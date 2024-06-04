@@ -58,7 +58,7 @@ other version will work with minor changes required.
 
 Currently, only OPENXR is supported.
 
-
+Currently, the project is buggy but working. (we got work todo!)
 
  ### Installation
 
