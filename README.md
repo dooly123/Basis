@@ -97,7 +97,7 @@ Thank you to everyone who has helped Basis become something remarkable.
 
 This project includes third-party code licensed under the Apache License 2.0:
 
-- [SteamAudio](Assets/third_party/plugins/SteamAudio/)
+- [SteamAudio](https://github.com/ValveSoftware/steam-audio)
 
 For more details, see `Assets/third_party/plugins/SteamAudio/LICENSE`.
 
