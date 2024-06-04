@@ -20,8 +20,6 @@ a framework for social VR
 
  ## About The Project
 
-![]()
-
 Basis is an open-source social framework for VR and Desktop usage.
 
 Basis aims to provide an alternative outlet for creative types through an open-source approach. By offering a "basis" (framework) that anyone can contribute to and customize, Basis empowers users to break free from the constraints of traditional social VR environments. This project was created to help grow this space and provide a jumping-off point for all.
@@ -30,7 +28,8 @@ Join us in creating a space where creativity knows no bounds and every user can 
 
 if you believe in creating a better future for VR feel free to contribute or donate
 
-  <img src="https://img.shields.io/liberapay/receives/dooly.svg?logo=liberapay">
+<script src="https://liberapay.com/dooly/widgets/button.js"></script>
+<noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
   
  ### Built With
 
@@ -92,7 +91,10 @@ luke dooly - [@lukedooly](https://x.com/lukedooly) - doolanl208@gmail.com
 Discord: [Doolys Discord Account](https://discord.com/users/170859544782700544)
 
 Thank you to everyone who has helped Basis become something remarkable.
-<img src="https://img.shields.io/liberapay/receives/dooly.svg?logo=liberapay">
+
+<script src="https://liberapay.com/dooly/widgets/button.js"></script>
+<noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+
 ## Third-Party Code and Trademarks
 
 This project includes third-party code licensed under the Apache License 2.0:
