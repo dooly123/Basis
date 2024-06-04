@@ -12,7 +12,7 @@ a framework for social VR
 <a href="https://discord.gg/F35u3cUMqt"><strong>Join The Discord!»</strong></a>
 <br/>
 <br/>
-<a href="">View Demo .</a>  
+<a href="https://github.com/dooly123/Basis/releases">Grab Latest Release .</a>  
 <a href="https://github.com/dooly123/Basis/issues/new?labels=bug&template=bug-report---.md">Report Bug .</a>
 <a href="https://github.com/dooly123/Basis/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
 </p>
