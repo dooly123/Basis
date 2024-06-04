@@ -1,0 +1,38 @@
+{
+  "name": "com.htc.upm.vive.openxr",
+  "displayName": "VIVE OpenXR Plugin",
+  "version": "2.3.0",
+  "unity": "2020.3",
+  "description": "The \"VIVE OpenXR Plugin\" package enables your application to run on VIVE devices. \nThis package is a bridge between VIVE devides and Unity OpenXR.\nThis package complements Unity's \"OpenXR Plugin\" package, and enables you to use extra features, as listed in the following.\n\n- Controller Input\n- Hand Tracking\n- Wrist Tracking\n- Eye Gaze\n- CompositionLayer\n- Facial Tracking\n\n\nYou can view the documentation for additional information.",
+  "keywords": [
+    "vr",
+    "xr",
+    "reality"
+  ],
+  "author": {
+    "name": "HTC Corporation",
+    "email": "vivesoftware@htc.com",
+    "url": "https://www.htc.com"
+  },
+  "dependencies": {
+    "com.unity.inputsystem": "1.4.3",
+    "com.unity.xr.management": "4.2.1",
+    "com.unity.xr.openxr": "1.3.1"
+  },
+  "samples": [
+    {
+      "displayName": "VIVE OpenXR Samples",
+      "description": "Basic sample showing how to use VIVE OpenXR.",
+      "path": "Samples~/Samples"
+    },
+    {
+      "displayName": "VIVE OpenXR Toolkits",
+      "description": "Toolkits help to use VIVE OpenXR.",
+      "path": "Samples~/ToolKits"
+    }
+  ],
+  "type": "library",
+  "hideInEditor": false,
+  "documentationUrl": "https://developer.vive.com/resources/openxr/openxr-mobile/tutorials/unity/getting-started-openxr-mobile/",
+  "changelogUrl": "https://developer.vive.com/resources/openxr/openxr-mobile/download/latest/"
+}

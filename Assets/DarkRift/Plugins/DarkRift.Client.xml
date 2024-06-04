@@ -1,0 +1,853 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DarkRift.Client</name>
+    </assembly>
+    <members>
+        <member name="T:DarkRift.Client.BichannelClientConnection">
+            <summary>
+                A connection to a remote server and handles TCP and UDP channels.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.BichannelClientConnection.RemoteTcpEndPoint">
+            <summary>
+                The IP address of the remote client.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.BichannelClientConnection.RemoteUdpEndPoint">
+            <summary>
+                The IP address of the remote client.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.BichannelClientConnection.NoDelay">
+            <summary>
+                Whether Nagel's algorithm should be disabled or not.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.BichannelClientConnection.PreserveTcpOrdering">
+            <summary>
+                If true (default), reliable messages are delivered in order. If false, reliable messages can be delivered out of order to improve performance.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.BichannelClientConnection.RemoteEndPoints">
+            <inheritdoc/>
+        </member>
+        <member name="P:DarkRift.Client.BichannelClientConnection.ConnectionState">
+            <inheritdoc/>
+        </member>
+        <member name="F:DarkRift.Client.BichannelClientConnection.connectionState">
+            <summary>
+                Backing for <see cref="P:DarkRift.Client.BichannelClientConnection.ConnectionState"/>.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.BichannelClientConnection.tcpSocket">
+            <summary>
+                The socket used in TCP communication.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.BichannelClientConnection.udpSocket">
+            <summary>
+                The socket used in UDP communication.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.#ctor(System.Net.IPAddress,System.Int32,System.Boolean)">
+            <summary>
+                Creates a new bichannel client.
+            </summary>
+            <param name="ipAddress">The IP address of the server.</param>
+            <param name="port">The port (UDP and TCP) the server is listening on.</param>
+            <param name="noDelay">Whether to disable Nagle's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.#ctor(System.Net.IPAddress,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                Creates a new bichannel client.
+            </summary>
+            <param name="ipAddress">The IP address of the server.</param>
+            <param name="udpPort">The port the server is listening on for UDP.</param>
+            <param name="tcpPort">The port the server is listening on for TCP.</param>
+            <param name="noDelay">Whether to disable Nagle's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.#ctor(DarkRift.IPVersion,System.Net.IPAddress,System.Int32,System.Boolean)">
+            <summary>
+                Creates a new bichannel client.
+            </summary>
+            <param name="ipVersion">The IP version to connect via.</param>
+            <param name="ipAddress">The IP address of the server.</param>
+            <param name="port">The port the server is listening on.</param>
+            <param name="noDelay">Whether to disable Nagle's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.Connect">
+            <inheritdoc/>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.SendMessageReliable(DarkRift.MessageBuffer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.SendMessageUnreliable(DarkRift.MessageBuffer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.Disconnect">
+            <inheritdoc/>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.GetRemoteEndPoint(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.ReceiveHeaderAndBody(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Receives TCP header followed by a TCP body, looping the operation becomes asynchronous.
+            </summary>
+            <param name="args">The socket args to use during the operations.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.AsyncReceiveHeaderCompleted(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Event handler for when a TCP header has been received.
+            </summary>
+            <param name="sender">The invoking object.</param>
+            <param name="args">The socket args used during the operation.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.AsyncReceiveBodyCompleted(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Event handler for when a TCP body has been received.
+            </summary>
+            <param name="sender">The invoking object.</param>
+            <param name="args">The socket args used during the operation.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.IsHeaderReceiveComplete(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Checks if a TCP header was received in its entirety.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+            <returns>If the whole header has been received.</returns>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.IsBodyReceiveComplete(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Checks if a TCP body was received in its entirety.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+            <returns>If the whole body has been received.</returns>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.ProcessHeader(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Processes a TCP header received.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+            <returns>The number of bytes in the body.</returns>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.ProcessBody(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Processes a TCP body received.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+            <returns>The buffer received.</returns>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.ProcessMessage(DarkRift.MessageBuffer)">
+            <summary>
+                Invokes message recevied events and cleans up.
+            </summary>
+            <param name="buffer">The TCP body received.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.WasHeaderReceiveSucessful(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Checks if a TCP header was received correctly.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+            <returns>If the receive completed correctly.</returns>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.WasBodyReceiveSucessful(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Checks if a TCP body was received correctly.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+            <returns>If the receive completed correctly.</returns>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.HandleDisconnectionDuringHeaderReceive(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Handles a disconnection while receiving a TCP header.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.HandleDisconnectionDuringBodyReceive(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Handles a disconnection while receiving a TCP body.
+            </summary>
+            <param name="args">The socket args used during the operation.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.SetupReceiveHeader(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Setup a lsiten operation for a new TCP header.
+            </summary>
+            <param name="args">The socket args to use during the operation.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.SetupReceiveBody(System.Net.Sockets.SocketAsyncEventArgs,System.Int32)">
+            <summary>
+                Setup a listen operation for a new TCP body.
+            </summary>
+            <param name="args">The socket args to use during the operation.</param>
+            <param name="length">The number of bytes in the body.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.UpdateBufferPointers(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Updates the pointers on the buffer to continue a receive operation.
+            </summary>
+            <param name="args">The socket args to update.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.UdpReceiveCompleted(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Called when a UDP message arrives.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.TcpSendCompleted(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Called when a TCP send has completed.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.UdpSendCompleted(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+                Called when a UDP send has completed.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.Disconnect(System.Net.Sockets.SocketError)">
+            <summary>
+                Called when a socket error has occured.
+            </summary>
+            <param name="error">The error causing the disconnect.</param>
+        </member>
+        <member name="M:DarkRift.Client.BichannelClientConnection.Dispose(System.Boolean)">
+            <summary>
+                Disposes of the connection.
+            </summary>
+            <param name="disposing">Whether the object is bing disposed or not.</param>
+        </member>
+        <member name="F:DarkRift.Client.ClientObjectCache.initialized">
+            <summary>
+                Whether this cache has been initialized yet.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.ClientObjectCache.messageReceivedEventArgsPool">
+            <summary>
+                Object pool of <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> objects.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.ClientObjectCache.settings">
+            <summary>
+                The settings for all object caches.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.ClientObjectCache.settingsLock">
+            <summary>
+                The lock for the settings field.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCache.Initialize(DarkRift.Client.ClientObjectCacheSettings)">
+            <summary>
+                Sets up the ObjectCache with the given settings.
+            </summary>
+            <returns>True if the object cache was set with the sepcified settings, false if it is already initialized.</returns>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCache.ThreadInitialize">
+            <summary>
+                Initializes the object cache with the stored settings.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCache.GetMessageReceivedEventArgs">
+            <summary>
+                Returns a pooled <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> or generates a new one if there are none available.
+            </summary>
+            <returns>A free <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/>.</returns>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCache.ReturnMessageReceivedEventArgs(DarkRift.Client.MessageReceivedEventArgs)">
+            <summary>
+                Returns a used <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> to the pool.
+            </summary>
+            <param name="writer">The <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> to return.</param>
+        </member>
+        <member name="T:DarkRift.Client.ClientObjectCacheHelper">
+            <summary>
+                Helper class for the server's object cache.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCacheHelper.InitializeObjectCache(DarkRift.Client.ClientObjectCacheSettings)">
+             <summary>
+                 Initializes the object cache.
+             </summary>
+             <remarks>
+                 Normally, initializing the object cache is handled for you when you create a server or client
+                 however there are times when it is necessary to initialize it without creating a server or client
+                 such as during testing. This method can be used to initialize the cache in those circumstances.
+            
+                 If the cache is already initialized this method will do nothing.
+            
+                 This method will also initialize the <see cref="T:DarkRift.ObjectCache"/>.
+             </remarks>
+             <param name="settings"></param>
+        </member>
+        <member name="P:DarkRift.Client.ClientObjectCacheHelper.FinalizedMessageReceivedEventArgs">
+            <summary>
+                The number of <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> objects that were not recycled properly.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCacheHelper.MessageReceivedEventArgsWasFinalized">
+            <summary>
+                Indcates an <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> did not get recycled properly.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCacheHelper.ResetCounters">
+            <summary>
+                Resets all counters to 0.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Client.ClientObjectCacheSettings">
+            <summary>
+                Configuration for the <see cref="T:DarkRift.Client.ClientObjectCache"/>.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.ClientObjectCacheSettings.DontUseCache">
+            <summary>
+                Return settings so no objects are cached.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.ClientObjectCacheSettings.MaxMessageReceivedEventArgs">
+            <summary>
+                The maximum number of MessageReceivedEventArgs to cache per thread.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Client.ClientObjectCacheTestHelper">
+            <summary>
+                Helper for tests to assert recycling is carried out correctly.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.ClientObjectCacheTestHelper.RetrievedMessageReceivedEventArgs">
+            <summary>
+                The number of <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> objects that were retrieved from the cache.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.ClientObjectCacheTestHelper.ReturnedMessageReceivedEventArgs">
+            <summary>
+                The number of <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> objects that were returned to the cache.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCacheTestHelper.MessageReceivedEventArgsWasRetrieved">
+            <summary>
+                Indcates an <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> was retrieved from the cache.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCacheTestHelper.MessageReceivedEventArgsWasReturned">
+            <summary>
+                Indcates an <see cref="T:DarkRift.Client.MessageReceivedEventArgs"/> was returned to the cache.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.ClientObjectCacheTestHelper.ResetCounters">
+            <summary>
+                Resets all metrics recorded.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Client.DarkRiftClient">
+            <summary>
+                The client for DarkRift connections.
+            </summary>
+        </member>
+        <member name="E:DarkRift.Client.DarkRiftClient.MessageReceived">
+            <summary>
+                Event fired when a message is received.
+            </summary>
+        </member>
+        <member name="E:DarkRift.Client.DarkRiftClient.Disconnected">
+            <summary>
+                Event fired when the client becomes disconnected.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.ID">
+            <summary>
+                The ID the client has been assigned.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.ConnectionState">
+            <summary>
+                The state of the connection.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.Connected">
+            <summary>
+                Returns whether or not this client is connected to the server.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.RemoteEndPoints">
+            <summary>
+                The endpoints of the connection.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.RemoteEndPoint">
+            <summary>
+                The remote end point of the connection.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Client.DarkRiftClient.ConnectCompleteHandler">
+            <summary>
+                Delegate type for handling the completion of an asynchronous connect.
+            </summary>
+            <param name="e">The exception that occured, if any.</param>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.Connection">
+            <summary>
+                The connection to the remote server.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.RoundTripTime">
+            <summary>
+                The round trip time helper for this client.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.DarkRiftClient.setupMutex">
+            <summary>
+                Mutex that is triggered once the connection is completely setup.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.DefaultCacheSettings">
+            <summary>
+                The recommended cache settings for clients.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftClient.DefaultClientCacheSettings">
+            <summary>
+                The recommended cache settings for clients.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.#ctor">
+            <summary>
+                Creates a new DarkRiftClient object with default cache settings.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.#ctor(DarkRift.Client.ClientObjectCacheSettings)">
+            <summary>
+                Creates a new DarkRiftClient object with specified cache settings.
+            </summary>
+            <param name="objectCacheSettings">The settings for the object cache.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Creates a new DarkRiftClient object with specified cache settings.
+            </summary>
+            <param name="maxCachedWriters">The maximum number of DarkRiftWriters to cache per thread.</param>
+            <param name="maxCachedReaders">The maximum number of DarkRiftReaders to cache per thread.</param>
+            <param name="maxCachedMessages">The maximum number of Messages to cache per thread.</param>
+            <param name="maxCachedSocketAsyncEventArgs">The maximum number of SocketAsyncEventArgs to cache per thread.</param>
+            <param name="maxActionDispatcherTasks">The maximum number of ActionDispatcherTasks to cache per thread.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.#ctor(DarkRift.ObjectCacheSettings)">
+            <summary>
+                Creates a new DarkRiftClient object with specified cache settings.
+            </summary>
+            <param name="objectCacheSettings">The settings for the object cache.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Connect(System.Net.IPAddress,System.Int32,DarkRift.IPVersion)">
+            <summary>
+                Connects to a remote server using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="port">The port of the server.</param>
+            <param name="ipVersion">The IP version to connect using.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Connect(System.Net.IPAddress,System.Int32,DarkRift.IPVersion,System.Boolean)">
+            <summary>
+                Connects to a remote server using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="port">The port of the server.</param>
+            <param name="ipVersion">The IP version to connect using.</param>
+            <param name="noDelay">Whether to disable Nagel's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Connect(System.Net.IPAddress,System.Int32,System.Boolean)">
+            <summary>
+                Connects to a remote server using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="port">The port of the server.</param>
+            <param name="noDelay">Whether to disable Nagel's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Connect(System.Net.IPAddress,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                Connects to a remote server using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="tcpPort">The port the server is listening on for TCP.</param>
+            <param name="udpPort">The port the server is listening on for UDP.</param>
+            <param name="noDelay">Whether to disable Nagel's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Connect(DarkRift.Client.NetworkClientConnection)">
+            <summary>
+                Connects the client using the given connection.
+            </summary>
+            <param name="connection">The connection to use to connect to the server.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.ConnectInBackground(System.Net.IPAddress,System.Int32,DarkRift.IPVersion,DarkRift.Client.DarkRiftClient.ConnectCompleteHandler)">
+            <summary>
+                Connects to a remote server in the background using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="port">The port of the server.</param>
+            <param name="ipVersion">The IP version to connect using.</param>
+            <param name="callback">The callback to invoke one the connection attempt has finished.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.ConnectInBackground(System.Net.IPAddress,System.Int32,DarkRift.IPVersion,System.Boolean,DarkRift.Client.DarkRiftClient.ConnectCompleteHandler)">
+            <summary>
+                Connects to a remote server in the background using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="port">The port of the server.</param>
+            <param name="ipVersion">The IP version to connect using.</param>
+            <param name="callback">The callback to invoke one the connection attempt has finished.</param>
+            <param name="noDelay">Whether to disable Nagel's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.ConnectInBackground(System.Net.IPAddress,System.Int32,System.Boolean,DarkRift.Client.DarkRiftClient.ConnectCompleteHandler)">
+            <summary>
+                Connects to a remote server in the background using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="port">The port of the server.</param>
+            <param name="callback">The callback to invoke one the connection attempt has finished.</param>
+            <param name="noDelay">Whether to disable Nagel's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.ConnectInBackground(System.Net.IPAddress,System.Int32,System.Int32,System.Boolean,DarkRift.Client.DarkRiftClient.ConnectCompleteHandler)">
+            <summary>
+                Connects to a remote server in the background using a <see cref="T:DarkRift.Client.BichannelClientConnection"/>.
+            </summary>
+            <param name="ip">The IP address of the server.</param>
+            <param name="tcpPort">The port the server is listening on for TCP.</param>
+            <param name="udpPort">The port the server is listening on for UDP.</param>
+            <param name="callback">The callback to invoke one the connection attempt has finished.</param>
+            <param name="noDelay">Whether to disable Nagel's algorithm or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.ConnectInBackground(DarkRift.Client.NetworkClientConnection,DarkRift.Client.DarkRiftClient.ConnectCompleteHandler)">
+            <summary>
+                Connects to a remote server in the background.
+            </summary>
+            <param name="connection">The connection to use to connect to the server.</param>
+            <param name="callback">The callback to invoke one the connection attempt has finished.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.SendMessage(DarkRift.Message,DarkRift.SendMode)">
+            <summary>
+                Sends a message to the server.
+            </summary>
+            <param name="message">The message to send.</param>
+            <param name="sendMode">How the message should be sent.</param>
+            <returns>Whether the send was successful.</returns>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.GetRemoteEndPoint(System.String)">
+            <summary>
+                Gets the endpoint with the given name.
+            </summary>
+            <param name="name">The name of the endpoint.</param>
+            <returns>The end point.</returns>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Disconnect">
+            <summary>
+                Disconnects this client from the server.
+            </summary>
+            <returns>Whether the disconnect was successful.</returns>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.MessageReceivedHandler(DarkRift.MessageBuffer,DarkRift.SendMode)">
+            <summary>
+                Callback for when data is received.
+            </summary>
+            <param name="buffer">The data recevied.</param>
+            <param name="sendMode">The SendMode used to send the data.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.HandleCommand(DarkRift.Message)">
+            <summary>
+                Handles a command received.
+            </summary>
+            <param name="message">The message that was received.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.HandleMessage(DarkRift.Message,DarkRift.SendMode)">
+            <summary>
+                Handles a message received.
+            </summary>
+            <param name="message">The message that was received.</param>
+            <param name="sendMode">The send mode the message was received with.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.DisconnectedHandler(System.Net.Sockets.SocketError,System.Exception)">
+            <summary>
+                Called when this connection becomes disconnected.
+            </summary>
+            <param name="error">The error that caused the disconnection.</param>
+            <param name="exception">The exception that caused the disconnection.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Dispose">
+            <summary>
+                Disposes of the DarkRift client object.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftClient.Dispose(System.Boolean)">
+            <summary>
+                Handles disposing of the DarkRift client object.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="T:DarkRift.Client.DarkRiftConnectionException">
+            <summary>
+            Exception thrown when a DarkRift client is unable to establish a connection to the server.
+            </summary>
+            <remarks>
+                This exception is here to provide more information about the operation the client
+                was performing during at the point of connection failure rather than a non-descript
+                <see cref="T:System.Net.Sockets.SocketException"/>. In general you should prefer catching a
+                <see cref="T:System.Net.Sockets.SocketException"/> over this as not all failures may be emitted as a
+                <see cref="T:DarkRift.Client.DarkRiftConnectionException"/>.
+            </remarks>
+        </member>
+        <member name="P:DarkRift.Client.DarkRiftConnectionException.InnerSocketException">
+            <summary>
+            The inner <see cref="T:System.Net.Sockets.SocketException"/> that caused this exception.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftConnectionException.#ctor(System.String,System.Net.Sockets.SocketException)">
+            <summary>
+            Creates a new <see cref="T:DarkRift.Client.DarkRiftConnectionException"/>.
+            </summary>
+            <param name="message">The exception message.</param>
+            <param name="innerException">The <see cref="T:System.Net.Sockets.SocketException"/> that caused this exception.</param>
+        </member>
+        <member name="M:DarkRift.Client.DarkRiftConnectionException.#ctor(System.String,System.Net.Sockets.SocketError)">
+            <summary>
+            Creates a new <see cref="T:DarkRift.Client.DarkRiftConnectionException"/>.
+            </summary>
+            <param name="message">The exception message.</param>
+            <param name="socketError">The <see cref="T:System.Net.Sockets.SocketError"/> that caused this exception.</param>
+        </member>
+        <member name="T:DarkRift.Client.DisconnectedEventArgs">
+            <summary>
+                Arguments for disconnection events.
+            </summary>
+            <remarks>
+                There are currently no members to this class, it is here for future use.
+            </remarks>
+        </member>
+        <member name="P:DarkRift.Client.DisconnectedEventArgs.LocalDisconnect">
+            <summary>
+                If the disconnect was requested by a call to <see cref="M:DarkRift.Client.DarkRiftClient.Disconnect"/>.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.DisconnectedEventArgs.Error">
+            <summary>
+                The error that caused the disconnect.
+            </summary>
+            <remarks>
+                If <see cref="P:DarkRift.Client.DisconnectedEventArgs.LocalDisconnect"/> is true this field will be set to a default value and 
+                should be ignored.
+                
+                If the contents of this property is <see cref="F:System.Net.Sockets.SocketError.SocketError"/> consider 
+                exploring <see cref="P:DarkRift.Client.DisconnectedEventArgs.Exception"/> for a general exception that caused the disconnection 
+                instead.
+            </remarks>
+        </member>
+        <member name="P:DarkRift.Client.DisconnectedEventArgs.Exception">
+            <summary>
+                The exception that caused the disconnection.
+            </summary>
+            <remarks>
+                If <see cref="P:DarkRift.Client.DisconnectedEventArgs.LocalDisconnect"/> is true this field will be set to a default value and 
+                should be ignored.
+            </remarks>
+        </member>
+        <member name="M:DarkRift.Client.DisconnectedEventArgs.#ctor(System.Boolean,System.Net.Sockets.SocketError,System.Exception)">
+            <summary>
+                Creates a new DisconnectedEventArgs object.
+            </summary>
+            <param name="localDisconnect">Whether it was a local call that caused the disconnection.</param>
+            <param name="error">The error that caused the disconnect.</param>
+            <param name="exception">The exception that caused the disconnect.</param>
+        </member>
+        <member name="T:DarkRift.Client.MessageReceivedEventArgs">
+            <summary>
+                Arguments for <see cref="E:DarkRift.Client.DarkRiftClient.MessageReceived">MessageReceived</see> events.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.MessageReceivedEventArgs.SendMode">
+            <summary>
+                The method the data was sent using.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.MessageReceivedEventArgs.Tag">
+            <summary>
+                The tag the message was sent with.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.MessageReceivedEventArgs.message">
+            <summary>
+                The message received.
+            </summary>
+        </member>
+        <member name="F:DarkRift.Client.MessageReceivedEventArgs.isCurrentlyLoungingInAPool">
+            <summary>
+                Whether this args object is currently in an object pool waiting or not.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.MessageReceivedEventArgs.Create(DarkRift.Message,DarkRift.SendMode)">
+            <summary>
+                Creates a new args object for the <see cref="E:DarkRift.Client.DarkRiftClient.MessageReceived"/> event.
+            </summary>
+            <param name="message">The message received.</param>
+            <param name="sendMode">The send mode the message was received with.</param>
+        </member>
+        <member name="M:DarkRift.Client.MessageReceivedEventArgs.#ctor">
+            <summary>
+                Creates a new MessageReceivedEventArgs. For use from the ObjectCache.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.MessageReceivedEventArgs.GetMessage">
+            <summary>
+                Gets the message received.
+            </summary>
+            <returns>An new instance of the message received.</returns>
+        </member>
+        <member name="M:DarkRift.Client.MessageReceivedEventArgs.Dispose">
+            <summary>
+                Recycles this object back into the pool.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.MessageReceivedEventArgs.Finalize">
+            <summary>
+                Finalizer so we can inform the cache system we were not recycled correctly.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Client.NetworkClientConnection">
+            <summary>
+                A connection to a remote server.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Client.NetworkClientConnection.MessageReceviedHandler">
+            <summary>
+                Delegate for handling messages.
+            </summary>
+            <param name="messageBuffer">The message buffer received.</param>
+            <param name="sendMode">The send mode the message was received with.</param>
+        </member>
+        <member name="T:DarkRift.Client.NetworkClientConnection.DisconnectedHandler">
+            <summary>
+                Delegate for handling disconnections.
+            </summary>
+            <param name="socketError">The socket error that caused the disconnection.</param>
+            <param name="exception">The exception that caused the disconnection.</param>
+        </member>
+        <member name="P:DarkRift.Client.NetworkClientConnection.MessageReceived">
+            <summary>
+                The method called when a message has been received.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.NetworkClientConnection.Disconnected">
+            <summary>
+                The method called when this connection is disconnected.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.NetworkClientConnection.ConnectionState">
+            <summary>
+                The state of the connection.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Client.NetworkClientConnection.RemoteEndPoints">
+            <summary>
+                The endpoints of the connection.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.#ctor">
+            <summary>
+                Creates a new client connection.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.Connect">
+            <summary>
+                Connects to a remote device.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.SendMessage(DarkRift.MessageBuffer,DarkRift.SendMode)">
+            <summary>
+                Sends a message using the appropriate protocol.
+            </summary>
+            <param name="message">The message to be sent.</param>
+            <param name="sendMode">How the message should be sent.</param>
+            <returns>Whether the send was successful.</returns>
+            <remarks>
+                <see cref="T:DarkRift.MessageBuffer"/> is an IDisposable type and therefore once you are done 
+                using it you should call <see cref="M:DarkRift.MessageBuffer.Dispose"/> to release resources.
+                Not doing this will result in memnory leaks.
+            </remarks>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.SendMessageReliable(DarkRift.MessageBuffer)">
+            <summary>
+                Sends a message reliably.
+            </summary>
+            <param name="message">The message to be sent.</param>
+            <returns>Whether the send was successful.</returns>
+            <remarks>
+                <see cref="T:DarkRift.MessageBuffer"/> is an IDisposable type and therefore once you are done 
+                using it you should call <see cref="M:DarkRift.MessageBuffer.Dispose"/> to release resources.
+                Not doing this will result in memnory leaks.
+            </remarks>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.SendMessageUnreliable(DarkRift.MessageBuffer)">
+            <summary>
+                Sends a message unreliably.
+            </summary>
+            <param name="message">The message to be sent.</param>
+            <returns>Whether the send was successful.</returns>
+            <remarks>
+                <see cref="T:DarkRift.MessageBuffer"/> is an IDisposable type and therefore once you are done 
+                using it you should call <see cref="M:DarkRift.MessageBuffer.Dispose"/> to release resources.
+                Not doing this will result in memnory leaks.
+            </remarks>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.Disconnect">
+            <summary>
+                Disconnects this client from the remote host.
+            </summary>
+            <returns>Whether the disconnect was successful.</returns>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.GetRemoteEndPoint(System.String)">
+            <summary>
+                Gets the endpoint with the given name.
+            </summary>
+            <param name="name">The name of the endpoint.</param>
+            <returns>The end point.</returns>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.HandleMessageReceived(DarkRift.MessageBuffer,DarkRift.SendMode)">
+            <summary>
+                Handles a buffer being received. 
+            </summary>
+            <param name="message">The message received.</param>
+            <param name="mode">The <see cref="T:DarkRift.SendMode"/> used to send the data.</param>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.HandleDisconnection">
+            <summary>
+                Handles a disconnection.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.HandleDisconnection(System.Net.Sockets.SocketError)">
+            <summary>
+                Handles a disconnection.
+            </summary>
+            <param name="error">The error that describes the cause of disconnection.</param>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.HandleDisconnection(System.Exception)">
+            <summary>
+                Handles a disconnection.
+            </summary>
+            <param name="exception">An exception that describes the cause of disconnection.</param>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.Dispose(System.Boolean)">
+            <summary>
+                Disposes of the client connection.
+            </summary>
+            <param name="disposing">Whether the object is bing disposed or not.</param>
+        </member>
+        <member name="M:DarkRift.Client.NetworkClientConnection.Dispose">
+            <summary>
+                Disposes of this client connection.
+            </summary>
+        </member>
+    </members>
+</doc>

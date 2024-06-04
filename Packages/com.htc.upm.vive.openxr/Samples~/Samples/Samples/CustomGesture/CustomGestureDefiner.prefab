@@ -1,0 +1,285 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8419823203306955676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8419823203306955648}
+  - component: {fileID: 8419823203306955651}
+  - component: {fileID: 8419823203306955650}
+  - component: {fileID: 8419823203306955677}
+  m_Layer: 0
+  m_Name: CustomGestureDefiner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8419823203306955648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8419823203306955676}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.63137037, y: 1.8553617, z: -2.3483706}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8419823203306955651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8419823203306955676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4717f5ed1f0b0a4a8a1aa02c8d30b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LFingers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  RFingers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  CurrentGestureL: {fileID: 0}
+  CurrentGestureR: {fileID: 0}
+  CurrentGestureDual: {fileID: 0}
+--- !u!114 &8419823203306955650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8419823203306955676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fc3b0937a9ed7d4a82e0a0c262beaf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ThumbDefiner:
+    StraightDistalLowBound: 150
+    StraightIntermediateLowBound: 150
+    StraightProximalLowBound: 150
+    BendingDistalLowBound: 140
+    BendingIntermediateLowBound: 140
+    BendingProximalLowBound: 140
+  IndexDefiner:
+    StraightDistalLowBound: 160
+    StraightIntermediateLowBound: 160
+    StraightProximalLowBound: 160
+    BendingDistalLowBound: 120
+    BendingIntermediateLowBound: 120
+    BendingProximalLowBound: 120
+  MiddleDefiner:
+    StraightDistalLowBound: 160
+    StraightIntermediateLowBound: 160
+    StraightProximalLowBound: 160
+    BendingDistalLowBound: 120
+    BendingIntermediateLowBound: 120
+    BendingProximalLowBound: 120
+  RingDefiner:
+    StraightDistalLowBound: 160
+    StraightIntermediateLowBound: 160
+    StraightProximalLowBound: 160
+    BendingDistalLowBound: 120
+    BendingIntermediateLowBound: 120
+    BendingProximalLowBound: 120
+  PinkyDefiner:
+    StraightDistalLowBound: 160
+    StraightIntermediateLowBound: 160
+    StraightProximalLowBound: 160
+    BendingDistalLowBound: 120
+    BendingIntermediateLowBound: 120
+    BendingProximalLowBound: 120
+--- !u!114 &8419823203306955677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8419823203306955676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d622bde162fe6524aa1cf99ee5bbda11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefinedGestures:
+  - GestureName: Fist
+    TargetHand: 3
+    ThumbStatus: 0
+    IndexStatus: 0
+    MiddleStatus: 0
+    RingStatus: 0
+    PinkyStatus: 0
+    ThumbStatusIs: 3
+    IndexStatusIs: 3
+    MiddleStatusIs: 3
+    RingStatusIs: 3
+    PinkyStatusIs: 4
+    DualHandDistance: 0
+    DualNear: 0
+    DualFar: 0
+    ThumbIndexDistance: 0
+    SingleNear: 0
+    SingleFar: 0
+  - GestureName: Point
+    TargetHand: 3
+    ThumbStatus: 3
+    IndexStatus: 1
+    MiddleStatus: 3
+    RingStatus: 3
+    PinkyStatus: 0
+    ThumbStatusIs: 3
+    IndexStatusIs: 1
+    MiddleStatusIs: 4
+    RingStatusIs: 4
+    PinkyStatusIs: 4
+    DualHandDistance: 0
+    DualNear: 0
+    DualFar: 0
+    ThumbIndexDistance: 0
+    SingleNear: 0
+    SingleFar: 0
+  - GestureName: Victory
+    TargetHand: 3
+    ThumbStatus: 3
+    IndexStatus: 1
+    MiddleStatus: 1
+    RingStatus: 3
+    PinkyStatus: 0
+    ThumbStatusIs: 4
+    IndexStatusIs: 1
+    MiddleStatusIs: 1
+    RingStatusIs: 4
+    PinkyStatusIs: 4
+    DualHandDistance: 0
+    DualNear: 0
+    DualFar: 0
+    ThumbIndexDistance: 2
+    SingleNear: 0
+    SingleFar: 0
+  - GestureName: OK
+    TargetHand: 3
+    ThumbStatus: 3
+    IndexStatus: 1
+    MiddleStatus: 1
+    RingStatus: 1
+    PinkyStatus: 0
+    ThumbStatusIs: 6
+    IndexStatusIs: 4
+    MiddleStatusIs: 6
+    RingStatusIs: 6
+    PinkyStatusIs: 6
+    DualHandDistance: 0
+    DualNear: 0
+    DualFar: 0
+    ThumbIndexDistance: 1
+    SingleNear: 3
+    SingleFar: 5.5
+  - GestureName: Like
+    TargetHand: 3
+    ThumbStatus: 3
+    IndexStatus: 1
+    MiddleStatus: 1
+    RingStatus: 1
+    PinkyStatus: 0
+    ThumbStatusIs: 6
+    IndexStatusIs: 3
+    MiddleStatusIs: 3
+    RingStatusIs: 3
+    PinkyStatusIs: 3
+    DualHandDistance: 0
+    DualNear: 0
+    DualFar: 0
+    ThumbIndexDistance: 2
+    SingleNear: 3
+    SingleFar: 5.5
+  - GestureName: Five
+    TargetHand: 3
+    ThumbStatus: 1
+    IndexStatus: 1
+    MiddleStatus: 1
+    RingStatus: 1
+    PinkyStatus: 0
+    ThumbStatusIs: 6
+    IndexStatusIs: 1
+    MiddleStatusIs: 1
+    RingStatusIs: 1
+    PinkyStatusIs: 1
+    DualHandDistance: 0
+    DualNear: 0
+    DualFar: 0
+    ThumbIndexDistance: 0
+    SingleNear: 0
+    SingleFar: 0
+  - GestureName: Rock
+    TargetHand: 3
+    ThumbStatus: 1
+    IndexStatus: 1
+    MiddleStatus: 3
+    RingStatus: 3
+    PinkyStatus: 0
+    ThumbStatusIs: 1
+    IndexStatusIs: 1
+    MiddleStatusIs: 3
+    RingStatusIs: 3
+    PinkyStatusIs: 1
+    DualHandDistance: 0
+    DualNear: 0
+    DualFar: 0
+    ThumbIndexDistance: 0
+    SingleNear: 0
+    SingleFar: 0
+  - GestureName: Vive
+    TargetHand: 4
+    ThumbStatus: 1
+    IndexStatus: 1
+    MiddleStatus: 3
+    RingStatus: 3
+    PinkyStatus: 0
+    ThumbStatusIs: 6
+    IndexStatusIs: 6
+    MiddleStatusIs: 0
+    RingStatusIs: 0
+    PinkyStatusIs: 0
+    DualHandDistance: 1
+    DualNear: 10
+    DualFar: 20
+    ThumbIndexDistance: 2
+    SingleNear: 5
+    SingleFar: 10
+  - GestureName: Push
+    TargetHand: 4
+    ThumbStatus: 1
+    IndexStatus: 1
+    MiddleStatus: 3
+    RingStatus: 3
+    PinkyStatus: 0
+    ThumbStatusIs: 1
+    IndexStatusIs: 1
+    MiddleStatusIs: 1
+    RingStatusIs: 1
+    PinkyStatusIs: 1
+    DualHandDistance: 2
+    DualNear: 10
+    DualFar: 20
+    ThumbIndexDistance: 0
+    SingleNear: 5
+    SingleFar: 10

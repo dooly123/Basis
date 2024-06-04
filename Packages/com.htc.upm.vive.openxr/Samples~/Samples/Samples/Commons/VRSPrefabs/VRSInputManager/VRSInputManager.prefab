@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4106666293350236145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4106666293350236147}
+  - component: {fileID: 4106666293350236146}
+  m_Layer: 0
+  m_Name: VRSInputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4106666293350236147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4106666293350236145}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.20003967, y: 0.3311797, z: 1.3696996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4106666293350236146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4106666293350236145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81abe82c07d949d428233b4e118ceaca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActionAsset: {fileID: -944628639613478452, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  ButtonReferences:
+  - {fileID: -8514278639596572500, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 6454596279149084813, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -3683315366864426127, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 11711766586467970, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -1644001223835636349, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -2169729131751125950, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 6986180202050166755, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -149401235567842990, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 5113088590926889233, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -631344258065148156, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  PositionReferences:
+  - {fileID: -8330880175803813698, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -5730229631511484051, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 7443918988805782556, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 1805487408676636314, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 9019252231132517785, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  RotationReferences:
+  - {fileID: 3113219943245244623, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -5246335118593862002, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 7542131730279260107, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -3341103204585363708, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: -22420666449113973, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  JoysitckReferences:
+  - {fileID: 7596212294181904713, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 7596212294181904713, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}
+  - {fileID: 3396702884570900202, guid: 699f4d2073ed2e34ea7f7944795b868c, type: 3}

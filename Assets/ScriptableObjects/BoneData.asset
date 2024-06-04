@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c1f66a5c2949a742a18892720c8f012, type: 3}
+  m_Name: BoneData
+  m_EditorClassIdentifier: 
+  FallBackPercentage:
+  - Position: {x: 0, y: 1.6, z: 0}
+    PositionPercentage: {x: NaN, y: 0.88888896, z: NaN}
+    HumanBone: 21
+    Role: 0
+  - Position: {x: -0.00000006394334, y: 1.0427046, z: 0.01554256}
+    PositionPercentage: {x: 0.49999973, y: 0.586651, z: 0.5254844}
+    HumanBone: 0
+    Role: 4
+  - Position: {x: -0.08207785, y: 0.9751874, z: -0.0004530223}
+    PositionPercentage: {x: 0.4545307, y: 0.55105, z: 0.48325506}
+    HumanBone: 1
+    Role: 6
+  - Position: {x: 0.08207792, y: 0.975188, z: -0.0004530577}
+    PositionPercentage: {x: 0.5454689, y: 0.55105036, z: 0.48325497}
+    HumanBone: 2
+    Role: 7
+  - Position: {x: -0.08207767, y: 0.53149194, z: 0.0035934532}
+    PositionPercentage: {x: 0.45453078, y: 0.31709453, z: 0.493938}
+    HumanBone: 3
+    Role: 8
+  - Position: {x: 0.08207811, y: 0.5314919, z: 0.003602513}
+    PositionPercentage: {x: 0.545469, y: 0.3170945, z: 0.49396193}
+    HumanBone: 4
+    Role: 9
+  - Position: {x: -0.08207751, y: 0.087295294, z: -0.027426764}
+    PositionPercentage: {x: 0.45453086, y: 0.0828748, z: 0.41204277}
+    HumanBone: 5
+    Role: 10
+  - Position: {x: 0.08207826, y: 0.08729631, z: -0.027427759}
+    PositionPercentage: {x: 0.5454691, y: 0.082875334, z: 0.41204014}
+    HumanBone: 6
+    Role: 11
+  - Position: {x: -0.00000021351784, y: 1.1445204, z: 0.016857807}
+    PositionPercentage: {x: 0.49999964, y: 0.64033735, z: 0.5289567}
+    HumanBone: 7
+    Role: 5
+  - Position: {x: -0.00000026298483, y: 1.24346, z: 0.0021507302}
+    PositionPercentage: {x: 0.4999996, y: 0.6925071, z: 0.49012914}
+    HumanBone: 8
+    Role: 3
+  - Position: {x: -0.00000040512643, y: 1.5030718, z: -0.03204596}
+    PositionPercentage: {x: 0.49999955, y: 0.8293973, z: 0.3998478}
+    HumanBone: 9
+    Role: 2
+  - Position: {x: -0.0000004579597, y: 1.5992506, z: -0.015195846}
+    PositionPercentage: {x: 0.49999952, y: 0.8801113, z: 0.44433314}
+    HumanBone: 10
+    Role: 1
+  - Position: {x: -0.045704827, y: 1.445815, z: -0.03316419}
+    PositionPercentage: {x: 0.47468042, y: 0.7992065, z: 0.39689562}
+    HumanBone: 11
+    Role: 13
+  - Position: {x: 0.045699332, y: 1.445817, z: -0.03316447}
+    PositionPercentage: {x: 0.52531606, y: 0.79920757, z: 0.39689487}
+    HumanBone: 12
+    Role: 14
+  - Position: {x: -0.15162854, y: 1.4405689, z: -0.05548539}
+    PositionPercentage: {x: 0.41600132, y: 0.7964403, z: 0.3379663}
+    HumanBone: 13
+    Role: 15
+  - Position: {x: 0.1516278, y: 1.4405689, z: -0.05548545}
+    PositionPercentage: {x: 0.5839978, y: 0.7964403, z: 0.33796614}
+    HumanBone: 14
+    Role: 16
+  - Position: {x: -0.43004376, y: 1.4405692, z: -0.05548565}
+    PositionPercentage: {x: 0.26176623, y: 0.7964404, z: 0.3379656}
+    HumanBone: 15
+    Role: 17
+  - Position: {x: 0.43004304, y: 1.440569, z: -0.05548522}
+    PositionPercentage: {x: 0.7382329, y: 0.79644036, z: 0.33796674}
+    HumanBone: 16
+    Role: 18
+  - Position: {x: -0.7133321, y: 1.4405693, z: -0.055485927}
+    PositionPercentage: {x: 0.1048315, y: 0.7964405, z: 0.33796486}
+    HumanBone: 17
+    Role: 19
+  - Position: {x: 0.7133315, y: 1.440569, z: -0.05548477}
+    PositionPercentage: {x: 0.8951677, y: 0.79644036, z: 0.33796793}
+    HumanBone: 18
+    Role: 20
+  - Position: {x: -0.08207745, y: 0.000008583069, z: 0.07967881}
+    PositionPercentage: {x: 0.4545309, y: 0.03684953, z: 0.69480795}
+    HumanBone: 19
+    Role: 21
+  - Position: {x: 0.08207833, y: 0.000009655952, z: 0.07967781}
+    PositionPercentage: {x: 0.5454691, y: 0.036850095, z: 0.6948053}
+    HumanBone: 20
+    Role: 22
+  - Position: {x: 0, y: 1.3356678, z: 0}
+    PositionPercentage: {x: 0, y: 0.7411272, z: 0}
+    HumanBone: 54
+    Role: 12
+  BoneTrackedRoles: 0000000004000000060000000700000008000000090000000a0000000b000000050000000300000002000000010000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000000c000000

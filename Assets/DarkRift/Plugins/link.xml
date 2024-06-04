@@ -1,0 +1,7 @@
+<linker>
+    <!-- Because DarkRift dynamically loads stuff Unity code strips it and breaks it in 2018.3 plus, tell it not to -->
+    <assembly fullname="DarkRift" preserve="all"/>
+    <assembly fullname="DarkRift.Server" preserve="all"/>
+    <assembly fullname="DarkRift.Client" preserve="all"/>
+</linker>
+

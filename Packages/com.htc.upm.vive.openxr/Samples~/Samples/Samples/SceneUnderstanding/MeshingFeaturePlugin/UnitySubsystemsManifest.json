@@ -1,0 +1,10 @@
+{
+        "name": "OpenXR Extension Sample",
+        "version": "0.1.0-preview.1",
+        "libraryName": "MeshingFeaturePlugin",
+        "meshings": [
+                {
+                        "id": "Sample Meshing"
+                }
+        ]
+}

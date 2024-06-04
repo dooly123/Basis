@@ -1,0 +1,19 @@
+{
+    "name": "HTC.VIVE.OPENXR.SceneUnderstandingSample",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4847341ff46394e83bb78fbd0652937e",
+        "GUID:96aa6ba065960476598f8f643e7252b6",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:d0a204fb2c62e9f4caca92f1c1e8c06b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

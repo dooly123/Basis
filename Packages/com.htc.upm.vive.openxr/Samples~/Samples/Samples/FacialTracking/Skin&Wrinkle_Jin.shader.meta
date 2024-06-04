@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 2fe9457ca0173ca4c92cffef833b591c
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Normal: {fileID: 2800000, guid: 5f6a88171526ba44b8edd0316d32be0e, type: 3}
+  - _SQZ_M: {fileID: 2800000, guid: 0bde64e6f5a7c7645b626bacac977600, type: 3}
+  - _Wide_M: {fileID: 2800000, guid: 76493984454b03f47a3137acfc5ee3a6, type: 3}
+  - _Wrinkle: {fileID: 2800000, guid: bf18efd814a59c645a89649c222ce5ec, type: 3}
+  - _lip_Sad_M: {fileID: 2800000, guid: b651b3205353cbe4eafef19f8cd4eee6, type: 3}
+  - _Wrinkle_Sad: {fileID: 2800000, guid: e86ced7d9ef006641b3cf8855baf388b, type: 3}
+  - _lip_Smile_M: {fileID: 2800000, guid: 9f79442cfa74a03479bcc9683e287520, type: 3}
+  - _Wrinkle_Smile: {fileID: 2800000, guid: b3054ff6e9f73b243b3cda952fa02424, type: 3}
+  - _DetailSkin_Normal: {fileID: 2800000, guid: 7a4aa691425a0e84996a3a3f3d3ef326,
+      type: 3}
+  - _Mask: {fileID: 2800000, guid: 7bf471a629e3ed640b3ace8997379f80, type: 3}
+  - _DetailSkin_Metalic: {fileID: 2800000, guid: 508aaba794b76264994ff90752435697,
+      type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

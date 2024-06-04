@@ -1,0 +1,19 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement style="flex-grow: 1;">
+        <engine:VisualElement name="Animator" template="ObjectField" style="flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: auto; position: relative;">
+            <editor:ObjectField name="AnimatorField" allow-scene-objects="true" usage-hints="None" style="position: relative; overflow: visible; visibility: visible; flex-direction: row; align-items: auto; top: 0; left: auto; align-self: auto; opacity: 1; justify-content: flex-start; height: 25px; width: 120px; background-image: none; flex-shrink: 0;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="FaceVisemeMesh" template="ObjectField" style="flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: auto; position: relative; height: 25px;">
+            <editor:ObjectField name="FaceVisemeMeshField" allow-scene-objects="true" usage-hints="None" style="position: relative; overflow: visible; visibility: visible; flex-direction: row; align-items: auto; top: auto; left: auto; align-self: auto; opacity: 1; justify-content: flex-start; height: 120px; width: 120px;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="FaceBlinkMesh" template="ObjectField" style="flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: auto; position: relative; height: 25px;">
+            <editor:ObjectField name="FaceBlinkMeshField" allow-scene-objects="true" usage-hints="None" style="position: relative; overflow: visible; visibility: visible; flex-direction: row; align-items: auto; top: auto; left: auto; align-self: auto; opacity: 1; justify-content: flex-start; height: 120px; width: 120px;" />
+        </engine:VisualElement>
+        <engine:Button text="Eye Position Toggle" name="AvatarEyePositionButton" />
+        <engine:Button text="Mouth Position Toggle" name="AvatarMouthPositionButton" />
+        <engine:Vector2Field label="Vec2 Field" name="AvatarEyePositionField" />
+        <engine:Vector2Field label="Vec2 Field" name="AvatarMouthPositionField" />
+        <engine:Button text="Avatar Automatic Viseme Detection" name="AvatarAutomaticVisemeDetection" />
+        <engine:Button text="Avatar Automatic Blink Detection" name="AvatarAutomaticBlinkDetection" />
+    </engine:VisualElement>
+</engine:UXML>
