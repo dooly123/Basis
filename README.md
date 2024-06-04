@@ -9,7 +9,7 @@
 a framework for social VR
 <br/>
 <br/>
-<a href=""><strong>Explore the docs »</strong></a>
+<a href="https://discord.gg/F35u3cUMqt"><strong>Join The Discord!»</strong></a>
 <br/>
 <br/>
 <a href="">View Demo .</a>  
