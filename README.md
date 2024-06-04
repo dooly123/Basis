@@ -28,7 +28,6 @@ Join us in creating a space where creativity knows no bounds and every user can 
 
 if you believe in creating a better future for VR feel free to contribute or donate
 
-<script src="https://liberapay.com/dooly/widgets/button.js"></script>
 <noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
   
  ### Built With
@@ -92,7 +91,6 @@ Discord: [Doolys Discord Account](https://discord.com/users/170859544782700544)
 
 Thank you to everyone who has helped Basis become something remarkable.
 
-<script src="https://liberapay.com/dooly/widgets/button.js"></script>
 <noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
 ## Third-Party Code and Trademarks
