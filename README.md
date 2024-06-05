@@ -28,7 +28,7 @@ Join us in creating a space where creativity knows no bounds and every user can 
 
 if you believe in creating a better future for VR feel free to contribute or donate
 
-<img src="https://media.discordapp.net/attachments/1247352185101221930/1247724271472480256/Banner.png?ex=66611147&is=665fbfc7&hm=d639ab1e76bf4ae262b75d392c3a3c6e0e3a49d2520601fb6802ab34efca3143&=&format=webp&quality=lossless&width=550&height=155" alt="Banner" width="720" height="202.5">
+<img src="https://media.discordapp.net/attachments/1247352185101221930/1247724271472480256/Banner.png?ex=66611147&is=665fbfc7&hm=d639ab1e76bf4ae262b75d392c3a3c6e0e3a49d2520601fb6802ab34efca3143&=&format=webp&quality=lossless&width=550&height=155" alt="Banner" width="550" height="155">
 
 <noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
