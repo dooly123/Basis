@@ -20,13 +20,12 @@ a framework for social VR
 
  ## About The Project
 
-Basis is an open-source social framework for VR and Desktop usage.
+Basis is an open-source social framework for VR and Desktop usage
 
-Basis aims to provide an alternative outlet for creative types through an open-source approach. By offering a "basis" (framework) that anyone can contribute to and customize, Basis empowers users to break free from the constraints of traditional social VR environments. This project was created to help grow this space and provide a jumping-off point for all.
+By offering an open-source basis framework for anyone to contribute and customise, we aim to give users the power to break free from constraints that traditional social VR environments have set in place.
+This project was created to help grow the VR space and provide a starting point for those who want to unleash their creative spirit and bring their vision to life.
 
-Join us in creating a space where creativity knows no bounds and every user can bring their vision to life.
-
-if you believe in creating a better future for VR feel free to contribute or donate
+Interested in helping create a better future for VR? Consider contributing or even donating!
 
 <img src="https://media.discordapp.net/attachments/1247352185101221930/1247724271472480256/Banner.png?ex=66611147&is=665fbfc7&hm=d639ab1e76bf4ae262b75d392c3a3c6e0e3a49d2520601fb6802ab34efca3143&=&format=webp&quality=lossless&width=550&height=155" alt="Banner" width="550" height="155">
 
