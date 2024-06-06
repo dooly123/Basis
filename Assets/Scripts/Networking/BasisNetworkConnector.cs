@@ -43,7 +43,7 @@ public class BasisNetworkConnector : MonoBehaviour
     {
         HasUnityClient = false;
         Client = BasisHelpers.GetOrAddComponent<BasisLowLevelClient>(this.gameObject);
-        Client.Initalize();
+        Client.Initialize();
         if (IpString.ToLower() == LocalHost)
         {
             string[] IpStrings = ResolveLocahost(IpString);
@@ -118,12 +118,11 @@ public class BasisNetworkConnector : MonoBehaviour
                 password = authenticationCode
             };
             writer.Write(Auth);
-            using (Message msg = Message.Create(BasisTags.AuthenticationTag, writer))
+            using (Message msg = Message.Create(BasisTags.AuthTag, writer))
             {
-                Client.SendMessage(msg, SendMode.Unreliable);
+                Client.SendMessage(msg, SendMode.Reliable);
                 Debug.Log("sent Authentication");
                 Client.MessageReceived += OnAuthResponse;
-                //    UniVoiceMirrorNetwork.WireUpConnection();
             }
         }
     }
@@ -137,13 +136,13 @@ public class BasisNetworkConnector : MonoBehaviour
         {
             Message message = e.GetMessage();
 
-            if (message.Tag == BasisTags.AuthenticationSucess)
+            if (message.Tag == BasisTags.AuthSuccess)
             {
                 await HandleAuthenticationSuccess();
             }
             else
             {
-                if (message.Tag == BasisTags.AuthenticationFailure)
+                if (message.Tag == BasisTags.AuthFailure)
                 {
                     Debug.LogError("Failed PassCode Check " + message.Tag);
                 }
@@ -165,8 +164,6 @@ public class BasisNetworkConnector : MonoBehaviour
     private async Task HandleAuthenticationSuccess()
     {
         HasUnityClient = true;
-        // DissonanceComms.enabled = true;
-        // DarkRift2CommsNetwork.enabled = true;
         BasisNetworkedPlayer player = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(transform.position, transform.rotation, transform));
         ushort playerID = Client.ID;
         player.ReInitialize(BasisLocalPlayer.Instance, playerID);
@@ -181,8 +178,8 @@ public class BasisNetworkConnector : MonoBehaviour
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
             writer.Write(readyMessage);
-            Message ReadyMessage = Message.Create(BasisTags.ReadyState, writer);
-            Client.SendMessage(ReadyMessage, SendMode.Unreliable);
+            Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
+            Client.SendMessage(ReadyMessage, SendMode.Reliable);
         }
         Client.MessageReceived += MessageReceived;
     }
@@ -194,16 +191,16 @@ public class BasisNetworkConnector : MonoBehaviour
             {
                 switch (message.Tag)
                 {
-                    case BasisTags.PlayerUpdateTag:
+                    case BasisTags.AvatarMuscleUpdateTag:
                         HandleAvatarUpdate(reader);
                         break;
                     case BasisTags.CreateRemotePlayerTag:
                         await HandleCreateRemotePlayer(reader);
                         break;
-                    case BasisTags.CreateAllRemoteClientsTag:
+                    case BasisTags.CreateRemotePlayersTag:
                         await HandleCreateAllRemoteClients(reader);
                         break;
-                    case BasisTags.VoiceAudioSegment:
+                    case BasisTags.AudioSegmentTag:
                         HandleAudioUpdate(reader);
                         break;
                     case BasisTags.DisconnectTag:

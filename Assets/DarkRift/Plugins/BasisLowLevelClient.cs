@@ -94,7 +94,7 @@ namespace DarkRift.Client.Unity
         public Dispatcher Dispatcher { get; private set; }
 
         public EnetClientConnection enetConnnection;
-        public void Initalize()
+        public void Initialize()
         {
             ObjectCacheSettings = objectCacheSettings.ToClientObjectCacheSettings();
             Client = new DarkRiftClient(ObjectCacheSettings);
@@ -105,7 +105,7 @@ namespace DarkRift.Client.Unity
             Client.MessageReceived += Client_MessageReceived;
             Client.Disconnected += Client_Disconnected;
         }
-        private const float interval = 1.0f / 64.0f;
+        private const float interval = 1.0f / 30.0f;
         private float timer = 0.0f;
         void Update()
         {

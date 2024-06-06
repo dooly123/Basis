@@ -100,7 +100,8 @@ public class BasisAudioTransmission
         {
             if (Length > ushort.MaxValue)
             {
-                Debug.LogError("Length was " + Length + " and thats larger then " + ushort.MaxValue);
+                Debug.LogError("Length was " + Length + " and is larger then " + ushort.MaxValue);
+                return;
             }
             AudioSegmentData Audio = new AudioSegmentData
             {
@@ -109,7 +110,7 @@ public class BasisAudioTransmission
             };
             writer.Write(Audio);
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
-            using (Message msg = Message.Create(BasisTags.VoiceAudioSegment, writer))
+            using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
             {
                 BasisNetworkConnector.Instance.Client.SendMessage(msg, SendMode.Unreliable);
             }
@@ -124,7 +125,7 @@ public class BasisAudioTransmission
             };
             writer.Write(Audio);
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
-            using (Message msg = Message.Create(BasisTags.VoiceAudioSegment, writer))
+            using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
             {
                 BasisNetworkConnector.Instance.Client.SendMessage(msg, SendMode.Unreliable);
             }

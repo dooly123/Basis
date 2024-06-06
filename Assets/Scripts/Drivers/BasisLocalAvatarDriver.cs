@@ -214,5 +214,13 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
                 Layer.active = false;
             }
         };
+        if (Control.HasTrackerPositionDriver == BasisBoneControl.BasisHasTracked.HasVRTracker || Control.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasVRTracker)
+        {
+            Layer.active = true;
+        }
+        else
+        {
+            Layer.active = false;
+        }
     }
 }

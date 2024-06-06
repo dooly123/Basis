@@ -10,7 +10,7 @@ public static class BasisNetworkAvatarCompressor
             CompressAvatar(ref NetworkSendBase.Target, NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, out NetworkSendBase.LASM.array, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
             writer.Write(NetworkSendBase.LASM);
             BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
-            using (var msg = Message.Create(BasisTags.PlayerUpdateTag, writer))
+            using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
             {
                 BasisNetworkConnector.Instance.Client.SendMessage(msg, SendMode.Unreliable);
             }
