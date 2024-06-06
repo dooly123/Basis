@@ -27,11 +27,20 @@ MonoBehaviour:
     m_IsDefault: 1
     m_Capabilities: 7
     m_ConfigSource: 0
-  m_UserSelectedRegistryName: 
+  - m_Id: scoped:project:Valve
+    m_Name: Valve
+    m_Url: https://registry.npmjs.org
+    m_Scopes:
+    - com.valvesoftware
+    - com.valvesoftware.unity.openvr
+    m_IsDefault: 0
+    m_Capabilities: 0
+    m_ConfigSource: 4
+  m_UserSelectedRegistryName: Valve
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
-    m_UserModificationsInstanceId: -860
-    m_OriginalInstanceId: -862
+    m_UserModificationsInstanceId: -884
+    m_OriginalInstanceId: -886
   m_LoadAssets: -1
