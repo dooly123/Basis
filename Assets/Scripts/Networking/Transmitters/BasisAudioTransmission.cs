@@ -17,6 +17,8 @@ public class BasisAudioTransmission
     public BasisNetworkSendBase Base;
     public BasisOpusSettings settings;
     public byte[] outputBuffer;
+    public byte[] encodedData;
+    public int encodedLength;
     public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject MicrophoneGameobject)
     {
         NetworkedPlayer = networkedPlayer;
@@ -91,8 +93,12 @@ public class BasisAudioTransmission
         {
             outputBuffer = new byte[PacketSize];
         }
-        var encodedLength = encoder.Encode(data, outputBuffer);
-        OnEncoded?.Invoke(outputBuffer, encodedLength);
+        encodedLength = encoder.Encode(data, outputBuffer);
+
+        encodedData = new byte[encodedLength];
+        Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
+
+        OnEncoded?.Invoke(encodedData, encodedLength);
     }
     private void SendVoiceOverNetwork(byte[] VoiceData, int Length)
     {

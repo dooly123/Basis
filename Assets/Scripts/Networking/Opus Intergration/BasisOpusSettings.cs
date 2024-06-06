@@ -4,9 +4,7 @@ using UnityOpus;
 public class BasisOpusSettings : ScriptableObject
 {
     public int RecordingFullLength = 1;
-    public int BufferedAudioSizeMs = 40 * 10;//6,144
-
-    public int BitrateKPS = 192000; // 192 kbps
+    public int BitrateKPS = 128000; // 128 kbps
     /// <summary>
     /// where 0 is the fastest on the cpu
     /// and 10 is the most performance hoggy
@@ -15,9 +13,8 @@ public class BasisOpusSettings : ScriptableObject
     public int Complexity = 10;
     public SamplingFrequency SamplingFrequency = SamplingFrequency.Frequency_48000;
     public NumChannels NumChannels = NumChannels.Mono;
-    public OpusApplication OpusApplication = OpusApplication.VoIP;
-    public OpusSignal OpusSignal = OpusSignal.Voice;
-    public int outputBufferSize;
+    public OpusApplication OpusApplication = OpusApplication.Audio;
+    public OpusSignal OpusSignal = OpusSignal.Auto;
     public float DesiredDurationInSeconds = 0.04f; // 40 milliseconds
     public int GetSampleFreq()
     {
