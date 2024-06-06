@@ -22,15 +22,15 @@ public class BasisDeviceManagement : MonoBehaviour
         
         if (ForceNoVR == false && BasisOpenVRManagement.TryStartOpenVR())
         {
-            BasisXRHeadToBodyOverride BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisXRHeadToBodyOverride>(this.gameObject);
+            BasisOverrideRotations BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
             BasisXRHeadToBodyOverride.Initialize();
             Debug.Log("OpenVR Started Correctly");
             CurrentMode = BootedMode.OpenVR;
             BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = true;
         }
-        else if (ForceNoVR == false && BasisXRManagement.TryStartXR())
+        else if (ForceNoVR == false && BasisOpenXRManagement.TryStartXR())
         {
-            BasisXRHeadToBodyOverride BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisXRHeadToBodyOverride>(this.gameObject);
+            BasisOverrideRotations BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
             BasisXRHeadToBodyOverride.Initialize();
             Debug.Log("XR Started Correctly");
             CurrentMode = BootedMode.XR;
@@ -49,7 +49,7 @@ public class BasisDeviceManagement : MonoBehaviour
     }
     public void OnDestroy()
     {
-        BasisXRManagement.StopXR();
+        BasisOpenXRManagement.StopXR();
     }
     public static async Task<BasisPlayer> LoadGameobject(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
     {

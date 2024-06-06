@@ -1,7 +1,7 @@
 using UnityEngine;
 using static UnityEngine.XR.Interaction.Toolkit.Inputs.XRInputTrackingAggregator;
 [DefaultExecutionOrder(15101)]
-public class BasisXRInput : MonoBehaviour
+public class BasisOpenXRInput : MonoBehaviour
 {
     public UnityEngine.XR.InputDevice Device;
     public BasisLocalBoneDriver Driver;

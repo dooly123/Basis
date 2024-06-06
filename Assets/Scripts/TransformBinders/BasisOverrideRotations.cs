@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BasisXRHeadToBodyOverride : MonoBehaviour
+public class BasisOverrideRotations : MonoBehaviour
 {
     public BasisBoneControl Head;
     public BasisBoneControl Hips;
