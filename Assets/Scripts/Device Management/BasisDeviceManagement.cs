@@ -9,6 +9,7 @@ public class BasisDeviceManagement : MonoBehaviour
     public static BasisDeviceManagement Instance;
     public enum BootedMode
     {
+        OpenVR,
         XR,
         Desktop,
         None
@@ -19,7 +20,15 @@ public class BasisDeviceManagement : MonoBehaviour
         InstantiationParameters Parameters = new InstantiationParameters();
         await BasisPlayerFactory.CreateLocalPLayer(Parameters);
         
-        if (ForceNoVR == false && BasisXRManagement.TryStartXR())
+        if (ForceNoVR == false && BasisOpenVRManagement.TryStartOpenVR())
+        {
+            BasisXRHeadToBodyOverride BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisXRHeadToBodyOverride>(this.gameObject);
+            BasisXRHeadToBodyOverride.Initialize();
+            Debug.Log("OpenVR Started Correctly");
+            CurrentMode = BootedMode.OpenVR;
+            BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = true;
+        }
+        else if (ForceNoVR == false && BasisXRManagement.TryStartXR())
         {
             BasisXRHeadToBodyOverride BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisXRHeadToBodyOverride>(this.gameObject);
             BasisXRHeadToBodyOverride.Initialize();
