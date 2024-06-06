@@ -18,10 +18,8 @@ public class BasisOpenVRInput : MonoBehaviour
     }
     public void Initialize(OpenVRDevice device, string iD)
     {
-        
         // Get a reference to the pose action by its name
         var actionSet = SteamVR_Input.GetActionSet("default");
-        
         
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         ID = iD;
@@ -42,12 +40,10 @@ public class BasisOpenVRInput : MonoBehaviour
                 if (isLeftHand)
                 {
                     Type = BasisBoneTrackedRole.LeftHand;
-                    actionSet.Activate(SteamVR_Input_Sources.LeftHand);
                 }
                 else
                 {
                     Type = BasisBoneTrackedRole.RightHand;
-                    actionSet.Activate(SteamVR_Input_Sources.RightHand);
                 }
                 
                 Debug.Log(isLeftHand);
@@ -94,33 +90,20 @@ public class BasisOpenVRInput : MonoBehaviour
 
     public void SetPosRot()
     {
-        poseAction = SteamVR_Actions.default_Pose;
-        if (Type == BasisBoneTrackedRole.LeftHand)
+        
+        TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
+        TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
+        var result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex((uint)Device.deviceIndex, ref devicePose, ref deviceGamePose);
+        
+        if (result != EVRCompositorError.None)
         {
-            LocalRawPosition = poseAction.GetLocalPosition(SteamVR_Input_Sources.LeftHand);
-            LocalRawRotation = poseAction.GetLocalRotation(SteamVR_Input_Sources.LeftHand);
+            Debug.LogError("Error getting device pose: " + result);
+            return;
         }
-        else if (Type == BasisBoneTrackedRole.RightHand)
-        {
-            LocalRawPosition = poseAction.GetLocalPosition(SteamVR_Input_Sources.RightHand);
-            LocalRawRotation = poseAction.GetLocalRotation(SteamVR_Input_Sources.RightHand);
-        }
-        else if (Type == BasisBoneTrackedRole.CenterEye)
-        {
-            TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
-            TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
-            var result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex((uint)Device.deviceIndex, ref devicePose, ref deviceGamePose);
-            
-            if (result != EVRCompositorError.None)
-            {
-                Debug.LogError("Error getting device pose: " + result);
-                return;
-            }
-            
-            var deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
-            LocalRawPosition = deviceTransform.pos;
-            LocalRawRotation = deviceTransform.rot;
-        }
+        
+        var deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
+        LocalRawPosition = deviceTransform.pos;
+        LocalRawRotation = deviceTransform.rot;
         
         if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
         {

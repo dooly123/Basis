@@ -132,7 +132,8 @@ public static class BasisOpenVRManagement
        {
            if (device.ID == ID)
            {
-                Object.Destroy(device.gameObject);
+               // I think they already should be destroyed, IDK. Doing this seems to work fine.
+               Object.Destroy(device.gameObject);
                TrackedOpenVRInputDevices.Remove(device);
                break;
            }
