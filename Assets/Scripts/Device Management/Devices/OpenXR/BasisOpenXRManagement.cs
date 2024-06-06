@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Management;
 
-public static class BasisXRManagement
+public static class BasisOpenXRManagement
 {
     public static XRManagerSettings XRInstance;
     /// <summary>
@@ -13,7 +13,7 @@ public static class BasisXRManagement
     /// <summary>
     /// generated at runtime
     /// </summary>
-    public static List<BasisXRInput> TrackedXRInputDevices = new List<BasisXRInput>();
+    public static List<BasisOpenXRInput> TrackedXRInputDevices = new List<BasisOpenXRInput>();
     /// <summary>
     /// keeps track of generated IDs and match InputDevice
     /// </summary>
@@ -100,7 +100,7 @@ public static class BasisXRManagement
     {
         GameObject gameObject = new GameObject(ID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
-        BasisXRInput BasisXRInput = gameObject.AddComponent<BasisXRInput>();
+        BasisOpenXRInput BasisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
         BasisXRInput.Initialize(device, ID);
         TrackedXRInputDevices.Add(BasisXRInput);
     }
