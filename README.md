@@ -94,7 +94,6 @@ Discord: [Doolys Discord Account](https://discord.com/users/170859544782700544)
 
 Thank you to everyone who has helped Basis become something remarkable.
 
-<noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
  ## License
 
 Distributed under the MIT License. See [MIT License](https://opensource.org/licenses/MIT) for more information.
