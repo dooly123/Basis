@@ -29,9 +29,9 @@ public class BasisAudioDecoder : MonoBehaviour
         decoder = null;
     }
 
-    public void OnEncoded(byte[] data, int length)
+    public void OnEncoded(byte[] data)
     {
-        var pcmLength = decoder.Decode(data, length, pcmBuffer);
+        var pcmLength = decoder.Decode(data, data.Length, pcmBuffer);
         OnDecoded?.Invoke(pcmBuffer, pcmLength);
     }
 }

@@ -9,7 +9,7 @@ using DarkRift.Server.Plugins.Commands;
 public class BasisAudioTransmission
 {
     public MicrophoneRecorder MicrophoneRecorder;
-    public event Action<byte[], int> OnEncoded;
+    public event Action<byte[]> OnEncoded;
     public Encoder encoder;
     public AudioSource SelfOutput;
     public BasisVisemeDriver VisemeDriver;
@@ -98,20 +98,14 @@ public class BasisAudioTransmission
         encodedData = new byte[encodedLength];
         Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
 
-        OnEncoded?.Invoke(encodedData, encodedLength);
+        OnEncoded?.Invoke(encodedData);
     }
-    private void SendVoiceOverNetwork(byte[] VoiceData, int Length)
+    private void SendVoiceOverNetwork(byte[] VoiceData)
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            if (Length > ushort.MaxValue)
-            {
-                Debug.LogError("Length was " + Length + " and is larger then " + ushort.MaxValue);
-                return;
-            }
             AudioSegmentData Audio = new AudioSegmentData
             {
-                encodedLength = (ushort)Length,
                 buffer = VoiceData,
             };
             writer.Write(Audio);
