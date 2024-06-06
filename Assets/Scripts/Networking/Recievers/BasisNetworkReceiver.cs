@@ -76,7 +76,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         if (Module.decoder != null)
         {
-            Module.decoder.OnEncoded(audioSegment.audioSegmentData.buffer, audioSegment.audioSegmentData.encodedLength);
+            Module.decoder.OnEncoded(audioSegment.audioSegmentData.buffer);
         }
     }
 

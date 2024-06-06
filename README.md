@@ -1,8 +1,8 @@
-                         
+
+
 <br/>
 <div align="center">
-<a href="https://github.com/ShaanCoding/ReadME-Generator">
-<img src="https://cdn.discordapp.com/attachments/1247352185101221930/1247352519068356659/BasisLogo.png?ex=665fb70f&is=665e658f&hm=69e12c84ef58b51cc6ab0c0fb5ddbad541cba7a33da5baec92d9315eb3653099&" alt="Logo" width="80" height="80">
+<img src="https://raw.githubusercontent.com/dooly123/Basis/main/Images/BasisLogo.png" alt="Logo" width="80" height="80">
 </a>
 <h3 align="center">Basis</h3>
 <p align="center">
@@ -20,14 +20,16 @@ a framework for social VR
 
  ## About The Project
 
-Basis is an open-source social framework for VR and Desktop usage
+Basis is an open-source social framework with VR and desktop usage, to be used to create your own social platform, games, ect.
+Create whatever you desire! Your creativity is your limit.
 
 By offering an open-source basis framework for anyone to contribute and customise, we aim to give users the power to break free from constraints that traditional social VR environments have set in place.
+
 This project was created to help grow the VR space and provide a starting point for those who want to unleash their creative spirit and bring their vision to life.
 
 Interested in helping create a better future for VR? Consider contributing or even donating!
 
-<img src="https://media.discordapp.net/attachments/1247352185101221930/1247724271472480256/Banner.png?ex=66611147&is=665fbfc7&hm=d639ab1e76bf4ae262b75d392c3a3c6e0e3a49d2520601fb6802ab34efca3143&=&format=webp&quality=lossless&width=550&height=155" alt="Banner" width="550" height="155">
+<img src="https://raw.githubusercontent.com/dooly123/Basis/main/Images/Banner.png" alt="Banner" width="550" height="155">
 
 <noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
@@ -47,49 +49,54 @@ This would not be possible without the following:
 - [lilToon](https://github.com/lilxyzw/lilToon)
 - [unity](https://unity.com/)
 
- ### Prerequisites
-
-this project is currently using Unity 6 (6000.0.4f1)
-other version will work with minor changes required.
-
-Currently, only OPENXR is supported.
-
-Currently, the project is buggy but working. (we got work todo!)
-
- ### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/dooly123/Basis.git
-   ```
-2. make sure you have the correct Unity version installed.
-3. open the project and make sure to load the scene Initialization
-4. enter play and you are away!
 
  ## Contributing
 
-Contributions make the open-source community an amazing place to learn, inspire, and create. I would greatly appreciate any contributions or donations you make.
+Currently, the project is buggy, but working. We’ve got work to do!
 
-If you have a suggestion to improve this, please Fork the repo and create a pull request. You can also open an issue with the tag "improvement".
-Don't forget to give the project a star! Thanks again!
+Contributing to an open-source project gives you an amazing opportunity to learn, inspire, and create! Along the way, you get to place your stone on the foundation of Basis.
+
+Do you have a suggestion to improve Basis? Please Fork the repo and create a pull request! You can also open an issue with the tag “improvement”.
+Not sure how to contribute but still wanting to help out? Consider donating! We appreciate any help possible.
+
+<noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+#### How To
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/ACrazyNewFeature`)
 3. Commit your Changes (`git commit -m 'Add some ACrazyNewFeature'`)
 4. Push to the Branch (`git push origin feature/ACrazyNewFeature`)
 5. Open a Pull Request
- ## License
+ ### Prerequisites/Requirements
 
-Distributed under the MIT License. See [MIT License](https://opensource.org/licenses/MIT) for more information.
+This project is currently using Unity 6 (6000.0.4f1)
+
+Other Unity versions may work but will require changes and adaptations.
+
+Currently, only OPENXR is supported.
+
+ ### Installation
+
+1. Make sure you have the correct Unity version installed.
+  
+2. Clone the repository
+   ```sh
+   git clone https://github.com/dooly123/Basis.git
+   ```
+3. Open the project and make sure to load the scene Initialization
+4. Enter play!
+
  ## Contact
 
-luke dooly - [@lukedooly](https://x.com/lukedooly) - doolanl208@gmail.com
+Luke Dooly - [@lukedooly](https://x.com/lukedooly) - doolanl208@gmail.com
 
 Discord: [Doolys Discord Account](https://discord.com/users/170859544782700544)
 
 Thank you to everyone who has helped Basis become something remarkable.
 
-<noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+ ## License
+
+Distributed under the MIT License. See [MIT License](https://opensource.org/licenses/MIT) for more information.
 
 ## Third-Party Code and Trademarks
 

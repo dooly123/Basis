@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1deef2ca99874854b9c4b0cf05088158, type: 3}
   m_Name: OpusData
   m_EditorClassIdentifier: 
-  bitrate: 96000
-  frameSize: 120
+  RecordingFullLength: 1
+  BitrateKPS: 128000
   Complexity: 10
   SamplingFrequency: 48000
   NumChannels: 1
   OpusApplication: 2049
-  OpusSignal: 3002
-  outputBufferSize: 480
+  OpusSignal: -1000
+  DesiredDurationInSeconds: 0.02
