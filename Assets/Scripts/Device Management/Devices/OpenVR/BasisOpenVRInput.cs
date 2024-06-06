@@ -9,6 +9,7 @@ public class BasisOpenVRInput : MonoBehaviour
     public BasisBoneTrackedRole Type;
     public BasisBoneControl Control;
     public string ID;
+    public SteamVR_ActionSet actionSet;
     public SteamVR_Action_Pose poseAction;
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
@@ -19,7 +20,7 @@ public class BasisOpenVRInput : MonoBehaviour
     public void Initialize(OpenVRDevice device, string iD)
     {
         // Get a reference to the pose action by its name
-        var actionSet = SteamVR_Input.GetActionSet("default");
+        actionSet = SteamVR_Input.GetActionSet("default");
         
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         ID = iD;
@@ -77,7 +78,8 @@ public class BasisOpenVRInput : MonoBehaviour
     }
     
     
-    public Vector2 primary2DAxis;
+    public Vector2 primary2DAxisL;
+    public Vector2 primary2DAxisR;
     public Vector2 secondary2DAxis;
     public bool gripButton;
     public bool menuButton;
@@ -118,6 +120,40 @@ public class BasisOpenVRInput : MonoBehaviour
             if (LocalRawRotation != Quaternion.identity)
             {
                 Control.LocalRawRotation = LocalRawRotation;
+            }
+        }
+        
+        
+        primary2DAxisL = SteamVR_Actions.default_Move.GetAxis(SteamVR_Input_Sources.Any);
+        primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
+        
+        if (Type == BasisBoneTrackedRole.LeftHand)
+        {
+            BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxisL;
+            if (primaryButton)
+            {
+                BasisLocalPlayer.Instance.Move.HandleJump();
+            }
+            if (secondaryButton)
+            {
+                if (BasisHamburgerMenu.Instance == null)
+                {
+                    if (BasisHamburgerMenu.IsLoading == false)
+                    {
+                        BasisHamburgerMenu.OpenMenu();
+                    }
+                }
+                else
+                {
+                    BasisHamburgerMenu.Instance.CloseThisMenu();
+                }
+            }
+        }
+        else
+        {
+            if (Type == BasisBoneTrackedRole.RightHand)
+            {
+                BasisLocalPlayer.Instance.Move.Rotation = primary2DAxisR;
             }
         }
         

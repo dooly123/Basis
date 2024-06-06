@@ -58,7 +58,7 @@
   "action_sets": [
     {
       "name": "/actions/default",
-      "usage": "single"
+      "usage": "leftright"
     }
   ],
   "default_bindings": [
