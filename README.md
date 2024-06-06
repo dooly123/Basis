@@ -6,7 +6,7 @@
 </a>
 <h3 align="center">Basis</h3>
 <p align="center">
-a framework for social VR
+A Framework For Social VR
 <br/>
 <br/>
 <a href="https://discord.gg/F35u3cUMqt"><strong>Join The Discord!»</strong></a>
