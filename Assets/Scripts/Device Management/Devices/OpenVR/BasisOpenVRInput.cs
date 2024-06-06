@@ -21,35 +21,14 @@ public class BasisOpenVRInput : MonoBehaviour
     {
         // Get a reference to the pose action by its name
         actionSet = SteamVR_Input.GetActionSet("default");
+        actionSet.Activate();
         
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         ID = iD;
         Device = device;
-        if (Device.deviceType == ETrackedDeviceClass.HMD)
-        {
-            Type = BasisBoneTrackedRole.CenterEye;
-            actionSet.Activate(SteamVR_Input_Sources.Head);
-        }
-        else
-        {
-            // Get handedness of controller
-            if (Device.deviceType == ETrackedDeviceClass.Controller)
-            {
-                bool isLeftHand = false;
-                isLeftHand = OpenVR.System.GetControllerRoleForTrackedDeviceIndex((uint)device.deviceIndex) == ETrackedControllerRole.LeftHand;
-                
-                if (isLeftHand)
-                {
-                    Type = BasisBoneTrackedRole.LeftHand;
-                }
-                else
-                {
-                    Type = BasisBoneTrackedRole.RightHand;
-                }
-                
-                Debug.Log(isLeftHand);
-            }
-        }
+        
+        Type = device.deviceType;
+        
         ActivateTracking();
     }
     public void ActivateTracking()
@@ -89,7 +68,6 @@ public class BasisOpenVRInput : MonoBehaviour
     public bool secondary2DAxisClick;
     public bool primary2DAxisClick;
     
-
     public void SetPosRot()
     {
         
@@ -123,12 +101,12 @@ public class BasisOpenVRInput : MonoBehaviour
             }
         }
         
-        
-        primary2DAxisL = SteamVR_Actions.default_Move.GetAxis(SteamVR_Input_Sources.Any);
-        primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
-        
         if (Type == BasisBoneTrackedRole.LeftHand)
         {
+            primary2DAxisL = SteamVR_Actions.default_Move.GetAxis(SteamVR_Input_Sources.LeftHand);
+            primaryButton = SteamVR_Actions.default_Jump.GetStateDown(SteamVR_Input_Sources.Any);
+            secondaryButton = SteamVR_Actions.default_Menu.GetStateDown(SteamVR_Input_Sources.Any);
+            
             BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxisL;
             if (primaryButton)
             {
@@ -153,6 +131,7 @@ public class BasisOpenVRInput : MonoBehaviour
         {
             if (Type == BasisBoneTrackedRole.RightHand)
             {
+                primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
                 BasisLocalPlayer.Instance.Move.Rotation = primary2DAxisR;
             }
         }

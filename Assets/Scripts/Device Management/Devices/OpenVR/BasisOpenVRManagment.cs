@@ -74,14 +74,20 @@ public static class BasisOpenVRManagement
         {
             if (TypicalDevices.ContainsKey(ID) == false)
             {
+                BasisBoneTrackedRole role = GetBasisBoneTrackedRole(deviceType, (uint)deviceIndex);
+
                 OpenVRDevice openVRDevice = new OpenVRDevice
                 {
                     deviceIndex = deviceIndex,
                     deviceName = ID,
-                    deviceType = deviceType
+                    deviceType = role
                 };
                 CreatePhysicalTrackedDevice(openVRDevice, ID);
                 TypicalDevices.Add(ID, openVRDevice);
+
+                // If a controller is connecting, check both controllers and make sure to update the roles so they are not the
+                // same or swapped. Sometimes when OpenVR has a new controller connecting, it will swap left and right roles.
+                UpdateControllerRoles(deviceType, role, ID);
                 
                 Debug.Log("Creating device: " + ID);
             }
@@ -91,6 +97,50 @@ public static class BasisOpenVRManagement
             DestroyPhysicalTrackedDevice(ID);
         }
     }
+
+    private static BasisBoneTrackedRole GetBasisBoneTrackedRole(ETrackedDeviceClass deviceType, uint deviceIndex)
+    {
+        BasisBoneTrackedRole role = BasisBoneTrackedRole.Hips;
+        switch (deviceType)
+        {
+            case ETrackedDeviceClass.Controller:
+                bool isLeftHand = OpenVR.System.GetControllerRoleForTrackedDeviceIndex(deviceIndex) == ETrackedControllerRole.LeftHand;
+                role = isLeftHand ? BasisBoneTrackedRole.LeftHand : BasisBoneTrackedRole.RightHand;
+                break;
+            case ETrackedDeviceClass.GenericTracker:
+                //role = BasisBoneTrackedRole.None;
+                break;
+            case ETrackedDeviceClass.HMD:
+                role = BasisBoneTrackedRole.CenterEye;
+                break;
+            case ETrackedDeviceClass.Invalid:
+                //role = BasisBoneTrackedRole.None;
+                break;
+            case ETrackedDeviceClass.TrackingReference:
+                //role = BasisBoneTrackedRole.None;
+                break;
+        }
+        return role;
+    }
+
+    private static void UpdateControllerRoles(ETrackedDeviceClass deviceType, BasisBoneTrackedRole role, string ID)
+    {
+        if (deviceType == ETrackedDeviceClass.Controller)
+        {
+            foreach (var device in TrackedOpenVRInputDevices)
+            {
+                if (device.ID == ID) continue;
+                if (device.Device.deviceType == BasisBoneTrackedRole.LeftHand || device.Device.deviceType == BasisBoneTrackedRole.RightHand)
+                {
+                    BasisBoneTrackedRole newRole = role == BasisBoneTrackedRole.LeftHand ? BasisBoneTrackedRole.RightHand : BasisBoneTrackedRole.LeftHand;
+                    device.Device.deviceType = newRole;
+                    device.Type = newRole;
+                    break;
+                }
+            }
+        }
+    }
+    
     public static string GenerateID(int device)
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
