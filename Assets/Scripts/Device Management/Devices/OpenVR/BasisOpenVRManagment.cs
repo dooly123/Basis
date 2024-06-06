@@ -69,6 +69,8 @@ public static class BasisOpenVRManagement
             return;
         }
         
+        BasisBoneTrackedRole role = GetBasisBoneTrackedRole(deviceType, (uint)deviceIndex);
+        
         string ID = GenerateID(deviceIndex);
         if (connected)
         {
@@ -78,7 +80,7 @@ public static class BasisOpenVRManagement
                 {
                     deviceIndex = deviceIndex,
                     deviceName = ID,
-                    deviceType = deviceType
+                    deviceType = role
                 };
                 CreatePhysicalTrackedDevice(openVRDevice, ID);
                 TypicalDevices.Add(ID, openVRDevice);
@@ -91,6 +93,32 @@ public static class BasisOpenVRManagement
             DestroyPhysicalTrackedDevice(ID);
         }
     }
+
+    private static BasisBoneTrackedRole GetBasisBoneTrackedRole(ETrackedDeviceClass deviceType, uint deviceIndex)
+    {
+        BasisBoneTrackedRole role = BasisBoneTrackedRole.CenterEye;
+        switch (deviceType)
+        {
+            case ETrackedDeviceClass.Controller:
+                bool isLeftHand = OpenVR.System.GetControllerRoleForTrackedDeviceIndex(deviceIndex) == ETrackedControllerRole.LeftHand;
+                role = isLeftHand ? BasisBoneTrackedRole.LeftHand : BasisBoneTrackedRole.RightHand;
+                break;
+            case ETrackedDeviceClass.GenericTracker:
+                //role = BasisBoneTrackedRole.None;
+                break;
+            case ETrackedDeviceClass.HMD:
+                role = BasisBoneTrackedRole.CenterEye;
+                break;
+            case ETrackedDeviceClass.Invalid:
+                //role = BasisBoneTrackedRole.None;
+                break;
+            case ETrackedDeviceClass.TrackingReference:
+                //role = BasisBoneTrackedRole.None;
+                break;
+        }
+        return role;
+    }
+
     public static string GenerateID(int device)
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
