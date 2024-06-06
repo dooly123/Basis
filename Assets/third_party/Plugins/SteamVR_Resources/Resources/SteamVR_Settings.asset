@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7f99b5209bd86441a74f3b0c7aab951, type: 3}
   m_Name: SteamVR_Settings
   m_EditorClassIdentifier: 
-  pauseGameWhenDashboardVisible: 1
-  lockPhysicsUpdateRateToRenderFrequency: 1
+  pauseGameWhenDashboardVisible: 0
+  lockPhysicsUpdateRateToRenderFrequency: 0
   trackingSpaceOrigin: 1
   actionsFilePath: actions.json
   steamVRInputPath: SteamVR_Input
@@ -22,10 +22,10 @@ MonoBehaviour:
   activateFirstActionSetOnStart: 1
   editorAppKey: application.generated.unity.basis.exe
   autoEnableVR: 1
-  legacyMixedRealityCamera: 1
+  legacyMixedRealityCamera: 0
   mixedRealityCameraPose:
-    actionPath: /actions/mixedreality/in/ExternalCamera
-    needsReinit: 0
+    actionPath: 
+    needsReinit: 1
   mixedRealityCameraInputSource: 11
   mixedRealityActionSetAutoEnable: 1
   previewHandLeft: {fileID: 0}

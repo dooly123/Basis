@@ -112,13 +112,30 @@ public static class BasisOpenVRManagement
    {
        DestroyInputDevice(ID);
        DestroyOpenVRInput(ID);
+       
+       Debug.Log("Destroying device: " + ID);
    }
    public static void DestroyInputDevice(string ID)
    {
-       TypicalDevices.Remove(ID);
+       foreach (var device in TypicalDevices)
+       {
+           if (device.Key == ID)
+           {
+               TypicalDevices.Remove(ID);
+               break;
+           }
+       }
    }
    public static void DestroyOpenVRInput(string ID)
    {
-       TrackedOpenVRInputDevices.RemoveAll(x => x.ID == ID);
+       foreach (var device in TrackedOpenVRInputDevices)
+       {
+           if (device.ID == ID)
+           {
+                Object.Destroy(device.gameObject);
+               TrackedOpenVRInputDevices.Remove(device);
+               break;
+           }
+       }
    }
 }
