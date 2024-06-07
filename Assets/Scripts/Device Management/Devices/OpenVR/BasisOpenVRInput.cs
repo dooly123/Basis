@@ -13,11 +13,13 @@ public class BasisOpenVRInput : BasisInput
     public static string ActionName = "default";
     public void Initialize(OpenVRDevice device, string iD)
     {
-        base.Initialize(iD);
         Device = device;
         TrackedRole = device.deviceType;
         actionSet = SteamVR_Input.GetActionSet(ActionName);
         actionSet.Activate();
+        
+        // Initialize after setting the device and role
+        base.Initialize(iD);
     }
 
     public override void PollData()

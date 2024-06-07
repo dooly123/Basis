@@ -8,9 +8,11 @@ public class BasisOpenXRInput : BasisInput
 
     public void Initialize(UnityEngine.XR.InputDevice device, string iD)
     {
-        base.Initialize(iD);
         Device = device;
         DetermineDeviceType();
+        
+        // Initialize after setting the device and role
+        base.Initialize(iD);
     }
 
     private void DetermineDeviceType()
