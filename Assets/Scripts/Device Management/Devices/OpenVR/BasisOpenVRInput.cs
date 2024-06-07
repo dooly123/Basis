@@ -15,7 +15,7 @@ public class BasisOpenVRInput : BasisInput
     {
         base.Initialize(iD);
         Device = device;
-        Type = device.deviceType;
+        TrackedRole = device.deviceType;
         actionSet = SteamVR_Input.GetActionSet(ActionName);
         actionSet.Activate();
     }
@@ -52,7 +52,7 @@ public class BasisOpenVRInput : BasisInput
 
     private void UpdatePlayerControl()
     {
-        if (Type == BasisBoneTrackedRole.LeftHand)
+        if (TrackedRole == BasisBoneTrackedRole.LeftHand)
         {
             primary2DAxisL = SteamVR_Actions.default_Move.GetAxis(SteamVR_Input_Sources.LeftHand);
             primaryButton = SteamVR_Actions.default_Jump.GetStateDown(SteamVR_Input_Sources.Any);
@@ -75,7 +75,7 @@ public class BasisOpenVRInput : BasisInput
                 }
             }
         }
-        else if (Type == BasisBoneTrackedRole.RightHand)
+        else if (TrackedRole == BasisBoneTrackedRole.RightHand)
         {
             primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
             BasisLocalPlayer.Instance.Move.Rotation = primary2DAxisR;

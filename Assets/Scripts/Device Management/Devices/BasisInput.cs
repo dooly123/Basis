@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class BasisInput : MonoBehaviour
 {
     public BasisLocalBoneDriver Driver;
-    private BasisBoneTrackedRole TrackedRole;
+    private BasisBoneTrackedRole trackedrole;
     public bool hasRoleAssigned = false;
     public BasisBoneControl Control;
     public string ID;
@@ -20,12 +20,12 @@ public abstract class BasisInput : MonoBehaviour
     public bool secondary2DAxisClick;
     public bool primary2DAxisClick;
 
-    public BasisBoneTrackedRole Type
+    public BasisBoneTrackedRole TrackedRole
     {
-        get => TrackedRole;
+        get => trackedrole;
         set
         {
-            TrackedRole = value;
+            trackedrole = value;
             hasRoleAssigned = true;
         }
     }
@@ -53,11 +53,14 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Missing Driver!");
             return;
         }
-        if (hasRoleAssigned && Driver.FindBone(out Control, Type))
+        if (hasRoleAssigned)
         {
-            Control.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-            Control.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-            // Do nothing if bone is found successfully
+            if (Driver.FindBone(out Control, TrackedRole))
+            {
+                Control.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+                Control.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+                // Do nothing if bone is found successfully
+            }
         }
         Driver.OnSimulate += PollData;
         SetRealTrackers(BasisBoneControl.BasisHasTracked.HasTracker, BasisBoneControl.BasisHasRigLayer.HasRigLayer);
@@ -78,7 +81,7 @@ public abstract class BasisInput : MonoBehaviour
 
     public void SetRealTrackers(BasisBoneControl.BasisHasTracked hasTracked, BasisBoneControl.BasisHasRigLayer HasLayer)
     {
-        if (Driver.FindBone(out Control, Type))
+        if (Driver.FindBone(out Control, TrackedRole))
         {
             Control.HasTrackerPositionDriver = hasTracked;
             Control.HasTrackerRotationDriver = hasTracked;

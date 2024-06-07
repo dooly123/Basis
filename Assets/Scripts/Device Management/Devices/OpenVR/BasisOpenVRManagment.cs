@@ -153,7 +153,7 @@ public static class BasisOpenVRManagement
                 {
                     BasisBoneTrackedRole newRole = role == BasisBoneTrackedRole.LeftHand ? BasisBoneTrackedRole.RightHand : BasisBoneTrackedRole.LeftHand;
                     device.Device.deviceType = newRole;
-                    device.Type = newRole;
+                    device.TrackedRole = newRole;
                     break;
                 }
             }

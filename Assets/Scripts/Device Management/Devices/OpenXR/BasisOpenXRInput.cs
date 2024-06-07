@@ -17,15 +17,15 @@ public class BasisOpenXRInput : BasisInput
     {
         if (Device.characteristics == Characteristics.hmd)
         {
-            Type = BasisBoneTrackedRole.CenterEye;
+            TrackedRole = BasisBoneTrackedRole.CenterEye;
         }
         else if (Device.characteristics == Characteristics.leftController || Device.characteristics == Characteristics.leftTrackedHand)
         {
-            Type = BasisBoneTrackedRole.LeftHand;
+            TrackedRole = BasisBoneTrackedRole.LeftHand;
         }
         else if (Device.characteristics == Characteristics.rightController || Device.characteristics == Characteristics.rightTrackedHand)
         {
-            Type = BasisBoneTrackedRole.RightHand;
+            TrackedRole = BasisBoneTrackedRole.RightHand;
         }
     }
 
@@ -35,16 +35,22 @@ public class BasisOpenXRInput : BasisInput
         {
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
             {
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                if (hasRoleAssigned)
                 {
-                    Control.LocalRawPosition = LocalRawPosition;
+                    if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    {
+                        Control.LocalRawPosition = LocalRawPosition;
+                    }
                 }
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out LocalRawRotation))
             {
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                if (hasRoleAssigned)
                 {
-                    Control.LocalRawRotation = LocalRawRotation;
+                    if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                    {
+                        Control.LocalRawRotation = LocalRawRotation;
+                    }
                 }
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out primary2DAxis))
@@ -84,7 +90,7 @@ public class BasisOpenXRInput : BasisInput
 
     private void UpdatePlayerControl()
     {
-        if (Type == BasisBoneTrackedRole.LeftHand)
+        if (TrackedRole == BasisBoneTrackedRole.LeftHand)
         {
             BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxis;
             if (primaryButton)
@@ -103,7 +109,7 @@ public class BasisOpenXRInput : BasisInput
                 }
             }
         }
-        else if (Type == BasisBoneTrackedRole.RightHand)
+        else if (TrackedRole == BasisBoneTrackedRole.RightHand)
         {
             BasisLocalPlayer.Instance.Move.Rotation = primary2DAxis;
         }
