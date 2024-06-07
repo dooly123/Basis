@@ -82,6 +82,11 @@ public static class BasisOpenXRManagement
         InputDevices.GetDevices(inputDevices);
         foreach (UnityEngine.XR.InputDevice device in inputDevices)
         {
+            if (device.characteristics.HasFlag(InputDeviceCharacteristics.TrackingReference) == true)
+            {
+                continue;
+            }
+            
             if (device != null)
             {
                 string ID = GenerateID(device);
