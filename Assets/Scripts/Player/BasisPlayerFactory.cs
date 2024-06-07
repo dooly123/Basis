@@ -5,7 +5,7 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 
 public static class BasisPlayerFactory
 {
-    public static async Task<BasisLocalPlayer> CreateLocalPLayer(InstantiationParameters InstantiationParameters, string RemotePlayerId = "LocalPlayer")
+    public static async Task<BasisLocalPlayer> CreateLocalPlayer(InstantiationParameters InstantiationParameters, string RemotePlayerId = "LocalPlayer")
     {
         BasisPlayer Player = await CreatePlayer(RemotePlayerId, InstantiationParameters);
         BasisLocalPlayer CreatedLocalPlayer = (BasisLocalPlayer)Player;

@@ -1,4 +1,5 @@
 using SteamAudio;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -13,6 +14,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public SteamAudioListener SteamAudioListener;
     public BasisLockToPositionBinder CamerasLockToPosition;
     public BasisLocalPlayer LocalPlayer;
+    public int DefaultcameraFOV = 90;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -30,6 +32,15 @@ public class BasisLocalCameraDriver : MonoBehaviour
         }
         CamerasLockToPosition.Initialize(LocalPlayer);
         RenderPipelineManager.beginCameraRendering += beginCameraRendering;
+        BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
+    }
+
+    private void OnModeSwitch(BasisDeviceManagement.BasisBootedMode mode)
+    {
+        if(mode == BasisDeviceManagement.BasisBootedMode.Desktop)
+        {
+            Camera.fieldOfView = DefaultcameraFOV;
+        }
     }
     public void OnDisable()
     {
