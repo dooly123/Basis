@@ -420,6 +420,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3d4ce58ea0b6eb744a10387e7824455b, type: 2}
     - target: {fileID: 1630794972795428178, guid: 887ee97c7dce4834792c0a5faba7f9d1,
         type: 3}
+      propertyPath: 'm_Materials.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0a291bbba8f58be42b17a1f1f8dec691, type: 2}
+    - target: {fileID: 1630794972795428178, guid: 887ee97c7dce4834792c0a5faba7f9d1,
+        type: 3}
       propertyPath: 'm_BlendShapeWeights.Array.data[0]'
       value: 0
       objectReference: {fileID: 0}
@@ -750,8 +755,8 @@ MonoBehaviour:
   Animator: {fileID: 1441881225265786801}
   FaceVisemeMesh: {fileID: 6037565266424221554}
   FaceBlinkMesh: {fileID: 6037565266424221554}
-  AvatarEyePosition: {x: 1.512417, y: 0.05306011}
-  AvatarMouthPosition: {x: 1.478505, y: 0.2697248}
+  AvatarEyePosition: {x: 1.5124171, y: 0.053060107}
+  AvatarMouthPosition: {x: 1.4785055, y: 0.26972476}
   FaceVisemeMovement: 0c0000000a000000040000000e0000000200000006000000110000000d000000070000000b0000000000000003000000050000001000000009000000
   BlinkViseme: ffffffff12000000
   laughterBlendTarget: -1

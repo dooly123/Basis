@@ -40,7 +40,7 @@ public class BasisFallBackBoneDataEditor : Editor
                 for (int index = 0; index < 55; index++)
                 {
                     HumanBodyBones bone = (HumanBodyBones)index;
-                    if (BasisLocalAvatarDriver.TryConvertToBoneTrackingRole(bone, out BasisBoneTrackedRole role))
+                    if (BasisAvatarDriver.TryConvertToBoneTrackingRole(bone, out BasisBoneTrackedRole role))
                     {
                         Transform boneTransform = Anim.GetBoneTransform(bone);
                         BasisFallBone fallbackedBone = CreateFallbackBone(bone, role, bounds, boneTransform);

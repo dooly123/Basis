@@ -8,32 +8,19 @@ using DarkRift.Server.Plugins.Commands;
 [System.Serializable]
 public class BasisAudioTransmission
 {
-    public MicrophoneRecorder MicrophoneRecorder;
     public event Action<byte[]> OnEncoded;
     public Encoder encoder;
-    public AudioSource SelfOutput;
-    public BasisVisemeDriver VisemeDriver;
     public BasisNetworkedPlayer NetworkedPlayer;
     public BasisNetworkSendBase Base;
     public BasisOpusSettings settings;
     public byte[] outputBuffer;
     public byte[] encodedData;
     public int encodedLength;
-    public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject MicrophoneGameobject)
+    public void OnEnable(BasisNetworkedPlayer networkedPlayer)
     {
         NetworkedPlayer = networkedPlayer;
         Base = networkedPlayer.NetworkSend;
-        settings = BasisNetworkConnector.Instance.BasisOpusSettings;
-        if (MicrophoneRecorder == null)
-        {
-            MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(MicrophoneGameobject);
-        }
-        else
-        {
-            MicrophoneRecorder.DeInitialize();
-        }
-        MicrophoneRecorder.Initialize();
-        OnCalibration(NetworkedPlayer, MicrophoneGameobject);
+        settings = BasisDeviceManagement.Instance.BasisOpusSettings;
         encoder = new Encoder(settings.SamplingFrequency, settings.NumChannels, settings.OpusApplication)
         {
             Bitrate = settings.BitrateKPS,
@@ -41,43 +28,21 @@ public class BasisAudioTransmission
             Signal = settings.OpusSignal
         };
         OnEncoded += SendVoiceOverNetwork;
-        MicrophoneRecorder.OnHasAudio += OnAudioReady;
-        MicrophoneRecorder.OnHasSilence += OnAudioSilence;
-    }
-    public void OnCalibration(BasisNetworkedPlayer NetworkedPlayer, GameObject MicrophoneGameobject)
-    {
-
-        if (SelfOutput == null)
+        BasisLocalPlayer Local = (BasisLocalPlayer)networkedPlayer.Player;
+        if (Local.AvatarDriver != null && Local.AvatarDriver.MicrophoneRecorder != null)
         {
-            SelfOutput = BasisHelpers.GetOrAddComponent<AudioSource>(MicrophoneGameobject);
+            Local.AvatarDriver.MicrophoneRecorder.OnHasAudio += OnAudioReady;
+            Local.AvatarDriver.MicrophoneRecorder.OnHasSilence += OnAudioSilence;
         }
-        if (VisemeDriver == null)
-        {
-            VisemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(MicrophoneGameobject);
-        }
-        SelfOutput.loop = true;     // Set the AudioClip to loop
-        SelfOutput.mute = false;
-        SelfOutput.clip = MicrophoneRecorder.clip;
-        SelfOutput.Play();
-        VisemeDriver.audioSource = SelfOutput;
-        VisemeDriver.Initialize(NetworkedPlayer.Player.Avatar);
     }
     public void OnDisable()
     {
-        if (MicrophoneRecorder != null)
+        if (BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder != null)
         {
-            GameObject.Destroy(MicrophoneRecorder.gameObject);
+            GameObject.Destroy(BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder.gameObject);
         }
-        if (SelfOutput != null)
-        {
-            GameObject.Destroy(SelfOutput);
-        }
-        if (VisemeDriver != null)
-        {
-            GameObject.Destroy(VisemeDriver);
-        }
-        MicrophoneRecorder.OnHasAudio -= OnAudioReady;
-        MicrophoneRecorder.OnHasSilence -= OnAudioSilence;
+        BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder.OnHasAudio -= OnAudioReady;
+        BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder.OnHasSilence -= OnAudioSilence;
         encoder.Dispose();
         encoder = null;
         OnEncoded -= SendVoiceOverNetwork;

@@ -19,7 +19,7 @@ public class BasisAudioDecoder : MonoBehaviour
     }
     public void Initialize()
     {
-        Settings = BasisNetworkConnector.Instance.BasisOpusSettings;
+        Settings = BasisDeviceManagement.Instance.BasisOpusSettings;
         pcmBuffer = new float[AudioDecoder.maximumPacketDuration * (int)Settings.NumChannels];
         decoder = new AudioDecoder(Settings.SamplingFrequency, Settings.NumChannels);
     }

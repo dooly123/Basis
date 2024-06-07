@@ -18,7 +18,7 @@ public class MicrophoneRecorder : MonoBehaviour
     private int rmsWindowSize = 10; // Size of the moving average window
     public void Initialize()
     {
-        BasisOpusSettings = BasisNetworkConnector.Instance.BasisOpusSettings;
+        BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
         processBuffer = BasisOpusSettings.CalculateProcessBuffer();
         samplingFrequency = BasisOpusSettings.GetSampleFreq();
         microphoneBuffer = new float[BasisOpusSettings.RecordingFullLength * samplingFrequency];

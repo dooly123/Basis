@@ -2,7 +2,7 @@ using UnityEngine;
 public class BasisAvatarEyeInput : MonoBehaviour
 {
     public Camera Camera;
-    public BasisLocalAvatarDriver Calibration;
+    public BasisLocalAvatarDriver AvatarDriver;
     public BasisLocalInputActions characterInputActions;
     public BasisBoneControl Eye;
     public static BasisAvatarEyeInput Instance;
@@ -43,7 +43,7 @@ public class BasisAvatarEyeInput : MonoBehaviour
         {
             characterInputActions.CharacterEyeInput = this;
         }
-        Calibration = BasisLocalPlayer.Instance.LocalAvatarDriver;
+        AvatarDriver = BasisLocalPlayer.Instance.AvatarDriver;
         Camera = BasisLocalCameraDriver.Instance.Camera;
     }
     public void OnDisable()

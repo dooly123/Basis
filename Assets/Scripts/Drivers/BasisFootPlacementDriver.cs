@@ -17,7 +17,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.Foot, BasisBoneTrackedRole.LeftFoot);
         Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.Foot, BasisBoneTrackedRole.RightFoot);
         OnCalibration();
-        Localplayer.LocalAvatarDriver.CalibrationComplete.AddListener(OnCalibration);
+        Localplayer.AvatarDriver.CalibrationComplete.AddListener(OnCalibration);
     }
     public void OnCalibration()
     {
@@ -30,10 +30,10 @@ public class BasisFootPlacementDriver : MonoBehaviour
         RightFootSolver.Foot.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
         RightFootSolver.Foot.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
 
-        LeftFootSolver.MyIkConstraint = Localplayer.LocalAvatarDriver.LeftFootTwoBoneIK;
-        RightFootSolver.MyIkConstraint = Localplayer.LocalAvatarDriver.RightFootTwoBoneIK;
-        Localplayer.LocalAvatarDriver.LeftFootLayer.active = true;
-        Localplayer.LocalAvatarDriver.RightFootLayer.active = true;
+        LeftFootSolver.MyIkConstraint = Localplayer.AvatarDriver.LeftFootTwoBoneIK;
+        RightFootSolver.MyIkConstraint = Localplayer.AvatarDriver.RightFootTwoBoneIK;
+        Localplayer.AvatarDriver.LeftFootLayer.active = true;
+        Localplayer.AvatarDriver.RightFootLayer.active = true;
 
         LeftFootSolver.Initialize(RightFootSolver);
         RightFootSolver.Initialize(LeftFootSolver);

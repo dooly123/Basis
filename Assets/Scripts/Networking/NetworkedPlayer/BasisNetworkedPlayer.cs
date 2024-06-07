@@ -36,9 +36,9 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
             if (player.IsLocal)
             {
                 BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
-                if (LocalPlayer.LocalAvatarDriver != null)
+                if (LocalPlayer.AvatarDriver != null)
                 {
-                    LocalPlayer.LocalAvatarDriver.CalibrationComplete.RemoveListener(CalibrationComplete);
+                    LocalPlayer.AvatarDriver.CalibrationComplete.RemoveListener(CalibrationComplete);
                 }
                 else
                 {
@@ -65,9 +65,9 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
             if (player.IsLocal)
             {
                 BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
-                if (LocalPlayer.LocalAvatarDriver != null)
+                if (LocalPlayer.AvatarDriver != null)
                 {
-                    LocalPlayer.LocalAvatarDriver.CalibrationComplete.AddListener(CalibrationComplete);
+                    LocalPlayer.AvatarDriver.CalibrationComplete.AddListener(CalibrationComplete);
                     LocalPlayer.LocalBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
                 }
                 else

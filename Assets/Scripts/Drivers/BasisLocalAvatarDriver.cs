@@ -27,6 +27,8 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public RigLayer HeadLayer;
     public RigLayer UpperChestLayer;
     public RigLayer SpineLayer;
+
+    public MicrophoneRecorder MicrophoneRecorder;
     public void LocalCalibration(BasisLocalPlayer Player)
     {
         LocalPlayer = Player;
@@ -58,6 +60,16 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
         }
         AnimatorDriver.Initalize(LocalDriver, Player.Avatar.Animator);
+
+        if (MicrophoneRecorder == null)
+        {
+            MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
+        }
+        else
+        {
+            MicrophoneRecorder.DeInitialize();
+        }
+        MicrophoneRecorder.Initialize();
     }
     public void ComputeOffsets(BaseBoneDriver BaseBoneDriver)
     {
@@ -192,35 +204,18 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void WriteUpEvents(BasisBoneControl Control, RigLayer Layer)
     {
-        Control.OnHasRigLayerPositionDriverChanged += delegate
+        // Define a method to update the active state of the Layer
+        void UpdateLayerActiveState()
         {
-            if (Control.HasRigLayerPositionDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer || Control.HasRigLayerRotationDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer)
-            {
-                Layer.active = true;
-            }
-            else
-            {
-                Layer.active = false;
-            }
-        };
-        Control.OnHasRigLayerRotationDriverChanged += delegate
-        {
-            if (Control.HasRigLayerPositionDriver != BasisBoneControl.BasisHasRigLayer.HasRigLayer || Control.HasRigLayerRotationDriver != BasisBoneControl.BasisHasRigLayer.HasRigLayer)
-            {
-                Layer.active = true;
-            }
-            else
-            {
-                Layer.active = false;
-            }
-        };
-        if (Control.HasRigLayerPositionDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer || Control.HasRigLayerRotationDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer)
-        {
-            Layer.active = true;
+            Layer.active = Control.HasRigLayerPositionDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer ||
+                           Control.HasRigLayerRotationDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
-        else
-        {
-            Layer.active = false;
-        }
+
+        // Subscribe to the events
+        Control.OnHasRigLayerPositionDriverChanged += delegate { UpdateLayerActiveState(); };
+        Control.OnHasRigLayerRotationDriverChanged += delegate { UpdateLayerActiveState(); };
+
+        // Set the initial state
+        UpdateLayerActiveState();
     }
 }

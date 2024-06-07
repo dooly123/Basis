@@ -14,7 +14,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public SteamAudioListener SteamAudioListener;
     public BasisLockToPositionBinder CamerasLockToPosition;
     public BasisLocalPlayer LocalPlayer;
-    public int DefaultcameraFOV = 90;
+    public int DefaultCameraFov = 90;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -39,15 +39,15 @@ public class BasisLocalCameraDriver : MonoBehaviour
     {
         if(mode == BasisDeviceManagement.BasisBootedMode.Desktop)
         {
-            Camera.fieldOfView = DefaultcameraFOV;
+            Camera.fieldOfView = DefaultCameraFov;
         }
     }
     public void OnDisable()
     {
         RenderPipelineManager.beginCameraRendering -= beginCameraRendering;
-        if (LocalPlayer.LocalAvatarDriver && LocalPlayer.LocalAvatarDriver.References != null && LocalPlayer.LocalAvatarDriver.References.head != null)
+        if (LocalPlayer.AvatarDriver && LocalPlayer.AvatarDriver.References != null && LocalPlayer.AvatarDriver.References.head != null)
         {
-            LocalPlayer.LocalAvatarDriver.References.head.localScale = LocalPlayer.LocalAvatarDriver.HeadScale;
+            LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
         }
     }
     public void beginCameraRendering(ScriptableRenderContext context, Camera Camera)
@@ -56,11 +56,11 @@ public class BasisLocalCameraDriver : MonoBehaviour
         {
             if (Camera.GetInstanceID() == CameraInstanceID)
             {
-                LocalPlayer.LocalAvatarDriver.References.head.localScale = LocalPlayer.LocalAvatarDriver.HeadScaledDown;
+                LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScaledDown;
             }
             else
             {
-                LocalPlayer.LocalAvatarDriver.References.head.localScale = LocalPlayer.LocalAvatarDriver.HeadScale;
+                LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
             }
         }
     }

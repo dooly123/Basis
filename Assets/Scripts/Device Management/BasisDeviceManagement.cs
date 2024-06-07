@@ -12,7 +12,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public BasisBootedMode CurrentMode = BasisBootedMode.Desktop;
     public static BasisDeviceManagement Instance;
     public BasisAvatarEyeInput BasisAvatarEyeInput;
-
+    public BasisOpusSettings BasisOpusSettings;
     // Define the events
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
@@ -122,7 +122,6 @@ public partial class BasisDeviceManagement : MonoBehaviour
         SetCameraRenderState(false);
         BasisAvatarEyeInput = BasisHelpers.GetOrAddComponent<BasisAvatarEyeInput>(this.gameObject);
         CurrentMode = BasisBootedMode.Desktop;
-        BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = false;
     }
 
     public void OnDestroy()

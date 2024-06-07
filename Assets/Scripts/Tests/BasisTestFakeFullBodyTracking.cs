@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 public class BasisTestFakeFullBodyTracking : MonoBehaviour
 {
-    public BasisLocalAvatarDriver Calibration;
+    public BasisLocalAvatarDriver LocalDriver;
     public BasisLocalBoneDriver Driver;
     [SerializeField]
     public List<Transform> FakeTransforms = new List<Transform>();
@@ -17,7 +17,7 @@ public class BasisTestFakeFullBodyTracking : MonoBehaviour
     public void OnEnable()
     {
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
-        Calibration = BasisLocalPlayer.Instance.LocalAvatarDriver;
+        LocalDriver = BasisLocalPlayer.Instance.AvatarDriver;
         if (BasisAvatarEyeInput.Instance != null)
         {
             BasisAvatarEyeInput.Instance.enabled = false;
@@ -75,7 +75,7 @@ public class BasisTestFakeFullBodyTracking : MonoBehaviour
     /// <returns></returns>
     public Vector3 ComputeOffset(GameObject createdFakeBone, BasisBoneControl control)
     {
-        Vector3 OffsetFromAvatar = BasisLocalBoneDriver.ConvertToAvatarSpace(Calibration.LocalPlayer.Avatar.Animator, createdFakeBone.transform.position, Calibration.LocalPlayer.Avatar.AvatarHeightOffset, out control.WorldSpaceFloor);
+        Vector3 OffsetFromAvatar = BasisLocalBoneDriver.ConvertToAvatarSpace(LocalDriver.LocalPlayer.Avatar.Animator, createdFakeBone.transform.position, LocalDriver.LocalPlayer.Avatar.AvatarHeightOffset, out control.WorldSpaceFloor);
         return OffsetFromAvatar - control.LocalRawPosition;
     }
     public void Simulate()

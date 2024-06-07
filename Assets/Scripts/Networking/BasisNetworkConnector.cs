@@ -22,7 +22,6 @@ public class BasisNetworkConnector : MonoBehaviour
     public PlayerIdMessage PlayerID = new PlayerIdMessage();
     public ReadyMessage readyMessage = new ReadyMessage();
     public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
-    public BasisOpusSettings BasisOpusSettings;
     public bool ForceConnect = false;
     public string Ip = "170.64.184.249";
     public ushort Port = 4296;

@@ -172,12 +172,13 @@ MonoBehaviour:
   HeadLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
-  ChestAndSpine:
+  UpperChestLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
   SpineLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
+  MicrophoneRecorder: {fileID: 0}
 --- !u!114 &4587526044252889482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,8 +199,10 @@ MonoBehaviour:
   Hips:
     Name: 
     HasBone: 0
-    HasTrackerPositionDriver: 0
-    HasTrackerRotationDriver: 0
+    hasTrackerPositionDriver: 1
+    hasTrackerRotationDriver: 1
+    hasRigLayerPositionDriver: 1
+    hasRigLayerRotationDriver: 1
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -233,8 +236,10 @@ MonoBehaviour:
     RestingLocalSpace:
       BeginningRotation: {x: 0, y: 0, z: 0, w: 0}
       BeginningPosition: {x: 0, y: 0, z: 0}
-  LocalAvatarDriver: {fileID: 5000096567804979388}
+  AvatarDriver: {fileID: 5000096567804979388}
   FootPlacementDriver: {fileID: 0}
+  VisemeDriver: {fileID: 0}
+  SelfOutput: {fileID: 0}
   GroundMask:
     serializedVersion: 2
     m_Bits: 1

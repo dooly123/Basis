@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentMode: 2
   BasisAvatarEyeInput: {fileID: 0}
+  BasisOpusSettings: {fileID: 11400000, guid: 5ad599c7b6420494f84e3a3b71efbfa8, type: 2}
 --- !u!114 &6370897756145117596
 MonoBehaviour:
   m_ObjectHideFlags: 0

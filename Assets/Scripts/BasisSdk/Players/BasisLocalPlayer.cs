@@ -12,8 +12,10 @@ public class BasisLocalPlayer : BasisPlayer
     public BasisLocalCharacterBinder Binder;
     public BasisLocalBoneDriver LocalBoneDriver;
     public BasisBoneControl Hips;
-    public BasisLocalAvatarDriver LocalAvatarDriver;
+    public BasisLocalAvatarDriver AvatarDriver;
     public BasisFootPlacementDriver FootPlacementDriver;
+    public BasisVisemeDriver VisemeDriver;
+    public AudioSource SelfOutput;
     [SerializeField]
     public LayerMask GroundMask;
     public async Task LocalInitialize()
@@ -30,8 +32,9 @@ public class BasisLocalPlayer : BasisPlayer
         //  FootPlacementDriver = Helpers.GetOrAddComponent<FootPlacementDriver>(this.gameObject);
         //  FootPlacementDriver.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-        CreateAvatar();
         BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
+        OnLocalAvatarChanged += OnCalibration;
+        await CreateAvatar();
     }
     public void Simulate()
     {
@@ -40,12 +43,29 @@ public class BasisLocalPlayer : BasisPlayer
             Avatar.Animator.transform.SetPositionAndRotation((Hips.BoneTransform.position - Hips.RestingLocalSpace.BeginningPosition), Hips.BoneTransform.rotation);
         }
     }
-    public async void CreateAvatar()
+    public async Task CreateAvatar()
     {
         await BasisAvatarFactory.LoadAvatar(this, FallBackAvatar);
       // await BasisAvatarFactory.LoadAvatar(this, "Assets/unity-chan!/unitychan.prefab");
         await CreateInputAction();
         OnLocalAvatarChanged?.Invoke();
+    }
+    public void OnCalibration()
+    {
+        if (VisemeDriver == null)
+        {
+            VisemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(this.gameObject);
+        }
+        if (SelfOutput == null)
+        {
+            SelfOutput = BasisHelpers.GetOrAddComponent<AudioSource>(this.gameObject);
+        }
+        SelfOutput.loop = true;     // Set the AudioClip to loop
+        SelfOutput.mute = false;
+        SelfOutput.clip = AvatarDriver.MicrophoneRecorder.clip;
+        SelfOutput.Play();
+        VisemeDriver.audioSource = SelfOutput;
+        VisemeDriver.Initialize(Avatar);
     }
     public async Task CreateInputAction()
     {
@@ -59,6 +79,17 @@ public class BasisLocalPlayer : BasisPlayer
                     CharacterInputActions.Initialize(this);
                 }
             }
+        }
+    }
+    public void OnDestroy()
+    {
+        if (VisemeDriver != null)
+        {
+            GameObject.Destroy(VisemeDriver);
+        }
+        if (SelfOutput != null)
+        {
+            GameObject.Destroy(SelfOutput);
         }
     }
 }

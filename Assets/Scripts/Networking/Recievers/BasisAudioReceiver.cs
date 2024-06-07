@@ -70,7 +70,7 @@ public class BasisAudioReceiver
     }
     public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
     {
-        settings = BasisNetworkConnector.Instance.BasisOpusSettings;
+        settings = BasisDeviceManagement.Instance.BasisOpusSettings;
         if (audioSource == null)
         {
             var remotePlayer = (BasisRemotePlayer)networkedPlayer.Player;

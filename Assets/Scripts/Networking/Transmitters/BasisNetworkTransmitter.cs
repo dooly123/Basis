@@ -5,7 +5,7 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
     public float timer = 0f;
     public float interval = 0.05f;
     [SerializeField]
-    public BasisAudioTransmission Module = new BasisAudioTransmission();
+    public BasisAudioTransmission AudioTransmission = new BasisAudioTransmission();
     public override void Compute()
     {
         if (Ready)
@@ -35,25 +35,20 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
         {
             Ready = true;
             NetworkedPlayer = networkedPlayer;
-            Module.OnEnable(networkedPlayer, this.gameObject);
+            AudioTransmission.OnEnable(networkedPlayer);
             OnAvatarCalibration();
-            BasisLocalPlayer LocalPlayer = (BasisLocalPlayer)NetworkedPlayer.Player;
-            LocalPlayer.LocalAvatarDriver.CalibrationComplete.AddListener(Oncalibration);
+           // LocalPlayer.AvatarDriver.CalibrationComplete.AddListener(Oncalibration);
         }
         else
         {
             Debug.Log("Already Ready");
         }
     }
-    public void Oncalibration()
-    {
-        Module.OnCalibration(NetworkedPlayer, this.gameObject);
-    }
     public override void DeInitialize()
     {
         if (Ready)
         {
         }
-        Module.OnDisable();
+        AudioTransmission.OnDisable();
     }
 }
