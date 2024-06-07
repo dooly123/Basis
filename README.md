@@ -106,6 +106,8 @@ This project includes third-party code licensed under the Apache License 2.0:
 
 This project includes third-party code licensed under the BSD-3-Clause license:
 - [SteamVR](https://github.com/ValveSoftware/steamvr_unity_plugin)
+The OpenVR API is (C) Valve Corporation under the BSD 3-clause license
+
 
 For more details, see `Assets/third_party/plugins/SteamAudio/LICENSE`.
 For more details, see `Assets/third_party/plugins/SteamVR/LICENSE`.
