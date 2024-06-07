@@ -21,28 +21,15 @@ public class BasisAnimatorVariableApply
             Animator.SetBool(BasisAvatarAnimatorHash.HashMovingState, BasisAnimatorVariables.isMoving);
             BasisAnimatorVariables.cachedIsMoving = BasisAnimatorVariables.isMoving;
         }
-
-        if (BasisAnimatorVariables.cachedIsJumping != BasisAnimatorVariables.IsJumping)
-        {
-            Animator.SetBool(BasisAvatarAnimatorHash.HashIsJumping, BasisAnimatorVariables.IsJumping);
-            BasisAnimatorVariables.cachedIsJumping = BasisAnimatorVariables.IsJumping;
-        }
-
-        if (BasisAnimatorVariables.cachedIsFalling != BasisAnimatorVariables.IsFalling)
-        {
-            Animator.SetBool(BasisAvatarAnimatorHash.HashIsFalling, BasisAnimatorVariables.IsFalling);
-            BasisAnimatorVariables.cachedIsFalling = BasisAnimatorVariables.IsFalling;
-        }
-
-        if (BasisAnimatorVariables.cachedIsLanding != BasisAnimatorVariables.IsLanding)
-        {
-            Animator.SetBool(BasisAvatarAnimatorHash.HashIsLanding, BasisAnimatorVariables.IsLanding);
-            BasisAnimatorVariables.cachedIsLanding = BasisAnimatorVariables.IsLanding;
-        }
         if (BasisAnimatorVariables.cachedIsCrouching != BasisAnimatorVariables.IsCrouching)
         {
             Animator.SetBool(BasisAvatarAnimatorHash.HashCrouchedState, BasisAnimatorVariables.IsCrouching);
             BasisAnimatorVariables.cachedIsCrouching = BasisAnimatorVariables.IsCrouching;
+        }
+        if (BasisAnimatorVariables.cachedIsFalling != BasisAnimatorVariables.IsFalling)
+        {
+            Animator.SetBool(BasisAvatarAnimatorHash.HashIsFalling, BasisAnimatorVariables.IsFalling);
+            BasisAnimatorVariables.cachedIsFalling = BasisAnimatorVariables.IsFalling;
         }
 
         float horizontalMovement = BasisAnimatorVariables.velocityLocal.x / Scale;
@@ -58,6 +45,7 @@ public class BasisAnimatorVariableApply
             Animator.SetFloat(BasisAvatarAnimatorHash.HashCurrentVerticalMovement, verticalMovement);
             BasisAnimatorVariables.cachedVerticalMovement = verticalMovement;
         }
+        UpdateJumpState();
     }
     public void LoadCachedAnimatorHashes(Animator Anim)
     {
@@ -71,5 +59,17 @@ public class BasisAnimatorVariableApply
         BasisAvatarAnimatorHash.HashIsFalling = Animator.StringToHash("IsFalling");
         BasisAvatarAnimatorHash.HashIsLanding = Animator.StringToHash("IsLanding");
         BasisAvatarAnimatorHash.HashIsJumping = Animator.StringToHash("IsJumping");
+    }
+    public void UpdateJumpState()
+    {
+        if (BasisAnimatorVariables.cachedIsJumping != BasisAnimatorVariables.IsJumping)
+        {
+            Animator.SetBool(BasisAvatarAnimatorHash.HashIsJumping, BasisAnimatorVariables.IsJumping);
+            BasisAnimatorVariables.cachedIsJumping = BasisAnimatorVariables.IsJumping;
+        }
+    }
+    public void UpdateIsLandingState()
+    {
+        Animator.SetTrigger(BasisAvatarAnimatorHash.HashIsLanding);
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using static BaseBoneDriver;
 
 public class BasisCharacterController : MonoBehaviour
 {
@@ -24,10 +25,13 @@ public class BasisCharacterController : MonoBehaviour
     public bool HasHead;
     private Quaternion currentRotation;
     private float eyeHeight;
-    public UnityEvent JustJumped = new UnityEvent();
-    public UnityEvent JustLanded = new UnityEvent();
+    public SimulationHandler JustJumped;
+    public SimulationHandler JustLanded;
     public bool LastWasGrounded = true;
     public float RotationSpeed = 50;
+    public event SimulationHandler ReadyToRead;
+
+    public bool IsFalling;
     public void OnEnable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged += Initialize;
@@ -62,6 +66,7 @@ public class BasisCharacterController : MonoBehaviour
 
         // Apply final movement
         characterController.Move(playerVelocity * Time.deltaTime);
+        ReadyToRead?.Invoke();
     }
     public void OnDrawGizmos()
     {
@@ -80,7 +85,7 @@ public class BasisCharacterController : MonoBehaviour
         if (groundedPlayer)
         {
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-            JustJumped.Invoke();
+            JustJumped?.Invoke();
         }
     }
 
@@ -97,9 +102,17 @@ public class BasisCharacterController : MonoBehaviour
 
         groundedPlayer = Physics.CheckSphere(bottomPoint, characterController.radius, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.Ignore);
 
+        if(groundedPlayer == false)
+        {
+            IsFalling = true;
+        }
+        else
+        {
+            IsFalling = false;
+        }
         if (groundedPlayer && !LastWasGrounded)
         {
-            JustLanded.Invoke();
+            JustLanded?.Invoke();
         }
         LastWasGrounded = groundedPlayer;
     }

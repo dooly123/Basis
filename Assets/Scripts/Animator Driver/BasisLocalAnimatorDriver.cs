@@ -66,17 +66,9 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
 
         }
         lastHeadTargetPos = cachedBones.Head.BoneTransform.position;
-        BasisLocalPlayer.Instance.Move.JustJumped.AddListener(JustJumped);
-        BasisLocalPlayer.Instance.Move.JustLanded.AddListener(JustLanded);
-        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
-    }
-    public void JustJumped()
-    {
-        BasisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = true;
-    }
-    public void JustLanded()
-    {
-        BasisAnimatorVariableApply.BasisAnimatorVariables.IsLanding = true;
+        BasisLocalPlayer.Instance.Move.ReadyToRead += Simulate;
+        BasisLocalPlayer.Instance.Move.JustJumped += JustJumped;
+        BasisLocalPlayer.Instance.Move.JustLanded += JustLanded;
     }
     public void Simulate()
     {
@@ -90,26 +82,28 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         CheckIfMoving();
         CalculateAnimationSpeed(cachedBones.Hips);
         ApplyRootLerpAndLimits(cachedBones.Hips);
-        CheckGroundedState();
+        BasisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = BasisLocalPlayer.Instance.Move.IsFalling;
         if (BasisLocalInputActions.Instance != null)
         {
             BasisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Instance.Crouching;
         }
         BasisAnimatorVariableApply.UpdateAnimator(scale);
-
-        BasisAnimatorVariableApply.BasisAnimatorVariables.IsLanding = false;
-        BasisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
-    }
-    public void CheckGroundedState()
-    {
-        if (BasisLocalPlayer.Instance.Move.groundedPlayer == false)
+        if (BasisAnimatorVariableApply.BasisAnimatorVariables.IsFalling == false)
         {
-            BasisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = true;
         }
         else
         {
-            BasisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = false;
+            BasisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
         }
+    }
+    public void JustJumped()
+    {
+        BasisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = true;
+        BasisAnimatorVariableApply.UpdateJumpState();
+    }
+    public void JustLanded()
+    {
+        BasisAnimatorVariableApply.UpdateIsLandingState();
     }
     private void CalculateRootUpVector(BasisBoneControl root)
     {
