@@ -65,28 +65,23 @@ public class BasisOverrideRotations : MonoBehaviour
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver.FindBone(out Head, BasisBoneTrackedRole.Head))
         {
-            Head.HasRigLayerPositionDriver =  BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-            Head.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Head.HasRigLayer =  BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Hips, BasisBoneTrackedRole.Hips))
         {
-            Hips.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-            Hips.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Hips.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out UpperChest, BasisBoneTrackedRole.UpperChest))
         {
-            UpperChest.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-            UpperChest.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            UpperChest.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Chest, BasisBoneTrackedRole.Chest))
         {
-            Chest.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-            Chest.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Chest.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Spine, BasisBoneTrackedRole.Spine))
         {
-            Spine.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-            Spine.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Spine.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
     }
 

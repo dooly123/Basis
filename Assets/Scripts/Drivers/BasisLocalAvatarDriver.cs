@@ -207,13 +207,11 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         // Define a method to update the active state of the Layer
         void UpdateLayerActiveState()
         {
-            Layer.active = Control.HasRigLayerPositionDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer ||
-                           Control.HasRigLayerRotationDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Layer.active = Control.HasRigLayer == BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
 
         // Subscribe to the events
-        Control.OnHasRigLayerPositionDriverChanged += delegate { UpdateLayerActiveState(); };
-        Control.OnHasRigLayerRotationDriverChanged += delegate { UpdateLayerActiveState(); };
+        Control.OnHasRigChanged += delegate { UpdateLayerActiveState(); };
 
         // Set the initial state
         UpdateLayerActiveState();

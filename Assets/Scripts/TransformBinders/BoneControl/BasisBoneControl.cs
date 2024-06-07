@@ -41,35 +41,20 @@ public partial class BasisBoneControl
         }
     }
     // Events for property changes
-    public event System.Action<BasisHasRigLayer> OnHasRigLayerPositionDriverChanged;
-    public event System.Action<BasisHasRigLayer> OnHasRigLayerRotationDriverChanged;
+    public event System.Action<BasisHasRigLayer> OnHasRigChanged;
 
     // Backing fields for the properties
-    [SerializeField] private BasisHasRigLayer hasRigLayerPositionDriver = BasisHasRigLayer.HasNoRigLayer;
-    [SerializeField] private BasisHasRigLayer hasRigLayerRotationDriver = BasisHasRigLayer.HasNoRigLayer;
+    [SerializeField] private BasisHasRigLayer hasRigLayer = BasisHasRigLayer.HasNoRigLayer;
     // Properties with get/set accessors
-    public BasisHasRigLayer HasRigLayerPositionDriver
+    public BasisHasRigLayer HasRigLayer
     {
-        get => hasRigLayerPositionDriver;
+        get => hasRigLayer;
         set
         {
-            if (hasRigLayerPositionDriver != value)
+            if (hasRigLayer != value)
             {
-                hasRigLayerPositionDriver = value;
-                OnHasRigLayerPositionDriverChanged?.Invoke(value);
-            }
-        }
-    }
-
-    public BasisHasRigLayer HasRigLayerRotationDriver
-    {
-        get => hasRigLayerRotationDriver;
-        set
-        {
-            if (hasRigLayerRotationDriver != value)
-            {
-                hasRigLayerRotationDriver = value;
-                OnHasRigLayerRotationDriverChanged?.Invoke(value);
+                hasRigLayer = value;
+                OnHasRigChanged?.Invoke(value);
             }
         }
     }

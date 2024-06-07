@@ -57,8 +57,7 @@ public abstract class BasisInput : MonoBehaviour
         {
             if (Driver.FindBone(out Control, TrackedRole))
             {
-                Control.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
-                Control.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+                Control.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
                 // Do nothing if bone is found successfully
             }
         }
@@ -85,8 +84,7 @@ public abstract class BasisInput : MonoBehaviour
         {
             Control.HasTrackerPositionDriver = hasTracked;
             Control.HasTrackerRotationDriver = hasTracked;
-            Control.HasRigLayerPositionDriver = HasLayer;
-            Control.HasRigLayerRotationDriver = HasLayer;
+            Control.HasRigLayer = HasLayer;
         }
     }
 }
