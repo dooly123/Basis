@@ -8,8 +8,8 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
         FindBone(out Head, BasisBoneTrackedRole.Head);
         if (Head != null)
         {
-            Head.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
-            Head.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
+            Head.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
+            Head.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
         }
 
     }

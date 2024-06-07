@@ -19,10 +19,9 @@ public class BasisDeviceManagement : MonoBehaviour
         Instance = this;
         InstantiationParameters Parameters = new InstantiationParameters();
         await BasisPlayerFactory.CreateLocalPLayer(Parameters);
-        
+        BasisOverrideRotations BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
         if (ForceNoVR == false && BasisOpenVRManagement.TryStartOpenVR())
         {
-            BasisOverrideRotations BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
             BasisXRHeadToBodyOverride.Initialize();
             Debug.Log("OpenVR Started Correctly");
             CurrentMode = BootedMode.OpenVR;
@@ -30,7 +29,6 @@ public class BasisDeviceManagement : MonoBehaviour
         }
         else if (ForceNoVR == false && BasisOpenXRManagement.TryStartXR())
         {
-            BasisOverrideRotations BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
             BasisXRHeadToBodyOverride.Initialize();
             Debug.Log("XR Started Correctly");
             CurrentMode = BootedMode.XR;
@@ -40,7 +38,8 @@ public class BasisDeviceManagement : MonoBehaviour
         else
         {
             Debug.Log("Falling back to Desktop");
-            await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Desktop Eye Controller.prefab", new InstantiationParameters());
+            BasisXRHeadToBodyOverride.Initialize();
+            BasisAvatarEyeInput BasisAvatarEyeInput = BasisHelpers.GetOrAddComponent<BasisAvatarEyeInput>(this.gameObject);
             CurrentMode = BootedMode.Desktop;
            // BasisLocalCameraDriver.Instance.Camera.stereoTargetEye = StereoTargetEyeMask.None;
             BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = false;

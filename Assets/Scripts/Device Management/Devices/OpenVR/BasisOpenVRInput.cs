@@ -1,112 +1,63 @@
 ﻿using UnityEngine;
 using Valve.VR;
-using static UnityEngine.XR.Interaction.Toolkit.Inputs.XRInputTrackingAggregator;
+
 [DefaultExecutionOrder(15101)]
-public class BasisOpenVRInput : MonoBehaviour
+public class BasisOpenVRInput : BasisInput
 {
     public OpenVRDevice Device;
-    public BasisLocalBoneDriver Driver;
-    public BasisBoneTrackedRole Type;
-    public BasisBoneControl Control;
-    public string ID;
     public SteamVR_ActionSet actionSet;
     public SteamVR_Action_Pose poseAction;
-    public Vector3 LocalRawPosition;
-    public Quaternion LocalRawRotation;
-    public void OnDisable()
-    {
-        DisableTracking();
-    }
-    public void Initialize(OpenVRDevice device, string iD)
-    {
-        // Get a reference to the pose action by its name
-        actionSet = SteamVR_Input.GetActionSet("default");
-        actionSet.Activate();
-        
-        Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
-        ID = iD;
-        Device = device;
-        
-        Type = device.deviceType;
-        
-        ActivateTracking();
-    }
-    public void ActivateTracking()
-    {
-        if (Driver == null)
-        {
-            Debug.LogError("Missing Driver!");
-            return;
-        }
-        if (Driver.FindBone(out Control, Type))
-        {
 
-        }
-        Driver.OnSimulate += SetPosRot;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasVRTracker);
-    }
-    public void DisableTracking()
-    {
-        if (Driver == null)
-        {
-            Debug.LogError("Missing Driver!");
-            return;
-        }
-        Driver.OnSimulate -= SetPosRot;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasNoTracker);
-    }
-    
-    
     public Vector2 primary2DAxisL;
     public Vector2 primary2DAxisR;
-    public Vector2 secondary2DAxis;
-    public bool gripButton;
-    public bool menuButton;
-    public bool primaryButton;
-    public bool secondaryButton;
-    public float Trigger;
-    public bool secondary2DAxisClick;
-    public bool primary2DAxisClick;
-    
-    public void SetPosRot()
+    public static string ActionName = "default";
+    public void Initialize(OpenVRDevice device, string iD)
     {
-        
+        base.Initialize(iD);
+        Device = device;
+        Type = device.deviceType;
+        actionSet = SteamVR_Input.GetActionSet(ActionName);
+        actionSet.Activate();
+    }
+
+    public override void PollData()
+    {
         TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
         TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
         var result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex((uint)Device.deviceIndex, ref devicePose, ref deviceGamePose);
-        
+
         if (result != EVRCompositorError.None)
         {
             Debug.LogError("Error getting device pose: " + result);
             return;
         }
-        
+
         var deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
         LocalRawPosition = deviceTransform.pos;
         LocalRawRotation = deviceTransform.rot;
-        
-        if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+
+        if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
         {
-            if (LocalRawPosition != Vector3.zero)
-            {
-                Control.LocalRawPosition = LocalRawPosition;
-            }
+            Control.LocalRawPosition = LocalRawPosition;
         }
 
-        if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+        if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
         {
-            if (LocalRawRotation != Quaternion.identity)
-            {
-                Control.LocalRawRotation = LocalRawRotation;
-            }
+            Control.LocalRawRotation = LocalRawRotation;
         }
-        
+
+        UpdatePlayerControl();
+        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
+    }
+
+    private void UpdatePlayerControl()
+    {
         if (Type == BasisBoneTrackedRole.LeftHand)
         {
             primary2DAxisL = SteamVR_Actions.default_Move.GetAxis(SteamVR_Input_Sources.LeftHand);
             primaryButton = SteamVR_Actions.default_Jump.GetStateDown(SteamVR_Input_Sources.Any);
             secondaryButton = SteamVR_Actions.default_Menu.GetStateDown(SteamVR_Input_Sources.Any);
-            
+
             BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxisL;
             if (primaryButton)
             {
@@ -114,12 +65,9 @@ public class BasisOpenVRInput : MonoBehaviour
             }
             if (secondaryButton)
             {
-                if (BasisHamburgerMenu.Instance == null)
+                if (BasisHamburgerMenu.Instance == null && !BasisHamburgerMenu.IsLoading)
                 {
-                    if (BasisHamburgerMenu.IsLoading == false)
-                    {
-                        BasisHamburgerMenu.OpenMenu();
-                    }
+                    BasisHamburgerMenu.OpenMenu();
                 }
                 else
                 {
@@ -127,23 +75,10 @@ public class BasisOpenVRInput : MonoBehaviour
                 }
             }
         }
-        else
+        else if (Type == BasisBoneTrackedRole.RightHand)
         {
-            if (Type == BasisBoneTrackedRole.RightHand)
-            {
-                primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
-                BasisLocalPlayer.Instance.Move.Rotation = primary2DAxisR;
-            }
-        }
-        
-        this.transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
-    }
-    public void SetRealTrackers(BasisBoneControl.BasisHasTracked value)
-    {
-        if (Driver.FindBone(out BasisBoneControl Control, Type))
-        {
-            Control.HasTrackerPositionDriver = value;
-            Control.HasTrackerRotationDriver = value;
+            primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
+            BasisLocalPlayer.Instance.Move.Rotation = primary2DAxisR;
         }
     }
 }

@@ -4,18 +4,9 @@ public class BasisAvatarEyeInput : MonoBehaviour
     public Camera Camera;
     public BasisLocalAvatarDriver Calibration;
     public BasisLocalInputActions characterInputActions;
-    public BasisBoneControl Head;
     public BasisBoneControl Eye;
-    public BasisBoneControl Hips;
-    public BasisBoneControl UpperChest;
-    public BasisBoneControl Chest;
-    public BasisBoneControl Spine;
     public static BasisAvatarEyeInput Instance;
     public BasisLocalBoneDriver Driver;
-    public float DelayedHips = 6;
-    public float DelayedUpperChest = 6;
-    public float DelayedChest = 6;
-    public float DelayedSpine = 6;
     public float RangeOfMotionBeforeTurn = 13;
     public float headDownwardForce = 0.004f;
     public float headUpwardForce = 0.001f;
@@ -40,38 +31,8 @@ public class BasisAvatarEyeInput : MonoBehaviour
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye))
         {
-            Eye.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
-            Eye.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
-        }
-        if (Driver.FindBone(out Hips, BasisBoneTrackedRole.Hips))
-        {
-            if (Hips.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                Hips.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
-        }
-
-        if (Driver.FindBone(out UpperChest, BasisBoneTrackedRole.UpperChest))
-        {
-            if (UpperChest.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                UpperChest.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
-        }
-        if (Driver.FindBone(out Chest, BasisBoneTrackedRole.Chest))
-        {
-            if (Chest.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                Chest.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
-        }
-
-        if (Driver.FindBone(out Spine, BasisBoneTrackedRole.Spine))
-        {
-            if (Spine.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                Spine.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
+            Eye.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
+            Eye.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
         }
         characterInputActions = BasisLocalInputActions.Instance;
         characterInputActions.CharacterEyeInput = this;
@@ -85,25 +46,6 @@ public class BasisAvatarEyeInput : MonoBehaviour
         {
             Eye.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
             Eye.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-        }
-        if (Driver.FindBone(out Head, BasisBoneTrackedRole.Head))
-        {
-        }
-        if (Hips != null)
-        {
-            Hips.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-        }
-        if (UpperChest != null)
-        {
-            UpperChest.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-        }
-        if (Chest != null)
-        {
-            Chest.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-        }
-        if (Spine != null)
-        {
-            Spine.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
         }
     }
     public bool isCursorLocked = true;
@@ -141,41 +83,17 @@ public class BasisAvatarEyeInput : MonoBehaviour
         {
             return;
         }
-        float DeltaTime = Time.deltaTime;
         rotationX += lookVector.x * rotationSpeed;
         rotationY -= lookVector.y * rotationSpeed;
 
         // Apply modulo operation to keep rotation within 0 to 360 range
-         rotationX %= 360f;
-         rotationY %= 360f;
+        rotationX %= 360f;
+        rotationY %= 360f;
 
         // Clamp rotationY to stay within the specified range
         rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
         Eye.LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
-
-      Quaternion coreRotation = Quaternion.Euler(0, rotationX, 0);
-
-        if (AngleCheck(coreRotation, Hips.LocalRawRotation, RangeOfMotionBeforeTurn))
-        {
-            // Slerp rotation for hips and upper body
-            if (Hips.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
-            {
-                Hips.LocalRawRotation = SlerpYRotation(Hips.LocalRawRotation, coreRotation, DelayedHips * DeltaTime);
-            }
-            if (UpperChest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
-            {
-                UpperChest.LocalRawRotation = SlerpYRotation(UpperChest.LocalRawRotation, coreRotation, DelayedUpperChest * DeltaTime);
-            }
-            if (Chest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
-            {
-                Chest.LocalRawRotation = SlerpYRotation(Chest.LocalRawRotation, coreRotation, DelayedChest * DeltaTime);
-            }
-            if (Spine.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
-            {
-                Spine.LocalRawRotation = SlerpYRotation(Spine.LocalRawRotation, coreRotation, DelayedSpine * DeltaTime);
-            }
-        }
-        Vector3 adjustedHeadPosition = new Vector3(0, Eye.RestingLocalSpace.BeginningPosition.y,0);
+        Vector3 adjustedHeadPosition = new Vector3(0, Eye.RestingLocalSpace.BeginningPosition.y, 0);
         if (characterInputActions.Crouching)
         {
             adjustedHeadPosition.y -= Eye.RestingLocalSpace.BeginningPosition.y * crouchPercentage;
@@ -184,19 +102,6 @@ public class BasisAvatarEyeInput : MonoBehaviour
         CalculateAdjustment();
         adjustedHeadPosition.y -= adjustment;
         Eye.LocalRawPosition = adjustedHeadPosition;
-    }
-    private Quaternion SlerpYRotation(Quaternion from, Quaternion to, float t)
-    {
-        Vector3 fromEuler = from.eulerAngles;
-        Vector3 toEuler = to.eulerAngles;
-        Vector3 resultEuler = new Vector3(fromEuler.x, Mathf.LerpAngle(fromEuler.y, toEuler.y, t), fromEuler.z);
-        return Quaternion.Euler(resultEuler);
-    }
-    public bool AngleCheck(Quaternion AngleA, Quaternion AngleB, float MaximumTolerance = 0.005f)
-    {
-        float Angle = Quaternion.Angle(AngleA, AngleB);
-        bool AngleLargeEnough = Angle > MaximumTolerance;
-        return AngleLargeEnough;
     }
     public void CalculateAdjustment()
     {

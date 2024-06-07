@@ -40,8 +40,8 @@ public class BasisTestFakeFullBodyTracking : MonoBehaviour
         calibrationOffsetRotation.Clear();
         foreach (BasisBoneControl control in Driver.Controls)
         {
-            control.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasVRTracker;
-            control.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasVRTracker;
+            control.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasTracker;
+            control.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasTracker;
             GameObject createdFakeBone = new GameObject(control.Name);
             createdFakeBone.transform.parent = transform;
             CreateFakeOffset(out Quaternion Rotation, out Vector3 Position, control);

@@ -3,9 +3,13 @@
     [System.Serializable]
     public enum BasisHasTracked
     {
-        HasVRTracker,
-        hasVirtualTracker,
-        HasInterpretedTracker,
-        HasNoTracker
+        HasTracker,
+        HasNoTracker,
+    }
+    [System.Serializable]
+    public enum BasisHasRigLayer
+    {
+        HasRigLayer,
+        HasNoRigLayer,
     }
 }

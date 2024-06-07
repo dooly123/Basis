@@ -28,19 +28,19 @@ public class BasisOverrideRotations : MonoBehaviour
         if (AngleCheck(coreRotation, Hips.LocalRawRotation, RangeOfMotionBeforeTurn))
         {
             // Slerp rotation for hips and upper body
-            if (Hips.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
+            if (Hips.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
             {
                 Hips.LocalRawRotation = SlerpYRotation(Hips.LocalRawRotation, coreRotation, DelayedHips * DeltaTime);
             }
-            if (UpperChest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
+            if (UpperChest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
             {
                 UpperChest.LocalRawRotation = SlerpYRotation(UpperChest.LocalRawRotation, coreRotation, DelayedUpperChest * DeltaTime);
             }
-            if (Chest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
+            if (Chest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
             {
                 Chest.LocalRawRotation = SlerpYRotation(Chest.LocalRawRotation, coreRotation, DelayedChest * DeltaTime);
             }
-            if (Spine.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.hasVirtualTracker)
+            if (Spine.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
             {
                 Spine.LocalRawRotation = SlerpYRotation(Spine.LocalRawRotation, coreRotation, DelayedSpine * DeltaTime);
             }
@@ -65,36 +65,28 @@ public class BasisOverrideRotations : MonoBehaviour
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver.FindBone(out Head, BasisBoneTrackedRole.Head))
         {
+            Head.HasRigLayerPositionDriver =  BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Head.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Hips, BasisBoneTrackedRole.Hips))
         {
-            if (Hips.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                Hips.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
+            Hips.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Hips.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
-
         if (Driver.FindBone(out UpperChest, BasisBoneTrackedRole.UpperChest))
         {
-            if (UpperChest.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                UpperChest.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
+            UpperChest.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            UpperChest.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Chest, BasisBoneTrackedRole.Chest))
         {
-            if (Chest.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                Chest.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
+            Chest.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Chest.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
-
         if (Driver.FindBone(out Spine, BasisBoneTrackedRole.Spine))
         {
-            if (Spine.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasVRTracker)
-            {
-                Spine.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.hasVirtualTracker;
-            }
+            Spine.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Spine.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
         }
     }
 

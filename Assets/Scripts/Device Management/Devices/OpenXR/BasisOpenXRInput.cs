@@ -1,166 +1,83 @@
 using UnityEngine;
 using static UnityEngine.XR.Interaction.Toolkit.Inputs.XRInputTrackingAggregator;
+
 [DefaultExecutionOrder(15101)]
-public class BasisOpenXRInput : MonoBehaviour
+public class BasisOpenXRInput : BasisInput
 {
     public UnityEngine.XR.InputDevice Device;
-    public BasisLocalBoneDriver Driver;
-    public BasisBoneTrackedRole Type;
-    public BasisBoneControl Control;
-    public string ID;
-    public Vector3 LocalRawPosition;
-    public Quaternion LocalRawRotation;
-    public void OnDisable()
-    {
-        DisableTracking();
-    }
+
     public void Initialize(UnityEngine.XR.InputDevice device, string iD)
     {
-        Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
-        ID = iD;
+        base.Initialize(iD);
         Device = device;
+        DetermineDeviceType();
+    }
+
+    private void DetermineDeviceType()
+    {
         if (Device.characteristics == Characteristics.hmd)
         {
             Type = BasisBoneTrackedRole.CenterEye;
         }
-        else
+        else if (Device.characteristics == Characteristics.leftController || Device.characteristics == Characteristics.leftTrackedHand)
         {
-            if (Device.characteristics == Characteristics.leftController || Device.characteristics == Characteristics.leftTrackedHand)
-            {
-                Type = BasisBoneTrackedRole.LeftHand;
-            }
-            else
-            {
-                if (Device.characteristics == Characteristics.rightController || Device.characteristics == Characteristics.rightTrackedHand)
-                {
-                    Type = BasisBoneTrackedRole.RightHand;
-                }
-            }
+            Type = BasisBoneTrackedRole.LeftHand;
         }
-        ActivateTracking();
+        else if (Device.characteristics == Characteristics.rightController || Device.characteristics == Characteristics.rightTrackedHand)
+        {
+            Type = BasisBoneTrackedRole.RightHand;
+        }
     }
-    public void ActivateTracking()
-    {
-        if (Driver == null)
-        {
-            Debug.LogError("Missing Driver!");
-            return;
-        }
-        if (Driver.FindBone(out Control, Type))
-        {
 
-        }
-        Driver.OnSimulate += SetPosRot;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasVRTracker);
-    }
-    public void DisableTracking()
-    {
-        if (Driver == null)
-        {
-            Debug.LogError("Missing Driver!");
-            return;
-        }
-        Driver.OnSimulate -= SetPosRot;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasNoTracker);
-    }
-    public Vector2 primary2DAxis;
-    public Vector2 secondary2DAxis;
-    public bool gripButton;
-    public bool menuButton;
-    public bool primaryButton;
-    public bool secondaryButton;
-    public float Trigger;
-    public bool secondary2DAxisClick;
-    public bool primary2DAxisClick;
-    public void SetPosRot()
+    public override void PollData()
     {
         if (Device.isValid)
         {
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
             {
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                 {
-                    if (LocalRawPosition != Vector3.zero)
-                    {
-                        Control.LocalRawPosition = LocalRawPosition;
-                    }
+                    Control.LocalRawPosition = LocalRawPosition;
                 }
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out LocalRawRotation))
             {
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                 {
-                    if (LocalRawRotation != Quaternion.identity)
-                    {
-                        Control.LocalRawRotation = LocalRawRotation;
-                    }
+                    Control.LocalRawRotation = LocalRawRotation;
                 }
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out primary2DAxis))
+            // Other feature value checks...
+
+            UpdatePlayerControl();
+        }
+        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
+    }
+
+    private void UpdatePlayerControl()
+    {
+        if (Type == BasisBoneTrackedRole.LeftHand)
+        {
+            BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxis;
+            if (primaryButton)
             {
+                BasisLocalPlayer.Instance.Move.HandleJump();
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxis, out secondary2DAxis))
+            if (secondaryButton)
             {
-            }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out gripButton))
-            {
-            }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out menuButton))
-            {
-            }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out primaryButton))
-            {
-            }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out secondaryButton))
-            {
-            }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out Trigger))
-            {
-            }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxisClick, out secondary2DAxisClick))
-            {
-            }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out primary2DAxisClick))
-            {
-            }
-            if (Type == BasisBoneTrackedRole.LeftHand)
-            {
-                BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxis;
-                if (primaryButton)
+                if (BasisHamburgerMenu.Instance == null && !BasisHamburgerMenu.IsLoading)
                 {
-                    BasisLocalPlayer.Instance.Move.HandleJump();
+                    BasisHamburgerMenu.OpenMenu();
                 }
-                if (secondaryButton)
+                else
                 {
-                    if (BasisHamburgerMenu.Instance == null)
-                    {
-                        if (BasisHamburgerMenu.IsLoading == false)
-                        {
-                            BasisHamburgerMenu.OpenMenu();
-                        }
-                    }
-                    else
-                    {
-                        BasisHamburgerMenu.Instance.CloseThisMenu();
-                    }
-                }
-            }
-            else
-            {
-                if (Type == BasisBoneTrackedRole.RightHand)
-                {
-                    BasisLocalPlayer.Instance.Move.Rotation = primary2DAxis;
+                    BasisHamburgerMenu.Instance.CloseThisMenu();
                 }
             }
         }
-        this.transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
-    }
-    public void SetRealTrackers(BasisBoneControl.BasisHasTracked value)
-    {
-        if (Driver.FindBone(out BasisBoneControl Control, Type))
+        else if (Type == BasisBoneTrackedRole.RightHand)
         {
-            Control.HasTrackerPositionDriver = value;
-            Control.HasTrackerRotationDriver = value;
+            BasisLocalPlayer.Instance.Move.Rotation = primary2DAxis;
         }
     }
 }

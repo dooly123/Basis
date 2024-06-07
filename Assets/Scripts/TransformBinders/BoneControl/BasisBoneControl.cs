@@ -12,8 +12,8 @@ public partial class BasisBoneControl
     public event System.Action<BasisHasTracked> OnHasTrackerRotationDriverChanged;
 
     // Backing fields for the properties
-   [SerializeField] private BasisHasTracked hasTrackerPositionDriver = BasisHasTracked.HasInterpretedTracker;
-    [SerializeField] private BasisHasTracked hasTrackerRotationDriver = BasisHasTracked.HasInterpretedTracker;
+   [SerializeField] private BasisHasTracked hasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
+    [SerializeField] private BasisHasTracked hasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
     // Properties with get/set accessors
     public BasisHasTracked HasTrackerPositionDriver
     {
@@ -37,6 +37,39 @@ public partial class BasisBoneControl
             {
                 hasTrackerRotationDriver = value;
                 OnHasTrackerRotationDriverChanged?.Invoke(value);
+            }
+        }
+    }
+    // Events for property changes
+    public event System.Action<BasisHasRigLayer> OnHasRigLayerPositionDriverChanged;
+    public event System.Action<BasisHasRigLayer> OnHasRigLayerRotationDriverChanged;
+
+    // Backing fields for the properties
+    [SerializeField] private BasisHasRigLayer hasRigLayerPositionDriver = BasisHasRigLayer.HasNoRigLayer;
+    [SerializeField] private BasisHasRigLayer hasRigLayerRotationDriver = BasisHasRigLayer.HasNoRigLayer;
+    // Properties with get/set accessors
+    public BasisHasRigLayer HasRigLayerPositionDriver
+    {
+        get => hasRigLayerPositionDriver;
+        set
+        {
+            if (hasRigLayerPositionDriver != value)
+            {
+                hasRigLayerPositionDriver = value;
+                OnHasRigLayerPositionDriverChanged?.Invoke(value);
+            }
+        }
+    }
+
+    public BasisHasRigLayer HasRigLayerRotationDriver
+    {
+        get => hasRigLayerRotationDriver;
+        set
+        {
+            if (hasRigLayerRotationDriver != value)
+            {
+                hasRigLayerRotationDriver = value;
+                OnHasRigLayerRotationDriverChanged?.Invoke(value);
             }
         }
     }
@@ -85,7 +118,7 @@ public partial class BasisBoneControl
             return;
         }
 
-        if (HasTrackerRotationDriver == BasisHasTracked.HasInterpretedTracker)
+        if (HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
         {
             //if angle is larger then 4 then lets then lets begin checking to see if we can snap it back
             if (RotationControl.UseAngle && AngleCheck(LocalRawRotation, RotationControl.Target.LocalRawRotation, RotationControl.AngleBeforeMove))
@@ -121,7 +154,7 @@ public partial class BasisBoneControl
             }
         }
 
-        if (HasTrackerPositionDriver == BasisHasTracked.HasInterpretedTracker)
+        if (HasTrackerPositionDriver == BasisHasTracked.HasNoTracker)
         {
             ApplyTargetPosition(ref LocalRawPosition, PositionControl);
             ApplyLerpToVector(ref LocalRawPosition, PositionControl);

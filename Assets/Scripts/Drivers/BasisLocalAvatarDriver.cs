@@ -192,9 +192,9 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void WriteUpEvents(BasisBoneControl Control, RigLayer Layer)
     {
-        Control.OnHasTrackerRotationDriverChanged += delegate
+        Control.OnHasRigLayerPositionDriverChanged += delegate
         {
-            if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker || Control.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (Control.HasRigLayerPositionDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer || Control.HasRigLayerRotationDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer)
             {
                 Layer.active = true;
             }
@@ -203,9 +203,9 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
                 Layer.active = false;
             }
         };
-        Control.OnHasTrackerPositionDriverChanged += delegate
+        Control.OnHasRigLayerRotationDriverChanged += delegate
         {
-            if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker || Control.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (Control.HasRigLayerPositionDriver != BasisBoneControl.BasisHasRigLayer.HasRigLayer || Control.HasRigLayerRotationDriver != BasisBoneControl.BasisHasRigLayer.HasRigLayer)
             {
                 Layer.active = true;
             }
@@ -214,7 +214,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
                 Layer.active = false;
             }
         };
-        if (Control.HasTrackerPositionDriver == BasisBoneControl.BasisHasTracked.HasVRTracker || Control.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasVRTracker)
+        if (Control.HasRigLayerPositionDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer || Control.HasRigLayerRotationDriver == BasisBoneControl.BasisHasRigLayer.HasRigLayer)
         {
             Layer.active = true;
         }

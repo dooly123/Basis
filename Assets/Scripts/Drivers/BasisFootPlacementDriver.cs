@@ -24,11 +24,11 @@ public class BasisFootPlacementDriver : MonoBehaviour
         LeftFootSolver.Driver = this;
         RightFootSolver.Driver = this;
 
-        LeftFootSolver.Foot.HasTrackerPositionDriver =  BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
-        LeftFootSolver.Foot.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
+        LeftFootSolver.Foot.HasTrackerPositionDriver =  BasisBoneControl.BasisHasTracked.HasNoTracker;
+        LeftFootSolver.Foot.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
 
-        RightFootSolver.Foot.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
-        RightFootSolver.Foot.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasInterpretedTracker;
+        RightFootSolver.Foot.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
+        RightFootSolver.Foot.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
 
         LeftFootSolver.MyIkConstraint = Localplayer.LocalAvatarDriver.LeftFootTwoBoneIK;
         RightFootSolver.MyIkConstraint = Localplayer.LocalAvatarDriver.RightFootTwoBoneIK;
