@@ -51,13 +51,32 @@ public static class BasisOpenVRManagement
         
         SteamVR_Events.DeviceConnected.Listen(UpdateDeviceList);
     }
-    private static void StopXRSDK()
+    public static void StopXRSDK()
+    {
+        if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
+        {
+            if (XRGeneralSettings.Instance.Manager.isInitializationComplete)
+            {
+                XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+            }
+        }
+        StopXR();
+    }
+    public static void StopXR()
     {
         if (XRInstance != null && XRInstance.activeLoader != null)
         {
             XRInstance.StopSubsystems();
         }
+        foreach (BasisOpenVRInput BasisOpenVRInput in TrackedOpenVRInputDevices)
+        {
+            if (BasisOpenVRInput != null)
+            {
+                Object.Destroy(BasisOpenVRInput.gameObject);
+            }
+        }
     }
+
     private static void UpdateDeviceList(int deviceIndex, bool connected)
     {
         ETrackedDeviceClass deviceType = OpenVR.System.GetTrackedDeviceClass((uint)deviceIndex);

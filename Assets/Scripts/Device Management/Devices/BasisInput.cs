@@ -3,7 +3,8 @@ using UnityEngine;
 public abstract class BasisInput : MonoBehaviour
 {
     public BasisLocalBoneDriver Driver;
-    public BasisBoneTrackedRole Type;
+    private BasisBoneTrackedRole TrackedRole;
+    public bool hasRoleAssigned = false;
     public BasisBoneControl Control;
     public string ID;
     public Vector3 LocalRawPosition;
@@ -19,7 +20,21 @@ public abstract class BasisInput : MonoBehaviour
     public bool secondary2DAxisClick;
     public bool primary2DAxisClick;
 
+    public BasisBoneTrackedRole Type
+    {
+        get => TrackedRole;
+        set
+        {
+            TrackedRole = value;
+            hasRoleAssigned = true;
+        }
+    }
+
     public void OnDisable()
+    {
+        DisableTracking();
+    }
+    public void OnDestroy()
     {
         DisableTracking();
     }
@@ -38,7 +53,7 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Missing Driver!");
             return;
         }
-        if (Driver.FindBone(out Control, Type))
+        if (hasRoleAssigned && Driver.FindBone(out Control, Type))
         {
             Control.HasRigLayerPositionDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
             Control.HasRigLayerRotationDriver = BasisBoneControl.BasisHasRigLayer.HasRigLayer;

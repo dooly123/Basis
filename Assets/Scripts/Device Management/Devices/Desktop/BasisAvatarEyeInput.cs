@@ -22,12 +22,16 @@ public class BasisAvatarEyeInput : MonoBehaviour
     {
         BasisLocalPlayer.OnLocalAvatarChanged += PlayerInitialized;
     }
-    public void PlayerInitialized()
+    public void Start()
     {
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
         }
+        PlayerInitialized();
+    }
+    public void PlayerInitialized()
+    {
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye))
         {
@@ -35,18 +39,20 @@ public class BasisAvatarEyeInput : MonoBehaviour
             Eye.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
         }
         characterInputActions = BasisLocalInputActions.Instance;
-        characterInputActions.CharacterEyeInput = this;
+        if (characterInputActions != null)
+        {
+            characterInputActions.CharacterEyeInput = this;
+        }
         Calibration = BasisLocalPlayer.Instance.LocalAvatarDriver;
         Camera = BasisLocalCameraDriver.Instance.Camera;
     }
     public void OnDisable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged -= PlayerInitialized;
-        if (Eye != null)
-        {
-            Eye.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-            Eye.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-        }
+    }
+    public void OnDestroy()
+    {
+        Instance = null;
     }
     public bool isCursorLocked = true;
     public void HandleEscape()

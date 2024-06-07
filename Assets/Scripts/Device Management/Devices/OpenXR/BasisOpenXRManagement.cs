@@ -13,12 +13,12 @@ public static class BasisOpenXRManagement
     /// <summary>
     /// generated at runtime
     /// </summary>
-    public static List<BasisOpenXRInput> TrackedXRInputDevices = new List<BasisOpenXRInput>();
+    public static List<BasisOpenXRInput> TrackedOpenXRInputDevices = new List<BasisOpenXRInput>();
     /// <summary>
     /// keeps track of generated IDs and match InputDevice
     /// </summary>
     public static Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
-    public static bool TryStartXR()
+    public static bool TryStartOpenXR()
     {
         //finds the first working vr loader
         XRGeneralSettings.Instance.Manager.InitializeLoaderSync();
@@ -35,9 +35,12 @@ public static class BasisOpenXRManagement
     {
         if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
         {
-            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-            StopXRSDK();
+            if (XRGeneralSettings.Instance.Manager.isInitializationComplete)
+            {
+                XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+            }
         }
+        StopXRSDK();
         UnityEngine.XR.InputDevices.deviceConnected -= OnDeviceConnected;
         UnityEngine.XR.InputDevices.deviceDisconnected -= OnDeviceDisconnected;
     }
@@ -55,6 +58,13 @@ public static class BasisOpenXRManagement
         if (XRInstance != null && XRInstance.activeLoader != null)
         {
             XRInstance.StopSubsystems();
+        }
+        foreach (BasisOpenXRInput BasisOpenVRInput in TrackedOpenXRInputDevices)
+        {
+            if (BasisOpenVRInput != null)
+            {
+                Object.Destroy(BasisOpenVRInput.gameObject);
+            }
         }
     }
 
@@ -102,7 +112,7 @@ public static class BasisOpenXRManagement
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         BasisOpenXRInput BasisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
         BasisXRInput.Initialize(device, ID);
-        TrackedXRInputDevices.Add(BasisXRInput);
+        TrackedOpenXRInputDevices.Add(BasisXRInput);
     }
     /// <summary>
     /// this wont well with fullbody, revist later
@@ -126,11 +136,11 @@ public static class BasisOpenXRManagement
     }
     public static void DestroyXRInput(string ID)
     {
-        foreach (var device in TrackedXRInputDevices)
+        foreach (var device in TrackedOpenXRInputDevices)
         {
             if (device.ID == ID)
             {
-                TrackedXRInputDevices.Remove(device);
+                TrackedOpenXRInputDevices.Remove(device);
                 break;
             }
         }

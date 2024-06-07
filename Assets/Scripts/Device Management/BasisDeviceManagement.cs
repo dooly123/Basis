@@ -1,54 +1,133 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-public class BasisDeviceManagement : MonoBehaviour
+public partial class BasisDeviceManagement : MonoBehaviour
 {
-    public bool ForceNoVR = false;
-    public BootedMode CurrentMode = BootedMode.None;
+    public BasisBootedMode CurrentMode = BasisBootedMode.Desktop;
     public static BasisDeviceManagement Instance;
-    public enum BootedMode
+    public BasisAvatarEyeInput BasisAvatarEyeInput;
+    void Start()
     {
-        OpenVR,
-        XR,
-        Desktop,
-        None
+        if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
+        {
+            Instance = this;
+        }
+        Initalize();
     }
-    async void Start()
+    public async void Initalize()
     {
-        Instance = this;
         InstantiationParameters Parameters = new InstantiationParameters();
         await BasisPlayerFactory.CreateLocalPLayer(Parameters);
         BasisOverrideRotations BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
-        if (ForceNoVR == false && BasisOpenVRManagement.TryStartOpenVR())
+        BasisXRHeadToBodyOverride.Initialize();
+        SwitchMode(CurrentMode);
+        await LoadGameobject("NetworkManagement", new InstantiationParameters());
+    }
+#if UNITY_EDITOR
+    [MenuItem("Basis/ForceSetOpenXR")]
+    public static void ForceSetOpenXR()
+    {
+     Instance.SwitchMode(BasisBootedMode.OpenXR);
+    }
+    [MenuItem("Basis/ForceSetOpenVR")]
+    public static void ForceSetOpenVR()
+    {
+        Instance.SwitchMode(BasisBootedMode.OpenVR);
+    }
+    [MenuItem("Basis/ForceSetDesktop")]
+    public static void ForceSetDesktop() 
+    {
+        Instance.SwitchMode(BasisBootedMode.Desktop);
+    }
+#else
+    public static void ForceSetOpenXR()
+    {
+     Instance.SwitchMode(BasisBootedMode.OpenXR);
+    }
+    public static void ForceSetOpenVR()
+    {
+        Instance.SwitchMode(BasisBootedMode.OpenVR);
+    }
+
+    public static void ForceSetDesktop() 
+    {
+        Instance.SwitchMode(BasisBootedMode.Desktop);
+    }
+#endif
+    public void SwitchMode(BasisBootedMode BasisBootedMode)
+    {
+        ShutDownLastMode();
+        switch (BasisBootedMode)
         {
-            BasisXRHeadToBodyOverride.Initialize();
-            Debug.Log("OpenVR Started Correctly");
-            CurrentMode = BootedMode.OpenVR;
-            BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = true;
+            case BasisBootedMode.OpenVR:
+                if (BasisOpenVRManagement.TryStartOpenVR())
+                {
+                    SetCameraRenderState(true);
+                }
+                else
+                {
+                    UseFallBack();
+                }
+                break;
+            case BasisBootedMode.OpenXR:
+                if (BasisOpenXRManagement.TryStartOpenXR())
+                {
+                    SetCameraRenderState(true);
+                }
+                else
+                {
+                    UseFallBack();
+                }
+                break;
+            case BasisBootedMode.Desktop:
+                UseFallBack();
+                break;
+            default:
+                Debug.LogError("this should not occur (default)");
+                UseFallBack();
+                break;
         }
-        else if (ForceNoVR == false && BasisOpenXRManagement.TryStartXR())
-        {
-            BasisXRHeadToBodyOverride.Initialize();
-            Debug.Log("XR Started Correctly");
-            CurrentMode = BootedMode.XR;
-           // BasisLocalCameraDriver.Instance.Camera.stereoTargetEye = StereoTargetEyeMask.Both;
-            BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = true;
-        }
-        else
-        {
-            Debug.Log("Falling back to Desktop");
-            BasisXRHeadToBodyOverride.Initialize();
-            BasisAvatarEyeInput BasisAvatarEyeInput = BasisHelpers.GetOrAddComponent<BasisAvatarEyeInput>(this.gameObject);
-            CurrentMode = BootedMode.Desktop;
-           // BasisLocalCameraDriver.Instance.Camera.stereoTargetEye = StereoTargetEyeMask.None;
-            BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = false;
-        }
-        await LoadGameobject("NetworkManagement",new InstantiationParameters());
+    }
+    public void SetCameraRenderState(bool state)
+    {
+        BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = state;
+    }
+    public void UseFallBack()
+    {
+        SetCameraRenderState(false);
+        BasisAvatarEyeInput = BasisHelpers.GetOrAddComponent<BasisAvatarEyeInput>(this.gameObject);
+        CurrentMode = BasisBootedMode.Desktop;
+        BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = false;
     }
     public void OnDestroy()
     {
+        ShutDownLastMode();
+    }
+    public void ShutDownLastMode()
+    {
+        BasisOpenVRManagement.StopXRSDK();
         BasisOpenXRManagement.StopXR();
+        StopDesktop();
+        switch (CurrentMode)
+        {
+            case BasisBootedMode.OpenVR:
+                break;
+            case BasisBootedMode.OpenXR:
+                break;
+            case BasisBootedMode.Desktop:
+                break;
+        }
+    }
+    public void StopDesktop()
+    {
+        if (BasisAvatarEyeInput != null)
+        {
+            GameObject.Destroy(BasisAvatarEyeInput);
+        }
     }
     public static async Task<BasisPlayer> LoadGameobject(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
     {

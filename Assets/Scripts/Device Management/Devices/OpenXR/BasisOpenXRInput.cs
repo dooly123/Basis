@@ -47,6 +47,34 @@ public class BasisOpenXRInput : BasisInput
                     Control.LocalRawRotation = LocalRawRotation;
                 }
             }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out primary2DAxis))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxis, out secondary2DAxis))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out gripButton))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out menuButton))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out primaryButton))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out secondaryButton))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out Trigger))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxisClick, out secondary2DAxisClick))
+            {
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out primary2DAxisClick))
+            {
+            }
+
             // Other feature value checks...
 
             UpdatePlayerControl();
