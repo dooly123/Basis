@@ -49,8 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444863616255f204b93987765ee33de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TurnAction: {fileID: -6829767556862319568, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
   MoveAction: {fileID: 4708565538779427141, guid: 5e4c3601c6a155f43af19da3bdd35a64,
     type: 3}
   LookAction: {fileID: -4614550756354622855, guid: 5e4c3601c6a155f43af19da3bdd35a64,
@@ -62,6 +60,12 @@ MonoBehaviour:
   RunButton: {fileID: 4166653571123788975, guid: 5e4c3601c6a155f43af19da3bdd35a64,
     type: 3}
   Escape: {fileID: -8104914591799447859, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  DesktopSwitch: {fileID: -1278911692722073990, guid: 5e4c3601c6a155f43af19da3bdd35a64,
+    type: 3}
+  OpenVRSwitch: {fileID: 3096343990557684458, guid: 5e4c3601c6a155f43af19da3bdd35a64,
+    type: 3}
+  OpenXRSwitch: {fileID: -4293204030498023674, guid: 5e4c3601c6a155f43af19da3bdd35a64,
+    type: 3}
   XRUIInputModule: {fileID: 855012268860739733}
   Crouching: 0
   LookDirection: {x: 0, y: 0}

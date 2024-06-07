@@ -10,6 +10,10 @@ public class BasisLocalInputActions : MonoBehaviour
     public InputActionReference CrouchAction;
     public InputActionReference RunButton;
     public InputActionReference Escape;
+
+    public InputActionReference DesktopSwitch;
+    public InputActionReference OpenVRSwitch;
+    public InputActionReference OpenXRSwitch;
     public XRUIInputModule XRUIInputModule;
 
     [SerializeField] public bool Crouching;
@@ -21,6 +25,10 @@ public class BasisLocalInputActions : MonoBehaviour
     public BasisLocalPlayer basisLocalPlayer;
     public void OnEnable()
     {
+        DesktopSwitch.action.Enable();
+        OpenVRSwitch.action.Enable();
+        OpenXRSwitch.action.Enable();
+
         MoveAction.action.Enable();
         LookAction.action.Enable();
         JumpAction.action.Enable();
@@ -32,6 +40,10 @@ public class BasisLocalInputActions : MonoBehaviour
     }
     public void OnDisable()
     {
+        DesktopSwitch.action.Disable();
+        OpenVRSwitch.action.Disable();
+        OpenXRSwitch.action.Disable();
+
         MoveAction.action.Disable();
         LookAction.action.Disable();
         JumpAction.action.Disable();
@@ -63,6 +75,10 @@ public class BasisLocalInputActions : MonoBehaviour
 
         Escape.action.performed += ctx => EscapePerformed();
         Escape.action.canceled += ctx => EscapeCancelled();
+
+        DesktopSwitch.action.performed += ctx => SwitchDesktop();
+        OpenVRSwitch.action.performed += ctx => SwitchOpenVR();
+        OpenXRSwitch.action.performed += ctx => SwitchOpenXR();
     }
     public void RemoveCallback()
     {
@@ -84,6 +100,24 @@ public class BasisLocalInputActions : MonoBehaviour
 
         Escape.action.performed -= ctx => EscapePerformed();
         Escape.action.canceled -= ctx => EscapeCancelled();
+
+
+        DesktopSwitch.action.performed -= ctx => SwitchDesktop();
+        OpenVRSwitch.action.performed -= ctx => SwitchOpenVR();
+        OpenXRSwitch.action.performed -= ctx => SwitchOpenXR();
+    }
+    public void SwitchDesktop()
+    {
+        BasisDeviceManagement.ForceSetDesktop();
+    }
+    public void SwitchOpenVR()
+    {
+        BasisDeviceManagement.ForceSetOpenVR();
+    }
+    public void SwitchOpenXR()
+    {
+        BasisDeviceManagement.ForceSetOpenXR();
+
     }
     public void LookActionStarted(Vector2 LookVector)
     {
