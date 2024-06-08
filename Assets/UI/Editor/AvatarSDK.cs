@@ -95,7 +95,8 @@ public class BasisAvatarSDKInspector : Editor
     }
     private void OnSceneGUI()
     {
-        BasisAvatarGizmoEditor.UpdateGizmos(this);
+        BasisAvatar avatar = (BasisAvatar)target;
+        BasisAvatarGizmoEditor.UpdateGizmos(this, avatar);
     }
     public void SetupItems()
     {

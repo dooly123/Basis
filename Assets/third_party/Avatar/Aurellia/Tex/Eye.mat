@@ -91,11 +91,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 1c0ba893a0cc8044f95c7ddf11cd886c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 1c0ba893a0cc8044f95c7ddf11cd886c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BlueTexture:
@@ -2883,12 +2883,12 @@ Material:
     - _StencilFrontFailOp: 0
     - _StencilFrontPassOp: 0
     - _StencilFrontZFailOp: 0
-    - _StencilPass: 0
+    - _StencilPass: 2
     - _StencilPassOp: 2
-    - _StencilReadMask: 77
-    - _StencilRef: 77
+    - _StencilReadMask: 182
+    - _StencilRef: 182
     - _StencilType: 0
-    - _StencilWriteMask: 77
+    - _StencilWriteMask: 182
     - _StencilZFail: 0
     - _StencilZFailOp: 0
     - _StereoEnabled: 0
