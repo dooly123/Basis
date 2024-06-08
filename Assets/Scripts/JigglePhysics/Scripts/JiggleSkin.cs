@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JigglePhysics
 {
-
+    [DefaultExecutionOrder(15002)]
     public class JiggleSkin : MonoBehaviour {
     [Serializable]
     public class JiggleZone : JiggleRigBuilder.JiggleRig {

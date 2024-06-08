@@ -30,6 +30,11 @@ namespace JigglePhysics
             camera = currentCamera;
             return currentCamera != null;
         }
+        /// <summary>
+        /// enables or disables camera by distance
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public override bool CheckActive(Vector3 position)
         {
             if (!TryGetCamera(out Camera camera))
