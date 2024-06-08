@@ -2,7 +2,8 @@
 
 public struct OpenVRDevice
 {
-    public int deviceIndex;
+    public SteamVR_Input_Sources SteamVR_Input_Sources;
     public string deviceName;
-    public BasisBoneTrackedRole deviceType;
+    public uint deviceIndex;
+    public SteamVR_Action_Pose_Source Pose;
 }

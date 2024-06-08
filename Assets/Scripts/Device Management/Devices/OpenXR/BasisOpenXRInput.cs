@@ -8,12 +8,12 @@ public class BasisOpenXRInput : BasisInput
 
     public void Initialize(UnityEngine.XR.InputDevice device, string iD)
     {
-        base.Initialize(iD);
         Device = device;
-        DetermineDeviceType();
+        base.Initialize(iD);
+        GetControllerOrHMD();
     }
 
-    private void DetermineDeviceType()
+    private void GetControllerOrHMD()
     {
         if (Device.characteristics == Characteristics.hmd)
         {
@@ -86,32 +86,5 @@ public class BasisOpenXRInput : BasisInput
             UpdatePlayerControl();
         }
         transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
-    }
-
-    private void UpdatePlayerControl()
-    {
-        if (TrackedRole == BasisBoneTrackedRole.LeftHand)
-        {
-            BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxis;
-            if (primaryButton)
-            {
-                BasisLocalPlayer.Instance.Move.HandleJump();
-            }
-            if (secondaryButton)
-            {
-                if (BasisHamburgerMenu.Instance == null && !BasisHamburgerMenu.IsLoading)
-                {
-                    BasisHamburgerMenu.OpenMenu();
-                }
-                else
-                {
-                    BasisHamburgerMenu.Instance.CloseThisMenu();
-                }
-            }
-        }
-        else if (TrackedRole == BasisBoneTrackedRole.RightHand)
-        {
-            BasisLocalPlayer.Instance.Move.Rotation = primary2DAxis;
-        }
     }
 }

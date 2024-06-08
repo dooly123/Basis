@@ -87,4 +87,78 @@ public abstract class BasisInput : MonoBehaviour
             Control.HasRigLayer = HasLayer;
         }
     }
+    public void UpdatePlayerControl()
+    {
+        switch (TrackedRole)
+        {
+            case BasisBoneTrackedRole.LeftHand:
+                BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxis;
+                if (secondaryButton)
+                {
+                    if (BasisHamburgerMenu.Instance == null && !BasisUIBase.IsLoading)
+                    {
+                        BasisHamburgerMenu.OpenMenu();
+                    }
+                    else
+                    {
+                        BasisHamburgerMenu.Instance.CloseThisMenu();
+                    }
+                }
+                Control.ApplyMovement();
+                break;
+            case BasisBoneTrackedRole.RightHand:
+                BasisLocalPlayer.Instance.Move.Rotation = primary2DAxis;
+                if (primaryButton)
+                {
+                    BasisLocalPlayer.Instance.Move.HandleJump();
+                }
+                Control.ApplyMovement();
+                break;
+            case BasisBoneTrackedRole.CenterEye:
+                Control.ApplyMovement();
+                break;
+            case BasisBoneTrackedRole.Head:
+                break;
+            case BasisBoneTrackedRole.Neck:
+                break;
+            case BasisBoneTrackedRole.Chest:
+                break;
+            case BasisBoneTrackedRole.Hips:
+                break;
+            case BasisBoneTrackedRole.Spine:
+                break;
+            case BasisBoneTrackedRole.LeftUpperLeg:
+                break;
+            case BasisBoneTrackedRole.RightUpperLeg:
+                break;
+            case BasisBoneTrackedRole.LeftLowerLeg:
+                break;
+            case BasisBoneTrackedRole.RightLowerLeg:
+                break;
+            case BasisBoneTrackedRole.LeftFoot:
+                break;
+            case BasisBoneTrackedRole.RightFoot:
+                break;
+            case BasisBoneTrackedRole.UpperChest:
+                break;
+            case BasisBoneTrackedRole.LeftShoulder:
+                break;
+            case BasisBoneTrackedRole.RightShoulder:
+                break;
+            case BasisBoneTrackedRole.LeftUpperArm:
+                break;
+            case BasisBoneTrackedRole.RightUpperArm:
+                break;
+            case BasisBoneTrackedRole.LeftLowerArm:
+                break;
+            case BasisBoneTrackedRole.RightLowerArm:
+                break;
+            case BasisBoneTrackedRole.LeftToes:
+                break;
+            case BasisBoneTrackedRole.RightToes:
+                break;
+            case BasisBoneTrackedRole.Mouth:
+                break;
+        }
+    }
 }

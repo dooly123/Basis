@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
-using UnityEngine.XR;
 using UnityEngine.XR.Management;
 using Valve.VR;
-
 public static class BasisOpenVRManagement
 {
     public static XRManagerSettings XRInstance;
@@ -37,7 +34,7 @@ public static class BasisOpenVRManagement
         {
             XRInstance.StartSubsystems();
         }
-        
+
         SteamVR instance = SteamVR.instance;
         Debug.Log("OpenVR Headset HMD Type: " + instance.hmd_Type);
 
@@ -46,10 +43,65 @@ public static class BasisOpenVRManagement
         SteamVR_Behaviour steamVR_Behaviour = go.AddComponent<SteamVR_Behaviour>();
         steamVR_Behaviour.initializeSteamVROnAwake = true;
         steamVR_Behaviour.doNotDestroy = true;
-        
         SteamVR_Render steamVR_Render = go.AddComponent<SteamVR_Render>();
-        
-        SteamVR_Events.DeviceConnected.Listen(UpdateDeviceList);
+        SteamVR_Action_Pose[] poses = SteamVR_Input.actionsPose;
+        foreach (SteamVR_Action_Pose Pose in poses)
+        {
+            Pose.onDeviceConnectedChanged += UpdateDeviceList;
+            UpdateDeviceList(Pose);
+        }
+    }
+
+    private static void UpdateDeviceList(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected)
+    {
+        UpdateDeviceList(fromAction);
+        if (deviceConnected == false)
+        {
+            foreach (KeyValuePair<string, OpenVRDevice> deviceData in TypicalDevices)
+            {
+                if (deviceData.Value.SteamVR_Input_Sources == fromSource)
+                {
+                    string ID = deviceData.Key;
+                    DestroyPhysicalTrackedDevice(ID);
+                    return;
+                }
+            }
+        }
+    }
+
+    private static void UpdateDeviceList(SteamVR_Action_Pose Pose)
+    {
+        foreach (SteamVR_Input_Sources inputSource in (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources)))
+        {
+            if (inputSource != SteamVR_Input_Sources.Any)
+            {
+                SteamVR_Action_Pose_Source poseSource = Pose[inputSource];
+                if (poseSource != null && poseSource.poseIsValid)
+                {
+                    UpdateDevice(poseSource);
+                }
+            }
+        }
+    }
+
+    private static void UpdateDevice(SteamVR_Action_Pose_Source fromAction)
+    {
+        uint deviceIndex = fromAction.trackedDeviceIndex;
+        Debug.Log("Device " + deviceIndex);
+        string ID = GenerateID(deviceIndex);
+        if (TypicalDevices.ContainsKey(ID) == false)
+        {
+            OpenVRDevice openVRDevice = new OpenVRDevice
+            {
+                SteamVR_Input_Sources = fromAction.inputSource,
+                deviceName = ID,
+                deviceIndex = deviceIndex,
+                Pose = fromAction
+            };
+            CreatePhysicalTrackedDevice(openVRDevice, ID);
+            TypicalDevices.Add(ID, openVRDevice);
+            Debug.Log("Creating device: " + ID);
+        }
     }
     public static void StopXRSDK()
     {
@@ -76,91 +128,7 @@ public static class BasisOpenVRManagement
             }
         }
     }
-
-    private static void UpdateDeviceList(int deviceIndex, bool connected)
-    {
-        ETrackedDeviceClass deviceType = OpenVR.System.GetTrackedDeviceClass((uint)deviceIndex);
-        Debug.Log("Device " + deviceIndex + " connected: " + connected);
-        Debug.Log("Device Type: " + deviceType);
-
-        if (deviceType == ETrackedDeviceClass.TrackingReference)
-        {
-            return;
-        }
-        
-        string ID = GenerateID(deviceIndex);
-        if (connected)
-        {
-            if (TypicalDevices.ContainsKey(ID) == false)
-            {
-                BasisBoneTrackedRole role = GetBasisBoneTrackedRole(deviceType, (uint)deviceIndex);
-
-                OpenVRDevice openVRDevice = new OpenVRDevice
-                {
-                    deviceIndex = deviceIndex,
-                    deviceName = ID,
-                    deviceType = role
-                };
-                CreatePhysicalTrackedDevice(openVRDevice, ID);
-                TypicalDevices.Add(ID, openVRDevice);
-
-                // If a controller is connecting, check both controllers and make sure to update the roles so they are not the
-                // same or swapped. Sometimes when OpenVR has a new controller connecting, it will swap left and right roles.
-                UpdateControllerRoles(deviceType, role, ID);
-                
-                Debug.Log("Creating device: " + ID);
-            }
-        }
-        else
-        {
-            DestroyPhysicalTrackedDevice(ID);
-        }
-    }
-
-    private static BasisBoneTrackedRole GetBasisBoneTrackedRole(ETrackedDeviceClass deviceType, uint deviceIndex)
-    {
-        BasisBoneTrackedRole role = BasisBoneTrackedRole.Hips;
-        switch (deviceType)
-        {
-            case ETrackedDeviceClass.Controller:
-                bool isLeftHand = OpenVR.System.GetControllerRoleForTrackedDeviceIndex(deviceIndex) == ETrackedControllerRole.LeftHand;
-                role = isLeftHand ? BasisBoneTrackedRole.LeftHand : BasisBoneTrackedRole.RightHand;
-                break;
-            case ETrackedDeviceClass.GenericTracker:
-                //role = BasisBoneTrackedRole.None;
-                break;
-            case ETrackedDeviceClass.HMD:
-                role = BasisBoneTrackedRole.CenterEye;
-                break;
-            case ETrackedDeviceClass.Invalid:
-                //role = BasisBoneTrackedRole.None;
-                break;
-            case ETrackedDeviceClass.TrackingReference:
-                //role = BasisBoneTrackedRole.None;
-                break;
-        }
-        return role;
-    }
-
-    private static void UpdateControllerRoles(ETrackedDeviceClass deviceType, BasisBoneTrackedRole role, string ID)
-    {
-        if (deviceType == ETrackedDeviceClass.Controller)
-        {
-            foreach (var device in TrackedOpenVRInputDevices)
-            {
-                if (device.ID == ID) continue;
-                if (device.Device.deviceType == BasisBoneTrackedRole.LeftHand || device.Device.deviceType == BasisBoneTrackedRole.RightHand)
-                {
-                    BasisBoneTrackedRole newRole = role == BasisBoneTrackedRole.LeftHand ? BasisBoneTrackedRole.RightHand : BasisBoneTrackedRole.LeftHand;
-                    device.Device.deviceType = newRole;
-                    device.TrackedRole = newRole;
-                    break;
-                }
-            }
-        }
-    }
-    
-    public static string GenerateID(int device)
+    public static string GenerateID(uint device)
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
         StringBuilder id = new System.Text.StringBuilder(64);
@@ -173,39 +141,37 @@ public static class BasisOpenVRManagement
         GameObject gameObject = new GameObject(ID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         BasisOpenVRInput BasisOpenVRInput = gameObject.AddComponent<BasisOpenVRInput>();
-        
         BasisOpenVRInput.Initialize(device, ID);
         TrackedOpenVRInputDevices.Add(BasisOpenVRInput);
     }
-   public static void DestroyPhysicalTrackedDevice(string ID)
-   {
-       DestroyInputDevice(ID);
-       DestroyOpenVRInput(ID);
-       
-       Debug.Log("Destroying device: " + ID);
-   }
-   public static void DestroyInputDevice(string ID)
-   {
-       foreach (var device in TypicalDevices)
-       {
-           if (device.Key == ID)
-           {
-               TypicalDevices.Remove(ID);
-               break;
-           }
-       }
-   }
-   public static void DestroyOpenVRInput(string ID)
-   {
-       foreach (var device in TrackedOpenVRInputDevices)
-       {
-           if (device.ID == ID)
-           {
-               // I think they already should be destroyed, IDK. Doing this seems to work fine.
-               Object.Destroy(device.gameObject);
-               TrackedOpenVRInputDevices.Remove(device);
-               break;
-           }
-       }
-   }
+    public static void DestroyPhysicalTrackedDevice(string ID)
+    {
+        DestroyInputDevice(ID);
+        DestroyOpenVRInput(ID);
+        Debug.Log("Destroying device: " + ID);
+    }
+    public static void DestroyInputDevice(string ID)
+    {
+        foreach (var device in TypicalDevices)
+        {
+            if (device.Key == ID)
+            {
+                TypicalDevices.Remove(ID);
+                break;
+            }
+        }
+    }
+    public static void DestroyOpenVRInput(string ID)
+    {
+        foreach (var device in TrackedOpenVRInputDevices)
+        {
+            if (device.ID == ID)
+            {
+                // I think they already should be destroyed, IDK. Doing this seems to work fine.
+                Object.Destroy(device.gameObject);
+                TrackedOpenVRInputDevices.Remove(device);
+                break;
+            }
+        }
+    }
 }
