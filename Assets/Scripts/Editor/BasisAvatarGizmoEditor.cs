@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 public class BasisAvatarGizmoEditor : MonoBehaviour
 {
-    public static void UpdateGizmos(BasisAvatarSDKInspector inspector)
+    public static void UpdateGizmos(BasisAvatarSDKInspector inspector, BasisAvatar avatar)
     {
         if (inspector == null)
         {
@@ -11,7 +11,6 @@ public class BasisAvatarGizmoEditor : MonoBehaviour
             return;
         }
 
-        BasisAvatar avatar = inspector.Avatar;
         if (avatar == null || avatar.Animator == null)
         {
             Debug.LogError("Avatar or its Animator was null!");

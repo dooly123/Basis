@@ -1,22 +1,33 @@
-﻿using UnityEngine;
+﻿using UnityEditor.VersionControl;
+using UnityEngine;
 using Valve.VR;
-
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInput : BasisInput
 {
     public OpenVRDevice Device;
-    public SteamVR_ActionSet actionSet;
-    public SteamVR_Action_Pose poseAction;
 
+    public SteamVR_Action_Vector2 moveAction;
+    public SteamVR_Action_Boolean jumpAction;
+    public SteamVR_Action_Boolean menuAction;
+    public SteamVR_Action_Vector2 rotateAction;
+    
     public Vector2 primary2DAxisL;
     public Vector2 primary2DAxisR;
-    public static string ActionName = "default";
-    public void Initialize(OpenVRDevice device, string iD)
+    public async void Initialize(OpenVRDevice device, string iD)
     {
         Device = device;
         TrackedRole = device.deviceType;
-        actionSet = SteamVR_Input.GetActionSet(ActionName);
-        actionSet.Activate();
+        
+        SteamVR_Input.Initialize();
+        SteamVR_Actions._default.Initialize();
+        moveAction = SteamVR_Actions.default_Move;
+        jumpAction = SteamVR_Actions.default_Jump;
+        menuAction = SteamVR_Actions.default_Menu;
+        rotateAction = SteamVR_Actions.default_Rotate;
+
+        // This is terrible, but it keeps the input from being null first frame
+        await System.Threading.Tasks.Task.Yield();
+        await System.Threading.Tasks.Task.Yield();
         
         // Initialize after setting the device and role
         base.Initialize(iD);
@@ -37,12 +48,12 @@ public class BasisOpenVRInput : BasisInput
         var deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
         LocalRawPosition = deviceTransform.pos;
         LocalRawRotation = deviceTransform.rot;
-
+        
         if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
         {
             Control.LocalRawPosition = LocalRawPosition;
         }
-
+        
         if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
         {
             Control.LocalRawRotation = LocalRawRotation;
@@ -56,9 +67,9 @@ public class BasisOpenVRInput : BasisInput
     {
         if (TrackedRole == BasisBoneTrackedRole.LeftHand)
         {
-            primary2DAxisL = SteamVR_Actions.default_Move.GetAxis(SteamVR_Input_Sources.LeftHand);
-            primaryButton = SteamVR_Actions.default_Jump.GetStateDown(SteamVR_Input_Sources.Any);
-            secondaryButton = SteamVR_Actions.default_Menu.GetStateDown(SteamVR_Input_Sources.Any);
+            primary2DAxisL = moveAction.GetAxis(SteamVR_Input_Sources.Any);
+            primaryButton = jumpAction.GetStateDown(SteamVR_Input_Sources.Any);
+            secondaryButton = menuAction.GetStateDown(SteamVR_Input_Sources.Any);
 
             BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxisL;
             if (primaryButton)
@@ -67,9 +78,12 @@ public class BasisOpenVRInput : BasisInput
             }
             if (secondaryButton)
             {
-                if (BasisHamburgerMenu.Instance == null && !BasisHamburgerMenu.IsLoading)
+                if (BasisHamburgerMenu.Instance == null)
                 {
-                    BasisHamburgerMenu.OpenMenu();
+                    if (!BasisHamburgerMenu.IsLoading)
+                    {
+                        BasisHamburgerMenu.OpenMenu();
+                    }
                 }
                 else
                 {
@@ -79,7 +93,11 @@ public class BasisOpenVRInput : BasisInput
         }
         else if (TrackedRole == BasisBoneTrackedRole.RightHand)
         {
-            primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
+            if (rotateAction.GetActive(SteamVR_Input_Sources.Any))
+            {
+                primary2DAxisR = rotateAction.GetAxis(SteamVR_Input_Sources.Any);
+            }
+
             BasisLocalPlayer.Instance.Move.Rotation = primary2DAxisR;
         }
     }

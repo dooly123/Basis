@@ -25,7 +25,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2450
   stringTagMap:
     AllLockedGUIDS: 3d4ce58ea0b6eb744a10387e7824455b
     OriginalKeywords: BSSBLOOMFOGTYPE_HEIGHT POI_RIM2 POI_STYLIZED_StylizedSpecular
@@ -2879,7 +2879,7 @@ Material:
     - _StencilBackFailOp: 0
     - _StencilBackPassOp: 0
     - _StencilBackZFailOp: 0
-    - _StencilComp: 8
+    - _StencilComp: 6
     - _StencilCompareFunction: 6
     - _StencilFail: 0
     - _StencilFailOp: 0
@@ -2889,10 +2889,10 @@ Material:
     - _StencilFrontZFailOp: 0
     - _StencilPass: 0
     - _StencilPassOp: 0
-    - _StencilReadMask: 255
-    - _StencilRef: 77
+    - _StencilReadMask: 182
+    - _StencilRef: 182
     - _StencilType: 0
-    - _StencilWriteMask: 255
+    - _StencilWriteMask: 182
     - _StencilZFail: 0
     - _StencilZFailOp: 0
     - _StereoEnabled: 0

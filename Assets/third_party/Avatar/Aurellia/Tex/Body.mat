@@ -2887,10 +2887,10 @@ Material:
     - _StencilFrontZFailOp: 0
     - _StencilPass: 0
     - _StencilPassOp: 0
-    - _StencilReadMask: 255
-    - _StencilRef: 0
+    - _StencilReadMask: 182
+    - _StencilRef: 182
     - _StencilType: 0
-    - _StencilWriteMask: 255
+    - _StencilWriteMask: 182
     - _StencilZFail: 0
     - _StencilZFailOp: 0
     - _StereoEnabled: 0

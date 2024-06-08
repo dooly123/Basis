@@ -40,34 +40,34 @@ public partial class BasisDeviceManagement : MonoBehaviour
     [MenuItem("Basis/ForceSetOpenXR")]
     public static void ForceSetOpenXR()
     {
-        Instance.SwitchMode(BasisBootedMode.OpenXR);
+        if (Instance != null) Instance.SwitchMode(BasisBootedMode.OpenXR);
     }
 
     [MenuItem("Basis/ForceSetOpenVR")]
     public static void ForceSetOpenVR()
     {
-        Instance.SwitchMode(BasisBootedMode.OpenVR);
+        if (Instance != null) Instance.SwitchMode(BasisBootedMode.OpenVR);
     }
 
     [MenuItem("Basis/ForceSetDesktop")]
     public static void ForceSetDesktop()
     {
-        Instance.SwitchMode(BasisBootedMode.Desktop);
+        if (Instance != null) Instance.SwitchMode(BasisBootedMode.Desktop);
     }
 #else
     public static void ForceSetOpenXR()
     {
-        Instance.SwitchMode(BasisBootedMode.OpenXR);
+        if (Instance != null) Instance.SwitchMode(BasisBootedMode.OpenXR);
     }
 
     public static void ForceSetOpenVR()
     {
-        Instance.SwitchMode(BasisBootedMode.OpenVR);
+        if (Instance != null) Instance.SwitchMode(BasisBootedMode.OpenVR);
     }
 
     public static void ForceSetDesktop()
     {
-        Instance.SwitchMode(BasisBootedMode.Desktop);
+        if (Instance != null) Instance.SwitchMode(BasisBootedMode.Desktop);
     }
 #endif
 

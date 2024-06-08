@@ -9,6 +9,7 @@ using Valve.VR;
 public static class BasisOpenVRManagement
 {
     public static XRManagerSettings XRInstance;
+    public static GameObject SteamVR_Behaviour;
     public static List<OpenVRDevice> inputDevices = new List<OpenVRDevice>();
     /// <summary>
     /// generated at runtime
@@ -41,13 +42,13 @@ public static class BasisOpenVRManagement
         SteamVR instance = SteamVR.instance;
         Debug.Log("OpenVR Headset HMD Type: " + instance.hmd_Type);
 
-        GameObject go = new GameObject();
-        go.name = "SteamVR_Behaviour";
-        SteamVR_Behaviour steamVR_Behaviour = go.AddComponent<SteamVR_Behaviour>();
+        SteamVR_Behaviour = new GameObject();
+        SteamVR_Behaviour.name = "SteamVR_Behaviour";
+        SteamVR_Behaviour steamVR_Behaviour = SteamVR_Behaviour.AddComponent<SteamVR_Behaviour>();
         steamVR_Behaviour.initializeSteamVROnAwake = true;
         steamVR_Behaviour.doNotDestroy = true;
         
-        SteamVR_Render steamVR_Render = go.AddComponent<SteamVR_Render>();
+        SteamVR_Render steamVR_Render = SteamVR_Behaviour.AddComponent<SteamVR_Render>();
         
         SteamVR_Events.DeviceConnected.Listen(UpdateDeviceList);
     }
@@ -60,9 +61,9 @@ public static class BasisOpenVRManagement
                 XRGeneralSettings.Instance.Manager.DeinitializeLoader();
             }
         }
-        StopXR();
+        StopOpenVR();
     }
-    public static void StopXR()
+    public static void StopOpenVR()
     {
         if (XRInstance != null && XRInstance.activeLoader != null)
         {
@@ -75,6 +76,8 @@ public static class BasisOpenVRManagement
                 Object.Destroy(BasisOpenVRInput.gameObject);
             }
         }
+        
+        Object.Destroy(SteamVR_Behaviour);
     }
 
     private static void UpdateDeviceList(int deviceIndex, bool connected)
