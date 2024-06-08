@@ -7,78 +7,70 @@ public class BasisOpenVRInput : BasisInput
     public OpenVRDevice Device;
     public SteamVR_ActionSet actionSet;
     public SteamVR_Action_Pose poseAction;
-
-    public Vector2 primary2DAxisL;
-    public Vector2 primary2DAxisR;
     public static string ActionName = "default";
+    public TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
+    public TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
+    public SteamVR_Utils.RigidTransform deviceTransform;
+    public EVRCompositorError result;
     public void Initialize(OpenVRDevice device, string iD)
     {
-        base.Initialize(iD);
         Device = device;
-        TrackedRole = device.deviceType;
+        base.Initialize(iD);
+        GetControllerOrHMD(Device.SteamVR_Input_Sources);
         actionSet = SteamVR_Input.GetActionSet(ActionName);
         actionSet.Activate();
     }
 
+    public void GetControllerOrHMD(SteamVR_Input_Sources SteamVR_Input_Sources)
+    {
+        switch (SteamVR_Input_Sources)
+        {
+            case SteamVR_Input_Sources.LeftHand:
+                TrackedRole = BasisBoneTrackedRole.LeftHand;
+                break;
+            case SteamVR_Input_Sources.RightHand:
+                TrackedRole = BasisBoneTrackedRole.RightHand;
+                break;
+            case SteamVR_Input_Sources.Head:
+                TrackedRole = BasisBoneTrackedRole.CenterEye;
+                break;
+        }
+    }
     public override void PollData()
     {
-        TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
-        TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
-        var result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex((uint)Device.deviceIndex, ref devicePose, ref deviceGamePose);
+        result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex((uint)Device.SteamVR_Input_Sources, ref devicePose, ref deviceGamePose);
 
-        if (result != EVRCompositorError.None)
+        if (result == EVRCompositorError.None)
+        {
+            deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
+            LocalRawPosition = deviceTransform.pos;
+            LocalRawRotation = deviceTransform.rot;
+
+            if (hasRoleAssigned)
+            {
+                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                {
+                    Control.LocalRawPosition = LocalRawPosition;
+                }
+
+                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                {
+                    Control.LocalRawRotation = LocalRawRotation;
+                }
+            }
+
+            SteamVR_Actions.default_Move.GetAxis(Device.SteamVR_Input_Sources);
+            primary2DAxis = SteamVR_Actions.default_Move.GetAxis(Device.SteamVR_Input_Sources);
+            primaryButton = SteamVR_Actions.default_Jump.GetStateDown(Device.SteamVR_Input_Sources);
+            secondaryButton = SteamVR_Actions.default_Menu.GetStateDown(Device.SteamVR_Input_Sources);
+
+
+            UpdatePlayerControl();
+        }
+        else
         {
             Debug.LogError("Error getting device pose: " + result);
-            return;
         }
-
-        var deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
-        LocalRawPosition = deviceTransform.pos;
-        LocalRawRotation = deviceTransform.rot;
-
-        if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
-        {
-            Control.LocalRawPosition = LocalRawPosition;
-        }
-
-        if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
-        {
-            Control.LocalRawRotation = LocalRawRotation;
-        }
-
-        UpdatePlayerControl();
         transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
-    }
-
-    private void UpdatePlayerControl()
-    {
-        if (TrackedRole == BasisBoneTrackedRole.LeftHand)
-        {
-            primary2DAxisL = SteamVR_Actions.default_Move.GetAxis(SteamVR_Input_Sources.LeftHand);
-            primaryButton = SteamVR_Actions.default_Jump.GetStateDown(SteamVR_Input_Sources.Any);
-            secondaryButton = SteamVR_Actions.default_Menu.GetStateDown(SteamVR_Input_Sources.Any);
-
-            BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxisL;
-            if (primaryButton)
-            {
-                BasisLocalPlayer.Instance.Move.HandleJump();
-            }
-            if (secondaryButton)
-            {
-                if (BasisHamburgerMenu.Instance == null && !BasisHamburgerMenu.IsLoading)
-                {
-                    BasisHamburgerMenu.OpenMenu();
-                }
-                else
-                {
-                    BasisHamburgerMenu.Instance.CloseThisMenu();
-                }
-            }
-        }
-        else if (TrackedRole == BasisBoneTrackedRole.RightHand)
-        {
-            primary2DAxisR = SteamVR_Actions.default_Rotate.GetAxis(SteamVR_Input_Sources.Any);
-            BasisLocalPlayer.Instance.Move.Rotation = primary2DAxisR;
-        }
     }
 }
