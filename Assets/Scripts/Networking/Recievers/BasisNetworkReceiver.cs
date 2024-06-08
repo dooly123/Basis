@@ -20,7 +20,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     public BasisAvatarLerpDataSettings Settings;
 
     [SerializeField]
-    public BasisAudioReceiver Module = new BasisAudioReceiver();
+    public BasisAudioReceiver AudioReceiverModule = new BasisAudioReceiver();
 
     public BasisRemotePlayer RemotePlayer;
 
@@ -49,7 +49,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         if (Ready)
         {
             Compute();
-            Module.Update();
+            AudioReceiverModule.Update();
         }
     }
 
@@ -74,17 +74,17 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
 
     public void ReceiveNetworkAudio(AudioSegment audioSegment)
     {
-        if (Module.decoder != null)
+        if (AudioReceiverModule.decoder != null)
         {
-            Module.decoder.OnEncoded(audioSegment.audioSegmentData.buffer);
+            AudioReceiverModule.decoder.OnEncoded(audioSegment.audioSegmentData.buffer);
         }
     }
 
     public void ReceiveSilentNetworkAudio(AudioSilentSegmentData audioSilentSegment)
     {
-        if (Module.decoder != null)
+        if (AudioReceiverModule.decoder != null)
         {
-            Module.OnDecodedSilence(silentData, dataSize);
+            AudioReceiverModule.OnDecodedSilence(silentData, dataSize);
         }
     }
 
@@ -103,7 +103,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
             Ready = true;
             NetworkedPlayer = networkedPlayer;
             RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
-            Module.OnEnable(networkedPlayer, gameObject);
+            AudioReceiverModule.OnEnable(networkedPlayer, gameObject);
             OnAvatarCalibration();
             RemotePlayer.RemoteAvatarDriver.CalibrationComplete.AddListener(OnCalibration);
         }
@@ -115,11 +115,11 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
 
     public void OnCalibration()
     {
-        Module.OnCalibration(NetworkedPlayer);
+        AudioReceiverModule.OnCalibration(NetworkedPlayer);
     }
 
     public override void DeInitialize()
     {
-        Module.OnDisable();
+        AudioReceiverModule.OnDisable();
     }
 }

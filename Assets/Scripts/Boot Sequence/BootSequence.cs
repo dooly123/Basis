@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
@@ -21,7 +21,7 @@ public static class BootSequence
         {
             foreach (GameObject gameObject in Gameobjects)
             {
-                gameObject.name = "BootManager";
+                gameObject.name = BootManager;
             }
         }
         else
