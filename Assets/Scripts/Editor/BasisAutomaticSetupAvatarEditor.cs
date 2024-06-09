@@ -108,6 +108,10 @@ public static class BasisAutomaticSetupAvatarEditor
     {
         if (BasisHelpers.TryGetVector3Bone(avatar.Animator, HumanBodyBones.LeftEye, out Vector3 LeftEye) && BasisHelpers.TryGetVector3Bone(avatar.Animator, HumanBodyBones.RightEye, out Vector3 RightEye))
         {
+            if (avatar.AvatarEyePosition != Vector2.zero)
+            {
+                return;
+            }
             Vector3 EyePosition = Vector3.Lerp(LeftEye, RightEye, 0.5f);
             if (BasisHelpers.TryGetFloor(avatar.Animator, out Vector3 Bottom))
             {
@@ -120,6 +124,11 @@ public static class BasisAutomaticSetupAvatarEditor
     {
         if (BasisHelpers.TryGetVector3Bone(avatar.Animator, HumanBodyBones.LeftFoot, out Vector3 LeftFoot) && BasisHelpers.TryGetVector3Bone(avatar.Animator, HumanBodyBones.RightFoot, out Vector3 RightFoot))
         {
+            if (avatar.AvatarMouthPosition != Vector2.zero)
+            {
+                return;
+            }
+
             Vector3 Bottom = Vector3.Lerp(LeftFoot, RightFoot, 0.5f);
             Vector3 estimatedMouthPosition = Head.position + Head.TransformDirection(BasisHelpers.ScaleVector(mouthOffset));//height
 

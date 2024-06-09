@@ -61,6 +61,7 @@ public abstract class BasisInput : MonoBehaviour
                 // Do nothing if bone is found successfully
             }
         }
+        
         Driver.OnSimulate += PollData;
         SetRealTrackers(BasisBoneControl.BasisHasTracked.HasTracker, BasisBoneControl.BasisHasRigLayer.HasRigLayer);
     }

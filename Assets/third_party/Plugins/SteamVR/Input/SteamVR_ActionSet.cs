@@ -132,7 +132,7 @@ namespace Valve.VR
         }
 
         [NonSerialized]
-        protected bool initialized = false;
+        public bool initialized = false;
 
 
         public static CreateType Create<CreateType>(string newSetPath) where CreateType : SteamVR_ActionSet, new()

@@ -35,9 +35,9 @@ public class BasisLocalCameraDriver : MonoBehaviour
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
     }
 
-    private void OnModeSwitch(BasisDeviceManagement.BasisBootedMode mode)
+    private void OnModeSwitch(BasisBootedMode mode)
     {
-        if(mode == BasisDeviceManagement.BasisBootedMode.Desktop)
+        if(mode == BasisBootedMode.Desktop)
         {
             Camera.fieldOfView = DefaultCameraFov;
         }

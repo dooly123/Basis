@@ -1,61 +1,50 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.XR.Management;
 using Valve.VR;
-public static class BasisOpenVRManagement
+[System.Serializable]
+public class BasisOpenVRManagement
 {
-    public static XRManagerSettings XRInstance;
-    public static List<OpenVRDevice> inputDevices = new List<OpenVRDevice>();
+    public GameObject SteamVR_BehaviourGameobject;
+    public SteamVR_Behaviour SteamVR_Behaviour;
+    public SteamVR_Render SteamVR_Render;
+    public SteamVR SteamVR;
+    public List<OpenVRDevice> inputDevices = new List<OpenVRDevice>();
     /// <summary>
     /// generated at runtime
     /// </summary>
-    public static List<BasisOpenVRInput> TrackedOpenVRInputDevices = new List<BasisOpenVRInput>();
+    public List<BasisOpenVRInput> TrackedOpenVRInputDevices = new List<BasisOpenVRInput>();
     /// <summary>
     /// keeps track of generated IDs and match InputDevice
     /// </summary>
-    public static Dictionary<string, OpenVRDevice> TypicalDevices = new Dictionary<string, OpenVRDevice>();
-    public static bool TryStartOpenVR()
+    public Dictionary<string, OpenVRDevice> TypicalDevices = new Dictionary<string, OpenVRDevice>();
+    public void StartXRSDK()
     {
-        //finds the first working vr loader
-        XRGeneralSettings.Instance.Manager.InitializeLoaderSync();
-        //start its subsystems
-        XRInstance = XRGeneralSettings.Instance.Manager;
-        StartXRSDK();
-        if (XRInstance.activeLoader == null)
+        SteamVR = SteamVR.instance;
+        Debug.Log("OpenVR Headset HMD Type: " + SteamVR.hmd_Type);
+        if (SteamVR_BehaviourGameobject == null)
         {
-            return false;
+            SteamVR_BehaviourGameobject = new GameObject("SteamVR");
         }
-        return true;
-    }
-    private static void StartXRSDK()
-    {
-        if (XRInstance != null && XRInstance.activeLoader != null)
+        SteamVR_BehaviourGameobject.name = "SteamVR_Behaviour";
+        SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
+        SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
+        SteamVR_Behaviour.initializeSteamVROnAwake = true;
+        SteamVR_Behaviour.doNotDestroy = true;
+        foreach (SteamVR_Action_Pose Pose in SteamVR_Input.actionsPose)
         {
-            XRInstance.StartSubsystems();
-        }
-
-        SteamVR instance = SteamVR.instance;
-        Debug.Log("OpenVR Headset HMD Type: " + instance.hmd_Type);
-
-        GameObject go = new GameObject();
-        go.name = "SteamVR_Behaviour";
-        SteamVR_Behaviour steamVR_Behaviour = go.AddComponent<SteamVR_Behaviour>();
-        steamVR_Behaviour.initializeSteamVROnAwake = true;
-        steamVR_Behaviour.doNotDestroy = true;
-        SteamVR_Render steamVR_Render = go.AddComponent<SteamVR_Render>();
-        SteamVR_Action_Pose[] poses = SteamVR_Input.actionsPose;
-        foreach (SteamVR_Action_Pose Pose in poses)
-        {
-            Pose.onDeviceConnectedChanged += UpdateDeviceList;
+            Pose.onDeviceConnectedChanged += UpdateOnConnectORDisconnect;
             UpdateDeviceList(Pose);
         }
     }
-
-    private static void UpdateDeviceList(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected)
+    private void UpdateOnConnectORDisconnect(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected)
     {
-        UpdateDeviceList(fromAction);
-        if (deviceConnected == false)
+        Debug.Log("Action " + fromAction.fullPath + " Input Source " + fromSource + " IS Connected " + deviceConnected);
+        if (deviceConnected)
+        {
+            CreateDevice(fromAction, fromSource);
+        }
+        else
         {
             foreach (KeyValuePair<string, OpenVRDevice> deviceData in TypicalDevices)
             {
@@ -68,23 +57,21 @@ public static class BasisOpenVRManagement
             }
         }
     }
-
-    private static void UpdateDeviceList(SteamVR_Action_Pose Pose)
+    private void UpdateDeviceList(SteamVR_Action_Pose Pose)
     {
         foreach (SteamVR_Input_Sources inputSource in (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources)))
         {
             if (inputSource != SteamVR_Input_Sources.Any)
             {
                 SteamVR_Action_Pose_Source poseSource = Pose[inputSource];
-                if (poseSource != null && poseSource.poseIsValid)
+                if (poseSource != null)
                 {
-                    UpdateDevice(poseSource);
+                    CreateDevice(Pose, inputSource);
                 }
             }
         }
     }
-
-    private static void UpdateDevice(SteamVR_Action_Pose_Source fromAction)
+    private void CreateDevice(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
     {
         uint deviceIndex = fromAction.trackedDeviceIndex;
         Debug.Log("Device " + deviceIndex);
@@ -93,32 +80,21 @@ public static class BasisOpenVRManagement
         {
             OpenVRDevice openVRDevice = new OpenVRDevice
             {
-                SteamVR_Input_Sources = fromAction.inputSource,
+                SteamVR_Input_Sources = fromSource,
                 deviceName = ID,
                 deviceIndex = deviceIndex,
-                Pose = fromAction
+                SteamVR_Action_Pose = fromAction
             };
             CreatePhysicalTrackedDevice(openVRDevice, ID);
             TypicalDevices.Add(ID, openVRDevice);
             Debug.Log("Creating device: " + ID);
         }
     }
-    public static void StopXRSDK()
+    public void StopXRSDK()
     {
-        if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
+        if (SteamVR_BehaviourGameobject != null)
         {
-            if (XRGeneralSettings.Instance.Manager.isInitializationComplete)
-            {
-                XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-            }
-        }
-        StopXR();
-    }
-    public static void StopXR()
-    {
-        if (XRInstance != null && XRInstance.activeLoader != null)
-        {
-            XRInstance.StopSubsystems();
+            GameObject.Destroy(SteamVR_BehaviourGameobject);
         }
         foreach (BasisOpenVRInput BasisOpenVRInput in TrackedOpenVRInputDevices)
         {
@@ -127,16 +103,17 @@ public static class BasisOpenVRManagement
                 Object.Destroy(BasisOpenVRInput.gameObject);
             }
         }
+        Object.Destroy(SteamVR_Behaviour);
     }
-    public static string GenerateID(uint device)
+    public string GenerateID(uint device)
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
-        StringBuilder id = new System.Text.StringBuilder(64);
+        StringBuilder id = new StringBuilder(64);
         OpenVR.System.GetStringTrackedDeviceProperty((uint)device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
         string ID = device + "|" + id;
         return ID;
     }
-    public static void CreatePhysicalTrackedDevice(OpenVRDevice device, string ID)
+    public void CreatePhysicalTrackedDevice(OpenVRDevice device, string ID)
     {
         GameObject gameObject = new GameObject(ID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
@@ -144,15 +121,15 @@ public static class BasisOpenVRManagement
         BasisOpenVRInput.Initialize(device, ID);
         TrackedOpenVRInputDevices.Add(BasisOpenVRInput);
     }
-    public static void DestroyPhysicalTrackedDevice(string ID)
+    public void DestroyPhysicalTrackedDevice(string ID)
     {
         DestroyInputDevice(ID);
         DestroyOpenVRInput(ID);
         Debug.Log("Destroying device: " + ID);
     }
-    public static void DestroyInputDevice(string ID)
+    public void DestroyInputDevice(string ID)
     {
-        foreach (var device in TypicalDevices)
+        foreach (KeyValuePair<string, OpenVRDevice> device in TypicalDevices)
         {
             if (device.Key == ID)
             {
@@ -161,10 +138,11 @@ public static class BasisOpenVRManagement
             }
         }
     }
-    public static void DestroyOpenVRInput(string ID)
+    public void DestroyOpenVRInput(string ID)
     {
-        foreach (var device in TrackedOpenVRInputDevices)
+        for (int Index = 0; Index < TrackedOpenVRInputDevices.Count; Index++)
         {
+            BasisOpenVRInput device = TrackedOpenVRInputDevices[Index];
             if (device.ID == ID)
             {
                 // I think they already should be destroyed, IDK. Doing this seems to work fine.

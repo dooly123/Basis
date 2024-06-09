@@ -15,6 +15,9 @@ public class BasisCharacterController : MonoBehaviour
     [SerializeField] public float gravityValue = -9.81f;
 
     [SerializeField] public float RaycastDistance = 0.2f;
+
+    [SerializeField] public float MinimumColliderSize = 0.01f;
+
     [SerializeField] public Vector2 MovementVector;
     [SerializeField] public Vector2 Rotation;
     [SerializeField] public bool Running;
@@ -173,7 +176,7 @@ public class BasisCharacterController : MonoBehaviour
 
         // Adjust the height to account for skinWidth
         float adjustedHeight = eyeHeight + skinWidth * 2f;
-
+        adjustedHeight = Mathf.Max(adjustedHeight, MinimumColliderSize);
         SetCharacterHeight(adjustedHeight);
     }
 

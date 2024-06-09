@@ -1,9 +1,6 @@
-﻿public partial class BasisDeviceManagement
+﻿public enum BasisBootedMode
 {
-    public enum BasisBootedMode
-    {
-        OpenVR,
-        OpenXR,
-        Desktop,
-    }
+    OpenVR,
+    OpenXR,
+    Desktop,
 }
