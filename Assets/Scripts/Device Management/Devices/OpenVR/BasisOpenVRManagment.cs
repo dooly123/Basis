@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Valve.VR;
@@ -29,12 +30,31 @@ public class BasisOpenVRManagement
         SteamVR_BehaviourGameobject.name = "SteamVR_Behaviour";
         SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
         SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
-        SteamVR_Behaviour.initializeSteamVROnAwake = true;
-        SteamVR_Behaviour.doNotDestroy = true;
-        foreach (SteamVR_Action_Pose Pose in SteamVR_Input.actionsPose)
+        SteamVR_Behaviour.initializeSteamVROnAwake = false;
+        SteamVR_Behaviour.doNotDestroy = false;
+        SteamVR.Initialize();
+        SteamVR_Render.StartCoroutine(CheckState());
+    }
+    public IEnumerator CheckState()
+    {
+        if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess || SteamVR.initializedState != SteamVR.InitializedStates.InitializeFailure || SteamVR.initializedState != SteamVR.InitializedStates.None)
         {
-            Pose.onDeviceConnectedChanged += UpdateOnConnectORDisconnect;
-            UpdateDeviceList(Pose);
+            Debug.Log("Waiting");
+            yield return new WaitForEndOfFrame();
+        }
+        foreach (SteamVR_Action_Pose poseAction in SteamVR_Input.actionsPose)
+        {
+            foreach (SteamVR_Input_Sources inputSource in (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources)))
+            {
+                if (inputSource != SteamVR_Input_Sources.Any)
+                {
+                    // poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
+                    poseAction[inputSource].onDeviceConnectedChanged += UpdateOnConnectORDisconnect;
+                    UpdateOnConnectORDisconnect(poseAction, poseAction[inputSource].inputSource, poseAction[inputSource].deviceIsConnected);
+                    //  poseAction[inputSource].onTrackingChanged += OnTrackingChanged;
+                    // poseAction[inputSource].onChange += SteamVR_Behaviour_Pose_OnChange;
+                }
+            }
         }
     }
     private void UpdateOnConnectORDisconnect(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected)
@@ -57,37 +77,26 @@ public class BasisOpenVRManagement
             }
         }
     }
-    private void UpdateDeviceList(SteamVR_Action_Pose Pose)
-    {
-        foreach (SteamVR_Input_Sources inputSource in (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources)))
-        {
-            if (inputSource != SteamVR_Input_Sources.Any)
-            {
-                SteamVR_Action_Pose_Source poseSource = Pose[inputSource];
-                if (poseSource != null)
-                {
-                    CreateDevice(Pose, inputSource);
-                }
-            }
-        }
-    }
     private void CreateDevice(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
     {
-        uint deviceIndex = fromAction.trackedDeviceIndex;
-        Debug.Log("Device " + deviceIndex);
-        string ID = GenerateID(deviceIndex);
+        string ID = GenerateID((uint)fromSource);
         if (TypicalDevices.ContainsKey(ID) == false)
         {
             OpenVRDevice openVRDevice = new OpenVRDevice
             {
                 SteamVR_Input_Sources = fromSource,
                 deviceName = ID,
-                deviceIndex = deviceIndex,
                 SteamVR_Action_Pose = fromAction
             };
             CreatePhysicalTrackedDevice(openVRDevice, ID);
-            TypicalDevices.Add(ID, openVRDevice);
-            Debug.Log("Creating device: " + ID);
+            if (TypicalDevices.TryAdd(ID, openVRDevice))
+            {
+                Debug.Log("Creating device: " + ID);
+            }
+            else
+            {
+                Debug.LogError("Device was already added");
+            }
         }
     }
     public void StopXRSDK()
@@ -109,7 +118,7 @@ public class BasisOpenVRManagement
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
         StringBuilder id = new StringBuilder(64);
-        OpenVR.System.GetStringTrackedDeviceProperty((uint)device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
+        OpenVR.System.GetStringTrackedDeviceProperty(device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
         string ID = device + "|" + id;
         return ID;
     }

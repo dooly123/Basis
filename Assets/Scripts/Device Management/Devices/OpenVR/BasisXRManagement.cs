@@ -44,9 +44,6 @@ public class BasisXRManagement
             // Debug.Log("isInitializationComplete = false");
             yield return new WaitForEndOfFrame();
         }
-
-        // Get the list of active loaders
-        IReadOnlyList<XRLoader> loaders = xRManagerSettings.activeLoaders;
         Debug.Log("trying to load  " + tryingToLoad);
         ReorderLoaders(tryingToLoad.ToString());
 
@@ -55,6 +52,10 @@ public class BasisXRManagement
         //  Debug.Log("StartSubsystems");
         // Check the result
         LoaderType result = GetLoaderType(xRManagerSettings.activeLoader?.name);
+        if (result.ToString() != tryingToLoad.ToString())
+        {
+            Debug.LogError("was unable to load requested " + tryingToLoad);
+        }
         xRManagerSettings.StartSubsystems();
         Debug.Log("Found Loader " + result);
         CheckForPass?.Invoke(result);

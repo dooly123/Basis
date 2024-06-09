@@ -9,8 +9,8 @@ public class BasisOpenXRInput : BasisInput
     public void Initialize(UnityEngine.XR.InputDevice device, string iD)
     {
         Device = device;
-        base.Initialize(iD);
         GetControllerOrHMD();
+        base.Initialize(iD);
     }
 
     private void GetControllerOrHMD()

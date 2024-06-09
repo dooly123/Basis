@@ -4,7 +4,6 @@ using Valve.VR;
 public class BasisOpenVRInput : BasisInput
 {
     public OpenVRDevice Device;
-    public SteamVR_ActionSet actionSet;
     public static string ActionName = "default";
     public TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
     public TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
@@ -13,10 +12,8 @@ public class BasisOpenVRInput : BasisInput
     public void Initialize(OpenVRDevice device, string iD)
     {
         Device = device;
-        base.Initialize(iD);
         GetControllerOrHMD(Device.SteamVR_Input_Sources);
-        actionSet = SteamVR_Input.GetActionSet(ActionName);
-        actionSet.Activate();
+        base.Initialize(iD);
     }
 
     public void GetControllerOrHMD(SteamVR_Input_Sources SteamVR_Input_Sources)
