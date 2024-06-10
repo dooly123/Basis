@@ -10,7 +10,6 @@ public class BasisOpenVRManagement
     public SteamVR_Behaviour SteamVR_Behaviour;
     public SteamVR_Render SteamVR_Render;
     public SteamVR SteamVR;
-    public List<OpenVRDevice> inputDevices = new List<OpenVRDevice>();
     /// <summary>
     /// generated at runtime
     /// </summary>
@@ -29,33 +28,43 @@ public class BasisOpenVRManagement
         }
         SteamVR_BehaviourGameobject.name = "SteamVR_Behaviour";
         SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
+        SteamVR_Behaviour.Initialize();
         SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
         SteamVR_Behaviour.initializeSteamVROnAwake = false;
         SteamVR_Behaviour.doNotDestroy = false;
-        SteamVR.Initialize();
+        
         SteamVR_Render.StartCoroutine(CheckState());
     }
+
     public IEnumerator CheckState()
     {
-        if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess || SteamVR.initializedState != SteamVR.InitializedStates.InitializeFailure || SteamVR.initializedState != SteamVR.InitializedStates.None)
+        // Loop until SteamVR is either successfully initialized or failed to initialize
+        while (SteamVR.initializedState == SteamVR.InitializedStates.None)
         {
-            yield return new WaitForEndOfFrame();
+            yield return null; // Wait for the next frame
         }
+
+        // Check if initialization failed
+        if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
+        {
+            Debug.LogError("SteamVR failed to initialize");
+            yield break; // Exit the coroutine
+        }
+        
+        // Now proceed to bind events
         foreach (SteamVR_Action_Pose poseAction in SteamVR_Input.actionsPose)
         {
             foreach (SteamVR_Input_Sources inputSource in (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources)))
             {
                 if (inputSource != SteamVR_Input_Sources.Any)
                 {
-                    // poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
                     poseAction[inputSource].onDeviceConnectedChanged += UpdateOnConnectORDisconnect;
-                    UpdateOnConnectORDisconnect(poseAction, poseAction[inputSource].inputSource, poseAction[inputSource].deviceIsConnected);
-                    //  poseAction[inputSource].onTrackingChanged += OnTrackingChanged;
-                    // poseAction[inputSource].onChange += SteamVR_Behaviour_Pose_OnChange;
+                    //UpdateOnConnectORDisconnect(poseAction, poseAction[inputSource].inputSource, poseAction[inputSource].deviceIsConnected);
                 }
             }
         }
     }
+
     private void UpdateOnConnectORDisconnect(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected)
     {
         Debug.Log("Action " + fromAction.fullPath + " Input Source " + fromSource + " IS Connected " + deviceConnected);
@@ -78,12 +87,14 @@ public class BasisOpenVRManagement
     }
     private void CreateDevice(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
     {
-        string ID = GenerateID((uint)fromSource);
+        uint deviceIndex = GetDeviceIndex(fromSource);
+        string ID = GenerateID(deviceIndex);
         if (TypicalDevices.ContainsKey(ID) == false)
         {
             OpenVRDevice openVRDevice = new OpenVRDevice
             {
                 SteamVR_Input_Sources = fromSource,
+                deviceIndex = deviceIndex,
                 deviceName = ID,
                 SteamVR_Action_Pose = fromAction
             };
@@ -120,6 +131,16 @@ public class BasisOpenVRManagement
         OpenVR.System.GetStringTrackedDeviceProperty(device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
         string ID = device + "|" + id;
         return ID;
+    }
+    uint GetDeviceIndex(SteamVR_Input_Sources source)
+    {
+        // Get the device index from the input source
+        SteamVR_Action_Pose poseAction = SteamVR_Actions.default_Pose;
+
+        // Get the input device index associated with the action and input source
+        uint inputDevice = poseAction[source].trackedDeviceIndex;
+        return inputDevice;
+
     }
     public void CreatePhysicalTrackedDevice(OpenVRDevice device, string ID)
     {
