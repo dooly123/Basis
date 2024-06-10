@@ -4,11 +4,11 @@ using Valve.VR;
 public class BasisOpenVRInput : BasisInput
 {
     public OpenVRDevice Device;
-    public static string ActionName = "default";
     public TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
     public TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
     public SteamVR_Utils.RigidTransform deviceTransform;
     public EVRCompositorError result;
+
     public void Initialize(OpenVRDevice device, string iD)
     {
         Device = device;
@@ -33,7 +33,8 @@ public class BasisOpenVRInput : BasisInput
     }
     public override void PollData()
     {
-        result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex((uint)Device.SteamVR_Input_Sources, ref devicePose, ref deviceGamePose);
+        result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex(Device.deviceIndex, ref devicePose, ref deviceGamePose);
+
         if (result == EVRCompositorError.None)
         {
             deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
