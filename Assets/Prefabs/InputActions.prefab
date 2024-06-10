@@ -64,7 +64,7 @@ MonoBehaviour:
     type: 3}
   OpenVRSwitch: {fileID: 3096343990557684458, guid: 5e4c3601c6a155f43af19da3bdd35a64,
     type: 3}
-  OpenXRSwitch: {fileID: -4293204030498023674, guid: 5e4c3601c6a155f43af19da3bdd35a64,
+  XRSwitch: {fileID: 3096343990557684458, guid: 5e4c3601c6a155f43af19da3bdd35a64,
     type: 3}
   XRUIInputModule: {fileID: 855012268860739733}
   Crouching: 0

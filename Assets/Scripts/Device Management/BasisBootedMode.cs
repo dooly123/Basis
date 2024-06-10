@@ -1,6 +1,7 @@
 ﻿public enum BasisBootedMode
 {
-    OpenVR,
-    OpenXR,
+    OpenVRLoader,
+    OpenXRLoader,
     Desktop,
+    SuccessButUnknown,
 }

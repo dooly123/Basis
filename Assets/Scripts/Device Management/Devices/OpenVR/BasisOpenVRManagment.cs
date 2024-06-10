@@ -39,7 +39,6 @@ public class BasisOpenVRManagement
     {
         if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess || SteamVR.initializedState != SteamVR.InitializedStates.InitializeFailure || SteamVR.initializedState != SteamVR.InitializedStates.None)
         {
-            Debug.Log("Waiting");
             yield return new WaitForEndOfFrame();
         }
         foreach (SteamVR_Action_Pose poseAction in SteamVR_Input.actionsPose)
