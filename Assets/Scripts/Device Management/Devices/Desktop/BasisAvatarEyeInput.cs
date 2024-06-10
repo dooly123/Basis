@@ -22,6 +22,11 @@ public class BasisAvatarEyeInput : MonoBehaviour
     {
         BasisLocalPlayer.OnLocalAvatarChanged += PlayerInitialized;
     }
+    public void OnDestroy()
+    {
+        Debug.Log("deleting " + nameof(BasisAvatarEyeInput));
+        Instance = null;
+    }
     public void Start()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -49,10 +54,6 @@ public class BasisAvatarEyeInput : MonoBehaviour
     public void OnDisable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged -= PlayerInitialized;
-    }
-    public void OnDestroy()
-    {
-        Instance = null;
     }
     public bool isCursorLocked = true;
     public void HandleEscape()

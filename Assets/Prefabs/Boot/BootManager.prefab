@@ -49,11 +49,12 @@ MonoBehaviour:
   BasisAvatarEyeInput: {fileID: 0}
   BasisOpusSettings: {fileID: 11400000, guid: 5ad599c7b6420494f84e3a3b71efbfa8, type: 2}
   BasisXRManagement:
-    XRManagerSettings: {fileID: -273138169001147305, guid: 1d5aae00e097ba9419be9ec26ccae856,
-      type: 2}
-    XRGeneralSettings: {fileID: -5957691810772215966, guid: 1d5aae00e097ba9419be9ec26ccae856,
-      type: 2}
-    AttemptedDefaultLoad: 0
+    xRManagerSettings: {fileID: 0}
+    xRGeneralSettings: {fileID: 0}
+    targetLoader: {fileID: 0}
+    initialLoaders:
+    - {fileID: 11400000, guid: 3bc3c9a960a936342a72833e45544032, type: 2}
+    - {fileID: 11400000, guid: 7892f170cc4e84f4cbde6ca6d077400b, type: 2}
   BasisOpenVRManagement:
     SteamVR_BehaviourGameobject: {fileID: 0}
     SteamVR_Behaviour: {fileID: 0}
