@@ -1,15 +1,11 @@
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
+using System;
 using UnityEngine;
 public static class BasisNetworkAvatarCompressor
 {
     public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim)
     {
-        if(NetworkSendBase.Target.Vectors.IsCreated == false)
-        {
-            ///NetworkSendBase.InitalizeAvatarStoredData();
-          //  NetworkSendBase.InitalizeDataJobs();
-        }
         using (var writer = DarkRiftWriter.Create())
         {
             CompressAvatar(ref NetworkSendBase.Target, NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, out NetworkSendBase.LASM.array, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
@@ -29,16 +25,16 @@ public static class BasisNetworkAvatarCompressor
         AvatarData.Vectors[2] = Sender.transform.localScale;
         AvatarData.Muscles.CopyFrom(CachedPose.muscles);
         AvatarData.Quaternions[0] = CachedPose.bodyRotation;
-        Bytes = CompressAvatarUpdate(AvatarData.Vectors[0], AvatarData.Vectors[2], AvatarData.Vectors[1], CachedPose.bodyRotation, CachedPose.muscles,PositionRanged,ScaleRanged);
+        Bytes = CompressAvatarUpdate(AvatarData.Vectors[0], AvatarData.Vectors[2], AvatarData.Vectors[1], CachedPose.bodyRotation, CachedPose.muscles, PositionRanged, ScaleRanged);
     }
     public static byte[] CompressAvatarUpdate(Vector3 NewPosition, Vector3 Scale, Vector3 BodyPosition, Quaternion Rotation, float[] muscles, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
     {
-        using (var Packer = DarkRiftWriter.Create())
+        using (var Packer = DarkRiftWriter.Create(216))
         {
-            CompressScaleAndPosition(Packer, NewPosition, BodyPosition, Scale, PositionRanged,ScaleRanged);
+            CompressScaleAndPosition(Packer, NewPosition, BodyPosition, Scale, PositionRanged, ScaleRanged);//3 ushorts atm needs to be uints (3*4)*3
 
-            BasisCompressionOfRotation.CompressQuaternion(Packer, Rotation);
-            BasisCompressionOfMuscles.CompressMuscles(Packer, muscles);
+            BasisCompressionOfRotation.CompressQuaternion(Packer, Rotation);//uint
+            BasisCompressionOfMuscles.CompressMuscles(Packer, muscles);//95 ushorts 95*4
             return Packer.ToArray();
         }
     }

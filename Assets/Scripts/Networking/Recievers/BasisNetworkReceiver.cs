@@ -50,7 +50,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         if (Ready)
         {
             Compute();
-            AudioReceiverModule.Update();
+            AudioReceiverModule.LateUpdate();
         }
     }
 
