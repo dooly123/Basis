@@ -12,8 +12,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public InputActionReference Escape;
 
     public InputActionReference DesktopSwitch;
-    public InputActionReference OpenVRSwitch;
-    public InputActionReference OpenXRSwitch;
+    public InputActionReference XRSwitch;
     public XRUIInputModule XRUIInputModule;
 
     [SerializeField] public bool Crouching;
@@ -26,8 +25,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public void OnEnable()
     {
         DesktopSwitch.action.Enable();
-        OpenVRSwitch.action.Enable();
-        OpenXRSwitch.action.Enable();
+        XRSwitch.action.Enable();
 
         MoveAction.action.Enable();
         LookAction.action.Enable();
@@ -41,8 +39,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public void OnDisable()
     {
         DesktopSwitch.action.Disable();
-        OpenVRSwitch.action.Disable();
-        OpenXRSwitch.action.Disable();
+        XRSwitch.action.Disable();
 
         MoveAction.action.Disable();
         LookAction.action.Disable();
@@ -77,8 +74,7 @@ public class BasisLocalInputActions : MonoBehaviour
         Escape.action.canceled += ctx => EscapeCancelled();
 
         DesktopSwitch.action.performed += ctx => SwitchDesktop();
-        OpenVRSwitch.action.performed += ctx => SwitchOpenVR();
-        OpenXRSwitch.action.performed += ctx => SwitchOpenXR();
+        XRSwitch.action.performed += ctx => SwitchOpenXR();
     }
     public void RemoveCallback()
     {
@@ -103,20 +99,15 @@ public class BasisLocalInputActions : MonoBehaviour
 
 
         DesktopSwitch.action.performed -= ctx => SwitchDesktop();
-        OpenVRSwitch.action.performed -= ctx => SwitchOpenVR();
-        OpenXRSwitch.action.performed -= ctx => SwitchOpenXR();
+        XRSwitch.action.performed -= ctx => SwitchOpenXR();
     }
     public void SwitchDesktop()
     {
         BasisDeviceManagement.ForceSetDesktop();
     }
-    public void SwitchOpenVR()
-    {
-        BasisDeviceManagement.ForceSetOpenVR();
-    }
     public void SwitchOpenXR()
     {
-        BasisDeviceManagement.ForceSetOpenXR();
+        BasisDeviceManagement.ForceLoadXR();
 
     }
     public void LookActionStarted(Vector2 LookVector)

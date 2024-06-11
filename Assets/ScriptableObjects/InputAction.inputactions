@@ -69,15 +69,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "HotSwitchToOpenXR",
-                    "type": "Button",
-                    "id": "cc92c8ad-2cb3-4cdc-bd1f-b29182db1a59",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "HotSwitchToDesktop",
                     "type": "Button",
                     "id": "cf7e8280-da4d-48bf-977a-8d8cffbcca69",
@@ -87,7 +78,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "HotSwtichToOpenVR",
+                    "name": "HotSwtichToXR",
                     "type": "Button",
                     "id": "6d34ee2a-cdc7-4bb8-b371-00a8849bf415",
                     "expectedControlType": "",
@@ -341,17 +332,6 @@
                 },
                 {
                     "name": "",
-                    "id": "5e6966fc-992e-488f-a100-9a57398b533a",
-                    "path": "<Keyboard>/f8",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";XR;Joystick;Touch;Gamepad;Keyboard&Mouse",
-                    "action": "HotSwitchToOpenXR",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "439b6574-6177-4be8-a26a-799ae0e364e5",
                     "path": "<Keyboard>/f9",
                     "interactions": "",
@@ -368,7 +348,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HotSwtichToOpenVR",
+                    "action": "HotSwtichToXR",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
