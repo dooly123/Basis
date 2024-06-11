@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using DarkRift;
+using Unity.Collections;
 public class BasisCompressionOfMuscles
 {
     public static BasisRangedFloatData CompressMuscles(DarkRiftWriter Packer, float[] muscles)
@@ -14,7 +15,7 @@ public class BasisCompressionOfMuscles
         }
         return CF;
     }
-    public static void DecompressMuscles(DarkRiftReader Packer,ref float[] Muscles)
+    public static void DecompressMuscles(DarkRiftReader Packer,ref NativeArray<float> Muscles)
     {
         Packer.Read(out byte LASV);
         BasisRangedFloatData CF = new BasisRangedFloatData(-LASV, LASV, BasisNetworkConstants.MusclePrecision);

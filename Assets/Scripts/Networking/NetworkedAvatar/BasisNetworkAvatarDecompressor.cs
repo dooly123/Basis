@@ -1,4 +1,5 @@
 using DarkRift;
+using Unity.Collections;
 using UnityEngine;
 using static SerializableDarkRift;
 public static class BasisNetworkAvatarDecompressor
@@ -11,12 +12,12 @@ public static class BasisNetworkAvatarDecompressor
     public static void DecompressAvatar(ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
     {
         DecompressAvatarUpdate(AvatarUpdate, out Vector3 PlayerPosition, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref AvatarData.Muscles, PositionRanged, ScaleRanged);
-        AvatarData.BodyPosition = BodyPosition;
-        AvatarData.PlayerPosition = PlayerPosition;
-        AvatarData.Scale = Scale;
-        AvatarData.Rotation = Rotation;
+        AvatarData.Vectors[1] = BodyPosition;
+        AvatarData.Vectors[0] = PlayerPosition;
+        AvatarData.Vectors[2] = Scale;
+        AvatarData.Quaternions[0] = Rotation;
     }
-    public static void DecompressAvatarUpdate(byte[] compressedData, out Vector3 NewPosition, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref float[] muscles, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
+    public static void DecompressAvatarUpdate(byte[] compressedData, out Vector3 NewPosition, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref NativeArray<float> muscles, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
     {
         using (var bitPacker = DarkRiftReader.CreateFromArray(compressedData, 0, compressedData.Length))
         {

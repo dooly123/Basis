@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEditor.EditorTools;
 using UnityEngine;
 
 public abstract class BasisInput : MonoBehaviour
 {
     public BasisLocalBoneDriver Driver;
-    private BasisBoneTrackedRole trackedrole;
+    private BasisBoneTrackedRole trackedRole;
     public bool hasRoleAssigned = false;
     public BasisBoneControl Control;
     public string UniqueID;
@@ -28,10 +27,10 @@ public abstract class BasisInput : MonoBehaviour
 
     public BasisBoneTrackedRole TrackedRole
     {
-        get => trackedrole;
+        get => trackedRole;
         set
         {
-            trackedrole = value;
+            trackedRole = value;
             hasRoleAssigned = true;
         }
     }

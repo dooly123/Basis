@@ -1,3 +1,5 @@
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -20,12 +22,14 @@ public class BasisLocalAvatarReader : MonoBehaviour
     public bool Ready = false;
     public BasisRangedFloatData PositionRanged;
     public BasisRangedFloatData ScaleRanged;
+    public DataJobs AvatarJobs;
     public async void OnEnable()
     {
+        InitalizeDataJobs();
         ReceiverPoseHandler = new HumanPoseHandler(Receiver.avatar, Receiver.transform);
         Receiver.enabled = false;
-        Target.Muscles = new float[95];
-        Output.Muscles = new float[95];
+        InitalizeAvatarStoredData(Target);
+        InitalizeAvatarStoredData(Output);
         UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisAvatarLerpDataSettings> Handle = Addressables.LoadAssetAsync<BasisAvatarLerpDataSettings>(BasisAvatarLerp.Settings);
         await Handle.Task;
         Settings = Handle.Result;
@@ -33,7 +37,31 @@ public class BasisLocalAvatarReader : MonoBehaviour
         PositionRanged = new BasisRangedFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
         ScaleRanged = new BasisRangedFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
     }
-    public void RecieveAvatarUpdate(byte[] AvatarData)
+    public void OnDestroy()
+    {
+        Target.Vectors.Dispose();
+        Target.Quaternions.Dispose();
+        Target.Muscles.Dispose();
+
+        Output.Vectors.Dispose();
+        Output.Quaternions.Dispose();
+        Output.Muscles.Dispose();
+    }
+    public void InitalizeAvatarStoredData(BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
+    {
+        //data
+        data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
+        data.Quaternions = new NativeArray<Quaternion>(QuaternionCount, Allocator.Persistent);
+        data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);
+    }
+    public void InitalizeDataJobs()
+    {
+        //jobs
+        AvatarJobs.rotationJob = new UpdateAvatarRotationJob();
+        AvatarJobs.positionJob = new UpdateAvatarPositionJob();
+        AvatarJobs.muscleJob = new UpdateAvatarMusclesJob();
+    }
+    public void ReceiveAvatarUpdate(byte[] AvatarData)
     {
         BasisNetworkAvatarDecompressor.DecompressAvatar(ref Target, AvatarData, PositionRanged,ScaleRanged);
     }
@@ -45,7 +73,7 @@ public class BasisLocalAvatarReader : MonoBehaviour
             LerpTimeSpeedMovement = DeltaTime * Settings.LerpSpeedMovement;
             LerpTimeSpeedRotation = DeltaTime * Settings.LerpSpeedRotation;
             LerpTimeSpeedMuscles = DeltaTime * Settings.LerpSpeedMuscles;
-            BasisAvatarLerp.UpdateAvatar(ref Output, Target, LerpTimeSpeedMovement, LerpTimeSpeedRotation, LerpTimeSpeedMuscles, Settings.TeleportDistance);
+            BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, LerpTimeSpeedMovement, LerpTimeSpeedRotation, LerpTimeSpeedMuscles, Settings.TeleportDistance);
             ApplyPoseData(Receiver, Output, ref HumanPose);
 
             ReceiverPoseHandler.SetHumanPose(ref HumanPose);
@@ -53,15 +81,15 @@ public class BasisLocalAvatarReader : MonoBehaviour
     }
     public void ApplyPoseData(Animator Animator, BasisAvatarData Output, ref HumanPose Pose)
     {
-        Pose.bodyPosition = Output.BodyPosition;
-        Pose.bodyRotation = Output.Rotation;
-        Pose.muscles = Output.Muscles;
-        PlayerPosition = Output.PlayerPosition;
+        Pose.bodyPosition = Output.Vectors[1];
+        Pose.bodyRotation = Output.Quaternions[0];
+        Output.Muscles.CopyTo(Pose.muscles);
+        PlayerPosition = Output.Vectors[0];
 
-        Animator.transform.localScale = Output.Scale;
+        Animator.transform.localScale = Output.Vectors[3];
 
         //we scale the position 
-        ScaleOffset = Output.Scale - Vector3.one;
+        ScaleOffset = Output.Vectors[3] - Vector3.one;
         PlayerPosition.Scale(ScaleOffset);
         Animator.transform.position = -PlayerPosition + VisualOffset;
     }

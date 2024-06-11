@@ -5,6 +5,11 @@ public static class BasisNetworkAvatarCompressor
 {
     public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim)
     {
+        if(NetworkSendBase.Target.Vectors.IsCreated == false)
+        {
+            ///NetworkSendBase.InitalizeAvatarStoredData();
+          //  NetworkSendBase.InitalizeDataJobs();
+        }
         using (var writer = DarkRiftWriter.Create())
         {
             CompressAvatar(ref NetworkSendBase.Target, NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, out NetworkSendBase.LASM.array, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
@@ -19,12 +24,12 @@ public static class BasisNetworkAvatarCompressor
     public static void CompressAvatar(ref BasisAvatarData AvatarData, HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender, out byte[] Bytes, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
     {
         SenderPoseHandler.GetHumanPose(ref CachedPose);
-        AvatarData.BodyPosition = CachedPose.bodyPosition;
-        AvatarData.PlayerPosition = Sender.transform.position;
-        AvatarData.Scale = Sender.transform.localScale;
-        AvatarData.Muscles = CachedPose.muscles;
-        AvatarData.Rotation = CachedPose.bodyRotation;
-        Bytes = CompressAvatarUpdate(AvatarData.PlayerPosition, AvatarData.Scale, AvatarData.BodyPosition, CachedPose.bodyRotation, CachedPose.muscles,PositionRanged,ScaleRanged);
+        AvatarData.Vectors[1] = CachedPose.bodyPosition;
+        AvatarData.Vectors[0] = Sender.transform.position;
+        AvatarData.Vectors[2] = Sender.transform.localScale;
+        AvatarData.Muscles.CopyFrom(CachedPose.muscles);
+        AvatarData.Quaternions[0] = CachedPose.bodyRotation;
+        Bytes = CompressAvatarUpdate(AvatarData.Vectors[0], AvatarData.Vectors[2], AvatarData.Vectors[1], CachedPose.bodyRotation, CachedPose.muscles,PositionRanged,ScaleRanged);
     }
     public static byte[] CompressAvatarUpdate(Vector3 NewPosition, Vector3 Scale, Vector3 BodyPosition, Quaternion Rotation, float[] muscles, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
     {

@@ -1,4 +1,5 @@
 using System;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
@@ -34,7 +35,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         lerpTimeSpeedRotation = deltaTime * Settings.LerpSpeedRotation;
         lerpTimeSpeedMuscles = deltaTime * Settings.LerpSpeedMuscles;
 
-        BasisAvatarLerp.UpdateAvatar(ref Output, Target, lerpTimeSpeedMovement, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
+        BasisAvatarLerp.UpdateAvatar(ref Output, Target,AvatarJobs, lerpTimeSpeedMovement, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
 
         ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, Output, ref HumanPose);
         PoseHandler.SetHumanPose(ref HumanPose);
@@ -60,14 +61,22 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
 
     public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
     {
-        pose.bodyPosition = output.BodyPosition;
-        pose.bodyRotation = output.Rotation;
-        pose.muscles = output.Muscles;
-        PlayerPosition = output.PlayerPosition;
+        pose.bodyPosition = output.Vectors[1];
+        pose.bodyRotation = output.Quaternions[0];
+        if (pose.muscles == null || pose.muscles.Length != output.Muscles.Length)
+        {
+            pose.muscles = output.Muscles.ToArray();
+        }
+        else
+        {
+            output.Muscles.CopyTo(pose.muscles);
+        }
+        PlayerPosition = Output.Vectors[0];
 
-        animator.transform.localScale = output.Scale;
+        animator.transform.localScale = Output.Vectors[2];
 
-        ScaleOffset = output.Scale - Vector3.one;
+        //we scale the position 
+        ScaleOffset = Output.Vectors[2] - Vector3.one;
         PlayerPosition.Scale(ScaleOffset);
         animator.transform.position = -PlayerPosition + VisualOffset;
     }
@@ -97,6 +106,9 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         if (!Ready)
         {
+            InitalizeDataJobs();
+            InitalizeAvatarStoredData(ref Target);
+            InitalizeAvatarStoredData(ref Output);
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisAvatarLerpDataSettings> handle = Addressables.LoadAssetAsync<BasisAvatarLerpDataSettings>(BasisAvatarLerp.Settings);
             await handle.Task;
             Settings = handle.Result;
@@ -107,12 +119,19 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
             OnAvatarCalibration();
             RemotePlayer.RemoteAvatarDriver.CalibrationComplete.AddListener(OnCalibration);
         }
-        Target.Muscles = new float[95];
-        Output.Muscles = new float[95];
         silentData = new float[silentDataSize];
         Array.Fill(silentData, 0f);
     }
+    public void OnDestroy()
+    {
+        Target.Vectors.Dispose();
+        Target.Quaternions.Dispose();
+        Target.Muscles.Dispose();
 
+        Output.Vectors.Dispose();
+        Output.Quaternions.Dispose();
+        Output.Muscles.Dispose();
+    }
     public void OnCalibration()
     {
         AudioReceiverModule.OnCalibration(NetworkedPlayer);
