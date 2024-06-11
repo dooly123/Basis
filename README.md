@@ -1,4 +1,4 @@
- ### Basis let's you set up your own Social VR and Networked VR games with ease.
+ ### Basis lets you set up your own Social VR and Networked VR games with ease.
  ## Find our latest release <a href="https://github.com/dooly123/Basis/releases">here</a>.
 
 <table border="0">
