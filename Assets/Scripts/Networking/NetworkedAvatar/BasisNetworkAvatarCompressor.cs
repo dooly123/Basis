@@ -1,6 +1,5 @@
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
-using System;
 using UnityEngine;
 public static class BasisNetworkAvatarCompressor
 {

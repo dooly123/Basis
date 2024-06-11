@@ -1,5 +1,4 @@
 using System;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
@@ -78,7 +77,11 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         //we scale the position 
         ScaleOffset = Output.Vectors[2] - Vector3.one;
         PlayerPosition.Scale(ScaleOffset);
+#if UNITY_EDITOR
         animator.transform.position = -PlayerPosition + VisualOffset;
+#else
+    animator.transform.position = -PlayerPosition;
+#endif
     }
 
     public void ReceiveNetworkAudio(AudioSegment audioSegment)
