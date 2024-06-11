@@ -19,7 +19,9 @@ public class MicrophoneRecorder : MonoBehaviour
     public int rmsWindowSize = 10; // Size of the moving average window
 
     private int bufferLength;
-
+    private int dataLength;
+    private int position;
+    private int remain;
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -39,7 +41,7 @@ public class MicrophoneRecorder : MonoBehaviour
 
     void Update()
     {
-        int position = Microphone.GetPosition(MicrophoneDevice);
+        position = Microphone.GetPosition(MicrophoneDevice);
         if (position < 0 || head == position)
         {
             return;
@@ -47,10 +49,10 @@ public class MicrophoneRecorder : MonoBehaviour
 
         clip.GetData(microphoneBuffer, 0);
 
-        int dataLength = GetDataLength(bufferLength, head, position);
+        dataLength = GetDataLength(bufferLength, head, position);
         while (dataLength > ProcessBufferLength)
         {
-            int remain = bufferLength - head;
+            remain = bufferLength - head;
             if (remain < ProcessBufferLength)
             {
                 Array.Copy(microphoneBuffer, head, processBuffer, 0, remain);
