@@ -41,35 +41,27 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Vector2 Move
+        public virtual SteamVR_Action_Vector2 Joystick
         {
             get
             {
-                return SteamVR_Actions.default_Move;
+                return SteamVR_Actions.default_Joystick;
             }
         }
         
-        public virtual SteamVR_Action_Vector2 Rotate
+        public virtual SteamVR_Action_Boolean B_Button
         {
             get
             {
-                return SteamVR_Actions.default_Rotate;
+                return SteamVR_Actions.default_B_Button;
             }
         }
         
-        public virtual SteamVR_Action_Boolean Menu
+        public virtual SteamVR_Action_Boolean A_Button
         {
             get
             {
-                return SteamVR_Actions.default_Menu;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean Jump
-        {
-            get
-            {
-                return SteamVR_Actions.default_Jump;
+                return SteamVR_Actions.default_A_Button;
             }
         }
         
