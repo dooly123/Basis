@@ -10,7 +10,7 @@ public class BasisOpenXRInput : BasisInput
     {
         Device = device;
         GetControllerOrHMD();
-        base.Initialize(iD);
+        ActivateTracking(iD);
     }
 
     private void GetControllerOrHMD()

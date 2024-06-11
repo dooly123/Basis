@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Valve.VR;
-using VIVE.OpenXR.CompositionLayer;
 
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInput : BasisInput
@@ -16,9 +15,8 @@ public class BasisOpenVRInput : BasisInput
     {
         Device = device;
         TryAssignRole(Device.deviceClass);
-        base.Initialize(iD);
+        ActivateTracking(iD);
     }
-
     public void TryAssignRole(ETrackedDeviceClass deviceClass)
     {
         if (deviceClass == ETrackedDeviceClass.Controller)

@@ -20,6 +20,8 @@ public abstract class BasisInput : MonoBehaviour
     public bool secondary2DAxisClick;
     public bool primary2DAxisClick;
 
+    public GameObject TrackedRepresentation;
+
     public BasisBoneTrackedRole TrackedRole
     {
         get => trackedrole;
@@ -29,7 +31,10 @@ public abstract class BasisInput : MonoBehaviour
             hasRoleAssigned = true;
         }
     }
-
+    public void OnEnable()
+    {
+        ShowTrackedVisual();
+    }
     public void OnDisable()
     {
         DisableTracking();
@@ -38,16 +43,10 @@ public abstract class BasisInput : MonoBehaviour
     {
         DisableTracking();
     }
-
-    public virtual void Initialize(string iD)
+    public void ActivateTracking(string iD)
     {
-        Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         ID = iD;
-        ActivateTracking();
-    }
-
-    public void ActivateTracking()
-    {
+        Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver == null)
         {
             Debug.LogError("Missing Driver!");
@@ -61,7 +60,7 @@ public abstract class BasisInput : MonoBehaviour
                 // Do nothing if bone is found successfully
             }
         }
-        
+
         Driver.OnSimulate += PollData;
         SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
     }
@@ -160,6 +159,30 @@ public abstract class BasisInput : MonoBehaviour
                 break;
             case BasisBoneTrackedRole.Mouth:
                 break;
+        }
+    }
+    public void ShowTrackedVisual()
+    {
+        if (TrackedRepresentation == null)
+        {
+            TrackedRepresentation = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            TrackedRepresentation.transform.parent = this.transform;
+            TrackedRepresentation.transform.SetLocalPositionAndRotation(new Vector3(0, 0, 0), Quaternion.identity);
+            TrackedRepresentation.transform.localScale = new Vector3(0.075f, 0.075f, 0.075f);
+            if (TrackedRepresentation.TryGetComponent(out MeshRenderer Renderer))
+            {
+            }
+            if (TrackedRepresentation.TryGetComponent(out Collider Collider))
+            {
+                Destroy(Collider);
+            }
+        }
+    }
+    public void HideTrackedVisual()
+    {
+        if (TrackedRepresentation == null)
+        {
+            GameObject.Destroy(TrackedRepresentation);
         }
     }
 }

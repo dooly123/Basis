@@ -1,0 +1,13 @@
+newmtl knuckles_right
+Ns 59.999996
+Ni 1.500000
+d 1.000000
+Tr 0.000000
+Tf 1.000000 1.000000 1.000000
+illum 2
+Ka 0.588235 0.588235 0.588235
+Kd 0.588235 0.588235 0.588235
+Ks 0.828000 0.828000 0.828000
+Ke 0.000000 0.000000 0.000000
+map_Kd valve_controller_knu_1_0_right_diff.png
+map_Ks valve_controller_knu_1_0_right_spec.png

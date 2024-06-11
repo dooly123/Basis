@@ -1,0 +1,185 @@
+{
+    "thumbnail" : "knucklesev1_3_thumb_left.png",
+    "components": {
+        "body": {
+            "filename": "body_left.obj",
+            "component_local" : {
+                "origin": [-0.026072, 0.02368, 0.099665],
+                "rotate_xyz" : [25.0,0.0,0.0]
+            }
+        },
+        "trigger": {
+            "filename": "trigger_left.obj",
+            "motion":{
+                "type":"rotate",
+                "controller_axis":1,
+                "controller_axis_component":0,
+                "trigger_path" : "/input/trigger",
+                "value_mapping": [0.0,-54.0],
+                "pivot": [0.022073, -0.018599, 0.03297],
+                "axis": [1.0, 0.0, 0.0]
+            },
+            "component_local" : {
+                "origin": [0.022073, -0.028435, 0.038826],
+                "rotate_xyz" : [-56.064,-8.697,-2.427]
+            }
+        },
+        "trackpad": {
+            "filename": "trackpad_left.obj",
+            "motion":{
+                "type":"trackpad",
+                "controller_axis": 0,
+                "component_path" : "/input/trackpad",
+                "center": [0.018255, 0.012703, 0.046559],
+                "rotate_xyz": [0.00,0.0,0.0],
+                "press_rotation_x": [7,-7],
+                "press_rotation_y": [4,-4],
+                "press_translate": [0.0, -0.002, 0.0]
+            },
+            "component_local" : {
+                "origin": [0.018255, 0.012703, 0.046559],
+                "rotate_xyz" : [93.219,-0.09,2.908]
+            },
+            "visibility": {
+            	"default": true,
+            	"scroll": false
+            }
+        },
+        "trackpad_touch": {
+            "filename": "trackpad_touch_left.obj",
+            "motion":{
+                "type":"trackpad",
+                "controller_axis": 0,
+                "component_path" : "/input/trackpad",
+                "center": [0.018255, 0.011375, 0.046559],
+                "rotate_xyz": [-3.219,-0.09,2.908],
+                "press_rotation_x": [7,-7],
+                "press_rotation_y": [4,-4],
+                "press_translate": [0.0, -0.002, 0.0],
+                "touch_translate_x": [ -0.019, 0.019 ],
+                "touch_translate_y": [ 0.019, -0.019 ]
+            },
+            "visibility": {
+            	"default": false,
+            	"touch": true,
+            	"press": true,
+            	"scroll": false
+            },
+            "component_local" : {
+                "origin": [0.018255, 0.011375, 0.046559],
+                "rotate_xyz" : [93.219,-0.09,2.908]
+            }
+        },
+        "sys_button": {
+            "filename": "button_sys_left.obj",
+            "motion":{
+                "type":"translate",
+                "pressed_path" : "/input/system/click",
+                "controller_button": 0,
+                "value_mapping": [0.0, 0.002],
+                "axis": [0.0, -1.0, 0.0]
+            },
+            "component_local" : {
+                "origin": [0.007674, 0.015885, 0.07287],
+                "rotate_xyz" : [88.74,0.0,5.0]
+            }
+        },
+        "button": {
+            "filename": "button_a_left.obj",
+            "motion":{
+                "type":"translate",
+                "pressed_path" : "/input/b/click",
+                "controller_button": 1,
+                "value_mapping": [0.0, 0.002],
+                "axis": [0.0, -1.0, 0.0]
+            },
+            "component_local" : {
+                "origin": [-0.005832, 0.014233, 0.047562],
+                "rotate_xyz" : [90.0,0.0,0.0]
+            }
+        },
+        "button_b": {
+            "filename": "button_b_left.obj",
+            "motion":{
+                "type":"translate",
+                "pressed_path" : "/input/a/click",
+                "controller_button": 2,
+                "value_mapping": [0.0, 0.002],
+                "axis": [0.0, -1.0, 0.0]
+            },
+            "component_local" : {
+                "origin": [0.040414, 0.017245, 0.055175],
+                "rotate_xyz" : [90.0,0.0,0.0]
+            }
+        },
+        "status": {
+            "filename": "status_left.obj",
+            "component_local" : {
+                "origin": [0.003233, 0.004903, 0.138584],
+                "rotate_xyz" : [120.0,0.0,0.0]
+            },
+            "visibility": {
+                "default": false
+            }
+        },
+        "led": {
+            "filename": "led_left.obj",
+            "component_local" : {
+                "origin": [0.003411, 0.012036, 0.12235],
+                "rotate_xyz" : [120.0,0.0,0.0]
+            }
+        },
+        "tip": {
+            "component_local" : {
+                "origin": [0.028092, 0.003428, 0.008967],
+                "rotate_xyz" : [-5.0,-4.981,0.437]
+            }
+        },
+        "base": {
+            "component_local" : {
+                "origin": [0.007122, -0.047919, 0.190731],
+                "rotate_xyz" : [-151.503,3.133,-6.573]
+            }
+        },
+        "gdc2015": {
+            "component_local" : {
+                "origin": [0.010122, -0.0047919, 0.0190731],
+                "rotate_xyz" : [-76.503,7.133,1.573]
+            }
+        },
+        "handgrip": {
+            "component_local" : {
+                "origin": [0.001527, -0.032466, 0.098151],
+                "rotate_xyz" : [-76.239,7.155,1.341]
+             }
+        },
+        "scroll_wheel": {
+            "filename": "scroll_wheel_left.obj",
+            "motion":{
+                "type":"rotate",
+                "touched_path" : "/input/trackpad/touch",
+                "x_path" : "/input/trackpad/y",
+                "controller_axis":0,
+                "controller_axis_component":1,
+                "value_mapping": [0.0,-40.0],
+                "pivot": [0.018889, 0.002037, 0.047355],
+                "axis": [0.998, 0.058, 0.0]
+            },
+            "component_local" : {
+                "origin": [0.018889, 0.01628, 0.047355],
+                "rotate_xyz" : [95.018,-5.11,1.044]
+            },
+            "visibility": {
+            	"default": false,
+            	"scroll": true
+            }
+          },
+        "trackpad_scroll_cut": {
+            "filename": "trackpad_scroll_cut_left.obj",
+            "visibility": {
+            	"default": false,
+            	"scroll": true
+            }
+        }
+    }
+}

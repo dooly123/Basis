@@ -35,16 +35,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2e35beba17f4766418fe93eb1007b6a5
-    m_Address: MainMenu
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 35e7c7e4293a3cb41844fb14a5d75725
-    m_Address: NetworkedPlayer
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 44e34e57747369b4791afeff1fe21695
     m_Address: Assets/Animator/Animated TPose.controller
     m_ReadOnly: 0
@@ -55,16 +45,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4b6d450b11ad8974e8c4ba0b1e0df50e
-    m_Address: RemotePlayer
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 561d30f605c713f49992f1f48529936b
-    m_Address: LocalPlayer
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8d526f5c06c8b604c8fb350cb41176bc
     m_Address: Assets/ScriptableObjects/Avatar Lerp Data.asset
     m_ReadOnly: 0
@@ -72,11 +52,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b1578359dddd0245b76d3ccd9dcc2d3
     m_Address: Assets/ScriptableObjects/BoneData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f3265cf667dbc5b4491d563eb89873da
-    m_Address: SettingsPanel
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
