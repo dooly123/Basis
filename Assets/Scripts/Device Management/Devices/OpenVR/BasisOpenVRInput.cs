@@ -50,11 +50,11 @@ public class BasisOpenVRInput : BasisInput
             LocalRawRotation = deviceTransform.rot;
             if (hasRoleAssigned)
             {
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                 {
                     Control.LocalRawPosition = LocalRawPosition;
                 }
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                 {
                     Control.LocalRawRotation = LocalRawRotation;
                 }

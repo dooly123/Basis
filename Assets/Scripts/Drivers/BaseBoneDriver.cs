@@ -69,7 +69,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
             return true;
         }
 
-        control = null;
+        control = new BasisBoneControl();
         return false;
     }
     public void CreateInitialArrays(Transform Parent)
@@ -113,7 +113,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
 
         return rainbowColors;
     }
-    public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl lockToBone, BasisRotationalControl.BasisClampAxis axisLock, BasisRotationalControl.BasisClampData clampData, float maxClamp, BasisRotationalControl.BasisAxisLerp axisLerp, float lerpAmount, Quaternion offset, BasisTargetController targetController, bool useAngle, float angleBeforeMove)
+    public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl lockToBone, BasisClampAxis axisLock, BasisClampData clampData, float maxClamp, BasisAxisLerp axisLerp, float lerpAmount, Quaternion offset, BasisTargetController targetController, bool useAngle, float angleBeforeMove)
     {
         BasisRotationalControl rotation = new BasisRotationalControl
         {

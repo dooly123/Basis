@@ -57,13 +57,13 @@ public abstract class BasisInput : MonoBehaviour
         {
             if (Driver.FindBone(out Control, TrackedRole))
             {
-                Control.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+                Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
                 // Do nothing if bone is found successfully
             }
         }
         
         Driver.OnSimulate += PollData;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasTracker, BasisBoneControl.BasisHasRigLayer.HasRigLayer);
+        SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
     }
 
     public void DisableTracking()
@@ -74,12 +74,12 @@ public abstract class BasisInput : MonoBehaviour
             return;
         }
         Driver.OnSimulate -= PollData;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasNoTracker, BasisBoneControl.BasisHasRigLayer.HasNoRigLayer);
+        SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
     }
 
     public abstract void PollData();
 
-    public void SetRealTrackers(BasisBoneControl.BasisHasTracked hasTracked, BasisBoneControl.BasisHasRigLayer HasLayer)
+    public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
     {
         if (Driver.FindBone(out Control, TrackedRole))
         {

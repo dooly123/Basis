@@ -1,18 +1,15 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using static BasisRotationalControl;
-
 [System.Serializable]
-public partial class BasisBoneControl
+public class BasisBoneControl
 {
     public string Name;
     public bool HasBone = false;
     // Events for property changes
     public event System.Action<BasisHasTracked> OnHasTrackerPositionDriverChanged;
     public event System.Action<BasisHasTracked> OnHasTrackerRotationDriverChanged;
-
     // Backing fields for the properties
-   [SerializeField] private BasisHasTracked hasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
+    [SerializeField] private BasisHasTracked hasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
     [SerializeField] private BasisHasTracked hasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
     // Properties with get/set accessors
     public BasisHasTracked HasTrackerPositionDriver
@@ -27,7 +24,6 @@ public partial class BasisBoneControl
             }
         }
     }
-
     public BasisHasTracked HasTrackerRotationDriver
     {
         get => hasTrackerRotationDriver;
@@ -42,7 +38,6 @@ public partial class BasisBoneControl
     }
     // Events for property changes
     public event System.Action<BasisHasRigLayer> OnHasRigChanged;
-
     // Backing fields for the properties
     [SerializeField] private BasisHasRigLayer hasRigLayer = BasisHasRigLayer.HasNoRigLayer;
     // Properties with get/set accessors
@@ -58,7 +53,6 @@ public partial class BasisBoneControl
             }
         }
     }
-
     [SerializeField]
     public BasisRotationalControl RotationControl;
     [SerializeField]
@@ -114,8 +108,8 @@ public partial class BasisBoneControl
                     {
                         ApplyTargetRotation(ref LocalRawRotation, RotationControl);
                         QuaternionClamp(ref LocalRawRotation, RotationControl);
-                        ApplyLerpToQuaternion(ref LocalRawRotation, RotationControl, (RotationControl.LerpAmountNormal/2) * Time.deltaTime);
-                        if(AngleCheck(LocalRawRotation, RotationControl.Target.LocalRawRotation))
+                        ApplyLerpToQuaternion(ref LocalRawRotation, RotationControl, (RotationControl.LerpAmountNormal / 2) * Time.deltaTime);
+                        if (AngleCheck(LocalRawRotation, RotationControl.Target.LocalRawRotation))
                         {
                             RotationControl.NextReset = double.MaxValue;
                             RotationControl.HasActiveTimer = false;
@@ -250,22 +244,22 @@ public partial class BasisBoneControl
             ApplyLerpToQuaternion(ref quaternionRotation, Rotation, lerpFactor);
         }
     }
-    private void ApplyLerpToQuaternion(ref Quaternion NewquaternionRotation, BasisRotationalControl Rotation,float lerpFactor)
+    private void ApplyLerpToQuaternion(ref Quaternion NewQuaternionRotation, BasisRotationalControl Rotation, float lerpFactor)
     {
 
         switch (Rotation.Lerp)
         {
             case BasisAxisLerp.Lerp:
-                NewquaternionRotation = Quaternion.Lerp(LastBoneRotation, NewquaternionRotation, lerpFactor);
+                NewQuaternionRotation = Quaternion.Lerp(LastBoneRotation, NewQuaternionRotation, lerpFactor);
                 break;
             case BasisAxisLerp.SphericalLerp:
-                NewquaternionRotation = Quaternion.Slerp(LastBoneRotation, NewquaternionRotation, lerpFactor);
+                NewQuaternionRotation = Quaternion.Slerp(LastBoneRotation, NewQuaternionRotation, lerpFactor);
                 break;
             case BasisAxisLerp.LerpUnclamped:
-                NewquaternionRotation = Quaternion.LerpUnclamped(LastBoneRotation, NewquaternionRotation, lerpFactor);
+                NewQuaternionRotation = Quaternion.LerpUnclamped(LastBoneRotation, NewQuaternionRotation, lerpFactor);
                 break;
             case BasisAxisLerp.SphericalLerpUnclamped:
-                NewquaternionRotation = Quaternion.SlerpUnclamped(LastBoneRotation, NewquaternionRotation, lerpFactor);
+                NewQuaternionRotation = Quaternion.SlerpUnclamped(LastBoneRotation, NewQuaternionRotation, lerpFactor);
                 break;
         }
     }
