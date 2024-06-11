@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using Valve.VR;
+using VIVE.OpenXR.CompositionLayer;
+
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInput : BasisInput
 {
     public OpenVRDevice Device;
+    public SteamVR_Input_Sources inputSource;
     public TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
     public TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
     public SteamVR_Utils.RigidTransform deviceTransform;
@@ -12,25 +15,30 @@ public class BasisOpenVRInput : BasisInput
     public void Initialize(OpenVRDevice device, string iD)
     {
         Device = device;
-        GetControllerOrHMD(Device.SteamVR_Input_Sources);
+        TryAssignRole(Device.deviceClass);
         base.Initialize(iD);
     }
 
-    public void GetControllerOrHMD(SteamVR_Input_Sources SteamVR_Input_Sources)
+    public void TryAssignRole(ETrackedDeviceClass deviceClass)
     {
-        switch (SteamVR_Input_Sources)
+        if (deviceClass == ETrackedDeviceClass.Controller)
         {
-            case SteamVR_Input_Sources.LeftHand:
+            bool isLeftHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand) == Device.deviceIndex;
+            if (isLeftHand)
+            {
                 TrackedRole = BasisBoneTrackedRole.LeftHand;
-                break;
-            case SteamVR_Input_Sources.RightHand:
+            }
+            else
+            {
                 TrackedRole = BasisBoneTrackedRole.RightHand;
-                break;
-            case SteamVR_Input_Sources.Head:
-                TrackedRole = BasisBoneTrackedRole.CenterEye;
-                break;
+            }
+        }
+        if (deviceClass == ETrackedDeviceClass.HMD)
+        {
+            TrackedRole = BasisBoneTrackedRole.CenterEye;
         }
     }
+    
     public override void PollData()
     {
         result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex(Device.deviceIndex, ref devicePose, ref deviceGamePose);
@@ -51,10 +59,10 @@ public class BasisOpenVRInput : BasisInput
                     Control.LocalRawRotation = LocalRawRotation;
                 }
             }
-            SteamVR_Actions.default_Move.GetAxis(Device.SteamVR_Input_Sources);
-            primary2DAxis = SteamVR_Actions.default_Move.GetAxis(Device.SteamVR_Input_Sources);
-            primaryButton = SteamVR_Actions.default_Jump.GetStateDown(Device.SteamVR_Input_Sources);
-            secondaryButton = SteamVR_Actions.default_Menu.GetStateDown(Device.SteamVR_Input_Sources);
+            
+            primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
+            primaryButton = SteamVR_Actions._default.A_Button.GetStateDown(inputSource);
+            secondaryButton = SteamVR_Actions._default.B_Button.GetStateDown(inputSource);
             UpdatePlayerControl();
         }
         else

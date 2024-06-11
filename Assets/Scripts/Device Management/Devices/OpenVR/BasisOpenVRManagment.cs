@@ -20,8 +20,8 @@ public class BasisOpenVRManagement
     public Dictionary<string, OpenVRDevice> TypicalDevices = new Dictionary<string, OpenVRDevice>();
     public void StartXRSDK()
     {
+        Debug.Log("Starting SteamVR Instance...");
         SteamVR = SteamVR.instance;
-        Debug.Log("OpenVR Headset HMD Type: " + SteamVR.hmd_Type);
         if (SteamVR_BehaviourGameobject == null)
         {
             SteamVR_BehaviourGameobject = new GameObject("SteamVR");
@@ -35,7 +35,7 @@ public class BasisOpenVRManagement
         
         SteamVR_Render.StartCoroutine(CheckState());
     }
-
+    
     public IEnumerator CheckState()
     {
         // Loop until SteamVR is either successfully initialized or failed to initialize
@@ -52,14 +52,40 @@ public class BasisOpenVRManagement
         }
         
         // Now proceed to bind events
+        SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
+        
         foreach (SteamVR_Action_Pose poseAction in SteamVR_Input.actionsPose)
         {
             foreach (SteamVR_Input_Sources inputSource in (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources)))
             {
-                if (inputSource != SteamVR_Input_Sources.Any)
+                poseAction[inputSource].onDeviceConnectedChanged += UpdateOnConnectORDisconnect;
+            }
+        }
+    }
+
+    private void OnDeviceConnected(int deviceIndex, bool deviceConnected)
+    {
+        Debug.Log("Device index " + deviceIndex + " IS Connected " + deviceConnected);
+        string ID = GenerateID((uint)deviceIndex);
+
+        ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass((uint)deviceIndex);
+        if (deviceClass == ETrackedDeviceClass.TrackingReference)
+        {
+            return;
+        }
+        
+        if (deviceConnected)
+        {
+            CreateDevice((uint)deviceIndex, deviceClass, ID);
+        }
+        else
+        {
+            foreach (KeyValuePair<string, OpenVRDevice> deviceData in TypicalDevices)
+            {
+                if (deviceData.Value.deviceName == ID)
                 {
-                    poseAction[inputSource].onDeviceConnectedChanged += UpdateOnConnectORDisconnect;
-                    //UpdateOnConnectORDisconnect(poseAction, poseAction[inputSource].inputSource, poseAction[inputSource].deviceIsConnected);
+                    DestroyPhysicalTrackedDevice(ID);
+                    return;
                 }
             }
         }
@@ -67,36 +93,38 @@ public class BasisOpenVRManagement
 
     private void UpdateOnConnectORDisconnect(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected)
     {
-        Debug.Log("Action " + fromAction.fullPath + " Input Source " + fromSource + " IS Connected " + deviceConnected);
         if (deviceConnected)
         {
-            CreateDevice(fromAction, fromSource);
-        }
-        else
-        {
-            foreach (KeyValuePair<string, OpenVRDevice> deviceData in TypicalDevices)
+            foreach (var device in TrackedOpenVRInputDevices)
             {
-                if (deviceData.Value.SteamVR_Input_Sources == fromSource)
+                if (device.TrackedRole == BasisBoneTrackedRole.LeftHand)
                 {
-                    string ID = deviceData.Key;
-                    DestroyPhysicalTrackedDevice(ID);
-                    return;
+                    if (device.Device.deviceIndex == GetDeviceIndex(fromSource))
+                    {
+                        device.TrackedRole = BasisBoneTrackedRole.LeftHand;
+                        device.inputSource = fromSource;
+                    }
+                }
+                if (device.TrackedRole == BasisBoneTrackedRole.RightHand)
+                {
+                    if (device.Device.deviceIndex == GetDeviceIndex(fromSource))
+                    {
+                        device.TrackedRole = BasisBoneTrackedRole.RightHand;
+                        device.inputSource = fromSource;
+                    }
                 }
             }
         }
     }
-    private void CreateDevice(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
+    private void CreateDevice(uint deviceIndex, ETrackedDeviceClass deviceClass, string ID)
     {
-        uint deviceIndex = GetDeviceIndex(fromSource);
-        string ID = GenerateID(deviceIndex);
         if (TypicalDevices.ContainsKey(ID) == false)
         {
             OpenVRDevice openVRDevice = new OpenVRDevice
             {
-                SteamVR_Input_Sources = fromSource,
+                deviceClass = deviceClass,
                 deviceIndex = deviceIndex,
                 deviceName = ID,
-                SteamVR_Action_Pose = fromAction
             };
             CreatePhysicalTrackedDevice(openVRDevice, ID);
             if (TypicalDevices.TryAdd(ID, openVRDevice))
