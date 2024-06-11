@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 using UnityEngine;
 using Valve.VR;
 [System.Serializable]
@@ -66,7 +67,7 @@ public class BasisOpenVRManagement
     private void OnDeviceConnected(int deviceIndex, bool deviceConnected)
     {
         Debug.Log("Device index " + deviceIndex + " IS Connected " + deviceConnected);
-        string ID = GenerateID((uint)deviceIndex);
+        GenerateID((uint)deviceIndex, out string UniqueID,out string UnUniqueID);
 
         ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass((uint)deviceIndex);
         if (deviceClass == ETrackedDeviceClass.TrackingReference)
@@ -76,15 +77,15 @@ public class BasisOpenVRManagement
         
         if (deviceConnected)
         {
-            CreateDevice((uint)deviceIndex, deviceClass, ID);
+            CreateDevice((uint)deviceIndex, deviceClass, UniqueID, UnUniqueID);
         }
         else
         {
             foreach (KeyValuePair<string, OpenVRDevice> deviceData in TypicalDevices)
             {
-                if (deviceData.Value.deviceName == ID)
+                if (deviceData.Value.deviceName == UniqueID)
                 {
-                    DestroyPhysicalTrackedDevice(ID);
+                    DestroyPhysicalTrackedDevice(UniqueID);
                     return;
                 }
             }
@@ -116,20 +117,20 @@ public class BasisOpenVRManagement
             }
         }
     }
-    private void CreateDevice(uint deviceIndex, ETrackedDeviceClass deviceClass, string ID)
+    private void CreateDevice(uint deviceIndex, ETrackedDeviceClass deviceClass, string UniqueID, string UnUniqueID)
     {
-        if (TypicalDevices.ContainsKey(ID) == false)
+        if (TypicalDevices.ContainsKey(UniqueID) == false)
         {
             OpenVRDevice openVRDevice = new OpenVRDevice
             {
                 deviceClass = deviceClass,
                 deviceIndex = deviceIndex,
-                deviceName = ID,
+                deviceName = UniqueID,
             };
-            CreatePhysicalTrackedDevice(openVRDevice, ID);
-            if (TypicalDevices.TryAdd(ID, openVRDevice))
+            CreatePhysicalTrackedDevice(openVRDevice, UniqueID, UnUniqueID);
+            if (TypicalDevices.TryAdd(UniqueID, openVRDevice))
             {
-                Debug.Log("Creating device: " + ID);
+                Debug.Log("Creating device: " + UniqueID);
             }
             else
             {
@@ -152,13 +153,13 @@ public class BasisOpenVRManagement
         }
         Object.Destroy(SteamVR_Behaviour);
     }
-    public string GenerateID(uint device)
+    public void GenerateID(uint device,out string UniqueID,out string UnUNiqueID)
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
         StringBuilder id = new StringBuilder(64);
         OpenVR.System.GetStringTrackedDeviceProperty(device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
-        string ID = device + "|" + id;
-        return ID;
+        UniqueID = device + "|" + id;
+        UnUNiqueID = id.ToString();
     }
     uint GetDeviceIndex(SteamVR_Input_Sources source)
     {
@@ -170,12 +171,12 @@ public class BasisOpenVRManagement
         return inputDevice;
 
     }
-    public void CreatePhysicalTrackedDevice(OpenVRDevice device, string ID)
+    public void CreatePhysicalTrackedDevice(OpenVRDevice device, string UniqueID, string UnUniqueID)
     {
-        GameObject gameObject = new GameObject(ID);
+        GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         BasisOpenVRInput BasisOpenVRInput = gameObject.AddComponent<BasisOpenVRInput>();
-        BasisOpenVRInput.Initialize(device, ID);
+        BasisOpenVRInput.Initialize(device, UniqueID, UnUniqueID);
         TrackedOpenVRInputDevices.Add(BasisOpenVRInput);
     }
     public void DestroyPhysicalTrackedDevice(string ID)
@@ -200,7 +201,7 @@ public class BasisOpenVRManagement
         for (int Index = 0; Index < TrackedOpenVRInputDevices.Count; Index++)
         {
             BasisOpenVRInput device = TrackedOpenVRInputDevices[Index];
-            if (device.ID == ID)
+            if (device.UniqueID == ID)
             {
                 // I think they already should be destroyed, IDK. Doing this seems to work fine.
                 Object.Destroy(device.gameObject);

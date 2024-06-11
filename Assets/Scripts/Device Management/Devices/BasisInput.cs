@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public abstract class BasisInput : MonoBehaviour
@@ -6,7 +9,7 @@ public abstract class BasisInput : MonoBehaviour
     private BasisBoneTrackedRole trackedrole;
     public bool hasRoleAssigned = false;
     public BasisBoneControl Control;
-    public string ID;
+    public string UniqueID;
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
 
@@ -19,8 +22,9 @@ public abstract class BasisInput : MonoBehaviour
     public float Trigger;
     public bool secondary2DAxisClick;
     public bool primary2DAxisClick;
-
-    public GameObject TrackedRepresentation;
+    public string UnUniqueDeviceID;
+    public BasisVisualTracker BasisVisualTracker;
+    public AddressableGenericResource LoadedDeviceRequest;
 
     public BasisBoneTrackedRole TrackedRole
     {
@@ -31,9 +35,9 @@ public abstract class BasisInput : MonoBehaviour
             hasRoleAssigned = true;
         }
     }
-    public void OnEnable()
+    public async void OnEnable()
     {
-        ShowTrackedVisual();
+        await ShowTrackedVisual();
     }
     public void OnDisable()
     {
@@ -43,9 +47,15 @@ public abstract class BasisInput : MonoBehaviour
     {
         DisableTracking();
     }
-    public void ActivateTracking(string iD)
+    /// <summary>
+    /// activate!
+    /// </summary>
+    /// <param name="UniqueID"></param>
+    /// <param name="unUniqueDeviceID"></param>
+    public void ActivateTracking(string UniqueID, string unUniqueDeviceID)
     {
-        ID = iD;
+        this.UnUniqueDeviceID = unUniqueDeviceID;
+        this.UniqueID = UniqueID;
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver == null)
         {
@@ -161,28 +171,34 @@ public abstract class BasisInput : MonoBehaviour
                 break;
         }
     }
-    public void ShowTrackedVisual()
+    public async Task ShowTrackedVisual()
     {
-        if (TrackedRepresentation == null)
+        if (BasisVisualTracker == null && LoadedDeviceRequest == null)
         {
-            TrackedRepresentation = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            TrackedRepresentation.transform.parent = this.transform;
-            TrackedRepresentation.transform.SetLocalPositionAndRotation(new Vector3(0, 0, 0), Quaternion.identity);
-            TrackedRepresentation.transform.localScale = new Vector3(0.075f, 0.075f, 0.075f);
-            if (TrackedRepresentation.TryGetComponent(out MeshRenderer Renderer))
+            LoadedDeviceRequest = new AddressableGenericResource(UnUniqueDeviceID, AddressableExpectedResult.SingleItem);
+            List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadedDeviceRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+            if (Gameobjects.Count != 0)
             {
+                foreach (GameObject gameObject in Gameobjects)
+                {
+                    gameObject.name = UnUniqueDeviceID;
+                }
             }
-            if (TrackedRepresentation.TryGetComponent(out Collider Collider))
+            else
             {
-                Destroy(Collider);
+                Debug.LogError("Missing " + LoadedDeviceRequest);
             }
         }
     }
     public void HideTrackedVisual()
     {
-        if (TrackedRepresentation == null)
+        if (BasisVisualTracker == null)
         {
-            GameObject.Destroy(TrackedRepresentation);
+            GameObject.Destroy(BasisVisualTracker);
+        }
+        if (LoadedDeviceRequest != null)
+        {
+            AddressableLoadFactory.ReleaseResource(LoadedDeviceRequest);
         }
     }
 }

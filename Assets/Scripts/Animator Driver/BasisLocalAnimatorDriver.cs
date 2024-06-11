@@ -50,8 +50,10 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     public float rootVelocityMag;
     public Vector3 RootPosition;
     public float offsetMag;
+    public BasisLocalPlayer LocalPlayer;
     public void Initalize(BasisLocalBoneDriver driver, Animator anim)
     {
+        FindReferences();
         Driver = driver;
         Animator = anim;
         Animator.updateMode = AnimatorUpdateMode.Normal;
@@ -66,9 +68,22 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
 
         }
         lastHeadTargetPos = cachedBones.Head.BoneTransform.position;
-        BasisLocalPlayer.Instance.Move.ReadyToRead += Simulate;
-        BasisLocalPlayer.Instance.Move.JustJumped += JustJumped;
-        BasisLocalPlayer.Instance.Move.JustLanded += JustLanded;
+    }
+    public void FindReferences()
+    {
+        if(LocalPlayer == null)
+        {
+            LocalPlayer = BasisLocalPlayer.Instance;
+            BasisLocalPlayer.Instance.Move.ReadyToRead += Simulate;
+            BasisLocalPlayer.Instance.Move.JustJumped += JustJumped;
+            BasisLocalPlayer.Instance.Move.JustLanded += JustLanded;
+        }
+    }
+    public void OnDestroy()
+    {
+        BasisLocalPlayer.Instance.Move.ReadyToRead -= Simulate;
+        BasisLocalPlayer.Instance.Move.JustJumped -= JustJumped;
+        BasisLocalPlayer.Instance.Move.JustLanded -= JustLanded;
     }
     public void Simulate()
     {

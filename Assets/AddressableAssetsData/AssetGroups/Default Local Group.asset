@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 18406c2d98a4b874e9ccd06d2741d401
+    m_Address: vr_tracker_vive_3_0
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26ade42e4ff7eb64eb194e1a6453ad85
     m_Address: NetworkManagement
     m_ReadOnly: 0
@@ -45,6 +50,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 664b0a1856405914186fc25229d9d893
+    m_Address: vr_tracker_vive_1_0
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86272a90b30fb814ea93537106bd9c2c
+    m_Address: valve_controller_knu_ev2_0_right
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8d526f5c06c8b604c8fb350cb41176bc
     m_Address: Assets/ScriptableObjects/Avatar Lerp Data.asset
     m_ReadOnly: 0
@@ -52,6 +67,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b1578359dddd0245b76d3ccd9dcc2d3
     m_Address: Assets/ScriptableObjects/BoneData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c48a4804c2b9e8e4ba8c9ea8aab07a1e
+    m_Address: valve_controller_knu_ev2_0_left
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc769e29146b5b34583aa23bb7d1a2b5
+    m_Address: tundra_tracker
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

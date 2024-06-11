@@ -38,11 +38,13 @@ public class BasisCharacterController : MonoBehaviour
     public void OnEnable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged += Initialize;
+        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
         Initialize();
     }
     public void OnDisable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged -= Initialize;
+        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead -= Simulate;
     }
     public void Initialize()
     {
@@ -51,7 +53,6 @@ public class BasisCharacterController : MonoBehaviour
         BasisLocalPlayer.Instance.Move = this;
         HasEye = driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye);
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
-        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
     }
     public void Simulate()
     {

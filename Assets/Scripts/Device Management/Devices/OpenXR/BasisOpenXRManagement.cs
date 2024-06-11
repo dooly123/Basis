@@ -67,7 +67,7 @@ public class BasisOpenXRManagement
                 string ID = GenerateID(device);
                 if (TypicalDevices.ContainsKey(ID) == false)
                 {
-                    CreatePhysicalTrackedDevice(device, ID);
+                    CreatePhysicalTrackedDevice(device, ID, device.name);
                     TypicalDevices.Add(ID, device);
                 }
             }
@@ -86,12 +86,12 @@ public class BasisOpenXRManagement
         string ID = device.name + "|" + device.serialNumber + "|" + device.manufacturer + "|" + (int)device.characteristics;
         return ID;
     }
-    public void CreatePhysicalTrackedDevice(UnityEngine.XR.InputDevice device, string ID)
+    public void CreatePhysicalTrackedDevice(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID)
     {
-        GameObject gameObject = new GameObject(ID);
+        GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         BasisOpenXRInput BasisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
-        BasisXRInput.Initialize(device, ID);
+        BasisXRInput.Initialize(device, UniqueID, UnUniqueID);
         TrackedOpenXRInputDevices.Add(BasisXRInput);
     }
     /// <summary>
@@ -118,7 +118,7 @@ public class BasisOpenXRManagement
     {
         foreach (var device in TrackedOpenXRInputDevices)
         {
-            if (device.ID == ID)
+            if (device.UniqueID == ID)
             {
                 TrackedOpenXRInputDevices.Remove(device);
                 break;
