@@ -93,6 +93,7 @@ public class BasisOpenXRManagement
         BasisOpenXRInput BasisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
         BasisXRInput.Initialize(device, UniqueID, UnUniqueID);
         TrackedOpenXRInputDevices.Add(BasisXRInput);
+        BasisDeviceManagement.Instance.AllInputDevices.Add(BasisXRInput);
     }
     /// <summary>
     /// this wont well with fullbody, revist later
@@ -121,7 +122,15 @@ public class BasisOpenXRManagement
             if (device.UniqueID == ID)
             {
                 TrackedOpenXRInputDevices.Remove(device);
+                Object.Destroy(device.gameObject);
                 break;
+            }
+        }
+        foreach (var device in BasisDeviceManagement.Instance.AllInputDevices)
+        {
+            if (device.UniqueID == ID)
+            {
+                BasisDeviceManagement.Instance.AllInputDevices.Remove(device);
             }
         }
     }

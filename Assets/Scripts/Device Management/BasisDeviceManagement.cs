@@ -13,6 +13,8 @@ public class BasisDeviceManagement : MonoBehaviour
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
     [SerializeField]
+    public List<BasisInput> AllInputDevices = new List<BasisInput>();
+    [SerializeField]
     public BasisXRManagement BasisXRManagement = new BasisXRManagement();
     [SerializeField]
     public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
@@ -48,7 +50,7 @@ public class BasisDeviceManagement : MonoBehaviour
     }
     public async Task RunAfterInitialized()
     {
-      //  await LoadGameobject("NetworkManagement", new InstantiationParameters());
+        //  await LoadGameobject("NetworkManagement", new InstantiationParameters());
     }
 
     private void CheckForPass(BasisBootedMode type)
@@ -153,7 +155,7 @@ public class BasisDeviceManagement : MonoBehaviour
 
     public static async Task<BasisPlayer> LoadGameobject(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
     {
-       var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
         List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
@@ -176,6 +178,25 @@ public class BasisDeviceManagement : MonoBehaviour
         if (Instance != null)
         {
             Instance.SwitchMode(BasisBootedMode.Desktop);
+        }
+    }
+    public async static Task ShowTrackers()
+    {
+        var inputDevices = BasisDeviceManagement.Instance.AllInputDevices;
+        var showTrackedVisualTasks = new List<Task>();
+
+        foreach (var input in inputDevices)
+        {
+            showTrackedVisualTasks.Add(input.ShowTrackedVisual());
+        }
+
+        await Task.WhenAll(showTrackedVisualTasks);
+    }
+    public static void HideTrackers()
+    {
+        foreach (var input in BasisDeviceManagement.Instance.AllInputDevices)
+        {
+            input.HideTrackedVisual();
         }
     }
 }

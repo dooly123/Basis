@@ -68,7 +68,6 @@ public abstract class BasisInput : MonoBehaviour
 
         Driver.OnSimulate += PollData;
         SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
-        await ShowTrackedVisual();
     }
 
     public void DisableTracking()
@@ -174,15 +173,15 @@ public abstract class BasisInput : MonoBehaviour
             Debug.Log("UnUniqueDeviceID " + UnUniqueDeviceID);
             if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest))
             {
-                var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
-                List<GameObject> Gameobjects = data.Item1;
-                if (Gameobjects == null)
+                (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+                List<GameObject> gameObjects = data.Item1;
+                if (gameObjects == null)
                 {
                     return;
                 }
-                if (Gameobjects.Count != 0)
+                if (gameObjects.Count != 0)
                 {
-                    foreach (GameObject gameObject in Gameobjects)
+                    foreach (GameObject gameObject in gameObjects)
                     {
                         gameObject.name = UnUniqueDeviceID;
                         gameObject.transform.parent = this.transform;
