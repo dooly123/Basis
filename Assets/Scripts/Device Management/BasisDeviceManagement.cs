@@ -180,7 +180,11 @@ public class BasisDeviceManagement : MonoBehaviour
             Instance.SwitchMode(BasisBootedMode.Desktop);
         }
     }
-    public async static Task ShowTrackers()
+    public static async void ShowTrackers()
+    {
+       await ShowTrackersAsync();
+    }
+    public async static Task ShowTrackersAsync()
     {
         var inputDevices = BasisDeviceManagement.Instance.AllInputDevices;
         var showTrackedVisualTasks = new List<Task>();
