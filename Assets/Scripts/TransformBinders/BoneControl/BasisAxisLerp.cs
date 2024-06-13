@@ -1,11 +1,8 @@
-﻿public partial struct BasisRotationalControl
+﻿public enum BasisAxisLerp
 {
-    public enum BasisAxisLerp
-    {
-        None,
-        SphericalLerp,
-        Lerp,
-        LerpUnclamped,
-        SphericalLerpUnclamped,
-    }
+    None,
+    SphericalLerp,
+    Lerp,
+    LerpUnclamped,
+    SphericalLerpUnclamped,
 }

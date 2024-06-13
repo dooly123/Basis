@@ -40,8 +40,8 @@ public class BasisAvatarEyeInput : MonoBehaviour
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye))
         {
-            Eye.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-            Eye.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
+            Eye.HasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
+            Eye.HasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
         }
         characterInputActions = BasisLocalInputActions.Instance;
         if (characterInputActions != null)

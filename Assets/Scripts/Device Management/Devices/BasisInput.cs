@@ -1,12 +1,14 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract class BasisInput : MonoBehaviour
 {
     public BasisLocalBoneDriver Driver;
-    private BasisBoneTrackedRole trackedrole;
+    private BasisBoneTrackedRole trackedRole;
     public bool hasRoleAssigned = false;
     public BasisBoneControl Control;
-    public string ID;
+    public string UniqueID;
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
 
@@ -19,17 +21,19 @@ public abstract class BasisInput : MonoBehaviour
     public float Trigger;
     public bool secondary2DAxisClick;
     public bool primary2DAxisClick;
+    public string UnUniqueDeviceID;
+    public BasisVisualTracker BasisVisualTracker;
+    public AddressableGenericResource LoadedDeviceRequest;
 
     public BasisBoneTrackedRole TrackedRole
     {
-        get => trackedrole;
+        get => trackedRole;
         set
         {
-            trackedrole = value;
+            trackedRole = value;
             hasRoleAssigned = true;
         }
     }
-
     public void OnDisable()
     {
         DisableTracking();
@@ -38,16 +42,16 @@ public abstract class BasisInput : MonoBehaviour
     {
         DisableTracking();
     }
-
-    public virtual void Initialize(string iD)
+    /// <summary>
+    /// activate!
+    /// </summary>
+    /// <param name="UniqueID"></param>
+    /// <param name="unUniqueDeviceID"></param>
+    public async void ActivateTracking(string UniqueID, string unUniqueDeviceID)
     {
+        this.UnUniqueDeviceID = unUniqueDeviceID;
+        this.UniqueID = UniqueID;
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
-        ID = iD;
-        ActivateTracking();
-    }
-
-    public void ActivateTracking()
-    {
         if (Driver == null)
         {
             Debug.LogError("Missing Driver!");
@@ -57,13 +61,14 @@ public abstract class BasisInput : MonoBehaviour
         {
             if (Driver.FindBone(out Control, TrackedRole))
             {
-                Control.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+                Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
                 // Do nothing if bone is found successfully
             }
         }
-        
+
         Driver.OnSimulate += PollData;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasTracker, BasisBoneControl.BasisHasRigLayer.HasRigLayer);
+        SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
+        await ShowTrackedVisual();
     }
 
     public void DisableTracking()
@@ -74,12 +79,12 @@ public abstract class BasisInput : MonoBehaviour
             return;
         }
         Driver.OnSimulate -= PollData;
-        SetRealTrackers(BasisBoneControl.BasisHasTracked.HasNoTracker, BasisBoneControl.BasisHasRigLayer.HasNoRigLayer);
+        SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
     }
 
     public abstract void PollData();
 
-    public void SetRealTrackers(BasisBoneControl.BasisHasTracked hasTracked, BasisBoneControl.BasisHasRigLayer HasLayer)
+    public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
     {
         if (Driver.FindBone(out Control, TrackedRole))
         {
@@ -160,6 +165,45 @@ public abstract class BasisInput : MonoBehaviour
                 break;
             case BasisBoneTrackedRole.Mouth:
                 break;
+        }
+    }
+    public async Task ShowTrackedVisual()
+    {
+        if (BasisVisualTracker == null || LoadedDeviceRequest == null)
+        {
+            Debug.Log("UnUniqueDeviceID " + UnUniqueDeviceID);
+            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest))
+            {
+                var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+                List<GameObject> Gameobjects = data.Item1;
+                if (Gameobjects == null)
+                {
+                    return;
+                }
+                if (Gameobjects.Count != 0)
+                {
+                    foreach (GameObject gameObject in Gameobjects)
+                    {
+                        gameObject.name = UnUniqueDeviceID;
+                        gameObject.transform.parent = this.transform;
+                        if (gameObject.TryGetComponent(out BasisVisualTracker))
+                        {
+                            BasisVisualTracker.Initialization(this);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void HideTrackedVisual()
+    {
+        if (BasisVisualTracker == null)
+        {
+            GameObject.Destroy(BasisVisualTracker);
+        }
+        if (LoadedDeviceRequest != null)
+        {
+            AddressableLoadFactory.ReleaseResource(LoadedDeviceRequest);
         }
     }
 }

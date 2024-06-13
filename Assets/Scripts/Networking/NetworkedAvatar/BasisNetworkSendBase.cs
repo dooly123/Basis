@@ -1,4 +1,6 @@
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static SerializableDarkRift;
 /// <summary>
 /// the goal of this script is to be the glue of consistent data between remote and local
@@ -13,7 +15,7 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
     public HumanPose HumanPose = new HumanPose();
     public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
     public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
-
+    public DataJobs AvatarJobs;
     public HumanPoseHandler PoseHandler;
     [SerializeField]
     public BasisRangedFloatData PositionRanged;
@@ -25,16 +27,29 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
         {
             array = new byte[0],
         };
-        if (Target.Muscles == null)
+        if (Target.Muscles.IsCreated == false)
         {
-            Target.Muscles = new float[95];
+            Target.Muscles.ResizeArray(95);
         }
-        if (Output.Muscles == null)
+        if (Output.Muscles.IsCreated == false)
         {
-            Output.Muscles = new float[95];
+            Output.Muscles.ResizeArray(95);
         }
-         PositionRanged = new BasisRangedFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
-         ScaleRanged = new BasisRangedFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
+        PositionRanged = new BasisRangedFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
+        ScaleRanged = new BasisRangedFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
+    }
+    public void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
+    {
+        data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
+        data.Quaternions = new NativeArray<Quaternion>(QuaternionCount, Allocator.Persistent);
+        data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);
+    }
+    public void InitalizeDataJobs()
+    {
+        //jobs
+        AvatarJobs.rotationJob = new UpdateAvatarRotationJob();
+        AvatarJobs.positionJob = new UpdateAvatarPositionJob();
+        AvatarJobs.muscleJob = new UpdateAvatarMusclesJob();
     }
     public abstract void Compute();
     public abstract void Initialize(BasisNetworkedPlayer NetworkedPlayer);

@@ -51,7 +51,6 @@ MonoBehaviour:
   BasisXRManagement:
     xRManagerSettings: {fileID: 0}
     xRGeneralSettings: {fileID: 0}
-    targetLoader: {fileID: 0}
     initialLoaders:
     - {fileID: 11400000, guid: 3bc3c9a960a936342a72833e45544032, type: 2}
     - {fileID: 11400000, guid: 7892f170cc4e84f4cbde6ca6d077400b, type: 2}
@@ -62,6 +61,8 @@ MonoBehaviour:
     TrackedOpenVRInputDevices: []
   BasisOpenXRManagement:
     TrackedOpenXRInputDevices: []
+  BasisDeviceNameMatcher: {fileID: 11400000, guid: 9b8e3db83cb310c40afaa430d0071a18,
+    type: 2}
 --- !u!114 &6370897756145117596
 MonoBehaviour:
   m_ObjectHideFlags: 0

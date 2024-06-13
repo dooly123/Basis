@@ -1,7 +1,4 @@
-﻿public partial struct BasisRotationalControl
+﻿public enum BasisClampAxis
 {
-    public enum BasisClampAxis
-    {
-        x, y, z,xz
-    }
+    x, y, z, xz
 }

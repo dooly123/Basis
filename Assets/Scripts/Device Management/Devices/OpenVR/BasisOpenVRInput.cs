@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Valve.VR;
-using VIVE.OpenXR.CompositionLayer;
 
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInput : BasisInput
@@ -12,13 +11,12 @@ public class BasisOpenVRInput : BasisInput
     public SteamVR_Utils.RigidTransform deviceTransform;
     public EVRCompositorError result;
 
-    public void Initialize(OpenVRDevice device, string iD)
+    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID)
     {
         Device = device;
         TryAssignRole(Device.deviceClass);
-        base.Initialize(iD);
+        ActivateTracking(UniqueID, UnUniqueID);
     }
-
     public void TryAssignRole(ETrackedDeviceClass deviceClass)
     {
         if (deviceClass == ETrackedDeviceClass.Controller)
@@ -50,11 +48,11 @@ public class BasisOpenVRInput : BasisInput
             LocalRawRotation = deviceTransform.rot;
             if (hasRoleAssigned)
             {
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                 {
                     Control.LocalRawPosition = LocalRawPosition;
                 }
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                 {
                     Control.LocalRawRotation = LocalRawRotation;
                 }

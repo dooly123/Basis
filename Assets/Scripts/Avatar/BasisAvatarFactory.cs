@@ -5,7 +5,8 @@ public static class BasisAvatarFactory
 {
     public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress)
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)
@@ -21,7 +22,8 @@ public static class BasisAvatarFactory
     }
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)

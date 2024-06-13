@@ -6,11 +6,12 @@ public class BasisOpenXRInput : BasisInput
 {
     public UnityEngine.XR.InputDevice Device;
 
-    public void Initialize(UnityEngine.XR.InputDevice device, string iD)
+
+    public void Initialize(UnityEngine.XR.InputDevice device, string UniqueID,string UnUniqueID)
     {
         Device = device;
         GetControllerOrHMD();
-        base.Initialize(iD);
+        ActivateTracking(UniqueID, UnUniqueID);
     }
 
     private void GetControllerOrHMD()
@@ -37,7 +38,7 @@ public class BasisOpenXRInput : BasisInput
             {
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                     {
                         Control.LocalRawPosition = LocalRawPosition;
                     }
@@ -47,7 +48,7 @@ public class BasisOpenXRInput : BasisInput
             {
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                     {
                         Control.LocalRawRotation = LocalRawRotation;
                     }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class BasisCalibratedRestingData
+public struct BasisCalibratedRestingData
 {
     public Quaternion BeginningRotation;
     public Vector3 BeginningPosition;

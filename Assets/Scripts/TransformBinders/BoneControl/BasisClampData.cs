@@ -1,8 +1,5 @@
-﻿public partial struct BasisRotationalControl
+﻿public enum BasisClampData
 {
-    public enum BasisClampData
-    {
-        None,
-        Clamp,
-    }
+    None,
+    Clamp,
 }

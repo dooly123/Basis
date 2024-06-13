@@ -30,18 +30,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 18406c2d98a4b874e9ccd06d2741d401
+    m_Address: vr_tracker_vive_3_0
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26ade42e4ff7eb64eb194e1a6453ad85
     m_Address: NetworkManagement
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2e35beba17f4766418fe93eb1007b6a5
-    m_Address: MainMenu
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 35e7c7e4293a3cb41844fb14a5d75725
-    m_Address: NetworkedPlayer
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -55,13 +50,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4b6d450b11ad8974e8c4ba0b1e0df50e
-    m_Address: RemotePlayer
+  - m_GUID: 664b0a1856405914186fc25229d9d893
+    m_Address: vr_tracker_vive_1_0
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 561d30f605c713f49992f1f48529936b
-    m_Address: LocalPlayer
+  - m_GUID: 86272a90b30fb814ea93537106bd9c2c
+    m_Address: valve_controller_knu_right
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -75,8 +70,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f3265cf667dbc5b4491d563eb89873da
-    m_Address: SettingsPanel
+  - m_GUID: 9b8e3db83cb310c40afaa430d0071a18
+    m_Address: Assets/ScriptableObjects/Basis Devices Matcher.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c48a4804c2b9e8e4ba8c9ea8aab07a1e
+    m_Address: valve_controller_knu_left
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc769e29146b5b34583aa23bb7d1a2b5
+    m_Address: tundra_tracker
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

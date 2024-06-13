@@ -40,8 +40,8 @@ public class BasisTestFakeFullBodyTracking : MonoBehaviour
         calibrationOffsetRotation.Clear();
         foreach (BasisBoneControl control in Driver.Controls)
         {
-            control.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasTracker;
-            control.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasTracker;
+            control.HasTrackerPositionDriver = BasisHasTracked.HasTracker;
+            control.HasTrackerRotationDriver = BasisHasTracked.HasTracker;
             GameObject createdFakeBone = new GameObject(control.Name);
             createdFakeBone.transform.parent = transform;
             CreateFakeOffset(out Quaternion Rotation, out Vector3 Position, control);
@@ -83,13 +83,13 @@ public class BasisTestFakeFullBodyTracking : MonoBehaviour
         for (int index = 0; index < Length; index++)
         {
             BasisBoneControl control = Driver.Controls[index];
-            if (control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
             {
                 // Calculate the position offseted
                 control.LocalRawPosition = FakeTransforms[index].position - calibrationOffsetPosition[index];
 
             }
-            if (control.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (control.HasTrackerRotationDriver != BasisHasTracked.HasNoTracker)
             {
                 if (calibrationOffsetRotation[index] != Quaternion.identity)
                 {
@@ -109,7 +109,7 @@ public class BasisTestFakeFullBodyTracking : MonoBehaviour
         for (int index = 0; index < Length; index++)
         {
             BasisBoneControl control = Driver.Controls[index];
-            if (control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && control.HasTrackerRotationDriver != BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && control.HasTrackerRotationDriver != BasisHasTracked.HasNoTracker)
             {
                 Gizmos.color = Color.black;
                 Gizmos.DrawWireSphere(FakeTransforms[index].position, 0.035f);

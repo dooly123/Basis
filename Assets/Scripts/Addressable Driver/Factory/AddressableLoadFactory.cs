@@ -13,6 +13,7 @@ public static class AddressableLoadFactory
     /// <param name="LoadRequest">The load request parameters.</param>
     public static async Task<bool> LoadAddressableResourceAsync<T>(AddressableLoadResourceBase LoadRequest)
     {
+        LoadRequest.IsLoading = true;
         try
         {
             if (AddressableValidation.ValidateLoadResource(LoadRequest))
@@ -41,11 +42,13 @@ public static class AddressableLoadFactory
                     AddressableDebug.DebugError("Resource handles result was null", LoadRequest);
                 }
             }
+            LoadRequest.IsLoading = false;
         }
         catch (Exception E)
         {
             AddressableDebug.DebugError(E.StackTrace + " " + E.Message, LoadRequest);
         }
+        LoadRequest.IsLoading = false;
         return false;
     }
     /// <summary>

@@ -23,7 +23,7 @@ public class BasisAudioReceiver
     public float dataTimeout = 0.1f; // Timeout period in seconds
     public float[] SilentData;
     public int DataSize;
-    public void Update()
+    public void LateUpdate()
     {
         if (Time.time - lastDataReceivedTime > dataTimeout)
         {

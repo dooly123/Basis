@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class BasisRemoteAvatarWriter : MonoBehaviour
 {
@@ -14,9 +15,9 @@ public class BasisRemoteAvatarWriter : MonoBehaviour
     public void OnEnable()
     {
         SenderPoseHandler = new HumanPoseHandler(Sender.avatar, Sender.transform);
-        if (Target.Muscles == null)
+        if (Target.Muscles.IsCreated == false)
         {
-            Target.Muscles = new float[95];
+            Target.Muscles.ResizeArray(95);
         }
         PositionRanged = new BasisRangedFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
         ScaleRanged = new BasisRangedFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
@@ -35,7 +36,7 @@ public class BasisRemoteAvatarWriter : MonoBehaviour
         BasisNetworkAvatarCompressor.CompressAvatar(ref Target, Pose, SenderPoseHandler, Sender, out byte[] AvatarData,PositionRanged,ScaleRanged);
         if (LocalAvatarReader != null)
         {
-            LocalAvatarReader.RecieveAvatarUpdate(AvatarData);
+            LocalAvatarReader.ReceiveAvatarUpdate(AvatarData);
         }
     }
 }

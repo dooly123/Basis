@@ -16,6 +16,8 @@ public class BasisAudioTransmission
     public byte[] outputBuffer;
     public byte[] encodedData;
     public int encodedLength;
+    public BasisLocalPlayer Local;
+    public MicrophoneRecorder Recorder;
     public void OnEnable(BasisNetworkedPlayer networkedPlayer)
     {
         NetworkedPlayer = networkedPlayer;
@@ -28,7 +30,8 @@ public class BasisAudioTransmission
             Signal = settings.OpusSignal
         };
         OnEncoded += SendVoiceOverNetwork;
-        BasisLocalPlayer Local = (BasisLocalPlayer)networkedPlayer.Player;
+        Local = (BasisLocalPlayer)networkedPlayer.Player;
+        Recorder = Local.AvatarDriver.MicrophoneRecorder;
         if (Local.AvatarDriver != null && Local.AvatarDriver.MicrophoneRecorder != null)
         {
             Local.AvatarDriver.MicrophoneRecorder.OnHasAudio += OnAudioReady;
@@ -37,12 +40,12 @@ public class BasisAudioTransmission
     }
     public void OnDisable()
     {
-        if (BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder != null)
+        if (Recorder != null)
         {
-            GameObject.Destroy(BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder.gameObject);
+            GameObject.Destroy(Recorder.gameObject);
         }
-        BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder.OnHasAudio -= OnAudioReady;
-        BasisLocalPlayer.Instance.AvatarDriver.MicrophoneRecorder.OnHasSilence -= OnAudioSilence;
+        Recorder.OnHasAudio -= OnAudioReady;
+        Recorder.OnHasSilence -= OnAudioSilence;
         encoder.Dispose();
         encoder = null;
         OnEncoded -= SendVoiceOverNetwork;
@@ -51,29 +54,28 @@ public class BasisAudioTransmission
     {
         SendSilenceOverNetwork();
     }
-    public void OnAudioReady(float[] data)
+    public void OnAudioReady()
     {
-        int PacketSize = data.Length * 4;
+        int PacketSize = Recorder.processBuffer.Length * 4;
         if (outputBuffer == null || PacketSize != outputBuffer.Length)
         {
             outputBuffer = new byte[PacketSize];
         }
-        encodedLength = encoder.Encode(data, outputBuffer);
+        encodedLength = encoder.Encode(Recorder.processBuffer, outputBuffer);
 
         encodedData = new byte[encodedLength];
         Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
 
         OnEncoded?.Invoke(encodedData);
     }
+    public AudioSegmentData AudioSegmentData = new AudioSegmentData();
+    public AudioSilentSegmentData audioSilentSegmentData = new AudioSilentSegmentData();
     private void SendVoiceOverNetwork(byte[] VoiceData)
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            AudioSegmentData Audio = new AudioSegmentData
-            {
-                buffer = VoiceData,
-            };
-            writer.Write(Audio);
+            AudioSegmentData.buffer = VoiceData;
+            writer.Write(AudioSegmentData);
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
             using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
             {
@@ -85,10 +87,7 @@ public class BasisAudioTransmission
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            AudioSilentSegmentData Audio = new AudioSilentSegmentData
-            {
-            };
-            writer.Write(Audio);
+            writer.Write(audioSilentSegmentData);
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
             using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
             {
