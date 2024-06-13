@@ -34,10 +34,6 @@ public abstract class BasisInput : MonoBehaviour
             hasRoleAssigned = true;
         }
     }
-    public async void OnEnable()
-    {
-        await ShowTrackedVisual();
-    }
     public void OnDisable()
     {
         DisableTracking();
@@ -51,7 +47,7 @@ public abstract class BasisInput : MonoBehaviour
     /// </summary>
     /// <param name="UniqueID"></param>
     /// <param name="unUniqueDeviceID"></param>
-    public void ActivateTracking(string UniqueID, string unUniqueDeviceID)
+    public async void ActivateTracking(string UniqueID, string unUniqueDeviceID)
     {
         this.UnUniqueDeviceID = unUniqueDeviceID;
         this.UniqueID = UniqueID;
@@ -72,6 +68,7 @@ public abstract class BasisInput : MonoBehaviour
 
         Driver.OnSimulate += PollData;
         SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
+        await ShowTrackedVisual();
     }
 
     public void DisableTracking()
@@ -172,20 +169,29 @@ public abstract class BasisInput : MonoBehaviour
     }
     public async Task ShowTrackedVisual()
     {
-        if (BasisVisualTracker == null && LoadedDeviceRequest == null)
+        if (BasisVisualTracker == null || LoadedDeviceRequest == null)
         {
-            LoadedDeviceRequest = new AddressableGenericResource(UnUniqueDeviceID, AddressableExpectedResult.SingleItem);
-            List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadedDeviceRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
-            if (Gameobjects.Count != 0)
+            Debug.Log("UnUniqueDeviceID " + UnUniqueDeviceID);
+            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest))
             {
-                foreach (GameObject gameObject in Gameobjects)
+                var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+                List<GameObject> Gameobjects = data.Item1;
+                if (Gameobjects == null)
                 {
-                    gameObject.name = UnUniqueDeviceID;
+                    return;
                 }
-            }
-            else
-            {
-                Debug.LogError("Missing " + LoadedDeviceRequest);
+                if (Gameobjects.Count != 0)
+                {
+                    foreach (GameObject gameObject in Gameobjects)
+                    {
+                        gameObject.name = UnUniqueDeviceID;
+                        gameObject.transform.parent = this.transform;
+                        if (gameObject.TryGetComponent(out BasisVisualTracker))
+                        {
+                            BasisVisualTracker.Initialization(this);
+                        }
+                    }
+                }
             }
         }
     }

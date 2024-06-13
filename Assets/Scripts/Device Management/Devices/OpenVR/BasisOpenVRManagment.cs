@@ -153,13 +153,13 @@ public class BasisOpenVRManagement
         }
         Object.Destroy(SteamVR_Behaviour);
     }
-    public void GenerateID(uint device,out string UniqueID,out string UnUNiqueID)
+    public void GenerateID(uint device,out string UniqueID,out string NotUnique)
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
         StringBuilder id = new StringBuilder(64);
         OpenVR.System.GetStringTrackedDeviceProperty(device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
         UniqueID = device + "|" + id;
-        UnUNiqueID = id.ToString();
+        NotUnique = id.ToString();
     }
     uint GetDeviceIndex(SteamVR_Input_Sources source)
     {

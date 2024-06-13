@@ -40,8 +40,6 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
     }
     public void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
     {
-        //data
-        Debug.Log("Setting Up Position Rotation Muscles");
         data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
         data.Quaternions = new NativeArray<Quaternion>(QuaternionCount, Allocator.Persistent);
         data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);

@@ -18,7 +18,8 @@ public class BasisDeviceManagement : MonoBehaviour
     public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
     [SerializeField]
     public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
-
+    [SerializeField]
+    public BasisDeviceNameMatcher BasisDeviceNameMatcher;
     // Define the delegate
     public delegate Task InitializationCompletedHandler();
 
@@ -47,7 +48,7 @@ public class BasisDeviceManagement : MonoBehaviour
     }
     public async Task RunAfterInitialized()
     {
-        await LoadGameobject("NetworkManagement", new InstantiationParameters());
+      //  await LoadGameobject("NetworkManagement", new InstantiationParameters());
     }
 
     private void CheckForPass(BasisBootedMode type)
@@ -152,7 +153,8 @@ public class BasisDeviceManagement : MonoBehaviour
 
     public static async Task<BasisPlayer> LoadGameobject(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
+       var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
         }

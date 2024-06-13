@@ -36,18 +36,18 @@ public static class AddressableResourceProcess
         return instantiated;
     }
 
-    public static async Task<List<GameObject>> LoadAsGameObjectsAsync(string key, InstantiationParameters instantiationParameters)
+    public static async Task<(List<GameObject>, AddressableGenericResource)> LoadAsGameObjectsAsync(string key, InstantiationParameters instantiationParameters)
     {
         AddressableGenericResource loadRequest = new AddressableGenericResource(key, AddressableExpectedResult.SingleItem);
         bool loaded = await AddressableLoadFactory.LoadAddressableResourceAsync<GameObject>(loadRequest);
         if (loaded)
         {
-            return await LoadAsGameObjectsAsync(loadRequest, instantiationParameters);
+            return ( await LoadAsGameObjectsAsync(loadRequest, instantiationParameters),loadRequest);
         }
         else
         {
             Debug.LogError("Missing " + key);
-            return null;
+            return (null, loadRequest);
         }
     }
 
