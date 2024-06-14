@@ -153,7 +153,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
         {
             Lerp = BasisVectorLerp.Lerp,
             TaretInterpreter = BasisTargetController.TargetDirectional,
-            Offset = Bone.RestingLocalSpace.BeginningPosition - Target.RestingLocalSpace.BeginningPosition,
+            Offset = Bone.RestingLocalSpace.OffsetPosition - Target.RestingLocalSpace.OffsetPosition,
             Target = Target,
             LerpAmount = 40
         };

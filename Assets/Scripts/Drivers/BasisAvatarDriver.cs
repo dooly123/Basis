@@ -204,12 +204,12 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public void SetInitalData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
     {
         bone.LocalRawPosition = BasisLocalBoneDriver.ConvertToAvatarSpace(animator, bone.RestingWorldSpacePosition, Player.Avatar.AvatarHeightOffset, out bone.WorldSpaceFloor);
-        bone.RestingLocalSpace.BeginningPosition = bone.LocalRawPosition;
-        bone.RestingLocalSpace.BeginningRotation = bone.LocalRawRotation;
+        bone.RestingLocalSpace.OffsetPosition = bone.LocalRawPosition;
+        bone.RestingLocalSpace.OffsetRotation = bone.LocalRawRotation;
         if (IsApartOfSpineVertical(Role))
         {
             bone.LocalRawPosition = new Vector3(0, bone.LocalRawPosition.y, bone.LocalRawPosition.z);
-            bone.RestingLocalSpace.BeginningPosition = bone.LocalRawPosition;
+            bone.RestingLocalSpace.OffsetPosition = bone.LocalRawPosition;
         }
     }
     public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisClampData clampData, int positionalLockValue, int rotationalLockValue, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis clampAxis = BasisClampAxis.x, bool CreateRotationalLock = true)

@@ -1,6 +1,4 @@
-﻿#if UNITY_EDITOR
-#endif
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BasisInputXRSimulate : BasisInput
 {

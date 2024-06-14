@@ -82,12 +82,12 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
         private void SimulateTopPoint()
         {
-            _topPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + Foot.RestingLocalSpace.BeginningPosition + Offset);
+            _topPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + Foot.RestingLocalSpace.OffsetPosition + Offset);
         }
 
         private void SimulateBottomPoint()
         {
-            _bottomPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + new Vector3(Foot.RestingLocalSpace.BeginningPosition.x, -Driver.Hips.RestingLocalSpace.BeginningPosition.y, Foot.RestingLocalSpace.BeginningPosition.z) + Offset);
+            _bottomPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + new Vector3(Foot.RestingLocalSpace.OffsetPosition.x, -Driver.Hips.RestingLocalSpace.OffsetPosition.y, Foot.RestingLocalSpace.OffsetPosition.z) + Offset);
         }
 
         public void Gizmo()

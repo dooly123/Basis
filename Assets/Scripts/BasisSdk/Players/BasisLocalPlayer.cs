@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using static UnityEngine.Analytics.IAnalytic;
 
 public class BasisLocalPlayer : BasisPlayer
 {
@@ -41,7 +40,10 @@ public class BasisLocalPlayer : BasisPlayer
     {
         if (Hips.HasBone && Avatar != null)
         {
-            Avatar.Animator.transform.SetPositionAndRotation((Hips.BoneTransform.position - Hips.RestingLocalSpace.BeginningPosition), Hips.BoneTransform.rotation);
+            Quaternion rotation = Hips.BoneTransform.rotation;
+            Vector3 rotatedOffset = rotation * Hips.RestingLocalSpace.OffsetPosition;
+            rotatedOffset = Hips.BoneTransform.position - rotatedOffset;
+            Avatar.Animator.transform.SetPositionAndRotation(rotatedOffset, rotation);
         }
     }
     public async Task CreateAvatar()
