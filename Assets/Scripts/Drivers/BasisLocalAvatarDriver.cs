@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 public class BasisLocalAvatarDriver : BasisAvatarDriver
@@ -27,13 +28,15 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public RigLayer HeadLayer;
     public RigLayer UpperChestLayer;
     public RigLayer SpineLayer;
-
+    public List<Rig> Rigs = new List<Rig>();
+    public RigBuilder Builder;
+    public List<RigTransform> AdditionalTransforms = new List<RigTransform>();
     public MicrophoneRecorder MicrophoneRecorder;
     public void LocalCalibration()
     {
-        LocalCalibration(BasisLocalPlayer.Instance);
+        InitalLocalCalibration(BasisLocalPlayer.Instance);
     }
-    public void LocalCalibration(BasisLocalPlayer Player)
+    public void InitalLocalCalibration(BasisLocalPlayer Player)
     {
         LocalPlayer = Player;
 
@@ -47,6 +50,12 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             return;
         }
         CleanupBeforeContinue();
+        if (Builder == null)
+        {
+            Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
+        }
+        AdditionalTransforms.Clear();
+        Rigs.Clear();
         Calibration(Player.Avatar);
         BasisLocalEyeFollowDriver EyeFollowBase = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
         EyeFollowBase.CreateEyeLook(this);
@@ -75,6 +84,21 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             MicrophoneRecorder.DeInitialize();
         }
         MicrophoneRecorder.Initialize();
+    }
+    public void TposeUntilReady()
+    {
+
+    }
+    /// <summary>
+    /// only called when dealing with trackers
+    /// </summary>
+    public void CalculateOffsetsAndTpose()
+    {
+        PutAvatarIntoTpose();
+        CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
+        ComputeOffsets(LocalDriver);
+        Builder.Build();
+        ResetAvatarAnimator();
     }
     public void CleanupBeforeContinue()
     {
@@ -252,4 +276,14 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         // Set the initial state
         UpdateLayerActiveState();
     }
+    public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
+    {
+        GameObject RigGameobject = CreateAndSetParent(Player.Avatar.Animator.transform, "Rig " + Role);
+        Rig = BasisHelpers.GetOrAddComponent<Rig>(RigGameobject);
+        Rigs.Add(Rig);
+        RigLayer = new RigLayer(Rig, Enabled);
+        Builder.layers.Add(RigLayer);
+        return RigGameobject;
+    }
+
 }

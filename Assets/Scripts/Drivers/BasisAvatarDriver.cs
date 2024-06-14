@@ -1,6 +1,4 @@
-using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
@@ -17,33 +15,32 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public RuntimeAnimatorController runtimeAnimatorController;
     public SkinnedMeshRenderer[] SkinnedMeshRenderer;
     public BasisPlayer Player;
-    public List<RigTransform> AdditionalTransforms = new List<RigTransform>();
-    public List<Rig> Rigs = new List<Rig>();
-    public RigBuilder Builder;
     public void Calibration(BasisAvatar Avatar)
     {
-        if (Builder == null)
-        {
-            Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Avatar.Animator.gameObject);
-        }
-        Rigs.Clear();
-        AdditionalTransforms.Clear();
         Avatar.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         BeginningCalibration.Invoke();
         FindSkinnedMeshRenders();
-        runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
-        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
-        RuntimeAnimatorController RAC = op.WaitForCompletion();
-        Player.Avatar.Animator.runtimeAnimatorController = RAC;
+        PutAvatarIntoTpose();
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
         ForceUpdateAnimator(Player.Avatar.Animator);
         ActiveHeight = Avatar.AvatarEyePosition.x;
-        Player.Avatar.Animator.runtimeAnimatorController = runtimeAnimatorController;
+        ResetAvatarAnimator();
         if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
         {
             BasisFacialBlinkDriver FacialBlinkDriver = BasisHelpers.GetOrAddComponent<BasisFacialBlinkDriver>(Avatar.gameObject);
             FacialBlinkDriver.Initialize(Avatar);
         }
+    }
+    public void PutAvatarIntoTpose()
+    {
+        runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
+        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
+        RuntimeAnimatorController RAC = op.WaitForCompletion();
+        Player.Avatar.Animator.runtimeAnimatorController = RAC;
+    }
+    public void ResetAvatarAnimator()
+    {
+        Player.Avatar.Animator.runtimeAnimatorController = runtimeAnimatorController;
     }
     public Bounds GetBounds(Transform animatorParent)
     {
@@ -272,7 +269,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         DT.data.dampPosition = positionWeight;
         GeneratedRequiredTransforms(Source, References.Hips);
     }
-    public void MultiRotation(GameObject Parent, Transform Source,Transform Target, float rotationWeight = 1)
+    public void MultiRotation(GameObject Parent, Transform Source, Transform Target, float rotationWeight = 1)
     {
         GameObject DTData = CreateAndSetParent(Parent.transform, "Eye Target");
         MultiAimConstraint DT = BasisHelpers.GetOrAddComponent<MultiAimConstraint>(DTData);
@@ -335,17 +332,9 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         TwoBoneIKConstraint.data.tip = tip;
         GeneratedRequiredTransforms(tip, References.Hips);
     }
-    public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
-    {
-        GameObject RigGameobject = CreateAndSetParent(Player.Avatar.Animator.transform, "Rig " + Role);
-        Rig = BasisHelpers.GetOrAddComponent<Rig>(RigGameobject);
-        Rigs.Add(Rig);
-        RigLayer = new RigLayer(Rig, Enabled);
-        Builder.layers.Add(RigLayer);
-        return RigGameobject;
-    }
     public void GeneratedRequiredTransforms(Transform BaseLevel, Transform TopLevelParent)
     {
+        BasisLocalAvatarDriver Driver = (BasisLocalAvatarDriver)this;
         // Go up the hierarchy until you hit the TopLevelParent
         if (BaseLevel != null)
         {
@@ -353,10 +342,17 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             while (currentTransform != null && currentTransform != TopLevelParent)
             {
                 // Add component if the current transform doesn't have it
-                if (currentTransform.TryGetComponent<RigTransform>(out RigTransform RigTransform) == false)
+                if (currentTransform.TryGetComponent<RigTransform>(out RigTransform RigTransform))
+                {
+                    if (Driver.AdditionalTransforms.Contains(RigTransform) == false)
+                    {
+                        Driver.AdditionalTransforms.Add(RigTransform);
+                    }
+                }
+                else
                 {
                     RigTransform = currentTransform.gameObject.AddComponent<RigTransform>();
-                    AdditionalTransforms.Add(RigTransform);
+                    Driver.AdditionalTransforms.Add(RigTransform);
                 }
                 // Move to the parent for the next iteration
                 currentTransform = currentTransform.parent;
