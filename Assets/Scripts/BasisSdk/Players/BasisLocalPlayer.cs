@@ -32,7 +32,7 @@ public class BasisLocalPlayer : BasisPlayer
         //  FootPlacementDriver = Helpers.GetOrAddComponent<FootPlacementDriver>(this.gameObject);
         //  FootPlacementDriver.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
+        Instance.LocalBoneDriver.ReadyToRead += Simulate;
         OnLocalAvatarChanged += OnCalibration;
         await CreateAvatar();
     }

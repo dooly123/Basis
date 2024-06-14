@@ -75,8 +75,18 @@ public abstract class BasisInput : MonoBehaviour
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-                Control.CalibrationOffset.OffsetPosition = this.transform.position - Control.BoneTransform.position;
-                Control.CalibrationOffset.OffsetRotation = Quaternion.Inverse(Control.BoneTransform.rotation) * this.transform.rotation;
+                if (TrackedRole == BasisBoneTrackedRole.CenterEye || TrackedRole == BasisBoneTrackedRole.LeftHand || TrackedRole == BasisBoneTrackedRole.RightHand)
+                {
+                    Control.CalibrationOffset.Use = false;
+                    Debug.Log("skipping calibration offset for " + TrackedRole);
+                }
+                else
+                {
+                    Control.CalibrationOffset.OffsetPosition = this.transform.position - Control.BoneTransform.position;
+                    Control.CalibrationOffset.OffsetRotation = Quaternion.Inverse(Control.BoneTransform.rotation) * this.transform.rotation;
+                    Control.CalibrationOffset.Use = true;
+                    Debug.Log("calibration set for " + TrackedRole);
+                }
                 // Do nothing if bone is found successfully
             }
         }

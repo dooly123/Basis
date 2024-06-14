@@ -139,7 +139,10 @@ public class BasisBoneControl
         }
         else
         {
-            LocalRawPosition -= CalibrationOffset.OffsetPosition;
+            if (CalibrationOffset.Use)
+            {
+                LocalRawPosition -= CalibrationOffset.OffsetPosition;
+            }
         }
 
         if (HasTrackerPositionDriver == BasisHasTracked.HasNoTracker)
@@ -149,7 +152,10 @@ public class BasisBoneControl
         }
         else
         {
-            LocalRawRotation = Quaternion.Inverse(CalibrationOffset.OffsetRotation) * LocalRawRotation;
+            if (CalibrationOffset.Use)
+            {
+                LocalRawRotation = Quaternion.Inverse(CalibrationOffset.OffsetRotation) * LocalRawRotation;
+            }
         }
     }
     public void RunRotationChange()
