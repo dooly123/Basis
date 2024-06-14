@@ -29,6 +29,10 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public RigLayer SpineLayer;
 
     public MicrophoneRecorder MicrophoneRecorder;
+    public void LocalCalibration()
+    {
+        LocalCalibration(BasisLocalPlayer.Instance);
+    }
     public void LocalCalibration(BasisLocalPlayer Player)
     {
         LocalPlayer = Player;

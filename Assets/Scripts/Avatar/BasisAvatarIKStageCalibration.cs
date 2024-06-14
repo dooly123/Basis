@@ -35,6 +35,7 @@ public static class BasisAvatarIKStageCalibration
         ModeToTrackersMask(availableBoneControl, Mode, out List<BasisBoneControl> TrackedBoneControls, out List<BasisBoneTrackedRole> TrackedRoles);
         SequenceIndexes(ref TrackedBoneControls, ref TrackedRoles);
         AssignInputsToClosestControls(InputTrackers, TrackedBoneControls, TrackedRoles);
+        BasisLocalPlayer.Instance.AvatarDriver.LocalCalibration();
     }
     private static List<BasisBoneTrackedRole> GetAllRoles()
     {

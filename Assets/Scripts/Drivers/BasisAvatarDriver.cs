@@ -9,8 +9,8 @@ using UnityEngine.Events;
 public abstract class BasisAvatarDriver : MonoBehaviour
 {
     public float ActiveHeight = 1.75f;
-    private static string Tpose = "Assets/Animator/Animated TPose.controller";
-    public static string Bonedata = "Assets/ScriptableObjects/BoneData.asset";
+    private static string TPose = "Assets/Animator/Animated TPose.controller";
+    public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
     public UnityEvent BeginningCalibration = new UnityEvent();
     public UnityEvent CalibrationComplete = new UnityEvent();
     public BasisTransformMapping References;
@@ -32,7 +32,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         BeginningCalibration.Invoke();
         FindSkinnedMeshRenders();
         runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
-        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Tpose);
+        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
         RuntimeAnimatorController RAC = op.WaitForCompletion();
         Player.Avatar.Animator.runtimeAnimatorController = RAC;
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
@@ -45,10 +45,10 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             FacialBlinkDriver.Initialize(Avatar);
         }
     }
-    public Bounds GetBounds(Transform Animatorparent)
+    public Bounds GetBounds(Transform animatorParent)
     {
         // Get all renderers in the parent GameObject
-        Renderer[] renderers = Animatorparent.GetComponentsInChildren<Renderer>();
+        Renderer[] renderers = animatorParent.GetComponentsInChildren<Renderer>();
         if (renderers.Length == 0)
         {
             return new Bounds(Vector3.zero, new Vector3(0.3f, 1.7f, 0.3f));
@@ -190,7 +190,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                 }
                 else
                 {
-                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> op = Addressables.LoadAssetAsync<BasisFallBackBoneData>(Bonedata);
+                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> op = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
                     BasisFallBackBoneData FBBD = op.WaitForCompletion();
                     if (FBBD.FindBone(out BasisFallBone Bone, driver.trackedRoles[Index]))
                     {
