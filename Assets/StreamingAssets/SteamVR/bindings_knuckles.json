@@ -45,122 +45,6 @@
          "sources" : [
             {
                "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/interactui"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/teleport"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/interactui"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/trigger"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/teleport"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/trackpad"
-            },
-            {
-               "inputs" : {
-                  "north" : {
-                     "output" : "/actions/default/in/teleport"
-                  }
-               },
-               "mode" : "dpad",
-               "parameters" : {
-                  "deadzone_pct" : "25",
-                  "overlap_pct" : "30",
-                  "sub_mode" : "touch"
-               },
-               "path" : "/user/hand/left/input/thumbstick"
-            },
-            {
-               "inputs" : {
-                  "north" : {
-                     "output" : "/actions/default/in/teleport"
-                  }
-               },
-               "mode" : "dpad",
-               "parameters" : {
-                  "deadzone_pct" : "25",
-                  "overlap_pct" : "30",
-                  "sub_mode" : "touch"
-               },
-               "path" : "/user/hand/right/input/thumbstick"
-            },
-            {
-               "inputs" : {
-                  "grab" : {
-                     "output" : "/actions/default/in/grabgrip"
-                  }
-               },
-               "mode" : "grab",
-               "parameters" : {
-                  "force_hold_threshold" : "0.02",
-                  "force_release_threshold" : "0.01"
-               },
-               "path" : "/user/hand/left/input/grip"
-            },
-            {
-               "inputs" : {
-                  "grab" : {
-                     "output" : "/actions/default/in/grabgrip"
-                  }
-               },
-               "mode" : "grab",
-               "parameters" : {
-                  "force_hold_threshold" : "0.02",
-                  "force_release_threshold" : "0.01"
-               },
-               "path" : "/user/hand/right/input/grip"
-            },
-            {
-               "inputs" : {
-                  "grab" : {
-                     "output" : "/actions/default/in/grabpinch"
-                  }
-               },
-               "mode" : "grab",
-               "parameters" : {
-                  "force_hold_threshold" : "0.02",
-                  "force_release_threshold" : "0.01"
-               },
-               "path" : "/user/hand/left/input/pinch"
-            },
-            {
-               "inputs" : {
-                  "grab" : {
-                     "output" : "/actions/default/in/grabpinch"
-                  }
-               },
-               "mode" : "grab",
-               "parameters" : {
-                  "force_hold_threshold" : "0.02",
-                  "force_release_threshold" : "0.01"
-               },
-               "path" : "/user/hand/right/input/pinch"
-            },
-            {
-               "inputs" : {
                   "position" : {
                      "output" : "/actions/default/in/joystick"
                   }
@@ -176,20 +60,6 @@
                },
                "mode" : "joystick",
                "path" : "/user/hand/right/input/thumbstick"
-            },
-            {
-               "inputs" : {},
-               "mode" : "button",
-               "path" : "/user/hand/right/input/a"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/menu"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/b"
             },
             {
                "inputs" : {
@@ -201,14 +71,50 @@
                "path" : "/user/hand/left/input/b"
             },
             {
-               "inputs" : {},
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/trigger"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/trigger"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/a_button"
+                  }
+               },
                "mode" : "button",
                "path" : "/user/hand/left/input/a"
             },
             {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/a_button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/a"
+            },
+            {
                "inputs" : {},
                "mode" : "none",
-               "path" : "/user/hand/right/input/a"
+               "path" : "/user/hand/left/input/skeleton/left"
+            },
+            {
+               "inputs" : {},
+               "mode" : "none",
+               "path" : "/user/hand/right/input/skeleton/left"
             }
          ]
       },
@@ -224,7 +130,7 @@
    "controller_type" : "knuckles",
    "description" : "",
    "interaction_profile" : "",
-   "name" : "My Basis [Testing] configuration for Index Controller",
+   "name" : "Basis Configuration",
    "options" : {},
    "simulated_actions" : []
 }

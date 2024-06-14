@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -21,12 +22,16 @@ public class BasisDeviceManagement : MonoBehaviour
     [SerializeField]
     public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
     [SerializeField]
+    public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
+    [SerializeField]
     public BasisDeviceNameMatcher BasisDeviceNameMatcher;
     // Define the delegate
     public delegate Task InitializationCompletedHandler();
 
     // Define the event based on the delegate
     public event InitializationCompletedHandler OnInitializationCompleted;
+
+    public bool FireOffNetwork = false;
     void Start()
     {
         if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -50,12 +55,16 @@ public class BasisDeviceManagement : MonoBehaviour
     }
     public async Task RunAfterInitialized()
     {
-        //  await LoadGameobject("NetworkManagement", new InstantiationParameters());
+        if (FireOffNetwork)
+        {
+            await LoadGameobject("NetworkManagement", new InstantiationParameters());
+        }
     }
 
     private void CheckForPass(BasisBootedMode type)
     {
         Debug.Log("Loading " + type);
+        BasisSimulateXR.StartSimulation();
         switch (type)
         {
             case BasisBootedMode.OpenVRLoader:
@@ -127,10 +136,12 @@ public class BasisDeviceManagement : MonoBehaviour
     {
         ShutDownXR();
         StopDesktop();
+        BasisSimulateXR.StopXR();
     }
 
     public void ShutDownXR()
     {
+        BasisSimulateXR.StopXR();
         OnBootModeStopped?.Invoke(CurrentMode); // Trigger the mode stop event
         if (BasisOpenXRManagement != null)
         {
@@ -147,6 +158,7 @@ public class BasisDeviceManagement : MonoBehaviour
 
     public void StopDesktop()
     {
+        BasisSimulateXR.StopXR();
         if (BasisAvatarEyeInput != null)
         {
             GameObject.Destroy(BasisAvatarEyeInput);
@@ -180,9 +192,10 @@ public class BasisDeviceManagement : MonoBehaviour
             Instance.SwitchMode(BasisBootedMode.Desktop);
         }
     }
+    [MenuItem("Basis/Show Trackers")]
     public static async void ShowTrackers()
     {
-       await ShowTrackersAsync();
+        await ShowTrackersAsync();
     }
     public async static Task ShowTrackersAsync()
     {
@@ -196,6 +209,7 @@ public class BasisDeviceManagement : MonoBehaviour
 
         await Task.WhenAll(showTrackedVisualTasks);
     }
+    [MenuItem("Basis/Hide Trackers")]
     public static void HideTrackers()
     {
         foreach (var input in BasisDeviceManagement.Instance.AllInputDevices)

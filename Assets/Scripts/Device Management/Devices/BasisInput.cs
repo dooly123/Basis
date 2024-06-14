@@ -65,6 +65,11 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Missing Driver!");
             return;
         }
+        ApplyRole();
+        Driver.OnSimulate += PollData;
+    }
+    public void ApplyRole()
+    {
         if (hasRoleAssigned)
         {
             if (Driver.FindBone(out Control, TrackedRole))
@@ -73,8 +78,6 @@ public abstract class BasisInput : MonoBehaviour
                 // Do nothing if bone is found successfully
             }
         }
-
-        Driver.OnSimulate += PollData;
         SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
     }
 
@@ -107,7 +110,7 @@ public abstract class BasisInput : MonoBehaviour
             case BasisBoneTrackedRole.LeftHand:
                 BasisLocalPlayer.Instance.Move.MovementVector = State.primary2DAxis;
                 //only open ui after we have stopped pressing down on the secondary button
-                if (State.secondaryButtonGetState == false && LastState.secondaryButtonGetState == true)
+                if (State.secondaryButtonGetState == false && LastState.secondaryButtonGetState)
                 {
                     if (BasisHamburgerMenu.Instance == null && !BasisUIBase.IsLoading)
                     {
@@ -119,6 +122,10 @@ public abstract class BasisInput : MonoBehaviour
                         BasisHamburgerMenu.Instance.CloseThisMenu();
                         BasisDeviceManagement.HideTrackers();
                     }
+                }
+                if (State.primaryButtonGetState == false && LastState.primaryButtonGetState)
+                {
+                    BasisAvatarIKStageCalibration.Calibrate();
                 }
                 Control.ApplyMovement();
                 break;

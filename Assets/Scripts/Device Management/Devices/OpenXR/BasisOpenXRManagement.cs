@@ -126,7 +126,9 @@ public class BasisOpenXRManagement
                 break;
             }
         }
-        foreach (var device in BasisDeviceManagement.Instance.AllInputDevices)
+        List<BasisInput> Duplicate = new List<BasisInput>();
+        Duplicate.AddRange(BasisDeviceManagement.Instance.AllInputDevices);
+        foreach (var device in Duplicate)
         {
             if (device.UniqueID == ID)
             {
