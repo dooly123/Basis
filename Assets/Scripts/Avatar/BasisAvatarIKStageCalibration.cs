@@ -235,7 +235,7 @@ public static class BasisAvatarIKStageCalibration
             }
         }
 
-        int[] matches = HungarianAlgorithm.FindAssignments(costMatrix);
+        int[] matches = BasisHungarianAlgorithm.FindAssignments(costMatrix);
         // Convert matches to a list of tuples for easier usage
         List<Tuple<int, int>> optimalMatches = new List<Tuple<int, int>>();
         for (int i = 0; i < n; i++)

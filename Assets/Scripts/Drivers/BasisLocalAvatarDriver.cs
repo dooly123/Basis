@@ -95,6 +95,19 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         ComputeOffsets(LocalDriver);
         Builder.Build();
         ResetAvatarAnimator();
+        for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles.Length; Index++)
+        {
+            BasisBoneTrackedRole role = BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles[Index];
+            BasisBoneControl BoneControl = BasisLocalPlayer.Instance.LocalBoneDriver.Controls[Index];
+            if (BoneControl.HasRigLayer == BasisHasRigLayer.HasRigLayer)
+            {
+                ApplyHint(role, 1);
+            }
+            else
+            {
+                ApplyHint(role, 0);
+            }
+        }
     }
     public void CleanupBeforeContinue()
     {
@@ -229,7 +242,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftHandLayer);
         }
-        CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftUpperArm,true, out LeftHandTwoBoneIK, false, true);
+        CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftUpperArm, false, out LeftHandTwoBoneIK, false, true);
     }
     public void RightHand(BasisLocalBoneDriver driver)
     {
@@ -238,7 +251,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightHandLayer);
         }
-        CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightUpperArm, true, out RightHandTwoBoneIK, false, true);
+        CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightUpperArm, false, out RightHandTwoBoneIK, false, true);
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {
@@ -247,7 +260,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftFootLayer);
         }
-        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, true, out LeftFootTwoBoneIK, false, true);
+        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, false, out LeftFootTwoBoneIK, false, false);
     }
     public void RightFoot(BasisLocalBoneDriver driver)
     {
@@ -256,7 +269,27 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightFootLayer);
         }
-        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, true);
+        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, false, out RightFootTwoBoneIK, false, false);
+    }
+    public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)
+    {
+        if (RoleWithHint == BasisBoneTrackedRole.RightLowerLeg)
+        {
+            RightFootTwoBoneIK.data.hintWeight = weight;
+        }
+        if (RoleWithHint == BasisBoneTrackedRole.LeftLowerLeg)
+        {
+            LeftFootTwoBoneIK.data.hintWeight = weight;
+
+        }
+        if (RoleWithHint == BasisBoneTrackedRole.RightUpperArm)
+        {
+            RightHandTwoBoneIK.data.hintWeight = weight;
+        }
+        if (RoleWithHint == BasisBoneTrackedRole.LeftUpperArm)
+        {
+            LeftHandTwoBoneIK.data.hintWeight = weight;
+        }
     }
     public void WriteUpEvents(BasisBoneControl Control, RigLayer Layer)
     {

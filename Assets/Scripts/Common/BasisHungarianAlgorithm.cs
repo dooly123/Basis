@@ -1,10 +1,8 @@
 ﻿using System;
-#if UNITY_EDITOR
-#endif
 /// <summary>
 /// Hungarian Algorithm.
 /// </summary>
-public static class HungarianAlgorithm
+public static class BasisHungarianAlgorithm
 {
     /// <summary>
     /// Finds the optimal assignments for a given matrix of agents and costed tasks such that the total cost is minimized.
@@ -70,7 +68,7 @@ public static class HungarianAlgorithm
             }
         }
 
-        HungarianAlgorithm.ClearCovers(rowsCovered, colsCovered, w, h);
+        BasisHungarianAlgorithm.ClearCovers(rowsCovered, colsCovered, w, h);
 
         var path = new Location[w * h];
         var pathStart = default(Location);
@@ -80,10 +78,10 @@ public static class HungarianAlgorithm
         {
             step = step switch
             {
-                1 => HungarianAlgorithm.RunStep1(masks, colsCovered, w, h),
-                2 => HungarianAlgorithm.RunStep2(costs, masks, rowsCovered, colsCovered, w, h, ref pathStart),
-                3 => HungarianAlgorithm.RunStep3(masks, rowsCovered, colsCovered, w, h, path, pathStart),
-                4 => HungarianAlgorithm.RunStep4(costs, rowsCovered, colsCovered, w, h),
+                1 => BasisHungarianAlgorithm.RunStep1(masks, colsCovered, w, h),
+                2 => BasisHungarianAlgorithm.RunStep2(costs, masks, rowsCovered, colsCovered, w, h, ref pathStart),
+                3 => BasisHungarianAlgorithm.RunStep3(masks, rowsCovered, colsCovered, w, h, path, pathStart),
+                4 => BasisHungarianAlgorithm.RunStep4(costs, rowsCovered, colsCovered, w, h),
                 _ => step
             };
         }
@@ -170,13 +168,13 @@ public static class HungarianAlgorithm
 
         while (true)
         {
-            var loc = HungarianAlgorithm.FindZero(costs, rowsCovered, colsCovered, w, h);
+            var loc = BasisHungarianAlgorithm.FindZero(costs, rowsCovered, colsCovered, w, h);
             if (loc.row == -1)
                 return 4;
 
             masks[loc.row, loc.column] = 2;
 
-            var starCol = HungarianAlgorithm.FindStarInRow(masks, w, loc.row);
+            var starCol = BasisHungarianAlgorithm.FindStarInRow(masks, w, loc.row);
             if (starCol != -1)
             {
                 rowsCovered[loc.row] = true;
@@ -205,22 +203,22 @@ public static class HungarianAlgorithm
 
         while (true)
         {
-            var row = HungarianAlgorithm.FindStarInColumn(masks, h, path[pathIndex].column);
+            var row = BasisHungarianAlgorithm.FindStarInColumn(masks, h, path[pathIndex].column);
             if (row == -1)
                 break;
 
             pathIndex++;
             path[pathIndex] = new Location(row, path[pathIndex - 1].column);
 
-            var col = HungarianAlgorithm.FindPrimeInRow(masks, w, path[pathIndex].row);
+            var col = BasisHungarianAlgorithm.FindPrimeInRow(masks, w, path[pathIndex].row);
 
             pathIndex++;
             path[pathIndex] = new Location(path[pathIndex - 1].row, col);
         }
 
-        HungarianAlgorithm.ConvertPath(masks, path, pathIndex + 1);
-        HungarianAlgorithm.ClearCovers(rowsCovered, colsCovered, w, h);
-        HungarianAlgorithm.ClearPrimes(masks, w, h);
+        BasisHungarianAlgorithm.ConvertPath(masks, path, pathIndex + 1);
+        BasisHungarianAlgorithm.ClearCovers(rowsCovered, colsCovered, w, h);
+        BasisHungarianAlgorithm.ClearPrimes(masks, w, h);
 
         return 1;
     }
@@ -235,7 +233,7 @@ public static class HungarianAlgorithm
         if (colsCovered == null)
             throw new ArgumentNullException(nameof(colsCovered));
 
-        var minValue = HungarianAlgorithm.FindMinimum(costs, rowsCovered, colsCovered, w, h);
+        var minValue = BasisHungarianAlgorithm.FindMinimum(costs, rowsCovered, colsCovered, w, h);
 
         for (var i = 0; i < h; i++)
         {
