@@ -320,13 +320,19 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         DT.data.space = Space;
         GeneratedRequiredTransforms(Source, References.Hips);
     }
-    public void CreateTwoBone(BaseBoneDriver driver, GameObject Parent, Transform root, Transform mid, Transform tip, BasisBoneTrackedRole Role, out TwoBoneIKConstraint TwoBoneIKConstraint, bool maintainTargetPositionOffset, bool maintainTargetRotationOffset)
+    public void CreateTwoBone(BaseBoneDriver driver, GameObject Parent, Transform root, Transform mid, Transform tip, BasisBoneTrackedRole TargetRole, BasisBoneTrackedRole BendRole,bool UseBoneRole, out TwoBoneIKConstraint TwoBoneIKConstraint, bool maintainTargetPositionOffset, bool maintainTargetRotationOffset)
     {
-        driver.FindBone(out BasisBoneControl BoneControl, Role);
-        GameObject BoneRole = CreateAndSetParent(Parent.transform, "Bone Role " + Role.ToString());
+        driver.FindBone(out BasisBoneControl BoneControl, TargetRole);
+        GameObject BoneRole = CreateAndSetParent(Parent.transform, "Bone Role " + TargetRole.ToString());
         TwoBoneIKConstraint = BasisHelpers.GetOrAddComponent<TwoBoneIKConstraint>(BoneRole);
         EnableTwoBoneIk(TwoBoneIKConstraint, maintainTargetPositionOffset, maintainTargetRotationOffset);
         TwoBoneIKConstraint.data.target = BoneControl.BoneTransform;
+        if (UseBoneRole)
+        {
+            driver.FindBone(out BasisBoneControl BendBoneControl, BendRole);
+            TwoBoneIKConstraint.data.hint = BendBoneControl.BoneTransform;
+            TwoBoneIKConstraint.data.hintWeight = 1;
+        }
         TwoBoneIKConstraint.data.root = root;
         TwoBoneIKConstraint.data.mid = mid;
         TwoBoneIKConstraint.data.tip = tip;

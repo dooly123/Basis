@@ -161,31 +161,93 @@ public static class BasisAvatarIKStageCalibration
             }
         }
     }
-    public static void SequenceIndexes(ref List<BasisBoneControl> availableBones,ref List<BasisBoneTrackedRole> roles)
+    public static void SequenceIndexes(ref List<BasisBoneControl> availableBones, ref List<BasisBoneTrackedRole> roles)
     {
+        // Hips role and corresponding bone control to the front
         if (roles.Contains(BasisBoneTrackedRole.Hips))
         {
             int index = roles.IndexOf(BasisBoneTrackedRole.Hips);
-
-            // Swap the Hips role and corresponding bone control to the front
             SwapAtIndex(roles, index, 0);
             SwapAtIndex(availableBones, index, 0);
         }
+
+        // LeftFoot role and corresponding bone control to the second position
         if (roles.Contains(BasisBoneTrackedRole.LeftFoot))
         {
             int index = roles.IndexOf(BasisBoneTrackedRole.LeftFoot);
-
-            // Swap the Hips role and corresponding bone control to the front
             SwapAtIndex(roles, index, 1);
             SwapAtIndex(availableBones, index, 1);
         }
+
+        // RightFoot role and corresponding bone control to the third position
         if (roles.Contains(BasisBoneTrackedRole.RightFoot))
         {
             int index = roles.IndexOf(BasisBoneTrackedRole.RightFoot);
-
-            // Swap the Hips role and corresponding bone control to the front
             SwapAtIndex(roles, index, 2);
             SwapAtIndex(availableBones, index, 2);
+        }
+        // RightFoot role and corresponding bone control to the third position
+        if (roles.Contains(BasisBoneTrackedRole.Chest))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.Chest);
+            SwapAtIndex(roles, index, 3);
+            SwapAtIndex(availableBones, index, 3);
+        }
+        // RightFoot role and corresponding bone control to the third position
+        if (roles.Contains(BasisBoneTrackedRole.LeftHand))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.LeftHand);
+            SwapAtIndex(roles, index, 4);
+            SwapAtIndex(availableBones, index, 4);
+        }
+
+        // RightFoot role and corresponding bone control to the third position
+        if (roles.Contains(BasisBoneTrackedRole.RightHand))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.RightHand);
+            SwapAtIndex(roles, index, 5);
+            SwapAtIndex(availableBones, index, 5);
+        }
+
+        // RightFoot role and corresponding bone control to the third position
+        if (roles.Contains(BasisBoneTrackedRole.UpperChest))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.UpperChest);
+            SwapAtIndex(roles, index, 6);
+            SwapAtIndex(availableBones, index, 6);
+        }
+
+        // Neck role and corresponding bone control to the end
+        if (roles.Contains(BasisBoneTrackedRole.Neck))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.Neck);
+            int lastIndex = roles.Count - 1;
+            SwapAtIndex(roles, index, lastIndex);
+            SwapAtIndex(availableBones, index, lastIndex);
+        }
+        // Neck role and corresponding bone control to the end
+        if (roles.Contains(BasisBoneTrackedRole.Head))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.Head);
+            int lastIndex = roles.Count - 2;
+            SwapAtIndex(roles, index, lastIndex);
+            SwapAtIndex(availableBones, index, lastIndex);
+        }
+        // Neck role and corresponding bone control to the end
+        if (roles.Contains(BasisBoneTrackedRole.CenterEye))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.CenterEye);
+            int lastIndex = roles.Count - 3;
+            SwapAtIndex(roles, index, lastIndex);
+            SwapAtIndex(availableBones, index, lastIndex);
+        }
+        // Neck role and corresponding bone control to the end
+        if (roles.Contains(BasisBoneTrackedRole.Mouth))
+        {
+            int index = roles.IndexOf(BasisBoneTrackedRole.Mouth);
+            int lastIndex = roles.Count - 4;
+            SwapAtIndex(roles, index, lastIndex);
+            SwapAtIndex(availableBones, index, lastIndex);
         }
     }
 

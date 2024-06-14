@@ -85,10 +85,6 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         }
         MicrophoneRecorder.Initialize();
     }
-    public void TposeUntilReady()
-    {
-
-    }
     /// <summary>
     /// only called when dealing with trackers
     /// </summary>
@@ -195,13 +191,13 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         GameObject HeadRig = CreateRig("Head", true, out RigHead, out HeadLayer);
         Hands(driver);
         Feet(driver);
-        CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, out HeadTwoBoneIK, false, true);
+        CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Head,false, out HeadTwoBoneIK, false, true);
 
         GameObject Body = CreateRig("Upper Chest", true, out ChestSpine, out UpperChestLayer);
-        CreateTwoBone(driver, Body, null, References.spine, References.chest, BasisBoneTrackedRole.UpperChest, out UpperChestTwoBoneIK, true, true);
+        CreateTwoBone(driver, Body, null, References.spine, References.chest, BasisBoneTrackedRole.UpperChest, BasisBoneTrackedRole.UpperChest, false, out UpperChestTwoBoneIK, true, true);
 
         GameObject SpineGo = CreateRig("Spine", true, out Spine, out SpineLayer);
-        CreateTwoBone(driver, SpineGo, null, null, References.spine, BasisBoneTrackedRole.Spine, out UpperChestTwoBoneIK, true, true);
+        CreateTwoBone(driver, SpineGo, null, null, References.spine, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Spine, false, out UpperChestTwoBoneIK, true, true);
 
         if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.Head))
         {
@@ -233,7 +229,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftHandLayer);
         }
-        CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, out LeftHandTwoBoneIK, false, true);
+        CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftUpperArm,true, out LeftHandTwoBoneIK, false, true);
     }
     public void RightHand(BasisLocalBoneDriver driver)
     {
@@ -242,7 +238,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightHandLayer);
         }
-        CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, out RightHandTwoBoneIK, false, true);
+        CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightUpperArm, true, out RightHandTwoBoneIK, false, true);
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {
@@ -251,7 +247,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftFootLayer);
         }
-        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, out LeftFootTwoBoneIK, false, true);
+        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, true, out LeftFootTwoBoneIK, false, true);
     }
     public void RightFoot(BasisLocalBoneDriver driver)
     {
@@ -260,7 +256,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightFootLayer);
         }
-        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, out RightFootTwoBoneIK, false, true);
+        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, true);
     }
     public void WriteUpEvents(BasisBoneControl Control, RigLayer Layer)
     {
