@@ -6,11 +6,7 @@ using UnityEngine;
 
 public class BasisSimulateXR
 {
-    public List<BasisInputXR> Inputs = new List<BasisInputXR>();
-    /// <summary>
-    /// generated at runtime
-    /// </summary>
-    public List<BasisInputXR> TrackedOpenXRInputDevices = new List<BasisInputXR>();
+    public List<BasisInputXRSimulate> Inputs = new List<BasisInputXRSimulate>();
     public void StartSimulation()
     {
 
@@ -19,18 +15,11 @@ public class BasisSimulateXR
     {
 
     }
-#if UNITY_EDITOR
-    [MenuItem("Basis/Create Puck Tracker")]
-    public static void CreatePuckTracker()
-    {
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0", "{htc}vr_tracker_vive_3_0");
-    }
-#endif
     public void CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID)
     {
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
-        BasisInputXR BasisInput = gameObject.AddComponent<BasisInputXR>();
+        BasisInputXRSimulate BasisInput = gameObject.AddComponent<BasisInputXRSimulate>();
         Initalize(BasisInput, UniqueID, UnUniqueID);
         BasisDeviceManagement.Instance.AllInputDevices.Add(BasisInput);
     }
@@ -59,10 +48,11 @@ public class BasisSimulateXR
             }
         }
     }
-}
-public class BasisInputXR : BasisInput
-{
-    public override void PollData()
+#if UNITY_EDITOR
+    [MenuItem("Basis/Create Puck Tracker")]
+    public static void CreatePuckTracker()
     {
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0", "{htc}vr_tracker_vive_3_0");
     }
+#endif
 }

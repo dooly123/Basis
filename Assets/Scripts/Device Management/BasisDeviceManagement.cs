@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -192,7 +194,6 @@ public class BasisDeviceManagement : MonoBehaviour
             Instance.SwitchMode(BasisBootedMode.Desktop);
         }
     }
-    [MenuItem("Basis/Show Trackers")]
     public static async void ShowTrackers()
     {
         await ShowTrackersAsync();
@@ -209,7 +210,6 @@ public class BasisDeviceManagement : MonoBehaviour
 
         await Task.WhenAll(showTrackedVisualTasks);
     }
-    [MenuItem("Basis/Hide Trackers")]
     public static void HideTrackers()
     {
         foreach (var input in BasisDeviceManagement.Instance.AllInputDevices)
@@ -217,4 +217,16 @@ public class BasisDeviceManagement : MonoBehaviour
             input.HideTrackedVisual();
         }
     }
+#if UNITY_EDITOR
+    [MenuItem("Basis/Hide Trackers")]
+    public static void HideTrackersEditor()
+    {
+        HideTrackers();
+    }
+    [MenuItem("Basis/Show Trackers")]
+    public static void ShowTrackersEditor()
+    {
+        ShowTrackers();
+    }
+#endif
 }

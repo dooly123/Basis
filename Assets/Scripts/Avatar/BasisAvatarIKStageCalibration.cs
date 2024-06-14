@@ -124,41 +124,39 @@ public static class BasisAvatarIKStageCalibration
     private static void AssignInputsToClosestControls(List<BasisInput> inputDevices, List<BasisBoneControl> availableBones, List<BasisBoneTrackedRole> roles)
     {
         Debug.Log("Completed assigning input devices to closest bone controls.");
-        bool[] bools = new bool[availableBones.Count];
-        Array.Fill(bools, false);
-        for (int index = 0; index < inputDevices.Count; index++)
+        bool[] assignedControls = new bool[availableBones.Count];
+        Array.Fill(assignedControls, false);
+
+        for (int inputIndex = 0; inputIndex < inputDevices.Count; inputIndex++)
         {
-            BasisInput baseInput = inputDevices[index];
+            BasisInput baseInput = inputDevices[inputIndex];
             BasisBoneControl closestControl = null;
-            int SelectedIdex = -1;
+            int selectedIndex = -1;
             float minDistance = float.MaxValue;
 
-            for (int Index = 0; Index < availableBones.Count; Index++)
+            for (int controlIndex = 0; controlIndex < availableBones.Count; controlIndex++)
             {
-                BasisBoneControl control = availableBones[Index];
-                if (bools[Index] == false)
+                BasisBoneControl control = availableBones[controlIndex];
+                if (!assignedControls[controlIndex])
                 {
                     float distance = Vector3.Distance(control.BoneTransform.position, baseInput.transform.position);
                     if (distance < minDistance)
                     {
                         minDistance = distance;
                         closestControl = control;
-                        SelectedIdex = index;
+                        selectedIndex = controlIndex;
                     }
                 }
             }
 
-            if (closestControl != null)
+            if (closestControl != null && selectedIndex != -1 && !assignedControls[selectedIndex])
             {
-                if (bools[SelectedIdex] == false)
+                Debug.Log($"Closest tracker for {baseInput.name} is {closestControl.Name} at distance {minDistance}");
+                if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(closestControl, out BasisBoneTrackedRole role))
                 {
-                    Debug.Log($"Closest tracker for {baseInput.name} is {closestControl.Name} at distance {minDistance}");
-                    if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(closestControl, out BasisBoneTrackedRole role))
-                    {
-                        ApplyToTarget(baseInput, role);
-                    }
-                    bools[SelectedIdex] = true;
+                    ApplyToTarget(baseInput, role);
                 }
+                assignedControls[selectedIndex] = true;
             }
         }
     }

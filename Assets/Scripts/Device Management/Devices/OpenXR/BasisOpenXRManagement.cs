@@ -19,8 +19,8 @@ public class BasisOpenXRManagement
     public Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
     public void StartXRSDK()
     {
-        UnityEngine.XR.InputDevices.deviceConnected += OnDeviceConnected;
-        UnityEngine.XR.InputDevices.deviceDisconnected += OnDeviceDisconnected;
+        InputDevices.deviceConnected += OnDeviceConnected;
+        InputDevices.deviceDisconnected += OnDeviceDisconnected;
         UpdateDeviceList();
     }
     public void StopXR()
@@ -39,8 +39,8 @@ public class BasisOpenXRManagement
                 Object.Destroy(BasisOpenVRInput.gameObject);
             }
         }
-        UnityEngine.XR.InputDevices.deviceConnected -= OnDeviceConnected;
-        UnityEngine.XR.InputDevices.deviceDisconnected -= OnDeviceDisconnected;
+        InputDevices.deviceConnected -= OnDeviceConnected;
+        InputDevices.deviceDisconnected -= OnDeviceDisconnected;
     }
 
     private void OnDeviceConnected(UnityEngine.XR.InputDevice device)
@@ -81,12 +81,12 @@ public class BasisOpenXRManagement
             }
         }
     }
-    public string GenerateID(UnityEngine.XR.InputDevice device)
+    public string GenerateID(InputDevice device)
     {
         string ID = device.name + "|" + device.serialNumber + "|" + device.manufacturer + "|" + (int)device.characteristics;
         return ID;
     }
-    public void CreatePhysicalTrackedDevice(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID)
+    public void CreatePhysicalTrackedDevice(InputDevice device, string UniqueID, string UnUniqueID)
     {
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
