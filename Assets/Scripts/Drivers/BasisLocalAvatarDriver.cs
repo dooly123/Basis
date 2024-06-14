@@ -46,6 +46,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             return;
         }
+        CleanupBeforeContinue();
         Calibration(Player.Avatar);
         BasisLocalEyeFollowDriver EyeFollowBase = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
         EyeFollowBase.CreateEyeLook(this);
@@ -74,6 +75,37 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             MicrophoneRecorder.DeInitialize();
         }
         MicrophoneRecorder.Initialize();
+    }
+    public void CleanupBeforeContinue()
+    {
+        if (RigHead != null)
+        {
+            Destroy(RigHead.gameObject);
+        }
+        if (LeftHandRig != null)
+        {
+            Destroy(LeftHandRig.gameObject);
+        }
+        if (RightHandRig != null)
+        {
+            Destroy(RightHandRig.gameObject);
+        }
+        if (LeftFootRig != null)
+        {
+            Destroy(LeftFootRig.gameObject);
+        }
+        if (RightFootRig != null)
+        {
+            Destroy(RightFootRig.gameObject);
+        }
+        if (ChestSpine != null)
+        {
+            Destroy(ChestSpine.gameObject);
+        }
+        if (Spine != null)
+        {
+            Destroy(Spine.gameObject);
+        }
     }
     public void ComputeOffsets(BaseBoneDriver BaseBoneDriver)
     {

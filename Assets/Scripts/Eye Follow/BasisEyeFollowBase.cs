@@ -23,10 +23,13 @@ public abstract class BasisEyeFollowBase : MonoBehaviour
     }
     public void CreateEyeLook(BasisAvatarDriver CharacterAvatarDriver)
     {
-        // GameObject EyeIK = CharacterAvatarDriver.CreateRig("Eye", true, out EyeRig, out EyeLayer);
-        GeneralEyeTarget = new GameObject("Eye Target").transform;
-        //  CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.LeftEye, GeneralEyeTarget);
-        //CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.RightEye, GeneralEyeTarget);
+        if (GeneralEyeTarget == null)
+        {
+            // GameObject EyeIK = CharacterAvatarDriver.CreateRig("Eye", true, out EyeRig, out EyeLayer);
+            GeneralEyeTarget = new GameObject("Eye Target").transform;
+            //  CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.LeftEye, GeneralEyeTarget);
+            //CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.RightEye, GeneralEyeTarget);
+        }
 
         rightEyeTransform = CharacterAvatarDriver.References.RightEye;
         leftEyeTransform = CharacterAvatarDriver.References.LeftEye;
