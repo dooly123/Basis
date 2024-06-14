@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public static class BasisAvatarIKStageCalibration
 {
@@ -122,8 +123,14 @@ public static class BasisAvatarIKStageCalibration
             }
         }
     }
-private static void AssignInputsToClosestControls(List<BasisInput> inputDevices, List<BasisBoneControl> availableBones, List<BasisBoneTrackedRole> roles)
-{
+    private static void AssignInputsToClosestControls(List<BasisInput> inputDevices, List<BasisBoneControl> availableBones, List<BasisBoneTrackedRole> roles)
+    {
+        List<Tuple<int, int>> optimalMatches = FindOptimalMatches(inputDevices, availableBones);
+        foreach (var match in optimalMatches)
+        {
+            ApplyToTarget(inputDevices[match.Item1], roles[match.Item2]);
+        }
+        /*
     Debug.Log("Started assigning input devices to closest bone controls.");
     bool[] assignedControls = new bool[availableBones.Count];
     Array.Fill(assignedControls, false);
@@ -207,7 +214,40 @@ private static void AssignInputsToClosestControls(List<BasisInput> inputDevices,
     }
 
     Debug.Log("Completed assigning input devices to closest bone controls.");
-}
+        */
+    }
+    public static List<Tuple<int, int>> FindOptimalMatches(List<BasisInput> inputDevices, List<BasisBoneControl> arrayB)
+    {
+        int n = inputDevices.Count;
+        int m = arrayB.Count;
+
+        // Create a cost matrix based on distances between points
+        int[,] costMatrix = new int[n, m];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                // Compute the squared magnitude
+                double squaredMagnitude = Vector3.SqrMagnitude(inputDevices[i].transform.position - arrayB[j].BoneTransform.position);
+
+                // Multiply by a scaling factor and cast to int
+                costMatrix[i, j] = (int)(squaredMagnitude * 1000);
+            }
+        }
+
+        int[] matches = HungarianAlgorithm.FindAssignments(costMatrix);
+        // Convert matches to a list of tuples for easier usage
+        List<Tuple<int, int>> optimalMatches = new List<Tuple<int, int>>();
+        for (int i = 0; i < n; i++)
+        {
+            if (matches[i] < m)
+            {
+                optimalMatches.Add(new Tuple<int, int>(i, matches[i]));
+            }
+        }
+
+        return optimalMatches;
+    }
     public static void SequenceIndexes(ref List<BasisBoneControl> availableBones, ref List<BasisBoneTrackedRole> roles)
     {
         // Hips role and corresponding bone control to the front
@@ -318,4 +358,5 @@ private static void AssignInputsToClosestControls(List<BasisInput> inputDevices,
         JustUpperBody,
         EverythingGoes,
     }
+
 }
