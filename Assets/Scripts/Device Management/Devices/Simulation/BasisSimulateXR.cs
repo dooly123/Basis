@@ -123,8 +123,9 @@ public class BasisSimulateXR
             Vector3 bodyPartPosition = ModifyVector(bodyPart.position);
             trackers[i].transform.SetPositionAndRotation(bodyPartPosition, bodyPart.rotation);
         }
-        BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+
+        BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers
         BasisDeviceManagement.ShowTrackers();
     }

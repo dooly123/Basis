@@ -22,7 +22,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         FindSkinnedMeshRenders();
         PutAvatarIntoTpose();
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
-        ForceUpdateAnimator(Player.Avatar.Animator);
         ActiveHeight = Avatar.AvatarEyePosition.x;
         ResetAvatarAnimator();
         if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
@@ -37,6 +36,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
         RuntimeAnimatorController RAC = op.WaitForCompletion();
         Player.Avatar.Animator.runtimeAnimatorController = RAC;
+        ForceUpdateAnimator(Player.Avatar.Animator);
     }
     public void ResetAvatarAnimator()
     {

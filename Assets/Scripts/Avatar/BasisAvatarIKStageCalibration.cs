@@ -122,45 +122,92 @@ public static class BasisAvatarIKStageCalibration
             }
         }
     }
-    private static void AssignInputsToClosestControls(List<BasisInput> inputDevices, List<BasisBoneControl> availableBones, List<BasisBoneTrackedRole> roles)
-    {
-        Debug.Log("Completed assigning input devices to closest bone controls.");
-        bool[] assignedControls = new bool[availableBones.Count];
-        Array.Fill(assignedControls, false);
+private static void AssignInputsToClosestControls(List<BasisInput> inputDevices, List<BasisBoneControl> availableBones, List<BasisBoneTrackedRole> roles)
+{
+    Debug.Log("Started assigning input devices to closest bone controls.");
+    bool[] assignedControls = new bool[availableBones.Count];
+    Array.Fill(assignedControls, false);
 
-        for (int inputIndex = 0; inputIndex < inputDevices.Count; inputIndex++)
+    // Store the current assignment to reassign if needed
+    BasisInput[] assignedInputs = new BasisInput[availableBones.Count];
+
+    // Step 1: Find the closest control for each input device
+    int[] closestControlIndices = new int[inputDevices.Count];
+    for (int inputIndex = 0; inputIndex < inputDevices.Count; inputIndex++)
+    {
+        BasisInput baseInput = inputDevices[inputIndex];
+        int closestControlIndex = -1;
+        float minDistance = float.MaxValue;
+
+        for (int controlIndex = 0; controlIndex < availableBones.Count; controlIndex++)
+        {
+            BasisBoneControl control = availableBones[controlIndex];
+            float distance = Vector3.Distance(control.BoneTransform.position, baseInput.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestControlIndex = controlIndex;
+            }
+        }
+
+        closestControlIndices[inputIndex] = closestControlIndex;
+    }
+
+    // Step 2: Assign each input device to its closest control
+    for (int inputIndex = 0; inputIndex < inputDevices.Count; inputIndex++)
+    {
+        int selectedIndex = closestControlIndices[inputIndex];
+        if (selectedIndex != -1)
         {
             BasisInput baseInput = inputDevices[inputIndex];
-            BasisBoneControl closestControl = null;
-            int selectedIndex = -1;
-            float minDistance = float.MaxValue;
+            BasisBoneControl closestControl = availableBones[selectedIndex];
+            float minDistance = Vector3.Distance(closestControl.BoneTransform.position, baseInput.transform.position);
 
-            for (int controlIndex = 0; controlIndex < availableBones.Count; controlIndex++)
+            if (!assignedControls[selectedIndex])
             {
-                BasisBoneControl control = availableBones[controlIndex];
-                if (!assignedControls[controlIndex])
-                {
-                    float distance = Vector3.Distance(control.BoneTransform.position, baseInput.transform.position);
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-                        closestControl = control;
-                        selectedIndex = controlIndex;
-                    }
-                }
-            }
-
-            if (closestControl != null && selectedIndex != -1 && !assignedControls[selectedIndex])
-            {
-                Debug.Log($"Closest tracker for {baseInput.name} is {closestControl.Name} at distance {minDistance}");
+                Debug.Log($"Assigning {baseInput.name} to {closestControl.Name} at distance {minDistance}");
                 if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(closestControl, out BasisBoneTrackedRole role))
                 {
                     ApplyToTarget(baseInput, role);
                 }
                 assignedControls[selectedIndex] = true;
+                assignedInputs[selectedIndex] = baseInput;
+            }
+            else
+            {
+                // Handle reassignment if the control is already assigned
+                BasisInput previouslyAssignedInput = assignedInputs[selectedIndex];
+                float previousDistance = Vector3.Distance(closestControl.BoneTransform.position, previouslyAssignedInput.transform.position);
+
+                if (minDistance < previousDistance)
+                {
+                    Debug.Log($"Reassigning {previouslyAssignedInput.name} from {closestControl.Name} to allow {baseInput.name} at distance {minDistance}");
+                    if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(closestControl, out BasisBoneTrackedRole role))
+                    {
+                        ApplyToTarget(baseInput, role);
+                    }
+                    assignedInputs[selectedIndex] = baseInput;
+                }
+                else
+                {
+                    Debug.LogWarning($"Control {closestControl.Name} already assigned to {previouslyAssignedInput.name}. {baseInput.name} not assigned.");
+                }
             }
         }
     }
+
+    // Check for any input devices that were not assigned and log a warning
+    for (int inputIndex = 0; inputIndex < inputDevices.Count; inputIndex++)
+    {
+        int selectedIndex = closestControlIndices[inputIndex];
+        if (selectedIndex == -1 || assignedControls[selectedIndex] == false)
+        {
+            Debug.LogWarning($"Input device {inputDevices[inputIndex].name} could not be assigned to any control.");
+        }
+    }
+
+    Debug.Log("Completed assigning input devices to closest bone controls.");
+}
     public static void SequenceIndexes(ref List<BasisBoneControl> availableBones, ref List<BasisBoneTrackedRole> roles)
     {
         // Hips role and corresponding bone control to the front
