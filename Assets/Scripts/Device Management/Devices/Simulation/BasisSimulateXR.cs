@@ -80,13 +80,15 @@ public class BasisSimulateXR
         Vector3 leftFootPosition = ModifyVector(leftFoot.position);
         Vector3 rightFootPosition = ModifyVector(rightFoot.position);
 
-        BasisHips.transform.SetPositionAndRotation(HipsPosition, hips.rotation);//* Random.rotation
-        BasisLeftFoot.transform.SetPositionAndRotation(leftFootPosition, leftFoot.rotation);//* Random.rotation
-        BasisRightFoot.transform.SetPositionAndRotation(rightFootPosition, rightFoot.rotation);//* Random.rotation
+        BasisHips.transform.SetPositionAndRotation(HipsPosition, Random.rotation);//* Random.rotation
+        BasisLeftFoot.transform.SetPositionAndRotation(leftFootPosition, Random.rotation);//* Random.rotation
+        BasisRightFoot.transform.SetPositionAndRotation(rightFootPosition, Random.rotation);//* Random.rotation
 
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
-        BasisDeviceManagement.ShowTrackers();
 
+        BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
+        // Show the trackers
+        BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Create MaxTracker Tracking")]
     public static void CreateFullMaxTracker()
@@ -110,10 +112,10 @@ public class BasisSimulateXR
 
         // Create an array of the BasisInputXRSimulate instances
         BasisInputXRSimulate[] trackers = new BasisInputXRSimulate[bodyParts.Length];
-        for (int i = 0; i < bodyParts.Length; i++)
+        for (int Index = 0; Index < bodyParts.Length; Index++)
         {
             BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice(trackerName, trackerName);
-            trackers[i] = BasisDeviceManagement.Instance.BasisSimulateXR.Inputs[i];
+            trackers[Index] = BasisDeviceManagement.Instance.BasisSimulateXR.Inputs[Index];
         }
 
         // Set positions and rotations for each tracker
@@ -121,7 +123,7 @@ public class BasisSimulateXR
         {
             Transform bodyPart = bodyParts[Index];
             Vector3 bodyPartPosition = ModifyVector(bodyPart.position);
-            trackers[Index].transform.SetPositionAndRotation(bodyPartPosition, bodyPart.rotation * Random.rotation);
+            trackers[Index].transform.SetPositionAndRotation(bodyPartPosition, Random.rotation);
         }
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 

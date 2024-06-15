@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public static class BasisAvatarIKStageCalibration
 {
