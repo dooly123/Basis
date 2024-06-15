@@ -117,11 +117,11 @@ public class BasisSimulateXR
         }
 
         // Set positions and rotations for each tracker
-        for (int i = 0; i < bodyParts.Length; i++)
+        for (int Index = 0; Index < bodyParts.Length; Index++)
         {
-            Transform bodyPart = bodyParts[i];
+            Transform bodyPart = bodyParts[Index];
             Vector3 bodyPartPosition = ModifyVector(bodyPart.position);
-            trackers[i].transform.SetPositionAndRotation(bodyPartPosition, bodyPart.rotation);
+            trackers[Index].transform.SetPositionAndRotation(bodyPartPosition, bodyPart.rotation * Random.rotation);
         }
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
@@ -138,11 +138,6 @@ public class BasisSimulateXR
     public static void ResetAvatarAnimator()
     {
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
-    }
-    public void CreateFakeOffset(out Quaternion Rotation, out Vector3 Position, BasisBoneControl control)
-    {
-        Rotation = Random.rotation;
-        Position = ModifyVector(control.LocalRawPosition);
     }
     public static float randomRange = 0.1f;
     static Vector3 ModifyVector(Vector3 original)

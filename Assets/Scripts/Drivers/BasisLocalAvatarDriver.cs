@@ -260,7 +260,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftFootLayer);
         }
-        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, false, out LeftFootTwoBoneIK, false, false);
+        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, false, out LeftFootTwoBoneIK, false, true);
     }
     public void RightFoot(BasisLocalBoneDriver driver)
     {
@@ -269,7 +269,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightFootLayer);
         }
-        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, false, out RightFootTwoBoneIK, false, false);
+        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, false, out RightFootTwoBoneIK, false, true);
     }
     public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)
     {

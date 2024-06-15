@@ -83,7 +83,11 @@ public abstract class BasisInput : MonoBehaviour
                 else
                 {
                     Control.CalibrationOffset.OffsetPosition = this.transform.position - Control.BoneTransform.position;
-                    Control.CalibrationOffset.OffsetRotation = Quaternion.Inverse(Control.BoneTransform.rotation) * this.transform.rotation;
+                    // During calibration: setting the calibration offset
+                    Control.CalibrationOffset.OffsetRotation = this.transform.rotation * Quaternion.Inverse(Control.BoneTransform.rotation);
+
+                    // Applying the calibration offset to the local raw rotation
+                    //  LocalRawRotation = Control.CalibrationOffset.OffsetRotation * LocalRawRotation;
                     Control.CalibrationOffset.Use = true;
                     Debug.Log("calibration set for " + TrackedRole);
                 }
