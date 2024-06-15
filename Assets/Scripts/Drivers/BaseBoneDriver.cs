@@ -72,6 +72,19 @@ public abstract class BaseBoneDriver : MonoBehaviour
         control = new BasisBoneControl();
         return false;
     }
+    public bool FindTrackedRole(BasisBoneControl control, out BasisBoneTrackedRole Role)
+    {
+        int Index = Array.IndexOf(Controls, control);
+
+        if (Index >= 0 && Index < ControlsLength)
+        {
+            Role = trackedRoles[Index];
+            return true;
+        }
+
+        Role = BasisBoneTrackedRole.CenterEye;
+        return false;
+    }
     public void CreateInitialArrays(Transform Parent)
     {
         trackedRoles = new BasisBoneTrackedRole[] { };
@@ -140,7 +153,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
         {
             Lerp = BasisVectorLerp.Lerp,
             TaretInterpreter = BasisTargetController.TargetDirectional,
-            Offset = Bone.RestingLocalSpace.BeginningPosition - Target.RestingLocalSpace.BeginningPosition,
+            Offset = Bone.RestingLocalSpace.OffsetPosition - Target.RestingLocalSpace.OffsetPosition,
             Target = Target,
             LerpAmount = 40
         };

@@ -11,19 +11,29 @@ public abstract class BasisInput : MonoBehaviour
     public string UniqueID;
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
+    public Vector3 pivotOffset;
+    public Vector3 rotationOffset;
 
-    public Vector2 primary2DAxis;
-    public Vector2 secondary2DAxis;
-    public bool gripButton;
-    public bool menuButton;
-    public bool primaryButton;
-    public bool secondaryButton;
-    public float Trigger;
-    public bool secondary2DAxisClick;
-    public bool primary2DAxisClick;
     public string UnUniqueDeviceID;
     public BasisVisualTracker BasisVisualTracker;
     public AddressableGenericResource LoadedDeviceRequest;
+    [SerializeField]
+    public BasisInputState State = new BasisInputState();
+    [SerializeField]
+    public BasisInputState LastState = new BasisInputState();
+    [System.Serializable]
+    public struct BasisInputState
+    {
+        public bool gripButton;
+        public bool menuButton;
+        public bool primaryButtonGetState;
+        public bool secondaryButtonGetState;
+        public float Trigger;
+        public bool secondary2DAxisClick;
+        public bool primary2DAxisClick;
+        public Vector2 primary2DAxis;
+        public Vector2 secondary2DAxis;
+    }
 
     public BasisBoneTrackedRole TrackedRole
     {
@@ -47,7 +57,7 @@ public abstract class BasisInput : MonoBehaviour
     /// </summary>
     /// <param name="UniqueID"></param>
     /// <param name="unUniqueDeviceID"></param>
-    public async void ActivateTracking(string UniqueID, string unUniqueDeviceID)
+    public void ActivateTracking(string UniqueID, string unUniqueDeviceID)
     {
         this.UnUniqueDeviceID = unUniqueDeviceID;
         this.UniqueID = UniqueID;
@@ -57,18 +67,42 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Missing Driver!");
             return;
         }
+        ApplyRole();
+        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedPivotOffset(unUniqueDeviceID, out pivotOffset))
+        {
+        }
+        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedRotationOffset(unUniqueDeviceID, out rotationOffset))
+        {
+        }
+        Driver.OnSimulate += PollData;
+    }
+    public void ApplyRole()
+    {
         if (hasRoleAssigned)
         {
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+                if (TrackedRole == BasisBoneTrackedRole.CenterEye || TrackedRole == BasisBoneTrackedRole.LeftHand || TrackedRole == BasisBoneTrackedRole.RightHand)
+                {
+                    Control.CalibrationOffset.Use = false;
+                    Debug.Log("skipping calibration offset for " + TrackedRole);
+                }
+                else
+                {
+                    Control.CalibrationOffset.OffsetPosition = this.transform.position - Control.BoneTransform.position;
+                    // During calibration: setting the calibration offset
+                    Control.CalibrationOffset.OffsetRotation = this.transform.rotation * Quaternion.Inverse(Control.BoneTransform.rotation);
+
+                    // Applying the calibration offset to the local raw rotation
+                    //  LocalRawRotation = Control.CalibrationOffset.OffsetRotation * LocalRawRotation;
+                    Control.CalibrationOffset.Use = true;
+                    Debug.Log("calibration set for " + TrackedRole);
+                }
                 // Do nothing if bone is found successfully
             }
         }
-
-        Driver.OnSimulate += PollData;
         SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
-        await ShowTrackedVisual();
     }
 
     public void DisableTracking()
@@ -98,23 +132,30 @@ public abstract class BasisInput : MonoBehaviour
         switch (TrackedRole)
         {
             case BasisBoneTrackedRole.LeftHand:
-                BasisLocalPlayer.Instance.Move.MovementVector = primary2DAxis;
-                if (secondaryButton)
+                BasisLocalPlayer.Instance.Move.MovementVector = State.primary2DAxis;
+                //only open ui after we have stopped pressing down on the secondary button
+                if (State.secondaryButtonGetState == false && LastState.secondaryButtonGetState)
                 {
                     if (BasisHamburgerMenu.Instance == null && !BasisUIBase.IsLoading)
                     {
                         BasisHamburgerMenu.OpenMenu();
+                        BasisDeviceManagement.ShowTrackers();
                     }
                     else
                     {
                         BasisHamburgerMenu.Instance.CloseThisMenu();
+                        BasisDeviceManagement.HideTrackers();
                     }
+                }
+                if (State.primaryButtonGetState == false && LastState.primaryButtonGetState)
+                {
+                    BasisAvatarIKStageCalibration.Calibrate();
                 }
                 Control.ApplyMovement();
                 break;
             case BasisBoneTrackedRole.RightHand:
-                BasisLocalPlayer.Instance.Move.Rotation = primary2DAxis;
-                if (primaryButton)
+                BasisLocalPlayer.Instance.Move.Rotation = State.primary2DAxis;
+                if (State.primaryButtonGetState)
                 {
                     BasisLocalPlayer.Instance.Move.HandleJump();
                 }
@@ -166,6 +207,7 @@ public abstract class BasisInput : MonoBehaviour
             case BasisBoneTrackedRole.Mouth:
                 break;
         }
+        LastState = State;
     }
     public async Task ShowTrackedVisual()
     {
@@ -174,15 +216,15 @@ public abstract class BasisInput : MonoBehaviour
             Debug.Log("UnUniqueDeviceID " + UnUniqueDeviceID);
             if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest))
             {
-                var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
-                List<GameObject> Gameobjects = data.Item1;
-                if (Gameobjects == null)
+                (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+                List<GameObject> gameObjects = data.Item1;
+                if (gameObjects == null)
                 {
                     return;
                 }
-                if (Gameobjects.Count != 0)
+                if (gameObjects.Count != 0)
                 {
-                    foreach (GameObject gameObject in Gameobjects)
+                    foreach (GameObject gameObject in gameObjects)
                     {
                         gameObject.name = UnUniqueDeviceID;
                         gameObject.transform.parent = this.transform;

@@ -18,4 +18,30 @@ public class BasisDeviceNameMatcher : ScriptableObject
         DeviceID = null;
         return false;
     }
+    public bool GetAssociatedPivotOffset(string nameToMatch,out Vector3 pivotOffset)
+    {
+        foreach (var DeviceEntry in BasisDevice)
+        {
+            if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
+            {
+                pivotOffset = DeviceEntry.PivotOffset;
+                return true; 
+            }
+        }
+        pivotOffset = Vector3.zero;
+        return false;
+    }
+    public bool GetAssociatedRotationOffset(string nameToMatch,out Vector3 rotationOffset)
+    {
+        foreach (var DeviceEntry in BasisDevice)
+        {
+            if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
+            {
+                rotationOffset = DeviceEntry.RotationOffset;
+                return true; 
+            }
+        }
+        rotationOffset = Vector3.zero;
+        return false;
+    }
 }

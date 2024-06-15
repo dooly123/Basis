@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -13,11 +16,15 @@ public class BasisDeviceManagement : MonoBehaviour
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
     [SerializeField]
+    public List<BasisInput> AllInputDevices = new List<BasisInput>();
+    [SerializeField]
     public BasisXRManagement BasisXRManagement = new BasisXRManagement();
     [SerializeField]
     public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
     [SerializeField]
     public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
+    [SerializeField]
+    public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
     [SerializeField]
     public BasisDeviceNameMatcher BasisDeviceNameMatcher;
     // Define the delegate
@@ -25,6 +32,8 @@ public class BasisDeviceManagement : MonoBehaviour
 
     // Define the event based on the delegate
     public event InitializationCompletedHandler OnInitializationCompleted;
+
+    public bool FireOffNetwork = false;
     void Start()
     {
         if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -48,12 +57,16 @@ public class BasisDeviceManagement : MonoBehaviour
     }
     public async Task RunAfterInitialized()
     {
-      //  await LoadGameobject("NetworkManagement", new InstantiationParameters());
+        if (FireOffNetwork)
+        {
+            await LoadGameobject("NetworkManagement", new InstantiationParameters());
+        }
     }
 
     private void CheckForPass(BasisBootedMode type)
     {
         Debug.Log("Loading " + type);
+        BasisSimulateXR.StartSimulation();
         switch (type)
         {
             case BasisBootedMode.OpenVRLoader:
@@ -125,10 +138,12 @@ public class BasisDeviceManagement : MonoBehaviour
     {
         ShutDownXR();
         StopDesktop();
+        BasisSimulateXR.StopXR();
     }
 
     public void ShutDownXR()
     {
+        BasisSimulateXR.StopXR();
         OnBootModeStopped?.Invoke(CurrentMode); // Trigger the mode stop event
         if (BasisOpenXRManagement != null)
         {
@@ -145,6 +160,7 @@ public class BasisDeviceManagement : MonoBehaviour
 
     public void StopDesktop()
     {
+        BasisSimulateXR.StopXR();
         if (BasisAvatarEyeInput != null)
         {
             GameObject.Destroy(BasisAvatarEyeInput);
@@ -153,7 +169,7 @@ public class BasisDeviceManagement : MonoBehaviour
 
     public static async Task<BasisPlayer> LoadGameobject(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
     {
-       var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
         List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
@@ -178,4 +194,39 @@ public class BasisDeviceManagement : MonoBehaviour
             Instance.SwitchMode(BasisBootedMode.Desktop);
         }
     }
+    public static async void ShowTrackers()
+    {
+        await ShowTrackersAsync();
+    }
+    public async static Task ShowTrackersAsync()
+    {
+        var inputDevices = BasisDeviceManagement.Instance.AllInputDevices;
+        var showTrackedVisualTasks = new List<Task>();
+
+        foreach (var input in inputDevices)
+        {
+            showTrackedVisualTasks.Add(input.ShowTrackedVisual());
+        }
+
+        await Task.WhenAll(showTrackedVisualTasks);
+    }
+    public static void HideTrackers()
+    {
+        foreach (var input in BasisDeviceManagement.Instance.AllInputDevices)
+        {
+            input.HideTrackedVisual();
+        }
+    }
+#if UNITY_EDITOR
+    [MenuItem("Basis/Hide Trackers")]
+    public static void HideTrackersEditor()
+    {
+        HideTrackers();
+    }
+    [MenuItem("Basis/Show Trackers")]
+    public static void ShowTrackersEditor()
+    {
+        ShowTrackers();
+    }
+#endif
 }

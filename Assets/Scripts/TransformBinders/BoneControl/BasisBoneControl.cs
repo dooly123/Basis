@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 [System.Serializable]
 public class BasisBoneControl
@@ -75,7 +77,10 @@ public class BasisBoneControl
     public Quaternion LastBoneRotation;
     private Color gizmoColor = Color.blue;
     [SerializeField]
-    public BasisCalibratedRestingData RestingLocalSpace = new BasisCalibratedRestingData();
+    public BasisCalibratedOffsetData RestingLocalSpace = new BasisCalibratedOffsetData();
+
+    [SerializeField]
+    public BasisCalibratedOffsetData CalibrationOffset = new BasisCalibratedOffsetData();
     public Color Color { get => gizmoColor; set => gizmoColor = value; }
     public void Initialize()
     {
@@ -132,11 +137,26 @@ public class BasisBoneControl
                 RunRotationChange();
             }
         }
+        else
+        {
+            if (CalibrationOffset.Use)
+            {
+                LocalRawPosition -= CalibrationOffset.OffsetPosition;
+            }
+        }
 
         if (HasTrackerPositionDriver == BasisHasTracked.HasNoTracker)
         {
             ApplyTargetPosition(ref LocalRawPosition, PositionControl);
             ApplyLerpToVector(ref LocalRawPosition, PositionControl);
+        }
+        else
+        {
+            if (CalibrationOffset.Use)
+            {
+                Quaternion adjustedRotation = CalibrationOffset.OffsetRotation * Quaternion.Inverse(LocalRawRotation);
+                LocalRawRotation = adjustedRotation;
+            }
         }
     }
     public void RunRotationChange()

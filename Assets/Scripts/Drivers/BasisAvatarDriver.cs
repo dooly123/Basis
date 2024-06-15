@@ -1,6 +1,4 @@
-using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
@@ -9,46 +7,45 @@ using UnityEngine.Events;
 public abstract class BasisAvatarDriver : MonoBehaviour
 {
     public float ActiveHeight = 1.75f;
-    private static string Tpose = "Assets/Animator/Animated TPose.controller";
-    public static string Bonedata = "Assets/ScriptableObjects/BoneData.asset";
+    private static string TPose = "Assets/Animator/Animated TPose.controller";
+    public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
     public UnityEvent BeginningCalibration = new UnityEvent();
     public UnityEvent CalibrationComplete = new UnityEvent();
     public BasisTransformMapping References;
     public RuntimeAnimatorController runtimeAnimatorController;
     public SkinnedMeshRenderer[] SkinnedMeshRenderer;
     public BasisPlayer Player;
-    public List<RigTransform> AdditionalTransforms = new List<RigTransform>();
-    public List<Rig> Rigs = new List<Rig>();
-    public RigBuilder Builder;
     public void Calibration(BasisAvatar Avatar)
     {
-        if (Builder == null)
-        {
-            Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Avatar.Animator.gameObject);
-        }
-        Rigs.Clear();
-        AdditionalTransforms.Clear();
         Avatar.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         BeginningCalibration.Invoke();
         FindSkinnedMeshRenders();
-        runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
-        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Tpose);
-        RuntimeAnimatorController RAC = op.WaitForCompletion();
-        Player.Avatar.Animator.runtimeAnimatorController = RAC;
+        PutAvatarIntoTpose();
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
-        ForceUpdateAnimator(Player.Avatar.Animator);
         ActiveHeight = Avatar.AvatarEyePosition.x;
-        Player.Avatar.Animator.runtimeAnimatorController = runtimeAnimatorController;
+        ResetAvatarAnimator();
         if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
         {
             BasisFacialBlinkDriver FacialBlinkDriver = BasisHelpers.GetOrAddComponent<BasisFacialBlinkDriver>(Avatar.gameObject);
             FacialBlinkDriver.Initialize(Avatar);
         }
     }
-    public Bounds GetBounds(Transform Animatorparent)
+    public void PutAvatarIntoTpose()
+    {
+        runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
+        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
+        RuntimeAnimatorController RAC = op.WaitForCompletion();
+        Player.Avatar.Animator.runtimeAnimatorController = RAC;
+        ForceUpdateAnimator(Player.Avatar.Animator);
+    }
+    public void ResetAvatarAnimator()
+    {
+        Player.Avatar.Animator.runtimeAnimatorController = runtimeAnimatorController;
+    }
+    public Bounds GetBounds(Transform animatorParent)
     {
         // Get all renderers in the parent GameObject
-        Renderer[] renderers = Animatorparent.GetComponentsInChildren<Renderer>();
+        Renderer[] renderers = animatorParent.GetComponentsInChildren<Renderer>();
         if (renderers.Length == 0)
         {
             return new Bounds(Vector3.zero, new Vector3(0.3f, 1.7f, 0.3f));
@@ -190,7 +187,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                 }
                 else
                 {
-                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> op = Addressables.LoadAssetAsync<BasisFallBackBoneData>(Bonedata);
+                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> op = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
                     BasisFallBackBoneData FBBD = op.WaitForCompletion();
                     if (FBBD.FindBone(out BasisFallBone Bone, driver.trackedRoles[Index]))
                     {
@@ -207,12 +204,12 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public void SetInitalData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
     {
         bone.LocalRawPosition = BasisLocalBoneDriver.ConvertToAvatarSpace(animator, bone.RestingWorldSpacePosition, Player.Avatar.AvatarHeightOffset, out bone.WorldSpaceFloor);
-        bone.RestingLocalSpace.BeginningPosition = bone.LocalRawPosition;
-        bone.RestingLocalSpace.BeginningRotation = bone.LocalRawRotation;
+        bone.RestingLocalSpace.OffsetPosition = bone.LocalRawPosition;
+        bone.RestingLocalSpace.OffsetRotation = bone.LocalRawRotation;
         if (IsApartOfSpineVertical(Role))
         {
             bone.LocalRawPosition = new Vector3(0, bone.LocalRawPosition.y, bone.LocalRawPosition.z);
-            bone.RestingLocalSpace.BeginningPosition = bone.LocalRawPosition;
+            bone.RestingLocalSpace.OffsetPosition = bone.LocalRawPosition;
         }
     }
     public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisClampData clampData, int positionalLockValue, int rotationalLockValue, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis clampAxis = BasisClampAxis.x, bool CreateRotationalLock = true)
@@ -272,7 +269,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         DT.data.dampPosition = positionWeight;
         GeneratedRequiredTransforms(Source, References.Hips);
     }
-    public void MultiRotation(GameObject Parent, Transform Source,Transform Target, float rotationWeight = 1)
+    public void MultiRotation(GameObject Parent, Transform Source, Transform Target, float rotationWeight = 1)
     {
         GameObject DTData = CreateAndSetParent(Parent.transform, "Eye Target");
         MultiAimConstraint DT = BasisHelpers.GetOrAddComponent<MultiAimConstraint>(DTData);
@@ -323,29 +320,27 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         DT.data.space = Space;
         GeneratedRequiredTransforms(Source, References.Hips);
     }
-    public void CreateTwoBone(BaseBoneDriver driver, GameObject Parent, Transform root, Transform mid, Transform tip, BasisBoneTrackedRole Role, out TwoBoneIKConstraint TwoBoneIKConstraint, bool maintainTargetPositionOffset, bool maintainTargetRotationOffset)
+    public void CreateTwoBone(BaseBoneDriver driver, GameObject Parent, Transform root, Transform mid, Transform tip, BasisBoneTrackedRole TargetRole, BasisBoneTrackedRole BendRole,bool UseBoneRole, out TwoBoneIKConstraint TwoBoneIKConstraint, bool maintainTargetPositionOffset, bool maintainTargetRotationOffset)
     {
-        driver.FindBone(out BasisBoneControl BoneControl, Role);
-        GameObject BoneRole = CreateAndSetParent(Parent.transform, "Bone Role " + Role.ToString());
+        driver.FindBone(out BasisBoneControl BoneControl, TargetRole);
+        GameObject BoneRole = CreateAndSetParent(Parent.transform, "Bone Role " + TargetRole.ToString());
         TwoBoneIKConstraint = BasisHelpers.GetOrAddComponent<TwoBoneIKConstraint>(BoneRole);
         EnableTwoBoneIk(TwoBoneIKConstraint, maintainTargetPositionOffset, maintainTargetRotationOffset);
         TwoBoneIKConstraint.data.target = BoneControl.BoneTransform;
+        if (UseBoneRole)
+        {
+            driver.FindBone(out BasisBoneControl BendBoneControl, BendRole);
+            TwoBoneIKConstraint.data.hint = BendBoneControl.BoneTransform;
+            TwoBoneIKConstraint.data.hintWeight = 1;
+        }
         TwoBoneIKConstraint.data.root = root;
         TwoBoneIKConstraint.data.mid = mid;
         TwoBoneIKConstraint.data.tip = tip;
         GeneratedRequiredTransforms(tip, References.Hips);
     }
-    public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
-    {
-        GameObject RigGameobject = CreateAndSetParent(Player.Avatar.Animator.transform, "Rig " + Role);
-        Rig = BasisHelpers.GetOrAddComponent<Rig>(RigGameobject);
-        Rigs.Add(Rig);
-        RigLayer = new RigLayer(Rig, Enabled);
-        Builder.layers.Add(RigLayer);
-        return RigGameobject;
-    }
     public void GeneratedRequiredTransforms(Transform BaseLevel, Transform TopLevelParent)
     {
+        BasisLocalAvatarDriver Driver = (BasisLocalAvatarDriver)this;
         // Go up the hierarchy until you hit the TopLevelParent
         if (BaseLevel != null)
         {
@@ -353,10 +348,17 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             while (currentTransform != null && currentTransform != TopLevelParent)
             {
                 // Add component if the current transform doesn't have it
-                if (currentTransform.TryGetComponent<RigTransform>(out RigTransform RigTransform) == false)
+                if (currentTransform.TryGetComponent<RigTransform>(out RigTransform RigTransform))
+                {
+                    if (Driver.AdditionalTransforms.Contains(RigTransform) == false)
+                    {
+                        Driver.AdditionalTransforms.Add(RigTransform);
+                    }
+                }
+                else
                 {
                     RigTransform = currentTransform.gameObject.AddComponent<RigTransform>();
-                    AdditionalTransforms.Add(RigTransform);
+                    Driver.AdditionalTransforms.Add(RigTransform);
                 }
                 // Move to the parent for the next iteration
                 currentTransform = currentTransform.parent;

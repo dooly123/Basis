@@ -19,8 +19,8 @@ public class BasisOpenXRManagement
     public Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
     public void StartXRSDK()
     {
-        UnityEngine.XR.InputDevices.deviceConnected += OnDeviceConnected;
-        UnityEngine.XR.InputDevices.deviceDisconnected += OnDeviceDisconnected;
+        InputDevices.deviceConnected += OnDeviceConnected;
+        InputDevices.deviceDisconnected += OnDeviceDisconnected;
         UpdateDeviceList();
     }
     public void StopXR()
@@ -39,8 +39,8 @@ public class BasisOpenXRManagement
                 Object.Destroy(BasisOpenVRInput.gameObject);
             }
         }
-        UnityEngine.XR.InputDevices.deviceConnected -= OnDeviceConnected;
-        UnityEngine.XR.InputDevices.deviceDisconnected -= OnDeviceDisconnected;
+        InputDevices.deviceConnected -= OnDeviceConnected;
+        InputDevices.deviceDisconnected -= OnDeviceDisconnected;
     }
 
     private void OnDeviceConnected(UnityEngine.XR.InputDevice device)
@@ -81,18 +81,19 @@ public class BasisOpenXRManagement
             }
         }
     }
-    public string GenerateID(UnityEngine.XR.InputDevice device)
+    public string GenerateID(InputDevice device)
     {
         string ID = device.name + "|" + device.serialNumber + "|" + device.manufacturer + "|" + (int)device.characteristics;
         return ID;
     }
-    public void CreatePhysicalTrackedDevice(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID)
+    public void CreatePhysicalTrackedDevice(InputDevice device, string UniqueID, string UnUniqueID)
     {
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         BasisOpenXRInput BasisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
         BasisXRInput.Initialize(device, UniqueID, UnUniqueID);
         TrackedOpenXRInputDevices.Add(BasisXRInput);
+        BasisDeviceManagement.Instance.AllInputDevices.Add(BasisXRInput);
     }
     /// <summary>
     /// this wont well with fullbody, revist later
@@ -121,7 +122,17 @@ public class BasisOpenXRManagement
             if (device.UniqueID == ID)
             {
                 TrackedOpenXRInputDevices.Remove(device);
+                Object.Destroy(device.gameObject);
                 break;
+            }
+        }
+        List<BasisInput> Duplicate = new List<BasisInput>();
+        Duplicate.AddRange(BasisDeviceManagement.Instance.AllInputDevices);
+        foreach (var device in Duplicate)
+        {
+            if (device.UniqueID == ID)
+            {
+                BasisDeviceManagement.Instance.AllInputDevices.Remove(device);
             }
         }
     }

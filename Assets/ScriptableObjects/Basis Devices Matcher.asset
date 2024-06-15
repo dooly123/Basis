@@ -16,19 +16,29 @@ MonoBehaviour:
   - DeviceID: vr_tracker_vive_3_0
     MatchableDeviceIds:
     - '{htc}vr_tracker_vive_3_0'
+    PivotOffset: {x: 0, y: 0, z: 0}
+    RotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: vr_tracker_vive_1_0
     MatchableDeviceIds:
     - '{htc}vr_tracker_vive_1_0'
+    PivotOffset: {x: 0, y: 0, z: 0}
+    RotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: valve_controller_knu_left
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_left'
     - '{indexcontroller}valve_controller_knu_2_0_left'
     - '{indexcontroller}valve_controller_knu_3_0_left'
+    PivotOffset: {x: 0.03, y: -0.05, z: 0.14}
+    RotationOffset: {x: -25, y: -2, z: 51}
   - DeviceID: valve_controller_knu_right
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_right'
     - '{indexcontroller}valve_controller_knu_2_0_right'
     - '{indexcontroller}valve_controller_knu_3_0_right'
+    PivotOffset: {x: -0.03, y: -0.05, z: 0.14}
+    RotationOffset: {x: -25, y: 2, z: -51}
   - DeviceID: tundra_tracker
     MatchableDeviceIds:
     - tundra_tracker
+    PivotOffset: {x: 0, y: 0, z: 0}
+    RotationOffset: {x: 0, y: 0, z: 0}

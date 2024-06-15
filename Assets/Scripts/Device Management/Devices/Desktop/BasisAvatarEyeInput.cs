@@ -100,10 +100,10 @@ public class BasisAvatarEyeInput : MonoBehaviour
         // Clamp rotationY to stay within the specified range
         rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
         Eye.LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
-        Vector3 adjustedHeadPosition = new Vector3(0, Eye.RestingLocalSpace.BeginningPosition.y, 0);
+        Vector3 adjustedHeadPosition = new Vector3(0, Eye.RestingLocalSpace.OffsetPosition.y, 0);
         if (characterInputActions.Crouching)
         {
-            adjustedHeadPosition.y -= Eye.RestingLocalSpace.BeginningPosition.y * crouchPercentage;
+            adjustedHeadPosition.y -= Eye.RestingLocalSpace.OffsetPosition.y * crouchPercentage;
         }
 
         CalculateAdjustment();
@@ -115,12 +115,12 @@ public class BasisAvatarEyeInput : MonoBehaviour
         if (rotationY > 0)
         {
             // Positive rotation
-            adjustment = Mathf.Abs(rotationY) * (headDownwardForce / Eye.RestingLocalSpace.BeginningPosition.y);
+            adjustment = Mathf.Abs(rotationY) * (headDownwardForce / Eye.RestingLocalSpace.OffsetPosition.y);
         }
         else
         {
             // Negative rotation
-            adjustment = Mathf.Abs(rotationY) * (headUpwardForce / Eye.RestingLocalSpace.BeginningPosition.y);
+            adjustment = Mathf.Abs(rotationY) * (headUpwardForce / Eye.RestingLocalSpace.OffsetPosition.y);
         }
     }
 }

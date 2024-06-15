@@ -74,6 +74,6 @@ public static class BasisAvatarFactory
             Debug.LogError("Missing Avatar");
             return;
         }
-        Player.AvatarDriver.LocalCalibration(Player);
+        Player.AvatarDriver.InitalLocalCalibration(Player);
     }
 }

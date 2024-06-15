@@ -104,3 +104,5 @@ MonoBehaviour:
   TrackedSetup:
     m_PersistentCalls:
       m_Calls: []
+  ModelRotationOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  ModelPositionOffset: {x: 0, y: 0, z: 0}

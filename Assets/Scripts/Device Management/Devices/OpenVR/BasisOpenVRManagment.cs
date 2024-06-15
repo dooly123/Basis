@@ -33,10 +33,10 @@ public class BasisOpenVRManagement
         SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
         SteamVR_Behaviour.initializeSteamVROnAwake = false;
         SteamVR_Behaviour.doNotDestroy = false;
-        
+
         SteamVR_Render.StartCoroutine(CheckState());
     }
-    
+
     public IEnumerator CheckState()
     {
         // Loop until SteamVR is either successfully initialized or failed to initialize
@@ -51,10 +51,10 @@ public class BasisOpenVRManagement
             Debug.LogError("SteamVR failed to initialize");
             yield break; // Exit the coroutine
         }
-        
+
         // Now proceed to bind events
         SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
-        
+
         foreach (SteamVR_Action_Pose poseAction in SteamVR_Input.actionsPose)
         {
             foreach (SteamVR_Input_Sources inputSource in (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources)))
@@ -67,14 +67,14 @@ public class BasisOpenVRManagement
     private void OnDeviceConnected(int deviceIndex, bool deviceConnected)
     {
         Debug.Log("Device index " + deviceIndex + " IS Connected " + deviceConnected);
-        GenerateID((uint)deviceIndex, out string UniqueID,out string UnUniqueID);
+        GenerateID((uint)deviceIndex, out string UniqueID, out string UnUniqueID);
 
         ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass((uint)deviceIndex);
         if (deviceClass == ETrackedDeviceClass.TrackingReference)
         {
             return;
         }
-        
+
         if (deviceConnected)
         {
             CreateDevice((uint)deviceIndex, deviceClass, UniqueID, UnUniqueID);
@@ -153,7 +153,7 @@ public class BasisOpenVRManagement
         }
         Object.Destroy(SteamVR_Behaviour);
     }
-    public void GenerateID(uint device,out string UniqueID,out string NotUnique)
+    public void GenerateID(uint device, out string UniqueID, out string NotUnique)
     {
         ETrackedPropertyError error = new ETrackedPropertyError();
         StringBuilder id = new StringBuilder(64);
@@ -178,6 +178,7 @@ public class BasisOpenVRManagement
         BasisOpenVRInput BasisOpenVRInput = gameObject.AddComponent<BasisOpenVRInput>();
         BasisOpenVRInput.Initialize(device, UniqueID, UnUniqueID);
         TrackedOpenVRInputDevices.Add(BasisOpenVRInput);
+        BasisDeviceManagement.Instance.AllInputDevices.Add(BasisOpenVRInput);
     }
     public void DestroyPhysicalTrackedDevice(string ID)
     {
@@ -203,10 +204,19 @@ public class BasisOpenVRManagement
             BasisOpenVRInput device = TrackedOpenVRInputDevices[Index];
             if (device.UniqueID == ID)
             {
+                TrackedOpenVRInputDevices.Remove(device);
                 // I think they already should be destroyed, IDK. Doing this seems to work fine.
                 Object.Destroy(device.gameObject);
-                TrackedOpenVRInputDevices.Remove(device);
                 break;
+            }
+        }
+        List<BasisInput> Duplicate = new List<BasisInput>();
+        Duplicate.AddRange(BasisDeviceManagement.Instance.AllInputDevices);
+        foreach (var device in Duplicate)
+        {
+            if (device.UniqueID == ID)
+            {
+                BasisDeviceManagement.Instance.AllInputDevices.Remove(device);
             }
         }
     }
