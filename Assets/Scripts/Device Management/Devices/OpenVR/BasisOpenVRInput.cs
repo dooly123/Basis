@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Serialization;
 using Valve.VR;
 
 [DefaultExecutionOrder(15101)]
@@ -50,11 +52,12 @@ public class BasisOpenVRInput : BasisInput
             {
                 if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                 {
-                    Control.LocalRawPosition = LocalRawPosition;
+                    Vector3 pivotOffset = LocalRawRotation * base.pivotOffset;
+                    Control.LocalRawPosition = LocalRawPosition - pivotOffset;
                 }
                 if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                 {
-                    Control.LocalRawRotation = LocalRawRotation;
+                    Control.LocalRawRotation = LocalRawRotation * Quaternion.Euler(base.rotationOffset);
                 }
             }
 

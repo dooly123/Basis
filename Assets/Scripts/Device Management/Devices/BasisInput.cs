@@ -11,6 +11,8 @@ public abstract class BasisInput : MonoBehaviour
     public string UniqueID;
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
+    public Vector3 pivotOffset;
+    public Vector3 rotationOffset;
 
     public string UnUniqueDeviceID;
     public BasisVisualTracker BasisVisualTracker;
@@ -66,6 +68,12 @@ public abstract class BasisInput : MonoBehaviour
             return;
         }
         ApplyRole();
+        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedPivotOffset(unUniqueDeviceID, out pivotOffset))
+        {
+        }
+        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedRotationOffset(unUniqueDeviceID, out rotationOffset))
+        {
+        }
         Driver.OnSimulate += PollData;
     }
     public void ApplyRole()
