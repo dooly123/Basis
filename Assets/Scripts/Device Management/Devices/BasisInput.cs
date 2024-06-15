@@ -90,9 +90,9 @@ public abstract class BasisInput : MonoBehaviour
                 }
                 else
                 {
-                    Control.CalibrationOffset.OffsetPosition = this.transform.position - Control.BoneTransform.position;
+                    Control.CalibrationOffset.OffsetPosition = transform.position - Control.BoneTransform.position;
                     // During calibration: setting the calibration offset
-                    Control.CalibrationOffset.OffsetRotation = this.transform.rotation * Quaternion.Inverse(Control.BoneTransform.rotation);
+                    Control.CalibrationOffset.OffsetRotation = Quaternion.Inverse(transform.localRotation * Control.BoneTransform.localRotation);
 
                     // Applying the calibration offset to the local raw rotation
                     //  LocalRawRotation = Control.CalibrationOffset.OffsetRotation * LocalRawRotation;
@@ -104,7 +104,6 @@ public abstract class BasisInput : MonoBehaviour
         }
         SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
     }
-
     public void DisableTracking()
     {
         if (Driver == null)

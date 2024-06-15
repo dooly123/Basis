@@ -154,8 +154,8 @@ public class BasisBoneControl
         {
             if (CalibrationOffset.Use)
             {
-                Quaternion adjustedRotation = CalibrationOffset.OffsetRotation * Quaternion.Inverse(LocalRawRotation);
-                LocalRawRotation = adjustedRotation;
+                Quaternion relativeRotation = CalibrationOffset.OffsetRotation * LocalRawRotation;
+                LocalRawRotation = relativeRotation;
             }
         }
     }
