@@ -34,9 +34,9 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public MicrophoneRecorder MicrophoneRecorder;
     public void LocalCalibration()
     {
-        InitalLocalCalibration(BasisLocalPlayer.Instance);
+        InitialLocalCalibration(BasisLocalPlayer.Instance);
     }
-    public void InitalLocalCalibration(BasisLocalPlayer Player)
+    public void InitialLocalCalibration(BasisLocalPlayer Player)
     {
         LocalPlayer = Player;
 

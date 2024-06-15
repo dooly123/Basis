@@ -80,7 +80,7 @@ public class BasisBoneControl
     public BasisCalibratedOffsetData RestingLocalSpace = new BasisCalibratedOffsetData();
 
     [SerializeField]
-    public BasisCalibratedOffsetData CalibrationOffset = new BasisCalibratedOffsetData();
+    public BasisCalibratedOffsetData initialOffset = new BasisCalibratedOffsetData();
     public Color Color { get => gizmoColor; set => gizmoColor = value; }
     public void Initialize()
     {
@@ -137,25 +137,19 @@ public class BasisBoneControl
                 RunRotationChange();
             }
         }
-        else
-        {
-            if (CalibrationOffset.Use)
-            {
-                LocalRawPosition -= CalibrationOffset.OffsetPosition;
-            }
-        }
 
         if (HasTrackerPositionDriver == BasisHasTracked.HasNoTracker)
         {
             ApplyTargetPosition(ref LocalRawPosition, PositionControl);
             ApplyLerpToVector(ref LocalRawPosition, PositionControl);
         }
-        else
+        if (HasTrackerRotationDriver == BasisHasTracked.HasTracker && HasTrackerPositionDriver == BasisHasTracked.HasTracker)
         {
-            if (CalibrationOffset.Use)
+            if (initialOffset.Use)
             {
-                Quaternion relativeRotation = CalibrationOffset.OffsetRotation * LocalRawRotation;
-                LocalRawRotation = relativeRotation;
+
+                LocalRawRotation = LocalRawRotation * initialOffset.OffsetRotation;
+                LocalRawPosition  = LocalRawPosition + LocalRawRotation * initialOffset.OffsetPosition;
             }
         }
     }

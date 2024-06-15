@@ -85,18 +85,25 @@ public abstract class BasisInput : MonoBehaviour
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
                 if (TrackedRole == BasisBoneTrackedRole.CenterEye || TrackedRole == BasisBoneTrackedRole.LeftHand || TrackedRole == BasisBoneTrackedRole.RightHand)
                 {
-                    Control.CalibrationOffset.Use = false;
+                    Control.initialOffset.Use = false;
                     Debug.Log("skipping calibration offset for " + TrackedRole);
                 }
                 else
                 {
-                    Control.CalibrationOffset.OffsetPosition = transform.position - Control.BoneTransform.position;
+
+                    // Calculate the initial offset in local space
+                    Vector3 relativePosition = transform.position - Control.BoneTransform.position;
+                    Control.initialOffset.OffsetPosition = Quaternion.Inverse(transform.rotation) * relativePosition;
+
+                    Control.initialOffset.OffsetRotation = Quaternion.Inverse(transform.rotation) * Control.BoneTransform.rotation;
+
+                    //   Control.initialOffset.OffsetPosition = transform.InverseTransformPoint(Control.BoneTransform.position);
                     // During calibration: setting the calibration offset
-                    Control.CalibrationOffset.OffsetRotation = Quaternion.Inverse(transform.localRotation * Control.BoneTransform.localRotation);
+                    //  Control.initialOffset.OffsetRotation = Quaternion.Inverse(transform.rotation) * Control.BoneTransform.rotation;
 
                     // Applying the calibration offset to the local raw rotation
                     //  LocalRawRotation = Control.CalibrationOffset.OffsetRotation * LocalRawRotation;
-                    Control.CalibrationOffset.Use = true;
+                    Control.initialOffset.Use = true;
                     Debug.Log("calibration set for " + TrackedRole);
                 }
                 // Do nothing if bone is found successfully
