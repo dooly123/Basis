@@ -91,9 +91,9 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public void CalculateOffsetsAndTpose()
     {
         PutAvatarIntoTpose();
-        CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
-        ComputeOffsets(LocalDriver);
-        Builder.Build();
+     //   CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
+     //   ComputeOffsets(LocalDriver);
+      //  Builder.Build();
         ResetAvatarAnimator();
         for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles.Length; Index++)
         {
