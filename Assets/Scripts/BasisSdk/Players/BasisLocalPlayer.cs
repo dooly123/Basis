@@ -41,7 +41,7 @@ public class BasisLocalPlayer : BasisPlayer
         if (Hips.HasBone && Avatar != null)
         {
             Quaternion rotation = Hips.BoneTransform.rotation;
-            Vector3 rotatedOffset = rotation * Hips.RestingLocalSpace.OffsetPosition;
+            Vector3 rotatedOffset = rotation * Hips.RestingLocalSpace.Position;
             rotatedOffset = Hips.BoneTransform.position - rotatedOffset;
 
             Avatar.Animator.transform.SetPositionAndRotation(rotatedOffset, rotation);

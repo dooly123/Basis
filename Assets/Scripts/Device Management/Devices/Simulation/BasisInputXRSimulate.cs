@@ -4,21 +4,24 @@ public class BasisInputXRSimulate : BasisInput
 {
     public override void PollData()
     {
-        this.transform.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
-        if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+        if (Control.HasBone)
         {
-            if (hasRoleAssigned)
+            this.transform.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
             {
-                Control.LocalRawPosition = LocalRawPosition;
+                if (hasRoleAssigned)
+                {
+                    Control.TrackerData.Position = LocalRawPosition;
+                }
             }
-        }
-        if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
-        {
-            if (hasRoleAssigned)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
             {
-                Control.LocalRawRotation = LocalRawRotation;
+                if (hasRoleAssigned)
+                {
+                    Control.TrackerData.Rotation = LocalRawRotation;
+                }
             }
+            UpdatePlayerControl();
         }
-        UpdatePlayerControl();
     }
 }

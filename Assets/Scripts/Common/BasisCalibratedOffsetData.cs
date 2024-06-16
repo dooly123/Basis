@@ -4,6 +4,6 @@
 public struct BasisCalibratedOffsetData
 {
     public bool Use;
-    public Quaternion OffsetRotation;
-    public Vector3 OffsetPosition;
+    public Quaternion Rotation;
+    public Vector3 Position;
 }

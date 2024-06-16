@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 using Random = UnityEngine.Random;
-
 public class BasisSimulateXR
 {
     public List<BasisInputXRSimulate> Inputs = new List<BasisInputXRSimulate>();
@@ -86,7 +84,7 @@ public class BasisSimulateXR
 
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
-      //  BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
+        //  BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers
         BasisDeviceManagement.ShowTrackers();
     }
@@ -127,7 +125,7 @@ public class BasisSimulateXR
         }
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
-       // BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
+        // BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers
         BasisDeviceManagement.ShowTrackers();
     }

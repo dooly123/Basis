@@ -6,12 +6,12 @@ public abstract class BasisInput : MonoBehaviour
     public BasisLocalBoneDriver Driver;
     private BasisBoneTrackedRole trackedRole;
     public bool hasRoleAssigned = false;
-    public BasisBoneControl Control;
+    public BasisBoneControl Control = new BasisBoneControl();
     public string UniqueID;
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
     public Vector3 pivotOffset;
-    public Vector3 rotationOffset;
+    public Quaternion rotationOffset;
 
     public string UnUniqueDeviceID;
     public BasisVisualTracker BasisVisualTracker;
@@ -67,11 +67,13 @@ public abstract class BasisInput : MonoBehaviour
             return;
         }
         ApplyRole();
-        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedPivotOffset(unUniqueDeviceID, out pivotOffset))
+        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedPivotAndRotationOffset(unUniqueDeviceID, out Vector3 rotationOffsetvector, out pivotOffset))
         {
+            rotationOffset = Quaternion.Euler(rotationOffsetvector);
         }
-        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedRotationOffset(unUniqueDeviceID, out rotationOffset))
+        else
         {
+            rotationOffset = Quaternion.identity;
         }
         Driver.OnSimulate += PollData;
     }
@@ -89,17 +91,19 @@ public abstract class BasisInput : MonoBehaviour
                 }
                 else
                 {
-
-                    Vector3 relativePosition = Control.BoneTransform.position - transform.position;
-                    Control.InitialOffset.OffsetPosition = transform.rotation * relativePosition;
-                    Control.InitialOffset.OffsetRotation = Quaternion.Inverse(transform.rotation) * Control.BoneTransform.rotation;
+                    //this is the tracker
+                    //target is the following along
+                    Debug.Log(Control.BoneTransform.position - transform.position);
+                    Vector3 RelativePosition = Control.BoneTransform.position - transform.position;
+                    Control.InitialOffset.Position = Quaternion.Inverse(transform.localRotation) * RelativePosition;
+                    Control.InitialOffset.Rotation = Quaternion.Inverse(transform.localRotation) * Control.BoneTransform.localRotation;
                     Control.InitialOffset.Use = true;
                     Debug.Log("calibration set for " + TrackedRole);
                 }
                 // Do nothing if bone is found successfully
+                SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
             }
         }
-        SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
     }
     public void DisableTracking()
     {

@@ -34,23 +34,24 @@ public class BasisOpenXRInput : BasisInput
     {
         if (Device.isValid)
         {
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
-            {
-                if (hasRoleAssigned)
-                {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
-                    {
-                        Control.LocalRawPosition = LocalRawPosition;
-                    }
-                }
-            }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out LocalRawRotation))
             {
                 if (hasRoleAssigned)
                 {
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                     {
-                        Control.LocalRawRotation = LocalRawRotation;
+                        Control.TrackerData.Rotation = LocalRawRotation * rotationOffset;
+                    }
+                }
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
+            {
+                if (hasRoleAssigned)
+                {
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    {
+                        Vector3 LocalPivot = LocalRawRotation * pivotOffset;
+                        Control.TrackerData.Position = LocalRawPosition - LocalPivot;
                     }
                 }
             }

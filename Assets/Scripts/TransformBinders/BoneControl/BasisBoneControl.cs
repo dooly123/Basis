@@ -21,6 +21,7 @@ public class BasisBoneControl
         {
             if (hasTrackerPositionDriver != value)
             {
+                Debug.Log("Setting Tracker To hasTrackerPositionDriver " + value);
                 hasTrackerPositionDriver = value;
                 OnHasTrackerPositionDriverChanged?.Invoke(value);
             }
@@ -33,6 +34,7 @@ public class BasisBoneControl
         {
             if (hasTrackerRotationDriver != value)
             {
+                Debug.Log("Setting Tracker To hasTrackerRotationDriver " + value);
                 hasTrackerRotationDriver = value;
                 OnHasTrackerRotationDriverChanged?.Invoke(value);
             }
@@ -81,6 +83,9 @@ public class BasisBoneControl
 
     [SerializeField]
     public BasisCalibratedOffsetData InitialOffset = new BasisCalibratedOffsetData();
+
+    [SerializeField]
+    public BasisCalibratedOffsetData TrackerData = new BasisCalibratedOffsetData();
     public Color Color { get => gizmoColor; set => gizmoColor = value; }
     public void Initialize()
     {
@@ -147,9 +152,17 @@ public class BasisBoneControl
         {
             if (InitialOffset.Use)
             {
+                // Update the position of the secondary transform to maintain the initial offset
+                Vector3 worldPositionOffset = TrackerData.Position + TrackerData.Rotation * InitialOffset.Position;
+                LocalRawPosition = worldPositionOffset;
 
-                LocalRawRotation = LocalRawRotation * InitialOffset.OffsetRotation;
-                LocalRawPosition  = LocalRawPosition + LocalRawRotation * InitialOffset.OffsetPosition;
+                // Update the rotation of the secondary transform to maintain the initial offset
+                LocalRawRotation = TrackerData.Rotation * InitialOffset.Rotation;
+            }
+            else
+            {
+                LocalRawRotation = TrackerData.Rotation;
+                LocalRawPosition = TrackerData.Position;
             }
         }
     }
