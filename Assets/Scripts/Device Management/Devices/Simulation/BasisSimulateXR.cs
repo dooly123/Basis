@@ -86,7 +86,7 @@ public class BasisSimulateXR
 
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
-        BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
+      //  BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers
         BasisDeviceManagement.ShowTrackers();
     }
@@ -127,7 +127,7 @@ public class BasisSimulateXR
         }
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
-        BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
+       // BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers
         BasisDeviceManagement.ShowTrackers();
     }

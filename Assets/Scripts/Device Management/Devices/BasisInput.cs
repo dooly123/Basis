@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UIElements;
-
 public abstract class BasisInput : MonoBehaviour
 {
     public BasisLocalBoneDriver Driver;
@@ -237,9 +235,9 @@ public abstract class BasisInput : MonoBehaviour
     }
     public void HideTrackedVisual()
     {
-        if (BasisVisualTracker == null)
+        if (BasisVisualTracker != null)
         {
-            GameObject.Destroy(BasisVisualTracker);
+            GameObject.Destroy(BasisVisualTracker.gameObject);
         }
         if (LoadedDeviceRequest != null)
         {
