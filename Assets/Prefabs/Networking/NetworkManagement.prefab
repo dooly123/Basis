@@ -87,5 +87,6 @@ MonoBehaviour:
   Client: {fileID: 1950411994380251594}
   HasUnityClient: 0
   authenticationCode: Default
-  BasisOpusSettings: {fileID: 11400000, guid: 5ad599c7b6420494f84e3a3b71efbfa8, type: 2}
   ForceConnect: 1
+  Ip: localhost
+  Port: 4296

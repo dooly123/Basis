@@ -93,7 +93,7 @@ namespace DarkRift.Client.Unity
         /// </summary>
         public Dispatcher Dispatcher { get; private set; }
 
-        public EnetClientConnection enetConnnection;
+        public LiteNetLibClientConnection enetConnnection;
         public void Initialize()
         {
             ObjectCacheSettings = objectCacheSettings.ToClientObjectCacheSettings();
@@ -156,7 +156,7 @@ namespace DarkRift.Client.Unity
         /// <param name="callback">The callback to make when the connection attempt completes.</param>
         public void ConnectInBackground(IPAddress ip, int port, DarkRiftClient.ConnectCompleteHandler callback = null)
         {
-            enetConnnection = new EnetClientConnection(ip.ToString(), port);
+            enetConnnection = new LiteNetLibClientConnection(ip.ToString(), port);
             Client.ConnectInBackground(enetConnnection,
                 delegate (Exception e)
                 {
@@ -186,7 +186,7 @@ namespace DarkRift.Client.Unity
         /// </summary>
         /// <param name="message">The message template to send.</param>
         /// <returns>Whether the send was successful.</returns>
-        public bool SendMessage(Message message, SendMode sendMode)
+        public bool SendMessage(Message message, DeliveryMethod sendMode)
         {
             return Client.SendMessage(message, sendMode);
         }

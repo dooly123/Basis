@@ -12,7 +12,7 @@ public static class BasisNetworkAvatarCompressor
             BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
             using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
             {
-                BasisNetworkConnector.Instance.Client.SendMessage(msg, SendMode.Unreliable);
+                BasisNetworkConnector.Instance.Client.SendMessage(msg, DeliveryMethod.Unreliable);
             }
         }
     }
