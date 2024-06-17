@@ -7,21 +7,6 @@ namespace DarkRift.Client.Unity
 {
     public class BasisLowLevelClient : MonoBehaviour
     {
-        /// <summary>
-        ///     The IP address this client connects to.
-        /// </summary>
-        public IPAddress Address
-        {
-            get { return IPAddress.Parse(address); }
-            set { address = value.ToString(); }
-        }
-
-        [SerializeField]
-        [Tooltip("The address of the server to connect to.")]
-        public string address = IPAddress.Loopback.ToString();                 //Unity requires a serializable backing field so use string
-        [SerializeField]
-        [Tooltip("The port the server is listening on.")]
-        public ushort Port = 4296;
 
         [SerializeField]
         [Tooltip("Specifies that DarkRift should take care of multithreading and invoke all events from Unity's main thread.")]
@@ -93,7 +78,7 @@ namespace DarkRift.Client.Unity
         /// </summary>
         public Dispatcher Dispatcher { get; private set; }
 
-        public LiteNetLibClientConnection enetConnnection;
+        public LiteNetLibClientConnection LiteNetLibConnnection;
         public void Initialize()
         {
             ObjectCacheSettings = objectCacheSettings.ToClientObjectCacheSettings();
@@ -127,11 +112,11 @@ namespace DarkRift.Client.Unity
         /// </summary>
         public void ReceiveMessages()
         {
-            if (enetConnnection == null)
+            if (LiteNetLibConnnection == null)
             {
                 return;
             }
-            enetConnnection.PerformUpdate();
+            LiteNetLibConnnection.PerformUpdate();
             Dispatcher.ExecuteDispatcherTasks();
         }
         public void OnDestroy()
@@ -156,8 +141,8 @@ namespace DarkRift.Client.Unity
         /// <param name="callback">The callback to make when the connection attempt completes.</param>
         public void ConnectInBackground(IPAddress ip, int port, DarkRiftClient.ConnectCompleteHandler callback = null)
         {
-            enetConnnection = new LiteNetLibClientConnection(ip.ToString(), port);
-            Client.ConnectInBackground(enetConnnection,
+            LiteNetLibConnnection = new LiteNetLibClientConnection(ip.ToString(), port);
+            Client.ConnectInBackground(LiteNetLibConnnection,
                 delegate (Exception e)
                 {
                     if (callback != null)
@@ -285,10 +270,10 @@ namespace DarkRift.Client.Unity
                 Dispatcher.Dispose();
                 Dispatcher = null;
             }
-            if (enetConnnection != null)
+            if (LiteNetLibConnnection != null)
             {
-                enetConnnection.Dispose();
-                enetConnnection = null;
+                LiteNetLibConnnection.Dispose();
+                LiteNetLibConnnection = null;
             }
         }
     }
