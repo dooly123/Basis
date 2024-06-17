@@ -1404,7 +1404,7 @@ namespace SteamAudio
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null)
+            if (mesh != null && mesh.sharedMesh != null)
             {
                 return mesh.sharedMesh.vertexCount;
             }
@@ -1438,7 +1438,7 @@ namespace SteamAudio
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null)
+            if (mesh != null && mesh.sharedMesh != null && mesh.sharedMesh.triangles != null)
             {
                 return mesh.sharedMesh.triangles.Length / 3;
             }
@@ -1785,6 +1785,10 @@ namespace SteamAudio
 
             if (mesh != null)
             {
+                if (mesh.sharedMesh == null || mesh.sharedMesh.vertices == null)
+                {
+                    Debug.Log(gameObject.name, gameObject);
+                }
                 var vertexArray = mesh.sharedMesh.vertices;
                 for (var i = 0; i < vertexArray.Length; ++i)
                 {

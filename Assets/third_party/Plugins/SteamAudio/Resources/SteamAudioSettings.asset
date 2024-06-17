@@ -16,7 +16,7 @@ MonoBehaviour:
   perspectiveCorrection: 0
   perspectiveCorrectionFactor: 1
   hrtfVolumeGainDB: 0
-  hrtfNormalizationType: 0
+  hrtfNormalizationType: 1
   SOFAFiles: []
   defaultMaterial: {fileID: 11400000, guid: a086f686223eed942816c70be67841b0, type: 2}
   sceneType: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
   realTimeCPUCoresPercentage: 5
   realTimeIrradianceMinDistance: 1
   bakeConvolution: 1
-  bakeParametric: 0
+  bakeParametric: 1
   bakingRays: 16384
   bakingBounces: 16
   bakingDuration: 1

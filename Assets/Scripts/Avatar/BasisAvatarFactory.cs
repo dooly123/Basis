@@ -16,6 +16,10 @@ public static class BasisAvatarFactory
                     Player.Avatar = Avatar;
                     CreateLocal(Player);
                     Player.InitalizeIKCalibration(Player.AvatarDriver);
+                    if(BasisScene.Instance != null)
+                    {
+                        BasisScene.Instance.SpawnPlayer(Player);
+                    }
                 }
             }
         }

@@ -4,20 +4,28 @@ public class BasisScene : MonoBehaviour
 {
     public static BasisScene Instance;
     public Transform SpawnPoint;
-    public void OnEnable()
+    public void Awake()
     {
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
         }
-        Instance = this;
     }
-    public void SpawnPlayer(BasisPlayer Basis)
+    public void SpawnPlayer(BasisLocalPlayer Basis)
     {
+        Debug.Log("Spawning Player");
         RequestSpawnPoint(out Vector3 position, out Quaternion rotation);
         if (Basis != null)
         {
-            Basis.transform.SetPositionAndRotation(position, rotation);
+
+            if (Basis.Move != null)
+            {
+                Debug.Log("Teleporting");
+                Basis.Move.enabled = false;
+                Basis.transform.SetPositionAndRotation(position, rotation);
+                Basis.Move.transform.SetPositionAndRotation(position, rotation);
+                Basis.Move.enabled = true;
+            }
         }
     }
     public void RequestSpawnPoint(out Vector3 Position, out Quaternion Rotation)
