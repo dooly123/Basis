@@ -42,13 +42,13 @@ MonoBehaviour:
     - tundra_tracker
     PivotOffset: {x: 0, y: 0, z: 0}
     RotationOffset: {x: 0, y: 0, z: 0}
-  - DeviceID: oculus_quest_pro_controller_left
+  - DeviceID: oculus_controller_left
     MatchableDeviceIds:
-    - tundra_tracker
+    - oculus_quest_pro_controller_left
     PivotOffset: {x: 0.03, y: -0.05, z: 0.14}
     RotationOffset: {x: -25, y: -2, z: 51}
-  - DeviceID: oculus_quest_pro_controller_right
+  - DeviceID: oculus_controller
     MatchableDeviceIds:
-    - tundra_tracker
+    - oculus_quest_pro_controller_right
     PivotOffset: {x: -0.03, y: -0.05, z: 0.14}
     RotationOffset: {x: -25, y: 2, z: -51}
