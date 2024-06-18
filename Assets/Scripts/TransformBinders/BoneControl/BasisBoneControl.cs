@@ -186,6 +186,10 @@ public class BasisBoneControl
     }
     public void ApplyMovement()
     {
+        if (!HasBone)
+        {
+            return;
+        }
         LastBonePosition = LocalRawPosition;
         LastBoneRotation = LocalRawRotation;
         BoneTransform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
