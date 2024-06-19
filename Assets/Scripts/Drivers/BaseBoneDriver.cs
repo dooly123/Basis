@@ -159,16 +159,16 @@ public abstract class BaseBoneDriver : MonoBehaviour
         };
         Bone.PositionControl = Position;
     }
-    public static Vector3 ConvertToAvatarSpace(Animator animator, Vector3 WorldSpace, float AvatarHeightOffset, out Vector3 FloorPosition)
+    public static Vector3 ConvertToAvatarSpaceInital(Animator animator, Vector3 WorldSpace, float AvatarHeightOffset)// out Vector3 FloorPosition
     {
         if (BasisHelpers.TryGetFloor(animator, out Vector3 Bottom))
         {
-            FloorPosition = Bottom;
+            //FloorPosition = Bottom;
             return BasisHelpers.ConvertToLocalSpace(WorldSpace + new Vector3(0f, AvatarHeightOffset, 0f), Bottom);
         }
         else
         {
-            FloorPosition = Vector3.zero;
+            //FloorPosition = Vector3.zero;
             Debug.LogError("Missing Avatar");
             return Vector3.zero;
         }

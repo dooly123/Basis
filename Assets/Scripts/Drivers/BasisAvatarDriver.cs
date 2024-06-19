@@ -175,14 +175,14 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             BasisBoneControl Control = driver.Controls[Index];
             if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
             {
-                GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out Control.RestingWorldSpaceRotation, out Control.RestingWorldSpacePosition);
+                GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out Control.RestingWorldSpace.Rotation, out Control.RestingWorldSpace.Position);
                 SetInitalData(anim, Control, driver.trackedRoles[Index]);
             }
             else
             {
                 if (driver.trackedRoles[Index] == BasisBoneTrackedRole.Mouth)
                 {
-                    GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out Control.RestingWorldSpaceRotation, out Control.RestingWorldSpacePosition);
+                    GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out Control.RestingWorldSpace.Rotation, out Control.RestingWorldSpace.Position);
                     SetInitalData(anim, Control, driver.trackedRoles[Index]);
                 }
                 else
@@ -193,7 +193,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                     {
                         if (TryConvertToHumanoidRole(driver.trackedRoles[Index], out HumanBodyBones HumanBones))
                         {
-                            GetBoneRotAndPos(driver, anim, HumanBones, Bone.PositionPercentage, out Control.RestingWorldSpaceRotation, out Control.RestingWorldSpacePosition, out bool UsedFallback);
+                            GetBoneRotAndPos(driver, anim, HumanBones, Bone.PositionPercentage, out Control.RestingWorldSpace.Rotation, out Control.RestingWorldSpace.Position, out bool UsedFallback);
                             SetInitalData(anim, Control, driver.trackedRoles[Index]);
                         }
                     }
@@ -203,13 +203,13 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     }
     public void SetInitalData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
     {
-        bone.LocalRawPosition = BasisLocalBoneDriver.ConvertToAvatarSpace(animator, bone.RestingWorldSpacePosition, Player.Avatar.AvatarHeightOffset, out bone.WorldSpaceFloor);
-        bone.RestingLocalSpace.Position = bone.LocalRawPosition;
-        bone.RestingLocalSpace.Rotation = bone.LocalRawRotation;
+        bone.RawLocalData.Position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.RestingWorldSpace.Position, Player.Avatar.AvatarHeightOffset);//out Vector3 WorldSpaceFloor
+        bone.RestingLocalSpace.Position = bone.RawLocalData.Position;
+        bone.RestingLocalSpace.Rotation = bone.RawLocalData.Rotation;
         if (IsApartOfSpineVertical(Role))
         {
-            bone.LocalRawPosition = new Vector3(0, bone.LocalRawPosition.y, bone.LocalRawPosition.z);
-            bone.RestingLocalSpace.Position = bone.LocalRawPosition;
+            bone.RawLocalData.Position = new Vector3(0, bone.RawLocalData.Position.y, bone.RawLocalData.Position.z);
+            bone.RestingLocalSpace.Position = bone.RawLocalData.Position;
         }
     }
     public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisClampData clampData, int positionalLockValue, int rotationalLockValue, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis clampAxis = BasisClampAxis.x, bool CreateRotationalLock = true)

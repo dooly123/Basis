@@ -20,8 +20,14 @@ public class BasisXRManagement
     public void Initalize()
     {
         // Debug.Log("Begin Load of XR");
-        xRGeneralSettings = XRGeneralSettings.Instance;
-        xRManagerSettings = xRGeneralSettings.Manager;
+        if (XRGeneralSettings.Instance != null)
+        {
+            xRGeneralSettings = XRGeneralSettings.Instance;
+            if (xRGeneralSettings.Manager != null)
+            {
+                xRManagerSettings = xRGeneralSettings.Manager;
+            }
+        }
     }
     public void BeginLoad()
     {

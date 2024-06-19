@@ -2013,7 +2013,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &3112063735882119603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2107,6 +2107,7 @@ MonoBehaviour:
   IPDefault: localhost
   PortDefault: 4296
   PassWordDefault: Default
+  SelectedPort: 4296
 --- !u!1 &7439290089677458734
 GameObject:
   m_ObjectHideFlags: 0

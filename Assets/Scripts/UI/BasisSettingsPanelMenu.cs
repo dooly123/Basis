@@ -13,6 +13,7 @@ public class BasisSettingsPanelMenu : BasisUIBase
     public string IPDefault = "localhost";
     public ushort PortDefault = 4296;
     public string PassWordDefault = "Default";
+    public ushort SelectedPort = 4296;
     public void OnEnable()
     {
         IP.contentType = TMP_InputField.ContentType.Standard;
@@ -29,15 +30,24 @@ public class BasisSettingsPanelMenu : BasisUIBase
     }
     public void ConnectTOServer()
     {
-        if (ushort.TryParse(Port.text, out ushort SelectedPort))
+        if (Port != null)
         {
+            if (ushort.TryParse(Port.text, out SelectedPort))
+            {
 
+            }
+            else
+            {
+                Debug.LogError("Submitted Port was not parsable until type Ushort");
+            }
         }
-        else
+        if (Password != null)
         {
-            Debug.LogError("Submitted Port was not parsable until type Ushort");
+            NetworkConnector.authenticationCode = Password.text;
         }
-        NetworkConnector.authenticationCode = Password.text;
-        NetworkConnector.Connect(SelectedPort, IP.text);
+        if (IP != null)
+        {
+            NetworkConnector.Connect(SelectedPort, IP.text);
+        }
     }
 }
