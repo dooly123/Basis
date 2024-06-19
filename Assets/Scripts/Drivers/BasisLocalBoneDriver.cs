@@ -5,11 +5,11 @@ public class BasisLocalBoneDriver : BaseBoneDriver
     public bool IsFlip;
     public void Start()
     {
-        InputSystem.onAfterUpdate += ValidatorSimulate;
+        InputSystem.onAfterUpdate += Simulate;
     }
     public void OnDestroy()
     {
-        InputSystem.onAfterUpdate -= ValidatorSimulate;
+        InputSystem.onAfterUpdate -= Simulate;
     }
     public void Update()
     {
