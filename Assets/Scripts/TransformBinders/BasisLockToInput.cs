@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BasisLockToInput : MonoBehaviour
 {
@@ -14,8 +13,6 @@ public class BasisLockToInput : MonoBehaviour
     public void Initialize()
     {
         BasisDeviceManagement = BasisDeviceManagement.Instance;
-        BasisDeviceManagement.AllInputDevices.OnListChanged += FindRole;
-        InputSystem.onAfterUpdate += Simulation;
         if (BasisDeviceManagement.basisLockToInputs.Contains(this) == false)
         {
             BasisDeviceManagement.basisLockToInputs.Add(this);
@@ -28,30 +25,36 @@ public class BasisLockToInput : MonoBehaviour
     }
     public void FindRole()
     {
-        if (AttachedInput == null)
+        for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
         {
-            Debug.Log("Has no AttachedInput ");
-            foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+            BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
+            if (Input != null)
             {
                 if (Input.hasRoleAssigned)
                 {
-                    Debug.Log("Has Role hasRoleAssigned");
                     if (Input.TrackedRole == TrackedRole)
                     {
-                        Debug.Log("Has Role " + TrackedRole);
                         AttachedInput = Input;
+                        Debug.Log("Assigning " + AttachedInput.name);
                         AttachedInput.AfterControlApply += Simulation;
                         HasInput = true;
                         return;
                     }
                 }
             }
-            HasInput = false;
         }
+        HasInput = false;
     }
     public void OnDestroy()
     {
         HasInput = false;
+        if (AttachedInput != null)
+        {
+            AttachedInput.AfterControlApply -= Simulation;
+        }
+    }
+    public void OnDisable()
+    {
         if (AttachedInput != null)
         {
             AttachedInput.AfterControlApply -= Simulation;

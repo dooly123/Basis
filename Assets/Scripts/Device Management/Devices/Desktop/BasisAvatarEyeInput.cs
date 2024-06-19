@@ -20,13 +20,16 @@ public class BasisAvatarEyeInput : BasisInput
     public float FallBackHeight = 1.73f;
     public void Initalize()
     {
+        Debug.Log("Initalizing Avatar Eye");
         if (BasisLocalPlayer.Instance.AvatarDriver != null)
         {
             LocalRawPosition = new Vector3(0, BasisLocalPlayer.Instance.AvatarDriver.ActiveHeight, 0);
+            LocalRawRotation = Quaternion.identity;
         }
         else
         {
             LocalRawPosition = new Vector3(0, FallBackHeight, 0);
+            LocalRawRotation = Quaternion.identity;
         }
         TrackedRole = BasisBoneTrackedRole.CenterEye;
         ActivateTracking("Desktop Eye", "Desktop Eye");
@@ -132,5 +135,6 @@ public class BasisAvatarEyeInput : BasisInput
         {
             Control.TrackerData.Position = LocalRawPosition;
         }
+        UpdatePlayerControl();
     }
 }

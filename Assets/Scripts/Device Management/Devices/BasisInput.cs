@@ -208,7 +208,7 @@ public abstract class BasisInput : MonoBehaviour
                 break;
         }
         LastState = State;
-        AfterControlApply.Invoke();
+        AfterControlApply?.Invoke();
     }
     public async Task ShowTrackedVisual()
     {

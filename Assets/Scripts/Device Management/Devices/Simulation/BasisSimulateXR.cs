@@ -30,23 +30,42 @@ public class BasisSimulateXR
     }
     public void DestroyXRInput(string ID)
     {
+        // Create a list to hold devices to remove from Inputs
+        List<BasisInput> devicesToRemove = new List<BasisInput>();
+
+        // Iterate over the Inputs list and find devices to remove
         foreach (var device in Inputs)
         {
             if (device.UniqueID == ID)
             {
-                Inputs.Remove(device);
+                devicesToRemove.Add(device);
                 UnityEngine.Object.Destroy(device.gameObject);
-                break;
             }
         }
-        List<BasisInput> Duplicate = new List<BasisInput>();
-        Duplicate.AddRange(BasisDeviceManagement.Instance.AllInputDevices);
-        foreach (var device in Duplicate)
+
+        // Remove devices from Inputs list after iteration
+        foreach (var device in devicesToRemove)
+        {
+            Inputs.Remove((BasisInputXRSimulate)device);
+        }
+
+        // Create a list to hold devices to remove from AllInputDevices
+        List<BasisInput> allDevicesToRemove = new List<BasisInput>();
+
+        // Iterate over a copy of the AllInputDevices list to find devices to remove
+        List<BasisInput> duplicate = new List<BasisInput>(BasisDeviceManagement.Instance.AllInputDevices);
+        foreach (var device in duplicate)
         {
             if (device.UniqueID == ID)
             {
-                BasisDeviceManagement.Instance.AllInputDevices.Remove(device);
+                allDevicesToRemove.Add(device);
             }
+        }
+
+        // Remove devices from AllInputDevices list after iteration
+        foreach (var device in allDevicesToRemove)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.Remove(device);
         }
     }
 #if UNITY_EDITOR

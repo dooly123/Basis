@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Xml;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,7 +16,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
     [SerializeField]
-    public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
+    public List<BasisInput> AllInputDevices = new List<BasisInput>();
     [SerializeField]
     public BasisXRManagement BasisXRManagement = new BasisXRManagement();
     [SerializeField]
@@ -94,7 +92,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
                 break;
         }
     }
-        public void SwitchMode(BasisBootedMode newMode)
+    public void SwitchMode(BasisBootedMode newMode)
     {
         Debug.Log("killing off" + CurrentMode);
         if (newMode != BasisBootedMode.Desktop)
@@ -120,10 +118,20 @@ public partial class BasisDeviceManagement : MonoBehaviour
             case BasisBootedMode.Desktop:
                 UseFallBack();
                 break;
+            case BasisBootedMode.Exiting:
+                break;
             default:
                 Debug.LogError("This should not occur (default)");
                 UseFallBack();
                 break;
+        }
+        for (int Index = 0; Index < basisLockToInputs.Count; Index++)
+        {
+            BasisLockToInput Inputs = basisLockToInputs[Index];
+            if (Inputs != null)
+            {
+                Inputs.FindRole();
+            }
         }
     }
 
@@ -134,17 +142,20 @@ public partial class BasisDeviceManagement : MonoBehaviour
 
     public void UseFallBack()
     {
-        Debug.Log("Booting Desktop");
-        SetCameraRenderState(false);
-        CurrentMode = BasisBootedMode.Desktop;
-        GameObject gameObject = new GameObject("Desktop Eye");
-        if(BasisLocalPlayer.Instance != null)
+        if (BasisAvatarEyeInput == null)
         {
-            gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+            Debug.Log("Booting Desktop");
+            SetCameraRenderState(false);
+            CurrentMode = BasisBootedMode.Desktop;
+            GameObject gameObject = new GameObject("Desktop Eye");
+            if (BasisLocalPlayer.Instance != null)
+            {
+                gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+            }
+            BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
+            BasisAvatarEyeInput.Initalize();
+            Instance.AllInputDevices.Add(BasisAvatarEyeInput);
         }
-        BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
-        BasisAvatarEyeInput.Initalize();
-        Instance.AllInputDevices.Add(BasisAvatarEyeInput);
     }
 
     public void OnDestroy()
@@ -167,6 +178,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
             BasisOpenVRManagement.StopXRSDK();
             BasisOpenVRManagement = null;
         }
+        AllInputDevices.RemoveAll(item => item == null);
         BasisXRManagement.StopXR(IsExiting);
     }
 
@@ -176,8 +188,9 @@ public partial class BasisDeviceManagement : MonoBehaviour
         if (BasisAvatarEyeInput != null)
         {
             AllInputDevices.Remove(BasisAvatarEyeInput);
-            GameObject.Destroy(BasisAvatarEyeInput);
+            GameObject.Destroy(BasisAvatarEyeInput.gameObject);
         }
+        AllInputDevices.RemoveAll(item => item == null);
     }
 
     public static async Task<BasisPlayer> LoadGameobject(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
@@ -197,14 +210,20 @@ public partial class BasisDeviceManagement : MonoBehaviour
     {
         if (Instance != null)
         {
-            Instance.SwitchMode(BasisBootedMode.OpenVRLoader);
+            if (BasisBootedMode.OpenVRLoader != Instance.CurrentMode)
+            {
+                Instance.SwitchMode(BasisBootedMode.OpenVRLoader);
+            }
         }
     }
     public static void ForceSetDesktop()
     {
         if (Instance != null)
         {
-            Instance.SwitchMode(BasisBootedMode.Desktop);
+            if (BasisBootedMode.Desktop != Instance.CurrentMode)
+            {
+                Instance.SwitchMode(BasisBootedMode.Desktop);
+            }
         }
     }
     public static async void ShowTrackers()
