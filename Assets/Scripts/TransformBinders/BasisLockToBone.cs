@@ -1,5 +1,5 @@
 using UnityEngine;
-public class BasisLockToPositionBinder : MonoBehaviour
+public class BasisLockToBone : MonoBehaviour
 {
     public BasisLocalBoneDriver CharacterTransformDriver;
     public BasisBoneControl BoneControl;

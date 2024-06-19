@@ -6,9 +6,9 @@ using UnityEngine;
 public class BasisBoneControl
 {
     [SerializeField]
-    private Color gizmoColor = Color.blue;
-    [SerializeField]
     public string Name;
+    [SerializeField]
+    private Color gizmoColor = Color.blue;
     [SerializeField]
     public bool HasBone = false;
     [SerializeField]

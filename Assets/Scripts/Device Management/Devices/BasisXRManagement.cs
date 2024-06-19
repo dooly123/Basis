@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR.Management;
 
@@ -56,13 +54,20 @@ public class BasisXRManagement
         return BasisBootedMode.SuccessButUnknown;
     }
 
-    public void StopXR()
+    public void StopXR(bool IsExiting)
     {
         if (xRManagerSettings != null)
         {
             xRManagerSettings.StopSubsystems();
             xRManagerSettings.DeinitializeLoader();
         }
-        CheckForPass?.Invoke(BasisBootedMode.Desktop);
+        if (IsExiting)
+        {
+            CheckForPass?.Invoke(BasisBootedMode.Exiting);
+        }
+        else
+        {
+            CheckForPass?.Invoke(BasisBootedMode.Desktop);
+        }
     }
 }

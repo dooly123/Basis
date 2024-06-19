@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Xml;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-public class BasisDeviceManagement : MonoBehaviour
+public partial class BasisDeviceManagement : MonoBehaviour
 {
     public BasisBootedMode CurrentMode = BasisBootedMode.Desktop;
     public static BasisDeviceManagement Instance;
@@ -16,7 +18,7 @@ public class BasisDeviceManagement : MonoBehaviour
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
     [SerializeField]
-    public List<BasisInput> AllInputDevices = new List<BasisInput>();
+    public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
     [SerializeField]
     public BasisXRManagement BasisXRManagement = new BasisXRManagement();
     [SerializeField]
@@ -27,6 +29,8 @@ public class BasisDeviceManagement : MonoBehaviour
     public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
     [SerializeField]
     public BasisDeviceNameMatcher BasisDeviceNameMatcher;
+    [SerializeField]
+    public List<BasisLockToInput> basisLockToInputs = new List<BasisLockToInput>();
     // Define the delegate
     public delegate Task InitializationCompletedHandler();
 
@@ -82,13 +86,15 @@ public class BasisDeviceManagement : MonoBehaviour
             case BasisBootedMode.Desktop:
                 UseFallBack();
                 break;
+            case BasisBootedMode.Exiting:
+                break;
             default:
                 Debug.LogError("This should not occur (default)");
                 UseFallBack();
                 break;
         }
     }
-    public void SwitchMode(BasisBootedMode newMode)
+        public void SwitchMode(BasisBootedMode newMode)
     {
         Debug.Log("killing off" + CurrentMode);
         if (newMode != BasisBootedMode.Desktop)
@@ -130,18 +136,24 @@ public class BasisDeviceManagement : MonoBehaviour
     {
         Debug.Log("Booting Desktop");
         SetCameraRenderState(false);
-        BasisAvatarEyeInput = BasisHelpers.GetOrAddComponent<BasisAvatarEyeInput>(this.gameObject);
         CurrentMode = BasisBootedMode.Desktop;
+        GameObject gameObject = new GameObject("Desktop Eye");
+        if(BasisLocalPlayer.Instance != null)
+        {
+            gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+        }
+        BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
+        BasisAvatarEyeInput.Initalize();
+        Instance.AllInputDevices.Add(BasisAvatarEyeInput);
     }
 
     public void OnDestroy()
     {
-        ShutDownXR();
+        ShutDownXR(true);
         StopDesktop();
         BasisSimulateXR.StopXR();
     }
-
-    public void ShutDownXR()
+    public void ShutDownXR(bool IsExiting = false)
     {
         BasisSimulateXR.StopXR();
         OnBootModeStopped?.Invoke(CurrentMode); // Trigger the mode stop event
@@ -155,7 +167,7 @@ public class BasisDeviceManagement : MonoBehaviour
             BasisOpenVRManagement.StopXRSDK();
             BasisOpenVRManagement = null;
         }
-        BasisXRManagement.StopXR();
+        BasisXRManagement.StopXR(IsExiting);
     }
 
     public void StopDesktop()
@@ -163,6 +175,7 @@ public class BasisDeviceManagement : MonoBehaviour
         BasisSimulateXR.StopXR();
         if (BasisAvatarEyeInput != null)
         {
+            AllInputDevices.Remove(BasisAvatarEyeInput);
             GameObject.Destroy(BasisAvatarEyeInput);
         }
     }
@@ -228,5 +241,6 @@ public class BasisDeviceManagement : MonoBehaviour
     {
         ShowTrackers();
     }
+
 #endif
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using static BaseBoneDriver;
 public abstract class BasisInput : MonoBehaviour
 {
     public BasisLocalBoneDriver Driver;
@@ -16,6 +17,7 @@ public abstract class BasisInput : MonoBehaviour
     public string UnUniqueDeviceID;
     public BasisVisualTracker BasisVisualTracker;
     public AddressableGenericResource LoadedDeviceRequest;
+    public event SimulationHandler AfterControlApply;
     [SerializeField]
     public BasisInputState State = new BasisInputState();
     [SerializeField]
@@ -93,12 +95,10 @@ public abstract class BasisInput : MonoBehaviour
                 {
                     //this is the tracker
                     //target is the following along
-                    Debug.Log(Control.BoneTransform.position - transform.position);
                     Vector3 RelativePosition = Control.BoneTransform.position - transform.position;
                     Control.InitialOffset.Position = Quaternion.Inverse(transform.localRotation) * RelativePosition;
                     Control.InitialOffset.Rotation = Quaternion.Inverse(transform.localRotation) * Control.BoneTransform.localRotation;
                     Control.InitialOffset.Use = true;
-                    Debug.Log("calibration set for " + TrackedRole);
                 }
                 // Do nothing if bone is found successfully
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
@@ -208,6 +208,7 @@ public abstract class BasisInput : MonoBehaviour
                 break;
         }
         LastState = State;
+        AfterControlApply.Invoke();
     }
     public async Task ShowTrackedVisual()
     {
