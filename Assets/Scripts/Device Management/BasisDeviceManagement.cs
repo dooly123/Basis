@@ -9,7 +9,8 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 
 public partial class BasisDeviceManagement : MonoBehaviour
 {
-    public BasisBootedMode CurrentMode = BasisBootedMode.Desktop;
+    public BasisBootedMode CurrentMode = BasisBootedMode.None;
+    public BasisBootedMode DefaultMode = BasisBootedMode.Desktop;
     public static BasisDeviceManagement Instance;
     public BasisOpusSettings BasisOpusSettings;
 
@@ -47,10 +48,9 @@ public partial class BasisDeviceManagement : MonoBehaviour
         BasisOverrideRotations basisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
         basisXRHeadToBodyOverride.Initialize();
 
-        SwitchMode(CurrentMode);
+        SwitchMode(DefaultMode);
 
-        BasisXRManagement.CheckForPass += CheckForPass;
-        BasisXRManagement.Initalize();
+       BasisXRManagement.CheckForPass += CheckForPass;
 
         OnInitializationCompleted += RunAfterInitialized;
         await OnInitializationCompleted?.Invoke();
@@ -63,57 +63,19 @@ public partial class BasisDeviceManagement : MonoBehaviour
             await LoadGameobject("NetworkManagement", new InstantiationParameters());
         }
     }
-
-    private void CheckForPass(BasisBootedMode type)
-    {
-        Debug.Log("Loading " + type);
-        BasisSimulateXR.StartSimulation();
-
-        switch (type)
-        {
-            case BasisBootedMode.OpenVRLoader:
-                BasisOpenVRManagement ??= new BasisOpenVRManagement();
-                BasisOpenVRManagement.StartXRSDK();
-                SetCameraRenderState(true);
-
-                break;
-            case BasisBootedMode.OpenXRLoader:
-                BasisOpenXRManagement ??= new BasisOpenXRManagement();
-                BasisOpenXRManagement.StartXRSDK();
-                SetCameraRenderState(true);
-                break;
-            case BasisBootedMode.Desktop:
-                BasisDesktopManagement.BeginDesktop();
-                break;
-            case BasisBootedMode.Exiting:
-                break;
-            default:
-                Debug.LogError("This should not occur (default)");
-                BasisDesktopManagement.BeginDesktop();
-                break;
-        }
-    }
-    public void UpdateLocks()
-    {
-        foreach (var input in BasisLockToInputs)
-        {
-            if (input != null)
-            {
-                input.FindRole();
-            }
-        }
-    }
     public void SwitchMode(BasisBootedMode newMode)
     {
-        Debug.Log("killing off " + CurrentMode);
-
-        if (newMode != BasisBootedMode.Desktop)
+        if (CurrentMode != BasisBootedMode.None)
         {
-            BasisDesktopManagement.StopDesktop();
-        }
-        else
-        {
-            ShutDownXR();
+            Debug.Log("killing off " + CurrentMode);
+            if (newMode == BasisBootedMode.Desktop)
+            {
+                ShutDownXR();
+            }
+            else
+            {
+                BasisDesktopManagement.StopDesktop();
+            }
         }
 
         CurrentMode = newMode;
@@ -124,6 +86,8 @@ public partial class BasisDeviceManagement : MonoBehaviour
         switch (CurrentMode)
         {
             case BasisBootedMode.OpenVRLoader:
+                BasisXRManagement.BeginLoad();
+                break;
             case BasisBootedMode.OpenXRLoader:
                 BasisXRManagement.BeginLoad();
                 break;
@@ -156,20 +120,11 @@ public partial class BasisDeviceManagement : MonoBehaviour
         BasisSimulateXR.StopXR();
         OnBootModeStopped?.Invoke(CurrentMode);
 
-        if (BasisOpenXRManagement != null)
-        {
-            BasisOpenXRManagement.StopXR();
-            BasisOpenXRManagement = null;
-        }
+        BasisOpenXRManagement.StopXRSDK();
+        BasisOpenVRManagement.StopXRSDK();
 
-        if (BasisOpenVRManagement != null)
-        {
-            BasisOpenVRManagement.StopXRSDK();
-            BasisOpenVRManagement = null;
-        }
-
+         BasisXRManagement.StopXR(isExiting);
         AllInputDevices.RemoveAll(item => item == null);
-        BasisXRManagement.StopXR(isExiting);
     }
 
     public static async Task<BasisPlayer> LoadGameobject(string playerAddressableID, InstantiationParameters instantiationParameters)
@@ -244,6 +199,35 @@ public partial class BasisDeviceManagement : MonoBehaviour
         }
 
         AllInputDevices.RemoveAll(item => item == null);
+    }
+    private void CheckForPass(BasisBootedMode type)
+    {
+        Debug.Log("Loading " + type);
+        BasisSimulateXR.StartSimulation();
+
+        switch (type)
+        {
+            case BasisBootedMode.OpenVRLoader:
+                BasisOpenVRManagement ??= new BasisOpenVRManagement();
+                BasisOpenVRManagement.StartXRSDK();
+                SetCameraRenderState(true);
+
+                break;
+            case BasisBootedMode.OpenXRLoader:
+                BasisOpenXRManagement ??= new BasisOpenXRManagement();
+                BasisOpenXRManagement.StartXRSDK();
+                SetCameraRenderState(true);
+                break;
+            case BasisBootedMode.Desktop:
+                BasisDesktopManagement.BeginDesktop();
+                break;
+            case BasisBootedMode.Exiting:
+                break;
+            default:
+                Debug.LogError("This should not occur (default)");
+                BasisDesktopManagement.BeginDesktop();
+                break;
+        }
     }
 
 #if UNITY_EDITOR

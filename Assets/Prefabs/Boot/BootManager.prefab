@@ -45,10 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c8ed7e061aaf144a66f9fcfde75b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentMode: 2
-  BasisAvatarEyeInput: {fileID: 0}
+  CurrentMode: 5
   BasisOpusSettings: {fileID: 11400000, guid: 5ad599c7b6420494f84e3a3b71efbfa8, type: 2}
-  AllInputDevices: []
   BasisXRManagement:
     xRManagerSettings: {fileID: 0}
     xRGeneralSettings: {fileID: 0}
@@ -59,11 +57,11 @@ MonoBehaviour:
     SteamVR_BehaviourGameobject: {fileID: 0}
     SteamVR_Behaviour: {fileID: 0}
     SteamVR_Render: {fileID: 0}
-    TrackedOpenVRInputDevices: []
-  BasisOpenXRManagement:
-    TrackedOpenXRInputDevices: []
+  BasisDesktopManagement:
+    BasisAvatarEyeInput: {fileID: 0}
   BasisDeviceNameMatcher: {fileID: 11400000, guid: 9b8e3db83cb310c40afaa430d0071a18,
     type: 2}
+  BasisLockToInputs: []
   FireOffNetwork: 1
 --- !u!114 &6370897756145117596
 MonoBehaviour:

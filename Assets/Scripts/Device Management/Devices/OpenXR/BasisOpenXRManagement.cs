@@ -13,18 +13,15 @@ public class BasisOpenXRManagement
 
     public void StartXRSDK()
     {
+        Debug.Log("Starting BasisOpenXRManagement");
         InputDevices.deviceConnected += OnDeviceConnected;
         InputDevices.deviceDisconnected += OnDeviceDisconnected;
         UpdateDeviceList();
     }
 
-    public void StopXR()
+    public void StopXRSDK()
     {
-        if (XRGeneralSettings.Instance?.Manager?.isInitializationComplete == true)
-        {
-            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-        }
-
+        Debug.Log("Stopping BasisOpenXRManagement");
         List<string> Devices = TypicalDevices.Keys.ToList();
         foreach (string device in Devices)
         {

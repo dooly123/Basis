@@ -4,5 +4,6 @@
     OpenXRLoader,
     Desktop,
     SuccessButUnknown,
-    Exiting
+    Exiting,
+    None
 }

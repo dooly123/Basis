@@ -14,9 +14,9 @@ public class BasisXRManagement
     // Store the initial list of loaders
     [SerializeField]
     public List<XRLoader> initialLoaders = new List<XRLoader>();
-
-    public void Initalize()
+    public void BeginLoad()
     {
+        Debug.Log("Starting LoadXR");
         // Debug.Log("Begin Load of XR");
         if (XRGeneralSettings.Instance != null)
         {
@@ -26,10 +26,6 @@ public class BasisXRManagement
                 xRManagerSettings = xRGeneralSettings.Manager;
             }
         }
-    }
-    public void BeginLoad()
-    {
-        Debug.Log("Starting LoadXR");
         BasisDeviceManagement.Instance.StartCoroutine(LoadXR());
     }
 
@@ -58,8 +54,10 @@ public class BasisXRManagement
     {
         if (xRManagerSettings != null)
         {
-            xRManagerSettings.StopSubsystems();
-            xRManagerSettings.DeinitializeLoader();
+            if (xRManagerSettings.isInitializationComplete)
+            {
+                xRManagerSettings.DeinitializeLoader();
+            }
         }
         if (IsExiting)
         {
