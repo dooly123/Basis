@@ -39,35 +39,38 @@ public class BasisOpenVRInput : BasisInput
 
     public override void PollData()
     {
-        result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex(Device.deviceIndex, ref devicePose, ref deviceGamePose);
-
-        if (result == EVRCompositorError.None)
+        if (SteamVR.active)
         {
-            deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
-            LocalRawPosition = deviceTransform.pos;
-            LocalRawRotation = deviceTransform.rot;
-            if (hasRoleAssigned)
+            result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex(Device.deviceIndex, ref devicePose, ref deviceGamePose);
+
+            if (result == EVRCompositorError.None)
             {
-                if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
+                LocalRawPosition = deviceTransform.pos;
+                LocalRawRotation = deviceTransform.rot;
+                if (hasRoleAssigned)
                 {
-                    Vector3 LocalPivot = LocalRawRotation * pivotOffset;
-                    Control.TrackerData.Position = LocalRawPosition - LocalPivot;
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    {
+                        Vector3 LocalPivot = LocalRawRotation * pivotOffset;
+                        Control.TrackerData.Position = LocalRawPosition - LocalPivot;
+                    }
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                    {
+                        Control.TrackerData.Rotation = LocalRawRotation * rotationOffset;
+                    }
                 }
-                if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
-                {
-                    Control.TrackerData.Rotation = LocalRawRotation * rotationOffset;
-                }
-            }
 
-            State.primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
-            State.primaryButtonGetState = SteamVR_Actions._default.A_Button.GetState(inputSource);
-            State.secondaryButtonGetState = SteamVR_Actions._default.B_Button.GetState(inputSource);
-            UpdatePlayerControl();
+                State.primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
+                State.primaryButtonGetState = SteamVR_Actions._default.A_Button.GetState(inputSource);
+                State.secondaryButtonGetState = SteamVR_Actions._default.B_Button.GetState(inputSource);
+                UpdatePlayerControl();
+            }
+            else
+            {
+                Debug.LogError("Error getting device pose: " + result);
+            }
+            transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
         }
-        else
-        {
-            Debug.LogError("Error getting device pose: " + result);
-        }
-        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
     }
 }

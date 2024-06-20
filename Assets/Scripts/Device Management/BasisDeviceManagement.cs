@@ -118,13 +118,13 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public void ShutDownXR(bool isExiting = false)
     {
         BasisSimulateXR.StopXR();
-        OnBootModeStopped?.Invoke(CurrentMode);
-
         BasisOpenXRManagement.StopXRSDK();
         BasisOpenVRManagement.StopXRSDK();
 
          BasisXRManagement.StopXR(isExiting);
         AllInputDevices.RemoveAll(item => item == null);
+
+        OnBootModeStopped?.Invoke(CurrentMode);
     }
 
     public static async Task<BasisPlayer> LoadGameobject(string playerAddressableID, InstantiationParameters instantiationParameters)
