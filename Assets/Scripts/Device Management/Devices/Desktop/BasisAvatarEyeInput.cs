@@ -18,7 +18,7 @@ public class BasisAvatarEyeInput : BasisInput
     public float DelayedResponseForRotation = 0.6f;
     public bool isCursorLocked = true;
     public float FallBackHeight = 1.73f;
-    public void Initalize()
+    public void Initalize(string ID = "Desktop Eye")
     {
         Debug.Log("Initalizing Avatar Eye");
         if (BasisLocalPlayer.Instance.AvatarDriver != null)
@@ -32,7 +32,7 @@ public class BasisAvatarEyeInput : BasisInput
             LocalRawRotation = Quaternion.identity;
         }
         TrackedRole = BasisBoneTrackedRole.CenterEye;
-        ActivateTracking("Desktop Eye", "Desktop Eye");
+        ActivateTracking(ID, ID);
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
@@ -50,7 +50,7 @@ public class BasisAvatarEyeInput : BasisInput
         }
         AvatarDriver = BasisLocalPlayer.Instance.AvatarDriver;
         Camera = BasisLocalCameraDriver.Instance.Camera;
-        foreach (BasisLockToInput Input in BasisDeviceManagement.Instance.basisLockToInputs)
+        foreach (BasisLockToInput Input in BasisDeviceManagement.Instance.BasisLockToInputs)
         {
             Input.FindRole();
         }

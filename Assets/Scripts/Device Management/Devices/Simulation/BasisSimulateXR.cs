@@ -39,7 +39,6 @@ public class BasisSimulateXR
             if (device.UniqueID == ID)
             {
                 devicesToRemove.Add(device);
-                UnityEngine.Object.Destroy(device.gameObject);
             }
         }
 
@@ -65,7 +64,7 @@ public class BasisSimulateXR
         // Remove devices from AllInputDevices list after iteration
         foreach (var device in allDevicesToRemove)
         {
-            BasisDeviceManagement.Instance.AllInputDevices.Remove(device);
+            BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisSimulateXR), ID);
         }
     }
 #if UNITY_EDITOR

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using Valve.VR;
@@ -12,8 +13,6 @@ public class BasisOpenVRManagement
     public SteamVR_Behaviour SteamVR_Behaviour;
     public SteamVR_Render SteamVR_Render;
     public SteamVR SteamVR;
-
-    public List<BasisOpenVRInput> TrackedOpenVRInputDevices = new List<BasisOpenVRInput>();
     public Dictionary<string, OpenVRDevice> TypicalDevices = new Dictionary<string, OpenVRDevice>();
 
     public void StartXRSDK()
@@ -86,12 +85,16 @@ public class BasisOpenVRManagement
         if (deviceConnected)
         {
             var deviceIndex = GetDeviceIndex(fromSource);
-            foreach (var device in TrackedOpenVRInputDevices)
+            foreach (BasisInput device in BasisDeviceManagement.Instance.AllInputDevices)
             {
-                if (device.Device.deviceIndex == deviceIndex)
+                if (device.SubSystem == nameof(BasisOpenVRManagement))
                 {
-                    device.TrackedRole = fromSource == SteamVR_Input_Sources.LeftHand ? BasisBoneTrackedRole.LeftHand : BasisBoneTrackedRole.RightHand;
-                    device.inputSource = fromSource;
+                    BasisOpenVRInput BasisOpenVRInput = (BasisOpenVRInput)device;
+                    if (BasisOpenVRInput.Device.deviceIndex == deviceIndex)
+                    {
+                        BasisOpenVRInput.TrackedRole = fromSource == SteamVR_Input_Sources.LeftHand ? BasisBoneTrackedRole.LeftHand : BasisBoneTrackedRole.RightHand;
+                        BasisOpenVRInput.inputSource = fromSource;
+                    }
                 }
             }
         }
@@ -124,16 +127,11 @@ public class BasisOpenVRManagement
         {
             GameObject.Destroy(SteamVR_BehaviourGameobject);
         }
-
-        foreach (var device in TrackedOpenVRInputDevices)
+        List<string> Devices = TypicalDevices.Keys.ToList();
+        foreach (string device in Devices)
         {
-            if (device != null)
-            {
-                GameObject.Destroy(device.gameObject);
-            }
+            DestroyPhysicalTrackedDevice(device);
         }
-
-        TrackedOpenVRInputDevices.Clear();
         SteamVR_Behaviour = null;
         SteamVR_Render = null;
     }
@@ -162,40 +160,11 @@ public class BasisOpenVRManagement
 
         var basisOpenVRInput = gameObject.AddComponent<BasisOpenVRInput>();
         basisOpenVRInput.Initialize(device, uniqueID, unUniqueID);
-        TrackedOpenVRInputDevices.Add(basisOpenVRInput);
         BasisDeviceManagement.Instance.AllInputDevices.Add(basisOpenVRInput);
     }
-
     public void DestroyPhysicalTrackedDevice(string id)
     {
-        DestroyInputDevice(id);
-        DestroyOpenVRInput(id);
-        Debug.Log($"Destroying device: {id}");
-    }
-
-    private void DestroyInputDevice(string id)
-    {
         TypicalDevices.Remove(id);
-    }
-
-    private void DestroyOpenVRInput(string id)
-    {
-        var devicesToRemove = new List<BasisOpenVRInput>();
-
-        foreach (var device in TrackedOpenVRInputDevices)
-        {
-            if (device.UniqueID == id)
-            {
-                devicesToRemove.Add(device);
-                GameObject.Destroy(device.gameObject);
-            }
-        }
-
-        foreach (var device in devicesToRemove)
-        {
-            TrackedOpenVRInputDevices.Remove(device);
-        }
-
-        BasisDeviceManagement.Instance.AllInputDevices.RemoveAll(item => item == null);
+        BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisOpenVRManagement), id);
     }
 }

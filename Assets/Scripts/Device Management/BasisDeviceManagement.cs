@@ -11,31 +11,25 @@ public partial class BasisDeviceManagement : MonoBehaviour
 {
     public BasisBootedMode CurrentMode = BasisBootedMode.Desktop;
     public static BasisDeviceManagement Instance;
-    public BasisAvatarEyeInput BasisAvatarEyeInput;
     public BasisOpusSettings BasisOpusSettings;
+
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
-    [SerializeField]
-    public List<BasisInput> AllInputDevices = new List<BasisInput>();
-    [SerializeField]
-    public BasisXRManagement BasisXRManagement = new BasisXRManagement();
-    [SerializeField]
-    public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
-    [SerializeField]
-    public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
-    [SerializeField]
-    public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
-    [SerializeField]
-    public BasisDeviceNameMatcher BasisDeviceNameMatcher;
-    [SerializeField]
-    public List<BasisLockToInput> basisLockToInputs = new List<BasisLockToInput>();
-    // Define the delegate
-    public delegate Task InitializationCompletedHandler();
 
-    // Define the event based on the delegate
+    [SerializeField] public List<BasisInput> AllInputDevices = new List<BasisInput>();
+    [SerializeField] public BasisXRManagement BasisXRManagement = new BasisXRManagement();
+    [SerializeField] public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
+    [SerializeField] public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
+    [SerializeField] public BasisDesktopManagement BasisDesktopManagement = new BasisDesktopManagement();
+    [SerializeField] public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
+    [SerializeField] public BasisDeviceNameMatcher BasisDeviceNameMatcher;
+    [SerializeField] public List<BasisLockToInput> BasisLockToInputs = new List<BasisLockToInput>();
+
+    public delegate Task InitializationCompletedHandler();
     public event InitializationCompletedHandler OnInitializationCompleted;
 
     public bool FireOffNetwork = false;
+
     void Start()
     {
         if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -47,16 +41,21 @@ public partial class BasisDeviceManagement : MonoBehaviour
 
     public async void Initialize()
     {
-        InstantiationParameters Parameters = new InstantiationParameters();
-        await BasisPlayerFactory.CreateLocalPlayer(Parameters);
-        BasisOverrideRotations BasisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
-        BasisXRHeadToBodyOverride.Initialize();
+        InstantiationParameters parameters = new InstantiationParameters();
+        await BasisPlayerFactory.CreateLocalPlayer(parameters);
+
+        BasisOverrideRotations basisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
+        basisXRHeadToBodyOverride.Initialize();
+
         SwitchMode(CurrentMode);
+
         BasisXRManagement.CheckForPass += CheckForPass;
         BasisXRManagement.Initalize();
+
         OnInitializationCompleted += RunAfterInitialized;
         await OnInitializationCompleted?.Invoke();
     }
+
     public async Task RunAfterInitialized()
     {
         if (FireOffNetwork)
@@ -69,6 +68,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
     {
         Debug.Log("Loading " + type);
         BasisSimulateXR.StartSimulation();
+
         switch (type)
         {
             case BasisBootedMode.OpenVRLoader:
@@ -82,56 +82,55 @@ public partial class BasisDeviceManagement : MonoBehaviour
                 SetCameraRenderState(true);
                 break;
             case BasisBootedMode.Desktop:
-                UseFallBack();
+                BasisDesktopManagement.BeginDesktop();
                 break;
             case BasisBootedMode.Exiting:
                 break;
             default:
                 Debug.LogError("This should not occur (default)");
-                UseFallBack();
+                BasisDesktopManagement.BeginDesktop();
                 break;
         }
+
+        foreach (var input in BasisLockToInputs)
+        {
+            input?.FindRole();
+        }
     }
+
     public void SwitchMode(BasisBootedMode newMode)
     {
-        Debug.Log("killing off" + CurrentMode);
+        Debug.Log("killing off " + CurrentMode);
+
         if (newMode != BasisBootedMode.Desktop)
         {
-            StopDesktop();
+            BasisDesktopManagement.StopDesktop();
         }
         else
         {
             ShutDownXR();
         }
+
         CurrentMode = newMode;
-        OnBootModeChanged?.Invoke(CurrentMode); // Trigger the mode change event
+        OnBootModeChanged?.Invoke(CurrentMode);
 
         Debug.Log("Loading " + CurrentMode);
+
         switch (CurrentMode)
         {
             case BasisBootedMode.OpenVRLoader:
-                BasisXRManagement.BeginLoad();
-                break;
             case BasisBootedMode.OpenXRLoader:
                 BasisXRManagement.BeginLoad();
                 break;
             case BasisBootedMode.Desktop:
-                UseFallBack();
+                BasisDesktopManagement.BeginDesktop();
                 break;
             case BasisBootedMode.Exiting:
                 break;
             default:
                 Debug.LogError("This should not occur (default)");
-                UseFallBack();
+                BasisDesktopManagement.BeginDesktop();
                 break;
-        }
-        for (int Index = 0; Index < basisLockToInputs.Count; Index++)
-        {
-            BasisLockToInput Inputs = basisLockToInputs[Index];
-            if (Inputs != null)
-            {
-                Inputs.FindRole();
-            }
         }
     }
 
@@ -140,99 +139,72 @@ public partial class BasisDeviceManagement : MonoBehaviour
         BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = state;
     }
 
-    public void UseFallBack()
-    {
-        if (BasisAvatarEyeInput == null)
-        {
-            Debug.Log("Booting Desktop");
-            SetCameraRenderState(false);
-            CurrentMode = BasisBootedMode.Desktop;
-            GameObject gameObject = new GameObject("Desktop Eye");
-            if (BasisLocalPlayer.Instance != null)
-            {
-                gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
-            }
-            BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
-            BasisAvatarEyeInput.Initalize();
-            Instance.AllInputDevices.Add(BasisAvatarEyeInput);
-        }
-    }
-
-    public void OnDestroy()
+    void OnDestroy()
     {
         ShutDownXR(true);
-        StopDesktop();
+        BasisDesktopManagement.StopDesktop();
         BasisSimulateXR.StopXR();
     }
-    public void ShutDownXR(bool IsExiting = false)
+
+    public void ShutDownXR(bool isExiting = false)
     {
         BasisSimulateXR.StopXR();
-        OnBootModeStopped?.Invoke(CurrentMode); // Trigger the mode stop event
+        OnBootModeStopped?.Invoke(CurrentMode);
+
         if (BasisOpenXRManagement != null)
         {
             BasisOpenXRManagement.StopXR();
             BasisOpenXRManagement = null;
         }
+
         if (BasisOpenVRManagement != null)
         {
             BasisOpenVRManagement.StopXRSDK();
             BasisOpenVRManagement = null;
         }
+
         AllInputDevices.RemoveAll(item => item == null);
-        BasisXRManagement.StopXR(IsExiting);
+        BasisXRManagement.StopXR(isExiting);
     }
 
-    public void StopDesktop()
+    public static async Task<BasisPlayer> LoadGameobject(string playerAddressableID, InstantiationParameters instantiationParameters)
     {
-        BasisSimulateXR.StopXR();
-        if (BasisAvatarEyeInput != null)
-        {
-            AllInputDevices.Remove(BasisAvatarEyeInput);
-            GameObject.Destroy(BasisAvatarEyeInput.gameObject);
-        }
-        AllInputDevices.RemoveAll(item => item == null);
-    }
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(playerAddressableID, instantiationParameters);
+        var gameObjects = data.Item1;
 
-    public static async Task<BasisPlayer> LoadGameobject(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
-    {
-        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
-        List<GameObject> Gameobjects = data.Item1;
-        if (Gameobjects.Count != 0)
-        {
-        }
-        else
+        if (gameObjects.Count == 0)
         {
             Debug.LogError("Missing ");
         }
+
         return null;
     }
+
     public static void ForceLoadXR()
     {
-        if (Instance != null)
-        {
-            if (BasisBootedMode.OpenVRLoader != Instance.CurrentMode)
-            {
-                Instance.SwitchMode(BasisBootedMode.OpenVRLoader);
-            }
-        }
+        SwitchSetMode(BasisBootedMode.OpenVRLoader);
     }
+
     public static void ForceSetDesktop()
     {
-        if (Instance != null)
+        SwitchSetMode(BasisBootedMode.Desktop);
+    }
+    public static void SwitchSetMode(BasisBootedMode Mode)
+    {
+        if (Instance != null && Mode != Instance.CurrentMode)
         {
-            if (BasisBootedMode.Desktop != Instance.CurrentMode)
-            {
-                Instance.SwitchMode(BasisBootedMode.Desktop);
-            }
+            Instance.SwitchMode(Mode);
         }
     }
+
     public static async void ShowTrackers()
     {
         await ShowTrackersAsync();
     }
-    public async static Task ShowTrackersAsync()
+
+    public static async Task ShowTrackersAsync()
     {
-        var inputDevices = BasisDeviceManagement.Instance.AllInputDevices;
+        var inputDevices = Instance.AllInputDevices;
         var showTrackedVisualTasks = new List<Task>();
 
         foreach (var input in inputDevices)
@@ -242,24 +214,44 @@ public partial class BasisDeviceManagement : MonoBehaviour
 
         await Task.WhenAll(showTrackedVisualTasks);
     }
+
     public static void HideTrackers()
     {
-        foreach (var input in BasisDeviceManagement.Instance.AllInputDevices)
+        foreach (var input in Instance.AllInputDevices)
         {
             input.HideTrackedVisual();
         }
     }
+    public void RemoveDevicesFrom(string SubSystem, string id)
+    {
+
+        for (int Index = 0; Index < AllInputDevices.Count; Index++)
+        {
+            BasisInput device = AllInputDevices[Index];
+            if (device != null)
+            {
+                if (device.SubSystem == SubSystem && device.UniqueID == id)
+                {
+                    GameObject.Destroy(device.gameObject);
+                    AllInputDevices[Index] = null;
+                }
+            }
+        }
+
+        AllInputDevices.RemoveAll(item => item == null);
+    }
+
 #if UNITY_EDITOR
     [MenuItem("Basis/Hide Trackers")]
     public static void HideTrackersEditor()
     {
         HideTrackers();
     }
+
     [MenuItem("Basis/Show Trackers")]
     public static void ShowTrackersEditor()
     {
         ShowTrackers();
     }
-
 #endif
 }

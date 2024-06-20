@@ -13,9 +13,9 @@ public class BasisLockToInput : MonoBehaviour
     public void Initialize()
     {
         BasisDeviceManagement = BasisDeviceManagement.Instance;
-        if (BasisDeviceManagement.basisLockToInputs.Contains(this) == false)
+        if (BasisDeviceManagement.BasisLockToInputs.Contains(this) == false)
         {
-            BasisDeviceManagement.basisLockToInputs.Add(this);
+            BasisDeviceManagement.BasisLockToInputs.Add(this);
         }
         FindRole();
     }

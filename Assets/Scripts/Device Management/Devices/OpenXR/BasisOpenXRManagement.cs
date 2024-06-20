@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Management;
@@ -8,7 +9,6 @@ using UnityEngine.XR.Management;
 public class BasisOpenXRManagement
 {
     public List<InputDevice> inputDevices = new List<InputDevice>();
-    public List<BasisOpenXRInput> TrackedOpenXRInputDevices = new List<BasisOpenXRInput>();
     public Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
 
     public void StartXRSDK()
@@ -25,15 +25,11 @@ public class BasisOpenXRManagement
             XRGeneralSettings.Instance.Manager.DeinitializeLoader();
         }
 
-        foreach (var device in TrackedOpenXRInputDevices)
+        List<string> Devices = TypicalDevices.Keys.ToList();
+        foreach (string device in Devices)
         {
-            if (device != null)
-            {
-                GameObject.Destroy(device.gameObject);
-            }
+            DestroyPhysicalTrackedDevice(device);
         }
-        TrackedOpenXRInputDevices.Clear();
-
         InputDevices.deviceConnected -= OnDeviceConnected;
         InputDevices.deviceDisconnected -= OnDeviceDisconnected;
     }
@@ -99,40 +95,14 @@ public class BasisOpenXRManagement
             }
         };
         var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
+        basisXRInput.SubSystem = nameof(BasisOpenXRManagement);
         basisXRInput.Initialize(device, uniqueID, unUniqueID);
-        TrackedOpenXRInputDevices.Add(basisXRInput);
         BasisDeviceManagement.Instance.AllInputDevices.Add(basisXRInput);
     }
 
     public void DestroyPhysicalTrackedDevice(string id)
     {
-        DestroyInputDevice(id);
-        DestroyXRInput(id);
-    }
-
-    private void DestroyInputDevice(string id)
-    {
         TypicalDevices.Remove(id);
-    }
-
-    public void DestroyXRInput(string id)
-    {
-        var devicesToRemove = new List<BasisOpenXRInput>();
-
-        foreach (var device in TrackedOpenXRInputDevices)
-        {
-            if (device.UniqueID == id)
-            {
-                devicesToRemove.Add(device);
-                GameObject.Destroy(device.gameObject);
-            }
-        }
-
-        foreach (var device in devicesToRemove)
-        {
-            TrackedOpenXRInputDevices.Remove(device);
-        }
-
-        BasisDeviceManagement.Instance.AllInputDevices.RemoveAll(item => item == null);
+        BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisOpenXRManagement), id);
     }
 }

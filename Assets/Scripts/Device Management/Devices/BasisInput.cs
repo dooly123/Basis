@@ -4,6 +4,7 @@ using UnityEngine;
 using static BaseBoneDriver;
 public abstract class BasisInput : MonoBehaviour
 {
+    public string SubSystem;
     public BasisLocalBoneDriver Driver;
     private BasisBoneTrackedRole trackedRole;
     public bool hasRoleAssigned = false;
