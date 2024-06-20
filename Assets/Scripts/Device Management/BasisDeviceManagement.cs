@@ -16,7 +16,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
 
-    [SerializeField] public List<BasisInput> AllInputDevices = new List<BasisInput>();
+    [SerializeField] public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
     [SerializeField] public BasisXRManagement BasisXRManagement = new BasisXRManagement();
     [SerializeField] public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
     [SerializeField] public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
@@ -28,7 +28,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public delegate Task InitializationCompletedHandler();
     public event InitializationCompletedHandler OnInitializationCompleted;
 
-    public bool FireOffNetwork = false;
+    public bool FireOffNetwork = true;
 
     void Start()
     {
@@ -75,6 +75,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
                 BasisOpenVRManagement ??= new BasisOpenVRManagement();
                 BasisOpenVRManagement.StartXRSDK();
                 SetCameraRenderState(true);
+
                 break;
             case BasisBootedMode.OpenXRLoader:
                 BasisOpenXRManagement ??= new BasisOpenXRManagement();
@@ -91,13 +92,17 @@ public partial class BasisDeviceManagement : MonoBehaviour
                 BasisDesktopManagement.BeginDesktop();
                 break;
         }
-
+    }
+    public void UpdateLocks()
+    {
         foreach (var input in BasisLockToInputs)
         {
-            input?.FindRole();
+            if (input != null)
+            {
+                input.FindRole();
+            }
         }
     }
-
     public void SwitchMode(BasisBootedMode newMode)
     {
         Debug.Log("killing off " + CurrentMode);

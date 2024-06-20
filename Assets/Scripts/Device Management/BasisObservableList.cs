@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 public class BasisObservableList<T> : IList<T>
 {
     private List<T> _list = new List<T>();
@@ -60,6 +61,16 @@ public class BasisObservableList<T> : IList<T>
     {
         _list.RemoveAt(index);
         OnListChanged?.Invoke();
+    }
+
+    public int RemoveAll(Predicate<T> match)
+    {
+        int removedCount = _list.RemoveAll(match);
+        if (removedCount > 0)
+        {
+            OnListChanged?.Invoke();
+        }
+        return removedCount;
     }
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _list.GetEnumerator();

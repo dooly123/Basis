@@ -2,25 +2,20 @@ using UnityEngine;
 
 public class BasisLockToInput : MonoBehaviour
 {
-    public BasisDeviceManagement BasisDeviceManagement;
     public BasisBoneTrackedRole TrackedRole;
     public BasisInput AttachedInput = null;
     public bool HasInput;
-    public void Start()
+    public void Awake()
     {
         Initialize();
     }
     public void Initialize()
     {
-        BasisDeviceManagement = BasisDeviceManagement.Instance;
-        if (BasisDeviceManagement.BasisLockToInputs.Contains(this) == false)
+        if (BasisDeviceManagement.Instance.BasisLockToInputs.Contains(this) == false)
         {
-            BasisDeviceManagement.BasisLockToInputs.Add(this);
+            BasisDeviceManagement.Instance.BasisLockToInputs.Add(this);
         }
-        FindRole();
-    }
-    public void OnEnable()
-    {
+        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += FindRole;
         FindRole();
     }
     public void FindRole()
@@ -48,13 +43,6 @@ public class BasisLockToInput : MonoBehaviour
     public void OnDestroy()
     {
         HasInput = false;
-        if (AttachedInput != null)
-        {
-            AttachedInput.AfterControlApply -= Simulation;
-        }
-    }
-    public void OnDisable()
-    {
         if (AttachedInput != null)
         {
             AttachedInput.AfterControlApply -= Simulation;
