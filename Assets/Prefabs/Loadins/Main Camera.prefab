@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 4150865382649993091}
   - component: {fileID: 8350818596157214651}
   - component: {fileID: 3211173287841905640}
-  - component: {fileID: 224861169622214591}
   - component: {fileID: 6553872292370766684}
+  - component: {fileID: 5985133177976618905}
   m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -169,60 +169,6 @@ MonoBehaviour:
         z: 0
       radius: 0
   mProbeBatchesUsed: []
---- !u!114 &224861169622214591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5812972426740207491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f33ece6bd11b74cb67b60e35f82edc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterTransformDriver: {fileID: 0}
-  BoneControl:
-    Name: 
-    HasBone: 0
-    hasTrackerPositionDriver: 2
-    hasTrackerRotationDriver: 2
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    BoneTransform: {fileID: 0}
-    LocalRawPosition: {x: 0, y: 0, z: 0}
-    WorldSpaceFloor: {x: 0, y: 0, z: 0}
-    LocalRawRotation: {x: 0, y: 0, z: 0, w: 0}
-    RestingWorldSpacePosition: {x: 0, y: 0, z: 0}
-    RestingWorldSpaceRotation: {x: 0, y: 0, z: 0, w: 0}
-    LastBonePosition: {x: 0, y: 0, z: 0}
-    LastBoneRotation: {x: 0, y: 0, z: 0, w: 0}
-    RestingLocalSpace:
-      BeginningRotation: {x: 0, y: 0, z: 0, w: 0}
-      BeginningPosition: {x: 0, y: 0, z: 0}
-  Role: 0
-  hasCharacterTransformDriver: 0
-  HasBoneControl: 0
 --- !u!114 &6553872292370766684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,5 +186,22 @@ MonoBehaviour:
   Listener: {fileID: 4150865382649993091}
   CameraData: {fileID: 8350818596157214651}
   SteamAudioListener: {fileID: 3211173287841905640}
-  CamerasLockToPosition: {fileID: 224861169622214591}
+  CamerasLockToPosition: {fileID: 0}
   LocalPlayer: {fileID: 0}
+  DefaultCameraFov: 90
+--- !u!114 &5985133177976618905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5812972426740207491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73aa7d0db070dad4390b4d0dc83e98b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BasisDeviceManagement: {fileID: 0}
+  TrackedRole: 0
+  AttachedInput: {fileID: 0}
+  HasInput: 0

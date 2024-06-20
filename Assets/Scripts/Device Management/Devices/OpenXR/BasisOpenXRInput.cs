@@ -6,11 +6,12 @@ public class BasisOpenXRInput : BasisInput
 {
     public UnityEngine.XR.InputDevice Device;
 
-    public void Initialize(UnityEngine.XR.InputDevice device, string iD)
+
+    public void Initialize(UnityEngine.XR.InputDevice device, string UniqueID,string UnUniqueID)
     {
         Device = device;
         GetControllerOrHMD();
-        base.Initialize(iD);
+        ActivateTracking(UniqueID, UnUniqueID);
     }
 
     private void GetControllerOrHMD()
@@ -33,51 +34,52 @@ public class BasisOpenXRInput : BasisInput
     {
         if (Device.isValid)
         {
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
-            {
-                if (hasRoleAssigned)
-                {
-                    if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
-                    {
-                        Control.LocalRawPosition = LocalRawPosition;
-                    }
-                }
-            }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out LocalRawRotation))
             {
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                     {
-                        Control.LocalRawRotation = LocalRawRotation;
+                        Control.TrackerData.Rotation = LocalRawRotation * rotationOffset;
                     }
                 }
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out primary2DAxis))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
+            {
+                if (hasRoleAssigned)
+                {
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    {
+                        Vector3 LocalPivot = LocalRawRotation * pivotOffset;
+                        Control.TrackerData.Position = LocalRawPosition - LocalPivot;
+                    }
+                }
+            }
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out State.primary2DAxis))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxis, out secondary2DAxis))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxis, out State.secondary2DAxis))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out gripButton))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out State.gripButton))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out menuButton))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out State.menuButton))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out primaryButton))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out State.primaryButtonGetState))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out secondaryButton))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out State.secondaryButtonGetState))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out Trigger))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out State.Trigger))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxisClick, out secondary2DAxisClick))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxisClick, out State.secondary2DAxisClick))
             {
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out primary2DAxisClick))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out State.primary2DAxisClick))
             {
             }
 

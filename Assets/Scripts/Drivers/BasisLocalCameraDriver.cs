@@ -1,5 +1,4 @@
 using SteamAudio;
-using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -12,7 +11,6 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public AudioListener Listener;
     public UniversalAdditionalCameraData CameraData;
     public SteamAudioListener SteamAudioListener;
-    public BasisLockToPositionBinder CamerasLockToPosition;
     public BasisLocalPlayer LocalPlayer;
     public int DefaultCameraFov = 90;
     public void OnEnable()
@@ -25,12 +23,6 @@ public class BasisLocalCameraDriver : MonoBehaviour
         Camera.nearClipPlane = 0.01f;
         Camera.farClipPlane = 1500;
         CameraInstanceID = Camera.GetInstanceID();
-        CamerasLockToPosition.CharacterTransformDriver = LocalPlayer.LocalBoneDriver;
-        if (CamerasLockToPosition.CharacterTransformDriver == null)
-        {
-            Debug.LogError("missing Character Tranform Driver");
-        }
-        CamerasLockToPosition.Initialize(LocalPlayer);
         RenderPipelineManager.beginCameraRendering += beginCameraRendering;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
     }

@@ -71,9 +71,6 @@ MonoBehaviour:
     type: 2}
   SkinnedMeshRenderer: []
   Player: {fileID: 3578141255088103770}
-  AdditionalTransforms: []
-  Rigs: []
-  Builder: {fileID: 0}
   RemotePlayer: {fileID: 3578141255088103770}
 --- !u!114 &3578141255088103770
 MonoBehaviour:
@@ -97,6 +94,7 @@ MonoBehaviour:
     HasBone: 0
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
+    hasRigLayer: 1
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -128,8 +126,17 @@ MonoBehaviour:
     LastBonePosition: {x: 0, y: 0, z: 0}
     LastBoneRotation: {x: 0, y: 0, z: 0, w: 0}
     RestingLocalSpace:
-      BeginningRotation: {x: 0, y: 0, z: 0, w: 0}
-      BeginningPosition: {x: 0, y: 0, z: 0}
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    InitialOffset:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    TrackerData:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
 --- !u!114 &7026422538752026465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,7 +322,7 @@ MonoBehaviour:
   dipoleWeight: 0.25
   dipolePower: 4
   directivityValue: 1
-  occlusion: 1
+  occlusion: 0
   occlusionInput: 0
   occlusionType: 1
   occlusionRadius: 1
@@ -423,6 +430,7 @@ MonoBehaviour:
     HasBone: 0
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
+    hasRigLayer: 1
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -454,7 +462,16 @@ MonoBehaviour:
     LastBonePosition: {x: 0, y: 0, z: 0}
     LastBoneRotation: {x: 0, y: 0, z: 0, w: 0}
     RestingLocalSpace:
-      BeginningRotation: {x: 0, y: 0, z: 0, w: 0}
-      BeginningPosition: {x: 0, y: 0, z: 0}
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    InitialOffset:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    TrackerData:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
   RemotePlayer: {fileID: 3578141255088103770}
   HeadAvatar: {fileID: 0}

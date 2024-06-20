@@ -24,11 +24,11 @@ public class BasisFootPlacementDriver : MonoBehaviour
         LeftFootSolver.Driver = this;
         RightFootSolver.Driver = this;
 
-        LeftFootSolver.Foot.HasTrackerPositionDriver =  BasisBoneControl.BasisHasTracked.HasNoTracker;
-        LeftFootSolver.Foot.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
+        LeftFootSolver.Foot.HasTrackerPositionDriver =  BasisHasTracked.HasNoTracker;
+        LeftFootSolver.Foot.HasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
 
-        RightFootSolver.Foot.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-        RightFootSolver.Foot.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
+        RightFootSolver.Foot.HasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
+        RightFootSolver.Foot.HasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
 
         LeftFootSolver.MyIkConstraint = Localplayer.AvatarDriver.LeftFootTwoBoneIK;
         RightFootSolver.MyIkConstraint = Localplayer.AvatarDriver.RightFootTwoBoneIK;
@@ -82,12 +82,12 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
         private void SimulateTopPoint()
         {
-            _topPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + Foot.RestingLocalSpace.BeginningPosition + Offset);
+            _topPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + Foot.RestingLocalSpace.Position + Offset);
         }
 
         private void SimulateBottomPoint()
         {
-            _bottomPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + new Vector3(Foot.RestingLocalSpace.BeginningPosition.x, -Driver.Hips.RestingLocalSpace.BeginningPosition.y, Foot.RestingLocalSpace.BeginningPosition.z) + Offset);
+            _bottomPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + new Vector3(Foot.RestingLocalSpace.Position.x, -Driver.Hips.RestingLocalSpace.Position.y, Foot.RestingLocalSpace.Position.z) + Offset);
         }
 
         public void Gizmo()

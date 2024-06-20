@@ -21,7 +21,8 @@ public static class BasisPlayerFactory
     }
     public static async Task<BasisPlayer> CreatePlayer(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)

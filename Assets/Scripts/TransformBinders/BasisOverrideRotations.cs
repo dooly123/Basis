@@ -22,27 +22,27 @@ public class BasisOverrideRotations : MonoBehaviour
     {
         float DeltaTime = Time.deltaTime;
 
-        roty = Head.LocalRawRotation.eulerAngles.y;
+        roty = Head.RawLocalData.Rotation.eulerAngles.y;
         Quaternion coreRotation = Quaternion.Euler(0, roty, 0);
 
-        if (AngleCheck(coreRotation, Hips.LocalRawRotation, RangeOfMotionBeforeTurn))
+        if (AngleCheck(coreRotation, Hips.RawLocalData.Rotation, RangeOfMotionBeforeTurn))
         {
             // Slerp rotation for hips and upper body
-            if (Hips.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (Hips.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                Hips.LocalRawRotation = SlerpYRotation(Hips.LocalRawRotation, coreRotation, DelayedHips * DeltaTime);
+                Hips.RawLocalData.Rotation = SlerpYRotation(Hips.RawLocalData.Rotation, coreRotation, DelayedHips * DeltaTime);
             }
-            if (UpperChest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (UpperChest.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                UpperChest.LocalRawRotation = SlerpYRotation(UpperChest.LocalRawRotation, coreRotation, DelayedUpperChest * DeltaTime);
+                UpperChest.RawLocalData.Rotation = SlerpYRotation(UpperChest.RawLocalData.Rotation, coreRotation, DelayedUpperChest * DeltaTime);
             }
-            if (Chest.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (Chest.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                Chest.LocalRawRotation = SlerpYRotation(Chest.LocalRawRotation, coreRotation, DelayedChest * DeltaTime);
+                Chest.RawLocalData.Rotation = SlerpYRotation(Chest.RawLocalData.Rotation, coreRotation, DelayedChest * DeltaTime);
             }
-            if (Spine.HasTrackerRotationDriver == BasisBoneControl.BasisHasTracked.HasNoTracker)
+            if (Spine.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                Spine.LocalRawRotation = SlerpYRotation(Spine.LocalRawRotation, coreRotation, DelayedSpine * DeltaTime);
+                Spine.RawLocalData.Rotation = SlerpYRotation(Spine.RawLocalData.Rotation, coreRotation, DelayedSpine * DeltaTime);
             }
         }
     }
@@ -65,23 +65,23 @@ public class BasisOverrideRotations : MonoBehaviour
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver.FindBone(out Head, BasisBoneTrackedRole.Head))
         {
-            Head.HasRigLayer =  BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Head.HasRigLayer =  BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Hips, BasisBoneTrackedRole.Hips))
         {
-            Hips.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Hips.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out UpperChest, BasisBoneTrackedRole.UpperChest))
         {
-            UpperChest.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            UpperChest.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Chest, BasisBoneTrackedRole.Chest))
         {
-            Chest.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Chest.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Spine, BasisBoneTrackedRole.Spine))
         {
-            Spine.HasRigLayer = BasisBoneControl.BasisHasRigLayer.HasRigLayer;
+            Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
     }
 

@@ -38,11 +38,13 @@ public class BasisCharacterController : MonoBehaviour
     public void OnEnable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged += Initialize;
+        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
         Initialize();
     }
     public void OnDisable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged -= Initialize;
+        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead -= Simulate;
     }
     public void Initialize()
     {
@@ -51,7 +53,6 @@ public class BasisCharacterController : MonoBehaviour
         BasisLocalPlayer.Instance.Move = this;
         HasEye = driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye);
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
-        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
     }
     public void Simulate()
     {
@@ -166,7 +167,7 @@ public class BasisCharacterController : MonoBehaviour
     {
         if (HasEye)
         {
-            eyeHeight = Eye.LocalRawPosition.y;
+            eyeHeight = Eye.RawLocalData.Position.y;
         }
         else
         {
@@ -187,7 +188,7 @@ public class BasisCharacterController : MonoBehaviour
         // Adjust the center to keep the character on the ground correctly
         if (HasHead)
         {
-            characterController.center = new Vector3(Head.LocalRawPosition.x, SkinModifiedHeight, Head.LocalRawPosition.z);
+            characterController.center = new Vector3(Head.RawLocalData.Position.x, SkinModifiedHeight, Head.RawLocalData.Position.z);
         }
         else
         {

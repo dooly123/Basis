@@ -8,8 +8,8 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
         FindBone(out Head, BasisBoneTrackedRole.Head);
         if (Head != null)
         {
-            Head.HasTrackerPositionDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
-            Head.HasTrackerRotationDriver = BasisBoneControl.BasisHasTracked.HasNoTracker;
+            Head.HasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
+            Head.HasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
         }
 
     }
@@ -24,8 +24,8 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
     {
         if (HeadAvatar != null)
         {
-            Head.LocalRawPosition = HeadAvatar.position - RemotePlayer.RemoteDriver.transform.position;
-            Head.LocalRawRotation = HeadAvatar.rotation;
+            Head.RawLocalData.Position = HeadAvatar.position - RemotePlayer.RemoteDriver.transform.position;
+            Head.RawLocalData.Rotation = HeadAvatar.rotation;
         }
     }
     public BasisRemotePlayer RemotePlayer;

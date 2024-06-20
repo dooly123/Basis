@@ -4,7 +4,7 @@ public abstract class BasisPlayer : MonoBehaviour
     public bool IsLocal { get; set; }
     public BasisAvatar Avatar;
     public bool HasAvatarDriver;
-    public static string FallBackAvatar = "LoadingAvatar";
+    public const string FallBackAvatar = "LoadingAvatar";
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)
     {
         if (LocalAvatarDriver != null)

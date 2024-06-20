@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 [System.Serializable]
-public partial struct BasisRotationalControl
+public struct BasisRotationalControl
 {
     public BasisAxisLerp Lerp;
     public float LerpAmountNormal;

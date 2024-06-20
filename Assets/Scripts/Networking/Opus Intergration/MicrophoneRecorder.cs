@@ -3,35 +3,45 @@ using System;
 
 public class MicrophoneRecorder : MonoBehaviour
 {
-    public event Action<float[]> OnHasAudio;
+    public event Action OnHasAudio;
     public event Action OnHasSilence; // Event triggered when silence is detected
     public AudioClip clip;
     public int head = 0;
     public float[] processBuffer;
+    public int ProcessBufferLength;
     public float[] microphoneBuffer;
     public string MicrophoneDevice = null;
     public float silenceThreshold = 0.001f; // RMS threshold for detecting silence
     public BasisOpusSettings BasisOpusSettings;
     public int samplingFrequency;
-    private float[] rmsValues;
-    private int rmsIndex = 0;
-    private int rmsWindowSize = 10; // Size of the moving average window
+    public float[] rmsValues;
+    public int rmsIndex = 0;
+    public int rmsWindowSize = 10; // Size of the moving average window
+
+    private int bufferLength;
+    private int dataLength;
+    private int position;
+    private int remain;
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
         processBuffer = BasisOpusSettings.CalculateProcessBuffer();
+        ProcessBufferLength = processBuffer.Length;
         samplingFrequency = BasisOpusSettings.GetSampleFreq();
         microphoneBuffer = new float[BasisOpusSettings.RecordingFullLength * samplingFrequency];
         clip = Microphone.Start(MicrophoneDevice, true, BasisOpusSettings.RecordingFullLength, samplingFrequency);
         rmsValues = new float[rmsWindowSize];
+        bufferLength = microphoneBuffer.Length;
     }
+
     public void DeInitialize()
     {
         Microphone.End(MicrophoneDevice);
     }
+
     void Update()
     {
-        int position = Microphone.GetPosition(MicrophoneDevice);
+        position = Microphone.GetPosition(MicrophoneDevice);
         if (position < 0 || head == position)
         {
             return;
@@ -39,17 +49,18 @@ public class MicrophoneRecorder : MonoBehaviour
 
         clip.GetData(microphoneBuffer, 0);
 
-        while (GetDataLength(microphoneBuffer.Length, head, position) > processBuffer.Length)
+        dataLength = GetDataLength(bufferLength, head, position);
+        while (dataLength > ProcessBufferLength)
         {
-            int remain = microphoneBuffer.Length - head;
-            if (remain < processBuffer.Length)
+            remain = bufferLength - head;
+            if (remain < ProcessBufferLength)
             {
                 Array.Copy(microphoneBuffer, head, processBuffer, 0, remain);
-                Array.Copy(microphoneBuffer, 0, processBuffer, remain, processBuffer.Length - remain);
+                Array.Copy(microphoneBuffer, 0, processBuffer, remain, ProcessBufferLength - remain);
             }
             else
             {
-                Array.Copy(microphoneBuffer, head, processBuffer, 0, processBuffer.Length);
+                Array.Copy(microphoneBuffer, head, processBuffer, 0, ProcessBufferLength);
             }
 
             float rms = GetRMS();
@@ -62,23 +73,20 @@ public class MicrophoneRecorder : MonoBehaviour
             }
             else
             {
-                OnHasAudio?.Invoke(processBuffer);
+                OnHasAudio?.Invoke();
             }
 
-            head += processBuffer.Length;
-            if (head >= microphoneBuffer.Length)
-            {
-                head -= microphoneBuffer.Length;
-            }
+            head = (head + ProcessBufferLength) % bufferLength;
+            dataLength -= ProcessBufferLength;
         }
     }
 
     public float GetRMS()
     {
         float sum = 0.0f;
-        foreach (var sample in processBuffer)
+        for (int i = 0; i < processBuffer.Length; i++)
         {
-            sum += sample * sample;
+            sum += processBuffer[i] * processBuffer[i];
         }
         return Mathf.Sqrt(sum / processBuffer.Length);
     }
@@ -92,21 +100,15 @@ public class MicrophoneRecorder : MonoBehaviour
     private float GetAverageRMS()
     {
         float sum = 0.0f;
-        foreach (var value in rmsValues)
+        for (int i = 0; i < rmsValues.Length; i++)
         {
-            sum += value;
+            sum += rmsValues[i];
         }
         return sum / rmsWindowSize;
     }
+
     static int GetDataLength(int bufferLength, int head, int tail)
     {
-        if (head < tail)
-        {
-            return tail - head;
-        }
-        else
-        {
-            return bufferLength - head + tail;
-        }
+        return head <= tail ? tail - head : bufferLength - head + tail;
     }
 }

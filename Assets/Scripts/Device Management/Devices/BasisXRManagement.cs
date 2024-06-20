@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Management;
 
@@ -15,16 +14,18 @@ public class BasisXRManagement
     // Store the initial list of loaders
     [SerializeField]
     public List<XRLoader> initialLoaders = new List<XRLoader>();
-
-    public void Initalize()
-    {
-        // Debug.Log("Begin Load of XR");
-        xRGeneralSettings = XRGeneralSettings.Instance;
-        xRManagerSettings = xRGeneralSettings.Manager;
-    }
     public void BeginLoad()
     {
         Debug.Log("Starting LoadXR");
+        // Debug.Log("Begin Load of XR");
+        if (XRGeneralSettings.Instance != null)
+        {
+            xRGeneralSettings = XRGeneralSettings.Instance;
+            if (xRGeneralSettings.Manager != null)
+            {
+                xRManagerSettings = xRGeneralSettings.Manager;
+            }
+        }
         BasisDeviceManagement.Instance.StartCoroutine(LoadXR());
     }
 
@@ -49,13 +50,22 @@ public class BasisXRManagement
         return BasisBootedMode.SuccessButUnknown;
     }
 
-    public void StopXR()
+    public void StopXR(bool IsExiting)
     {
         if (xRManagerSettings != null)
         {
-            xRManagerSettings.StopSubsystems();
-            xRManagerSettings.DeinitializeLoader();
+            if (xRManagerSettings.isInitializationComplete)
+            {
+                xRManagerSettings.DeinitializeLoader();
+            }
         }
-        CheckForPass?.Invoke(BasisBootedMode.Desktop);
+        if (IsExiting)
+        {
+            CheckForPass?.Invoke(BasisBootedMode.Exiting);
+        }
+        else
+        {
+            CheckForPass?.Invoke(BasisBootedMode.Desktop);
+        }
     }
 }

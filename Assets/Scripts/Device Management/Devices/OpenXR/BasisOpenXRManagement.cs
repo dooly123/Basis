@@ -1,128 +1,105 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Management;
-[System.Serializable]
+
+[Serializable]
 public class BasisOpenXRManagement
 {
-    /// <summary>
-    /// pulled in from InputDevices.GetDevices
-    /// </summary>
     public List<InputDevice> inputDevices = new List<InputDevice>();
-    /// <summary>
-    /// generated at runtime
-    /// </summary>
-    public List<BasisOpenXRInput> TrackedOpenXRInputDevices = new List<BasisOpenXRInput>();
-    /// <summary>
-    /// keeps track of generated IDs and match InputDevice
-    /// </summary>
     public Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
+
     public void StartXRSDK()
     {
-        UnityEngine.XR.InputDevices.deviceConnected += OnDeviceConnected;
-        UnityEngine.XR.InputDevices.deviceDisconnected += OnDeviceDisconnected;
+        Debug.Log("Starting BasisOpenXRManagement");
+        InputDevices.deviceConnected += OnDeviceConnected;
+        InputDevices.deviceDisconnected += OnDeviceDisconnected;
         UpdateDeviceList();
     }
-    public void StopXR()
+
+    public void StopXRSDK()
     {
-        if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null)
+        Debug.Log("Stopping BasisOpenXRManagement");
+        List<string> Devices = TypicalDevices.Keys.ToList();
+        foreach (string device in Devices)
         {
-            if (XRGeneralSettings.Instance.Manager.isInitializationComplete)
-            {
-                XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-            }
+            DestroyPhysicalTrackedDevice(device);
         }
-        foreach (BasisOpenXRInput BasisOpenVRInput in TrackedOpenXRInputDevices)
-        {
-            if (BasisOpenVRInput != null)
-            {
-                Object.Destroy(BasisOpenVRInput.gameObject);
-            }
-        }
-        UnityEngine.XR.InputDevices.deviceConnected -= OnDeviceConnected;
-        UnityEngine.XR.InputDevices.deviceDisconnected -= OnDeviceDisconnected;
+        InputDevices.deviceConnected -= OnDeviceConnected;
+        InputDevices.deviceDisconnected -= OnDeviceDisconnected;
     }
 
-    private void OnDeviceConnected(UnityEngine.XR.InputDevice device)
+    private void OnDeviceConnected(InputDevice device)
     {
         UpdateDeviceList();
     }
 
-    private void OnDeviceDisconnected(UnityEngine.XR.InputDevice device)
+    private void OnDeviceDisconnected(InputDevice device)
     {
         UpdateDeviceList();
     }
+
     private void UpdateDeviceList()
     {
         InputDevices.GetDevices(inputDevices);
-        foreach (UnityEngine.XR.InputDevice device in inputDevices)
+
+        foreach (var device in inputDevices)
         {
-            if (device.characteristics.HasFlag(InputDeviceCharacteristics.TrackingReference) == true)
-            {
+            if (device.characteristics.HasFlag(InputDeviceCharacteristics.TrackingReference))
                 continue;
-            }
 
             if (device != null)
             {
-                string ID = GenerateID(device);
-                if (TypicalDevices.ContainsKey(ID) == false)
+                string id = GenerateID(device);
+                if (!TypicalDevices.ContainsKey(id))
                 {
-                    CreatePhysicalTrackedDevice(device, ID);
-                    TypicalDevices.Add(ID, device);
+                    CreatePhysicalTrackedDevice(device, id, device.name);
+                    TypicalDevices[id] = device;
                 }
             }
         }
-        foreach (var deviceData in TypicalDevices)
+
+        var keysToRemove = new List<string>();
+        foreach (var kvp in TypicalDevices)
         {
-            if (deviceData.Value == null)
+            if (!inputDevices.Contains(kvp.Value))
             {
-                string ID = deviceData.Key;
-                DestroyPhysicalTrackedDevice(ID);
+                keysToRemove.Add(kvp.Key);
             }
         }
-    }
-    public string GenerateID(UnityEngine.XR.InputDevice device)
-    {
-        string ID = device.name + "|" + device.serialNumber + "|" + device.manufacturer + "|" + (int)device.characteristics;
-        return ID;
-    }
-    public void CreatePhysicalTrackedDevice(UnityEngine.XR.InputDevice device, string ID)
-    {
-        GameObject gameObject = new GameObject(ID);
-        gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
-        BasisOpenXRInput BasisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
-        BasisXRInput.Initialize(device, ID);
-        TrackedOpenXRInputDevices.Add(BasisXRInput);
-    }
-    /// <summary>
-    /// this wont well with fullbody, revist later
-    /// </summary>
-    /// <param name="ID"></param>
-    public void DestroyPhysicalTrackedDevice(string ID)
-    {
-        DestroyInputDevice(ID);
-        DestroyXRInput(ID);
-    }
-    public void DestroyInputDevice(string ID)
-    {
-        foreach (var device in TypicalDevices)
+
+        foreach (var key in keysToRemove)
         {
-            if (device.Key == ID)
-            {
-                TypicalDevices.Remove(ID);
-                break;
-            }
+            DestroyPhysicalTrackedDevice(key);
+            TypicalDevices.Remove(key);
         }
     }
-    public void DestroyXRInput(string ID)
+
+    private string GenerateID(InputDevice device)
     {
-        foreach (var device in TrackedOpenXRInputDevices)
+        return $"{device.name}|{device.serialNumber}|{device.manufacturer}|{(int)device.characteristics}";
+    }
+
+    private void CreatePhysicalTrackedDevice(InputDevice device, string uniqueID, string unUniqueID)
+    {
+        var gameObject = new GameObject(uniqueID)
         {
-            if (device.ID == ID)
+            transform =
             {
-                TrackedOpenXRInputDevices.Remove(device);
-                break;
+                parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform
             }
-        }
+        };
+        var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
+        basisXRInput.SubSystem = nameof(BasisOpenXRManagement);
+        basisXRInput.Initialize(device, uniqueID, unUniqueID);
+        BasisDeviceManagement.Instance.AllInputDevices.Add(basisXRInput);
+    }
+
+    public void DestroyPhysicalTrackedDevice(string id)
+    {
+        TypicalDevices.Remove(id);
+        BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisOpenXRManagement), id);
     }
 }

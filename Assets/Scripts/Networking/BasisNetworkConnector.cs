@@ -119,7 +119,7 @@ public class BasisNetworkConnector : MonoBehaviour
             writer.Write(Auth);
             using (Message msg = Message.Create(BasisTags.AuthTag, writer))
             {
-                Client.SendMessage(msg, SendMode.Reliable);
+                Client.SendMessage(msg, DeliveryMethod.ReliableOrdered);
                 Debug.Log("sent Authentication");
                 Client.MessageReceived += OnAuthResponse;
             }
@@ -178,7 +178,7 @@ public class BasisNetworkConnector : MonoBehaviour
         {
             writer.Write(readyMessage);
             Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
-            Client.SendMessage(ReadyMessage, SendMode.Reliable);
+            Client.SendMessage(ReadyMessage, DeliveryMethod.ReliableOrdered);
         }
         Client.MessageReceived += MessageReceived;
     }

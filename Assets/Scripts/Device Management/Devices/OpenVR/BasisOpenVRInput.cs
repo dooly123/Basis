@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Valve.VR;
-using VIVE.OpenXR.CompositionLayer;
 
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInput : BasisInput
@@ -12,13 +11,12 @@ public class BasisOpenVRInput : BasisInput
     public SteamVR_Utils.RigidTransform deviceTransform;
     public EVRCompositorError result;
 
-    public void Initialize(OpenVRDevice device, string iD)
+    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID)
     {
         Device = device;
         TryAssignRole(Device.deviceClass);
-        base.Initialize(iD);
+        ActivateTracking(UniqueID, UnUniqueID);
     }
-
     public void TryAssignRole(ETrackedDeviceClass deviceClass)
     {
         if (deviceClass == ETrackedDeviceClass.Controller)
@@ -38,37 +36,41 @@ public class BasisOpenVRInput : BasisInput
             TrackedRole = BasisBoneTrackedRole.CenterEye;
         }
     }
-    
+
     public override void PollData()
     {
-        result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex(Device.deviceIndex, ref devicePose, ref deviceGamePose);
+        if (SteamVR.active)
+        {
+            result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex(Device.deviceIndex, ref devicePose, ref deviceGamePose);
 
-        if (result == EVRCompositorError.None)
-        {
-            deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
-            LocalRawPosition = deviceTransform.pos;
-            LocalRawRotation = deviceTransform.rot;
-            if (hasRoleAssigned)
+            if (result == EVRCompositorError.None)
             {
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
+                LocalRawPosition = deviceTransform.pos;
+                LocalRawRotation = deviceTransform.rot;
+                if (hasRoleAssigned)
                 {
-                    Control.LocalRawPosition = LocalRawPosition;
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    {
+                        Vector3 LocalPivot = LocalRawRotation * pivotOffset;
+                        Control.TrackerData.Position = LocalRawPosition - LocalPivot;
+                    }
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                    {
+                        Control.TrackerData.Rotation = LocalRawRotation * rotationOffset;
+                    }
                 }
-                if (Control.HasTrackerPositionDriver != BasisBoneControl.BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
-                {
-                    Control.LocalRawRotation = LocalRawRotation;
-                }
+
+                State.primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
+                State.primaryButtonGetState = SteamVR_Actions._default.A_Button.GetState(inputSource);
+                State.secondaryButtonGetState = SteamVR_Actions._default.B_Button.GetState(inputSource);
+                UpdatePlayerControl();
             }
-            
-            primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
-            primaryButton = SteamVR_Actions._default.A_Button.GetStateDown(inputSource);
-            secondaryButton = SteamVR_Actions._default.B_Button.GetStateDown(inputSource);
-            UpdatePlayerControl();
+            else
+            {
+                Debug.LogError("Error getting device pose: " + result);
+            }
+            transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
         }
-        else
-        {
-            Debug.LogError("Error getting device pose: " + result);
-        }
-        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
     }
 }

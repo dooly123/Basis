@@ -33,6 +33,9 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
     {
         if (Ready == false)
         {
+            InitalizeDataJobs();
+            InitalizeAvatarStoredData(ref Target);
+            InitalizeAvatarStoredData(ref Output);
             Ready = true;
             NetworkedPlayer = networkedPlayer;
             AudioTransmission.OnEnable(networkedPlayer);

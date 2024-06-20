@@ -16,7 +16,8 @@ public static class BootSequence
     }
     private static async void OnAddressablesInitializationComplete(AsyncOperationHandle<IResourceLocator> obj)
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(BootManager, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+      var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(BootManager, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)

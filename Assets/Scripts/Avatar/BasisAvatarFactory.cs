@@ -5,7 +5,8 @@ public static class BasisAvatarFactory
 {
     public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress)
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)
@@ -15,13 +16,18 @@ public static class BasisAvatarFactory
                     Player.Avatar = Avatar;
                     CreateLocal(Player);
                     Player.InitalizeIKCalibration(Player.AvatarDriver);
+                    if(BasisScene.Instance != null)
+                    {
+                        BasisScene.Instance.SpawnPlayer(Player);
+                    }
                 }
             }
         }
     }
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)
@@ -72,6 +78,6 @@ public static class BasisAvatarFactory
             Debug.LogError("Missing Avatar");
             return;
         }
-        Player.AvatarDriver.LocalCalibration(Player);
+        Player.AvatarDriver.InitialLocalCalibration(Player);
     }
 }

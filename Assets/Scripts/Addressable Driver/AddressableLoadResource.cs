@@ -16,15 +16,14 @@ public class AddressableLoadResourceBase
     public IList<AsyncOperationHandle> Handles = new List<AsyncOperationHandle>();
     public UnityEvent<string> OnLoadFailure = new UnityEvent<string>();
     public UnityEvent<AddressableLoadResourceBase> OnLoaded = new UnityEvent<AddressableLoadResourceBase>();
-    public float LoadPercentage;
-
+    public float LoadPercentage = 0;
+    public bool IsLoading = false;
     public AddressableLoadResourceBase(string key, AddressableExpectedResult expectedResult)
     {
         Key = key;
         ExpectedResult = expectedResult;
     }
 }
-
 public class AddressableGenericResource : AddressableLoadResourceBase
 {
     public InstantiationParameters InstantiationParameters; // Moved from base class to here

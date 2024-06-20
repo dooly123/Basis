@@ -32,7 +32,7 @@ public class BasisLocalPlayer : BasisPlayer
         //  FootPlacementDriver = Helpers.GetOrAddComponent<FootPlacementDriver>(this.gameObject);
         //  FootPlacementDriver.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
+        Instance.LocalBoneDriver.ReadyToRead += Simulate;
         OnLocalAvatarChanged += OnCalibration;
         await CreateAvatar();
     }
@@ -40,13 +40,16 @@ public class BasisLocalPlayer : BasisPlayer
     {
         if (Hips.HasBone && Avatar != null)
         {
-            Avatar.Animator.transform.SetPositionAndRotation((Hips.BoneTransform.position - Hips.RestingLocalSpace.BeginningPosition), Hips.BoneTransform.rotation);
+            Quaternion rotation = Hips.BoneTransform.rotation;
+            Vector3 rotatedOffset = rotation * Hips.RestingLocalSpace.Position;
+            rotatedOffset = Hips.BoneTransform.position - rotatedOffset;
+
+            Avatar.Animator.transform.SetPositionAndRotation(rotatedOffset, rotation);
         }
     }
-    public async Task CreateAvatar()
+    public async Task CreateAvatar(string AddressableID = FallBackAvatar)
     {
-        await BasisAvatarFactory.LoadAvatar(this, FallBackAvatar);
-      // await BasisAvatarFactory.LoadAvatar(this, "Assets/unity-chan!/unitychan.prefab");
+        await BasisAvatarFactory.LoadAvatar(this, AddressableID);
         await CreateInputAction();
         OnLocalAvatarChanged?.Invoke();
     }
@@ -69,7 +72,8 @@ public class BasisLocalPlayer : BasisPlayer
     }
     public async Task CreateInputAction()
     {
-        List<GameObject> Gameobjects = await AddressableResourceProcess.LoadAsGameObjectsAsync(InputActions, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(InputActions, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)
