@@ -65,7 +65,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Trigger
+        public virtual SteamVR_Action_Single Trigger
         {
             get
             {

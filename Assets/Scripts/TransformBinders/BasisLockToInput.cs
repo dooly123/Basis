@@ -52,7 +52,7 @@ public class BasisLockToInput : MonoBehaviour
     {
         if (HasInput)
         {
-            transform.SetPositionAndRotation(AttachedInput.LocalRawPosition + BasisLocalPlayer.Instance.transform.position, AttachedInput.LocalRawRotation);
+            transform.SetPositionAndRotation(AttachedInput.transform.position, AttachedInput.transform.rotation);
         }
     }
 }

@@ -29,7 +29,7 @@
     },
     {
       "name": "/actions/default/in/Trigger",
-      "type": "boolean"
+      "type": "vector1"
     },
     {
       "name": "/actions/default/out/Haptic",
