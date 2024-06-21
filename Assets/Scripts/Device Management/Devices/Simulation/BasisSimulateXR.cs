@@ -15,14 +15,19 @@ public class BasisSimulateXR
     {
 
     }
-    public void CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID)
+    public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false)
     {
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         BasisInputXRSimulate BasisInput = gameObject.AddComponent<BasisInputXRSimulate>();
+        if (hasrole)
+        {
+            BasisInput.TrackedRole = Role;
+        }
         Initalize(BasisInput, UniqueID, UnUniqueID);
         Inputs.Add(BasisInput);
         BasisDeviceManagement.Instance.AllInputDevices.Add(BasisInput);
+        return BasisInput;
     }
     public void Initalize(BasisInput BasisInput, string UniqueID, string UnUniqueID)
     {
@@ -79,13 +84,13 @@ public class BasisSimulateXR
     [MenuItem("Basis/Create Vive Right Controller")]
     public static void CreateViveRightTracker()
     {
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right", "{indexcontroller}valve_controller_knu_3_0_right");
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right", "{indexcontroller}valve_controller_knu_3_0_right", BasisBoneTrackedRole.RightHand,true);
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Create Vive Left Controller")]
     public static void CreateViveLeftTracker()
     {
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left", "{indexcontroller}valve_controller_knu_3_0_left");
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left", "{indexcontroller}valve_controller_knu_3_0_left", BasisBoneTrackedRole.LeftHand, true);
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Create 3Point Tracking")]

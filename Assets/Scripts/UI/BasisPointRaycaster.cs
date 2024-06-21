@@ -11,9 +11,6 @@ public class BasisPointRaycaster : MonoBehaviour
     public QueryTriggerInteraction TriggerInteraction = QueryTriggerInteraction.UseGlobal;
     public Ray ray;
     public RaycastHit hit;
-
-    public Vector3 startPoint;
-    public Vector3 endPoint;
     public Material lineMaterial;
     //   public Color lineColor = Color.white;
     public float lineWidth = 0.01f;
@@ -115,6 +112,7 @@ public class BasisPointRaycaster : MonoBehaviour
                     }
                     LastTrigger = Trigger;
                 }
+                Debug.DrawLine(ray.origin, hit.point, Color.green);
             }
             else
             {
@@ -127,6 +125,7 @@ public class BasisPointRaycaster : MonoBehaviour
                 {
                     highlightQuadInstance.SetActive(false);
                 }
+                Debug.DrawLine(ray.origin, hit.point, Color.blue);
             }
         }
         else
@@ -140,6 +139,7 @@ public class BasisPointRaycaster : MonoBehaviour
             {
                 highlightQuadInstance.SetActive(false);
             }
+            Debug.DrawLine(ray.origin, ray.direction * MaxDistance,Color.red);
         }
     }
     void TriggerClick(GameObject target)
