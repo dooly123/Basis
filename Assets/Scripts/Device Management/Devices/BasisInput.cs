@@ -264,12 +264,13 @@ public abstract class BasisInput : MonoBehaviour
             AddressableLoadFactory.ReleaseResource(LoadedDeviceRequest);
         }
     }
-    public void CreateRayCaster(BasisDeviceMatchableNames BasisDeviceMatchableNames)
+    public async void CreateRayCaster(BasisDeviceMatchableNames BasisDeviceMatchableNames)
     {
         Debug.Log("Adding RayCaster");
         BasisPointRaycasterRef = new GameObject(nameof(BasisPointRaycaster));
         BasisPointRaycasterRef.transform.parent = this.transform;
         BasisPointRaycasterRef.transform.SetLocalPositionAndRotation(BasisDeviceMatchableNames.PivotRaycastOffset, Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset));
         BasisPointRaycaster = BasisHelpers.GetOrAddComponent<BasisPointRaycaster>(BasisPointRaycasterRef);
+      await  BasisPointRaycaster.Initalize(BasisDeviceMatchableNames);
     }
 }

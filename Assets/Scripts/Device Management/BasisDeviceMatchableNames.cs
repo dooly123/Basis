@@ -10,7 +10,8 @@ public class BasisDeviceMatchableNames
     public Vector3 RotationOffset;
     public bool HasRayCastSupport;
     public bool HasRepresentation = false;
-    public bool ShowRayCast;
+    public bool HasRayCastVisual;
+    public bool HasRayCastRedical;
     public Vector3 PivotRaycastOffset;
     public Vector3 RotationRaycastOffset;
 }

@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c44a2f4c5649a741ad3411f4e79d396
+    m_Address: Assets/UI/Prefabs/highlightQuad.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d0b5834872dc2e49bcc10f8b0d13e9c
     m_Address: Assets/UI/Material/RayCastMaterial.mat
     m_ReadOnly: 0

@@ -20,7 +20,8 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
     HasRepresentation: 0
-    ShowRayCast: 0
+    HasRayCastVisual: 0
+    HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: vr_tracker_vive_1_0
@@ -30,7 +31,8 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
     HasRepresentation: 0
-    ShowRayCast: 0
+    HasRayCastVisual: 0
+    HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: valve_controller_knu_left
@@ -42,7 +44,8 @@ MonoBehaviour:
     RotationOffset: {x: -25, y: -2, z: 51}
     HasRayCastSupport: 1
     HasRepresentation: 1
-    ShowRayCast: 1
+    HasRayCastVisual: 1
+    HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: valve_controller_knu_right
@@ -54,7 +57,8 @@ MonoBehaviour:
     RotationOffset: {x: -25, y: 2, z: -51}
     HasRayCastSupport: 1
     HasRepresentation: 1
-    ShowRayCast: 1
+    HasRayCastVisual: 1
+    HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: tundra_tracker
@@ -64,7 +68,8 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
     HasRepresentation: 0
-    ShowRayCast: 0
+    HasRayCastVisual: 0
+    HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: oculus_controller_left
@@ -74,7 +79,8 @@ MonoBehaviour:
     RotationOffset: {x: -25, y: -2, z: 51}
     HasRayCastSupport: 1
     HasRepresentation: 1
-    ShowRayCast: 1
+    HasRayCastVisual: 1
+    HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: oculus_controller_right
@@ -84,7 +90,8 @@ MonoBehaviour:
     RotationOffset: {x: -25, y: 2, z: -51}
     HasRayCastSupport: 1
     HasRepresentation: 1
-    ShowRayCast: 1
+    HasRayCastVisual: 1
+    HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: Eye
@@ -95,6 +102,7 @@ MonoBehaviour:
     RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 1
     HasRepresentation: 0
-    ShowRayCast: 1
+    HasRayCastVisual: 0
+    HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
