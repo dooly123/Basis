@@ -50,6 +50,7 @@ public class BasisPointRaycaster : MonoBehaviour
         LineRenderer.enabled = HasLineRenderer;
         CachedLinerRenderState = HasLineRenderer;
     }
+    public float LastTrigger = 0;
     public void RayCastUI(float Trigger)
     {
         if (CheckRayCast())
@@ -69,9 +70,13 @@ public class BasisPointRaycaster : MonoBehaviour
                 }
                 LineRenderer.SetPosition(0, ray.origin);
                 LineRenderer.SetPosition(1, hitPoint);
-                if (Trigger == 1)
+                if (Trigger != LastTrigger)
                 {
-                    TriggerClick(hit.transform.gameObject);
+                    if (Trigger == 1)
+                    {
+                        TriggerClick(hit.transform.gameObject);
+                    }
+                    LastTrigger = Trigger;
                 }
             }
             else
