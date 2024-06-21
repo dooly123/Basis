@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 public class BasisPointRaycaster : MonoBehaviour
 {
     public Vector3 Direction = Vector3.forward;
@@ -84,28 +86,37 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     public bool WasLastDown = false;
     public GameObject LastHit;
+    public PointerEventData pointerEventData;
+    public Canvas FoundCanvas;
+    RaycastResult RaycastResult = new RaycastResult();
+    public void ApplyStaticDataToRaycastResult()
+    {
+        RaycastResult.displayIndex = 0;
+        RaycastResult.index = 0;
+        RaycastResult.depth = 0;
+        RaycastResult.module = null;
+    }
     public void RayCastUI(float Trigger)
     {
         if (CheckRayCast())
         {
             if (hit.transform.gameObject.layer == UIMask)
             {
-                if (HasLineRenderer)
+                pointerEventData = new PointerEventData(EventSystem.current);
+                RaycastResult.gameObject = hit.transform.gameObject;
+                RaycastResult.distance = hit.distance;
+                RaycastResult.screenPosition = BasisLocalCameraDriver.Instance.Camera.WorldToScreenPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
+                FoundCanvas = hit.transform.gameObject.GetComponentInParent<Canvas>();
+                if (FoundCanvas != null)
                 {
-                    if (CachedLinerRenderState == false)
-                    {
-                        LineRenderer.enabled = true;
-                        CachedLinerRenderState = true;
-                    }
-                    LineRenderer.SetPosition(0, ray.origin);
-                    LineRenderer.SetPosition(1, hit.point);
+                    RaycastResult.sortingLayer = FoundCanvas.sortingLayerID;
+                    RaycastResult.sortingOrder = FoundCanvas.sortingOrder;
                 }
-                if (HasRedicalRenderer)
-                {
-                    highlightQuadInstance.SetActive(true);
-                    highlightQuadInstance.transform.position = hit.point;
-                    highlightQuadInstance.transform.rotation = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(90, 0, 0);
-                }
+                RaycastResult.worldPosition = ray.origin + ray.direction * hit.distance;
+                RaycastResult.worldNormal = hit.normal;
+                pointerEventData.pointerCurrentRaycast = RaycastResult;
+                pointerEventData.position = RaycastResult.screenPosition;
+                pointerEventData.pressPosition = RaycastResult.screenPosition;
                 if (Trigger != LastTrigger)
                 {
                     if (Trigger == 1)
@@ -126,6 +137,22 @@ public class BasisPointRaycaster : MonoBehaviour
                         }
                     }
                     LastTrigger = Trigger;
+                }
+                if (HasLineRenderer)
+                {
+                    if (CachedLinerRenderState == false)
+                    {
+                        LineRenderer.enabled = true;
+                        CachedLinerRenderState = true;
+                    }
+                    LineRenderer.SetPosition(0, ray.origin);
+                    LineRenderer.SetPosition(1, hit.point);
+                }
+                if (HasRedicalRenderer)
+                {
+                    highlightQuadInstance.SetActive(true);
+                    highlightQuadInstance.transform.position = hit.point;
+                    highlightQuadInstance.transform.rotation = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(90, 0, 0);
                 }
                 IPointerMoveHandler(hit.transform.gameObject);
                 if (LastHit != hit.transform.gameObject)
@@ -169,55 +196,26 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     public void IPointerMoveHandler(GameObject target)
     {
-        Debug.Log("triggering for " + target);
-        // Create a pointer event data instance
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-        // Execute the IPointerClickHandler interface on the target object
         ExecuteEvents.Execute<IPointerMoveHandler>(target, pointerEventData, ExecuteEvents.pointerMoveHandler);
     }
     public void IPointerEnterHandler(GameObject target)
     {
-        Debug.Log("triggering for " + target);
-        // Create a pointer event data instance
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-
-        // Execute the IPointerClickHandler interface on the target object
         ExecuteEvents.Execute<IPointerEnterHandler>(target, pointerEventData, ExecuteEvents.pointerEnterHandler);
     }
     public void IPointerExitHandler(GameObject target)
     {
-        Debug.Log("triggering for " + target);
-        // Create a pointer event data instance
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-
-        // Execute the IPointerClickHandler interface on the target object
         ExecuteEvents.Execute<IPointerExitHandler>(target, pointerEventData, ExecuteEvents.pointerExitHandler);
     }
     public void IPointerDownHandler(GameObject target)
     {
-        Debug.Log("triggering for " + target);
-        // Create a pointer event data instance
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-
-        // Execute the IPointerClickHandler interface on the target object
         ExecuteEvents.Execute<IPointerDownHandler>(target, pointerEventData, ExecuteEvents.pointerDownHandler);
     }
     public void IPointerUpHandler(GameObject target)
     {
-        Debug.Log("triggering for " + target);
-        // Create a pointer event data instance
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-
-        // Execute the IPointerClickHandler interface on the target object
         ExecuteEvents.Execute<IPointerUpHandler>(target, pointerEventData, ExecuteEvents.pointerUpHandler);
     }
     public void IPointerClickHandler(GameObject target)
     {
-        Debug.Log("triggering for " + target);
-        // Create a pointer event data instance
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-
-        // Execute the IPointerClickHandler interface on the target object
         ExecuteEvents.Execute<IPointerClickHandler>(target, pointerEventData, ExecuteEvents.pointerClickHandler);
     }
     public bool CheckRayCast()
