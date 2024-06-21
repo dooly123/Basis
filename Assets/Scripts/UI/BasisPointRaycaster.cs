@@ -82,6 +82,8 @@ public class BasisPointRaycaster : MonoBehaviour
             }
         }
     }
+    public bool WasLastDown = false;
+    public GameObject LastHit;
     public void RayCastUI(float Trigger)
     {
         if (CheckRayCast())
@@ -98,7 +100,7 @@ public class BasisPointRaycaster : MonoBehaviour
                     LineRenderer.SetPosition(0, ray.origin);
                     LineRenderer.SetPosition(1, hit.point);
                 }
-                if(HasRedicalRenderer)
+                if (HasRedicalRenderer)
                 {
                     highlightQuadInstance.SetActive(true);
                     highlightQuadInstance.transform.position = hit.point;
@@ -108,10 +110,33 @@ public class BasisPointRaycaster : MonoBehaviour
                 {
                     if (Trigger == 1)
                     {
-                        TriggerClick(hit.transform.gameObject);
+                        IPointerClickHandler(hit.transform.gameObject);
+                        if (WasLastDown == false)
+                        {
+                            WasLastDown = true;
+                            IPointerDownHandler(hit.transform.gameObject);
+                        }
+                    }
+                    else
+                    {
+                        if (WasLastDown)
+                        {
+                            IPointerUpHandler(hit.transform.gameObject);
+                            WasLastDown = true;
+                        }
                     }
                     LastTrigger = Trigger;
                 }
+                IPointerMoveHandler(hit.transform.gameObject);
+                if (LastHit != hit.transform.gameObject)
+                {
+                    IPointerEnterHandler(hit.transform.gameObject);
+                    if (LastHit != null)
+                    {
+                        IPointerExitHandler(LastHit);
+                    }
+                }
+                LastHit = hit.transform.gameObject;
                 Debug.DrawLine(ray.origin, hit.point, Color.green);
             }
             else
@@ -139,10 +164,54 @@ public class BasisPointRaycaster : MonoBehaviour
             {
                 highlightQuadInstance.SetActive(false);
             }
-            Debug.DrawLine(ray.origin, ray.direction * MaxDistance,Color.red);
+            Debug.DrawLine(ray.origin, ray.direction * MaxDistance, Color.red);
         }
     }
-    void TriggerClick(GameObject target)
+    public void IPointerMoveHandler(GameObject target)
+    {
+        Debug.Log("triggering for " + target);
+        // Create a pointer event data instance
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        // Execute the IPointerClickHandler interface on the target object
+        ExecuteEvents.Execute<IPointerMoveHandler>(target, pointerEventData, ExecuteEvents.pointerMoveHandler);
+    }
+    public void IPointerEnterHandler(GameObject target)
+    {
+        Debug.Log("triggering for " + target);
+        // Create a pointer event data instance
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+
+        // Execute the IPointerClickHandler interface on the target object
+        ExecuteEvents.Execute<IPointerEnterHandler>(target, pointerEventData, ExecuteEvents.pointerEnterHandler);
+    }
+    public void IPointerExitHandler(GameObject target)
+    {
+        Debug.Log("triggering for " + target);
+        // Create a pointer event data instance
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+
+        // Execute the IPointerClickHandler interface on the target object
+        ExecuteEvents.Execute<IPointerExitHandler>(target, pointerEventData, ExecuteEvents.pointerExitHandler);
+    }
+    public void IPointerDownHandler(GameObject target)
+    {
+        Debug.Log("triggering for " + target);
+        // Create a pointer event data instance
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+
+        // Execute the IPointerClickHandler interface on the target object
+        ExecuteEvents.Execute<IPointerDownHandler>(target, pointerEventData, ExecuteEvents.pointerDownHandler);
+    }
+    public void IPointerUpHandler(GameObject target)
+    {
+        Debug.Log("triggering for " + target);
+        // Create a pointer event data instance
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+
+        // Execute the IPointerClickHandler interface on the target object
+        ExecuteEvents.Execute<IPointerUpHandler>(target, pointerEventData, ExecuteEvents.pointerUpHandler);
+    }
+    public void IPointerClickHandler(GameObject target)
     {
         Debug.Log("triggering for " + target);
         // Create a pointer event data instance

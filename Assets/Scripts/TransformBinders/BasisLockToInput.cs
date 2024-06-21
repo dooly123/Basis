@@ -43,7 +43,7 @@ public class BasisLockToInput : MonoBehaviour
     public void OnDestroy()
     {
         HasInput = false;
-        if (AttachedInput != null)
+        if (AttachedInput != null) 
         {
             AttachedInput.AfterControlApply -= Simulation;
         }
