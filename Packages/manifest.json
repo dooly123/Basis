@@ -9,9 +9,9 @@
     "com.unity.memoryprofiler": "1.1.0",
     "com.unity.profiling.core": "1.0.2",
     "com.unity.render-pipelines.universal": "17.0.3",
-    "com.unity.xr.interaction.toolkit": "3.0.3",
     "com.unity.xr.management": "4.4.0",
     "com.unity.xr.openxr": "1.11.0",
+    "com.valvesoftware.unity.openvr": "file:com.valvesoftware.unity.openvr-1.1.4.tgz",
     "jp.lilxyzw.liltoon": "https://github.com/lilxyzw/lilToon.git?path=Assets/lilToon#master",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
@@ -44,9 +44,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.valvesoftware.unity.openvr": "file:com.valvesoftware.unity.openvr-1.1.4.tgz"
+    "com.unity.modules.xr": "1.0.0"
   },
-  "scopedRegistries": [
-  ]
+  "scopedRegistries": []
 }

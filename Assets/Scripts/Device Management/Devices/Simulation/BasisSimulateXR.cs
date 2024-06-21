@@ -76,6 +76,18 @@ public class BasisSimulateXR
         BasisDeviceManagement.ShowTrackers();
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
     }
+    [MenuItem("Basis/Create Vive Right Controller")]
+    public static void CreateViveRightTracker()
+    {
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right", "{indexcontroller}valve_controller_knu_3_0_right");
+        BasisDeviceManagement.ShowTrackers();
+    }
+    [MenuItem("Basis/Create Vive Left Controller")]
+    public static void CreateViveLeftTracker()
+    {
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left", "{indexcontroller}valve_controller_knu_3_0_left");
+        BasisDeviceManagement.ShowTrackers();
+    }
     [MenuItem("Basis/Create 3Point Tracking")]
     public static void CreatePuck3Tracker()
     {

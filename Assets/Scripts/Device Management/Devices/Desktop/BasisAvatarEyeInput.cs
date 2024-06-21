@@ -16,7 +16,6 @@ public class BasisAvatarEyeInput : BasisInput
     public float minimumY = -80f;
     public float maximumY = 80f;
     public float DelayedResponseForRotation = 0.6f;
-    public bool isCursorLocked = true;
     public float FallBackHeight = 1.73f;
     public void Initalize(string ID = "Desktop Eye")
     {
@@ -39,6 +38,7 @@ public class BasisAvatarEyeInput : BasisInput
         }
         PlayerInitialized();
         BasisLocalPlayer.OnLocalAvatarChanged += PlayerInitialized;
+        LockCursor();
     }
     public void PlayerInitialized()
     {
@@ -59,37 +59,21 @@ public class BasisAvatarEyeInput : BasisInput
     {
         BasisLocalPlayer.OnLocalAvatarChanged -= PlayerInitialized;
         base.OnDisable();
-    }
-    public void HandleEscape()
-    {
-        if (isCursorLocked)
-        {
-            UnlockCursor();
-        }
-        else
-        {
-            LockCursor();
-        }
+        UnlockCursor();
     }
     public void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor to the center of the screen
         Cursor.visible = false; // Hide the cursor
-        isCursorLocked = true;
     }
     public void UnlockCursor()
     {
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Show the cursor
-        isCursorLocked = false;
     }
     public void HandleMouseRotation(Vector2 lookVector)
     {
         if (!isActiveAndEnabled)
-        {
-            return;
-        }
-        if (isCursorLocked == false)
         {
             return;
         }
@@ -136,5 +120,6 @@ public class BasisAvatarEyeInput : BasisInput
             Control.TrackerData.Position = LocalRawPosition;
         }
         UpdatePlayerControl();
+        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
     }
 }

@@ -13,7 +13,6 @@ public class BasisHamburgerMenu : BasisUIBase
         Settings.onClick.AddListener(SettingsPanel);
         AvatarButton.onClick.AddListener(AvatarButtonPanel);
         CloseUI.onClick.AddListener(CloseThisMenu);
-        OnCloseMenu.AddListener(CallbackCloseThisMenu);
     }
 
     private void AvatarButtonPanel()
@@ -25,14 +24,6 @@ public class BasisHamburgerMenu : BasisUIBase
     {
         await BasisSettingsPanelMenu.OpenThisMenu(BasisSettingsPanelMenu.SettingsPanel);
         CloseThisMenu();
-    }
-    public void CallbackCloseThisMenu()
-    {
-        if (BasisAvatarEyeInput.Instance != null)
-        {
-            BasisAvatarEyeInput.Instance.HandleEscape();
-
-        }
     }
     public async static void OpenMenu()
     {

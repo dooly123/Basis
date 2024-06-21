@@ -14,11 +14,14 @@ public abstract class BasisInput : MonoBehaviour
     public Quaternion LocalRawRotation;
     public Vector3 pivotOffset;
     public Quaternion rotationOffset;
-
+    public bool HasUIInputSupport = false;
     public string UnUniqueDeviceID;
     public BasisVisualTracker BasisVisualTracker;
+    public BasisPointRaycaster BasisPointRaycaster;//used to raycast against things like UI
     public AddressableGenericResource LoadedDeviceRequest;
     public event SimulationHandler AfterControlApply;
+    public GameObject BasisPointRaycasterRef;
+    public BasisDeviceMatchableNames BasisDeviceMatchableNames;
     [SerializeField]
     public BasisInputState State = new BasisInputState();
     [SerializeField]
@@ -70,12 +73,18 @@ public abstract class BasisInput : MonoBehaviour
             return;
         }
         ApplyRole();
-        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedPivotAndRotationOffset(unUniqueDeviceID, out Vector3 rotationOffsetvector, out pivotOffset))
+        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(unUniqueDeviceID, out BasisDeviceMatchableNames))
         {
-            rotationOffset = Quaternion.Euler(rotationOffsetvector);
+            rotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.RotationOffset);
+            HasUIInputSupport = BasisDeviceMatchableNames.HasRayCastSupport;
+            if (HasUIInputSupport)
+            {
+                CreateRayCaster(BasisDeviceMatchableNames);
+            }
         }
         else
         {
+            Debug.Log("Missing ID " + unUniqueDeviceID);
             rotationOffset = Quaternion.identity;
         }
         Driver.OnSimulate += PollData;
@@ -116,9 +125,7 @@ public abstract class BasisInput : MonoBehaviour
         Driver.OnSimulate -= PollData;
         SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
     }
-
     public abstract void PollData();
-
     public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
     {
         if (Driver.FindBone(out Control, TrackedRole))
@@ -208,6 +215,10 @@ public abstract class BasisInput : MonoBehaviour
             case BasisBoneTrackedRole.Mouth:
                 break;
         }
+        if (HasUIInputSupport)
+        {
+            BasisPointRaycaster.RayCastUI(State.Trigger);
+        }
         LastState = State;
         AfterControlApply?.Invoke();
     }
@@ -216,23 +227,26 @@ public abstract class BasisInput : MonoBehaviour
         if (BasisVisualTracker == null || LoadedDeviceRequest == null)
         {
             Debug.Log("UnUniqueDeviceID " + UnUniqueDeviceID);
-            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest))
+            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest,out bool ShowVisual))
             {
-                (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
-                List<GameObject> gameObjects = data.Item1;
-                if (gameObjects == null)
+                if (ShowVisual)
                 {
-                    return;
-                }
-                if (gameObjects.Count != 0)
-                {
-                    foreach (GameObject gameObject in gameObjects)
+                    (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+                    List<GameObject> gameObjects = data.Item1;
+                    if (gameObjects == null)
                     {
-                        gameObject.name = UnUniqueDeviceID;
-                        gameObject.transform.parent = this.transform;
-                        if (gameObject.TryGetComponent(out BasisVisualTracker))
+                        return;
+                    }
+                    if (gameObjects.Count != 0)
+                    {
+                        foreach (GameObject gameObject in gameObjects)
                         {
-                            BasisVisualTracker.Initialization(this);
+                            gameObject.name = UnUniqueDeviceID;
+                            gameObject.transform.parent = this.transform;
+                            if (gameObject.TryGetComponent(out BasisVisualTracker))
+                            {
+                                BasisVisualTracker.Initialization(this);
+                            }
                         }
                     }
                 }
@@ -249,5 +263,13 @@ public abstract class BasisInput : MonoBehaviour
         {
             AddressableLoadFactory.ReleaseResource(LoadedDeviceRequest);
         }
+    }
+    public void CreateRayCaster(BasisDeviceMatchableNames BasisDeviceMatchableNames)
+    {
+        Debug.Log("Adding RayCaster");
+        BasisPointRaycasterRef = new GameObject(nameof(BasisPointRaycaster));
+        BasisPointRaycasterRef.transform.parent = this.transform;
+        BasisPointRaycasterRef.transform.SetLocalPositionAndRotation(BasisDeviceMatchableNames.PivotRaycastOffset, Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset));
+        BasisPointRaycaster = BasisHelpers.GetOrAddComponent<BasisPointRaycaster>(BasisPointRaycasterRef);
     }
 }

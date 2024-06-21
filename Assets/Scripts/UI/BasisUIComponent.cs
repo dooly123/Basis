@@ -1,27 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit.UI;
-
 public class BasisUIComponent : MonoBehaviour
 {
     public Canvas Canvas;
-    public TrackedDeviceGraphicRaycaster TrackedDeviceGraphicRaycaster;
-    public GraphicRaycaster GraphicRaycaster;
     public CanvasScaler CanvasScaler;
+    public BasisGraphicUIRayCaster GraphicUIRayCaster;
     public void OnEnable()
     {
         if (Canvas == null)
         {
             Canvas = BasisHelpers.GetOrAddComponent<Canvas>(this.gameObject);
         }
-        if (TrackedDeviceGraphicRaycaster == null)
+        if (GraphicUIRayCaster == null)
         {
-            TrackedDeviceGraphicRaycaster = BasisHelpers.GetOrAddComponent<TrackedDeviceGraphicRaycaster>(this.gameObject);
-            TrackedDeviceGraphicRaycaster.checkFor3DOcclusion = true;
-        }
-        if (GraphicRaycaster == null)
-        {
-            GraphicRaycaster = BasisHelpers.GetOrAddComponent<GraphicRaycaster>(this.gameObject);
+            GraphicUIRayCaster = BasisHelpers.GetOrAddComponent<BasisGraphicUIRayCaster>(this.gameObject);
         }
         if (CanvasScaler == null)
         {

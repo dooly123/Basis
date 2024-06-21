@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.XR.Interaction.Toolkit.UI;
 public class BasisLocalInputActions : MonoBehaviour
 {
     public InputActionReference MoveAction;
@@ -13,14 +11,14 @@ public class BasisLocalInputActions : MonoBehaviour
 
     public InputActionReference DesktopSwitch;
     public InputActionReference XRSwitch;
-    public XRUIInputModule XRUIInputModule;
+
+    public InputActionReference LeftMousePressed;
+    public InputActionReference RightMousePressed;
 
     [SerializeField] public bool Crouching;
     [SerializeField] public Vector2 LookDirection;
     public BasisAvatarEyeInput CharacterEyeInput;
     public static BasisLocalInputActions Instance;
-    public InputSystemUIInputModule InputSystemUIInputModule;
-    public PlayerInput Input;
     public BasisLocalPlayer basisLocalPlayer;
     public void OnEnable()
     {
@@ -49,8 +47,6 @@ public class BasisLocalInputActions : MonoBehaviour
     public void Initialize(BasisLocalPlayer localPlayer)
     {
         basisLocalPlayer = localPlayer;
-        Input.camera = BasisLocalCameraDriver.Instance.Camera;
-        InputSystemUIInputModule.xrTrackingOrigin = basisLocalPlayer.transform;
     }
     public void AddCallback()
     {
@@ -75,6 +71,9 @@ public class BasisLocalInputActions : MonoBehaviour
 
         DesktopSwitch.action.performed += ctx => SwitchDesktop();
         XRSwitch.action.performed += ctx => SwitchOpenXR();
+
+        LeftMousePressed.action.performed += ctx => LeftMouse(ctx.ReadValue<float>());
+        RightMousePressed.action.performed += ctx => RightMouse(ctx.ReadValue<float>());
     }
     public void RemoveCallback()
     {
@@ -100,6 +99,22 @@ public class BasisLocalInputActions : MonoBehaviour
 
         DesktopSwitch.action.performed -= ctx => SwitchDesktop();
         XRSwitch.action.performed -= ctx => SwitchOpenXR();
+
+        LeftMousePressed.action.performed -= ctx => LeftMouse(ctx.ReadValue<float>());
+        RightMousePressed.action.performed -= ctx => RightMouse(ctx.ReadValue<float>());
+    }
+    public void LeftMouse(float state)
+    {
+        if (CharacterEyeInput != null)
+        {
+            CharacterEyeInput.State.Trigger = state;
+        }
+    }
+    public void RightMouse(float state)
+    {
+        if (CharacterEyeInput != null)
+        {
+        }
     }
     public void SwitchDesktop()
     {
@@ -130,10 +145,6 @@ public class BasisLocalInputActions : MonoBehaviour
         else
         {
             BasisHamburgerMenu.Instance.CloseThisMenu();
-        }
-        if (CharacterEyeInput != null)
-        {
-            CharacterEyeInput.HandleEscape();
         }
     }
     public void EscapeCancelled()

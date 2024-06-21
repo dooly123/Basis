@@ -18,6 +18,21 @@ public class BasisDeviceNameMatcher : ScriptableObject
         DeviceID = null;
         return false;
     }
+    public bool GetAssociatedDeviceID(string nameToMatch, out string DeviceID,out bool ShowVisual)
+    {
+        foreach (var DeviceEntry in BasisDevice)
+        {
+            if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
+            {
+                DeviceID = DeviceEntry.DeviceID;
+                ShowVisual = DeviceEntry.HasRepresentation;
+                return true;
+            }
+        }
+        ShowVisual = false;
+        DeviceID = null;
+        return false;
+    }
     public bool GetAssociatedPivotOffset(string nameToMatch, out Vector3 pivotOffset)
     {
         foreach (var DeviceEntry in BasisDevice)
@@ -46,7 +61,7 @@ public class BasisDeviceNameMatcher : ScriptableObject
     }
     public bool GetAssociatedPivotAndRotationOffset(string nameToMatch, out Vector3 rotationOffset, out Vector3 pivotOffset)
     {
-        foreach (var DeviceEntry in BasisDevice)
+        foreach (BasisDeviceMatchableNames DeviceEntry in BasisDevice)
         {
             if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
             {
@@ -57,6 +72,19 @@ public class BasisDeviceNameMatcher : ScriptableObject
         }
         rotationOffset = Vector3.zero;
         pivotOffset = Vector3.zero;
+        return false;
+    }
+    public bool GetAssociatedDeviceMatchableNames(string nameToMatch, out BasisDeviceMatchableNames BasisDeviceMatchableNames)
+    {
+        foreach (BasisDeviceMatchableNames DeviceEntry in BasisDevice)
+        {
+            if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
+            {
+                BasisDeviceMatchableNames = DeviceEntry;
+                return true;
+            }
+        }
+        BasisDeviceMatchableNames = null;
         return false;
     }
 }

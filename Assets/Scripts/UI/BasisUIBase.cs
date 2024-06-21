@@ -13,11 +13,6 @@ public abstract class BasisUIBase : MonoBehaviour
         OnCloseMenu.Invoke();
         AddressableLoadFactory.ReleaseResource(LoadedMenu);
         Destroy(this.gameObject);
-        if (BasisAvatarEyeInput.Instance != null)
-        {
-            BasisAvatarEyeInput.Instance.HandleEscape();
-
-        }
     }
     public static async Task OpenThisMenu(string AddressableID)
     {

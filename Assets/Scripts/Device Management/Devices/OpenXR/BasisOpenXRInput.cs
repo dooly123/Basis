@@ -1,6 +1,5 @@
 using UnityEngine;
-using static UnityEngine.XR.Interaction.Toolkit.Inputs.XRInputTrackingAggregator;
-
+using UnityEngine.XR;
 [DefaultExecutionOrder(15101)]
 public class BasisOpenXRInput : BasisInput
 {
@@ -16,7 +15,7 @@ public class BasisOpenXRInput : BasisInput
 
     private void GetControllerOrHMD()
     {
-        if (Device.characteristics == Characteristics.hmd)
+      if (Device.characteristics == Characteristics.hmd)
         {
             TrackedRole = BasisBoneTrackedRole.CenterEye;
         }
@@ -88,5 +87,43 @@ public class BasisOpenXRInput : BasisInput
             UpdatePlayerControl();
         }
         transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
+    }
+    public static class Characteristics
+    {
+        /// <summary>
+        /// HMD characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
+        /// </summary>
+        public static InputDeviceCharacteristics hmd => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.TrackedDevice;
+
+        /// <summary>
+        /// Eye gaze characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.EyeTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
+        /// </summary>
+        public static InputDeviceCharacteristics eyeGaze => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.EyeTracking | InputDeviceCharacteristics.TrackedDevice;
+
+        /// <summary>
+        /// Left controller characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
+        /// </summary>
+        public static InputDeviceCharacteristics leftController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
+
+        /// <summary>
+        /// Right controller characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
+        /// </summary>
+        public static InputDeviceCharacteristics rightController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
+
+        /// <summary>
+        /// Left tracked hand characteristics.
+        /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
+        /// </summary>
+        public static InputDeviceCharacteristics leftTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Left;
+
+        /// <summary>
+        /// Right tracked hand characteristics.
+        /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
+        /// </summary>
+        public static InputDeviceCharacteristics rightTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Right;
     }
 }

@@ -666,10 +666,10 @@ GameObject:
   - component: {fileID: 2452654881612522778}
   - component: {fileID: 1600284590662190142}
   - component: {fileID: 3112063735882119603}
-  - component: {fileID: 827407369145171387}
   - component: {fileID: 8917893734727658160}
   - component: {fileID: 1036067617934251197}
   - component: {fileID: -4260526141799047002}
+  - component: {fileID: 2645338253211475504}
   m_Layer: 5
   m_Name: HamBurgerMenu
   m_TagString: Untagged
@@ -743,7 +743,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3112063735882119603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,25 +761,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &827407369145171387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7434544960807650688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 0
-  m_CheckFor2DOcclusion: 0
-  m_CheckFor3DOcclusion: 1
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RaycastTriggerInteraction: 1
 --- !u!114 &8917893734727658160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -793,9 +774,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Canvas: {fileID: 2452654881612522778}
-  TrackedDeviceGraphicRaycaster: {fileID: 827407369145171387}
-  GraphicRaycaster: {fileID: 3112063735882119603}
   CanvasScaler: {fileID: 1600284590662190142}
+  GraphicUIRayCaster: {fileID: 2645338253211475504}
 --- !u!114 &1036067617934251197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -844,6 +824,19 @@ MonoBehaviour:
   LocalPlayer: {fileID: 0}
   CameraDriver: {fileID: 0}
   WorldOffset: {x: 0, y: -0.12, z: 0.3}
+--- !u!114 &2645338253211475504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7434544960807650688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41a29b28a2ac302409a0fd77d867cc7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Canvas: {fileID: 2452654881612522778}
 --- !u!1 &8509309538099924209
 GameObject:
   m_ObjectHideFlags: 0
