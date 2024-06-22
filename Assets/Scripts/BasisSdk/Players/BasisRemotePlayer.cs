@@ -2,21 +2,22 @@ using UnityEngine;
 
 public class BasisRemotePlayer : BasisPlayer
 {
-    public BasisRemoteBoneDriver RemoteDriver;
+    public BasisRemoteBoneDriver RemoteBoneDriver;
     public BasisRemoteAvatarDriver RemoteAvatarDriver;
     public GameObject AudioSourceGameobject;
     public BasisBoneControl MouthControl;
-    public void RemoteInitialize()
+    public async void RemoteInitialize()
     {
         IsLocal = false;
-        RemoteDriver.CreateInitialArrays(RemoteDriver.transform);
-        RemoteDriver.Initialize();
+        RemoteBoneDriver.CreateInitialArrays(RemoteBoneDriver.transform);
+        RemoteBoneDriver.Initialize();
         RemoteAvatarDriver.CalibrationComplete.AddListener(RemoteCalibration);
         if (Avatar == null)
         {
             CreateAvatar();
         }
-        RemoteDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
+        RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
+        await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
     }
     public void UpdateTransform(Vector3 position, Quaternion rotation)
     {
@@ -28,6 +29,6 @@ public class BasisRemotePlayer : BasisPlayer
     }
     public void RemoteCalibration()
     {
-        RemoteDriver.OnCalibration(this);
+        RemoteBoneDriver.OnCalibration(this);
     }
 }

@@ -271,6 +271,6 @@ public abstract class BasisInput : MonoBehaviour
         BasisPointRaycasterRef.transform.parent = this.transform;
         BasisPointRaycasterRef.transform.SetLocalPositionAndRotation(BasisDeviceMatchableNames.PivotRaycastOffset, Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset));
         BasisPointRaycaster = BasisHelpers.GetOrAddComponent<BasisPointRaycaster>(BasisPointRaycasterRef);
-      await  BasisPointRaycaster.Initalize(BasisDeviceMatchableNames);
+      await  BasisPointRaycaster.Initialize(BasisDeviceMatchableNames);
     }
 }

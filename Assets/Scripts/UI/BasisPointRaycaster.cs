@@ -12,7 +12,6 @@ public class BasisPointRaycaster : MonoBehaviour
     public Ray ray;
     public RaycastHit hit;
     public Material lineMaterial;
-    //   public Color lineColor = Color.white;
     public float lineWidth = 0.01f;
 
     public LineRenderer LineRenderer;
@@ -24,9 +23,16 @@ public class BasisPointRaycaster : MonoBehaviour
     public BasisDeviceMatchableNames BasisDeviceMatchableNames;
     public GameObject highlightQuadInstance;
     public float LastTrigger = 0;
-    public async Task Initalize(BasisDeviceMatchableNames basisDeviceMatchableNames)
+    public bool WasLastDown = false;
+    public GameObject LastHit;
+    public PointerEventData pointerEventData;
+    public Canvas FoundCanvas;
+    public RaycastResult RaycastResult = new RaycastResult();
+    public float Trigger;
+    public async Task Initialize(BasisDeviceMatchableNames basisDeviceMatchableNames)
     {
         BasisDeviceMatchableNames = basisDeviceMatchableNames;
+        ApplyStaticDataToRaycastResult();
         // Get the layer number for "Ignore Raycast" layer
         int ignoreRaycastLayer = LayerMask.NameToLayer("Ignore Raycast");
         UIMask = LayerMask.NameToLayer("UI");
@@ -59,12 +65,12 @@ public class BasisPointRaycaster : MonoBehaviour
         }
         if (BasisDeviceMatchableNames.HasRayCastRedical)
         {
-            await CreateRedical();
+            await CreateRadical();
             HasRedicalRenderer = true;
         }
         CachedLinerRenderState = HasLineRenderer;
     }
-    public async Task CreateRedical()
+    public async Task CreateRadical()
     {
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadUIRedicalAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> gameObjects = data.Item1;
@@ -82,11 +88,6 @@ public class BasisPointRaycaster : MonoBehaviour
             }
         }
     }
-    public bool WasLastDown = false;
-    public GameObject LastHit;
-    public PointerEventData pointerEventData;
-    public Canvas FoundCanvas;
-    RaycastResult RaycastResult = new RaycastResult();
     public void ApplyStaticDataToRaycastResult()
     {
         RaycastResult.displayIndex = 0;
@@ -94,127 +95,179 @@ public class BasisPointRaycaster : MonoBehaviour
         RaycastResult.depth = 0;
         RaycastResult.module = null;
     }
-    public void RayCastUI(float Trigger)
+    public void RayCastUI(float trigger)
     {
         if (CheckRayCast())
         {
-            if (hit.transform.gameObject.layer == UIMask)
-            {
-                pointerEventData = new PointerEventData(EventSystem.current);
-                RaycastResult.gameObject = hit.transform.gameObject;
-                RaycastResult.distance = hit.distance;
-                RaycastResult.screenPosition = BasisLocalCameraDriver.Instance.Camera.WorldToScreenPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
-                FoundCanvas = hit.transform.gameObject.GetComponentInParent<Canvas>();
-                if (FoundCanvas != null)
-                {
-                    RaycastResult.sortingLayer = FoundCanvas.sortingLayerID;
-                    RaycastResult.sortingOrder = FoundCanvas.sortingOrder;
-                }
-                RaycastResult.worldPosition = ray.origin + ray.direction * hit.distance;
-                RaycastResult.worldNormal = hit.normal;
-                pointerEventData.pointerCurrentRaycast = RaycastResult;
-                pointerEventData.position = RaycastResult.screenPosition;
-                pointerEventData.pressPosition = RaycastResult.screenPosition;
-                if (Trigger != LastTrigger)
-                {
-                    if (Trigger == 1)
-                    {
-                        IPointerClickHandler(hit.transform.gameObject);
-                        if (WasLastDown == false)
-                        {
-                            WasLastDown = true;
-                            IPointerDownHandler(hit.transform.gameObject);
-                        }
-                    }
-                    else
-                    {
-                        if (WasLastDown)
-                        {
-                            IPointerUpHandler(hit.transform.gameObject);
-                            WasLastDown = true;
-                        }
-                    }
-                    LastTrigger = Trigger;
-                }
-                if (HasLineRenderer)
-                {
-                    if (CachedLinerRenderState == false)
-                    {
-                        LineRenderer.enabled = true;
-                        CachedLinerRenderState = true;
-                    }
-                    LineRenderer.SetPosition(0, ray.origin);
-                    LineRenderer.SetPosition(1, hit.point);
-                }
-                if (HasRedicalRenderer)
-                {
-                    highlightQuadInstance.SetActive(true);
-                    highlightQuadInstance.transform.position = hit.point;
-                    highlightQuadInstance.transform.rotation = Quaternion.LookRotation(hit.normal) * Quaternion.Euler(90, 0, 0);
-                }
-                IPointerMoveHandler(hit.transform.gameObject);
-                if (LastHit != hit.transform.gameObject)
-                {
-                    IPointerEnterHandler(hit.transform.gameObject);
-                    if (LastHit != null)
-                    {
-                        IPointerExitHandler(LastHit);
-                    }
-                }
-                LastHit = hit.transform.gameObject;
-                Debug.DrawLine(ray.origin, hit.point, Color.green);
-            }
-            else
-            {
-                if (CachedLinerRenderState && HasLineRenderer)
-                {
-                    LineRenderer.enabled = false;
-                    CachedLinerRenderState = false;
-                }
-                if (HasRedicalRenderer)
-                {
-                    highlightQuadInstance.SetActive(false);
-                }
-                Debug.DrawLine(ray.origin, hit.point, Color.blue);
-            }
+            HandleValidHit(trigger);
         }
         else
         {
-            if (CachedLinerRenderState && HasLineRenderer)
+            HandleNoHit();
+        }
+    }
+
+    private void HandleValidHit(float trigger)
+    {
+        if (hit.transform.gameObject.layer == UIMask)
+        {
+            UpdateRayCastResult();
+            HandleUIEvents(trigger);
+            UpdateLineRenderer();
+            UpdateRadicalRenderer();
+            UpdatePointerState();
+            UpdateDebugDraw(Color.green, hit.point);
+        }
+        else
+        {
+            ResetRenderers();
+            UpdateDebugDraw(Color.blue, hit.point);
+        }
+    }
+
+    private void UpdateRayCastResult()
+    {
+        pointerEventData = new PointerEventData(EventSystem.current);
+        RaycastResult.gameObject = hit.transform.gameObject;
+        RaycastResult.distance = hit.distance;
+        RaycastResult.screenPosition = BasisLocalCameraDriver.Instance.Camera.WorldToScreenPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
+        FoundCanvas = hit.transform.gameObject.GetComponentInParent<Canvas>();
+        if (FoundCanvas != null)
+        {
+            RaycastResult.sortingLayer = FoundCanvas.sortingLayerID;
+            RaycastResult.sortingOrder = FoundCanvas.sortingOrder;
+        }
+        RaycastResult.worldPosition = ray.origin + ray.direction * hit.distance;
+        RaycastResult.worldNormal = hit.normal;
+        pointerEventData.pointerCurrentRaycast = RaycastResult;
+        pointerEventData.position = RaycastResult.screenPosition;
+        pointerEventData.pressPosition = RaycastResult.screenPosition;
+    }
+
+    private void HandleUIEvents(float trigger)
+    {
+        Trigger = trigger;
+        if (Trigger != LastTrigger)
+        {
+            if (Trigger == 1)
             {
-                LineRenderer.enabled = false;
-                CachedLinerRenderState = false;
+                ExecuteClickHandler();
+                if (!WasLastDown)
+                {
+                    WasLastDown = true;
+                    ExecuteDownHandler();
+                }
             }
-            if (HasRedicalRenderer)
+            else
+            {
+                if (WasLastDown)
+                {
+                    ExecuteUpHandler();
+                    WasLastDown = true;
+                }
+            }
+            LastTrigger = Trigger;
+        }
+
+        ExecuteMoveHandler();
+        HandlePointerEnterAndExit();
+    }
+
+    private void ExecuteClickHandler()
+    {
+        ExecuteEvents.Execute<IPointerClickHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerClickHandler);
+    }
+
+    private void ExecuteDownHandler()
+    {
+        ExecuteEvents.Execute<IPointerDownHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerDownHandler);
+    }
+
+    private void ExecuteUpHandler()
+    {
+        ExecuteEvents.Execute<IPointerUpHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerUpHandler);
+    }
+
+    private void ExecuteMoveHandler()
+    {
+        ExecuteEvents.Execute<IPointerMoveHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerMoveHandler);
+    }
+
+    private void HandlePointerEnterAndExit()
+    {
+        if (LastHit != hit.transform.gameObject)
+        {
+            ExecuteEvents.Execute<IPointerEnterHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerEnterHandler);
+            if (LastHit != null)
+            {
+                ExecuteEvents.Execute<IPointerExitHandler>(LastHit, pointerEventData, ExecuteEvents.pointerExitHandler);
+            }
+        }
+        LastHit = hit.transform.gameObject;
+    }
+
+    private void UpdateLineRenderer()
+    {
+        if (HasLineRenderer && !CachedLinerRenderState)
+        {
+            LineRenderer.enabled = true;
+            CachedLinerRenderState = true;
+        }
+        else if (!HasLineRenderer && CachedLinerRenderState)
+        {
+            LineRenderer.enabled = false;
+            CachedLinerRenderState = false;
+        }
+
+        if (HasLineRenderer)
+        {
+            LineRenderer.SetPosition(0, ray.origin);
+            LineRenderer.SetPosition(1, hit.point);
+        }
+    }
+
+    private void UpdateRadicalRenderer()
+    {
+        if (HasRedicalRenderer)
+        {
+            if (hit.transform != null)
+            {
+                highlightQuadInstance.SetActive(true);
+                highlightQuadInstance.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(hit.normal) * Quaternion.Euler(90, 0, 0));
+            }
+            else
             {
                 highlightQuadInstance.SetActive(false);
             }
-            Debug.DrawLine(ray.origin, ray.direction * MaxDistance, Color.red);
         }
     }
-    public void IPointerMoveHandler(GameObject target)
+
+    private void UpdatePointerState()
     {
-        ExecuteEvents.Execute<IPointerMoveHandler>(target, pointerEventData, ExecuteEvents.pointerMoveHandler);
+        WasLastDown = Trigger == 1;
     }
-    public void IPointerEnterHandler(GameObject target)
+
+    private void ResetRenderers()
     {
-        ExecuteEvents.Execute<IPointerEnterHandler>(target, pointerEventData, ExecuteEvents.pointerEnterHandler);
+        if (CachedLinerRenderState && HasLineRenderer)
+        {
+            LineRenderer.enabled = false;
+            CachedLinerRenderState = false;
+        }
+
+        if (HasRedicalRenderer)
+        {
+            highlightQuadInstance.SetActive(false);
+        }
     }
-    public void IPointerExitHandler(GameObject target)
+    private void UpdateDebugDraw(Color color,Vector3 Destination)
     {
-        ExecuteEvents.Execute<IPointerExitHandler>(target, pointerEventData, ExecuteEvents.pointerExitHandler);
+        Debug.DrawLine(ray.origin, Destination, color);
     }
-    public void IPointerDownHandler(GameObject target)
+    private void HandleNoHit()
     {
-        ExecuteEvents.Execute<IPointerDownHandler>(target, pointerEventData, ExecuteEvents.pointerDownHandler);
-    }
-    public void IPointerUpHandler(GameObject target)
-    {
-        ExecuteEvents.Execute<IPointerUpHandler>(target, pointerEventData, ExecuteEvents.pointerUpHandler);
-    }
-    public void IPointerClickHandler(GameObject target)
-    {
-        ExecuteEvents.Execute<IPointerClickHandler>(target, pointerEventData, ExecuteEvents.pointerClickHandler);
+        ResetRenderers();
+        UpdateDebugDraw(Color.red,transform.forward * MaxDistance);
     }
     public bool CheckRayCast()
     {

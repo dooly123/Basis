@@ -271,7 +271,9 @@ public class BasisNetworkConnector : MonoBehaviour
         InstantiationParameters instantiationParameters = new InstantiationParameters(Vector3.zero, Quaternion.identity, transform);
         BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters);
         BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
+
         networkedPlayer.ReInitialize(remote, sspm.playerIdMessage.playerID);
+
         if (Players.TryAdd(sspm.playerIdMessage.playerID, networkedPlayer))
         {
 
@@ -280,10 +282,13 @@ public class BasisNetworkConnector : MonoBehaviour
         {
             Debug.LogError("Cant add " + sspm.playerIdMessage.playerID);
         }
+
+        networkedPlayer.NetworkSend.LASM = sspm.avatarSerialization;
+        BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, sspm);
     }
 #if UNITY_EDITOR
     [MenuItem("Basis/Spawn Fake Remote")]
-    public static void SpawnRemoteTestClient()
+    public static void SpawnFakeRemote()
     {
         BasisNetworkConnector NetworkConnector = BasisNetworkConnector.Instance;
         if (NetworkConnector != null)
@@ -291,9 +296,11 @@ public class BasisNetworkConnector : MonoBehaviour
             ServerSideSyncPlayerMessage serverSideSyncPlayerMessage = new ServerSideSyncPlayerMessage();
             serverSideSyncPlayerMessage.playerIdMessage = new PlayerIdMessage();
             serverSideSyncPlayerMessage.playerIdMessage.playerID = (ushort)(NetworkConnector.Players.Count + 1);
+            serverSideSyncPlayerMessage.avatarSerialization = new LocalAvatarSyncMessage();
             BasisNetworkTransmitter Transmitter = FindFirstObjectByType<BasisNetworkTransmitter>();
             if (Transmitter != null)
             {
+                Debug.Log("Apply SpawnFakeRemote");
                 serverSideSyncPlayerMessage.avatarSerialization = Transmitter.LASM;
             }
             CreateTestRemotePlayer(serverSideSyncPlayerMessage);

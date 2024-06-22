@@ -13,6 +13,7 @@
     "com.unity.xr.openxr": "1.11.0",
     "com.valvesoftware.unity.openvr": "file:com.valvesoftware.unity.openvr-1.1.4.tgz",
     "jp.lilxyzw.liltoon": "https://github.com/lilxyzw/lilToon.git?path=Assets/lilToon#master",
+    "nl.elraccoone.web-sockets": "git+https://github.com/jeffreylanters/unity-web-sockets",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

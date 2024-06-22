@@ -86,12 +86,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Avatar: {fileID: 0}
   HasAvatarDriver: 0
-  RemoteDriver: {fileID: 3382825646792045376}
+  RemoteBoneDriver: {fileID: 3382825646792045376}
   RemoteAvatarDriver: {fileID: 4496089132972522230}
   AudioSourceGameobject: {fileID: 5669630751523980901}
   MouthControl:
     Name: 
+    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
+    BoneTransform: {fileID: 0}
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
     hasRigLayer: 1
@@ -117,14 +119,18 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    BoneTransform: {fileID: 0}
-    LocalRawPosition: {x: 0, y: 0, z: 0}
-    WorldSpaceFloor: {x: 0, y: 0, z: 0}
-    LocalRawRotation: {x: 0, y: 0, z: 0, w: 0}
-    RestingWorldSpacePosition: {x: 0, y: 0, z: 0}
-    RestingWorldSpaceRotation: {x: 0, y: 0, z: 0, w: 0}
-    LastBonePosition: {x: 0, y: 0, z: 0}
-    LastBoneRotation: {x: 0, y: 0, z: 0, w: 0}
+    RawLocalData:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    LastRunData:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    RestingWorldSpace:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
     RestingLocalSpace:
       Use: 0
       Rotation: {x: 0, y: 0, z: 0, w: 0}
@@ -427,7 +433,9 @@ MonoBehaviour:
   ProvidedTime: 0
   Head:
     Name: 
+    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
+    BoneTransform: {fileID: 0}
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
     hasRigLayer: 1
@@ -453,14 +461,18 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    BoneTransform: {fileID: 0}
-    LocalRawPosition: {x: 0, y: 0, z: 0}
-    WorldSpaceFloor: {x: 0, y: 0, z: 0}
-    LocalRawRotation: {x: 0, y: 0, z: 0, w: 0}
-    RestingWorldSpacePosition: {x: 0, y: 0, z: 0}
-    RestingWorldSpaceRotation: {x: 0, y: 0, z: 0, w: 0}
-    LastBonePosition: {x: 0, y: 0, z: 0}
-    LastBoneRotation: {x: 0, y: 0, z: 0, w: 0}
+    RawLocalData:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    LastRunData:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
+    RestingWorldSpace:
+      Use: 0
+      Rotation: {x: 0, y: 0, z: 0, w: 0}
+      Position: {x: 0, y: 0, z: 0}
     RestingLocalSpace:
       Use: 0
       Rotation: {x: 0, y: 0, z: 0, w: 0}

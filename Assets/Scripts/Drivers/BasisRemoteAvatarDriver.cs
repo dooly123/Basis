@@ -23,8 +23,8 @@ public class BasisRemoteAvatarDriver : BasisAvatarDriver
             SkinnedMeshRenderer Render = SkinnedMeshRenderer[Index];
             Render.forceMatrixRecalculationPerRender = false;
         }
-        CalculateTransformPositions(RemotePlayer.Avatar.Animator, remotePlayer.RemoteDriver);
-        ComputeOffsets(remotePlayer.RemoteDriver);
+        CalculateTransformPositions(RemotePlayer.Avatar.Animator, remotePlayer.RemoteBoneDriver);
+        ComputeOffsets(remotePlayer.RemoteBoneDriver);
         RemotePlayer.Avatar.Animator.enabled = false;
         CalibrationComplete.Invoke();
     }
@@ -75,7 +75,7 @@ public class BasisRemoteAvatarDriver : BasisAvatarDriver
         {
             return false;
         }
-        if (IsNull(RemotePlayer.RemoteDriver))
+        if (IsNull(RemotePlayer.RemoteBoneDriver))
         {
             return false;
         }

@@ -81,7 +81,7 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 if (RemotePlayer.RemoteAvatarDriver != null)
                 {
                     RemotePlayer.RemoteAvatarDriver.CalibrationComplete.AddListener(CalibrationComplete);
-                    RemotePlayer.RemoteDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
+                    RemotePlayer.RemoteBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
                 }
                 else
                 {

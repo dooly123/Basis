@@ -39,8 +39,8 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, Output, ref HumanPose);
         PoseHandler.SetHumanPose(ref HumanPose);
 
-        RemotePlayer.RemoteDriver.Simulate();
-        RemotePlayer.RemoteDriver.ApplyMovement();
+        RemotePlayer.RemoteBoneDriver.Simulate();
+        RemotePlayer.RemoteBoneDriver.ApplyMovement();
         RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.BoneTransform.position, RemotePlayer.MouthControl.BoneTransform.rotation);
     }
 

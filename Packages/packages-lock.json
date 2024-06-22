@@ -296,6 +296,13 @@
       "dependencies": {},
       "hash": "b96470d3dd9092b840052578048b2307fe6d8786"
     },
+    "nl.elraccoone.web-sockets": {
+      "version": "git+https://github.com/jeffreylanters/unity-web-sockets",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "36f720f7b38ec339d7e672a850cb6df1a26929af"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

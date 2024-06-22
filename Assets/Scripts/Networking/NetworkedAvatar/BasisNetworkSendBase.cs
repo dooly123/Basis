@@ -10,7 +10,9 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
 {
     public bool Ready;
     public BasisNetworkedPlayer NetworkedPlayer;
+    [SerializeField]
     public BasisAvatarData Target = new BasisAvatarData();
+    [SerializeField]
     public BasisAvatarData Output = new BasisAvatarData();
     public HumanPose HumanPose = new HumanPose();
     public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();

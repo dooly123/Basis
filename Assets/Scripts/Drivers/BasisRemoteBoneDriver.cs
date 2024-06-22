@@ -24,7 +24,7 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
     {
         if (HeadAvatar != null)
         {
-            Head.RawLocalData.Position = HeadAvatar.position - RemotePlayer.RemoteDriver.transform.position;
+            Head.RawLocalData.Position = HeadAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
             Head.RawLocalData.Rotation = HeadAvatar.rotation;
         }
     }
