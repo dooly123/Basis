@@ -272,7 +272,7 @@ public class BasisNetworkConnector : MonoBehaviour
         BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters);
         BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
 
-        networkedPlayer.ReInitialize(remote, sspm.playerIdMessage.playerID);
+        networkedPlayer.ReInitialize(remote, sspm);
 
         if (Players.TryAdd(sspm.playerIdMessage.playerID, networkedPlayer))
         {
@@ -282,8 +282,6 @@ public class BasisNetworkConnector : MonoBehaviour
         {
             Debug.LogError("Cant add " + sspm.playerIdMessage.playerID);
         }
-
-        networkedPlayer.NetworkSend.LASM = sspm.avatarSerialization;
         BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, sspm);
     }
 #if UNITY_EDITOR

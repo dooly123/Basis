@@ -1,4 +1,5 @@
 using UnityEngine;
+using static SerializableDarkRift;
 [DefaultExecutionOrder(15002)]
 public partial class BasisNetworkedPlayer : MonoBehaviour
 {
@@ -29,7 +30,13 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
             NetworkSend.OnAvatarCalibration();
         }
     }
-    public void ReInitialize(BasisPlayer player, ushort NetId)
+    public void ReInitialize(BasisPlayer player, ushort PlayerID)
+    {
+        ServerSideSyncPlayerMessage Stub = new ServerSideSyncPlayerMessage();
+        Stub.playerIdMessage.playerID = PlayerID;
+        ReInitialize(player, Stub);
+    }
+    public void ReInitialize(BasisPlayer player, ServerSideSyncPlayerMessage sspm)
     {
         if (Player != null && Player != player)
         {
@@ -97,8 +104,12 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
         else
         {
             NetworkSend = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
+            if (sspm.avatarSerialization.array != null && sspm.avatarSerialization.array.Length != 0)
+            {
+                NetworkSend.LASM = sspm.avatarSerialization;
+            }
         }
-        NetworkSend.NetworkNetID.playerID = NetId;
+        NetworkSend.NetworkNetID.playerID = sspm.playerIdMessage.playerID;
         NetworkSend.Initialize(this);
         CalibrationComplete();
     }

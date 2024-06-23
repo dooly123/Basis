@@ -17,11 +17,13 @@ public class MicrophoneRecorder : MonoBehaviour
     public float[] rmsValues;
     public int rmsIndex = 0;
     public int rmsWindowSize = 10; // Size of the moving average window
+    public bool useMovingWindowRMS = false; // Flag to enable/disable moving window RMS (needs refinement)
 
     private int bufferLength;
     private int dataLength;
     private int position;
     private int remain;
+
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -64,10 +66,13 @@ public class MicrophoneRecorder : MonoBehaviour
             }
 
             float rms = GetRMS();
-            AddRMSValue(rms);
-            float averageRMS = GetAverageRMS();
+            if (useMovingWindowRMS)
+            {
+                AddRMSValue(rms);
+                rms = GetAverageRMS();
+            }
 
-            if (averageRMS < silenceThreshold)
+            if (rms < silenceThreshold)
             {
                 OnHasSilence?.Invoke();
             }

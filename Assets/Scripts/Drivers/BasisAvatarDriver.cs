@@ -212,7 +212,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             bone.RestingLocalSpace.Position = bone.RawLocalData.Position;
         }
     }
-    public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisClampData clampData, int positionalLockValue, int rotationalLockValue, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis clampAxis = BasisClampAxis.x, bool CreateRotationalLock = true)
+    public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisTargetController PositionTargetController,float PositionLerpAmount, BasisClampData clampData, int positionalLockValue, int rotationalLockValue, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis clampAxis = BasisClampAxis.x, bool CreateRotationalLock = true)
     {
 
         if (BaseBoneDriver.FindBone(out BasisBoneControl Bone, AssignedTo) == false)
@@ -223,7 +223,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         {
             Debug.LogError("Cant Find Bone " + TargetBone);
         }
-        BaseBoneDriver.CreatePositionalLock(Bone, Target);
+        BaseBoneDriver.CreatePositionalLock(Bone, Target, PositionTargetController, PositionLerpAmount, BasisVectorLerp.Lerp);
         if (CreateRotationalLock)
         {
             BaseBoneDriver.CreateRotationalLock(Bone, Target, clampAxis, clampData, positionalLockValue, BasisAxisLerp.SphericalLerp, rotationalLockValue, Quaternion.identity, targetController, UseAngle, AngleBeforeMove);

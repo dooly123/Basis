@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public abstract class BaseBoneDriver : MonoBehaviour
 {
@@ -148,15 +147,15 @@ public abstract class BaseBoneDriver : MonoBehaviour
         };
         addToBone.RotationControl = rotation;
     }
-    public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target)
+    public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, BasisTargetController BasisTargetController = BasisTargetController.TargetDirectional, float Positional = 40, BasisVectorLerp BasisVectorLerp = BasisVectorLerp.Lerp)
     {
         BasisPositionControl Position = new BasisPositionControl
         {
-            Lerp = BasisVectorLerp.Lerp,
-            TaretInterpreter = BasisTargetController.TargetDirectional,
+            Lerp = BasisVectorLerp,
+            TaretInterpreter = BasisTargetController,
             Offset = Bone.RestingLocalSpace.Position - Target.RestingLocalSpace.Position,
             Target = Target,
-            LerpAmount = 40
+            LerpAmount = Positional
         };
         Bone.PositionControl = Position;
     }
