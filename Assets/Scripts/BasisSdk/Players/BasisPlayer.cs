@@ -2,6 +2,8 @@ using UnityEngine;
 public abstract class BasisPlayer : MonoBehaviour
 {
     public bool IsLocal { get; set; }
+    public string DisplayName;
+    public string UUID;
     public BasisAvatar Avatar;
     public bool HasAvatarDriver;
     public const string FallBackAvatar = "LoadingAvatar";

@@ -187,6 +187,7 @@ MonoBehaviour:
       Rotation: {x: 0, y: 0, z: 0, w: 0}
       Position: {x: 0, y: 0, z: 0}
   Offset: {x: 0, y: -0.5, z: 0}
+  Text: {fileID: 5913064765185686731}
 --- !u!114 &2997356888555999241
 MonoBehaviour:
   m_ObjectHideFlags: 0

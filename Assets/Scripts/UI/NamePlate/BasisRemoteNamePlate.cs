@@ -22,7 +22,7 @@ public class BasisRemoteNamePlate : BasisNamePlate
                     BasisRemoteNamePlate.transform.SetParent(Player.transform, false);
                     if (Player.RemoteBoneDriver.FindBone(out BasisBoneControl Hips, BasisBoneTrackedRole.Hips))
                     {
-                        BasisRemoteNamePlate.Initalize(Hips, Player.MouthControl);
+                        BasisRemoteNamePlate.Initalize(Hips, Player);
                     }
                 }
             }

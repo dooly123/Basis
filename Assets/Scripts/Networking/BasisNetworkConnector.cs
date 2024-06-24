@@ -165,6 +165,7 @@ public class BasisNetworkConnector : MonoBehaviour
         HasUnityClient = true;
         BasisNetworkedPlayer player = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(transform.position, transform.rotation, transform));
         ushort playerID = Client.ID;
+        BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
         player.ReInitialize(BasisLocalPlayer.Instance, playerID);
         if (Players.TryAdd(playerID, player))
         {
@@ -177,11 +178,16 @@ public class BasisNetworkConnector : MonoBehaviour
         }
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            BasisNetworkAvatarCompressor.CompressIntoSendBase(player.NetworkSend, BasisLocalPlayer.Instance.Avatar.Animator);
+            BasisNetworkAvatarCompressor.CompressIntoSendBase(player.NetworkSend, BasisLocalPlayer.Avatar.Animator);
             readyMessage.localAvatarSyncMessage = player.NetworkSend.LASM;
             readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
             {
-                avatarID = BasisLocalPlayer.Instance.AvatarUrl
+                avatarID = BasisLocalPlayer.AvatarUrl
+            };
+            readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
+            {
+                playerUUID = BasisLocalPlayer.UUID,
+                playerDisplayName = BasisLocalPlayer.DisplayName
             };
             writer.Write(readyMessage);
             Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
@@ -281,10 +287,11 @@ public class BasisNetworkConnector : MonoBehaviour
             Debug.Log("bad! empty avatar for " + ServerReadyMessage.playerIdMessage.playerID);
         }
         BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID);
+        remote.DisplayName = ServerReadyMessage.LocalReadyMessage.playerMetaDataMessage.playerDisplayName;
+        remote.UUID = ServerReadyMessage.LocalReadyMessage.playerMetaDataMessage.playerUUID;
         BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
 
         networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
-
         if (Players.TryAdd(ServerReadyMessage.playerIdMessage.playerID, networkedPlayer))
         {
             Debug.Log("added Player " + ServerReadyMessage.playerIdMessage.playerID);
