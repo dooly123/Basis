@@ -32,11 +32,11 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
     }
     public void ReInitialize(BasisPlayer player, ushort PlayerID)
     {
-        ServerSideSyncPlayerMessage Stub = new ServerSideSyncPlayerMessage();
-        Stub.playerIdMessage.playerID = PlayerID;
-        ReInitialize(player, Stub);
+        LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage();
+        Stub.array = new byte[] { };
+        ReInitialize(player,PlayerID, Stub);
     }
-    public void ReInitialize(BasisPlayer player, ServerSideSyncPlayerMessage sspm)
+    public void ReInitialize(BasisPlayer player, ushort PlayerID, LocalAvatarSyncMessage sspm)
     {
         if (Player != null && Player != player)
         {
@@ -104,16 +104,15 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
         else
         {
             NetworkSend = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
-            if (sspm.avatarSerialization.array != null && sspm.avatarSerialization.array.Length != 0)
+            if (sspm.array != null && sspm.array.Length != 0)
             {
-                NetworkSend.LASM = sspm.avatarSerialization;
+                NetworkSend.LASM = sspm;
             }
         }
-        NetworkSend.NetworkNetID.playerID = sspm.playerIdMessage.playerID;
+        NetworkSend.NetworkNetID.playerID = PlayerID;
         NetworkSend.Initialize(this);
         CalibrationComplete();
     }
-
     private T GetOrCreateNetworkComponent<T>() where T : BasisNetworkSendBase
     {
         if (NetworkSend != null && NetworkSend.GetType() == typeof(T))

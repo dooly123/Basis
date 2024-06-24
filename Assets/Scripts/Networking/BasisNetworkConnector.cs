@@ -169,6 +169,7 @@ public class BasisNetworkConnector : MonoBehaviour
         if (Players.TryAdd(playerID, player))
         {
 
+            Debug.Log("added local Player " + Client.ID);
         }
         else
         {
@@ -176,6 +177,12 @@ public class BasisNetworkConnector : MonoBehaviour
         }
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
+            BasisNetworkAvatarCompressor.CompressIntoSendBase(player.NetworkSend, BasisLocalPlayer.Instance.Avatar.Animator);
+            readyMessage.localAvatarSyncMessage = player.NetworkSend.LASM;
+            readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
+            {
+                avatarID = BasisLocalPlayer.Instance.AvatarUrl
+            };
             writer.Write(readyMessage);
             Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
             Client.SendMessage(ReadyMessage, DeliveryMethod.ReliableOrdered);
@@ -232,7 +239,7 @@ public class BasisNetworkConnector : MonoBehaviour
     }
     private void HandleAudioUpdate(DarkRiftReader reader)
     {
-        reader.Read(out AudioSegment AudioUpdate);
+        reader.Read(out AudioSegmentMessage AudioUpdate);
         if (Players.TryGetValue(AudioUpdate.playerIdMessage.playerID, out BasisNetworkedPlayer player))
         {
             BasisNetworkReceiver networkReceiver = (BasisNetworkReceiver)player.NetworkSend;
@@ -252,37 +259,41 @@ public class BasisNetworkConnector : MonoBehaviour
     }
     private async Task HandleCreateRemotePlayer(DarkRiftReader reader)
     {
-        reader.Read(out ServerSideSyncPlayerMessage sspm);
-        await CreateRemotePlayer(sspm);
+        reader.Read(out ServerReadyMessage SRM);
+        await CreateRemotePlayer(SRM);
     }
 
     private async Task HandleCreateAllRemoteClients(DarkRiftReader reader)
     {
         reader.Read(out CreateAllRemoteMessage allRemote);
-        int playerCount = (int)allRemote.playerCount;
-        for (int PlayerIndex = 0; PlayerIndex < playerCount; PlayerIndex++)
+        int RemoteLength = allRemote.serverSidePlayer.Length;
+        for (int PlayerIndex = 0; PlayerIndex < RemoteLength; PlayerIndex++)
         {
-            ServerSideSyncPlayerMessage sspm = allRemote.serverSidePlayer[PlayerIndex];
-            await CreateRemotePlayer(sspm);
+            await CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex]);
         }
     }
-    private async Task CreateRemotePlayer(ServerSideSyncPlayerMessage sspm)
+    private async Task CreateRemotePlayer(ServerReadyMessage ServerReadyMessage)
     {
         InstantiationParameters instantiationParameters = new InstantiationParameters(Vector3.zero, Quaternion.identity, transform);
-        BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters);
+        string avatarID = ServerReadyMessage.LocalReadyMessage.clientAvatarChangeMessage.avatarID;
+        if (string.IsNullOrEmpty(avatarID))
+        {
+            Debug.Log("bad! empty avatar for " + ServerReadyMessage.playerIdMessage.playerID);
+        }
+        BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID);
         BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
 
-        networkedPlayer.ReInitialize(remote, sspm);
+        networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
 
-        if (Players.TryAdd(sspm.playerIdMessage.playerID, networkedPlayer))
+        if (Players.TryAdd(ServerReadyMessage.playerIdMessage.playerID, networkedPlayer))
         {
-
+            Debug.Log("added Player " + ServerReadyMessage.playerIdMessage.playerID);
         }
         else
         {
-            Debug.LogError("Cant add " + sspm.playerIdMessage.playerID);
+            Debug.LogError("Cant add " + ServerReadyMessage.playerIdMessage.playerID);
         }
-        BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, sspm);
+        BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
     }
 #if UNITY_EDITOR
     [MenuItem("Basis/Spawn Fake Remote")]
@@ -291,23 +302,29 @@ public class BasisNetworkConnector : MonoBehaviour
         BasisNetworkConnector NetworkConnector = BasisNetworkConnector.Instance;
         if (NetworkConnector != null)
         {
-            ServerSideSyncPlayerMessage serverSideSyncPlayerMessage = new ServerSideSyncPlayerMessage();
-            serverSideSyncPlayerMessage.playerIdMessage = new PlayerIdMessage();
-            serverSideSyncPlayerMessage.playerIdMessage.playerID = (ushort)(NetworkConnector.Players.Count + 1);
-            serverSideSyncPlayerMessage.avatarSerialization = new LocalAvatarSyncMessage();
+            ServerReadyMessage serverSideSyncPlayerMessage = new ServerReadyMessage
+            {
+                playerIdMessage = new PlayerIdMessage
+                {
+                    playerID = (ushort)(NetworkConnector.Players.Count + 1)
+                },
+                LocalReadyMessage = new ReadyMessage()
+            };
+            serverSideSyncPlayerMessage.LocalReadyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage();
+            serverSideSyncPlayerMessage.LocalReadyMessage.localAvatarSyncMessage = new LocalAvatarSyncMessage();
             BasisNetworkTransmitter Transmitter = FindFirstObjectByType<BasisNetworkTransmitter>();
             if (Transmitter != null)
             {
                 Debug.Log("Apply SpawnFakeRemote");
-                serverSideSyncPlayerMessage.avatarSerialization = Transmitter.LASM;
+                serverSideSyncPlayerMessage.LocalReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
             }
             CreateTestRemotePlayer(serverSideSyncPlayerMessage);
         }
     }
-    public async static void CreateTestRemotePlayer(ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage)
+    public async static void CreateTestRemotePlayer(ServerReadyMessage ServerReadyMessage)
     {
         BasisNetworkConnector NetworkConnector = BasisNetworkConnector.Instance;
-        await NetworkConnector.CreateRemotePlayer(ServerSideSyncPlayerMessage);
+        await NetworkConnector.CreateRemotePlayer(ServerReadyMessage);
     }
 #endif
     public void Host(ushort Port)

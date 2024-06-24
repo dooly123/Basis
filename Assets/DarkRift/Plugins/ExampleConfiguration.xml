@@ -62,7 +62,7 @@
     <!--
     Unity requires the compatibilty network listener to work properly!
     -->
-    <listener name="DefaultNetworkListener" type="CompatibilityBichannelListener" address="0.0.0.0" port="4296">
+    <listener name="LiteNetLibListenerPlugin" type="LiteNetLibListenerPlugin" address="0.0.0.0" port="4296">
     </listener>
   </listeners>
 </configuration>

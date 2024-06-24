@@ -12,11 +12,11 @@ public static class BasisPlayerFactory
         await CreatedLocalPlayer.LocalInitialize();
         return CreatedLocalPlayer;
     }
-    public static async Task<BasisRemotePlayer> CreateRemotePlayer(InstantiationParameters InstantiationParameters, string LocalPlayerId = "RemotePlayer")
+    public static async Task<BasisRemotePlayer> CreateRemotePlayer(InstantiationParameters InstantiationParameters, string AvatarURL, string LocalPlayerId = "RemotePlayer")
     {
         BasisPlayer Player = await CreatePlayer(LocalPlayerId, InstantiationParameters);
         BasisRemotePlayer CreatedRemotePlayer = (BasisRemotePlayer)Player;
-        CreatedRemotePlayer.RemoteInitialize();
+        CreatedRemotePlayer.RemoteInitialize(AvatarURL);
         return CreatedRemotePlayer;
     }
     public static async Task<BasisPlayer> CreatePlayer(string PlayerAddressableID, InstantiationParameters InstantiationParameters)

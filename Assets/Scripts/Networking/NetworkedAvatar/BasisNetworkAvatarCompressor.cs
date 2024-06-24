@@ -5,9 +5,9 @@ public static class BasisNetworkAvatarCompressor
 {
     public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim)
     {
-        using (var writer = DarkRiftWriter.Create())
+        using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            CompressAvatar(ref NetworkSendBase.Target, NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, out NetworkSendBase.LASM.array, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
+            CompressIntoSendBase(NetworkSendBase, Anim);
             writer.Write(NetworkSendBase.LASM);
             BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
             using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
@@ -15,6 +15,10 @@ public static class BasisNetworkAvatarCompressor
                 BasisNetworkConnector.Instance.Client.SendMessage(msg, DeliveryMethod.Unreliable);
             }
         }
+    }
+    public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim)
+    {
+        CompressAvatar(ref NetworkSendBase.Target, NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, out NetworkSendBase.LASM.array, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
     }
     public static void CompressAvatar(ref BasisAvatarData AvatarData, HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender, out byte[] Bytes, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
     {

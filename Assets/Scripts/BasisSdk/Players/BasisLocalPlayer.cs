@@ -18,6 +18,7 @@ public class BasisLocalPlayer : BasisPlayer
     public AudioSource SelfOutput;
     [SerializeField]
     public LayerMask GroundMask;
+    public string AvatarUrl;
     public async Task LocalInitialize()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -49,6 +50,7 @@ public class BasisLocalPlayer : BasisPlayer
     }
     public async Task CreateAvatar(string AddressableID = FallBackAvatar)
     {
+        AvatarUrl = AddressableID;
         await BasisAvatarFactory.LoadAvatar(this, AddressableID);
         await CreateInputAction();
         OnLocalAvatarChanged?.Invoke();

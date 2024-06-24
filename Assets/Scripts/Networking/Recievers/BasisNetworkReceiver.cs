@@ -84,7 +84,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
 #endif
     }
 
-    public void ReceiveNetworkAudio(AudioSegment audioSegment)
+    public void ReceiveNetworkAudio(AudioSegmentMessage audioSegment)
     {
         if (AudioReceiverModule.decoder != null)
         {
@@ -92,7 +92,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         }
     }
 
-    public void ReceiveSilentNetworkAudio(AudioSilentSegmentData audioSilentSegment)
+    public void ReceiveSilentNetworkAudio(AudioSilentSegmentDataMessage audioSilentSegment)
     {
         if (AudioReceiverModule.decoder != null)
         {

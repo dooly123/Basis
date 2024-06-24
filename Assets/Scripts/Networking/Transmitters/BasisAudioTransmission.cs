@@ -68,8 +68,8 @@ public class BasisAudioTransmission
 
         OnEncoded?.Invoke(encodedData);
     }
-    public AudioSegmentData AudioSegmentData = new AudioSegmentData();
-    public AudioSilentSegmentData audioSilentSegmentData = new AudioSilentSegmentData();
+    public AudioSegmentDataMessage AudioSegmentData = new AudioSegmentDataMessage();
+    public AudioSilentSegmentDataMessage audioSilentSegmentData = new AudioSilentSegmentDataMessage();
     private void SendVoiceOverNetwork(byte[] VoiceData)
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
