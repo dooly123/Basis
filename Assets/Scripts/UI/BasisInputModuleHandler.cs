@@ -1,3 +1,5 @@
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -37,7 +39,58 @@ public class BasisInputModuleHandler : BaseInputModule
         enterAction.Disable();
         keypadEnterAction.Disable();
     }
+    private void OnTextInput(char character)
+    {
+        if (char.IsControl(character))
+        {
+            HandleControlCharacter(character);
+        }
+        else
+        {
+            HandleTextCharacter(character);
+        }
+    }
 
+    private void HandleControlCharacter(char character)
+    {
+        if (character == '\b') // Backspace character
+        {
+            if (CurrentSelectedTMP_InputField != null)
+            {
+                if (CurrentSelectedTMP_InputField.text.Length > 0)
+                {
+                    CurrentSelectedTMP_InputField.text = CurrentSelectedTMP_InputField.text.Remove(CurrentSelectedTMP_InputField.text.Length - 1);
+                    CurrentSelectedTMP_InputField.onValueChanged.Invoke(CurrentSelectedTMP_InputField.text);
+                }
+            }
+            else if (CurrentSelectedInputField != null)
+            {
+                if (CurrentSelectedInputField.text.Length > 0)
+                {
+                    CurrentSelectedInputField.text = CurrentSelectedInputField.text.Remove(CurrentSelectedInputField.text.Length - 1);
+                    CurrentSelectedInputField.onValueChanged.Invoke(CurrentSelectedInputField.text);
+                }
+            }
+        }
+        // Add more control character handling if needed
+    }
+
+    private void HandleTextCharacter(char character)
+    {
+        if (CurrentSelectedTMP_InputField != null)
+        {
+            CurrentSelectedTMP_InputField.text += character;
+            CurrentSelectedTMP_InputField.onValueChanged.Invoke(CurrentSelectedTMP_InputField.text);
+        }
+        else if (CurrentSelectedInputField != null)
+        {
+            CurrentSelectedInputField.text += character;
+            CurrentSelectedInputField.onValueChanged.Invoke(CurrentSelectedInputField.text);
+        }
+    }
+    public TMP_InputField CurrentSelectedTMP_InputField;
+    public InputField CurrentSelectedInputField;
+    public bool HasEvent = false;
     public override void Process()
     {
         // Process your input events here
@@ -45,6 +98,42 @@ public class BasisInputModuleHandler : BaseInputModule
         {
             var data = GetBaseEventData();
             ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
+            if (EventSystem.currentSelectedGameObject.TryGetComponent(out CurrentSelectedTMP_InputField))
+            {
+
+            }
+            else
+            {
+                if (EventSystem.currentSelectedGameObject.TryGetComponent(out CurrentSelectedInputField))
+                {
+
+                }
+            }
+            if (HasEvent == false)
+            {
+                // Subscribe to the device change event
+                Keyboard.current.onTextInput += OnTextInput;
+                HasEvent = true;
+                if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
+                {
+                    BasisLocalPlayer.Instance.Move.BlockMovement = true;
+                }
+            }
+        }
+        else
+        {
+            if (HasEvent)
+            {
+                // Unsubscribe from the key press event
+                Keyboard.current.onTextInput -= OnTextInput;
+                HasEvent = false;
+                CurrentSelectedTMP_InputField = null;
+                CurrentSelectedInputField = null;
+                if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
+                {
+                    BasisLocalPlayer.Instance.Move.BlockMovement = false;
+                }
+            }
         }
     }
 

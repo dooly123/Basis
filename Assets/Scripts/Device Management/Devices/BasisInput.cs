@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static BaseBoneDriver;
 public abstract class BasisInput : MonoBehaviour
 {
@@ -79,7 +80,7 @@ public abstract class BasisInput : MonoBehaviour
             HasUIInputSupport = BasisDeviceMatchableNames.HasRayCastSupport;
             if (HasUIInputSupport)
             {
-                CreateRayCaster(BasisDeviceMatchableNames);
+                CreateRayCaster(this);
             }
         }
         else
@@ -217,7 +218,7 @@ public abstract class BasisInput : MonoBehaviour
         }
         if (HasUIInputSupport)
         {
-            BasisPointRaycaster.RayCastUI(State.Trigger);
+            BasisPointRaycaster.RayCastUI();
         }
         LastState = State;
         AfterControlApply?.Invoke();
@@ -264,13 +265,13 @@ public abstract class BasisInput : MonoBehaviour
             AddressableLoadFactory.ReleaseResource(LoadedDeviceRequest);
         }
     }
-    public async void CreateRayCaster(BasisDeviceMatchableNames BasisDeviceMatchableNames)
+    public async void CreateRayCaster(BasisInput BaseInput)
     {
         Debug.Log("Adding RayCaster");
         BasisPointRaycasterRef = new GameObject(nameof(BasisPointRaycaster));
         BasisPointRaycasterRef.transform.parent = this.transform;
         BasisPointRaycasterRef.transform.SetLocalPositionAndRotation(BasisDeviceMatchableNames.PivotRaycastOffset, Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset));
         BasisPointRaycaster = BasisHelpers.GetOrAddComponent<BasisPointRaycaster>(BasisPointRaycasterRef);
-      await  BasisPointRaycaster.Initialize(BasisDeviceMatchableNames);
+      await  BasisPointRaycaster.Initialize(BaseInput);
     }
 }

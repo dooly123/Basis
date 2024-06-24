@@ -33,7 +33,7 @@ public class BasisCharacterController : MonoBehaviour
     public bool LastWasGrounded = true;
     public float RotationSpeed = 50;
     public event SimulationHandler ReadyToRead;
-
+    public bool BlockMovement = false;
     public bool IsFalling;
     public void OnEnable()
     {
@@ -122,6 +122,10 @@ public class BasisCharacterController : MonoBehaviour
     }
     public void HandleMovement()
     {
+        if (BlockMovement)
+        {
+            return;
+        }
         Vector3 inputDirection = new Vector3(MovementVector.x, 0, MovementVector.y).normalized;
 
         // Get the current rotation of the character controller
