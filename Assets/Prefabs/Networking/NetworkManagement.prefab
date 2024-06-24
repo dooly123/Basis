@@ -85,6 +85,6 @@ MonoBehaviour:
   Client: {fileID: 1950411994380251594}
   HasUnityClient: 0
   authenticationCode: Default
-  ForceConnect: 1
+  ForceConnect: 0
   Ip: localhost
   Port: 4296

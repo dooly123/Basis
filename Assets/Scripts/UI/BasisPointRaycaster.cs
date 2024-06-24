@@ -176,6 +176,7 @@ public class BasisPointRaycaster : MonoBehaviour
     private void ExecuteClickHandler()
     {
         ExecuteEvents.Execute<IPointerClickHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerClickHandler);
+        EventSystem.current.SetSelectedGameObject(hit.transform.gameObject, null);
     }
 
     private void ExecuteDownHandler()

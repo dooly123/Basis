@@ -8,9 +8,17 @@ public class BasisUIComponent : MonoBehaviour
     public void OnEnable()
     {
         Initalize();
+        BasisLocalCameraDriver.InstanceExists += Initalize;
+    }
+    public void OnDisable()
+    {
+        BasisLocalCameraDriver.InstanceExists -= Initalize;
     }
     public void Initalize()
     {
-        Canvas.worldCamera = BasisLocalCameraDriver.Instance.Camera;
+        if (BasisLocalCameraDriver.Instance != null)
+        {
+            Canvas.worldCamera = BasisLocalCameraDriver.Instance.Camera;
+        }
     }
 }

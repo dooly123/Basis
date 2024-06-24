@@ -192,8 +192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f412872e0df964494751723e9f3838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayName: dooly123
-  UUID: asdasdasdad
+  DisplayName: 
+  UUID: 
   Avatar: {fileID: 0}
   HasAvatarDriver: 0
   Move: {fileID: 0}

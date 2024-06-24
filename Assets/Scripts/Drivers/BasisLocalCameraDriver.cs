@@ -13,6 +13,8 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public SteamAudioListener SteamAudioListener;
     public BasisLocalPlayer LocalPlayer;
     public int DefaultCameraFov = 90;
+    // Static event to notify when the instance exists
+    public static event System.Action InstanceExists;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -25,8 +27,9 @@ public class BasisLocalCameraDriver : MonoBehaviour
         CameraInstanceID = Camera.GetInstanceID();
         RenderPipelineManager.beginCameraRendering += beginCameraRendering;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
+        //fire static event that says the instance exists
+        InstanceExists?.Invoke();
     }
-
     private void OnModeSwitch(BasisBootedMode mode)
     {
         if(mode == BasisBootedMode.Desktop)

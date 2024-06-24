@@ -38,6 +38,10 @@ public class BasisNetworkConnector : MonoBehaviour
             Connect(Port, Ip);
         }
     }
+    public void Connect()
+    {
+        Connect(Port, Ip);
+    }
     public void Connect(ushort Port, string IpString)
     {
         HasUnityClient = false;
