@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: UI
   m_GUID: cde9fff55eaf64c43b2b4dca3feb6fbf
   m_SerializeEntries:
+  - m_GUID: 25f595223cb8ed24f96eefd1db66dc0e
+    m_Address: BasisPlayerMenu
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e35beba17f4766418fe93eb1007b6a5
     m_Address: MainMenu
     m_ReadOnly: 0
