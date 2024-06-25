@@ -147,17 +147,28 @@ public class BasisLocalInputActions : MonoBehaviour
     }
     public async void EscapePerformed()
     {
-        if (BasisHamburgerMenu.Instance == null)
+        if (BasisPlayerMenu.Instance == null)
         {
-            if (BasisHamburgerMenu.IsLoading == false)
+            if (BasisPlayerMenu.IsLoading == false)
             {
-                await BasisHamburgerMenu.OpenHamburgerMenu();
+                await BasisPlayerMenu.OpenPlayerMenu();
             }
         }
         else
         {
-            BasisHamburgerMenu.Instance.CloseThisMenu();
+            BasisPlayerMenu.Instance.CloseThisMenu();
         }
+        //if (BasisHamburgerMenu.Instance == null)
+        //{
+        //    if (BasisHamburgerMenu.IsLoading == false)
+        //    {
+        //        await BasisHamburgerMenu.OpenHamburgerMenu();
+        //    }
+        //}
+        //else
+        //{
+        //    BasisHamburgerMenu.Instance.CloseThisMenu();
+        //}
     }
     public void EscapeCancelled()
     {
