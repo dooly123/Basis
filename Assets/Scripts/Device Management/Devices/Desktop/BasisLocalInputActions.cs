@@ -80,6 +80,9 @@ public class BasisLocalInputActions : MonoBehaviour
 
         LeftMousePressed.action.performed += ctx => LeftMouse(ctx.ReadValue<float>());
         RightMousePressed.action.performed += ctx => RightMouse(ctx.ReadValue<float>());
+
+        LeftMousePressed.action.canceled += ctx => LeftMouse(ctx.ReadValue<float>());
+        RightMousePressed.action.canceled += ctx => RightMouse(ctx.ReadValue<float>());
     }
     public void RemoveCallback()
     {
@@ -108,13 +111,14 @@ public class BasisLocalInputActions : MonoBehaviour
 
         LeftMousePressed.action.performed -= ctx => LeftMouse(ctx.ReadValue<float>());
         RightMousePressed.action.performed -= ctx => RightMouse(ctx.ReadValue<float>());
+
+        LeftMousePressed.action.canceled -= ctx => LeftMouse(ctx.ReadValue<float>());
+        RightMousePressed.action.canceled -= ctx => RightMouse(ctx.ReadValue<float>());
     }
     public void LeftMouse(float state)
     {
-        Debug.Log("Left Mouse "+ state);
         if (CharacterEyeInput != null)
         {
-            Debug.Log(" CharacterEyeInput Left Mouse " + state);
             CharacterEyeInput.State.Trigger = state;
         }
     }

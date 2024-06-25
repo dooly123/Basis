@@ -149,24 +149,23 @@ public class BasisPointRaycaster : MonoBehaviour
     {
         if (BasisInput.State.Trigger == 1)
         {
-          //  Debug.Log("Triggered 1");
-             ExecuteClickHandler();
+            Debug.Log("Firing!");
+            EffectiveMouseDown();
+           // ExecuteClickHandler();
             if (!WasLastDown)
             {
-              //  EffectiveMouseDown();
                 WasLastDown = true;
-                  ExecuteDownHandler();
-                  ExecuteBeginDragHandler();
+               // ExecuteDownHandler();
+               // ExecuteBeginDragHandler();
             }
         }
         else
         {
-          //  Debug.Log("Hover Over");
             if (WasLastDown)
             {
                 EffectiveMouseUp();
-                  ExecuteUpHandler();
-                  ExecuteEndDragHandler();
+             //   ExecuteUpHandler();
+             //   ExecuteEndDragHandler();
                 WasLastDown = true;
             }
 
