@@ -27,7 +27,7 @@ public class BasisPointRaycaster : MonoBehaviour
     public Canvas FoundCanvas;
     public RaycastResult RaycastResult = new RaycastResult();
     public BasisInput BasisInput;
-    public UnityEngine.EventSystems.PointerEventData eventData;
+    public PointerEventData eventData;
     public async Task Initialize(BasisInput basisInput)
     {
         BasisInput = basisInput;
@@ -111,6 +111,7 @@ public class BasisPointRaycaster : MonoBehaviour
     {
         if (hit.transform.gameObject.layer == UIMask)
         {
+          //  Debug.Log("HandleValidHit");
             UpdateRayCastResult();
             HandleUIEvents();
             UpdateLineRenderer();
@@ -148,22 +149,24 @@ public class BasisPointRaycaster : MonoBehaviour
     {
         if (BasisInput.State.Trigger == 1)
         {
-            // ExecuteClickHandler();
+          //  Debug.Log("Triggered 1");
+             ExecuteClickHandler();
             if (!WasLastDown)
             {
-                EffectiveMouseDown();
+              //  EffectiveMouseDown();
                 WasLastDown = true;
-                //  ExecuteDownHandler();
-                //  ExecuteBeginDragHandler();
+                  ExecuteDownHandler();
+                  ExecuteBeginDragHandler();
             }
         }
         else
         {
+          //  Debug.Log("Hover Over");
             if (WasLastDown)
             {
                 EffectiveMouseUp();
-                //  ExecuteUpHandler();
-                //  ExecuteEndDragHandler();
+                  ExecuteUpHandler();
+                  ExecuteEndDragHandler();
                 WasLastDown = true;
             }
 
@@ -174,6 +177,7 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     private void EffectiveMouseDown()
     {
+     //   Debug.Log("EffectiveMouseDown");
         eventData.selectedObject = hit.transform.gameObject;
         // If we have clicked something new, deselect the old thing and leave 'selection handling' up
         // to the press event (except if there's none and we're told to not deselect in that case).
@@ -192,6 +196,7 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     private void EffectiveMouseUp()
     {
+       // Debug.Log("EffectiveMouseUp");
         ExecuteEvents.Execute(hit.transform.gameObject, eventData, ExecuteEvents.pointerUpHandler);
         ExecuteEvents.Execute(hit.transform.gameObject, eventData, ExecuteEvents.pointerClickHandler);
            // else if (eventData.dragging && eventData.pointerDrag != null)

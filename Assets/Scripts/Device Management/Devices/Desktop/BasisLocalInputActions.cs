@@ -20,6 +20,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public BasisAvatarEyeInput CharacterEyeInput;
     public static BasisLocalInputActions Instance;
     public BasisLocalPlayer basisLocalPlayer;
+    public PlayerInput Input;
     public void OnEnable()
     {
         DesktopSwitch.action.Enable();
@@ -33,6 +34,11 @@ public class BasisLocalInputActions : MonoBehaviour
         {
             Instance = this;
         }
+        BasisLocalCameraDriver.InstanceExists += SetupCamera;
+    }
+    public void SetupCamera()
+    {
+        Input.camera = BasisLocalCameraDriver.Instance.Camera;
     }
     public void OnDisable()
     {
@@ -105,8 +111,10 @@ public class BasisLocalInputActions : MonoBehaviour
     }
     public void LeftMouse(float state)
     {
+        Debug.Log("Left Mouse "+ state);
         if (CharacterEyeInput != null)
         {
+            Debug.Log(" CharacterEyeInput Left Mouse " + state);
             CharacterEyeInput.State.Trigger = state;
         }
     }

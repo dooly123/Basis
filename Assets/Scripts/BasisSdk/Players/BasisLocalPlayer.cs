@@ -28,6 +28,7 @@ public class BasisLocalPlayer : BasisPlayer
         Instance = this;
         IsLocal = true;
         LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
+        await CreateInputAction();
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Character Controller.prefab", new InstantiationParameters());
         //  FootPlacementDriver = Helpers.GetOrAddComponent<FootPlacementDriver>(this.gameObject);
@@ -52,7 +53,6 @@ public class BasisLocalPlayer : BasisPlayer
     {
         AvatarUrl = AddressableID;
         await BasisAvatarFactory.LoadAvatar(this, AddressableID);
-        await CreateInputAction();
         OnLocalAvatarChanged?.Invoke();
     }
     public void OnCalibration()
