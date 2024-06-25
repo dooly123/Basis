@@ -5,7 +5,9 @@ public static class BasisAvatarFactory
 {
     public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress)
     {
-        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        DeleteLastAvatar(Player);
+        LoadLoadingAvatar(Player);
+        (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {
@@ -26,6 +28,8 @@ public static class BasisAvatarFactory
     }
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
     {
+        DeleteLastAvatar(Player);
+        LoadLoadingAvatar(Player);
         var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
@@ -39,6 +43,20 @@ public static class BasisAvatarFactory
                     Player.InitalizeIKCalibration(Player.RemoteAvatarDriver);
                 }
             }
+        }
+    }
+    public static void LoadLoadingAvatar(BasisPlayer Player)
+    {
+    }
+    public static void DeleteLastAvatar(BasisPlayer Player)
+    {
+        if (Player.Avatar != null)
+        {
+            GameObject.Destroy(Player.Avatar.gameObject);
+        }
+        if (Player.AvatarAddressableGenericResource != null)
+        {
+            AddressableLoadFactory.ReleaseResource(Player.AvatarAddressableGenericResource);
         }
     }
     public static async Task LoadAvatar(BasisPlayer Player, string AvatarAddress)

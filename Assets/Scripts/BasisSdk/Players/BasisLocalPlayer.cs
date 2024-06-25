@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class BasisLocalPlayer : BasisPlayer
 {
     public static BasisLocalPlayer Instance;
@@ -49,6 +51,13 @@ public class BasisLocalPlayer : BasisPlayer
             Avatar.Animator.transform.SetPositionAndRotation(rotatedOffset, rotation);
         }
     }
+#if UNITY_EDITOR
+    [MenuItem("Basis/ReloadAvatar")]
+    public static async void ReloadAvatar()
+    {
+      await  BasisLocalPlayer.Instance.CreateAvatar();
+    }
+#endif
     public async Task CreateAvatar(string AddressableID = FallBackAvatar)
     {
         AvatarUrl = AddressableID;

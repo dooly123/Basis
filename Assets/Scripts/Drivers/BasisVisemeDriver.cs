@@ -20,23 +20,26 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
     }
     void Update()
     {
-        // get the current viseme frame
-        OVRLipSync.Frame frame = GetCurrentPhonemeFrame();
-        if (frame != null)
+        if (Avatar != null)
         {
-            SetVisemeToMorphTarget(frame);
+            // get the current viseme frame
+            OVRLipSync.Frame frame = GetCurrentPhonemeFrame();
+            if (frame != null)
+            {
+                SetVisemeToMorphTarget(frame);
 
-            SetLaughterToMorphTarget(frame);
-        }
-        else
-        {
-            Debug.Log("missing frame");
-        }
-        laughterScore = this.Frame.laughterScore;
-        // Update smoothing value
-        if (smoothAmount != Smoothing)
-        {
-            Smoothing = smoothAmount;
+                SetLaughterToMorphTarget(frame);
+            }
+            else
+            {
+                Debug.Log("missing frame");
+            }
+            laughterScore = this.Frame.laughterScore;
+            // Update smoothing value
+            if (smoothAmount != Smoothing)
+            {
+                Smoothing = smoothAmount;
+            }
         }
     }
     void SetVisemeToMorphTarget(OVRLipSync.Frame frame)

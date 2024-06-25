@@ -149,7 +149,6 @@ public class BasisPointRaycaster : MonoBehaviour
     {
         if (BasisInput.State.Trigger == 1)
         {
-            Debug.Log("Firing!");
             EffectiveMouseDown();
            // ExecuteClickHandler();
             if (!WasLastDown)

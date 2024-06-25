@@ -5,6 +5,7 @@ public abstract class BasisPlayer : MonoBehaviour
     public string DisplayName;
     public string UUID;
     public BasisAvatar Avatar;
+    public AddressableGenericResource AvatarAddressableGenericResource;
     public bool HasAvatarDriver;
     public const string FallBackAvatar = "LoadingAvatar";
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)
