@@ -104,7 +104,10 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         BasisNetworkAvatarDecompressor.DeCompress(this, serverSideSyncPlayerMessage);
     }
-
+    public void ReceiveAvatarChangeRequest(ServerAvatarChangeMessage ServerAvatarChangeMessage)
+    {
+        RemotePlayer.CreateAvatar(ServerAvatarChangeMessage.clientAvatarChangeMessage.avatarID);
+    }
     public override async void Initialize(BasisNetworkedPlayer networkedPlayer)
     {
         if (!Ready)

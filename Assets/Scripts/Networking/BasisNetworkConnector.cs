@@ -222,9 +222,26 @@ public class BasisNetworkConnector : MonoBehaviour
                     case BasisTags.DisconnectTag:
                         HandleDisconnection(reader);
                         break;
+                    case BasisTags.AvatarChangeMessage:
+                        HandleAvatarChangeMessage(reader);
+                        break;
 
                 }
             }
+        }
+    }
+    private void HandleAvatarChangeMessage(DarkRiftReader reader)
+    {
+        reader.Read(out ServerAvatarChangeMessage ServerAvatarChangeMessage);
+        ushort PlayerID = ServerAvatarChangeMessage.uShortPlayerId.playerID;
+        if (Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
+        {
+            BasisNetworkReceiver networkReceiver = (BasisNetworkReceiver)Player.NetworkSend;
+            networkReceiver.ReceiveAvatarChangeRequest(ServerAvatarChangeMessage);
+        }
+        else
+        {
+            Debug.Log("Missing Player For Message " + ServerAvatarChangeMessage.uShortPlayerId.playerID);
         }
     }
     private void HandleDisconnection(DarkRiftReader reader)

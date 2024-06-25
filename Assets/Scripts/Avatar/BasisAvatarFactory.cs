@@ -9,6 +9,7 @@ public static class BasisAvatarFactory
         LoadLoadingAvatar(Player);
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;
+        Player.AvatarUrl = AvatarAddress;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)
@@ -25,6 +26,7 @@ public static class BasisAvatarFactory
                 }
             }
         }
+        Player.OnAvatarSwitched?.Invoke();
     }
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
     {
@@ -32,6 +34,7 @@ public static class BasisAvatarFactory
         LoadLoadingAvatar(Player);
         var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;
+        Player.AvatarUrl = AvatarAddress;
         if (Gameobjects.Count != 0)
         {
             foreach (GameObject gameObject in Gameobjects)
@@ -44,6 +47,7 @@ public static class BasisAvatarFactory
                 }
             }
         }
+        Player.OnAvatarSwitched?.Invoke();
     }
     public static void LoadLoadingAvatar(BasisPlayer Player)
     {

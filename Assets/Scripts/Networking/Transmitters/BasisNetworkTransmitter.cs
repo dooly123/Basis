@@ -1,4 +1,7 @@
+using DarkRift;
+using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
+using static SerializableDarkRift;
 [DefaultExecutionOrder(15002)]
 public partial class BasisNetworkTransmitter : BasisNetworkSendBase
 {
@@ -40,7 +43,8 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
             NetworkedPlayer = networkedPlayer;
             AudioTransmission.OnEnable(networkedPlayer);
             OnAvatarCalibration();
-           // LocalPlayer.AvatarDriver.CalibrationComplete.AddListener(Oncalibration);
+            networkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
+            networkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
         }
         else
         {
@@ -53,5 +57,18 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
         {
         }
         AudioTransmission.OnDisable();
+    }
+    public void SendOutLatestAvatar()
+    {
+        using (DarkRiftWriter writer = DarkRiftWriter.Create())
+        {
+            ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage();
+            ClientAvatarChangeMessage.avatarID = NetworkedPlayer.Player.AvatarUrl;
+            writer.Write(ClientAvatarChangeMessage);
+            using (var msg = Message.Create(BasisTags.AvatarChangeMessage, writer))
+            {
+                BasisNetworkConnector.Instance.Client.SendMessage(msg, DeliveryMethod.ReliableOrdered);
+            }
+        }
     }
 }
