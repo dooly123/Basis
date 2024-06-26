@@ -41,7 +41,7 @@ public class BasisLocalPlayer : BasisPlayer
     }
     public void Simulate()
     {
-        if (Hips.HasBone && Avatar != null)
+        if (Hips.HasBone && Avatar != null && Avatar.Animator != null)
         {
             Quaternion rotation = Hips.BoneTransform.rotation;
             Vector3 rotatedOffset = rotation * Hips.RestingLocalSpace.Position;

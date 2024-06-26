@@ -11,7 +11,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
     public UnityEvent BeginningCalibration = new UnityEvent();
     public UnityEvent CalibrationComplete = new UnityEvent();
-    public BasisTransformMapping References;
+    public BasisTransformMapping References = new BasisTransformMapping();
     public RuntimeAnimatorController runtimeAnimatorController;
     public SkinnedMeshRenderer[] SkinnedMeshRenderer;
     public BasisPlayer Player;
@@ -97,8 +97,28 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     }
     public void GetBoneRotAndPos(BaseBoneDriver driver, Animator anim, HumanBodyBones bone, Vector3 heightPercentage, out Quaternion Rotation, out Vector3 Position, out bool UsedFallback)
     {
-        Transform boneTransform = anim.GetBoneTransform(bone);
-        if (boneTransform == null)
+        if (anim.avatar != null && anim.avatar.isHuman)
+        {
+            Transform boneTransform = anim.GetBoneTransform(bone);
+            if (boneTransform == null)
+            {
+                Rotation = driver.transform.rotation;
+                if (BasisHelpers.TryGetFloor(anim, out Position))
+                {
+
+                }
+                Position = new Vector3(0, Position.y, 0);
+                Position += CalculateFallbackOffset(bone, ActiveHeight, heightPercentage);
+                Position = new Vector3(0, Position.y, 0);
+                UsedFallback = true;
+            }
+            else
+            {
+                UsedFallback = false;
+                boneTransform.GetPositionAndRotation(out Position, out Rotation);
+            }
+        }
+        else
         {
             Rotation = driver.transform.rotation;
             if (BasisHelpers.TryGetFloor(anim, out Position))
@@ -109,11 +129,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             Position += CalculateFallbackOffset(bone, ActiveHeight, heightPercentage);
             Position = new Vector3(0, Position.y, 0);
             UsedFallback = true;
-        }
-        else
-        {
-            UsedFallback = false;
-            boneTransform.GetPositionAndRotation(out Position, out Rotation);
         }
     }
     public Vector3 CalculateFallbackOffset(HumanBodyBones bone, float fallbackHeight, Vector3 heightPercentage)

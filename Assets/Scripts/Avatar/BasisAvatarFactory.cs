@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 public static class BasisAvatarFactory
 {
     public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress)
@@ -16,6 +17,7 @@ public static class BasisAvatarFactory
             {
                 if (gameObject.TryGetComponent(out BasisAvatar Avatar))
                 {
+                    DeleteLastAvatar(Player);
                     Player.Avatar = Avatar;
                     CreateLocal(Player);
                     Player.InitalizeIKCalibration(Player.AvatarDriver);
@@ -41,6 +43,7 @@ public static class BasisAvatarFactory
             {
                 if (gameObject.TryGetComponent(out BasisAvatar Avatar))
                 {
+                    DeleteLastAvatar(Player);
                     Player.Avatar = Avatar;
                     CreateRemote(Player);
                     Player.InitalizeIKCalibration(Player.RemoteAvatarDriver);
@@ -49,8 +52,27 @@ public static class BasisAvatarFactory
         }
         Player.OnAvatarSwitched?.Invoke();
     }
-    public static void LoadLoadingAvatar(BasisPlayer Player)
+    public static void LoadLoadingAvatar(BasisPlayer Player, string LoadingAvatarToUse = "Assets/Prefabs/Loadins/LankyLoad.prefab")
     {
+        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(LoadingAvatarToUse);
+        GameObject LoadingAvatar = op.WaitForCompletion();
+        GameObject InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar);
+        if (InSceneLoadingAvatar.TryGetComponent(out BasisAvatar Avatar))
+        {
+            Player.Avatar = Avatar;
+            if (Player.IsLocal)
+            {
+                BasisLocalPlayer BasisLocalPlayer = (BasisLocalPlayer)Player;
+                CreateLocal(BasisLocalPlayer);
+                Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
+            }
+            else
+            {
+                BasisRemotePlayer BasisRemotePlayer = (BasisRemotePlayer)Player;
+                CreateRemote(BasisRemotePlayer);
+                Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
+            }
+        }
     }
     public static void DeleteLastAvatar(BasisPlayer Player)
     {

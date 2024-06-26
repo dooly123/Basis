@@ -62,7 +62,14 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         HeadScaledDown = Vector3.zero;
         SetMatrixRecalculation(true);
         updateWhenOffscreen(true);
-        HeadScale = References.head.localScale;
+        if (References.Hashead)
+        {
+            HeadScale = References.head.localScale;
+        }
+        else
+        {
+            HeadScale = Vector3.one;
+        }
         SetBodySettings(LocalDriver);
         CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
         ComputeOffsets(LocalDriver);

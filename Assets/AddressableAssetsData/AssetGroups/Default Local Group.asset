@@ -80,6 +80,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98a748106e6c47748a99038c99c23bb8
+    m_Address: Assets/Prefabs/Loadins/LankyLoad.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b1578359dddd0245b76d3ccd9dcc2d3
     m_Address: Assets/ScriptableObjects/BoneData.asset
     m_ReadOnly: 0

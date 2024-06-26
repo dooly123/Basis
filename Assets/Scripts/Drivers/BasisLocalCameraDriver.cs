@@ -25,7 +25,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
         Camera.nearClipPlane = 0.01f;
         Camera.farClipPlane = 1500;
         CameraInstanceID = Camera.GetInstanceID();
-        RenderPipelineManager.beginCameraRendering += beginCameraRendering;
+        RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
         //fire static event that says the instance exists
         InstanceExists?.Invoke();
@@ -39,15 +39,15 @@ public class BasisLocalCameraDriver : MonoBehaviour
     }
     public void OnDisable()
     {
-        RenderPipelineManager.beginCameraRendering -= beginCameraRendering;
+        RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
         if (LocalPlayer.AvatarDriver && LocalPlayer.AvatarDriver.References != null && LocalPlayer.AvatarDriver.References.head != null)
         {
             LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
         }
     }
-    public void beginCameraRendering(ScriptableRenderContext context, Camera Camera)
+    public void BeginCameraRendering(ScriptableRenderContext context, Camera Camera)
     {
-        if (LocalPlayer.HasAvatarDriver)
+        if (LocalPlayer.HasAvatarDriver && LocalPlayer.AvatarDriver.References.Hashead)
         {
             if (Camera.GetInstanceID() == CameraInstanceID)
             {

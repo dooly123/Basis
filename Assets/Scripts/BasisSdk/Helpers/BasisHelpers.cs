@@ -42,17 +42,22 @@ public static class BasisHelpers
 
     public static bool TryGetVector3Bone(Animator animator, HumanBodyBones bone, out Vector3 position)
     {
-        Transform boneTransform = animator.GetBoneTransform(bone);
-        if (boneTransform != null)
+        if (animator.avatar != null && animator.avatar.isHuman)
         {
-            position = boneTransform.position;
-            return true;
+            Transform boneTransform = animator.GetBoneTransform(bone);
+            if (boneTransform != null)
+            {
+                position = boneTransform.position;
+                return true;
+            }
+            else
+            {
+                position = Vector3.zero;
+                return false;
+            }
         }
-        else
-        {
-            position = Vector3.zero;
-            return false;
-        }
+        position = Vector3.zero;
+        return false;
     }
 
     public static bool TryGetTransformBone(Animator animator, HumanBodyBones bone, out Transform boneTransform)
