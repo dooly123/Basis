@@ -1,4 +1,3 @@
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,6 +10,11 @@ public class BasisInputModuleHandler : BaseInputModule
     private InputAction tabAction;
     private InputAction enterAction;
     private InputAction keypadEnterAction;
+
+    public TMP_InputField CurrentSelectedTMP_InputField;
+    public InputField CurrentSelectedInputField;
+    public bool HasEvent = false;
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -88,16 +92,13 @@ public class BasisInputModuleHandler : BaseInputModule
             CurrentSelectedInputField.onValueChanged.Invoke(CurrentSelectedInputField.text);
         }
     }
-    public TMP_InputField CurrentSelectedTMP_InputField;
-    public InputField CurrentSelectedInputField;
-    public bool HasEvent = false;
     public override void Process()
     {
         // Process your input events here
         if (EventSystem.currentSelectedGameObject != null)
         {
             var data = GetBaseEventData();
-            ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
+            //  ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
             if (EventSystem.currentSelectedGameObject.TryGetComponent(out CurrentSelectedTMP_InputField))
             {
 
@@ -112,7 +113,7 @@ public class BasisInputModuleHandler : BaseInputModule
             if (HasEvent == false)
             {
                 // Subscribe to the device change event
-                Keyboard.current.onTextInput += OnTextInput;
+              //  Keyboard.current.onTextInput += OnTextInput;
                 HasEvent = true;
                 if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
                 {
@@ -125,7 +126,7 @@ public class BasisInputModuleHandler : BaseInputModule
             if (HasEvent)
             {
                 // Unsubscribe from the key press event
-                Keyboard.current.onTextInput -= OnTextInput;
+               // Keyboard.current.onTextInput -= OnTextInput;
                 HasEvent = false;
                 CurrentSelectedTMP_InputField = null;
                 CurrentSelectedInputField = null;
@@ -133,6 +134,8 @@ public class BasisInputModuleHandler : BaseInputModule
                 {
                     BasisLocalPlayer.Instance.Move.BlockMovement = false;
                 }
+                var data = GetBaseEventData();
+                ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
             }
         }
     }

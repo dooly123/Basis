@@ -8,7 +8,7 @@ public abstract class BasisNamePlate : MonoBehaviour
     public Vector3 directionToCamera;
     public BasisBoneControl HipTarget;
     public BasisBoneControl MouthTarget;
-    public Vector3 Offset = new Vector3(0, -0.5f, 0f);
+    public float FloatOffset = -0.5f;
     public TextMeshProUGUI Text;
     public void Initalize(BasisBoneControl hipTarget, BasisRemotePlayer BasisRemotePlayer)
     {
@@ -28,6 +28,6 @@ public abstract class BasisNamePlate : MonoBehaviour
     }
     public Vector3 GeneratePoint()
     {
-      return HipTarget.BoneTransform.position + MouthTarget.RestingLocalSpace.Position + Offset;
+        return HipTarget.BoneTransform.position + new Vector3(0, MouthTarget.RestingLocalSpace.Position.y + FloatOffset, 0);
     }
 }

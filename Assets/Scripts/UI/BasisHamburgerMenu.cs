@@ -15,15 +15,16 @@ public class BasisHamburgerMenu : BasisUIBase
         CloseUI.onClick.AddListener(CloseThisMenu);
     }
 
-    private void AvatarButtonPanel()
+    private async static void AvatarButtonPanel()
     {
-        CloseThisMenu();
+        BasisHamburgerMenu.Instance.CloseThisMenu();
+        await BasisSettingsPanelMenu.OpenThisMenu(BasisUIAvatarSelection.AvatarSelection);
     }
 
-    public async void SettingsPanel()
+    public async static void SettingsPanel()
     {
+        BasisHamburgerMenu.Instance.CloseThisMenu();
         await BasisSettingsPanelMenu.OpenThisMenu(BasisSettingsPanelMenu.SettingsPanel);
-        CloseThisMenu();
     }
     public async static void OpenMenu()
     {

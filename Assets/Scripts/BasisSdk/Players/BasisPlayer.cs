@@ -8,7 +8,7 @@ public abstract class BasisPlayer : MonoBehaviour
     public AddressableGenericResource AvatarAddressableGenericResource;
     public string AvatarUrl;
     public bool HasAvatarDriver;
-    public const string FallBackAvatar = "LoadingAvatar";
+    public const string FallBackAvatar = "Aurellia";
     public System.Action OnAvatarSwitched;
     public System.Action OnAvatarSwitchedFallBack;
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)

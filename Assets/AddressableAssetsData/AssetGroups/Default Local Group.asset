@@ -15,13 +15,18 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 37c75a6cf72db324eb01200602299fc8
   m_SerializeEntries:
+  - m_GUID: 015b3d7344ee29b41acd36bac09baf03
+    m_Address: BasisUIAvatarSelection
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 07132e11222fce241973d5e194e108b6
     m_Address: Assets/Prefabs/Loadins/Character Controller.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1599b83511bbe754ab292ae68f39dd6d
-    m_Address: LoadingAvatar
+    m_Address: Aurellia
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

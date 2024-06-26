@@ -216,7 +216,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         GameObject HeadRig = CreateRig("Head", true, out RigHead, out HeadLayer);
         Hands(driver);
         Feet(driver);
-        CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Head,false, out HeadTwoBoneIK, false, true);
+        CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Head,false, out HeadTwoBoneIK, false, false);
 
         GameObject Body = CreateRig("Upper Chest", true, out ChestSpine, out UpperChestLayer);
         CreateTwoBone(driver, Body, null, References.spine, References.chest, BasisBoneTrackedRole.UpperChest, BasisBoneTrackedRole.UpperChest, false, out UpperChestTwoBoneIK, true, true);

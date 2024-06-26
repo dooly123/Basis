@@ -39,7 +39,6 @@ public class BasisPointRaycaster : MonoBehaviour
         UIMask = LayerMask.NameToLayer("UI");
         // Create a LayerMask that includes all layers
         LayerMask allLayers = ~0;
-
         // Exclude the "Ignore Raycast" layer using bitwise AND and NOT operations
         Mask = allLayers & ~(1 << ignoreRaycastLayer);
         HasLineRenderer = false;
@@ -111,21 +110,23 @@ public class BasisPointRaycaster : MonoBehaviour
     {
         if (hit.transform.gameObject.layer == UIMask)
         {
-          //  Debug.Log("HandleValidHit");
             UpdateRayCastResult();
             HandleUIEvents();
             UpdateLineRenderer();
             UpdateRadicalRenderer();
             UpdatePointerState();
             UpdateDebugDraw(Color.green, hit.point);
+            LastHit = hit.transform.gameObject;
         }
         else
         {
             ResetRenderers();
             UpdateDebugDraw(Color.blue, hit.point);
-        }
-    }
 
+            EventSystem.current.SetSelectedGameObject(null, null);
+        }
+     BasisUIProcessUIEvents.SendUpdateEventToSelectedObject(eventData);
+    }
     private void UpdateRayCastResult()
     {
         pointerEventData = new PointerEventData(EventSystem.current);
@@ -144,18 +145,15 @@ public class BasisPointRaycaster : MonoBehaviour
         pointerEventData.position = RaycastResult.screenPosition;
         pointerEventData.pressPosition = RaycastResult.screenPosition;
     }
-
     private void HandleUIEvents()
     {
         if (BasisInput.State.Trigger == 1)
         {
-            EffectiveMouseDown();
-           // ExecuteClickHandler();
-            if (!WasLastDown)
+            if (WasLastDown == false)
             {
+                EventSystem.current.SetSelectedGameObject(hit.transform.gameObject, eventData);
                 WasLastDown = true;
-               // ExecuteDownHandler();
-               // ExecuteBeginDragHandler();
+                EffectiveMouseDown();
             }
         }
         else
@@ -163,94 +161,86 @@ public class BasisPointRaycaster : MonoBehaviour
             if (WasLastDown)
             {
                 EffectiveMouseUp();
-             //   ExecuteUpHandler();
-             //   ExecuteEndDragHandler();
                 WasLastDown = true;
             }
 
         }
-        //ExecuteMoveHandler();
-        // ExecuteIDragHandler();
-        // HandlePointerEnterAndExit();
     }
+    float m_ClickSpeed = 0.3f;
     private void EffectiveMouseDown()
     {
-     //   Debug.Log("EffectiveMouseDown");
+        eventData.eligibleForClick = true;
+        eventData.delta = Vector2.zero;
+        eventData.dragging = false;
+        eventData.pressPosition = eventData.position;
+        eventData.pointerPressRaycast = eventData.pointerCurrentRaycast;
+        eventData.useDragThreshold = true;
         eventData.selectedObject = hit.transform.gameObject;
-        // If we have clicked something new, deselect the old thing and leave 'selection handling' up
-        // to the press event (except if there's none and we're told to not deselect in that case).
-        var selectHandler = ExecuteEvents.GetEventHandler<ISelectHandler>(hit.transform.gameObject);
+
+        GameObject selectHandler = ExecuteEvents.GetEventHandler<ISelectHandler>(hit.transform.gameObject);
+
+        // If we have clicked something new, deselect the old thing
+        // and leave 'selection handling' up to the press event.
         if (selectHandler != EventSystem.current.currentSelectedGameObject)
         {
             EventSystem.current.SetSelectedGameObject(null, eventData);
         }
-        var newPressed = ExecuteEvents.ExecuteHierarchy(hit.transform.gameObject, eventData, ExecuteEvents.pointerDownHandler);
 
+        GameObject newPressed = ExecuteEvents.ExecuteHierarchy(hit.transform.gameObject, eventData, ExecuteEvents.pointerDownHandler);
+
+        // We didn't find a press handler, so we search for a click handler.
         if (newPressed == null)
-        {
             newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.transform.gameObject);
+
+        var time = Time.unscaledTime;
+
+        if (newPressed == eventData.lastPress && ((time - eventData.clickTime) < m_ClickSpeed))
+            ++eventData.clickCount;
+        else
+            eventData.clickCount = 1;
+
+        eventData.clickTime = time;
+
+        eventData.pointerPress = newPressed;
+        eventData.rawPointerPress = hit.transform.gameObject;
+
+        // Save the drag handler for drag events during this mouse down.
+        var dragObject = ExecuteEvents.GetEventHandler<IDragHandler>(hit.transform.gameObject);
+        eventData.pointerDrag = dragObject;
+
+        if (dragObject != null)
+        {
+            ExecuteEvents.Execute(dragObject, eventData, ExecuteEvents.initializePotentialDrag);
         }
-        ExecuteEvents.Execute(hit.transform.gameObject, eventData, ExecuteEvents.initializePotentialDrag);
     }
     private void EffectiveMouseUp()
     {
-       // Debug.Log("EffectiveMouseUp");
-        ExecuteEvents.Execute(hit.transform.gameObject, eventData, ExecuteEvents.pointerUpHandler);
-        ExecuteEvents.Execute(hit.transform.gameObject, eventData, ExecuteEvents.pointerClickHandler);
-           // else if (eventData.dragging && eventData.pointerDrag != null)
-         //   ExecuteEvents.ExecuteHierarchy(currentOverGo, eventData, ExecuteEvents.dropHandler);
-    }
+        var target = eventData.pointerPress;
+        ExecuteEvents.Execute(target, eventData, ExecuteEvents.pointerUpHandler);
 
-    private void ExecuteClickHandler()
-    {
-        ExecuteEvents.Execute<IPointerClickHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerClickHandler);
-        EventSystem.current.SetSelectedGameObject(hit.transform.gameObject, null);
-    }
-
-    private void ExecuteDownHandler()
-    {
-        ExecuteEvents.Execute<IPointerDownHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerDownHandler);
-        EventSystem.current.SetSelectedGameObject(hit.transform.gameObject, null);
-    }
-
-    private void ExecuteUpHandler()
-    {
-        ExecuteEvents.Execute<IPointerUpHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerUpHandler);
-    }
-
-    private void ExecuteMoveHandler()
-    {
-        ExecuteEvents.Execute<IPointerMoveHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerMoveHandler);
-    }
-    private void ExecuteBeginDragHandler()
-    {
-        ExecuteEvents.Execute<IBeginDragHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.beginDragHandler);
-    }
-    private void ExecuteIDragHandler()
-    {
-        ExecuteEvents.Execute<IDragHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.dragHandler);
-    }
-    private void ExecuteEndDragHandler()
-    {
-        ExecuteEvents.Execute<IEndDragHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.endDragHandler);
-    }
-    private void ExecuteIUpdateSelectedHandler()
-    {
-        ExecuteEvents.Execute<IUpdateSelectedHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.updateSelectedHandler);
-    }
-    private void HandlePointerEnterAndExit()
-    {
-        if (LastHit != hit.transform.gameObject)
+        var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.transform.gameObject);
+        var pointerDrag = eventData.pointerDrag;
+        if (target == pointerUpHandler && eventData.eligibleForClick)
         {
-            ExecuteEvents.Execute<IPointerEnterHandler>(hit.transform.gameObject, pointerEventData, ExecuteEvents.pointerEnterHandler);
-            if (LastHit != null)
-            {
-                ExecuteEvents.Execute<IPointerExitHandler>(LastHit, pointerEventData, ExecuteEvents.pointerExitHandler);
-            }
+            ExecuteEvents.Execute(target, eventData, ExecuteEvents.pointerClickHandler);
         }
-        LastHit = hit.transform.gameObject;
-    }
+        else if (eventData.dragging && pointerDrag != null)
+        {
+            ExecuteEvents.ExecuteHierarchy(hit.transform.gameObject, eventData, ExecuteEvents.dropHandler);
+        }
 
+        eventData.eligibleForClick = false;
+        eventData.pointerPress = null;
+        eventData.rawPointerPress = null;
+
+        if (eventData.dragging && pointerDrag != null)
+        {
+            ExecuteEvents.Execute(pointerDrag, eventData, ExecuteEvents.endDragHandler);
+        }
+
+        eventData.dragging = false;
+        eventData.pointerDrag = null;
+    }
     private void UpdateLineRenderer()
     {
         if (HasLineRenderer && !CachedLinerRenderState)
