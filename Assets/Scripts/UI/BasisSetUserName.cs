@@ -16,11 +16,16 @@ public class BasisSetUserName : MonoBehaviour
         if (string.IsNullOrEmpty(UserNameTMP_InputField.text) == false)
         {
             BasisLocalPlayer.Instance.DisplayName = UserNameTMP_InputField.text;
-            if (BasisNetworking.Instance != null)
+            if (BasisNetworkConnector.Instance != null)
             {
+                Debug.Log("connecting to default");
                 BasisNetworkConnector.Instance.Connect();
+                GameObject.Destroy(this.gameObject);
             }
-            GameObject.Destroy(this.gameObject);
+        }
+        else
+        {
+            Debug.LogError("Name was empty bailing");
         }
     }
 }
