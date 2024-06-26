@@ -43,6 +43,7 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
             NetworkedPlayer = networkedPlayer;
             AudioTransmission.OnEnable(networkedPlayer);
             OnAvatarCalibration();
+            networkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
             networkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
             networkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
         }

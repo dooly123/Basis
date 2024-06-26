@@ -10,6 +10,7 @@ public abstract class BasisPlayer : MonoBehaviour
     public bool HasAvatarDriver;
     public const string FallBackAvatar = "LoadingAvatar";
     public System.Action OnAvatarSwitched;
+    public System.Action OnAvatarSwitchedFallBack;
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)
     {
         if (LocalAvatarDriver != null)

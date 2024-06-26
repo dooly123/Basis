@@ -50,12 +50,16 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             return;
         }
         CleanupBeforeContinue();
+        AdditionalTransforms.Clear();
+        Rigs.Clear();
         if (Builder == null)
         {
             Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
         }
-        AdditionalTransforms.Clear();
-        Rigs.Clear();
+        else
+        {
+            Builder.Clear();
+        }
         Calibration(Player.Avatar);
         BasisLocalEyeFollowDriver EyeFollowBase = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
         EyeFollowBase.CreateEyeLook(this);
@@ -75,11 +79,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         ComputeOffsets(LocalDriver);
         Builder.Build();
         CalibrationComplete.Invoke();
-
-        if (AnimatorDriver == null)
-        {
-            AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
-        }
+        AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
         AnimatorDriver.Initalize(LocalDriver, Player.Avatar.Animator);
 
         if (MicrophoneRecorder == null)
@@ -118,6 +118,11 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void CleanupBeforeContinue()
     {
+        if (Builder != null)
+        {
+            Destroy(Builder);
+        }
+        Builder = null;
         if (RigHead != null)
         {
             Destroy(RigHead.gameObject);

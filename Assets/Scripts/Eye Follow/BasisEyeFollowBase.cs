@@ -21,6 +21,13 @@ public abstract class BasisEyeFollowBase : MonoBehaviour
         }
         return false;
     }
+    public void OnDestroy()
+    {
+        if (GeneralEyeTarget != null)
+        {
+            GameObject.Destroy(GeneralEyeTarget.gameObject);    
+        }
+    }
     public void CreateEyeLook(BasisAvatarDriver CharacterAvatarDriver)
     {
         if (GeneralEyeTarget == null)

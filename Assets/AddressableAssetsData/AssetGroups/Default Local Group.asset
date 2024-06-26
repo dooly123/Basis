@@ -65,6 +65,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7274a0750104ae84da15a2c895b715fc
+    m_Address: Assets/third_party/Avatar/Dooly/dooly.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 851cc482c802fed4388550f1c5749169
     m_Address: Assets/UI/Prefabs/NamePlate.prefab
     m_ReadOnly: 0

@@ -7,7 +7,8 @@ public static class BasisAvatarFactory
     public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress)
     {
         DeleteLastAvatar(Player);
-        LoadLoadingAvatar(Player);
+        LoadLoadingAvatar(Player, "Assets/third_party/Avatar/Dooly/dooly.prefab");
+        Player.OnAvatarSwitchedFallBack?.Invoke();
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;
         Player.AvatarUrl = AvatarAddress;
@@ -23,6 +24,7 @@ public static class BasisAvatarFactory
                     Player.InitalizeIKCalibration(Player.AvatarDriver);
                     if(BasisScene.Instance != null)
                     {
+                        //swap over to on scene load
                         BasisScene.Instance.SpawnPlayer(Player);
                     }
                 }
@@ -33,8 +35,9 @@ public static class BasisAvatarFactory
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
     {
         DeleteLastAvatar(Player);
-        LoadLoadingAvatar(Player);
-        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        LoadLoadingAvatar(Player, "Assets/third_party/Avatar/Dooly/dooly.prefab");
+        Player.OnAvatarSwitchedFallBack?.Invoke();
+        (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;
         Player.AvatarUrl = AvatarAddress;
         if (Gameobjects.Count != 0)
