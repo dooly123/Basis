@@ -65,13 +65,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 664b0a1856405914186fc25229d9d893
-    m_Address: vr_tracker_vive_1_0
+  - m_GUID: 65ce57433cf75924fadf6a624f62f5cb
+    m_Address: Dooly
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7274a0750104ae84da15a2c895b715fc
-    m_Address: Assets/third_party/Avatar/Dooly/dooly.prefab
+  - m_GUID: 664b0a1856405914186fc25229d9d893
+    m_Address: vr_tracker_vive_1_0
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 98a748106e6c47748a99038c99c23bb8
-    m_Address: Assets/Prefabs/Loadins/LankyLoad.prefab
+    m_Address: LoadingAvatar
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -107,6 +107,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c48a4804c2b9e8e4ba8c9ea8aab07a1e
     m_Address: valve_controller_knu_left
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4d884cb6bc7bc542bf6cf227d217191
+    m_Address: Peech
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

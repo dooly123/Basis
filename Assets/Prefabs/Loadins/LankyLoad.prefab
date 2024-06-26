@@ -10,28 +10,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5385094
+      value: 26.654125
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.907
+      value: 6.225068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.871
+      value: -49.850006
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
@@ -41,7 +56,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
         type: 3}
@@ -68,6 +83,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LankyLoad
       objectReference: {fileID: 0}
+    - target: {fileID: 5064880245253675553, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9fb5feadd6ca34342aaebdf1168d8dee, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -81,12 +101,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7103285763428802826}
   m_SourcePrefab: {fileID: 100100000, guid: c5d7ffea6aec9f14f8c57483e9ff1e54, type: 3}
---- !u!23 &3107627022079304294 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
-    type: 3}
-  m_PrefabInstance: {fileID: 4386813823472090850}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3467910526416094131 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
@@ -106,16 +120,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 7103285763428802826}
-  FaceVisemeMesh: {fileID: 0}
-  FaceBlinkMesh: {fileID: 0}
-  AvatarEyePosition: {x: 0, y: 0}
-  AvatarMouthPosition: {x: 0, y: 0}
-  FaceVisemeMovement: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-  BlinkViseme: ffffffff
+  FaceVisemeMesh: {fileID: 8839165641088738499}
+  FaceBlinkMesh: {fileID: 8839165641088738499}
+  AvatarEyePosition: {x: 1.5230026, y: 0.15810776}
+  AvatarMouthPosition: {x: 1.3779702, y: 0.12749863}
+  FaceVisemeMovement: 
+  BlinkViseme: ffffffffffffffff
   laughterBlendTarget: -1
   AvatarHeightOffset: 0.1
   Renders:
-  - {fileID: 3107627022079304294}
+  - {fileID: 8839165641088738499}
   JiggleStrains: []
 --- !u!95 &7103285763428802826
 Animator:
@@ -126,8 +140,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3467910526416094131}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: c5d7ffea6aec9f14f8c57483e9ff1e54, type: 3}
+  m_Controller: {fileID: 9100000, guid: 78f02360f31c1a547b937559d34b03b1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -139,3 +153,9 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!137 &8839165641088738499 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5064880245253675553, guid: c5d7ffea6aec9f14f8c57483e9ff1e54,
+    type: 3}
+  m_PrefabInstance: {fileID: 4386813823472090850}
+  m_PrefabAsset: {fileID: 0}

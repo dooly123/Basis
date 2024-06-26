@@ -7,7 +7,7 @@ public static class BasisAvatarFactory
     public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress)
     {
         DeleteLastAvatar(Player);
-        LoadLoadingAvatar(Player, "Assets/third_party/Avatar/Dooly/dooly.prefab");
+        LoadLoadingAvatar(Player, "LoadingAvatar");
         Player.OnAvatarSwitchedFallBack?.Invoke();
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;
@@ -35,7 +35,7 @@ public static class BasisAvatarFactory
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
     {
         DeleteLastAvatar(Player);
-        LoadLoadingAvatar(Player, "Assets/third_party/Avatar/Dooly/dooly.prefab");
+        LoadLoadingAvatar(Player, "LoadingAvatar");
         Player.OnAvatarSwitchedFallBack?.Invoke();
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
         List<GameObject> Gameobjects = data.Item1;

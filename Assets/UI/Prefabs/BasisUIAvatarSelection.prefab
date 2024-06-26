@@ -753,6 +753,7 @@ MonoBehaviour:
       m_Calls: []
   AvatarUrls:
   - Aurellia
-  - Assets/third_party/Avatar/Dooly/dooly.prefab
+  - Dooly
+  - Peech
   ParentedAvatarButtons: {fileID: 673662174573543822}
   ButtonPrefab: {fileID: 617829828588750553}
