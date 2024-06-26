@@ -307,11 +307,14 @@ public class BasisNetworkConnector : MonoBehaviour
         {
             Debug.Log("bad! empty avatar for " + ServerReadyMessage.playerIdMessage.playerID);
         }
+        else
+        {
+         //   Debug.Log("requesting Avatar load " + avatarID);
+        }
         BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID);
         remote.DisplayName = ServerReadyMessage.LocalReadyMessage.playerMetaDataMessage.playerDisplayName;
         remote.UUID = ServerReadyMessage.LocalReadyMessage.playerMetaDataMessage.playerUUID;
         BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
-
         networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
         if (Players.TryAdd(ServerReadyMessage.playerIdMessage.playerID, networkedPlayer))
         {

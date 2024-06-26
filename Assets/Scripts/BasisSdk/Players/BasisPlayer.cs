@@ -6,6 +6,7 @@ public abstract class BasisPlayer : MonoBehaviour
     public string UUID;
     public BasisAvatar Avatar;
     public AddressableGenericResource AvatarAddressableGenericResource;
+    public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
     public string AvatarUrl;
     public bool HasAvatarDriver;
     public const string FallBackAvatar = "LoadingAvatar";

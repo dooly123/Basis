@@ -22,11 +22,6 @@ public static class BasisAvatarFactory
                     Player.Avatar = Avatar;
                     CreateLocal(Player);
                     Player.InitalizeIKCalibration(Player.AvatarDriver);
-                    if(BasisScene.Instance != null)
-                    {
-                        //swap over to on scene load
-                        BasisScene.Instance.SpawnPlayer(Player);
-                    }
                 }
             }
         }

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -38,6 +40,15 @@ public class BasisLocalPlayer : BasisPlayer
         Instance.LocalBoneDriver.ReadyToRead += Simulate;
         OnLocalAvatarChanged += OnCalibration;
         await CreateAvatar();
+        SceneManager.sceneLoaded += OnSceneLoadedCallback;
+    }
+    public void OnSceneLoadedCallback(Scene scene, LoadSceneMode mode)
+    {
+        if (BasisScene.Instance != null)
+        {
+            //swap over to on scene load
+            BasisScene.Instance.SpawnPlayer(this);
+        }
     }
     public void Simulate()
     {

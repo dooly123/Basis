@@ -195,6 +195,8 @@ MonoBehaviour:
   DisplayName: 
   UUID: 
   Avatar: {fileID: 0}
+  BasisAvatarStrainJiggleDriver: {fileID: 277109516044041921}
+  AvatarUrl: 
   HasAvatarDriver: 0
   Move: {fileID: 0}
   Binder: {fileID: 8640748518353179972}
@@ -260,7 +262,6 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 1
-  AvatarUrl: 
 --- !u!114 &277109516044041921
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,11 +20,13 @@ public class BasisScene : MonoBehaviour
 
             if (Basis.Move != null)
             {
+                Basis.BasisAvatarStrainJiggleDriver.PrepareTeleport();
                 Debug.Log("Teleporting");
                 Basis.Move.enabled = false;
                 Basis.transform.SetPositionAndRotation(position, rotation);
                 Basis.Move.transform.SetPositionAndRotation(position, rotation);
                 Basis.Move.enabled = true;
+                Basis.BasisAvatarStrainJiggleDriver.FinishTeleport();
             }
         }
     }

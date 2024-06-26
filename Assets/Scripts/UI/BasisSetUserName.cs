@@ -11,7 +11,7 @@ public class BasisSetUserName : MonoBehaviour
     {
         Ready.onClick.AddListener(hasUserName);
     }
-    public void hasUserName()
+    public async void hasUserName()
     {
         if (string.IsNullOrEmpty(UserNameTMP_InputField.text) == false)
         {
@@ -19,6 +19,7 @@ public class BasisSetUserName : MonoBehaviour
             if (BasisNetworkConnector.Instance != null)
             {
                 Debug.Log("connecting to default");
+                await BasisSceneLoadDriver.LoadScene("GardenScene");
                 BasisNetworkConnector.Instance.Connect();
                 GameObject.Destroy(this.gameObject);
             }

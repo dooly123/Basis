@@ -8,6 +8,10 @@ public class BasisAvatarStrainJiggleDriver : MonoBehaviour
     public JiggleRigSimpleLOD SimpleJiggleLOD = new JiggleRigSimpleLOD();
     public void OnCalibration()
     {
+        if (Jiggler != null)
+        {
+            PrepareTeleport();
+        }
         if (player.Avatar != null)
         {
             if (player.Avatar.JiggleStrains != null && player.Avatar.JiggleStrains.Count != 0)
@@ -27,6 +31,24 @@ public class BasisAvatarStrainJiggleDriver : MonoBehaviour
                     Jiggler.Initialize();
                 }
             }
+        }
+        if (Jiggler != null)
+        {
+            Jiggler.FinishTeleport();
+        }
+    }
+    public void PrepareTeleport()
+    {
+        if (Jiggler != null)
+        {
+            Jiggler.PrepareTeleport();
+        }
+    }
+    public void FinishTeleport()
+    {
+        if (Jiggler != null)
+        {
+            Jiggler.FinishTeleport();
         }
     }
     public void SetWind(Vector3 Wind)

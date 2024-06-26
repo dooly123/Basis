@@ -267,7 +267,7 @@ Light:
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
+  m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
@@ -285,12 +285,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 206261990}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1494691, y: 0.02941893, z: -0.004449194, w: 0.9883187}
-  m_LocalPosition: {x: -32.442, y: 2.494, z: -40.335}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.01918894, y: 0.028586509, z: -0.008251071, w: 0.999373}
+  m_LocalPosition: {x: -32442.002, y: -9608.744, z: -39700.848}
+  m_LocalScale: {x: 1000, y: 1000, z: 999.99994}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 4971332652728634518}
   m_LocalEulerAnglesHint: {x: 17.2, y: 3.41, z: 0}
 --- !u!1 &209617550
 GameObject:
@@ -581,9 +581,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898795218}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.34282, y: 20.260626, z: -114.666855}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.13052616, y: -0, z: -0, w: 0.9914449}
+  m_LocalPosition: {x: -26342.818, y: -11685.995, z: -116098.25}
+  m_LocalScale: {x: 1000, y: 999.9999, z: 999.9999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 78273763}
@@ -592,7 +592,7 @@ Transform:
   - {fileID: 410261090}
   - {fileID: 744609591}
   - {fileID: 209617552}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 4971332652728634518}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &117282901128954111
 MonoBehaviour:
@@ -1189,6 +1189,8 @@ RectTransform:
   - {fileID: 2435875050769831484}
   - {fileID: 406810707935571239}
   - {fileID: 6569885882475836054}
+  - {fileID: 206261993}
+  - {fileID: 1898795219}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1584,6 +1586,4 @@ GameObject:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 206261993}
-  - {fileID: 1898795219}
   - {fileID: 4971332652728634518}
