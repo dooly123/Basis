@@ -19,7 +19,7 @@ MonoBehaviour:
     PivotOffset: {x: 0, y: 0, z: 0}
     RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
-    HasRepresentation: 0
+    HasRepresentation: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
@@ -30,7 +30,7 @@ MonoBehaviour:
     PivotOffset: {x: 0, y: 0, z: 0}
     RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
-    HasRepresentation: 0
+    HasRepresentation: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
@@ -67,7 +67,7 @@ MonoBehaviour:
     PivotOffset: {x: 0, y: 0, z: 0}
     RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
-    HasRepresentation: 0
+    HasRepresentation: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}

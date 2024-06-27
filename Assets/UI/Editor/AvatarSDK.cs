@@ -13,11 +13,13 @@ public class BasisAvatarSDKInspector : Editor
     public bool AvatarMouthPositionState = false;
     public VisualElement rootElement;
     public AvatarSDKJiggleBonesView AvatarSDKJiggleBonesView = new AvatarSDKJiggleBonesView();
+
     private void OnEnable()
     {
         visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(AvatarPathConstants.uxmlPath);
         Avatar = (BasisAvatar)target;
     }
+
     public override VisualElement CreateInspectorGUI()
     {
         Avatar = (BasisAvatar)target;
@@ -37,9 +39,11 @@ public class BasisAvatarSDKInspector : Editor
         }
         return rootElement;
     }
+
     public void AutomaticallyFindVisemes()
     {
         SkinnedMeshRenderer Renderer = Avatar.FaceVisemeMesh;
+        Undo.RecordObject(Avatar, "Automatically Find Visemes");
         Avatar.FaceVisemeMovement = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
         List<string> Names = AvatarHelper.FindAllNames(Renderer);
         foreach (KeyValuePair<string, int> Value in AvatarHelper.SearchForVisemeIndex)
@@ -49,55 +53,84 @@ public class BasisAvatarSDKInspector : Editor
                 Avatar.FaceVisemeMovement[Value.Value] = OnMeshIndex;
             }
         }
+        EditorUtility.SetDirty(Avatar);
+        AssetDatabase.Refresh();
     }
+
     public void AutomaticallyFindBlinking()
     {
         SkinnedMeshRenderer Renderer = Avatar.FaceBlinkMesh;
-        Avatar.FaceVisemeMovement = new int[] { };
+        Undo.RecordObject(Avatar, "Automatically Find Blinking");
+        Avatar.BlinkViseme = new int[] { };
         List<string> Names = AvatarHelper.FindAllNames(Renderer);
-        List<int> ints = new List<int>();
+        List<int> Ints = new List<int>();
         foreach (string Name in AvatarHelper.SearchForBlinkIndex)
         {
             AvatarHelper.GetBlendShapes(Names, Name, out int BlendShapeIndex);
-            ints.Add(BlendShapeIndex);
+            Ints.Add(BlendShapeIndex);
         }
-        Avatar.BlinkViseme = ints.ToArray();
+        Avatar.BlinkViseme = Ints.ToArray();
+        EditorUtility.SetDirty(Avatar);
+        AssetDatabase.Refresh();
     }
+
     public void ClickedAvatarEyePositionButton(Button Button)
     {
+        Undo.RecordObject(Avatar, "Toggle Eye Position Gizmo");
         AvatarEyePositionState = !AvatarEyePositionState;
         Button.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
+        EditorUtility.SetDirty(Avatar);
     }
+
     public void ClickedAvatarMouthPositionButton(Button Button)
     {
+        Undo.RecordObject(Avatar, "Toggle Mouth Position Gizmo");
         AvatarMouthPositionState = !AvatarMouthPositionState;
         Button.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
+        EditorUtility.SetDirty(Avatar);
     }
+
     public void EventCallbackAnimator(ChangeEvent<Object> evt)
     {
+        Undo.RecordObject(Avatar, "Change Animator");
         Avatar.Animator = (Animator)evt.newValue;
+        EditorUtility.SetDirty(Avatar);
     }
+
     public void EventCallbackFaceBlinkMesh(ChangeEvent<Object> evt)
     {
+        Undo.RecordObject(Avatar, "Change Face Blink Mesh");
         Avatar.FaceBlinkMesh = (SkinnedMeshRenderer)evt.newValue;
+        EditorUtility.SetDirty(Avatar);
     }
+
     public void EventCallbackFaceVisemeMesh(ChangeEvent<Object> evt)
     {
+        Undo.RecordObject(Avatar, "Change Face Viseme Mesh");
         Avatar.FaceVisemeMesh = (SkinnedMeshRenderer)evt.newValue;
+        EditorUtility.SetDirty(Avatar);
     }
+
     private void OnMouthHeightValueChanged(ChangeEvent<Vector2> evt)
     {
+        Undo.RecordObject(Avatar, "Change Mouth Height");
         Avatar.AvatarMouthPosition = new Vector3(0, evt.newValue.x, evt.newValue.y);
+        EditorUtility.SetDirty(Avatar);
     }
+
     private void OnEyeHeightValueChanged(ChangeEvent<Vector2> evt)
     {
+        Undo.RecordObject(Avatar, "Change Eye Height");
         Avatar.AvatarEyePosition = new Vector3(0, evt.newValue.x, evt.newValue.y);
+        EditorUtility.SetDirty(Avatar);
     }
+
     private void OnSceneGUI()
     {
         BasisAvatar avatar = (BasisAvatar)target;
         BasisAvatarGizmoEditor.UpdateGizmos(this, avatar);
     }
+
     public void SetupItems()
     {
         Button avatarEyePositionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.avatarEyePositionButton);
@@ -148,6 +181,7 @@ public class BasisAvatarSDKInspector : Editor
         {
             eventCallbackFaceVisemeMeshField += EventCallbackFaceVisemeMesh;
         }
+
         avatarEyePositionClick.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
         avatarMouthPositionClick.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
     }

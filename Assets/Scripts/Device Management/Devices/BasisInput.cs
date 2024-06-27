@@ -227,8 +227,7 @@ public abstract class BasisInput : MonoBehaviour
     {
         if (BasisVisualTracker == null || LoadedDeviceRequest == null)
         {
-            Debug.Log("UnUniqueDeviceID " + UnUniqueDeviceID);
-            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest,out bool ShowVisual))
+            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest, out bool ShowVisual))
             {
                 if (ShowVisual)
                 {
@@ -251,6 +250,10 @@ public abstract class BasisInput : MonoBehaviour
                         }
                     }
                 }
+            }
+            else
+            {
+                Debug.Log("cant find Model for " + UnUniqueDeviceID);
             }
         }
     }
