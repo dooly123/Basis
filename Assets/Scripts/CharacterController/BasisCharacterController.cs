@@ -5,13 +5,11 @@ using static BaseBoneDriver;
 public class BasisCharacterController : MonoBehaviour
 {
     public CharacterController characterController;
-    public Vector3 playerVelocity;
     public Vector3 bottomPoint;
     public bool groundedPlayer;
 
     [SerializeField] public float RunSpeed = 2f;
     [SerializeField] public float playerSpeed = 1.5f;
-    [SerializeField] public float jumpHeight = 1;
     [SerializeField] public float gravityValue = -9.81f;
 
     [SerializeField] public float RaycastDistance = 0.2f;
@@ -35,17 +33,23 @@ public class BasisCharacterController : MonoBehaviour
     public event SimulationHandler ReadyToRead;
     public bool BlockMovement = false;
     public bool IsFalling;
+    public bool HasJumpAction = false;
+    public float jumpHeight = 1.0f; // Jump height set to 1 meter
+    public float currentVerticalSpeed = 0f; // Vertical speed of the character
+
     public void OnEnable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged += Initialize;
         BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
         Initialize();
     }
+
     public void OnDisable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged -= Initialize;
         BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead -= Simulate;
     }
+
     public void Initialize()
     {
         driver = BasisLocalPlayer.Instance.LocalBoneDriver;
@@ -53,133 +57,101 @@ public class BasisCharacterController : MonoBehaviour
         BasisLocalPlayer.Instance.Move = this;
         HasEye = driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye);
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
+        characterController.minMoveDistance = 0;
+        currentRotation = Quaternion.identity;
     }
+
     public void Simulate()
     {
         CalculateCharacterSize();
-        GroundCheck();
-        // Handle jumping
-        if (groundedPlayer && playerVelocity.y < 0)
-        {
-            playerVelocity.y = 0f;
-        }
         HandleRotation();
         HandleMovement();
-        // Apply gravity
-        playerVelocity.y += gravityValue * Time.deltaTime;
-
-        // Apply final movement
-        characterController.Move(playerVelocity * Time.deltaTime);
+        GroundCheck();
         ReadyToRead?.Invoke();
     }
+
     public void OnDrawGizmos()
     {
-        if (groundedPlayer)
-        {
-            Gizmos.color = Color.green;
-        }
-        else
-        {
-            Gizmos.color = Color.red;
-        }
+        Gizmos.color = groundedPlayer ? Color.green : Color.red;
         Gizmos.DrawWireSphere(bottomPoint, characterController.radius);
     }
+
     public void HandleJump()
     {
-        if (groundedPlayer)
+        if (groundedPlayer && !HasJumpAction)
         {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-            JustJumped?.Invoke();
+            HasJumpAction = true;
         }
     }
-
     public void GroundCheck()
     {
-        // Get the current rotation of the character controller
-        Quaternion rotation = characterController.transform.rotation;
-
-        // Rotate the center point based on the character controller's rotation
-        Vector3 rotatedCenter = rotation * characterController.center;
-
-        // Calculate the bottom point using the rotated center point
+        Vector3 rotatedCenter = characterController.transform.rotation * characterController.center;
         bottomPoint = characterController.transform.position + (rotatedCenter - new Vector3(0, characterController.height / 2 - characterController.radius + characterController.skinWidth, 0));
+        groundedPlayer = characterController.isGrounded;
+           IsFalling = !groundedPlayer;
 
-        groundedPlayer = Physics.CheckSphere(bottomPoint, characterController.radius, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.Ignore);
-
-        if(groundedPlayer == false)
-        {
-            IsFalling = true;
-        }
-        else
-        {
-            IsFalling = false;
-        }
         if (groundedPlayer && !LastWasGrounded)
         {
             JustLanded?.Invoke();
+            currentVerticalSpeed = 0f; // Reset vertical speed on landing
         }
+
         LastWasGrounded = groundedPlayer;
     }
+
     public void HandleMovement()
     {
         if (BlockMovement)
         {
             return;
         }
-        Vector3 inputDirection = new Vector3(MovementVector.x, 0, MovementVector.y).normalized;
 
-        // Get the current rotation of the character controller
-        if (HasHead)
+        // Cache current rotation and zero out x and z components
+        currentRotation = Head.FinalisedWorldData.rotation;
+        Vector3 rotationEulerAngles = currentRotation.eulerAngles;
+        rotationEulerAngles.x = 0;
+        rotationEulerAngles.z = 0;
+
+        Quaternion flattenedRotation = Quaternion.Euler(rotationEulerAngles);
+
+        // Calculate horizontal movement direction
+        Vector3 horizontalMoveDirection = new Vector3(MovementVector.x, 0, MovementVector.y).normalized;
+        float speed = Running ? RunSpeed : playerSpeed;
+        Vector3 totalMoveDirection = flattenedRotation * horizontalMoveDirection * speed * Time.deltaTime;
+
+        // Handle jumping and falling
+        if (groundedPlayer && HasJumpAction)
         {
-            currentRotation = Head.BoneTransform.rotation;
+            currentVerticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravityValue);
+            JustJumped?.Invoke();
         }
         else
         {
-            currentRotation = Quaternion.identity;
+            currentVerticalSpeed += gravityValue * Time.deltaTime;
         }
-        Vector3 Rotation = currentRotation.eulerAngles;
-        // Ignore rotation around the x and z axes
-        Rotation.x = 0;
-        Rotation.z = 0;
 
-        // Rotate the input direction based on the character controller's y-axis rotation
-        Vector3 moveDirection = Quaternion.Euler(Rotation) * inputDirection;
+        HasJumpAction = false;
+        totalMoveDirection.y = currentVerticalSpeed * Time.deltaTime;
 
-        // Move the character controller
-        if (Running)
-        {
-            characterController.Move(RunSpeed * Time.deltaTime * moveDirection);
-        }
-        else
-        {
-            characterController.Move(playerSpeed * Time.deltaTime * moveDirection);
-        }
+        // Move character
+        characterController.Move(totalMoveDirection);
     }
     public void HandleRotation()
     {
         float rotationAmount = Rotation.x * RotationSpeed * Time.deltaTime;
-        // Get the center position of the GameObject
         Vector3 center = transform.position;
-        // Rotate the player GameObject around its center on the Y axis
         transform.RotateAround(center, Vector3.up, rotationAmount);
     }
+
     public void RunningToggle()
     {
         Running = !Running;
     }
+
     public void CalculateCharacterSize()
     {
-        if (HasEye)
-        {
-            eyeHeight = Eye.RawLocalData.Position.y;
-        }
-        else
-        {
-            eyeHeight = 1.73f;
-        }
+        eyeHeight = HasEye ? Eye.RawLocalData.position.y : 1.73f;
         float skinWidth = characterController.skinWidth;
-
-        // Adjust the height to account for skinWidth
         float adjustedHeight = eyeHeight + skinWidth * 2f;
         adjustedHeight = Mathf.Max(adjustedHeight, MinimumColliderSize);
         SetCharacterHeight(adjustedHeight);
@@ -189,14 +161,7 @@ public class BasisCharacterController : MonoBehaviour
     {
         characterController.height = height;
         float SkinModifiedHeight = height / 2 - characterController.skinWidth;
-        // Adjust the center to keep the character on the ground correctly
-        if (HasHead)
-        {
-            characterController.center = new Vector3(Head.RawLocalData.Position.x, SkinModifiedHeight, Head.RawLocalData.Position.z);
-        }
-        else
-        {
-            characterController.center = new Vector3(0, SkinModifiedHeight, 0);
-        }
+
+        characterController.center = HasHead ? new Vector3(Head.RawLocalData.position.x, SkinModifiedHeight, Head.RawLocalData.position.z): new Vector3(0, SkinModifiedHeight, 0);
     }
 }

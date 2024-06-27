@@ -74,20 +74,19 @@ public class BasisFootPlacementDriver : MonoBehaviour
                 Vector3 footPosition = _hitInfo.point;
                 Foot.BoneTransform.position = footPosition;
                 // Calculate the rotation to align the foot with the normal and up direction
-                Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, _hitInfo.normal);
-                Foot.BoneTransform.rotation = targetRotation;
+                Foot.BoneTransform.rotation = Quaternion.LookRotation(Vector3.forward, _hitInfo.normal);
             }
             Foot.BoneTransform.eulerAngles = new Vector3(Foot.BoneTransform.eulerAngles.x, Driver.Hips.BoneTransform.eulerAngles.y, Foot.BoneTransform.eulerAngles.z);
         }
 
         private void SimulateTopPoint()
         {
-            _topPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + Foot.RestingLocalSpace.Position + Offset);
+            _topPoint = Driver.Hips.FinalisedWorldData.rotation * (Driver.Hips.FinalisedWorldData.position + Foot.RestingLocalSpace.position + Offset);
         }
 
         private void SimulateBottomPoint()
         {
-            _bottomPoint = Driver.Hips.BoneTransform.rotation * (Driver.Hips.BoneTransform.position + new Vector3(Foot.RestingLocalSpace.Position.x, -Driver.Hips.RestingLocalSpace.Position.y, Foot.RestingLocalSpace.Position.z) + Offset);
+            _bottomPoint = Driver.Hips.FinalisedWorldData.rotation * (Driver.Hips.FinalisedWorldData.position + new Vector3(Foot.RestingLocalSpace.position.x, -Driver.Hips.RestingLocalSpace.position.y, Foot.RestingLocalSpace.position.z) + Offset);
         }
 
         public void Gizmo()

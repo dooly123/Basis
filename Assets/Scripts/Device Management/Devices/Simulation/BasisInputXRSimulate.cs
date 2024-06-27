@@ -11,14 +11,14 @@ public class BasisInputXRSimulate : BasisInput
             {
                 if (hasRoleAssigned)
                 {
-                    Control.TrackerData.Position = LocalRawPosition;
+                    Control.TrackerData.position = LocalRawPosition;
                 }
             }
             if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
             {
                 if (hasRoleAssigned)
                 {
-                    Control.TrackerData.Rotation = LocalRawRotation;
+                    Control.TrackerData.rotation = LocalRawRotation;
                 }
             }
             UpdatePlayerControl();

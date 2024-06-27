@@ -86,10 +86,10 @@ public class BasisAvatarEyeInput : BasisInput
         // Clamp rotationY to stay within the specified range
         rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
         LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
-        Vector3 adjustedHeadPosition = new Vector3(0, Control.RestingLocalSpace.Position.y, 0);
+        Vector3 adjustedHeadPosition = new Vector3(0, Control.RestingLocalSpace.position.y, 0);
         if (characterInputActions.Crouching)
         {
-            adjustedHeadPosition.y -= Control.RestingLocalSpace.Position.y * crouchPercentage;
+            adjustedHeadPosition.y -= Control.RestingLocalSpace.position.y * crouchPercentage;
         }
 
         CalculateAdjustment();
@@ -101,23 +101,23 @@ public class BasisAvatarEyeInput : BasisInput
         if (rotationY > 0)
         {
             // Positive rotation
-            adjustment = Mathf.Abs(rotationY) * (headDownwardForce / Control.RestingLocalSpace.Position.y);
+            adjustment = Mathf.Abs(rotationY) * (headDownwardForce / Control.RestingLocalSpace.position.y);
         }
         else
         {
             // Negative rotation
-            adjustment = Mathf.Abs(rotationY) * (headUpwardForce / Control.RestingLocalSpace.Position.y);
+            adjustment = Mathf.Abs(rotationY) * (headUpwardForce / Control.RestingLocalSpace.position.y);
         }
     }
     public override void PollData()
     {
         if (hasRoleAssigned)
         {
-            Control.TrackerData.Rotation = LocalRawRotation;
+            Control.TrackerData.rotation = LocalRawRotation;
         }
         if (hasRoleAssigned)
         {
-            Control.TrackerData.Position = LocalRawPosition;
+            Control.TrackerData.position = LocalRawPosition;
         }
         UpdatePlayerControl();
         transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);

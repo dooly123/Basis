@@ -28,6 +28,6 @@ public abstract class BasisNamePlate : MonoBehaviour
     }
     public Vector3 GeneratePoint()
     {
-        return HipTarget.BoneTransform.position + new Vector3(0, MouthTarget.RestingLocalSpace.Position.y + FloatOffset, 0);
+        return HipTarget.FinalisedWorldData.position + new Vector3(0, MouthTarget.RestingLocalSpace.position.y + FloatOffset, 0);
     }
 }

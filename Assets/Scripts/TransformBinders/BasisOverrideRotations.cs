@@ -22,27 +22,27 @@ public class BasisOverrideRotations : MonoBehaviour
     {
         float DeltaTime = Time.deltaTime;
 
-        roty = Head.RawLocalData.Rotation.eulerAngles.y;
+        roty = Head.RawLocalData.rotation.eulerAngles.y;
         Quaternion coreRotation = Quaternion.Euler(0, roty, 0);
 
-        if (AngleCheck(coreRotation, Hips.RawLocalData.Rotation, RangeOfMotionBeforeTurn))
+        if (AngleCheck(coreRotation, Hips.RawLocalData.rotation, RangeOfMotionBeforeTurn))
         {
             // Slerp rotation for hips and upper body
             if (Hips.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                Hips.RawLocalData.Rotation = SlerpYRotation(Hips.RawLocalData.Rotation, coreRotation, DelayedHips * DeltaTime);
+                Hips.RawLocalData.rotation = SlerpYRotation(Hips.RawLocalData.rotation, coreRotation, DelayedHips * DeltaTime);
             }
             if (UpperChest.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                UpperChest.RawLocalData.Rotation = SlerpYRotation(UpperChest.RawLocalData.Rotation, coreRotation, DelayedUpperChest * DeltaTime);
+                UpperChest.RawLocalData.rotation = SlerpYRotation(UpperChest.RawLocalData.rotation, coreRotation, DelayedUpperChest * DeltaTime);
             }
             if (Chest.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                Chest.RawLocalData.Rotation = SlerpYRotation(Chest.RawLocalData.Rotation, coreRotation, DelayedChest * DeltaTime);
+                Chest.RawLocalData.rotation = SlerpYRotation(Chest.RawLocalData.rotation, coreRotation, DelayedChest * DeltaTime);
             }
             if (Spine.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
             {
-                Spine.RawLocalData.Rotation = SlerpYRotation(Spine.RawLocalData.Rotation, coreRotation, DelayedSpine * DeltaTime);
+                Spine.RawLocalData.rotation = SlerpYRotation(Spine.RawLocalData.rotation, coreRotation, DelayedSpine * DeltaTime);
             }
         }
     }

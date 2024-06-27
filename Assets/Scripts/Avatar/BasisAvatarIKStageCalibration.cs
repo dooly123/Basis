@@ -142,7 +142,7 @@ public static class BasisAvatarIKStageCalibration
             for (int j = 0; j < m; j++)
             {
                 // Compute the squared magnitude
-                double squaredMagnitude = Vector3.SqrMagnitude(inputDevices[i].transform.position - arrayB[j].BoneTransform.position);
+                double squaredMagnitude = Vector3.SqrMagnitude(inputDevices[i].transform.position - arrayB[j].FinalisedWorldData.position);
 
                 // Multiply by a scaling factor and cast to int
                 costMatrix[i, j] = (int)(squaredMagnitude * 1000);

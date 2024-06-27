@@ -31,13 +31,13 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
     {
         if (Head.HasBone && HeadAvatar != null)
         {
-            Head.RawLocalData.Position = HeadAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
-            Head.RawLocalData.Rotation = HeadAvatar.rotation;
+            Head.RawLocalData.position = HeadAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
+            Head.RawLocalData.rotation = HeadAvatar.rotation;
         }
         if (Hips.HasBone && HipsAvatar != null)
         {
-            Hips.RawLocalData.Position = HipsAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
-            Hips.RawLocalData.Rotation = HipsAvatar.rotation;
+            Hips.RawLocalData.position = HipsAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
+            Hips.RawLocalData.rotation = HipsAvatar.rotation;
         }
     }
     public void OnCalibration(BasisRemotePlayer remotePlayer)

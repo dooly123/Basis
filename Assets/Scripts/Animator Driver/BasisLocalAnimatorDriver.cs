@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 public class BasisLocalAnimatorDriver : MonoBehaviour
 {
     [SerializeField]
@@ -13,11 +12,10 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     public float ScaleMovementBy = 1;
     public float dampeningFactor = 0.1f; // Adjust this value to control the dampening effect
     private Vector3 previousRawVelocity = Vector3.zero;
-
     void Simulate()
     {
         //ofset vertical of body position
-        Vector3 currentVelocity = Quaternion.Inverse(cachedBones.Head.FinalisedWorldData.Rotation) * (cachedBones.Hips.FinalisedWorldData.Position - cachedBones.Hips.FinalisedLastWorldData.Position) / Time.deltaTime;
+        Vector3 currentVelocity = Quaternion.Inverse(cachedBones.Head.FinalisedWorldData.rotation) * (cachedBones.Hips.FinalisedWorldData.position - cachedBones.Hips.FinalisedLastWorldData.position) / Time.deltaTime;
 
         Vector3 dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
 
@@ -33,7 +31,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
             basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Instance.Crouching;
         }
 
-        if (basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling == false)
+        if (basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling)
         {
             basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
         }

@@ -53,11 +53,11 @@ public class BasisOpenVRInput : BasisInput
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                     {
                         Vector3 LocalPivot = LocalRawRotation * pivotOffset;
-                        Control.TrackerData.Position = LocalRawPosition - LocalPivot;
+                        Control.TrackerData.position = LocalRawPosition - LocalPivot;
                     }
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                     {
-                        Control.TrackerData.Rotation = LocalRawRotation * rotationOffset;
+                        Control.TrackerData.rotation = LocalRawRotation * rotationOffset;
                     }
                 }
 
