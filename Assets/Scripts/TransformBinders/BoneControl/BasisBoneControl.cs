@@ -82,6 +82,10 @@ public class BasisBoneControl
     public BasisCalibratedOffsetData InitialOffset = new BasisCalibratedOffsetData();
     [SerializeField]
     public BasisCalibratedOffsetData TrackerData = new BasisCalibratedOffsetData();
+    [SerializeField]
+    public BasisCalibratedOffsetData FinalisedWorldData = new BasisCalibratedOffsetData();
+    [SerializeField]
+    public BasisCalibratedOffsetData FinalisedLastWorldData = new BasisCalibratedOffsetData();
     public Color Color { get => gizmoColor; set => gizmoColor = value; }
     public void Initialize()
     {
@@ -187,7 +191,10 @@ public class BasisBoneControl
         }
         LastRunData.Position = RawLocalData.Position;
         LastRunData.Rotation = RawLocalData.Rotation;
+        FinalisedLastWorldData.Position = FinalisedWorldData.Position;
+        FinalisedLastWorldData.Rotation = FinalisedWorldData.Rotation;
         BoneTransform.SetLocalPositionAndRotation(RawLocalData.Position, RawLocalData.Rotation);
+        BoneTransform.GetPositionAndRotation(out FinalisedWorldData.Position,out FinalisedWorldData.Rotation);
     }
     public void QuaternionClamp(ref Quaternion rotation, BasisRotationalControl AxisLock)
     {

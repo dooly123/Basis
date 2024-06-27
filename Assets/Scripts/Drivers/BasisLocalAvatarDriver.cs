@@ -80,7 +80,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         Builder.Build();
         CalibrationComplete.Invoke();
         AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
-        AnimatorDriver.Initalize(LocalDriver, Player.Avatar.Animator);
+        AnimatorDriver.Initialize(LocalDriver, Player.Avatar.Animator);
 
         if (MicrophoneRecorder == null)
         {
@@ -95,13 +95,8 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     /// <summary>
     /// only called when dealing with trackers
     /// </summary>
-    public void CalculateOffsetsAndTpose()
+    public void CalibrateRoles()
     {
-        PutAvatarIntoTpose();
-     //   CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
-     //   ComputeOffsets(LocalDriver);
-      //  Builder.Build();
-        ResetAvatarAnimator();
         for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles.Length; Index++)
         {
             BasisBoneTrackedRole role = BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles[Index];

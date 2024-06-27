@@ -13,7 +13,7 @@ public struct BasisAnimatorVariables
     public bool cachedIsFalling;
     public bool IsCrouching;
     public bool cachedIsCrouching;
-    public float animSpeed;
+    public float AnimationsCurrentSpeed;
     public bool isMoving;
-    public Vector3 velocityLocal;
+    public Vector3 Velocity;
 }

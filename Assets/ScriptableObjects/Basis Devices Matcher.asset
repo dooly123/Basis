@@ -96,7 +96,6 @@ MonoBehaviour:
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
   - DeviceID: Eye
     MatchableDeviceIds:
-    - hmd
     - desktop eye
     PivotOffset: {x: 0, y: 0, z: 0}
     RotationOffset: {x: 0, y: 0, z: 0}

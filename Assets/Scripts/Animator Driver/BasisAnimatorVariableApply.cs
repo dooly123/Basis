@@ -10,10 +10,10 @@ public class BasisAnimatorVariableApply
     public void UpdateAnimator(float Scale)
     {
         // Check if values have changed before applying updates
-        if (BasisAnimatorVariables.cachedAnimSpeed != BasisAnimatorVariables.animSpeed)
+        if (BasisAnimatorVariables.cachedAnimSpeed != BasisAnimatorVariables.AnimationsCurrentSpeed)
         {
-            Animator.SetFloat(BasisAvatarAnimatorHash.HashCurrentSpeed, BasisAnimatorVariables.animSpeed);
-            BasisAnimatorVariables.cachedAnimSpeed = BasisAnimatorVariables.animSpeed;
+            Animator.SetFloat(BasisAvatarAnimatorHash.HashCurrentSpeed, BasisAnimatorVariables.AnimationsCurrentSpeed);
+            BasisAnimatorVariables.cachedAnimSpeed = BasisAnimatorVariables.AnimationsCurrentSpeed;
         }
 
         if (BasisAnimatorVariables.cachedIsMoving != BasisAnimatorVariables.isMoving)
@@ -32,14 +32,14 @@ public class BasisAnimatorVariableApply
             BasisAnimatorVariables.cachedIsFalling = BasisAnimatorVariables.IsFalling;
         }
 
-        float horizontalMovement = BasisAnimatorVariables.velocityLocal.x / Scale;
+        float horizontalMovement = BasisAnimatorVariables.Velocity.x / Scale;
         if (BasisAnimatorVariables.cachedHorizontalMovement != horizontalMovement)
         {
             Animator.SetFloat(BasisAvatarAnimatorHash.HashCurrentHorizontalMovement, horizontalMovement);
             BasisAnimatorVariables.cachedHorizontalMovement = horizontalMovement;
         }
 
-        float verticalMovement = BasisAnimatorVariables.velocityLocal.z / Scale;
+        float verticalMovement = BasisAnimatorVariables.Velocity.z / Scale;
         if (BasisAnimatorVariables.cachedVerticalMovement != verticalMovement)
         {
             Animator.SetFloat(BasisAvatarAnimatorHash.HashCurrentVerticalMovement, verticalMovement);
