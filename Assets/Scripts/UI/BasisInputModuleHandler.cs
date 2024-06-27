@@ -119,6 +119,10 @@ public class BasisInputModuleHandler : BaseInputModule
                 {
                     BasisLocalPlayer.Instance.Move.BlockMovement = true;
                 }
+                if(BasisAvatarEyeInput.Instance != null)
+                {
+                    BasisAvatarEyeInput.Instance.BlockCrouching = true;
+                }
             }
         }
         else
@@ -133,6 +137,10 @@ public class BasisInputModuleHandler : BaseInputModule
                 if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
                 {
                     BasisLocalPlayer.Instance.Move.BlockMovement = false;
+                }
+                if (BasisAvatarEyeInput.Instance != null)
+                {
+                    BasisAvatarEyeInput.Instance.BlockCrouching = false;
                 }
                 var data = GetBaseEventData();
                 ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);

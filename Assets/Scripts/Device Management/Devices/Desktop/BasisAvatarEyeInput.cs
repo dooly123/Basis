@@ -17,6 +17,7 @@ public class BasisAvatarEyeInput : BasisInput
     public float maximumY = 80f;
     public float DelayedResponseForRotation = 0.6f;
     public float FallBackHeight = 1.73f;
+    public bool BlockCrouching;
     public void Initalize(string ID = "Desktop Eye")
     {
         Debug.Log("Initalizing Avatar Eye");
@@ -87,7 +88,7 @@ public class BasisAvatarEyeInput : BasisInput
         rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
         LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
         Vector3 adjustedHeadPosition = new Vector3(0, Control.RestingLocalSpace.position.y, 0);
-        if (characterInputActions.Crouching)
+        if (characterInputActions.Crouching && BlockCrouching == false)
         {
             adjustedHeadPosition.y -= Control.RestingLocalSpace.position.y * crouchPercentage;
         }
