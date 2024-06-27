@@ -103,6 +103,7 @@ public class BasisCharacterController : MonoBehaviour
     {
         if (BlockMovement)
         {
+            HasJumpAction = false;
             return;
         }
 
