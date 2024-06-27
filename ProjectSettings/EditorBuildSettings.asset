@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Initalization.unity
     guid: dd1db054b177db7459cc81633b86e525
   - enabled: 0
-    path: Assets/Scenes/Garden/GardenScene.unity
+    path: Assets/Scenes/Garden doolys scene name that cant be replicated by u wahhaha/GardenScene.unity
     guid: 81e71078978223e4c8ffbf973484c9c5
   m_configObjects:
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: eb72c1b2c1c33b14291190a772f5e3df,
