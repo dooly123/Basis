@@ -30,14 +30,12 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         {
             basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Instance.Crouching;
         }
+        basisAnimatorVariableApply.UpdateAnimator(ScaleMovementBy);
 
         if (basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling)
         {
             basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
         }
-
-        basisAnimatorVariableApply.UpdateAnimator(ScaleMovementBy);
-
         // Update the previous velocity with the current dampened velocity for the next frame
         previousRawVelocity = dampenedVelocity;
     }
