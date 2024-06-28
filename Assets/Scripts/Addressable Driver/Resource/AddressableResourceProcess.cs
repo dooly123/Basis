@@ -18,14 +18,14 @@ public static class AddressableResourceProcess
     public static async Task<List<GameObject>> LoadAsGameObjectsAsync(AddressableGenericResource loadRequest, InstantiationParameters instantiationParameters)
     {
         List<GameObject> instantiated = new List<GameObject>();
-        loadRequest.InstantiationParameters = instantiationParameters;
         for (int Index = 0; Index < loadRequest.Handles.Count; Index++)
         {
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle handle = loadRequest.Handles[Index];
             object result = await handle.Task;
             if (result is GameObject resource)
             {
-                GameObject spawned = Object.Instantiate(resource);
+                GameObject spawned = Object.Instantiate(resource, instantiationParameters.Position, instantiationParameters.Rotation, instantiationParameters.Parent);
+              //  Debug.Log("Spawned " + spawned.name + " at " + spawned.transform.position + " with rotation " + spawned.transform.rotation);
                 instantiated.Add(spawned);
             }
             else

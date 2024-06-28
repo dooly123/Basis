@@ -26,8 +26,6 @@ public class AddressableLoadResourceBase
 }
 public class AddressableGenericResource : AddressableLoadResourceBase
 {
-    public InstantiationParameters InstantiationParameters; // Moved from base class to here
-
     public AddressableGenericResource(string key, AddressableExpectedResult expectedResult) : base(key, expectedResult)
     {
         ResourceType = AddressableLoadResourceType.Generic;
@@ -36,9 +34,9 @@ public class AddressableGenericResource : AddressableLoadResourceBase
     public AddressableGenericResource(AssetReference assetReference, AddressableExpectedResult expectedResult, InstantiationParameters instantiationParameters) : base(assetReference.RuntimeKeyIsValid() ? assetReference.RuntimeKey.ToString() : "Invalid", expectedResult)
     {
         if (!assetReference.RuntimeKeyIsValid())
+        {
             AddressableDebug.Log("Construct Type is Other but Preset == Scene or Gameobject");
-
-        InstantiationParameters = instantiationParameters; // Assign instantiation parameters
+        }
     }
 
     public AddressableGenericResource(string key, AddressableLoadResourceType resourceType, AddressableExpectedResult expectedResult) : base(key, expectedResult)

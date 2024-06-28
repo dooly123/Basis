@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,6 +12,7 @@ public class BasisLocalPlayer : BasisPlayer
     public BasisCharacterController Move;
     public static string InputActions = "InputActions";
     public static event System.Action OnLocalAvatarChanged;
+    public static event System.Action OnSpawnedEvent;
     public BasisLocalCharacterBinder Binder;
     public BasisLocalBoneDriver LocalBoneDriver;
     public BasisBoneControl Hips;
@@ -41,6 +41,20 @@ public class BasisLocalPlayer : BasisPlayer
         OnLocalAvatarChanged += OnCalibration;
         await CreateAvatar();
         SceneManager.sceneLoaded += OnSceneLoadedCallback;
+    }
+    public void Teleport(Vector3 position,Quaternion rotation)
+    {
+        BasisAvatarStrainJiggleDriver.PrepareTeleport();
+        Debug.Log("Teleporting");
+        if (Move != null)
+        {
+            Move.enabled = false;
+            transform.SetPositionAndRotation(position, rotation);
+            Move.transform.SetPositionAndRotation(position, rotation);
+            Move.enabled = true;
+        }
+        BasisAvatarStrainJiggleDriver.FinishTeleport();
+        OnSpawnedEvent?.Invoke();
     }
     public void OnSceneLoadedCallback(Scene scene, LoadSceneMode mode)
     {

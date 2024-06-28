@@ -15736,6 +15736,7 @@ GameObject:
   - component: {fileID: 3172262374525251012}
   - component: {fileID: 3495050165005451023}
   - component: {fileID: 1753101766628400647}
+  - component: {fileID: 7522235755497681572}
   m_Layer: 5
   m_Name: Settings UI
   m_TagString: Untagged
@@ -15819,7 +15820,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6328418170902668384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15936,6 +15937,24 @@ MonoBehaviour:
   LocalPlayer: {fileID: 0}
   CameraDriver: {fileID: 0}
   WorldOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &7522235755497681572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5776740318662466287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2d850aa68a77142a3070c8c2a72ddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCloseMenu:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCreatedMenu:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5797980771536184077
 GameObject:
   m_ObjectHideFlags: 0

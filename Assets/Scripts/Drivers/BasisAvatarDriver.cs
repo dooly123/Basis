@@ -17,7 +17,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public BasisPlayer Player;
     public void Calibration(BasisAvatar Avatar)
     {
-        Avatar.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         BeginningCalibration.Invoke();
         FindSkinnedMeshRenders();
         PutAvatarIntoTpose();
@@ -107,9 +106,9 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                 {
 
                 }
-                Position = new Vector3(0, Position.y, 0);
+               // Position = new Vector3(0, Position.y, 0);
                 Position += CalculateFallbackOffset(bone, ActiveHeight, heightPercentage);
-                Position = new Vector3(0, Position.y, 0);
+                //Position = new Vector3(0, Position.y, 0);
                 UsedFallback = true;
             }
             else
@@ -202,13 +201,13 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                 }
                 else
                 {
-                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> op = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
-                    BasisFallBackBoneData FBBD = op.WaitForCompletion();
-                    if (FBBD.FindBone(out BasisFallBone Bone, driver.trackedRoles[Index]))
+                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
+                    BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
+                    if (FBBD.FindBone(out BasisFallBone FallBackBone, driver.trackedRoles[Index]))
                     {
                         if (TryConvertToHumanoidRole(driver.trackedRoles[Index], out HumanBodyBones HumanBones))
                         {
-                            GetBoneRotAndPos(driver, anim, HumanBones, Bone.PositionPercentage, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position, out bool UsedFallback);
+                            GetBoneRotAndPos(driver, anim, HumanBones, FallBackBone.PositionPercentage, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position, out bool UsedFallback);
                             SetInitalData(anim, Control, driver.trackedRoles[Index]);
                         }
                     }

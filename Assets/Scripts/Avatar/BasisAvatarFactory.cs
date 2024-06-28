@@ -9,7 +9,8 @@ public static class BasisAvatarFactory
         DeleteLastAvatar(Player);
         LoadLoadingAvatar(Player, "LoadingAvatar");
         Player.OnAvatarSwitchedFallBack?.Invoke();
-        (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Player.transform.rotation, null);
+        (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
         List<GameObject> Gameobjects = data.Item1;
         Player.AvatarUrl = AvatarAddress;
         if (Gameobjects.Count != 0)
@@ -18,10 +19,14 @@ public static class BasisAvatarFactory
             {
                 if (gameObject.TryGetComponent(out BasisAvatar Avatar))
                 {
+                 //   Debug.Log("avatar position 1" + Avatar.transform.name + " at " + Avatar.transform.position + " with rotation " + Avatar.transform.rotation);
                     DeleteLastAvatar(Player);
                     Player.Avatar = Avatar;
-                    CreateLocal(Player);
+                  //  Debug.Log("avatar position 2" + Avatar.transform.name + " at " + Avatar.transform.position + " with rotation " + Avatar.transform.rotation);
+                   CreateLocal(Player);
+                 //   Debug.Log("avatar position 3" + Avatar.transform.name + " at " + Avatar.transform.position + " with rotation " + Avatar.transform.rotation);
                     Player.InitalizeIKCalibration(Player.AvatarDriver);
+                  //  Debug.Log("avatar position 4" + Avatar.transform.name + " at " + Avatar.transform.position + " with rotation " + Avatar.transform.rotation);
                 }
             }
         }
@@ -32,7 +37,8 @@ public static class BasisAvatarFactory
         DeleteLastAvatar(Player);
         LoadLoadingAvatar(Player, "LoadingAvatar");
         Player.OnAvatarSwitchedFallBack?.Invoke();
-        (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Player.transform.rotation, null);
+        (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
         List<GameObject> Gameobjects = data.Item1;
         Player.AvatarUrl = AvatarAddress;
         if (Gameobjects.Count != 0)
@@ -54,7 +60,7 @@ public static class BasisAvatarFactory
     {
         UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(LoadingAvatarToUse);
         GameObject LoadingAvatar = op.WaitForCompletion();
-        GameObject InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar);
+        GameObject InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar, Player.transform.position, Player.transform.rotation);
         if (InSceneLoadingAvatar.TryGetComponent(out BasisAvatar Avatar))
         {
             Player.Avatar = Avatar;

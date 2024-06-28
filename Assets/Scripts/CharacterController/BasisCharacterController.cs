@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 using static BaseBoneDriver;
 
 public class BasisCharacterController : MonoBehaviour
 {
     public CharacterController characterController;
     public Vector3 bottomPoint;
+    public Vector3 LastbottomPoint;
     public bool groundedPlayer;
 
     [SerializeField] public float RunSpeed = 2f;
@@ -36,7 +38,12 @@ public class BasisCharacterController : MonoBehaviour
     public bool HasJumpAction = false;
     public float jumpHeight = 1.0f; // Jump height set to 1 meter
     public float currentVerticalSpeed = 0f; // Vertical speed of the character
+    public Vector3 OutPosition;
+    public Quaternion OutRotation;
 
+    public Vector3 OutLastPosition;
+    public Quaternion OutLastRotation;
+    private float SkinModifiedHeight;
     public void OnEnable()
     {
         BasisLocalPlayer.OnLocalAvatarChanged += Initialize;
@@ -59,14 +66,22 @@ public class BasisCharacterController : MonoBehaviour
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
         characterController.minMoveDistance = 0;
         currentRotation = Quaternion.identity;
+        GetLatestSkinWidth();
     }
-
+    public void GetLatestSkinWidth()
+    {
+        SkinModifiedHeight = characterController.skinWidth * 2;
+    }
     public void Simulate()
     {
         CalculateCharacterSize();
         HandleRotation();
         HandleMovement();
         GroundCheck();
+        OutLastPosition = OutPosition;
+        OutLastRotation = OutRotation;
+        transform.GetPositionAndRotation(out OutPosition, out OutRotation);
+        OutPosition -= new Vector3(0, SkinModifiedHeight, 0);
         ReadyToRead?.Invoke();
     }
 
@@ -85,6 +100,7 @@ public class BasisCharacterController : MonoBehaviour
     }
     public void GroundCheck()
     {
+        LastbottomPoint = bottomPoint;
         Vector3 rotatedCenter = characterController.transform.rotation * characterController.center;
         bottomPoint = characterController.transform.position + (rotatedCenter - new Vector3(0, characterController.height / 2 - characterController.radius + characterController.skinWidth, 0));
         groundedPlayer = characterController.isGrounded;

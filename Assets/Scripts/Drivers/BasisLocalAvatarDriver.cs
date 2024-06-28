@@ -80,8 +80,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         Builder.Build();
         CalibrationComplete.Invoke();
         AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
-        AnimatorDriver.Initialize(LocalDriver, Player.Avatar.Animator);
-
+        AnimatorDriver.Initialize(Player.Avatar.Animator);
         if (MicrophoneRecorder == null)
         {
             MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
