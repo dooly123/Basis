@@ -33,7 +33,9 @@ public abstract class BasisEyeFollowBase : MonoBehaviour
         if (GeneralEyeTarget == null)
         {
             // GameObject EyeIK = CharacterAvatarDriver.CreateRig("Eye", true, out EyeRig, out EyeLayer);
-            GeneralEyeTarget = new GameObject("Eye Target").transform;
+            GeneralEyeTarget = new GameObject("Eye Target " + CharacterAvatarDriver.Player.DisplayName).transform;
+            CharacterAvatarDriver.transform.GetPositionAndRotation(out Vector3 position, out Quaternion rotation);
+            GeneralEyeTarget.SetPositionAndRotation(position, rotation);
             //  CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.LeftEye, GeneralEyeTarget);
             //CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.RightEye, GeneralEyeTarget);
         }

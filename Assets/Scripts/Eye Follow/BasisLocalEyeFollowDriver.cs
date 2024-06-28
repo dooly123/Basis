@@ -21,13 +21,13 @@ public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
         // Initialize look speed
         lookSpeed = Random.Range(minLookSpeed, maxLookSpeed);
         BasisLocalPlayer.OnSpawnedEvent += AfterTeleport;
-      //  BasisLocalPlayer.OnLocalAvatarChanged += AfterTeleport;
+       //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged += AfterTeleport;
     }
     public new void OnDestroy()
     {
         base.OnDestroy();
         BasisLocalPlayer.OnSpawnedEvent -= AfterTeleport;
-       // BasisLocalPlayer.OnLocalAvatarChanged -= AfterTeleport;
+        //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged -= AfterTeleport;
     }
     public void LateUpdate()
     {
