@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2ae54136d6e8f554fa1df508de801eba
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 158458
+  packageName: Settings Manager
+  packageVersion: 4.33
+  assetPath: Assets/Settings Manager/SettingsManager/SMTypes/FallBack/SMTypeFallbackDataHolder.cs
+  uploadId: 588660

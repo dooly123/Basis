@@ -15,7 +15,7 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
 
     public void Initialize(BasisAvatar avatar)
     {
-        Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
+       // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
         Avatar = avatar;
         Smoothing = smoothAmount;
     }

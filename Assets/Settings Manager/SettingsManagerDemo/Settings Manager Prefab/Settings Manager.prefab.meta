@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 95ebbedcc96f6aa4e8cae91964936a6d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 158458
+  packageName: Settings Manager
+  packageVersion: 4.33
+  assetPath: Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Settings
+    Manager.prefab
+  uploadId: 588660

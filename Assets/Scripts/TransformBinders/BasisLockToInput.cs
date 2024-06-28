@@ -30,7 +30,7 @@ public class BasisLockToInput : MonoBehaviour
                     if (Input.TrackedRole == TrackedRole)
                     {
                         AttachedInput = Input;
-                        Debug.Log("Assigning " + AttachedInput.name);
+                        //Debug.Log("Assigning " + AttachedInput.name);
                         AttachedInput.AfterControlApply += Simulation;
                         HasInput = true;
                         return;

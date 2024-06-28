@@ -23,6 +23,6 @@ public abstract class BasisUIBase : MonoBehaviour
         Result = GameObject.Instantiate(Result);
         BasisUIBase BasisHamburgerMenu = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
         IsLoading = false;
-        BasisHamburgerMenu.OnCreatedMenu.Invoke();
+        BasisHamburgerMenu.OnCreatedMenu?.Invoke();
     }
 }

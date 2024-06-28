@@ -1,5 +1,494 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &930336014935329343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7236260345192759045}
+  - component: {fileID: 1469491627460388504}
+  - component: {fileID: 8189430712937981822}
+  - component: {fileID: 4392366896631511115}
+  - component: {fileID: 8114261106711035974}
+  - component: {fileID: 6501620817872612099}
+  - component: {fileID: 8937679370050399871}
+  - component: {fileID: 697764147136612878}
+  - component: {fileID: 5443067033238234296}
+  - component: {fileID: 3655613681521570213}
+  m_Layer: 0
+  m_Name: FallBack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7236260345192759045
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 36357243023420718}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1469491627460388504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446e38a2f3c745e43ae2db29c4350a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+--- !u!114 &8189430712937981822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e4f284417b3ab489d8d9472147c9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+--- !u!114 &4392366896631511115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e91725a631429ab4093ffd9511dc43b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+--- !u!114 &8114261106711035974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 211723899a659bc48b75cddae23a6951, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+--- !u!114 &6501620817872612099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd436ea24dd244e4fbee26933da59fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+--- !u!114 &8937679370050399871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ae54136d6e8f554fa1df508de801eba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorkArounds:
+  - Name: Antialiasing
+    DefaultValue: smaa
+    SelectedValue: smaa
+    Index: 0
+    SelectableValueList:
+    - realValue: taa
+      UserValue: TAA
+    - realValue: fxaa
+      UserValue: FXAA
+    - realValue: smaa
+      UserValue: SMAA
+    - realValue: noaa
+      UserValue: NOAA
+    Min: 0
+    Max: 0
+  - Name: Master Quality
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 1
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Ambient Occlusion
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 2
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Contact Shadows
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 3
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Quality Level
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 4
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Shadow Quality
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 5
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Shadow Distance
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 6
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Texture Quality
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 7
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Vertical Sync
+    DefaultValue: on
+    SelectedValue: on
+    Index: 8
+    SelectableValueList:
+    - realValue: on
+      UserValue: On
+    - realValue: half
+      UserValue: Half
+    - realValue: off
+      UserValue: Off
+    Min: 0
+    Max: 0
+  - Name: Volumetric Quality
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 9
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Memory Allocation
+    DefaultValue: dynamic
+    SelectedValue: dynamic
+    Index: 10
+    SelectableValueList:
+    - realValue: 256
+      UserValue: 256
+    - realValue: 512
+      UserValue: 512
+    - realValue: 1024
+      UserValue: 1024
+    - realValue: 2048
+      UserValue: 2048
+    - realValue: 4096
+      UserValue: 4096
+    - realValue: 8192
+      UserValue: 8192
+    - realValue: dynamic
+      UserValue: Dynamic
+    Min: 0
+    Max: 0
+  - Name: Close Point Shadows
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 11
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: HDR Support
+    DefaultValue: true
+    SelectedValue: true
+    Index: 12
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+    Min: 0
+    Max: 0
+  - Name: Terrain Quality
+    DefaultValue: ultra
+    SelectedValue: very low
+    Index: 13
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Resolution
+    DefaultValue: 
+    SelectedValue: 2560x1440
+    Index: 14
+    SelectableValueList:
+    - realValue: 640x480
+      UserValue: 640x480
+    - realValue: 720x480
+      UserValue: 720x480
+    - realValue: 720x576
+      UserValue: 720x576
+    - realValue: 800x600
+      UserValue: 800x600
+    - realValue: 1024x768
+      UserValue: 1024x768
+    - realValue: 1152x720
+      UserValue: 1152x720
+    - realValue: 1152x864
+      UserValue: 1152x864
+    - realValue: 1176x664
+      UserValue: 1176x664
+    - realValue: 1280x720
+      UserValue: 1280x720
+    - realValue: 1280x768
+      UserValue: 1280x768
+    - realValue: 1280x800
+      UserValue: 1280x800
+    - realValue: 1280x960
+      UserValue: 1280x960
+    - realValue: 1280x1024
+      UserValue: 1280x1024
+    - realValue: 1360x768
+      UserValue: 1360x768
+    - realValue: 1366x768
+      UserValue: 1366x768
+    - realValue: 1400x1050
+      UserValue: 1400x1050
+    - realValue: 1440x900
+      UserValue: 1440x900
+    - realValue: 1440x1080
+      UserValue: 1440x1080
+    - realValue: 1600x900
+      UserValue: 1600x900
+    - realValue: 1600x1024
+      UserValue: 1600x1024
+    - realValue: 1600x1200
+      UserValue: 1600x1200
+    - realValue: 1680x1050
+      UserValue: 1680x1050
+    - realValue: 1920x1080
+      UserValue: 1920x1080
+    - realValue: 1920x1200
+      UserValue: 1920x1200
+    - realValue: 1920x1440
+      UserValue: 1920x1440
+    - realValue: 2560x1440
+      UserValue: 2560x1440
+    Min: 0
+    Max: 0
+  - Name: ScreenMode
+    DefaultValue: 
+    SelectedValue: exclusive fullscreen
+    Index: 15
+    SelectableValueList:
+    - realValue: exclusive fullscreen
+      UserValue: Exclusive FullScreen
+    - realValue: fullscreen
+      UserValue: Fullscreen
+    - realValue: maximized window
+      UserValue: Maximized Window
+    - realValue: windowed
+      UserValue: Windowed
+    Min: 0
+    Max: 0
+  - Name: Monitor
+    DefaultValue: 
+    SelectedValue: 0
+    Index: 16
+    SelectableValueList:
+    - realValue: 0
+      UserValue: 0
+    Min: 0
+    Max: 0
+  - Name: Main Audio
+    DefaultValue: 50
+    SelectedValue: 50
+    Index: 17
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  - Name: SFX Audio
+    DefaultValue: 50
+    SelectedValue: 50
+    Index: 18
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  - Name: Music Audio
+    DefaultValue: 50
+    SelectedValue: 50
+    Index: 19
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  Manager: {fileID: 7743749643595271440}
+--- !u!114 &697764147136612878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7452288b73446dd4ba94db232a13427d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5443067033238234296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b39fd83ee173214a85fe865be89ad83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3655613681521570213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dd1e097ac91677488bd0e0e511838c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1286943206467795689
 GameObject:
   m_ObjectHideFlags: 0
@@ -32,7 +521,8 @@ Transform:
   m_LocalPosition: {x: -20.082209, y: -7.7414694, z: -9.887683}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 36357243023420718}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5604905376641563031
@@ -134,3 +624,1344 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!1 &7884915406730103288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2755666493907349224}
+  - component: {fileID: 8352518869527864548}
+  - component: {fileID: 6042927766578467380}
+  - component: {fileID: 5896743050639982037}
+  - component: {fileID: 4907001347912712639}
+  - component: {fileID: 4942735700325845565}
+  - component: {fileID: 673822432540484547}
+  - component: {fileID: 2999677633599871041}
+  - component: {fileID: 7626703953093772756}
+  - component: {fileID: 8449095911647677582}
+  - component: {fileID: 3784412682251115113}
+  - component: {fileID: 6164862947249097587}
+  - component: {fileID: 1742149703474370130}
+  - component: {fileID: 8638552490007219108}
+  - component: {fileID: 1077079382445251767}
+  m_Layer: 0
+  m_Name: Modules
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2755666493907349224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 36357243023420718}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8352518869527864548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8176cf7d415d3e944a2795ea1012ed22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Ambient Occlusion
+    Explanation: Ambient Occlusion
+    Parse: 1
+    Type: 1
+--- !u!114 &6042927766578467380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbd89c128da2752409f7284b2a78bf60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Antialiasing
+    Explanation: Antialiasing
+    Parse: 1
+    Type: 1
+  Cam: {fileID: 0}
+--- !u!114 &5896743050639982037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c48d3c2688693184aa9901530ef6069f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Main Audio
+    Explanation: Main Audio
+    Parse: 0
+    Type: 3
+  - OptionName: SFX Audio
+    Explanation: SFX Audio
+    Parse: 0
+    Type: 3
+  - OptionName: Music Audio
+    Explanation: Music Audio
+    Parse: 0
+    Type: 3
+  UseAudioListener: 1
+  Mixer: {fileID: 24100000, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
+  AudioMixerGroupOne: Master
+  AudioMixerGroupTwo: SFX Audio
+  AudioMixerGroupThree: Music Audio
+--- !u!114 &4907001347912712639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef39a73909e538d4787b1b98af083a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Close Point Shadows
+    Explanation: Close Point Shadows
+    Parse: 1
+    Type: 1
+--- !u!114 &4942735700325845565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95c17ca6a7c8f2344aae88dc7fd5b2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: HDR Support
+    Explanation: HDR Support
+    Parse: 1
+    Type: 1
+  Camera: {fileID: 0}
+--- !u!114 &673822432540484547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a93fe78a7221b84b88e9c5334214f3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Shadow Quality
+    Explanation: Shadow Quality
+    Parse: 1
+    Type: 1
+  - OptionName: Shadow Distance
+    Explanation: Shadow Distance
+    Parse: 1
+    Type: 1
+  VeryLowShadowCascades: 1
+  VeryLowShadowQuality: 1
+  VeryLowResolution: 0
+  VeryLowShadowDistance: 3
+  LowShadowCascades: 2
+  LowShadowQuality: 1
+  LowResolution: 0
+  LowShadowDistance: 5
+  mediumShadowCascades: 2
+  mediumShadowQuality: 2
+  mediumResolution: 0
+  MediumShadowDistance: 10
+  HighShadowCascades: 3
+  highShadowQuality: 2
+  highResolution: 0
+  HighShadowDistance: 20
+  UltraShadowCascades: 4
+  ultraShadowQuality: 2
+  ultraResolution: 3
+  UltraShadowDistance: 30
+--- !u!114 &2999677633599871041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d16246ceaf5cd34792f85a1856c111e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Terrain Quality
+    Explanation: Terrain Quality
+    Parse: 1
+    Type: 1
+  terrain: {fileID: 0}
+--- !u!114 &7626703953093772756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1233f799a24f05e49a119304535e9f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Texture Quality
+    Explanation: Texture Quality
+    Parse: 1
+    Type: 1
+  - OptionName: Memory Allocation
+    Explanation: Memory Allocation
+    Parse: 1
+    Type: 1
+  veryLowStreamingMipmapsMaxLevelReduction: 4
+  veryLowStreamingMipmapsMaxFileIORequests: 512
+  lowStreamingMipmapsMaxLevelReduction: 4
+  lowStreamingMipmapsMaxFileIORequests: 512
+  mediumStreamingMipmapsMaxLevelReduction: 4
+  mediumStreamingMipmapsMaxFileIORequests: 512
+  highStreamingMipmapsMaxLevelReduction: 4
+  highStreamingMipmapsMaxFileIORequests: 512
+  ultraStreamingMipmapsMaxLevelReduction: 4
+  ultraStreamingMipmapsMaxFileIORequests: 512
+--- !u!114 &8449095911647677582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 201a185017cc6d04c97fce13187e2656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Vertical Sync
+    Explanation: Vertical Sync
+    Parse: 1
+    Type: 1
+  targetFrameRateWhenOff: 500
+--- !u!114 &3784412682251115113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2d8e1a3545bcf44997df5ae16f38c76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Volumetric Quality
+    Explanation: Volumetric Quality
+    Parse: 1
+    Type: 1
+--- !u!114 &6164862947249097587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54871b009a78c5f47a02578a6c8371bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Quality Level
+    Explanation: Quality Level
+    Parse: 1
+    Type: 1
+  VeryLow: 0
+  low: 0
+  medium: 1
+  high: 1
+  ultra: 1
+--- !u!114 &1742149703474370130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a07b9cf1aabd3a740934323045f20bb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: ScreenMode
+    Explanation: 
+    Parse: 1
+    Type: 2
+  Manager: {fileID: 7743749643595271440}
+--- !u!114 &8638552490007219108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f10435deb7c89ed4ab046bb626081fd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Monitor
+    Explanation: 
+    Parse: 1
+    Type: 2
+--- !u!114 &1077079382445251767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31c3866dc0581284385f845ed998d652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Resolution
+    Explanation: 
+    Parse: 1
+    Type: 2
+--- !u!1 &8852770691268876905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 36357243023420718}
+  - component: {fileID: 7743749643595271440}
+  - component: {fileID: 6435900343388600922}
+  - component: {fileID: 2324246957475388958}
+  - component: {fileID: 4638345324399635204}
+  - component: {fileID: 8473322279503238074}
+  m_Layer: 0
+  m_Name: Settings Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: b7063a98511ecee40b70479ad8b88749, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &36357243023420718
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852770691268876905}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 20.814209, y: 8.46147, z: 9.887683}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7236260345192759045}
+  - {fileID: 2755666493907349224}
+  m_Father: {fileID: 4563181907587156597}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7743749643595271440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852770691268876905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf13421e0162df1468bc366a695f14f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerSettings:
+    SuccessfullyGenerated: 1
+    ActiveCanvasLikeObject: {fileID: 0}
+    BuildValues: 4
+    FileName: Settings Manager
+    CType: 0
+    CurrentPipeline: 4
+    MarkAsDontDestroyOnLoad: 1
+    ExplanationText: {fileID: 0}
+    SettingsManagerObjectpaths:
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Dropdown.prefab
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Dynamic Dropdown.prefab
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Slider.prefab
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Toggle.prefab
+    SettingsManagerObjects:
+    - {fileID: 7449501133343338555, guid: 91c995af67f8e7c46b15c8cd8184a723, type: 3}
+    - {fileID: 7449501133343338555, guid: c4d7177423c74af4fafb9699c399dafb, type: 3}
+    - {fileID: 4698753801063083922, guid: 19e5030522240f4459ed288c663e390f, type: 3}
+    - {fileID: -892464885040180822, guid: e814fefd40c6ef445bfacef072a362ca, type: 3}
+    CurrentlySelectedSaveModule: {fileID: 6435900343388600922}
+    CurrentlySelectedSaveModuleName: INI
+  SettingsManagerOptions:
+  - {fileID: 1077079382445251767}
+  - {fileID: 8638552490007219108}
+  - {fileID: 1742149703474370130}
+  - {fileID: 6164862947249097587}
+  - {fileID: 3784412682251115113}
+  - {fileID: 8449095911647677582}
+  - {fileID: 7626703953093772756}
+  - {fileID: 2999677633599871041}
+  - {fileID: 673822432540484547}
+  - {fileID: 4942735700325845565}
+  - {fileID: 4907001347912712639}
+  - {fileID: 5896743050639982037}
+  - {fileID: 6042927766578467380}
+  - {fileID: 8352518869527864548}
+  Options:
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Antialiasing
+    ValueDescriptor: Antialiasing
+    SelectedValueDefault: smaa
+    ValueDefault: smaa
+    Explanation: Antialiasing
+    selectedValue: smaa
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 7
+      GraphicsVendor: 3
+      SetString: smaa
+    - Platform: 2
+      GraphicsVendor: 0
+      SetString: smaa
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 1
+    SelectableValueList:
+    - realValue: taa
+      UserValue: TAA
+    - realValue: fxaa
+      UserValue: FXAA
+    - realValue: smaa
+      UserValue: SMAA
+    - realValue: noaa
+      UserValue: NOAA
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Master Quality
+    ValueDescriptor: Master Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: 
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 2
+      GraphicsVendor: 3
+      SetString: ultra
+    - Platform: 0
+      GraphicsVendor: 3
+      SetString: medium
+    - Platform: 7
+      GraphicsVendor: 3
+      SetString: ultra
+    - Platform: 1
+      GraphicsVendor: 0
+      SetString: medium
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 2
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Ambient Occlusion
+    ValueDescriptor: Ambient Occlusion
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Ambient Occlusion
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 0
+      GraphicsVendor: 0
+      SetString: very low
+    ExcludeFromThesePlatforms:
+    - Platform: 0
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Contact Shadows
+    ValueDescriptor: Contact Shadows
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Contact Shadows
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Quality Level
+    ValueDescriptor: Quality Level
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Quality Level
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Shadow Quality
+    ValueDescriptor: Shadow Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Shadow Quality
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Shadow Distance
+    ValueDescriptor: Shadow Distance
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Shadow Distance
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Texture Quality
+    ValueDescriptor: Texture Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Texture Quality
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 000000000300000004000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Vertical Sync
+    ValueDescriptor: Vertical Sync
+    SelectedValueDefault: on
+    ValueDefault: on
+    Explanation: Vertical Sync
+    selectedValue: on
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: on
+      UserValue: On
+    - realValue: half
+      UserValue: Half
+    - realValue: off
+      UserValue: Off
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Volumetric Quality
+    ValueDescriptor: Volumetric Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Volumetric Quality
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 1
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Memory Allocation
+    ValueDescriptor: Memory Allocation
+    SelectedValueDefault: dynamic
+    ValueDefault: dynamic
+    Explanation: Memory Allocation
+    selectedValue: dynamic
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 2
+      GraphicsVendor: 3
+      SetString: dynamic
+    - Platform: 7
+      GraphicsVendor: 3
+      SetString: dynamic
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: 256
+      UserValue: 256
+    - realValue: 512
+      UserValue: 512
+    - realValue: 1024
+      UserValue: 1024
+    - realValue: 2048
+      UserValue: 2048
+    - realValue: 4096
+      UserValue: 4096
+    - realValue: 8192
+      UserValue: 8192
+    - realValue: dynamic
+      UserValue: Dynamic
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Close Point Shadows
+    ValueDescriptor: Close Point Shadows
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Close Point Shadows
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: HDR Support
+    ValueDescriptor: HDR Support
+    SelectedValueDefault: true
+    ValueDefault: true
+    Explanation: HDR Support
+    selectedValue: true
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Terrain Quality
+    ValueDescriptor: Terrain Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Terrain Quality
+    selectedValue: very low
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Resolution
+    ValueDescriptor: Resolution
+    SelectedValueDefault: 
+    ValueDefault: 640x480
+    Explanation: 
+    selectedValue: 2560x1440
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: 640x480
+      UserValue: 640x480
+    - realValue: 720x480
+      UserValue: 720x480
+    - realValue: 720x576
+      UserValue: 720x576
+    - realValue: 800x600
+      UserValue: 800x600
+    - realValue: 1024x768
+      UserValue: 1024x768
+    - realValue: 1152x720
+      UserValue: 1152x720
+    - realValue: 1152x864
+      UserValue: 1152x864
+    - realValue: 1176x664
+      UserValue: 1176x664
+    - realValue: 1280x720
+      UserValue: 1280x720
+    - realValue: 1280x768
+      UserValue: 1280x768
+    - realValue: 1280x800
+      UserValue: 1280x800
+    - realValue: 1280x960
+      UserValue: 1280x960
+    - realValue: 1280x1024
+      UserValue: 1280x1024
+    - realValue: 1360x768
+      UserValue: 1360x768
+    - realValue: 1366x768
+      UserValue: 1366x768
+    - realValue: 1400x1050
+      UserValue: 1400x1050
+    - realValue: 1440x900
+      UserValue: 1440x900
+    - realValue: 1440x1080
+      UserValue: 1440x1080
+    - realValue: 1600x900
+      UserValue: 1600x900
+    - realValue: 1600x1024
+      UserValue: 1600x1024
+    - realValue: 1600x1200
+      UserValue: 1600x1200
+    - realValue: 1680x1050
+      UserValue: 1680x1050
+    - realValue: 1920x1080
+      UserValue: 1920x1080
+    - realValue: 1920x1200
+      UserValue: 1920x1200
+    - realValue: 1920x1440
+      UserValue: 1920x1440
+    - realValue: 2560x1440
+      UserValue: 2560x1440
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: ScreenMode
+    ValueDescriptor: ScreenMode
+    SelectedValueDefault: 
+    ValueDefault: exclusive fullscreen
+    Explanation: 
+    selectedValue: exclusive fullscreen
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: exclusive fullscreen
+      UserValue: Exclusive FullScreen
+    - realValue: fullscreen
+      UserValue: Fullscreen
+    - realValue: maximized window
+      UserValue: Maximized Window
+    - realValue: windowed
+      UserValue: Windowed
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Monitor
+    ValueDescriptor: Monitor
+    SelectedValueDefault: 
+    ValueDefault: 0
+    Explanation: 
+    selectedValue: 0
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: 0
+      UserValue: 0
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 80
+    SliderMinValue: 0
+    Name: Main Audio
+    ValueDescriptor: 62%
+    SelectedValueDefault: 50
+    ValueDefault: 50
+    Explanation: Main Audio
+    selectedValue: 50
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 80
+    SliderMinValue: 0
+    Name: SFX Audio
+    ValueDescriptor: 62%
+    SelectedValueDefault: 50
+    ValueDefault: 50
+    Explanation: SFX Audio
+    selectedValue: 50
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 1
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 80
+    SliderMinValue: 0
+    Name: Music Audio
+    ValueDescriptor: 62%
+    SelectedValueDefault: 50
+    ValueDefault: 50
+    Explanation: Music Audio
+    selectedValue: 50
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  SaveModules:
+  - {fileID: 8473322279503238074}
+  - {fileID: 4638345324399635204}
+  - {fileID: 2324246957475388958}
+  - {fileID: 6435900343388600922}
+  SettingsManagerAbstractTypeDropdown:
+  - {fileID: 5443067033238234296}
+  - {fileID: 1469491627460388504}
+  SettingsManagerAbstractTypeToggle:
+  - {fileID: 8114261106711035974}
+  SettingsManagerAbstractTypeSlider:
+  - {fileID: 4392366896631511115}
+  SettingsManagerAbstractTypeManagement:
+  - {fileID: 697764147136612878}
+  - {fileID: 8189430712937981822}
+  SettingsManagerAbstractTypeText:
+  - {fileID: 3655613681521570213}
+  - {fileID: 6501620817872612099}
+  PlatformSaveDefault:
+  - Platform: 2
+    SaveType: INI
+  - Platform: 7
+    SaveType: INI
+  - Platform: 16
+    SaveType: PlayerPref
+  - Platform: 13
+    SaveType: PlayerPref
+  DefaultSaveType:
+    Platform: 0
+    SaveType: PlayerPref
+  OnSettingsSaving:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSettingsSaved:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6435900343388600922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852770691268876905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82bdf5e34837d4c469ade8d39276e8b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2324246957475388958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852770691268876905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae8ec4604032aa43add9ddf96000535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4638345324399635204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852770691268876905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5289782b0b11143aba520ce9fad6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8473322279503238074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852770691268876905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 220f03ccc3871d546ab6d12d7927cbc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

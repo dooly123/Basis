@@ -65,7 +65,7 @@ public class BasisOverrideRotations : MonoBehaviour
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver.FindBone(out Head, BasisBoneTrackedRole.Head))
         {
-            Head.HasRigLayer =  BasisHasRigLayer.HasRigLayer;
+            Head.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Hips, BasisBoneTrackedRole.Hips))
         {
@@ -83,10 +83,10 @@ public class BasisOverrideRotations : MonoBehaviour
         {
             Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
+        Driver.ReadyToRead += Simulate;
     }
-
-    public void Update()
+    public void OnDestroy()
     {
-        Simulate();
+        Driver.ReadyToRead -= Simulate;
     }
 }

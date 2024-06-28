@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: dfd89e9c5eb7dcb4f8ca06ae922c15c2
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 158458
+  packageName: Settings Manager
+  packageVersion: 4.33
+  assetPath: Assets/Settings Manager/SettingsManagerDemo/SettingsManagerDemo.asmdef
+  uploadId: 588660
