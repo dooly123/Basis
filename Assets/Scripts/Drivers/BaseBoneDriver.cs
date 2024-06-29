@@ -40,6 +40,17 @@ public abstract class BaseBoneDriver : MonoBehaviour
         }
         ReadyToRead?.Invoke();
     }
+    public void Calibrate()
+    {
+        for (int Index = 0; Index < ControlsLength; Index++)
+        {
+            if (trackedRoles[Index] != BasisBoneTrackedRole.Head)
+            {
+                Controls[Index].SetOffset();
+            }
+            
+        }
+    }
 #if UNITY_EDITOR
     public void OnDrawGizmos()
     {
@@ -99,7 +110,11 @@ public abstract class BaseBoneDriver : MonoBehaviour
             BasisBoneControl Control = new BasisBoneControl();
             GameObject TrackedBone = new GameObject(role.ToString());
             TrackedBone.transform.parent = Parent;
+            GameObject BoneModelOffset = new GameObject(role.ToString() + "_AvatarRotationOffset");
+            BoneModelOffset.transform.parent = TrackedBone.transform;
             Control.BoneTransform = TrackedBone.transform;
+            Control.BoneModelTransform = BoneModelOffset.transform;
+            Control.BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             Control.HasBone = true;
             Control.Initialize();
             FillOutBasicInformation(Control, role.ToString(), Colors[Index]);

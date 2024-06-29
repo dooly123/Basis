@@ -29,13 +29,14 @@ public static class BasisAvatarIKStageCalibration
             Debug.Log("use 3Point");
         }
         BasisTrackingMode Mode = makeSureFullBodyGoesFirst ? BasisTrackingMode.HipAndFeet : BasisTrackingMode.EverythingGoes;
-
-        Debug.Log("output is  " + Mode);
-
         ModeToTrackersMask(availableBoneControl, Mode, out List<BasisBoneControl> TrackedBoneControls, out List<BasisBoneTrackedRole> TrackedRoles);
+       // Debug.Log("ModeToTrackersMask");
         SequenceIndexes(ref TrackedBoneControls, ref TrackedRoles);
+      //  Debug.Log("SequenceIndexes");
         AssignInputsToClosestControls(InputTrackers, TrackedBoneControls, TrackedRoles);
+       // Debug.Log("AssignInputsToClosestControls");
         BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
+        //Debug.Log("CalibrateRoles");
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
     }
     private static List<BasisBoneTrackedRole> GetAllRoles()
@@ -131,31 +132,51 @@ public static class BasisAvatarIKStageCalibration
             ApplyToTarget(inputDevices[match.Item1], roles[match.Item2]);
         }
     }
-    public static List<Tuple<int, int>> FindOptimalMatches(List<BasisInput> inputDevices, List<BasisBoneControl> arrayB)
+    public static List<Tuple<int, int>> FindOptimalMatches(List<BasisInput> inputDevices, List<BasisBoneControl> BasisBoneControls)
     {
-        int n = inputDevices.Count;
-        int m = arrayB.Count;
-
+        int inputDevicesCount = inputDevices.Count;
+        int BasisBoneControlCount = BasisBoneControls.Count;
+        Debug.Log("inputDevicesCount = " + inputDevicesCount + " BasisBoneControlCount = " + BasisBoneControlCount);
         // Create a cost matrix based on distances between points
-        int[,] costMatrix = new int[n, m];
-        for (int i = 0; i < n; i++)
+        int[,] costMatrix = new int[inputDevicesCount, BasisBoneControlCount];
+
+        for (int inputDevicesIndex = 0; inputDevicesIndex < inputDevicesCount; inputDevicesIndex++)
         {
-            for (int j = 0; j < m; j++)
+            for (int BasisBoneControlIndex = 0; BasisBoneControlIndex < BasisBoneControlCount; BasisBoneControlIndex++)
             {
-                // Compute the squared magnitude
-                double squaredMagnitude = Vector3.SqrMagnitude(inputDevices[i].transform.position - arrayB[j].FinalisedWorldData.position);
+                // Ensure the positions are in the same coordinate space and not null
+                if (inputDevices[inputDevicesIndex] == null || inputDevices[inputDevicesIndex].transform == null || BasisBoneControls[BasisBoneControlIndex] == null)
+                {
+                    throw new ArgumentNullException("One of the objects in the input lists is null.");
+                }
+
+                Vector3 inputPosition = inputDevices[inputDevicesIndex].transform.position;
+                Vector3 arrayBPosition = BasisBoneControls[BasisBoneControlIndex].FinalisedWorldData.position;
+
+                // Debugging log
+                Debug.Log($"Input Device {inputDevicesIndex} Position: {inputPosition}");
+                Debug.Log($"ArrayB {BasisBoneControlIndex} Position: {arrayBPosition}");
+
+                // Compute the squared magnitude of the distance vector
+                double squaredMagnitude = Vector3.SqrMagnitude(inputPosition - arrayBPosition);
+
+                // Debugging log
+                //Debug.Log($"Squared Magnitude between Input Device {i} and ArrayB {j}: {squaredMagnitude}");
 
                 // Multiply by a scaling factor and cast to int
-                costMatrix[i, j] = (int)(squaredMagnitude * 1000);
+                costMatrix[inputDevicesIndex, BasisBoneControlIndex] = (int)(squaredMagnitude * 1000);
+                Debug.Log($"Squared Magnitude between Input Device {inputDevicesIndex} and ArrayB {BasisBoneControlIndex}: {costMatrix[inputDevicesIndex, BasisBoneControlIndex]}");
             }
         }
 
+        // Find the optimal assignments using the Hungarian Algorithm
         int[] matches = BasisHungarianAlgorithm.FindAssignments(costMatrix);
+
         // Convert matches to a list of tuples for easier usage
         List<Tuple<int, int>> optimalMatches = new List<Tuple<int, int>>();
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < inputDevicesCount; i++)
         {
-            if (matches[i] < m)
+            if (matches[i] < BasisBoneControlCount)
             {
                 optimalMatches.Add(new Tuple<int, int>(i, matches[i]));
             }

@@ -13,6 +13,8 @@ public class BasisBoneControl
     public bool HasBone = false;
     [SerializeField]
     public Transform BoneTransform;
+    [SerializeField]
+    public Transform BoneModelTransform;
     // Events for property changes
     public event System.Action<BasisHasTracked> OnHasTrackerPositionDriverChanged;
     public event System.Action<BasisHasTracked> OnHasTrackerRotationDriverChanged;
@@ -164,6 +166,10 @@ public class BasisBoneControl
                 RawLocalData.position = TrackerData.position;
             }
         }
+    }
+    public void SetOffset()
+    {
+        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, RestingWorldSpace.rotation);
     }
     public void RunRotationChange()
     {

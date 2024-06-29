@@ -19,10 +19,9 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     {
         BeginningCalibration.Invoke();
         FindSkinnedMeshRenders();
-        PutAvatarIntoTpose();
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
         ActiveHeight = Avatar.AvatarEyePosition.x;
-        ResetAvatarAnimator();
+        BasisLocalPlayer.Instance.LocalBoneDriver.Calibrate();
         if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
         {
             BasisFacialBlinkDriver FacialBlinkDriver = BasisHelpers.GetOrAddComponent<BasisFacialBlinkDriver>(Avatar.gameObject);
@@ -97,6 +96,39 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             return true;
         }
         return false;
+    }
+    public void CalculateTransformPositions(Animator anim, BaseBoneDriver driver)
+    {
+        for (int Index = 0; Index < driver.Controls.Length; Index++)
+        {
+            BasisBoneControl Control = driver.Controls[Index];
+            if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
+            {
+                GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position);
+                SetInitalData(anim, Control, driver.trackedRoles[Index]);
+            }
+            else
+            {
+                if (driver.trackedRoles[Index] == BasisBoneTrackedRole.Mouth)
+                {
+                    GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position);
+                    SetInitalData(anim, Control, driver.trackedRoles[Index]);
+                }
+                else
+                {
+                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
+                    BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
+                    if (FBBD.FindBone(out BasisFallBone FallBackBone, driver.trackedRoles[Index]))
+                    {
+                        if (TryConvertToHumanoidRole(driver.trackedRoles[Index], out HumanBodyBones HumanBones))
+                        {
+                            GetBoneRotAndPos(driver, anim, HumanBones, FallBackBone.PositionPercentage, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position, out bool UsedFallback);
+                            SetInitalData(anim, Control, driver.trackedRoles[Index]);
+                        }
+                    }
+                }
+            }
+        }
     }
     public void GetBoneRotAndPos(BaseBoneDriver driver, Animator anim, HumanBodyBones bone, Vector3 heightPercentage, out Quaternion Rotation, out Vector3 Position, out bool UsedFallback)
     {
@@ -186,39 +218,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             return false;
         }
     }
-    public void CalculateTransformPositions(Animator anim, BaseBoneDriver driver)
-    {
-        for (int Index = 0; Index < driver.Controls.Length; Index++)
-        {
-            BasisBoneControl Control = driver.Controls[Index];
-            if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
-            {
-                GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position);
-                SetInitalData(anim, Control, driver.trackedRoles[Index]);
-            }
-            else
-            {
-                if (driver.trackedRoles[Index] == BasisBoneTrackedRole.Mouth)
-                {
-                    GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position);
-                    SetInitalData(anim, Control, driver.trackedRoles[Index]);
-                }
-                else
-                {
-                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
-                    BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
-                    if (FBBD.FindBone(out BasisFallBone FallBackBone, driver.trackedRoles[Index]))
-                    {
-                        if (TryConvertToHumanoidRole(driver.trackedRoles[Index], out HumanBodyBones HumanBones))
-                        {
-                            GetBoneRotAndPos(driver, anim, HumanBones, FallBackBone.PositionPercentage, out Control.RestingWorldSpace.rotation, out Control.RestingWorldSpace.position, out bool UsedFallback);
-                            SetInitalData(anim, Control, driver.trackedRoles[Index]);
-                        }
-                    }
-                }
-            }
-        }
-    }
     public void SetInitalData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
     {
         bone.RawLocalData.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.RestingWorldSpace.position, Player.Avatar.AvatarHeightOffset);//out Vector3 WorldSpaceFloor
@@ -279,7 +278,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         GameObject DTData = CreateAndSetParent(Parent.transform, "Bone Role " + Role.ToString());
         DampedTransform DT = BasisHelpers.GetOrAddComponent<DampedTransform>(DTData);
 
-        GameObject Ref = CreateAndSetParent(Target.BoneTransform, "Offset");
+        GameObject Ref = CreateAndSetParent(Target.BoneModelTransform, "Offset");
 
         DT.data.constrainedObject = Source;
         DT.data.sourceObject = Ref.transform;
@@ -313,7 +312,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         MultiAimConstraint DT = BasisHelpers.GetOrAddComponent<MultiAimConstraint>(DTData);
         DT.data.constrainedObject = Source;
         WeightedTransformArray Array = new WeightedTransformArray(0);
-        WeightedTransform Weighted = new WeightedTransform(Target.BoneTransform, rotationWeight);
+        WeightedTransform Weighted = new WeightedTransform(Target.BoneModelTransform, rotationWeight);
         Array.Add(Weighted);
         DT.data.sourceObjects = Array;
         DT.data.maintainOffset = false;
@@ -332,7 +331,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         GameObject DTData = CreateAndSetParent(Parent.transform, "Bone Role " + Role.ToString());
         OverrideTransform DT = BasisHelpers.GetOrAddComponent<OverrideTransform>(DTData);
         DT.data.constrainedObject = Source;
-        DT.data.sourceObject = Target.BoneTransform;
+        DT.data.sourceObject = Target.BoneModelTransform;
         DT.data.rotationWeight = rotationWeight;
         DT.data.positionWeight = positionWeight;
         DT.data.space = Space;
@@ -344,11 +343,11 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         GameObject BoneRole = CreateAndSetParent(Parent.transform, "Bone Role " + TargetRole.ToString());
         TwoBoneIKConstraint = BasisHelpers.GetOrAddComponent<TwoBoneIKConstraint>(BoneRole);
         EnableTwoBoneIk(TwoBoneIKConstraint, maintainTargetPositionOffset, maintainTargetRotationOffset);
-        TwoBoneIKConstraint.data.target = BoneControl.BoneTransform;
+        TwoBoneIKConstraint.data.target = BoneControl.BoneModelTransform;
         if (UseBoneRole)
         {
             driver.FindBone(out BasisBoneControl BendBoneControl, BendRole);
-            TwoBoneIKConstraint.data.hint = BendBoneControl.BoneTransform;
+            TwoBoneIKConstraint.data.hint = BendBoneControl.BoneModelTransform;
             TwoBoneIKConstraint.data.hintWeight = 1;
         }
         TwoBoneIKConstraint.data.root = root;
