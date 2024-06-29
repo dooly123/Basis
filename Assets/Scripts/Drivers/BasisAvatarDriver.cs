@@ -31,7 +31,10 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     }
     public void PutAvatarIntoTpose()
     {
-        runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
+        if (runtimeAnimatorController == null)
+        {
+            runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
+        }
         UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
         RuntimeAnimatorController RAC = op.WaitForCompletion();
         Player.Avatar.Animator.runtimeAnimatorController = RAC;
@@ -40,6 +43,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public void ResetAvatarAnimator()
     {
         Player.Avatar.Animator.runtimeAnimatorController = runtimeAnimatorController;
+        runtimeAnimatorController = null;
     }
     public Bounds GetBounds(Transform animatorParent)
     {

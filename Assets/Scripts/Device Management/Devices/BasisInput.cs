@@ -106,9 +106,10 @@ public abstract class BasisInput : MonoBehaviour
                 {
                     //this is the tracker
                     //target is the following along
-                    Control.InitialOffset.position = Quaternion.Inverse(transform.localRotation) * (Control.FinalisedWorldData.position - transform.position);
-                    Control.InitialOffset.rotation = Quaternion.Inverse(transform.localRotation) * Control.FinalisedWorldData.rotation;
+                    Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
+                    Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
                     Control.InitialOffset.Use = true;
+                   // Vector3 Fowards = BasisLocalCameraDriver.Instance.Camera.transform.forward;
                 }
                 // Do nothing if bone is found successfully
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);

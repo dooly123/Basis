@@ -17,7 +17,7 @@ public static class BasisAvatarIKStageCalibration
     public static void Calibrate()
     {
         Debug.Log("running through");
-
+        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
         List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
         List<BasisInput> InputTrackers = GetUnassignedInputs(ref rolesToDiscover);
         List<BasisBoneControl> availableBoneControl = GetAvailableBoneControls(rolesToDiscover);
@@ -36,6 +36,7 @@ public static class BasisAvatarIKStageCalibration
         SequenceIndexes(ref TrackedBoneControls, ref TrackedRoles);
         AssignInputsToClosestControls(InputTrackers, TrackedBoneControls, TrackedRoles);
         BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
+        BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
     }
     private static List<BasisBoneTrackedRole> GetAllRoles()
     {
