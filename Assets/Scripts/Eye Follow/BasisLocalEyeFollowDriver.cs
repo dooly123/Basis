@@ -15,7 +15,7 @@ public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
     private float lookSpeed; // Speed of looking
     public Vector3 FowardsLookPoint;
     public Vector3 AppliedOffset;
-
+    public float DistanceBeforeTeleport = 30;
     public void Start()
     {
         // Initialize look speed
@@ -57,8 +57,15 @@ public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
         // Randomize target position within maxOffset
         RandomizedPosition = FowardsLookPoint + AppliedOffset;
         // Smoothly interpolate towards the target position with randomized speed
-        GeneralEyeTarget.position = Vector3.MoveTowards(GeneralEyeTarget.position, RandomizedPosition, lookSpeed);
 
+        if (Vector3.Distance(RandomizedPosition, GeneralEyeTarget.position) > DistanceBeforeTeleport)
+        {
+            GeneralEyeTarget.position = RandomizedPosition;
+        }
+        else
+        {
+            GeneralEyeTarget.position = Vector3.MoveTowards(GeneralEyeTarget.position, RandomizedPosition, lookSpeed);
+        }
         if (leftEyeTransform != null)
         {
             LookAtTarget(leftEyeTransform, leftEyeInitialRotation);

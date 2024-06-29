@@ -107,7 +107,7 @@ public abstract class BasisInput : MonoBehaviour
                     //this is the tracker
                     //target is the following along
                     Control.InitialOffset.position = Quaternion.Inverse(transform.localRotation) * (Control.FinalisedWorldData.position - transform.position);
-                    Control.InitialOffset.rotation = Quaternion.Inverse(transform.localRotation) * Control.BoneTransform.localRotation;
+                    Control.InitialOffset.rotation = Quaternion.Inverse(transform.localRotation) * Control.FinalisedWorldData.rotation;
                     Control.InitialOffset.Use = true;
                 }
                 // Do nothing if bone is found successfully
