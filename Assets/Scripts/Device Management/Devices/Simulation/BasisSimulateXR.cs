@@ -25,8 +25,18 @@ public class BasisSimulateXR
             BasisInput.TrackedRole = Role;
         }
         Initalize(BasisInput, UniqueID, UnUniqueID);
-        Inputs.Add(BasisInput);
-        BasisDeviceManagement.Instance.AllInputDevices.Add(BasisInput);
+        if (Inputs.Contains(BasisInput) == false)
+        {
+            Inputs.Add(BasisInput);
+        }
+        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(BasisInput) == false)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.Add(BasisInput);
+        }
+        else
+        {
+            Debug.LogError("already added a Input Device thats identical!");
+        }
         return BasisInput;
     }
     public void Initalize(BasisInput BasisInput, string UniqueID, string UnUniqueID)
@@ -77,29 +87,29 @@ public class BasisSimulateXR
     public static void CreatePuckTracker()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0", "{htc}vr_tracker_vive_3_0");
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
         BasisDeviceManagement.ShowTrackers();
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
     }
     [MenuItem("Basis/Create Vive Right Controller")]
     public static void CreateViveRightTracker()
     {
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right", "{indexcontroller}valve_controller_knu_3_0_right", BasisBoneTrackedRole.RightHand,true);
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_right", BasisBoneTrackedRole.RightHand,true);
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Create Vive Left Controller")]
     public static void CreateViveLeftTracker()
     {
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left", "{indexcontroller}valve_controller_knu_3_0_left", BasisBoneTrackedRole.LeftHand, true);
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_left", BasisBoneTrackedRole.LeftHand, true);
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Create 3Point Tracking")]
     public static void CreatePuck3Tracker()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0", "{htc}vr_tracker_vive_3_0");
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0", "{htc}vr_tracker_vive_3_0");
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0", "{htc}vr_tracker_vive_3_0");
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999,999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
 
         var hips = BasisLocalPlayer.Instance.AvatarDriver.References.Hips;
         var leftFoot = BasisLocalPlayer.Instance.AvatarDriver.References.leftFoot;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class BasisTransformMapping
 {
@@ -124,5 +125,36 @@ public class BasisTransformMapping
     public static bool BoolState(Transform Transform)
     {
         return Transform != null;
+    }
+    public Dictionary<string, Transform> GetAllTransforms()
+    {
+        Dictionary<string, Transform> transforms = new Dictionary<string, Transform>
+        {
+            { "AnimatorRoot", AnimatorRoot },
+            { "Hips", Hips },
+            { "Spine", spine },
+            { "Chest", chest },
+            { "Neck", neck },
+            { "Head", head },
+            { "LeftEye", LeftEye },
+            { "RightEye", RightEye },
+            { "LeftShoulder", leftShoulder },
+            { "LeftUpperArm", leftUpperArm },
+            { "LeftLowerArm", leftLowerArm },
+            { "LeftHand", leftHand },
+            { "RightShoulder", RightShoulder },
+            { "RightUpperArm", RightUpperArm },
+            { "RightLowerArm", RightLowerArm },
+            { "RightHand", rightHand },
+            { "LeftUpperLeg", LeftUpperLeg },
+            { "LeftLowerLeg", LeftLowerLeg },
+            { "LeftFoot", leftFoot },
+            { "LeftToes", leftToes },
+            { "RightUpperLeg", RightUpperLeg },
+            { "RightLowerLeg", RightLowerLeg },
+            { "RightFoot", rightFoot },
+            { "RightToes", rightToes }
+        };
+        return transforms;
     }
 }

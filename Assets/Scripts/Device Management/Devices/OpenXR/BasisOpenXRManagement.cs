@@ -94,7 +94,14 @@ public class BasisOpenXRManagement
         var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
         basisXRInput.SubSystem = nameof(BasisOpenXRManagement);
         basisXRInput.Initialize(device, uniqueID, unUniqueID);
-        BasisDeviceManagement.Instance.AllInputDevices.Add(basisXRInput);
+        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(basisXRInput) == false)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.Add(basisXRInput);
+        }
+        else
+        {
+            Debug.LogError("already added a Input Device thats identical!");
+        }
     }
 
     public void DestroyPhysicalTrackedDevice(string id)

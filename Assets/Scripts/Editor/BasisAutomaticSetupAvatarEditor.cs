@@ -89,7 +89,6 @@ public static class BasisAutomaticSetupAvatarEditor
 
     private static bool TryFindNeckAndHead(BasisAvatar avatar, out Transform Neck, out Transform Head)
     {
-        Neck = null;
         Head = null;
         if (!BasisHelpers.TryGetTransformBone(avatar.Animator, HumanBodyBones.Neck, out Neck))
         {

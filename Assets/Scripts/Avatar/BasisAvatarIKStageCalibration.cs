@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
-
 public static class BasisAvatarIKStageCalibration
 {
 #if UNITY_EDITOR
@@ -16,28 +15,156 @@ public static class BasisAvatarIKStageCalibration
 #endif
     public static void Calibrate()
     {
-        Debug.Log("running through");
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
-        List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
-        List<BasisInput> InputTrackers = GetUnassignedInputs(ref rolesToDiscover);
-        List<BasisBoneControl> availableBoneControl = GetAvailableBoneControls(rolesToDiscover);
 
-        int hasEnoughForFullBody = 3; // 3 point tracker
-        bool makeSureFullBodyGoesFirst = InputTrackers.Count <= hasEnoughForFullBody;
-        if (makeSureFullBodyGoesFirst)
+        List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
+        List<BasisInput> Trackers = GetAllInputsExcludingEyeAndHands(ref rolesToDiscover);
+        List<CalibrationConnector> availableBoneControl = GetAvailableBoneControls(rolesToDiscover);
+
+        List<CalibrationConnector> Left = new List<CalibrationConnector>();
+        List<CalibrationConnector> Right = new List<CalibrationConnector>();
+        List<CalibrationConnector> Middle = new List<CalibrationConnector>();
+
+        foreach (CalibrationConnector Connector in availableBoneControl)
         {
-            Debug.Log("use 3Point");
+            if (Connector.GeneralLocation == GeneralLocation.Left)
+            {
+                Left.Add(Connector);
+            }
+            else
+            {
+                if (Connector.GeneralLocation == GeneralLocation.Right)
+                {
+                    Right.Add(Connector);
+                }
+                else
+                {
+                    if (Connector.GeneralLocation == GeneralLocation.Middle)
+                    {
+                        Middle.Add(Connector);
+                    }
+                }
+            }
         }
-        BasisTrackingMode Mode = makeSureFullBodyGoesFirst ? BasisTrackingMode.HipAndFeet : BasisTrackingMode.EverythingGoes;
-        ModeToTrackersMask(availableBoneControl, Mode, out List<BasisBoneControl> TrackedBoneControls, out List<BasisBoneTrackedRole> TrackedRoles);
-       // Debug.Log("ModeToTrackersMask");
-        SequenceIndexes(ref TrackedBoneControls, ref TrackedRoles);
-      //  Debug.Log("SequenceIndexes");
-        AssignInputsToClosestControls(InputTrackers, TrackedBoneControls, TrackedRoles);
-       // Debug.Log("AssignInputsToClosestControls");
+
+        RunFor(Trackers.Count, availableBoneControl, out List<CalibrationConnector> MiddleOutput);
+        FindOptimalMatches(Trackers, MiddleOutput);
+
         BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
-        //Debug.Log("CalibrateRoles");
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+    }
+    public static void RunFor(int AvaliableTrackersCount, List<CalibrationConnector> Connectors, out List<CalibrationConnector> LatestConnectors)
+    {
+        LatestConnectors = new List<CalibrationConnector>();
+
+        for (int Index = 0; Index < Connectors.Count; Index++)
+        {
+            CalibrationConnector Connector = Connectors[Index];
+
+            if (AvaliableTrackersCount <= 3)
+            {
+                // Case for 3 or fewer trackers
+                if (CheckFor3Point(Connector.BasisBoneTrackedRole))
+                {
+                    LatestConnectors.Add(Connector);
+                }
+            }
+            /*
+            else if (AvaliableTrackersCount >= 4 && AvaliableTrackersCount <= 5)
+            {
+                // Case for 4 or 5 trackers
+                if (CheckFor3Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority6Point(Connector.BasisBoneTrackedRole))
+                {
+                    LatestConnectors.Add(Connector);
+                }
+            }
+            else if (AvaliableTrackersCount >= 6 && AvaliableTrackersCount <= 8)
+            {
+                // Case for 6 to 8 trackers
+                if (CheckFor3Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority6Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority9Point(Connector.BasisBoneTrackedRole))
+                {
+                    LatestConnectors.Add(Connector);
+                }
+            }
+            else if (AvaliableTrackersCount >= 9 && AvaliableTrackersCount <= 10)
+            {
+                // Case for 9 or 10 trackers
+                if (CheckFor3Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority6Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority9Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority11Point(Connector.BasisBoneTrackedRole))
+                {
+                    LatestConnectors.Add(Connector);
+                }
+            }
+            */
+            else// if (AvaliableTrackersCount >= 11)
+            {
+                // Case for 11 or more trackers
+                //  if (CheckForNextPriority13Point(Connector.BasisBoneTrackedRole) && ReplaceMeOnceyouhaveTime(Connector.BasisBoneTrackedRole) && DisableAsIhaveNotImplemented(Connector.BasisBoneTrackedRole))
+                // {
+                //    LatestConnectors.Add(Connector);
+                // }
+            }
+        }
+    }
+    public static bool CheckFor3Point(BasisBoneTrackedRole Role)
+    {
+        return (Role == BasisBoneTrackedRole.Hips || Role == BasisBoneTrackedRole.LeftFoot || Role == BasisBoneTrackedRole.RightFoot);
+    }
+    public static bool CheckForNextPriority6Point(BasisBoneTrackedRole Role)
+    {
+        return (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.LeftUpperLeg || Role == BasisBoneTrackedRole.RightUpperLeg);
+    }
+    public static bool CheckForNextPriority9Point(BasisBoneTrackedRole Role)
+    {
+        return (Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.LeftUpperArm || Role == BasisBoneTrackedRole.RightUpperArm);
+    }
+    public static bool CheckForNextPriority11Point(BasisBoneTrackedRole Role)
+    {
+        return (Role == BasisBoneTrackedRole.LeftToes || Role == BasisBoneTrackedRole.RightToes || Role == BasisBoneTrackedRole.Neck);
+    }
+    public static bool CheckForNextPriority13Point(BasisBoneTrackedRole Role)
+    {
+        return true;
+    }
+    public static bool ReplaceMeOnceyouhaveTime(BasisBoneTrackedRole Role)
+    {
+        if(Role == BasisBoneTrackedRole.Head || Role == BasisBoneTrackedRole.Neck || Role == BasisBoneTrackedRole.CenterEye  || Role == BasisBoneTrackedRole.Mouth)
+        {
+            return false;
+        }
+        return true;
+    }
+    public static bool DisableAsIhaveNotImplemented(BasisBoneTrackedRole Role)
+    {
+        if (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.UpperChest || Role ==  BasisBoneTrackedRole.Spine)
+        {
+            return false;
+        }
+        return true;
+    }
+    public static bool IsRight(Transform TransformRightCheck, Transform avatarMiddle)
+    {
+        Vector3 directionToOther = TransformRightCheck.position - avatarMiddle.position;
+        // Vector3 avatarForward = avatarMiddle.forward;
+        Vector3 avatarRight = avatarMiddle.right;
+
+        // Check if the other transform is to the left or right
+        float dotProduct = Vector3.Dot(avatarRight, directionToOther);
+
+        if (dotProduct > 0)
+        {
+            Debug.Log(TransformRightCheck.name + " is on the right.");
+            return true;
+        }
+        else if (dotProduct < 0)
+        {
+            Debug.Log(TransformRightCheck.name + " is on the left.");
+            return false;
+        }
+        else
+        {
+            Debug.Log(TransformRightCheck.name + " is directly in front or behind.");
+        }
+        return false;
     }
     private static List<BasisBoneTrackedRole> GetAllRoles()
     {
@@ -48,238 +175,119 @@ public static class BasisAvatarIKStageCalibration
         }
         return rolesToDiscover;
     }
+
     private static List<BasisInput> GetUnassignedInputs(ref List<BasisBoneTrackedRole> rolesToDiscover)
     {
-        List<BasisInput> TrackInput = new List<BasisInput>();
+        List<BasisInput> trackInput = new List<BasisInput>();
         foreach (BasisInput baseInput in BasisDeviceManagement.Instance.AllInputDevices)
         {
             if (!baseInput.hasRoleAssigned)
             {
-                TrackInput.Add(baseInput);
+                trackInput.Add(baseInput);
             }
             else
             {
+                Debug.Log("Removing role " + baseInput.TrackedRole);
                 rolesToDiscover.Remove(baseInput.TrackedRole);
             }
         }
-        Debug.Log("Ran through additions");
-        return TrackInput;
+        Debug.Log("Completed input tracking");
+        return trackInput;
     }
-    private static List<BasisBoneControl> GetAvailableBoneControls(List<BasisBoneTrackedRole> rolesToDiscover)
+    private static List<BasisInput> GetAllInputsExcludingEyeAndHands(ref List<BasisBoneTrackedRole> rolesToDiscover)
     {
-        List<BasisBoneControl> availableBoneControl = new List<BasisBoneControl>();
+        List<BasisInput> trackInput = new List<BasisInput>();
+        foreach (BasisInput baseInput in BasisDeviceManagement.Instance.AllInputDevices)
+        {
+            if (!baseInput.hasRoleAssigned)
+            {
+                trackInput.Add(baseInput);
+            }
+            else
+            {
+                // Debug.Log("Removing role " + baseInput.TrackedRole);
+                // rolesToDiscover.Remove(baseInput.TrackedRole);
+                if (baseInput.TrackedRole != BasisBoneTrackedRole.CenterEye && baseInput.TrackedRole != BasisBoneTrackedRole.LeftHand && baseInput.TrackedRole != BasisBoneTrackedRole.RightHand)
+                {
+                    trackInput.Add(baseInput);
+                }
+                else
+                {
+                    Debug.Log("Removing role " + baseInput.TrackedRole);
+                    rolesToDiscover.Remove(baseInput.TrackedRole);
+                }
+            }
+        }
+        Debug.Log("Completed input tracking");
+        return trackInput;
+    }
+    private static List<CalibrationConnector> GetAvailableBoneControls(List<BasisBoneTrackedRole> rolesToDiscover)
+    {
+        List<CalibrationConnector> availableBoneControl = new List<CalibrationConnector>();
         foreach (BasisBoneTrackedRole role in rolesToDiscover)
         {
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl control, role))
             {
-                availableBoneControl.Add(control);
+                CalibrationConnector calibrationConnector = new CalibrationConnector
+                {
+                    BasisBoneTrackedRole = role,
+                    BasisBoneControl = control
+                };
+                if (BasisAvatarDriver.IsApartOfSpineVertical(calibrationConnector.BasisBoneTrackedRole))
+                {
+                    calibrationConnector.GeneralLocation = GeneralLocation.Middle;
+                }
+                else
+                {
+                    if (IsRight(calibrationConnector.BasisBoneControl.BoneModelTransform, BasisLocalCameraDriver.Instance.Camera.transform))
+                    {
+                        calibrationConnector.GeneralLocation = GeneralLocation.Right;
+                    }
+                    else
+                    {
+                        calibrationConnector.GeneralLocation = GeneralLocation.Left;
+                    }
+                }
+                availableBoneControl.Add(calibrationConnector);
             }
             else
             {
-                Debug.LogError("Missing Role " + role);
+                Debug.LogError("Missing bone control for role " + role);
             }
         }
-        Debug.Log("Ran through Removals");
+        Debug.Log("Completed bone control setup");
         return availableBoneControl;
     }
-    public static void ModeToTrackersMask(List<BasisBoneControl> needsAHome, BasisTrackingMode TrackingMode, out List<BasisBoneControl> TrackedInputs, out List<BasisBoneTrackedRole> TrackedRoles)
+    public struct CalibrationConnector
     {
-        TrackedInputs = new List<BasisBoneControl>();
-        TrackedRoles = new List<BasisBoneTrackedRole>();
-
-        foreach (BasisBoneControl baseInput in needsAHome)
+        public BasisBoneControl BasisBoneControl;
+        public BasisBoneTrackedRole BasisBoneTrackedRole;
+        public GeneralLocation GeneralLocation;
+    }
+    public enum GeneralLocation
+    {
+        Middle, Left, Right
+    }
+    private static void FindOptimalMatches(List<BasisInput> inputDevices, List<CalibrationConnector> Connectors)
+    {
+        List<BoneTransformMapping> boneTransformMappings = new List<BoneTransformMapping>();
+        foreach (BasisInput bone in inputDevices)
         {
-            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(baseInput, out BasisBoneTrackedRole role))
+            BoneTransformMapping mapping = new BoneTransformMapping(bone, Connectors.ToArray());
+            boneTransformMappings.Add(mapping);
+        }
+        foreach (BoneTransformMapping mapping in boneTransformMappings)
+        {
+            for (int topDistanceIndex = 0; topDistanceIndex < mapping.Distances.Length; topDistanceIndex++)
             {
-                switch (TrackingMode)
+                float topdistance = mapping.Distances[topDistanceIndex];
+                if (WasThereASmallerIndex(boneTransformMappings, mapping, topDistanceIndex, topdistance) == false)
                 {
-                    case BasisTrackingMode.JustUpperBody:
-                        switch (role)
-                        {
-                            case BasisBoneTrackedRole.LeftLowerArm:
-                            case BasisBoneTrackedRole.RightLowerArm:
-                                TrackedInputs.Add(baseInput);
-                                TrackedRoles.Add(role);
-                                break;
-                        }
-                        break;
-
-                    case BasisTrackingMode.HipAndFeet:
-                        switch (role)
-                        {
-                            case BasisBoneTrackedRole.Hips:
-                            case BasisBoneTrackedRole.LeftFoot:
-                            case BasisBoneTrackedRole.RightFoot:
-                                TrackedInputs.Add(baseInput);
-                                TrackedRoles.Add(role);
-                                break;
-                        }
-                        break;
-
-                    case BasisTrackingMode.EverythingGoes:
-                        TrackedInputs.Add(baseInput);
-                        TrackedRoles.Add(role);
-                        break;
+                    mapping.Closest = Connectors[topDistanceIndex];
+                    ApplyToTarget(mapping.Bone, mapping.Closest.BasisBoneTrackedRole);
                 }
             }
         }
-    }
-    private static void AssignInputsToClosestControls(List<BasisInput> inputDevices, List<BasisBoneControl> availableBones, List<BasisBoneTrackedRole> roles)
-    {
-        List<Tuple<int, int>> optimalMatches = FindOptimalMatches(inputDevices, availableBones);
-        foreach (var match in optimalMatches)
-        {
-            ApplyToTarget(inputDevices[match.Item1], roles[match.Item2]);
-        }
-    }
-    public static List<Tuple<int, int>> FindOptimalMatches(List<BasisInput> inputDevices, List<BasisBoneControl> BasisBoneControls)
-    {
-        int inputDevicesCount = inputDevices.Count;
-        int BasisBoneControlCount = BasisBoneControls.Count;
-        Debug.Log("inputDevicesCount = " + inputDevicesCount + " BasisBoneControlCount = " + BasisBoneControlCount);
-        // Create a cost matrix based on distances between points
-        int[,] costMatrix = new int[inputDevicesCount, BasisBoneControlCount];
-
-        for (int inputDevicesIndex = 0; inputDevicesIndex < inputDevicesCount; inputDevicesIndex++)
-        {
-            for (int BasisBoneControlIndex = 0; BasisBoneControlIndex < BasisBoneControlCount; BasisBoneControlIndex++)
-            {
-                // Ensure the positions are in the same coordinate space and not null
-                if (inputDevices[inputDevicesIndex] == null || inputDevices[inputDevicesIndex].transform == null || BasisBoneControls[BasisBoneControlIndex] == null)
-                {
-                    throw new ArgumentNullException("One of the objects in the input lists is null.");
-                }
-
-                Vector3 inputPosition = inputDevices[inputDevicesIndex].transform.position;
-                Vector3 arrayBPosition = BasisBoneControls[BasisBoneControlIndex].FinalisedWorldData.position;
-
-                // Debugging log
-                Debug.Log($"Input Device {inputDevicesIndex} Position: {inputPosition}");
-                Debug.Log($"ArrayB {BasisBoneControlIndex} Position: {arrayBPosition}");
-
-                // Compute the squared magnitude of the distance vector
-                double squaredMagnitude = Vector3.SqrMagnitude(inputPosition - arrayBPosition);
-
-                // Debugging log
-                //Debug.Log($"Squared Magnitude between Input Device {i} and ArrayB {j}: {squaredMagnitude}");
-
-                // Multiply by a scaling factor and cast to int
-                costMatrix[inputDevicesIndex, BasisBoneControlIndex] = (int)(squaredMagnitude * 1000);
-                Debug.Log($"Squared Magnitude between Input Device {inputDevicesIndex} and ArrayB {BasisBoneControlIndex}: {costMatrix[inputDevicesIndex, BasisBoneControlIndex]}");
-            }
-        }
-
-        // Find the optimal assignments using the Hungarian Algorithm
-        int[] matches = BasisHungarianAlgorithm.FindAssignments(costMatrix);
-
-        // Convert matches to a list of tuples for easier usage
-        List<Tuple<int, int>> optimalMatches = new List<Tuple<int, int>>();
-        for (int i = 0; i < inputDevicesCount; i++)
-        {
-            if (matches[i] < BasisBoneControlCount)
-            {
-                optimalMatches.Add(new Tuple<int, int>(i, matches[i]));
-            }
-        }
-
-        return optimalMatches;
-    }
-    public static void SequenceIndexes(ref List<BasisBoneControl> availableBones, ref List<BasisBoneTrackedRole> roles)
-    {
-        // Hips role and corresponding bone control to the front
-        if (roles.Contains(BasisBoneTrackedRole.Hips))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.Hips);
-            SwapAtIndex(roles, index, 0);
-            SwapAtIndex(availableBones, index, 0);
-        }
-
-        // LeftFoot role and corresponding bone control to the second position
-        if (roles.Contains(BasisBoneTrackedRole.LeftFoot))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.LeftFoot);
-            SwapAtIndex(roles, index, 1);
-            SwapAtIndex(availableBones, index, 1);
-        }
-
-        // RightFoot role and corresponding bone control to the third position
-        if (roles.Contains(BasisBoneTrackedRole.RightFoot))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.RightFoot);
-            SwapAtIndex(roles, index, 2);
-            SwapAtIndex(availableBones, index, 2);
-        }
-        // RightFoot role and corresponding bone control to the third position
-        if (roles.Contains(BasisBoneTrackedRole.Chest))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.Chest);
-            SwapAtIndex(roles, index, 3);
-            SwapAtIndex(availableBones, index, 3);
-        }
-        // RightFoot role and corresponding bone control to the third position
-        if (roles.Contains(BasisBoneTrackedRole.LeftHand))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.LeftHand);
-            SwapAtIndex(roles, index, 4);
-            SwapAtIndex(availableBones, index, 4);
-        }
-
-        // RightFoot role and corresponding bone control to the third position
-        if (roles.Contains(BasisBoneTrackedRole.RightHand))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.RightHand);
-            SwapAtIndex(roles, index, 5);
-            SwapAtIndex(availableBones, index, 5);
-        }
-
-        // RightFoot role and corresponding bone control to the third position
-        if (roles.Contains(BasisBoneTrackedRole.UpperChest))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.UpperChest);
-            SwapAtIndex(roles, index, 6);
-            SwapAtIndex(availableBones, index, 6);
-        }
-
-        // Neck role and corresponding bone control to the end
-        if (roles.Contains(BasisBoneTrackedRole.Neck))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.Neck);
-            int lastIndex = roles.Count - 1;
-            SwapAtIndex(roles, index, lastIndex);
-            SwapAtIndex(availableBones, index, lastIndex);
-        }
-        // Neck role and corresponding bone control to the end
-        if (roles.Contains(BasisBoneTrackedRole.Head))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.Head);
-            int lastIndex = roles.Count - 2;
-            SwapAtIndex(roles, index, lastIndex);
-            SwapAtIndex(availableBones, index, lastIndex);
-        }
-        // Neck role and corresponding bone control to the end
-        if (roles.Contains(BasisBoneTrackedRole.CenterEye))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.CenterEye);
-            int lastIndex = roles.Count - 3;
-            SwapAtIndex(roles, index, lastIndex);
-            SwapAtIndex(availableBones, index, lastIndex);
-        }
-        // Neck role and corresponding bone control to the end
-        if (roles.Contains(BasisBoneTrackedRole.Mouth))
-        {
-            int index = roles.IndexOf(BasisBoneTrackedRole.Mouth);
-            int lastIndex = roles.Count - 4;
-            SwapAtIndex(roles, index, lastIndex);
-            SwapAtIndex(availableBones, index, lastIndex);
-        }
-    }
-
-    // Helper method to swap elements in a list
-    private static void SwapAtIndex<T>(List<T> list, int indexA, int indexB)
-    {
-        T temp = list[indexA];
-        list[indexA] = list[indexB];
-        list[indexB] = temp;
     }
     public static void ApplyToTarget(BasisInput Input, BasisBoneTrackedRole Role)
     {
@@ -288,11 +296,37 @@ public static class BasisAvatarIKStageCalibration
         Input.ApplyRole();
         Debug.Log($"Tracker role assigned for {Input.name}: {Input.TrackedRole}");
     }
-    public enum BasisTrackingMode
+    public static bool WasThereASmallerIndex(List<BoneTransformMapping> boneTransformMappings, BoneTransformMapping mapping, int topDistanceIndex, float topdistance)
     {
-        HipAndFeet,
-        JustUpperBody,
-        EverythingGoes,
+        foreach (BoneTransformMapping secondPass in boneTransformMappings)
+        {
+            if (secondPass != mapping)
+            {
+                if (secondPass.Distances[topDistanceIndex] < topdistance)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
+    [System.Serializable]
+    public class BoneTransformMapping
+    {
+        public BasisInput Bone;
+        [SerializeField]
+        public float[] Distances;
+        [SerializeField]
+        public CalibrationConnector Closest;
 
+        public BoneTransformMapping(BasisInput bone, CalibrationConnector[] transformsToMatch)
+        {
+            Bone = bone;
+            Distances = new float[transformsToMatch.Length];
+            for (int i = 0; i < transformsToMatch.Length; i++)
+            {
+                Distances[i] = Vector3.Distance(bone.transform.position, transformsToMatch[i].BasisBoneControl.BoneModelTransform.position);
+            }
+        }
+    }
 }

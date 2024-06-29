@@ -160,7 +160,14 @@ public class BasisOpenVRManagement
 
         var basisOpenVRInput = gameObject.AddComponent<BasisOpenVRInput>();
         basisOpenVRInput.Initialize(device, uniqueID, unUniqueID);
-        BasisDeviceManagement.Instance.AllInputDevices.Add(basisOpenVRInput);
+        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(basisOpenVRInput) == false)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.Add(basisOpenVRInput);
+        }
+        else
+        {
+            Debug.LogError("already added a Input Device thats identical!");
+        }
     }
     public void DestroyPhysicalTrackedDevice(string id)
     {

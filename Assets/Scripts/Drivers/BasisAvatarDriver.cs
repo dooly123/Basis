@@ -83,15 +83,16 @@ public abstract class BasisAvatarDriver : MonoBehaviour
 
         return false; // Failed to parse
     }
-    public bool IsApartOfSpineVertical(BasisBoneTrackedRole Role)
+    public static bool IsApartOfSpineVertical(BasisBoneTrackedRole Role)
     {
         if (Role == BasisBoneTrackedRole.Hips ||
-           Role == BasisBoneTrackedRole.Chest ||
+            Role == BasisBoneTrackedRole.Chest ||
             Role == BasisBoneTrackedRole.UpperChest ||
-           Role == BasisBoneTrackedRole.Hips ||
-           Role == BasisBoneTrackedRole.Spine ||
-           Role == BasisBoneTrackedRole.CenterEye ||
-           Role == BasisBoneTrackedRole.Head)
+            Role == BasisBoneTrackedRole.Hips ||
+            Role == BasisBoneTrackedRole.Spine ||
+            Role == BasisBoneTrackedRole.CenterEye ||
+            Role == BasisBoneTrackedRole.Mouth ||
+            Role == BasisBoneTrackedRole.Head)
         {
             return true;
         }

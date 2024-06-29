@@ -19,9 +19,9 @@ public class BasisBoneControl
     public event System.Action<BasisHasTracked> OnHasTrackerPositionDriverChanged;
     public event System.Action<BasisHasTracked> OnHasTrackerRotationDriverChanged;
     // Backing fields for the properties
-    [SerializeField] 
+    [SerializeField]
     private BasisHasTracked hasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
-    [SerializeField] 
+    [SerializeField]
     private BasisHasTracked hasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
     // Properties with get/set accessors
     public BasisHasTracked HasTrackerPositionDriver
@@ -31,7 +31,7 @@ public class BasisBoneControl
         {
             if (hasTrackerPositionDriver != value)
             {
-                Debug.Log("Setting Tracker To has Tracker Position Driver " + value);
+               // Debug.Log("Setting Tracker To has Tracker Position Driver " + value);
                 hasTrackerPositionDriver = value;
                 OnHasTrackerPositionDriverChanged?.Invoke(value);
             }
@@ -44,7 +44,7 @@ public class BasisBoneControl
         {
             if (hasTrackerRotationDriver != value)
             {
-                Debug.Log("Setting Tracker To has Tracker Rotation Driver " + value);
+               // Debug.Log("Setting Tracker To has Tracker Rotation Driver " + value);
                 hasTrackerRotationDriver = value;
                 OnHasTrackerRotationDriverChanged?.Invoke(value);
             }
@@ -53,7 +53,7 @@ public class BasisBoneControl
     // Events for property changes
     public event System.Action<BasisHasRigLayer> OnHasRigChanged;
     // Backing fields for the properties
-    [SerializeField] 
+    [SerializeField]
     private BasisHasRigLayer hasRigLayer = BasisHasRigLayer.HasNoRigLayer;
     // Properties with get/set accessors
     public BasisHasRigLayer HasRigLayer
@@ -200,7 +200,7 @@ public class BasisBoneControl
         FinalisedLastWorldData.position = FinalisedWorldData.position;
         FinalisedLastWorldData.rotation = FinalisedWorldData.rotation;
         BoneTransform.SetLocalPositionAndRotation(RawLocalData.position, RawLocalData.rotation);
-        BoneTransform.GetPositionAndRotation(out FinalisedWorldData.position,out FinalisedWorldData.rotation);
+        BoneTransform.GetPositionAndRotation(out FinalisedWorldData.position, out FinalisedWorldData.rotation);
     }
     public void QuaternionClamp(ref Quaternion rotation, BasisRotationalControl AxisLock)
     {

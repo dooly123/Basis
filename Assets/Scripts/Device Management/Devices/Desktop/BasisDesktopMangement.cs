@@ -18,7 +18,15 @@ public class BasisDesktopManagement
             BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
             BasisAvatarEyeInput.SubSystem = nameof(BasisDesktopManagement);
             BasisAvatarEyeInput.Initalize("Desktop Eye");
-            BasisDeviceManagement.Instance.AllInputDevices.Add(BasisAvatarEyeInput);
+
+            if (BasisDeviceManagement.Instance.AllInputDevices.Contains(BasisAvatarEyeInput) == false)
+            {
+                BasisDeviceManagement.Instance.AllInputDevices.Add(BasisAvatarEyeInput);
+            }
+            else
+            {
+                Debug.LogError("already added a Input Device thats identical!");
+            }
         }
     }
     public void StopDesktop()
