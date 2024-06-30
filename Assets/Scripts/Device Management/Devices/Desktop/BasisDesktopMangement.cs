@@ -16,17 +16,8 @@ public class BasisDesktopManagement
                 gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
             }
             BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
-            BasisAvatarEyeInput.SubSystem = nameof(BasisDesktopManagement);
-            BasisAvatarEyeInput.Initalize("Desktop Eye");
-
-            if (BasisDeviceManagement.Instance.AllInputDevices.Contains(BasisAvatarEyeInput) == false)
-            {
-                BasisDeviceManagement.Instance.AllInputDevices.Add(BasisAvatarEyeInput);
-            }
-            else
-            {
-                Debug.LogError("already added a Input Device thats identical!");
-            }
+            BasisAvatarEyeInput.Initalize("Desktop Eye", nameof(BasisDesktopManagement));
+            BasisDeviceManagement.Instance.TryAdd(BasisAvatarEyeInput);
         }
     }
     public void StopDesktop()

@@ -62,8 +62,9 @@ public abstract class BasisInput : MonoBehaviour
     /// </summary>
     /// <param name="UniqueID"></param>
     /// <param name="unUniqueDeviceID"></param>
-    public void ActivateTracking(string UniqueID, string unUniqueDeviceID)
+    public void ActivateTracking(string UniqueID, string unUniqueDeviceID, string subSystems)
     {
+        SubSystem = subSystems;
         this.UnUniqueDeviceID = unUniqueDeviceID;
         this.UniqueID = UniqueID;
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;

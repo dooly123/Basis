@@ -6,17 +6,14 @@ public class BasisOpenVRInputController : BasisInput
     public OpenVRDevice Device;
     public SteamVR_Input_Sources inputSource;
     public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
-    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID)
+    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems)
     {
         Device = device;
         TryAssignRole(Device.deviceClass);
-        ActivateTracking(UniqueID, UnUniqueID);
+        ActivateTracking(UniqueID, UnUniqueID, SubSystem);
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
-          //  poseAction[inputSource].onDeviceConnectedChanged += OnDeviceConnectedChanged;
-        //    poseAction[inputSource].onTrackingChanged += OnTrackingChanged;
-         //   poseAction[inputSource].onChange += SteamVR_Behaviour_Pose_OnChange;
         }
     }
     public new void OnDestroy()
@@ -24,9 +21,6 @@ public class BasisOpenVRInputController : BasisInput
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate -= SteamVR_Behaviour_Pose_OnUpdate;
-        //    poseAction[inputSource].onDeviceConnectedChanged -= OnDeviceConnectedChanged;
-         //   poseAction[inputSource].onTrackingChanged -= OnTrackingChanged;
-         //   poseAction[inputSource].onChange -= SteamVR_Behaviour_Pose_OnChange;
         }
         historyBuffer.Clear();
         base.OnDestroy();
@@ -70,7 +64,7 @@ public class BasisOpenVRInputController : BasisInput
         UpdateHistoryBuffer();
         LocalRawPosition = poseAction[inputSource].localPosition;
         LocalRawRotation = poseAction[inputSource].localRotation;
-        transform.SetLocalPositionAndRotation(poseAction[inputSource].localPosition, poseAction[inputSource].localRotation);
+        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
         if (hasRoleAssigned)
         {
             if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)

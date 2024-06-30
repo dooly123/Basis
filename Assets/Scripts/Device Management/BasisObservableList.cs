@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UnityEngine;
+[System.Serializable]
 public class BasisObservableList<T> : IList<T>
 {
-    private List<T> _list = new List<T>();
+    [SerializeField]
+    public List<T> _list = new List<T>();
 
     public event Action OnListChanged;
 

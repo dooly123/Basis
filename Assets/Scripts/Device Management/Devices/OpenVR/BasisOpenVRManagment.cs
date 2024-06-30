@@ -152,33 +152,19 @@ public class BasisOpenVRManagement
     public void CreateController(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
     {
         BasisOpenVRInputController BasisOpenVRInputController = GameObject.AddComponent<BasisOpenVRInputController>();
-        BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID);
-        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(BasisOpenVRInputController) == false)
-        {
-            BasisDeviceManagement.Instance.AllInputDevices.Add(BasisOpenVRInputController);
-        }
-        else
-        {
-            Debug.LogError("Already added an input device that's identical!");
-        }
+        BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement");
+        BasisDeviceManagement.Instance.TryAdd(BasisOpenVRInputController);
     }
     public void CreateTracker(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
     {
         BasisOpenVRInput basisOpenVRInput = GameObject.AddComponent<BasisOpenVRInput>();
-        basisOpenVRInput.Initialize(device, uniqueID, unUniqueID);
-        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(basisOpenVRInput) == false)
-        {
-            BasisDeviceManagement.Instance.AllInputDevices.Add(basisOpenVRInput);
-        }
-        else
-        {
-            Debug.LogError("Already added an input device that's identical!");
-        }
+        basisOpenVRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement");
+        BasisDeviceManagement.Instance.TryAdd(basisOpenVRInput);
     }
 
     public void DestroyPhysicalTrackedDevice(string id)
     {
         TypicalDevices.Remove(id);
-        BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisOpenVRManagement), id);
+        BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisOpenVRManagement", id);
     }
 }

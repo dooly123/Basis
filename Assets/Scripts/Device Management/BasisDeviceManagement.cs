@@ -13,10 +13,8 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public BasisBootedMode DefaultMode = BasisBootedMode.Desktop;
     public static BasisDeviceManagement Instance;
     public BasisOpusSettings BasisOpusSettings;
-
     public event Action<BasisBootedMode> OnBootModeChanged;
     public event Action<BasisBootedMode> OnBootModeStopped;
-
     [SerializeField] public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
     [SerializeField] public BasisXRManagement BasisXRManagement = new BasisXRManagement();
     [SerializeField] public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
@@ -25,12 +23,9 @@ public partial class BasisDeviceManagement : MonoBehaviour
     [SerializeField] public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
     [SerializeField] public BasisDeviceNameMatcher BasisDeviceNameMatcher;
     [SerializeField] public List<BasisLockToInput> BasisLockToInputs = new List<BasisLockToInput>();
-
     public delegate Task InitializationCompletedHandler();
     public event InitializationCompletedHandler OnInitializationCompleted;
-
     public bool FireOffNetwork = true;
-
     void Start()
     {
         if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -39,7 +34,12 @@ public partial class BasisDeviceManagement : MonoBehaviour
         }
         Initialize();
     }
-
+    void OnDestroy()
+    {
+        ShutDownXR(true);
+        BasisDesktopManagement.StopDesktop();
+        BasisSimulateXR.StopXR();
+    }
     public async void Initialize()
     {
         InstantiationParameters parameters = new InstantiationParameters();
@@ -50,12 +50,11 @@ public partial class BasisDeviceManagement : MonoBehaviour
 
         SwitchMode(DefaultMode);
 
-       BasisXRManagement.CheckForPass += CheckForPass;
+        BasisXRManagement.CheckForPass += CheckForPass;
 
         OnInitializationCompleted += RunAfterInitialized;
         await OnInitializationCompleted?.Invoke();
     }
-
     public async Task RunAfterInitialized()
     {
         if (FireOffNetwork)
@@ -102,31 +101,21 @@ public partial class BasisDeviceManagement : MonoBehaviour
                 break;
         }
     }
-
     public void SetCameraRenderState(bool state)
     {
         BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = state;
     }
-
-    void OnDestroy()
-    {
-        ShutDownXR(true);
-        BasisDesktopManagement.StopDesktop();
-        BasisSimulateXR.StopXR();
-    }
-
     public void ShutDownXR(bool isExiting = false)
     {
         BasisSimulateXR.StopXR();
         BasisOpenXRManagement.StopXRSDK();
         BasisOpenVRManagement.StopXRSDK();
 
-         BasisXRManagement.StopXR(isExiting);
+        BasisXRManagement.StopXR(isExiting);
         AllInputDevices.RemoveAll(item => item == null);
 
         OnBootModeStopped?.Invoke(CurrentMode);
     }
-
     public static async Task<BasisPlayer> LoadGameobject(string playerAddressableID, InstantiationParameters instantiationParameters)
     {
         var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(playerAddressableID, instantiationParameters);
@@ -139,12 +128,10 @@ public partial class BasisDeviceManagement : MonoBehaviour
 
         return null;
     }
-
     public static void ForceLoadXR()
     {
         SwitchSetMode(BasisBootedMode.OpenVRLoader);
     }
-
     public static void ForceSetDesktop()
     {
         SwitchSetMode(BasisBootedMode.Desktop);
@@ -156,12 +143,10 @@ public partial class BasisDeviceManagement : MonoBehaviour
             Instance.SwitchMode(Mode);
         }
     }
-
     public static async void ShowTrackers()
     {
         await ShowTrackersAsync();
     }
-
     public static async Task ShowTrackersAsync()
     {
         var inputDevices = Instance.AllInputDevices;
@@ -174,7 +159,6 @@ public partial class BasisDeviceManagement : MonoBehaviour
 
         await Task.WhenAll(showTrackedVisualTasks);
     }
-
     public static void HideTrackers()
     {
         foreach (var input in Instance.AllInputDevices)
@@ -184,7 +168,6 @@ public partial class BasisDeviceManagement : MonoBehaviour
     }
     public void RemoveDevicesFrom(string SubSystem, string id)
     {
-
         for (int Index = 0; Index < AllInputDevices.Count; Index++)
         {
             BasisInput device = AllInputDevices[Index];
@@ -229,7 +212,19 @@ public partial class BasisDeviceManagement : MonoBehaviour
                 break;
         }
     }
-
+    public bool TryAdd(BasisInput basisXRInput)
+    {
+        if (AllInputDevices.Contains(basisXRInput) == false)
+        {
+            AllInputDevices.Add(basisXRInput);
+            return true;
+        }
+        else
+        {
+            Debug.LogError("already added a Input Device thats identical!");
+        }
+         return false;
+    }
 #if UNITY_EDITOR
     [MenuItem("Basis/Hide Trackers")]
     public static void HideTrackersEditor()

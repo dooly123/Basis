@@ -10,10 +10,11 @@ public class BasisOpenVRInput : BasisInput
     public SteamVR_Utils.RigidTransform deviceTransform;
     public EVRCompositorError result;
 
-    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID)
+    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID,string subSystems)
     {
         Device = device;
-        ActivateTracking(UniqueID, UnUniqueID);
+        SubSystem = subSystems;
+        ActivateTracking(UniqueID, UnUniqueID, SubSystem);
     }
     public void Update()
     {

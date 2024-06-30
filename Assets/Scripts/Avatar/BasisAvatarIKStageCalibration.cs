@@ -152,17 +152,17 @@ public static class BasisAvatarIKStageCalibration
 
         if (dotProduct > 0)
         {
-            Debug.Log(TransformRightCheck.name + " is on the right.");
+          //  Debug.Log(TransformRightCheck.name + " is on the right.");
             return true;
         }
         else if (dotProduct < 0)
         {
-            Debug.Log(TransformRightCheck.name + " is on the left.");
+           // Debug.Log(TransformRightCheck.name + " is on the left.");
             return false;
         }
         else
         {
-            Debug.Log(TransformRightCheck.name + " is directly in front or behind.");
+          //  Debug.Log(TransformRightCheck.name + " is directly in front or behind.");
         }
         return false;
     }

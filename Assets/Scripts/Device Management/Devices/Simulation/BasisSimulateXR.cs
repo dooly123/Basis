@@ -15,7 +15,7 @@ public class BasisSimulateXR
     {
 
     }
-    public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false)
+    public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "")
     {
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
@@ -24,24 +24,17 @@ public class BasisSimulateXR
         {
             BasisInput.TrackedRole = Role;
         }
-        Initalize(BasisInput, UniqueID, UnUniqueID);
+        Initalize(BasisInput, UniqueID, UnUniqueID, subSystems);
         if (Inputs.Contains(BasisInput) == false)
         {
             Inputs.Add(BasisInput);
         }
-        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(BasisInput) == false)
-        {
-            BasisDeviceManagement.Instance.AllInputDevices.Add(BasisInput);
-        }
-        else
-        {
-            Debug.LogError("already added a Input Device thats identical!");
-        }
+        BasisDeviceManagement.Instance.TryAdd(BasisInput);
         return BasisInput;
     }
-    public void Initalize(BasisInput BasisInput, string UniqueID, string UnUniqueID)
+    public void Initalize(BasisInput BasisInput, string UniqueID, string UnUniqueID, string subSystems)
     {
-        BasisInput.ActivateTracking(UniqueID, UnUniqueID);
+        BasisInput.ActivateTracking(UniqueID, UnUniqueID, subSystems);
     }
     public void DestroyXRInput(string ID)
     {

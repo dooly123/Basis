@@ -92,21 +92,13 @@ public class BasisOpenXRManagement
             }
         };
         var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
-        basisXRInput.SubSystem = nameof(BasisOpenXRManagement);
-        basisXRInput.Initialize(device, uniqueID, unUniqueID);
-        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(basisXRInput) == false)
-        {
-            BasisDeviceManagement.Instance.AllInputDevices.Add(basisXRInput);
-        }
-        else
-        {
-            Debug.LogError("already added a Input Device thats identical!");
-        }
+        basisXRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenXRManagement");
+        BasisDeviceManagement.Instance.TryAdd(basisXRInput);
     }
 
     public void DestroyPhysicalTrackedDevice(string id)
     {
         TypicalDevices.Remove(id);
-        BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisOpenXRManagement), id);
+        BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisOpenXRManagement", id);
     }
 }

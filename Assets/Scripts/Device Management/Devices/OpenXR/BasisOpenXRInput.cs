@@ -6,11 +6,12 @@ public class BasisOpenXRInput : BasisInput
     public UnityEngine.XR.InputDevice Device;
 
 
-    public void Initialize(UnityEngine.XR.InputDevice device, string UniqueID,string UnUniqueID)
+    public void Initialize(UnityEngine.XR.InputDevice device, string UniqueID,string UnUniqueID,string subSystems)
     {
+        SubSystem = subSystems;
         Device = device;
         GetControllerOrHMD();
-        ActivateTracking(UniqueID, UnUniqueID);
+        ActivateTracking(UniqueID, UnUniqueID, SubSystem);
     }
 
     private void GetControllerOrHMD()
