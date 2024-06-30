@@ -189,7 +189,7 @@ MonoBehaviour:
   RowWidth: 44
   VerticalSpacing: 1
   HorizontalSpacing: 1
-  rowHeight: 50
+  rowHeight: 44
   keyboardParent: {fileID: 0}
   SelectedLanguage: English
   SelectedStyle: QWERTY

@@ -14,7 +14,7 @@ public class BasisVirtualKeyboard : BasisUIBase
     public float RowWidth = 44;
     public float VerticalSpacing = 1;
     public float HorizontalSpacing = 1;
-    public float rowHeight = 50f;
+    public float rowHeight = 44f;
     public GameObject keyboardParent;
     public static string KeyboardParent = "KeyboardParent";
     public static string RowName = "Row";
@@ -143,7 +143,7 @@ public class BasisVirtualKeyboard : BasisUIBase
         }
 
         // Set the size of the RectTransform to match the calculated width and fixed height
-        keyboardParentRectTransform.sizeDelta = new Vector2(totalWidth, rowHeight * Rows.Count);
+        keyboardParentRectTransform.sizeDelta = new Vector2(totalWidth, (rowHeight + VerticalSpacing) * Rows.Count);
 
         // Set the size of the Canvas to match the RectTransform
         CanvasRectTransform.sizeDelta = keyboardParentRectTransform.sizeDelta;
@@ -164,7 +164,7 @@ public class BasisVirtualKeyboard : BasisUIBase
             rowObject.transform.localScale = Vector3.one;
 
             RectTransform rowRectTransform = rowObject.AddComponent<RectTransform>();
-            rowRectTransform.sizeDelta = new Vector2(totalWidth, rowHeight);
+            rowRectTransform.sizeDelta = new Vector2(totalWidth, rowHeight + VerticalSpacing);
 
             // Add HorizontalLayoutGroup to the row object
             HorizontalLayoutGroup horizontalLayoutGroup = rowObject.AddComponent<HorizontalLayoutGroup>();
