@@ -15,23 +15,27 @@ public class BasisHamburgerMenu : BasisUIBase
         CloseUI.onClick.AddListener(CloseThisMenu);
     }
 
-    private async static void AvatarButtonPanel()
+    private static void AvatarButtonPanel()
     {
         BasisHamburgerMenu.Instance.CloseThisMenu();
-        await BasisSettingsPanelMenu.OpenThisMenu(BasisUIAvatarSelection.AvatarSelection);
+        AddressableGenericResource resource = new AddressableGenericResource(BasisUIAvatarSelection.AvatarSelection, AddressableExpectedResult.SingleItem);
+        BasisSettingsPanelMenu.OpenMenuNow(resource);
     }
 
-    public async static void SettingsPanel()
+    public static void SettingsPanel()
     {
         BasisHamburgerMenu.Instance.CloseThisMenu();
-        await BasisSettingsPanelMenu.OpenThisMenu(BasisSettingsPanelMenu.SettingsPanel);
-    }
-    public async static void OpenMenu()
-    {
-        await BasisHamburgerMenu.OpenHamburgerMenu();
+        AddressableGenericResource resource = new AddressableGenericResource(BasisSettingsPanelMenu.SettingsPanel, AddressableExpectedResult.SingleItem);
+        BasisSettingsPanelMenu.OpenMenuNow(resource);
     }
     public static async Task OpenHamburgerMenu()
     {
-        await OpenThisMenu(AddressableID);
+        AddressableGenericResource resource = new AddressableGenericResource(AddressableID, AddressableExpectedResult.SingleItem);
+        await OpenThisMenu(resource);
+    }
+    public static void OpenHamburgerMenuNow()
+    {
+        AddressableGenericResource resource = new AddressableGenericResource(AddressableID, AddressableExpectedResult.SingleItem);
+        OpenMenuNow(resource);
     }
 }

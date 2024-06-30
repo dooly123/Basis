@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class BasisPlayerMenu : BasisUIBase
 {
     public static string AddressableID = "BasisPlayerMenu";
-    
+
     public Button HomePanelButton;
     public Button AvatarPanelButton;
     public Button SettingsPanelButton;
@@ -13,9 +13,9 @@ public class BasisPlayerMenu : BasisUIBase
     public GameObject HomePanel;
     public GameObject AvatarPanel;
     public GameObject SettingsPanel;
-    
+
     public static BasisPlayerMenu Instance;
-    
+
     public void Start()
     {
         Instance = this;
@@ -25,11 +25,12 @@ public class BasisPlayerMenu : BasisUIBase
         CloseMenuButton.onClick.AddListener(CloseThisMenu);
     }
 
-    public static async Task OpenPlayerMenu()
+    public static void OpenPlayerMenu()
     {
-        await OpenThisMenu(AddressableID);
+        AddressableGenericResource resource = new AddressableGenericResource(AddressableID, AddressableExpectedResult.SingleItem);
+         OpenMenuNow(resource);
     }
-    
+
     public void OpenPanel(GameObject panel)
     {
         HomePanel.SetActive(false);

@@ -145,14 +145,11 @@ public class BasisLocalInputActions : MonoBehaviour
             CharacterEyeInput.HandleMouseRotation(LookDirection);
         }
     }
-    public async void EscapePerformed()
+    public void EscapePerformed()
     {
         if (BasisHamburgerMenu.Instance == null)
         {
-            if (BasisHamburgerMenu.IsLoading == false)
-            {
-                await BasisHamburgerMenu.OpenHamburgerMenu();
-            }
+            BasisHamburgerMenu.OpenHamburgerMenuNow();
         }
         else
         {

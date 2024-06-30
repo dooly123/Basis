@@ -33,9 +33,9 @@ public abstract class BasisInput : MonoBehaviour
         public bool menuButton;
         public bool primaryButtonGetState;
         public bool secondaryButtonGetState;
-        public float Trigger;
         public bool secondary2DAxisClick;
         public bool primary2DAxisClick;
+        public float Trigger;
         public Vector2 primary2DAxis;
         public Vector2 secondary2DAxis;
     }
@@ -144,9 +144,9 @@ public abstract class BasisInput : MonoBehaviour
                 //only open ui after we have stopped pressing down on the secondary button
                 if (State.secondaryButtonGetState == false && LastState.secondaryButtonGetState)
                 {
-                    if (BasisHamburgerMenu.Instance == null && !BasisUIBase.IsLoading)
+                    if (BasisHamburgerMenu.Instance == null )
                     {
-                        BasisHamburgerMenu.OpenMenu();
+                        BasisHamburgerMenu.OpenHamburgerMenuNow();
                         BasisDeviceManagement.ShowTrackers();
                     }
                     else

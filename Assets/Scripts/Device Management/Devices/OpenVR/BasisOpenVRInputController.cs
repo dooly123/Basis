@@ -6,18 +6,17 @@ public class BasisOpenVRInputController : BasisInput
     public OpenVRDevice Device;
     public SteamVR_Input_Sources inputSource;
     public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
-    public ETrackingResult ETrackingResult;
     public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID)
     {
         Device = device;
-        UpdateDeviceID();
+        TryAssignRole(Device.deviceClass);
         ActivateTracking(UniqueID, UnUniqueID);
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
-            poseAction[inputSource].onDeviceConnectedChanged += OnDeviceConnectedChanged;
-            poseAction[inputSource].onTrackingChanged += OnTrackingChanged;
-            poseAction[inputSource].onChange += SteamVR_Behaviour_Pose_OnChange;
+          //  poseAction[inputSource].onDeviceConnectedChanged += OnDeviceConnectedChanged;
+        //    poseAction[inputSource].onTrackingChanged += OnTrackingChanged;
+         //   poseAction[inputSource].onChange += SteamVR_Behaviour_Pose_OnChange;
         }
     }
     public new void OnDestroy()
@@ -25,9 +24,9 @@ public class BasisOpenVRInputController : BasisInput
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate -= SteamVR_Behaviour_Pose_OnUpdate;
-            poseAction[inputSource].onDeviceConnectedChanged -= OnDeviceConnectedChanged;
-            poseAction[inputSource].onTrackingChanged -= OnTrackingChanged;
-            poseAction[inputSource].onChange -= SteamVR_Behaviour_Pose_OnChange;
+        //    poseAction[inputSource].onDeviceConnectedChanged -= OnDeviceConnectedChanged;
+         //   poseAction[inputSource].onTrackingChanged -= OnTrackingChanged;
+         //   poseAction[inputSource].onChange -= SteamVR_Behaviour_Pose_OnChange;
         }
         historyBuffer.Clear();
         base.OnDestroy();
@@ -69,7 +68,6 @@ public class BasisOpenVRInputController : BasisInput
     private void SteamVR_Behaviour_Pose_OnUpdate(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
     {
         UpdateHistoryBuffer();
-        UpdateDeviceID();
         LocalRawPosition = poseAction[inputSource].localPosition;
         LocalRawRotation = poseAction[inputSource].localRotation;
         transform.SetLocalPositionAndRotation(poseAction[inputSource].localPosition, poseAction[inputSource].localRotation);
@@ -85,45 +83,9 @@ public class BasisOpenVRInputController : BasisInput
             }
         }
     }
-    protected virtual void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
-    {
-        poseAction = changedAction;
-        inputSource = changedSource;
-        UpdateDeviceID();
-        Debug.Log("Tracker Changed");
-    }
-    protected virtual void OnTrackingChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, ETrackingResult trackingChanged)
-    {
-        poseAction = changedAction;
-        inputSource = changedSource;
-        ETrackingResult = trackingChanged;
-        UpdateDeviceID();
-        Debug.Log("input is  " + inputSource + " with EtrackingResult " + ETrackingResult);
-    }
     #region Mostly Unused Steam
-    private void SteamVR_Behaviour_Pose_OnChange(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
-    {
-
-    }
     protected SteamVR_HistoryBuffer historyBuffer = new SteamVR_HistoryBuffer(30);
     protected int lastFrameUpdated;
-    protected virtual void UpdateDeviceID()
-    {
-        if (poseAction[inputSource].active && poseAction[inputSource].deviceIsConnected)
-        {
-            uint currentDeviceIndex = poseAction[inputSource].trackedDeviceIndex;
-
-            if (Device.deviceIndex != currentDeviceIndex)
-            {
-                Device.deviceIndex = currentDeviceIndex;
-            }
-        }
-        else
-        {
-            Debug.LogError("poling while not active or device is connected");
-        }
-        TryAssignRole(Device.deviceClass);
-    }
     protected void UpdateHistoryBuffer()
     {
         int currentFrame = Time.frameCount;
@@ -132,16 +94,6 @@ public class BasisOpenVRInputController : BasisInput
             historyBuffer.Update(poseAction[inputSource].localPosition, poseAction[inputSource].localRotation, poseAction[inputSource].velocity, poseAction[inputSource].angularVelocity);
             lastFrameUpdated = currentFrame;
         }
-    }
-    public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
-    {
-        if (poseAction != null)
-            return poseAction.GetLocalizedOriginPart(inputSource, localizedParts);
-        return null;
-    }
-    public uint GetDeviceIndex()
-    {
-        return Device.deviceIndex;
     }
     public Vector3 GetVelocity()
     {
