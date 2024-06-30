@@ -10,7 +10,7 @@ public class BasisOpenVRInputController : BasisInput
     {
         Device = device;
         TryAssignRole(Device.deviceClass);
-        ActivateTracking(UniqueID, UnUniqueID, SubSystem);
+        ActivateTracking(UniqueID, UnUniqueID, subSystems);
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;

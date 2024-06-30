@@ -13,7 +13,7 @@ public class BasisOpenVRInput : BasisInput
     public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID,string subSystems)
     {
         Device = device;
-        SubSystem = subSystems;
+
         ActivateTracking(UniqueID, UnUniqueID, SubSystem);
     }
     public void Update()

@@ -20,7 +20,6 @@ public class BasisAvatarEyeInput : BasisInput
     public bool BlockCrouching;
     public void Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
     {
-        SubSystem = subSystems;
         Debug.Log("Initalizing Avatar Eye");
         if (BasisLocalPlayer.Instance.AvatarDriver != null)
         {
