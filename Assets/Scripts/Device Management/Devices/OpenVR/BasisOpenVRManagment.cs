@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Valve.VR;
-
 [Serializable]
 public class BasisOpenVRManagement
 {
@@ -14,31 +13,36 @@ public class BasisOpenVRManagement
     public SteamVR_Render SteamVR_Render;
     public SteamVR SteamVR;
     public Dictionary<string, OpenVRDevice> TypicalDevices = new Dictionary<string, OpenVRDevice>();
-
+    public bool IsInUse = false;
     public void StartXRSDK()
     {
-        Debug.Log("Starting SteamVR Instance...");
-        SteamVR = SteamVR.instance;
-
-        if (SteamVR_BehaviourGameobject == null)
+        if (!IsInUse)
         {
-            SteamVR_BehaviourGameobject = new GameObject("SteamVR_Behaviour");
+            Debug.Log("Starting SteamVR Instance...");
+            SteamVR = SteamVR.instance;
+
+            if (SteamVR_BehaviourGameobject == null)
+            {
+                SteamVR_BehaviourGameobject = new GameObject("SteamVR_Behaviour");
+            }
+
+            SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
+            SteamVR_Behaviour.Initialize();
+            SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
+
+            SteamVR_Behaviour.initializeSteamVROnAwake = false;
+            SteamVR_Behaviour.doNotDestroy = false;
+
+            SteamVR_Render.StartCoroutine(CheckState());
+            IsInUse = true;
         }
-
-        SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
-        SteamVR_Behaviour.Initialize();
-        SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
-
-        SteamVR_Behaviour.initializeSteamVROnAwake = false;
-        SteamVR_Behaviour.doNotDestroy = false;
-
-        SteamVR_Render.StartCoroutine(CheckState());
     }
 
     private IEnumerator CheckState()
     {
         while (SteamVR.initializedState == SteamVR.InitializedStates.None)
         {
+            Debug.LogError("SteamVR initializedState failed");
             yield return null;
         }
 
@@ -49,58 +53,29 @@ public class BasisOpenVRManagement
         }
 
         SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
-
-        foreach (var poseAction in SteamVR_Input.actionsPose)
-        {
-            foreach (SteamVR_Input_Sources inputSource in Enum.GetValues(typeof(SteamVR_Input_Sources)))
-            {
-                poseAction[inputSource].onDeviceConnectedChanged += UpdateOnConnectOrDisconnect;
-            }
-        }
     }
 
     private void OnDeviceConnected(int deviceIndex, bool deviceConnected)
     {
+        uint DeviceID = (uint)deviceIndex;
         Debug.Log($"Device index {deviceIndex} is connected: {deviceConnected}");
-        GenerateID((uint)deviceIndex, out string uniqueID, out string unUniqueID);
-
-        var deviceClass = OpenVR.System.GetTrackedDeviceClass((uint)deviceIndex);
-        if (deviceClass == ETrackedDeviceClass.TrackingReference)
+        GenerateID(DeviceID, out ETrackedDeviceClass ETrackedDeviceClass, out string uniqueID, out string unUniqueID);
+        if (ETrackedDeviceClass == ETrackedDeviceClass.TrackingReference)
         {
+            //we dont want lighthouses
             return;
         }
 
         if (deviceConnected)
         {
-            CreateDevice((uint)deviceIndex, deviceClass, uniqueID, unUniqueID);
+            CreateTrackerDevice(DeviceID, ETrackedDeviceClass, uniqueID, unUniqueID);
         }
         else
         {
             DestroyPhysicalTrackedDevice(uniqueID);
         }
     }
-
-    private void UpdateOnConnectOrDisconnect(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected)
-    {
-        if (deviceConnected)
-        {
-            var deviceIndex = GetDeviceIndex(fromSource);
-            foreach (BasisInput device in BasisDeviceManagement.Instance.AllInputDevices)
-            {
-                if (device.SubSystem == nameof(BasisOpenVRManagement))
-                {
-                    BasisOpenVRInput BasisOpenVRInput = (BasisOpenVRInput)device;
-                    if (BasisOpenVRInput.Device.deviceIndex == deviceIndex)
-                    {
-                        BasisOpenVRInput.TrackedRole = fromSource == SteamVR_Input_Sources.LeftHand ? BasisBoneTrackedRole.LeftHand : BasisBoneTrackedRole.RightHand;
-                        BasisOpenVRInput.inputSource = fromSource;
-                    }
-                }
-            }
-        }
-    }
-
-    private void CreateDevice(uint deviceIndex, ETrackedDeviceClass deviceClass, string uniqueID, string unUniqueID)
+    private void CreateTrackerDevice(uint deviceIndex, ETrackedDeviceClass deviceClass, string uniqueID, string unUniqueID)
     {
         if (!TypicalDevices.ContainsKey(uniqueID))
         {
@@ -120,7 +95,6 @@ public class BasisOpenVRManagement
             Debug.LogError("Device was already added");
         }
     }
-
     public void StopXRSDK()
     {
         if (SteamVR_BehaviourGameobject != null)
@@ -134,31 +108,62 @@ public class BasisOpenVRManagement
         }
         SteamVR_Behaviour = null;
         SteamVR_Render = null;
+        IsInUse = false;
     }
-
-    public void GenerateID(uint device, out string uniqueID, out string notUnique)
+    public void GenerateID(uint device, out ETrackedDeviceClass ETrackedDeviceClass, out string uniqueID, out string notUnique)
     {
         var error = new ETrackedPropertyError();
         var id = new StringBuilder(64);
         OpenVR.System.GetStringTrackedDeviceProperty(device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
+        ETrackedDeviceClass = OpenVR.System.GetTrackedDeviceClass(device);
         uniqueID = $"{device}|{id}";
         notUnique = id.ToString();
     }
-
-    private uint GetDeviceIndex(SteamVR_Input_Sources source)
-    {
-        var poseAction = SteamVR_Actions.default_Pose;
-        return poseAction[source].trackedDeviceIndex;
-    }
-
     private void CreatePhysicalTrackedDevice(OpenVRDevice device, string uniqueID, string unUniqueID)
     {
         var gameObject = new GameObject(uniqueID)
         {
             transform = { parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform }
         };
-
-        var basisOpenVRInput = gameObject.AddComponent<BasisOpenVRInput>();
+        if (device.deviceClass == ETrackedDeviceClass.HMD)
+        {
+            CreateTracker(gameObject, device, uniqueID, unUniqueID);
+        }
+        else
+        {
+            if (device.deviceClass == ETrackedDeviceClass.Controller)
+            {
+                CreateController(gameObject, device, uniqueID, unUniqueID);
+            }
+            else
+            {
+                if (device.deviceClass == ETrackedDeviceClass.GenericTracker)
+                {
+                    CreateTracker(gameObject, device, uniqueID, unUniqueID);
+                }
+                else
+                {
+                    CreateTracker(gameObject, device, uniqueID, unUniqueID);
+                }
+            }
+        }
+    }
+    public void CreateController(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
+    {
+        BasisOpenVRInputController BasisOpenVRInputController = GameObject.AddComponent<BasisOpenVRInputController>();
+        BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID);
+        if (BasisDeviceManagement.Instance.AllInputDevices.Contains(BasisOpenVRInputController) == false)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.Add(BasisOpenVRInputController);
+        }
+        else
+        {
+            Debug.LogError("Already added an input device that's identical!");
+        }
+    }
+    public void CreateTracker(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
+    {
+        BasisOpenVRInput basisOpenVRInput = GameObject.AddComponent<BasisOpenVRInput>();
         basisOpenVRInput.Initialize(device, uniqueID, unUniqueID);
         if (BasisDeviceManagement.Instance.AllInputDevices.Contains(basisOpenVRInput) == false)
         {
@@ -166,9 +171,10 @@ public class BasisOpenVRManagement
         }
         else
         {
-            Debug.LogError("already added a Input Device thats identical!");
+            Debug.LogError("Already added an input device that's identical!");
         }
     }
+
     public void DestroyPhysicalTrackedDevice(string id)
     {
         TypicalDevices.Remove(id);

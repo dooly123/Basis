@@ -3,12 +3,8 @@
 // Purpose: Handles rendering of all SteamVR_Cameras
 //
 //=============================================================================
-
 using UnityEngine;
 using System.Collections;
-using Valve.VR;
-
-
 namespace Valve.VR
 {
     public class SteamVR_Render : MonoBehaviour
@@ -241,21 +237,11 @@ namespace Valve.VR
 
             if (hasFocus)
             {
-                if (SteamVR.settings.pauseGameWhenDashboardVisible)
-                {
-                    Time.timeScale = timeScale;
-                }
 
                 SteamVR_Camera.sceneResolutionScale = sceneResolutionScale;
             }
             else
             {
-                if (SteamVR.settings.pauseGameWhenDashboardVisible)
-                {
-                    timeScale = Time.timeScale;
-                    Time.timeScale = 0.0f;
-                }
-
                 sceneResolutionScale = SteamVR_Camera.sceneResolutionScale;
                 SteamVR_Camera.sceneResolutionScale = 0.5f;
             }
@@ -315,11 +301,7 @@ namespace Valve.VR
             if (SteamVR_Settings.instance.legacyMixedRealityCamera)
                 SteamVR_ExternalCamera_LegacyManager.SubscribeToNewPoses();
 
-#if UNITY_2017_1_OR_NEWER
-		    Application.onBeforeRender += OnBeforeRender;
-#else
-            Camera.onPreCull += OnCameraPreCull;
-#endif
+            Application.onBeforeRender += OnBeforeRender;
 
             if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess)
                 OpenVR.Screenshots.HookScreenshot(screenshotTypes);
@@ -339,11 +321,7 @@ namespace Valve.VR
             SteamVR_Events.InputFocus.Remove(OnInputFocus);
             SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Remove(OnRequestScreenshot);
 
-#if UNITY_2017_1_OR_NEWER
-		    Application.onBeforeRender -= OnBeforeRender;
-#else
-            Camera.onPreCull -= OnCameraPreCull;
-#endif
+            Application.onBeforeRender -= OnBeforeRender;
 
             if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
                 SteamVR_Events.Initialized.RemoveListener(OnSteamVRInitialized);
@@ -360,8 +338,7 @@ namespace Valve.VR
             }
         }
 
-#if UNITY_2017_1_OR_NEWER
-	    void OnBeforeRender()
+        void OnBeforeRender()
         {
             if (SteamVR.active == false)
                 return;
@@ -371,35 +348,6 @@ namespace Valve.VR
                 UpdatePoses();
             }
         }
-#else
-        void OnCameraPreCull(Camera cam)
-        {
-            if (SteamVR.active == false)
-                return;
-
-#if UNITY_2017_1_OR_NEWER
-		if (cam.cameraType != CameraType.VR)
-			return;
-#else
-            //custom code
-            if (!cam.stereoEnabled) //if not main camera (stereoEnabled isn't perfect, but it is the fast/easiest way to check this in Unity 5.4)
-            {
-                return;
-            }
-#endif
-            // Only update poses on the first camera per frame.
-            if (Time.frameCount != lastFrameCount)
-            {
-                lastFrameCount = Time.frameCount;
-
-                if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
-                {
-                    UpdatePoses();
-                }
-            }
-        }
-        static int lastFrameCount = -1;
-#endif
 
         void Update()
         {
@@ -443,25 +391,6 @@ namespace Valve.VR
                     default:
                         SteamVR_Events.System((EVREventType)vrEvent.eventType).Send(vrEvent);
                         break;
-                }
-            }
-
-            // Ensure various settings to minimize latency.
-            Application.targetFrameRate = -1;
-            Application.runInBackground = true; // don't require companion window focus
-            QualitySettings.maxQueuedFrames = -1;
-            QualitySettings.vSyncCount = 0; // this applies to the companion window
-
-            if (SteamVR.settings.lockPhysicsUpdateRateToRenderFrequency && Time.timeScale > 0.0f)
-            {
-                var vr = SteamVR.instance;
-                if (vr != null && Application.isPlaying)
-                {
-                    //var timing = new Compositor_FrameTiming();
-                    //timing.m_nSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
-                    //vr.compositor.GetFrameTiming(ref timing, 0);
-
-                    Time.fixedDeltaTime = Time.timeScale / vr.hmd_DisplayFrequency;
                 }
             }
         }

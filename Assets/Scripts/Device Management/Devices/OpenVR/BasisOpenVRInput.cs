@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using Valve.VR;
-
 [DefaultExecutionOrder(15101)]
+///only used for trackers!
 public class BasisOpenVRInput : BasisInput
 {
     public OpenVRDevice Device;
-    public SteamVR_Input_Sources inputSource;
     public TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
     public TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
     public SteamVR_Utils.RigidTransform deviceTransform;
@@ -14,29 +13,16 @@ public class BasisOpenVRInput : BasisInput
     public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID)
     {
         Device = device;
-        TryAssignRole(Device.deviceClass);
         ActivateTracking(UniqueID, UnUniqueID);
     }
-    public void TryAssignRole(ETrackedDeviceClass deviceClass)
+    public void Update()
     {
-        if (deviceClass == ETrackedDeviceClass.Controller)
-        {
-            bool isLeftHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand) == Device.deviceIndex;
-            if (isLeftHand)
-            {
-                TrackedRole = BasisBoneTrackedRole.LeftHand;
-            }
-            else
-            {
-                TrackedRole = BasisBoneTrackedRole.RightHand;
-            }
-        }
-        if (deviceClass == ETrackedDeviceClass.HMD)
-        {
-            TrackedRole = BasisBoneTrackedRole.CenterEye;
-        }
+        PollData();
     }
-
+    public void LateUpdate()
+    {
+        PollData();
+    }
     public override void PollData()
     {
         if (SteamVR.active)
@@ -52,19 +38,20 @@ public class BasisOpenVRInput : BasisInput
                 {
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                     {
-                        Vector3 LocalPivot = LocalRawRotation * pivotOffset;
-                        Control.TrackerData.position = LocalRawPosition - LocalPivot;
+                        Control.TrackerData.position = LocalRawPosition - LocalRawRotation * pivotOffset;
                     }
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                     {
                         Control.TrackerData.rotation = LocalRawRotation * rotationOffset;
                     }
                 }
-
-                State.primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
-                State.primaryButtonGetState = SteamVR_Actions._default.A_Button.GetState(inputSource);
-                State.secondaryButtonGetState = SteamVR_Actions._default.B_Button.GetState(inputSource);
-                State.Trigger = SteamVR_Actions._default.Trigger.GetAxis(inputSource);
+                if (HasInputSource)
+                {
+                    State.primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
+                    State.primaryButtonGetState = SteamVR_Actions._default.A_Button.GetState(inputSource);
+                    State.secondaryButtonGetState = SteamVR_Actions._default.B_Button.GetState(inputSource);
+                    State.Trigger = SteamVR_Actions._default.Trigger.GetAxis(inputSource);
+                }
                 UpdatePlayerControl();
             }
             else
@@ -74,4 +61,6 @@ public class BasisOpenVRInput : BasisInput
             transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
         }
     }
+    public bool HasInputSource = false;
+    public SteamVR_Input_Sources inputSource;
 }

@@ -127,7 +127,7 @@ public static class BasisAvatarIKStageCalibration
     }
     public static bool ReplaceMeOnceyouhaveTime(BasisBoneTrackedRole Role)
     {
-        if(Role == BasisBoneTrackedRole.Head || Role == BasisBoneTrackedRole.Neck || Role == BasisBoneTrackedRole.CenterEye  || Role == BasisBoneTrackedRole.Mouth)
+        if (Role == BasisBoneTrackedRole.Head || Role == BasisBoneTrackedRole.Neck || Role == BasisBoneTrackedRole.CenterEye || Role == BasisBoneTrackedRole.Mouth)
         {
             return false;
         }
@@ -135,7 +135,7 @@ public static class BasisAvatarIKStageCalibration
     }
     public static bool DisableAsIhaveNotImplemented(BasisBoneTrackedRole Role)
     {
-        if (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.UpperChest || Role ==  BasisBoneTrackedRole.Spine)
+        if (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.Spine)
         {
             return false;
         }
