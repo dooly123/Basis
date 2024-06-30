@@ -33,6 +33,7 @@ public class BasisLockToInput : MonoBehaviour
                         //Debug.Log("Assigning " + AttachedInput.name);
                         AttachedInput.AfterControlApply += Simulation;
                         HasInput = true;
+                        this.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
                         return;
                     }
                 }
@@ -52,7 +53,7 @@ public class BasisLockToInput : MonoBehaviour
     {
         if (HasInput)
         {
-            transform.SetPositionAndRotation(AttachedInput.transform.position, AttachedInput.transform.rotation);
+            transform.SetLocalPositionAndRotation(AttachedInput.LocalRawPosition, AttachedInput.LocalRawRotation);
         }
     }
 }
