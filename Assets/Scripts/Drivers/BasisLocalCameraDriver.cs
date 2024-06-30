@@ -24,6 +24,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
         LocalPlayer = BasisLocalPlayer.Instance;
         Camera.nearClipPlane = 0.01f;
         Camera.farClipPlane = 1500;
+        QualitySettings.maxQueuedFrames = -1;
         CameraInstanceID = Camera.GetInstanceID();
         RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
@@ -32,7 +33,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     }
     private void OnModeSwitch(BasisBootedMode mode)
     {
-        if(mode == BasisBootedMode.Desktop)
+        if (mode == BasisBootedMode.Desktop)
         {
             Camera.fieldOfView = DefaultCameraFov;
         }

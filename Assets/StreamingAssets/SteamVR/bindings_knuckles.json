@@ -105,6 +105,15 @@
                },
                "mode" : "button",
                "path" : "/user/hand/right/input/a"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/b-button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/b"
             }
          ]
       },
@@ -120,7 +129,9 @@
    "controller_type" : "knuckles",
    "description" : "",
    "interaction_profile" : "",
-   "name" : "configuration for Index Controller",
-   "options" : {},
+   "name" : "Basis configuration for Index Controller",
+   "options" : {
+      "simulated_controller_type" : "none"
+   },
    "simulated_actions" : []
 }
