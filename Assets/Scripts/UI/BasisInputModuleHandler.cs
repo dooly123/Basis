@@ -14,6 +14,7 @@ public class BasisInputModuleHandler : BaseInputModule
     public TMP_InputField CurrentSelectedTMP_InputField;
     public InputField CurrentSelectedInputField;
     public bool HasEvent = false;
+    public bool ForceKeyboard = false;
 
     protected override void OnEnable()
     {
@@ -101,27 +102,49 @@ public class BasisInputModuleHandler : BaseInputModule
             //  ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
             if (EventSystem.currentSelectedGameObject.TryGetComponent(out CurrentSelectedTMP_InputField))
             {
+                if (HasEvent == false)
+                {
+                    // Subscribe to the device change event
+                    //  Keyboard.current.onTextInput += OnTextInput;
+                    HasEvent = true;
+                    if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
+                    {
+                        BasisLocalPlayer.Instance.Move.BlockMovement = true;
+                    }
+                    if (BasisAvatarEyeInput.Instance != null)
+                    {
+                        BasisAvatarEyeInput.Instance.BlockCrouching = true;
 
+                    }
+                    if(BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenVRLoader || BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenXRLoader || ForceKeyboard)
+                    {
+                        BasisVirtualKeyboard.CreateMenu(CurrentSelectedInputField, CurrentSelectedTMP_InputField);
+                    }
+                }
             }
             else
             {
                 if (EventSystem.currentSelectedGameObject.TryGetComponent(out CurrentSelectedInputField))
                 {
+                    if (HasEvent == false)
+                    {
+                        // Subscribe to the device change event
+                        //  Keyboard.current.onTextInput += OnTextInput;
+                        HasEvent = true;
+                        if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
+                        {
+                            BasisLocalPlayer.Instance.Move.BlockMovement = true;
+                        }
+                        if (BasisAvatarEyeInput.Instance != null)
+                        {
+                            BasisAvatarEyeInput.Instance.BlockCrouching = true;
 
-                }
-            }
-            if (HasEvent == false)
-            {
-                // Subscribe to the device change event
-              //  Keyboard.current.onTextInput += OnTextInput;
-                HasEvent = true;
-                if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
-                {
-                    BasisLocalPlayer.Instance.Move.BlockMovement = true;
-                }
-                if(BasisAvatarEyeInput.Instance != null)
-                {
-                    BasisAvatarEyeInput.Instance.BlockCrouching = true;
+                        }
+                        if (BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenVRLoader || BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenXRLoader || ForceKeyboard)
+                        {
+                            BasisVirtualKeyboard.CreateMenu(CurrentSelectedInputField, CurrentSelectedTMP_InputField);
+                        }
+                    }
                 }
             }
         }
@@ -130,7 +153,7 @@ public class BasisInputModuleHandler : BaseInputModule
             if (HasEvent)
             {
                 // Unsubscribe from the key press event
-               // Keyboard.current.onTextInput -= OnTextInput;
+                // Keyboard.current.onTextInput -= OnTextInput;
                 HasEvent = false;
                 CurrentSelectedTMP_InputField = null;
                 CurrentSelectedInputField = null;

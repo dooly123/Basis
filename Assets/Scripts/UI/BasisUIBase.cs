@@ -19,15 +19,15 @@ public abstract class BasisUIBase : MonoBehaviour
         await AddressableLoadFactory.LoadAddressableResourceAsync<GameObject>(resource);
         GameObject Result = (GameObject)resource.Handles[0].Result;
         Result = GameObject.Instantiate(Result);
-        BasisUIBase BasisHamburgerMenu = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
-        BasisHamburgerMenu.OnCreatedMenu?.Invoke();
+        BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
+        BasisUIBase.OnCreatedMenu?.Invoke();
     }
     public static void OpenMenuNow(AddressableGenericResource AddressableGenericResource)
     {
         UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(AddressableGenericResource.Key);
         GameObject RAC = op.WaitForCompletion();
         GameObject Result = GameObject.Instantiate(RAC);
-        BasisUIBase BasisHamburgerMenu = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
-        BasisHamburgerMenu.OnCreatedMenu?.Invoke();
+        BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
+        BasisUIBase.OnCreatedMenu?.Invoke();
     }
 }

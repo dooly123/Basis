@@ -7,35 +7,24 @@ public class BasisGraphicUIRayCaster : MonoBehaviour
     public void Start()
     {
         AddCanvasCollider();
-        UpdateColliderSize();
+        UpdateColliderSize(this.gameObject);
     }
-    private void UpdateColliderSize()
+    public void UpdateColliderSize(GameObject Parent)
     {
         Canvas = BasisHelpers.GetOrAddComponent<Canvas>(this.gameObject);
-        IPointerClickHandler[] ClickHandles = GetComponentsInChildren<IPointerClickHandler>(true);
+        IEventSystemHandler[] ClickHandles = Parent.GetComponentsInChildren<IEventSystemHandler>(true);
 
-        foreach (IPointerClickHandler clickHandler in ClickHandles)
+        foreach (IEventSystemHandler clickHandler in ClickHandles)
         {
             GameObject handlerGameObject = (clickHandler as MonoBehaviour).gameObject;
             if (handlerGameObject != null)
             {
                 BoxCollider boxCollider = BasisHelpers.GetOrAddComponent<BoxCollider>(handlerGameObject);
-                RectTransform rectTransform = handlerGameObject.GetComponent<RectTransform>();
-
-                if (rectTransform != null)
+                if (handlerGameObject.TryGetComponent<RectTransform>(out RectTransform RectTransform))
                 {
-                    Vector2 size = rectTransform.sizeDelta;
+                    Vector2 size = RectTransform.sizeDelta;
                     Vector3 newSize = new Vector3(size.x, size.y, 1); // Assuming a depth of 1 for the collider
                     boxCollider.size = newSize;
-
-                    // Adjust the position of the collider to match the RectTransform position
-                    Vector3 adjustedPosition = rectTransform.localPosition;
-                    // Correct the position considering the pivot
-                    Vector3 pivotCorrection = new Vector3(
-                        size.x * (0.5f - rectTransform.pivot.x),
-                        size.y * (0.5f - rectTransform.pivot.y),
-                        0);
-                    //  adjustedPosition + pivotCorrection;
                     boxCollider.center = Vector3.zero;
                 }
                 else
@@ -45,13 +34,11 @@ public class BasisGraphicUIRayCaster : MonoBehaviour
             }
         }
     }
-    private void AddCanvasCollider()
+    public void AddCanvasCollider()
     {
-        RectTransform canvasRectTransform = Canvas.GetComponent<RectTransform>();
-        BoxCollider canvasCollider = BasisHelpers.GetOrAddComponent<BoxCollider>(Canvas.gameObject);
-
-        if (canvasRectTransform != null)
+        if (Canvas.TryGetComponent<RectTransform>(out RectTransform canvasRectTransform))
         {
+            BoxCollider canvasCollider = BasisHelpers.GetOrAddComponent<BoxCollider>(Canvas.gameObject);
             Vector2 canvasSize = canvasRectTransform.sizeDelta;
             Vector3 canvasNewSize = new Vector3(canvasSize.x, canvasSize.y, 0.1f); // Assuming a depth of 1 for the collider
             canvasCollider.size = canvasNewSize;
