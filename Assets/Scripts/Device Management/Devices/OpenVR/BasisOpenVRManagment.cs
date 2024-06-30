@@ -127,7 +127,8 @@ public class BasisOpenVRManagement
         };
         if (device.deviceClass == ETrackedDeviceClass.HMD)
         {
-            CreateTracker(gameObject, device, uniqueID, unUniqueID);
+            // CreateTracker(gameObject, device, uniqueID, unUniqueID);
+            CreateController(gameObject, device, uniqueID, unUniqueID);
         }
         else
         {
