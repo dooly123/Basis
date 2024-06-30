@@ -186,6 +186,7 @@ public class BasisVirtualKeyboard : BasisUIBase
                 {
                     button.BasisVirtualKeyboardSpecialKey = FoundSpecial.BasisVirtualKeyboardSpecialKey;
                 }
+                button.Button.onClick.AddListener(() => Callback(button));
                 basisRow.RowButtons.Add(button);
                 rows.Add(basisRow);
             }
@@ -221,7 +222,6 @@ public class BasisVirtualKeyboard : BasisUIBase
                     Text = textMeshProUGUI,
                     Button = Button,
                 };
-                Button.onClick.AddListener(() => Callback(BVKB));
                 return BVKB;
             }
             else
