@@ -117,15 +117,20 @@ public class BasisVirtualKeyboard : BasisUIBase
         // Calculate the required width based on the widest row and fixed height of 50 units
         float totalWidth = 0f;
         List<RowCollection> Rows = Language.rows;
-        if (IsCapitalization)
+        for (int Index = 0; Index < Rows.Count; Index++)
         {
-            for (int Index = 0; Index < Rows.Count; Index++)
+            List<string> ItemsInRow = Rows[Index].innerCollection;
+            for (int RowIndex = 0; RowIndex < ItemsInRow.Count; RowIndex++)
             {
-                List<string> ItemsInRow = Rows[Index].innerCollection;
-                for (int RowIndex = 0; RowIndex < ItemsInRow.Count; RowIndex++)
+                if (IsCapitalization)
                 {
                     ItemsInRow[RowIndex] = ItemsInRow[RowIndex].ToUpper();
                 }
+                else
+                {
+                    ItemsInRow[RowIndex] = ItemsInRow[RowIndex].ToLower();
+                }
+
             }
         }
         foreach (var row in Rows)

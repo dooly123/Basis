@@ -27,7 +27,7 @@ public class BasisVirtualRow
         SetScale(button, ScaleSize); // default size;
         foreach (var SpecialKey in SpecialKeys)
         {
-            if (button.Text.text == SpecialKey.Match)
+            if (button.Text.text.ToLower() == SpecialKey.Match.ToLower())
             {
                 SetScale(button, SpecialKey.WidthSize);//check for special
                 button.Button.colors = SpecialKey.ColorBlock;
