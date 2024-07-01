@@ -10,7 +10,7 @@
 #if UNITY_SERVER
                 Debug.Log(LogValue);
 #else
-            Debug.Log(SettingsManagerText + "<color=gray> | </color>" + "<color=white>" + LogValue + "</color></size></b>");
+            Debug.Log(SettingsManagerText + "<color=white>" + LogValue + "</color></size></b>");
 #endif
         }
         public static void Log(string LogValue)
@@ -18,7 +18,7 @@
 #if UNITY_SERVER
                 Debug.Log(LogValue);
 #else
-            Debug.Log(SettingsManagerText + "<color=gray> | </color>" + "<color=white>" + LogValue + "</color></size></b>");
+            Debug.Log(SettingsManagerText + "<color=white>" + LogValue + "</color></size></b>");
 #endif
         }
         public static void LogError(string LogValue, UnityEngine.Object DebugItem)

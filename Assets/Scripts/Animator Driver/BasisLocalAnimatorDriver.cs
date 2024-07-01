@@ -14,31 +14,34 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     public BasisBoneControl Hips;
     void Simulate()
     {
-        //calculate the velocity of the character controller taking into the account the direction occuring to the hips
-        //this works well in fullbody
-        Vector3 currentVelocity = Quaternion.Inverse(Hips.FinalisedWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / Time.deltaTime;
-
-        Vector3 dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
-
-        basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = dampenedVelocity;
-        basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > IsMoving;
-
-        basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 1;
-
-        basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = localPlayer.Move.IsFalling;
-
-        if (BasisLocalInputActions.Instance != null)
+        if (localPlayer.AvatarDriver.InTPose == false)
         {
-            basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Instance.Crouching;
-        }
-        basisAnimatorVariableApply.UpdateAnimator(ScaleMovementBy);
+            //calculate the velocity of the character controller taking into the account the direction occuring to the hips
+            //this works well in fullbody
+            Vector3 currentVelocity = Quaternion.Inverse(Hips.FinalisedWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / Time.deltaTime;
 
-        if (basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling)
-        {
-            basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
+            Vector3 dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
+
+            basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = dampenedVelocity;
+            basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > IsMoving;
+
+            basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 1;
+
+            basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = localPlayer.Move.IsFalling;
+
+            if (BasisLocalInputActions.Instance != null)
+            {
+                basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Instance.Crouching;
+            }
+            basisAnimatorVariableApply.UpdateAnimator(ScaleMovementBy);
+
+            if (basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling)
+            {
+                basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
+            }
+            // Update the previous velocity with the current dampened velocity for the next frame
+            previousRawVelocity = dampenedVelocity;
         }
-        // Update the previous velocity with the current dampened velocity for the next frame
-        previousRawVelocity = dampenedVelocity;
     }
     private void JustJumped()
     {

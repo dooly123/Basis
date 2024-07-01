@@ -15,6 +15,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public RuntimeAnimatorController runtimeAnimatorController;
     public SkinnedMeshRenderer[] SkinnedMeshRenderer;
     public BasisPlayer Player;
+    public bool InTPose = false;
     public void Calibration(BasisAvatar Avatar)
     {
         BeginningCalibration.Invoke();
@@ -30,6 +31,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     }
     public void PutAvatarIntoTpose()
     {
+        InTPose = true;
         if (runtimeAnimatorController == null)
         {
             runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
@@ -43,6 +45,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     {
         Player.Avatar.Animator.runtimeAnimatorController = runtimeAnimatorController;
         runtimeAnimatorController = null;
+        InTPose = false;
     }
     public Bounds GetBounds(Transform animatorParent)
     {
