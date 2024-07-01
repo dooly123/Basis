@@ -119,7 +119,7 @@ public class BasisLocalInputActions : MonoBehaviour
     {
         if (CharacterEyeInput != null)
         {
-            CharacterEyeInput.State.Trigger = state;
+            CharacterEyeInput.InputState.Trigger = state;
         }
     }
     public void RightMouse(float state)

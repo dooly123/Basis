@@ -23,6 +23,21 @@ public class BasisHamburgerMenu : BasisUIBase
         if (OverrideForceCalibration || BasisBootedMode == BasisBootedMode.OpenVRLoader || BasisBootedMode == BasisBootedMode.OpenXRLoader)
         {
             BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+            foreach(BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
+            {
+                BasisInput.InputState.OnTriggerChanged += delegate { OnTriggerChanged(BasisInput); };
+            }
+        }
+    }
+    public void OnTriggerChanged(BasisInput FiredOff)
+    {
+        if (FiredOff.InputState.Trigger >= 0.9f)
+        {
+            foreach (BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
+            {
+                BasisInput.InputState.OnTriggerChanged -= delegate { OnTriggerChanged(BasisInput); };
+            }
+            BasisAvatarIKStageCalibration.FullBodyCalibration();
         }
     }
     private static void AvatarButtonPanel()

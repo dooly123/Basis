@@ -52,10 +52,10 @@ public class BasisOpenVRInputController : BasisInput
     {
         if (SteamVR.active)
         {
-            State.Primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
-            State.PrimaryButtonGetState = SteamVR_Actions._default.A_Button.GetState(inputSource);
-            State.SecondaryButtonGetState = SteamVR_Actions._default.B_Button.GetState(inputSource);
-            State.Trigger = SteamVR_Actions._default.Trigger.GetAxis(inputSource);
+            InputState.Primary2DAxis = SteamVR_Actions._default.Joystick.GetAxis(inputSource);
+            InputState.PrimaryButtonGetState = SteamVR_Actions._default.A_Button.GetState(inputSource);
+            InputState.SecondaryButtonGetState = SteamVR_Actions._default.B_Button.GetState(inputSource);
+            InputState.Trigger = SteamVR_Actions._default.Trigger.GetAxis(inputSource);
             UpdatePlayerControl();
         }
     }

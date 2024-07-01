@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using static BaseBoneDriver;
-public abstract partial class BasisInput : MonoBehaviour
+public abstract class BasisInput : MonoBehaviour
 {
     public string SubSystem;
     public BasisLocalBoneDriver Driver;
@@ -24,7 +24,7 @@ public abstract partial class BasisInput : MonoBehaviour
     public GameObject BasisPointRaycasterRef;
     public BasisDeviceMatchableNames BasisDeviceMatchableNames;
     [SerializeField]
-    public BasisInputState State = new BasisInputState();
+    public BasisInputState InputState = new BasisInputState();
     [SerializeField]
     public BasisInputState LastState = new BasisInputState();
 public BasisBoneTrackedRole TrackedRole
@@ -128,9 +128,9 @@ public BasisBoneTrackedRole TrackedRole
         switch (TrackedRole)
         {
             case BasisBoneTrackedRole.LeftHand:
-                BasisLocalPlayer.Instance.Move.MovementVector = State.Primary2DAxis;
+                BasisLocalPlayer.Instance.Move.MovementVector = InputState.Primary2DAxis;
                 //only open ui after we have stopped pressing down on the secondary button
-                if (State.SecondaryButtonGetState == false && LastState.SecondaryButtonGetState)
+                if (InputState.SecondaryButtonGetState == false && LastState.SecondaryButtonGetState)
                 {
                     if (BasisHamburgerMenu.Instance == null )
                     {
@@ -143,15 +143,11 @@ public BasisBoneTrackedRole TrackedRole
                         BasisDeviceManagement.HideTrackers();
                     }
                 }
-                if (State.PrimaryButtonGetState == false && LastState.PrimaryButtonGetState)
-                {
-                    BasisAvatarIKStageCalibration.FullBodyCalibration();
-                }
                 Control.ApplyMovement();
                 break;
             case BasisBoneTrackedRole.RightHand:
-                BasisLocalPlayer.Instance.Move.Rotation = State.Primary2DAxis;
-                if (State.PrimaryButtonGetState)
+                BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
+                if (InputState.PrimaryButtonGetState)
                 {
                     BasisLocalPlayer.Instance.Move.HandleJump();
                 }
@@ -207,7 +203,7 @@ public BasisBoneTrackedRole TrackedRole
         {
             BasisPointRaycaster.RayCastUI();
         }
-        LastState = State;
+        LastState = InputState;
         AfterControlApply?.Invoke();
     }
     public async Task ShowTrackedVisual()

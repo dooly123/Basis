@@ -1,144 +1,141 @@
 ﻿using System;
 using UnityEngine;
-public abstract partial class BasisInput
+[System.Serializable]
+public class BasisInputState
 {
-    [System.Serializable]
-    public class BasisInputState
+    public event Action OnGripButtonChanged;
+    public event Action OnMenuButtonChanged;
+    public event Action OnPrimaryButtonGetStateChanged;
+    public event Action OnSecondaryButtonGetStateChanged;
+    public event Action OnSecondary2DAxisClickChanged;
+    public event Action OnPrimary2DAxisClickChanged;
+    public event Action OnTriggerChanged;
+    public event Action OnPrimary2DAxisChanged;
+    public event Action OnSecondary2DAxisChanged;
+
+    private bool gripButton;
+    private bool menuButton;
+    private bool primaryButtonGetState;
+    private bool secondaryButtonGetState;
+    private bool secondary2DAxisClick;
+    private bool primary2DAxisClick;
+    private float trigger;
+    private Vector2 primary2DAxis;
+    private Vector2 secondary2DAxis;
+
+    public bool GripButton
     {
-        public event Action OnGripButtonChanged;
-        public event Action OnMenuButtonChanged;
-        public event Action OnPrimaryButtonGetStateChanged;
-        public event Action OnSecondaryButtonGetStateChanged;
-        public event Action OnSecondary2DAxisClickChanged;
-        public event Action OnPrimary2DAxisClickChanged;
-        public event Action OnTriggerChanged;
-        public event Action OnPrimary2DAxisChanged;
-        public event Action OnSecondary2DAxisChanged;
-
-        private bool gripButton;
-        private bool menuButton;
-        private bool primaryButtonGetState;
-        private bool secondaryButtonGetState;
-        private bool secondary2DAxisClick;
-        private bool primary2DAxisClick;
-        private float trigger;
-        private Vector2 primary2DAxis;
-        private Vector2 secondary2DAxis;
-
-        public bool GripButton
+        get => gripButton;
+        set
         {
-            get => gripButton;
-            set
+            if (gripButton != value)
             {
-                if (gripButton != value)
-                {
-                    gripButton = value;
-                    OnGripButtonChanged?.Invoke();
-                }
+                gripButton = value;
+                OnGripButtonChanged?.Invoke();
             }
         }
+    }
 
-        public bool MenuButton
+    public bool MenuButton
+    {
+        get => menuButton;
+        set
         {
-            get => menuButton;
-            set
+            if (menuButton != value)
             {
-                if (menuButton != value)
-                {
-                    menuButton = value;
-                    OnMenuButtonChanged?.Invoke();
-                }
+                menuButton = value;
+                OnMenuButtonChanged?.Invoke();
             }
         }
+    }
 
-        public bool PrimaryButtonGetState
+    public bool PrimaryButtonGetState
+    {
+        get => primaryButtonGetState;
+        set
         {
-            get => primaryButtonGetState;
-            set
+            if (primaryButtonGetState != value)
             {
-                if (primaryButtonGetState != value)
-                {
-                    primaryButtonGetState = value;
-                    OnPrimaryButtonGetStateChanged?.Invoke();
-                }
+                primaryButtonGetState = value;
+                OnPrimaryButtonGetStateChanged?.Invoke();
             }
         }
+    }
 
-        public bool SecondaryButtonGetState
+    public bool SecondaryButtonGetState
+    {
+        get => secondaryButtonGetState;
+        set
         {
-            get => secondaryButtonGetState;
-            set
+            if (secondaryButtonGetState != value)
             {
-                if (secondaryButtonGetState != value)
-                {
-                    secondaryButtonGetState = value;
-                    OnSecondaryButtonGetStateChanged?.Invoke();
-                }
+                secondaryButtonGetState = value;
+                OnSecondaryButtonGetStateChanged?.Invoke();
             }
         }
+    }
 
-        public bool Secondary2DAxisClick
+    public bool Secondary2DAxisClick
+    {
+        get => secondary2DAxisClick;
+        set
         {
-            get => secondary2DAxisClick;
-            set
+            if (secondary2DAxisClick != value)
             {
-                if (secondary2DAxisClick != value)
-                {
-                    secondary2DAxisClick = value;
-                    OnSecondary2DAxisClickChanged?.Invoke();
-                }
+                secondary2DAxisClick = value;
+                OnSecondary2DAxisClickChanged?.Invoke();
             }
         }
+    }
 
-        public bool Primary2DAxisClick
+    public bool Primary2DAxisClick
+    {
+        get => primary2DAxisClick;
+        set
         {
-            get => primary2DAxisClick;
-            set
+            if (primary2DAxisClick != value)
             {
-                if (primary2DAxisClick != value)
-                {
-                    primary2DAxisClick = value;
-                    OnPrimary2DAxisClickChanged?.Invoke();
-                }
+                primary2DAxisClick = value;
+                OnPrimary2DAxisClickChanged?.Invoke();
             }
         }
+    }
 
-        public float Trigger
+    public float Trigger
+    {
+        get => trigger;
+        set
         {
-            get => trigger;
-            set
+            if (Math.Abs(trigger - value) > 0.0001f)
             {
-                if (Math.Abs(trigger - value) > 0.0001f)
-                {
-                    trigger = value;
-                    OnTriggerChanged?.Invoke();
-                }
+                trigger = value;
+                OnTriggerChanged?.Invoke();
             }
         }
+    }
 
-        public Vector2 Primary2DAxis
+    public Vector2 Primary2DAxis
+    {
+        get => primary2DAxis;
+        set
         {
-            get => primary2DAxis;
-            set
+            if (primary2DAxis != value)
             {
-                if (primary2DAxis != value)
-                {
-                    primary2DAxis = value;
-                    OnPrimary2DAxisChanged?.Invoke();
-                }
+                primary2DAxis = value;
+                OnPrimary2DAxisChanged?.Invoke();
             }
         }
+    }
 
-        public Vector2 Secondary2DAxis
+    public Vector2 Secondary2DAxis
+    {
+        get => secondary2DAxis;
+        set
         {
-            get => secondary2DAxis;
-            set
+            if (secondary2DAxis != value)
             {
-                if (secondary2DAxis != value)
-                {
-                    secondary2DAxis = value;
-                    OnSecondary2DAxisChanged?.Invoke();
-                }
+                secondary2DAxis = value;
+                OnSecondary2DAxisChanged?.Invoke();
             }
         }
     }

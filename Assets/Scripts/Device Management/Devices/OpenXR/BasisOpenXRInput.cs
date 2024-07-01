@@ -56,39 +56,39 @@ public class BasisOpenXRInput : BasisInput
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out Vector2 Primary2DAxis))
             {
-                State.Primary2DAxis = Primary2DAxis;
+                InputState.Primary2DAxis = Primary2DAxis;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxis, out Vector2 secondary2DAxis))
             {
-                State.Secondary2DAxis = secondary2DAxis;
+                InputState.Secondary2DAxis = secondary2DAxis;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out bool gripButton))
             {
-                State.GripButton = gripButton;
+                InputState.GripButton = gripButton;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out bool menuButton))
             {
-                State.MenuButton = menuButton;
+                InputState.MenuButton = menuButton;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out bool primaryButtonGetState))
             {
-                State.PrimaryButtonGetState = primaryButtonGetState;
+                InputState.PrimaryButtonGetState = primaryButtonGetState;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out bool secondaryButtonGetState))
             {
-                State.SecondaryButtonGetState = secondaryButtonGetState;
+                InputState.SecondaryButtonGetState = secondaryButtonGetState;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out float Trigger))
             {
-                State.Trigger = Trigger;
+                InputState.Trigger = Trigger;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxisClick, out bool secondary2DAxisClick))
             {
-                State.Secondary2DAxisClick = secondary2DAxisClick;
+                InputState.Secondary2DAxisClick = secondary2DAxisClick;
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out bool primary2DAxisClick))
             {
-                State.Primary2DAxisClick = primary2DAxisClick;
+                InputState.Primary2DAxisClick = primary2DAxisClick;
             }
 
             // Other feature value checks...

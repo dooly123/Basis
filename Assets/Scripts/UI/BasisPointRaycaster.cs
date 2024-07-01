@@ -147,7 +147,7 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     private void HandleUIEvents()
     {
-        if (BasisInput.State.Trigger == 1)
+        if (BasisInput.InputState.Trigger == 1)
         {
             if (WasLastDown == false)
             {
@@ -279,7 +279,7 @@ public class BasisPointRaycaster : MonoBehaviour
 
     private void UpdatePointerState()
     {
-        WasLastDown = BasisInput.State.Trigger == 1;
+        WasLastDown = BasisInput.InputState.Trigger == 1;
     }
 
     private void ResetRenderers()
