@@ -1119,9 +1119,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   Settings: {fileID: 2155481806297643238}
-  AvatarButton: {fileID: 8678589435511341367}
+  AvatarButton: {fileID: 6300372329318747006}
   CloseUI: {fileID: 7793664512655881935}
-  FullBody: {fileID: 0}
+  FullBody: {fileID: 8678589435511341367}
   OverrideForceCalibration: 0
 --- !u!114 &-4260526141799047002
 MonoBehaviour:
