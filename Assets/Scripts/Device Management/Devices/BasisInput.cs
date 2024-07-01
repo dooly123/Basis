@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using static BaseBoneDriver;
-public abstract class BasisInput : MonoBehaviour
+public abstract partial class BasisInput : MonoBehaviour
 {
     public string SubSystem;
     public BasisLocalBoneDriver Driver;
@@ -26,21 +27,7 @@ public abstract class BasisInput : MonoBehaviour
     public BasisInputState State = new BasisInputState();
     [SerializeField]
     public BasisInputState LastState = new BasisInputState();
-    [System.Serializable]
-    public struct BasisInputState
-    {
-        public bool gripButton;
-        public bool menuButton;
-        public bool primaryButtonGetState;
-        public bool secondaryButtonGetState;
-        public bool secondary2DAxisClick;
-        public bool primary2DAxisClick;
-        public float Trigger;
-        public Vector2 primary2DAxis;
-        public Vector2 secondary2DAxis;
-    }
-
-    public BasisBoneTrackedRole TrackedRole
+public BasisBoneTrackedRole TrackedRole
     {
         get => trackedRole;
         set
@@ -141,9 +128,9 @@ public abstract class BasisInput : MonoBehaviour
         switch (TrackedRole)
         {
             case BasisBoneTrackedRole.LeftHand:
-                BasisLocalPlayer.Instance.Move.MovementVector = State.primary2DAxis;
+                BasisLocalPlayer.Instance.Move.MovementVector = State.Primary2DAxis;
                 //only open ui after we have stopped pressing down on the secondary button
-                if (State.secondaryButtonGetState == false && LastState.secondaryButtonGetState)
+                if (State.SecondaryButtonGetState == false && LastState.SecondaryButtonGetState)
                 {
                     if (BasisHamburgerMenu.Instance == null )
                     {
@@ -156,15 +143,15 @@ public abstract class BasisInput : MonoBehaviour
                         BasisDeviceManagement.HideTrackers();
                     }
                 }
-                if (State.primaryButtonGetState == false && LastState.primaryButtonGetState)
+                if (State.PrimaryButtonGetState == false && LastState.PrimaryButtonGetState)
                 {
-                    BasisAvatarIKStageCalibration.Calibrate();
+                    BasisAvatarIKStageCalibration.FullBodyCalibration();
                 }
                 Control.ApplyMovement();
                 break;
             case BasisBoneTrackedRole.RightHand:
-                BasisLocalPlayer.Instance.Move.Rotation = State.primary2DAxis;
-                if (State.primaryButtonGetState)
+                BasisLocalPlayer.Instance.Move.Rotation = State.Primary2DAxis;
+                if (State.PrimaryButtonGetState)
                 {
                     BasisLocalPlayer.Instance.Move.HandleJump();
                 }

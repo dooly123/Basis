@@ -10,10 +10,11 @@ public static class BasisAvatarIKStageCalibration
     [MenuItem("Basis/CalibrateFB")]
     public static void CalibrateEditor()
     {
-        Calibrate();
+        FullBodyCalibration();
     }
 #endif
-    public static void Calibrate()
+
+    public static void FullBodyCalibration()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
 

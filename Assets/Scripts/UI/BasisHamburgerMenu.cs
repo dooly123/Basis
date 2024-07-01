@@ -5,16 +5,26 @@ public class BasisHamburgerMenu : BasisUIBase
     public Button Settings;
     public Button AvatarButton;
     public Button CloseUI;
+    public Button FullBody;
     public static string AddressableID = "MainMenu";
     public static BasisHamburgerMenu Instance;
+    public bool OverrideForceCalibration;
     public void Initialize()
     {
         Instance = this;
         Settings.onClick.AddListener(SettingsPanel);
         AvatarButton.onClick.AddListener(AvatarButtonPanel);
         CloseUI.onClick.AddListener(CloseThisMenu);
+        FullBody.onClick.AddListener(PutIntoCalibrationMode);
     }
-
+    public void PutIntoCalibrationMode()
+    {
+        BasisBootedMode BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;
+        if (OverrideForceCalibration || BasisBootedMode == BasisBootedMode.OpenVRLoader || BasisBootedMode == BasisBootedMode.OpenXRLoader)
+        {
+            BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+        }
+    }
     private static void AvatarButtonPanel()
     {
         BasisHamburgerMenu.Instance.CloseThisMenu();

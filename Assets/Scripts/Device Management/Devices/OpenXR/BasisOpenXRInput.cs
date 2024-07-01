@@ -54,32 +54,41 @@ public class BasisOpenXRInput : BasisInput
                     }
                 }
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out State.primary2DAxis))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out Vector2 Primary2DAxis))
             {
+                State.Primary2DAxis = Primary2DAxis;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxis, out State.secondary2DAxis))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxis, out Vector2 secondary2DAxis))
             {
+                State.Secondary2DAxis = secondary2DAxis;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out State.gripButton))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out bool gripButton))
             {
+                State.GripButton = gripButton;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out State.menuButton))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out bool menuButton))
             {
+                State.MenuButton = menuButton;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out State.primaryButtonGetState))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out bool primaryButtonGetState))
             {
+                State.PrimaryButtonGetState = primaryButtonGetState;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out State.secondaryButtonGetState))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out bool secondaryButtonGetState))
             {
+                State.SecondaryButtonGetState = secondaryButtonGetState;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out State.Trigger))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out float Trigger))
             {
+                State.Trigger = Trigger;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxisClick, out State.secondary2DAxisClick))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondary2DAxisClick, out bool secondary2DAxisClick))
             {
+                State.Secondary2DAxisClick = secondary2DAxisClick;
             }
-            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out State.primary2DAxisClick))
+            if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out bool primary2DAxisClick))
             {
+                State.Primary2DAxisClick = primary2DAxisClick;
             }
 
             // Other feature value checks...
