@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
+using System;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 public class BasisLocalPlayer : BasisPlayer
 {
+    public float PlayerEyeHeight = 1.64f;
+    public float ScaledUpPlayerPositions = 1;
     public static BasisLocalPlayer Instance;
     public BasisCharacterController Move;
     public static string InputActions = "InputActions";
@@ -41,6 +45,18 @@ public class BasisLocalPlayer : BasisPlayer
         OnLocalAvatarChanged += OnCalibration;
         await CreateAvatar();
         SceneManager.sceneLoaded += OnSceneLoadedCallback;
+    }
+    public void SetPlayersEyeHeight(float realEyeHeight, float avatarHeight)
+    {
+        if (realEyeHeight <= 0 || avatarHeight <= 0)
+        {
+            ScaledUpPlayerPositions = 1;
+            Debug.LogError("Scale was below zero");
+        }
+        else
+        {
+            ScaledUpPlayerPositions = avatarHeight / realEyeHeight;
+        }
     }
     public void Teleport(Vector3 position,Quaternion rotation)
     {

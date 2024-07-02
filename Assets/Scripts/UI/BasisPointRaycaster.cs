@@ -21,18 +21,18 @@ public class BasisPointRaycaster : MonoBehaviour
     public static string LoadUIRedicalAddress = "Assets/UI/Prefabs/highlightQuad.prefab";
     public BasisDeviceMatchableNames BasisDeviceMatchableNames;
     public GameObject highlightQuadInstance;
-    public bool WasLastDown = false;
     public GameObject LastHit;
-    public PointerEventData pointerEventData;
     public Canvas FoundCanvas;
     public RaycastResult RaycastResult = new RaycastResult();
     public BasisInput BasisInput;
-    public PointerEventData eventData;
+    public BasisPointerEventData CurrentEventData;
+    public bool HadRaycastUITarget = false;
+    public bool WasCorrectLayer = false;
     public async Task Initialize(BasisInput basisInput)
     {
+        CurrentEventData = new BasisPointerEventData(EventSystem.current);
         BasisInput = basisInput;
         BasisDeviceMatchableNames = BasisInput.BasisDeviceMatchableNames;
-        eventData = new UnityEngine.EventSystems.PointerEventData(EventSystem.current);
         ApplyStaticDataToRaycastResult();
         // Get the layer number for "Ignore Raycast" layer
         int ignoreRaycastLayer = LayerMask.NameToLayer("Ignore Raycast");
@@ -97,7 +97,8 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     public void RayCastUI()
     {
-        if (CheckRayCast())
+        HadRaycastUITarget = CheckRayCast();
+        if (HadRaycastUITarget)
         {
             HandleValidHit();
         }
@@ -108,13 +109,12 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     private void HandleValidHit()
     {
-        if (hit.transform.gameObject.layer == UIMask)
+        WasCorrectLayer = hit.transform.gameObject.layer == UIMask;
+        if (WasCorrectLayer)
         {
-            UpdateRayCastResult();
-            HandleUIEvents();
-            UpdateLineRenderer();
-            UpdateRadicalRenderer();
-            UpdatePointerState();
+            UpdateRayCastResult();//sets alll RaycastResult data
+            UpdateLineRenderer();//updates the line denderer
+            UpdateRadicalRenderer();// moves the redical renderer
             UpdateDebugDraw(Color.green, hit.point);
             LastHit = hit.transform.gameObject;
         }
@@ -122,14 +122,10 @@ public class BasisPointRaycaster : MonoBehaviour
         {
             ResetRenderers();
             UpdateDebugDraw(Color.blue, hit.point);
-
-            EventSystem.current.SetSelectedGameObject(null, null);
         }
-     BasisUIProcessUIEvents.SendUpdateEventToSelectedObject(eventData);
     }
     private void UpdateRayCastResult()
     {
-        pointerEventData = new PointerEventData(EventSystem.current);
         RaycastResult.gameObject = hit.transform.gameObject;
         RaycastResult.distance = hit.distance;
         RaycastResult.screenPosition = BasisLocalCameraDriver.Instance.Camera.WorldToScreenPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
@@ -141,105 +137,6 @@ public class BasisPointRaycaster : MonoBehaviour
         }
         RaycastResult.worldPosition = ray.origin + ray.direction * hit.distance;
         RaycastResult.worldNormal = hit.normal;
-        pointerEventData.pointerCurrentRaycast = RaycastResult;
-        pointerEventData.position = RaycastResult.screenPosition;
-        pointerEventData.pressPosition = RaycastResult.screenPosition;
-    }
-    private void HandleUIEvents()
-    {
-        if (BasisInput.InputState.Trigger == 1)
-        {
-            if (WasLastDown == false)
-            {
-                EventSystem.current.SetSelectedGameObject(hit.transform.gameObject, eventData);
-                WasLastDown = true;
-                EffectiveMouseDown();
-            }
-        }
-        else
-        {
-            if (WasLastDown)
-            {
-                EffectiveMouseUp();
-                WasLastDown = true;
-            }
-
-        }
-    }
-    float m_ClickSpeed = 0.3f;
-    private void EffectiveMouseDown()
-    {
-        eventData.eligibleForClick = true;
-        eventData.delta = Vector2.zero;
-        eventData.dragging = false;
-        eventData.pressPosition = eventData.position;
-        eventData.pointerPressRaycast = eventData.pointerCurrentRaycast;
-        eventData.useDragThreshold = true;
-        eventData.selectedObject = hit.transform.gameObject;
-
-        GameObject selectHandler = ExecuteEvents.GetEventHandler<ISelectHandler>(hit.transform.gameObject);
-
-        // If we have clicked something new, deselect the old thing
-        // and leave 'selection handling' up to the press event.
-        if (selectHandler != EventSystem.current.currentSelectedGameObject)
-        {
-            EventSystem.current.SetSelectedGameObject(null, eventData);
-        }
-
-        GameObject newPressed = ExecuteEvents.ExecuteHierarchy(hit.transform.gameObject, eventData, ExecuteEvents.pointerDownHandler);
-
-        // We didn't find a press handler, so we search for a click handler.
-        if (newPressed == null)
-            newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.transform.gameObject);
-
-        var time = Time.unscaledTime;
-
-        if (newPressed == eventData.lastPress && ((time - eventData.clickTime) < m_ClickSpeed))
-            ++eventData.clickCount;
-        else
-            eventData.clickCount = 1;
-
-        eventData.clickTime = time;
-
-        eventData.pointerPress = newPressed;
-        eventData.rawPointerPress = hit.transform.gameObject;
-
-        // Save the drag handler for drag events during this mouse down.
-        var dragObject = ExecuteEvents.GetEventHandler<IDragHandler>(hit.transform.gameObject);
-        eventData.pointerDrag = dragObject;
-
-        if (dragObject != null)
-        {
-            ExecuteEvents.Execute(dragObject, eventData, ExecuteEvents.initializePotentialDrag);
-        }
-    }
-    private void EffectiveMouseUp()
-    {
-        var target = eventData.pointerPress;
-        ExecuteEvents.Execute(target, eventData, ExecuteEvents.pointerUpHandler);
-
-        var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.transform.gameObject);
-        var pointerDrag = eventData.pointerDrag;
-        if (target == pointerUpHandler && eventData.eligibleForClick)
-        {
-            ExecuteEvents.Execute(target, eventData, ExecuteEvents.pointerClickHandler);
-        }
-        else if (eventData.dragging && pointerDrag != null)
-        {
-            ExecuteEvents.ExecuteHierarchy(hit.transform.gameObject, eventData, ExecuteEvents.dropHandler);
-        }
-
-        eventData.eligibleForClick = false;
-        eventData.pointerPress = null;
-        eventData.rawPointerPress = null;
-
-        if (eventData.dragging && pointerDrag != null)
-        {
-            ExecuteEvents.Execute(pointerDrag, eventData, ExecuteEvents.endDragHandler);
-        }
-
-        eventData.dragging = false;
-        eventData.pointerDrag = null;
     }
     private void UpdateLineRenderer()
     {
@@ -277,11 +174,6 @@ public class BasisPointRaycaster : MonoBehaviour
         }
     }
 
-    private void UpdatePointerState()
-    {
-        WasLastDown = BasisInput.InputState.Trigger == 1;
-    }
-
     private void ResetRenderers()
     {
         if (CachedLinerRenderState && HasLineRenderer)
@@ -303,6 +195,8 @@ public class BasisPointRaycaster : MonoBehaviour
     {
         ResetRenderers();
         UpdateDebugDraw(Color.red, transform.forward * MaxDistance);
+        RaycastResult = new RaycastResult();
+        hit = new RaycastHit();
     }
     public bool CheckRayCast()
     {

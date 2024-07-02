@@ -15,7 +15,7 @@ public class BasisInputModuleHandler : BaseInputModule
     public InputField CurrentSelectedInputField;
     public bool HasEvent = false;
     public bool ForceKeyboard = false;
-
+    public BasisUIRaycastProcess basisUIRaycastProcess = new BasisUIRaycastProcess();
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -95,6 +95,7 @@ public class BasisInputModuleHandler : BaseInputModule
     }
     public override void Process()
     {
+        basisUIRaycastProcess.Update();
         // Process your input events here
         if (EventSystem.currentSelectedGameObject != null)
         {

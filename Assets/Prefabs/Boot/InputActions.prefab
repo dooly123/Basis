@@ -593,6 +593,7 @@ MonoBehaviour:
   CurrentSelectedTMP_InputField: {fileID: 0}
   CurrentSelectedInputField: {fileID: 0}
   HasEvent: 0
+  ForceKeyboard: 0
 --- !u!114 &4506459589283058818
 MonoBehaviour:
   m_ObjectHideFlags: 0

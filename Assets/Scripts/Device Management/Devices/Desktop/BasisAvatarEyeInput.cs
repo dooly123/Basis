@@ -23,7 +23,7 @@ public class BasisAvatarEyeInput : BasisInput
         Debug.Log("Initalizing Avatar Eye");
         if (BasisLocalPlayer.Instance.AvatarDriver != null)
         {
-            LocalRawPosition = new Vector3(0, BasisLocalPlayer.Instance.AvatarDriver.ActiveHeight, 0);
+            LocalRawPosition = new Vector3(0, BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight * BasisLocalPlayer.Instance.ScaledUpPlayerPositions, 0);
             LocalRawRotation = Quaternion.identity;
         }
         else
@@ -95,19 +95,19 @@ public class BasisAvatarEyeInput : BasisInput
 
         CalculateAdjustment();
         adjustedHeadPosition.y -= adjustment;
-        LocalRawPosition = adjustedHeadPosition;
+        LocalRawPosition = adjustedHeadPosition; // / BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
     }
     public void CalculateAdjustment()
     {
         if (rotationY > 0)
         {
             // Positive rotation
-            adjustment = Mathf.Abs(rotationY) * (headDownwardForce / Control.RestingLocalSpace.position.y);
+            adjustment = Mathf.Abs(rotationY) * ((headDownwardForce * BasisLocalPlayer.Instance.ScaledUpPlayerPositions) / Control.RestingLocalSpace.position.y);
         }
         else
         {
             // Negative rotation
-            adjustment = Mathf.Abs(rotationY) * (headUpwardForce / Control.RestingLocalSpace.position.y);
+            adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.ScaledUpPlayerPositions) / Control.RestingLocalSpace.position.y);
         }
     }
     public override void PollData()

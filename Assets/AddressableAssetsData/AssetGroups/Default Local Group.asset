@@ -70,6 +70,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63569f46b0e1e7142951e22edfd5d956
+    m_Address: Dooly Smol
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 65ce57433cf75924fadf6a624f62f5cb
     m_Address: Dooly
     m_ReadOnly: 0

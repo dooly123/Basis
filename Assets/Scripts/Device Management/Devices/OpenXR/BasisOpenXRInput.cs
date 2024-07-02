@@ -45,6 +45,7 @@ public class BasisOpenXRInput : BasisInput
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
             {
+                LocalRawPosition *= BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
                 if (hasRoleAssigned)
                 {
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)

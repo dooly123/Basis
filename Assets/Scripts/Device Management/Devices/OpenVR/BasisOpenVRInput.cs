@@ -33,7 +33,7 @@ public class BasisOpenVRInput : BasisInput
             if (result == EVRCompositorError.None)
             {
                 deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
-                LocalRawPosition = deviceTransform.pos;
+                LocalRawPosition = deviceTransform.pos * BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
                 LocalRawRotation = deviceTransform.rot;
                 if (hasRoleAssigned)
                 {

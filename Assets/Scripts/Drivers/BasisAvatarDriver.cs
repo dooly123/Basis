@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public abstract class BasisAvatarDriver : MonoBehaviour
 {
-    public float ActiveHeight = 1.75f;
+    public float ActiveEyeHeight = 1.75f;
     private static string TPose = "Assets/Animator/Animated TPose.controller";
     public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
     public UnityEvent BeginningCalibration = new UnityEvent();
@@ -21,7 +21,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         BeginningCalibration.Invoke();
         FindSkinnedMeshRenders();
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
-        ActiveHeight = Avatar.AvatarEyePosition.x;
+        ActiveEyeHeight = Avatar.AvatarEyePosition.x;
         BasisLocalPlayer.Instance.LocalBoneDriver.Calibrate();
         if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
         {
@@ -147,7 +147,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
 
                 }
                // Position = new Vector3(0, Position.y, 0);
-                Position += CalculateFallbackOffset(bone, ActiveHeight, heightPercentage);
+                Position += CalculateFallbackOffset(bone, ActiveEyeHeight, heightPercentage);
                 //Position = new Vector3(0, Position.y, 0);
                 UsedFallback = true;
             }
@@ -165,7 +165,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
 
             }
             Position = new Vector3(0, Position.y, 0);
-            Position += CalculateFallbackOffset(bone, ActiveHeight, heightPercentage);
+            Position += CalculateFallbackOffset(bone, ActiveEyeHeight, heightPercentage);
             Position = new Vector3(0, Position.y, 0);
             UsedFallback = true;
         }

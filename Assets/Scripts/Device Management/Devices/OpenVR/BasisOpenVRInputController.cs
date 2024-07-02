@@ -62,7 +62,7 @@ public class BasisOpenVRInputController : BasisInput
     private void SteamVR_Behaviour_Pose_OnUpdate(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
     {
         UpdateHistoryBuffer();
-        LocalRawPosition = poseAction[inputSource].localPosition;
+        LocalRawPosition = poseAction[inputSource].localPosition * BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
         LocalRawRotation = poseAction[inputSource].localRotation;
         transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
         if (hasRoleAssigned)

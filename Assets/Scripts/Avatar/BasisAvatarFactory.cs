@@ -30,6 +30,7 @@ public static class BasisAvatarFactory
                 }
             }
         }
+        Player.SetPlayersEyeHeight(Player.PlayerEyeHeight, Player.AvatarDriver.ActiveEyeHeight);
         Player.OnAvatarSwitched?.Invoke();
     }
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)

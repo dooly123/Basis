@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BasisGraphicUIRayCaster : MonoBehaviour
 {
@@ -19,20 +20,48 @@ public class BasisGraphicUIRayCaster : MonoBehaviour
             GameObject handlerGameObject = (clickHandler as MonoBehaviour).gameObject;
             if (handlerGameObject != null)
             {
-                BoxCollider boxCollider = BasisHelpers.GetOrAddComponent<BoxCollider>(handlerGameObject);
-                if (handlerGameObject.TryGetComponent<RectTransform>(out RectTransform RectTransform))
-                {
-                    Vector2 size = RectTransform.sizeDelta;
-                    Vector3 newSize = new Vector3(size.x, size.y, 1); // Assuming a depth of 1 for the collider
-                    boxCollider.size = newSize;
-                    boxCollider.center = Vector3.zero;
-                }
-                else
-                {
-                    Debug.LogWarning("No RectTransform found on " + handlerGameObject.name);
-                }
+                SetBoxColliderToRectTransform(handlerGameObject);
             }
         }
+    }
+    public static void SetBoxColliderToRectTransform(GameObject handlerGameObject)
+    {
+        BoxCollider boxCollider = BasisHelpers.GetOrAddComponent<BoxCollider>(handlerGameObject);
+
+        if (handlerGameObject.TryGetComponent<RectTransform>(out RectTransform rectTransform))
+        {
+            // Calculate the size and center based on the RectTransform's rect, which accounts for anchors
+            Vector2 size = rectTransform.rect.size;
+            
+
+            Vector3 newSize = new Vector3(size.x, size.y, AppropriateSize(rectTransform)); // Assuming a depth of 1 for the collider
+            boxCollider.size = newSize;
+
+            // Calculate the center of the BoxCollider based on the RectTransform's pivot
+            Vector2 pivot = rectTransform.pivot;
+            Vector3 newCenter = new Vector3(
+                (0.5f - pivot.x) * size.x,
+                (0.5f - pivot.y) * size.y,
+                0); // Centered along the z-axis
+
+            boxCollider.center = newCenter;
+        }
+        else
+        {
+            Debug.LogWarning("No RectTransform found on " + handlerGameObject.name);
+        }
+    }
+    public static float AppropriateSize(RectTransform RectTransform)
+    {
+        if (RectTransform.TryGetComponent(out ScrollRect Rect))
+        {
+            return 0.5f;
+        }
+        if (RectTransform.TryGetComponent(out Canvas Canvas))
+        {
+            return 0.5f;
+        }
+        return 1;
     }
     public void AddCanvasCollider()
     {
