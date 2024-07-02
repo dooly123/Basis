@@ -200,7 +200,7 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     public bool CheckRayCast()
     {
-        ray = new Ray(transform.position, transform.forward);
+        ray = new Ray(transform.position, Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset) * transform.forward);
         return Physics.Raycast(ray, out hit, MaxDistance, Mask, TriggerInteraction);
     }
 }

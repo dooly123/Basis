@@ -12,6 +12,10 @@ public abstract class BasisInput : MonoBehaviour
     public string UniqueID;
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
+
+    public Vector3 FinalPosition;
+    public Quaternion FinalRotation;
+
     public Vector3 pivotOffset;
     public Quaternion rotationOffset;
     public bool HasUIInputSupport = false;
@@ -68,6 +72,13 @@ public BasisBoneTrackedRole TrackedRole
             {
                 CreateRayCaster(this);
             }
+            if(hasRoleAssigned)
+            {
+                Control.InitialOffset = new BasisCalibratedOffsetData();
+                Control.InitialOffset.position = BasisLocalPlayer.Instance.RatioPlayerToAvatarScale *  BasisDeviceMatchableNames.AvatarPositionOffset;
+                Control.InitialOffset.rotation = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
+                Control.InitialOffset.Use = true;
+            }
         }
         else
         {
@@ -83,9 +94,12 @@ public BasisBoneTrackedRole TrackedRole
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-                if (TrackedRole == BasisBoneTrackedRole.CenterEye || TrackedRole == BasisBoneTrackedRole.LeftHand || TrackedRole == BasisBoneTrackedRole.RightHand)
+                if(TrackedRole == BasisBoneTrackedRole.CenterEye)
                 {
                     Control.InitialOffset.Use = false;
+                }
+                if (TrackedRole == BasisBoneTrackedRole.CenterEye || TrackedRole == BasisBoneTrackedRole.LeftHand || TrackedRole == BasisBoneTrackedRole.RightHand)
+                {
                     Debug.Log("skipping calibration offset for " + TrackedRole);
                 }
                 else
@@ -207,7 +221,7 @@ public BasisBoneTrackedRole TrackedRole
     }
     public async Task ShowTrackedVisual()
     {
-        if (BasisVisualTracker == null || LoadedDeviceRequest == null)
+        if (BasisVisualTracker == null && LoadedDeviceRequest == null)
         {
             if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest, out bool ShowVisual))
             {
@@ -241,12 +255,15 @@ public BasisBoneTrackedRole TrackedRole
     }
     public void HideTrackedVisual()
     {
+        Debug.Log("HideTrackedVisual");
         if (BasisVisualTracker != null)
         {
+            Debug.Log("Found and removing  HideTrackedVisual");
             GameObject.Destroy(BasisVisualTracker.gameObject);
         }
         if (LoadedDeviceRequest != null)
         {
+            Debug.Log("Released Memory");
             AddressableLoadFactory.ReleaseResource(LoadedDeviceRequest);
         }
     }

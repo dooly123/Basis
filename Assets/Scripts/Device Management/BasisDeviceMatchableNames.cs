@@ -12,6 +12,10 @@ public class BasisDeviceMatchableNames
     public bool HasRepresentation = false;
     public bool HasRayCastVisual;
     public bool HasRayCastRedical;
+
     public Vector3 PivotRaycastOffset;
     public Vector3 RotationRaycastOffset;
+    //useful for things like the avatars hands
+    public Vector3 AvatarPositionOffset;
+    public Vector3 AvatarRotationOffset;
 }

@@ -66,18 +66,21 @@ public class BasisOpenVRInputController : BasisInput
     private void SteamVR_Behaviour_Pose_OnUpdate(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
     {
         UpdateHistoryBuffer();
-        LocalRawPosition = poseAction[inputSource].localPosition * BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
+        LocalRawPosition = poseAction[inputSource].localPosition;
         LocalRawRotation = poseAction[inputSource].localRotation;
-        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
+
+        FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+        FinalRotation = LocalRawRotation;
+        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
         if (hasRoleAssigned)
         {
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalPosition != Vector3.zero)
             {
-                Control.TrackerData.position = LocalRawPosition - LocalRawRotation * pivotOffset;
+                Control.TrackerData.position = FinalPosition - FinalRotation * pivotOffset;
             }
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalRotation != Quaternion.identity)
             {
-                Control.TrackerData.rotation = LocalRawRotation * rotationOffset;
+                Control.TrackerData.rotation = FinalRotation * rotationOffset;
             }
         }
     }

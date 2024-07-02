@@ -186,9 +186,9 @@ MonoBehaviour:
   Listener: {fileID: 4150865382649993091}
   CameraData: {fileID: 8350818596157214651}
   SteamAudioListener: {fileID: 3211173287841905640}
-  CamerasLockToPosition: {fileID: 0}
   LocalPlayer: {fileID: 0}
   DefaultCameraFov: 90
+  BasisLockToInput: {fileID: 5985133177976618905}
 --- !u!114 &5985133177976618905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +201,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73aa7d0db070dad4390b4d0dc83e98b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BasisDeviceManagement: {fileID: 0}
   TrackedRole: 0
   AttachedInput: {fileID: 0}
-  HasInput: 0

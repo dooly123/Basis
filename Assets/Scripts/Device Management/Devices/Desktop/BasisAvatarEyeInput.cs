@@ -31,6 +31,8 @@ public class BasisAvatarEyeInput : BasisInput
             LocalRawPosition = new Vector3(0, FallBackHeight, 0);
             LocalRawRotation = Quaternion.identity;
         }
+        FinalPosition = LocalRawPosition;
+        FinalRotation = LocalRawRotation;
         TrackedRole = BasisBoneTrackedRole.CenterEye;
         ActivateTracking(ID, ID, subSystems);
         if (BasisHelpers.CheckInstance(Instance))
@@ -95,19 +97,6 @@ public class BasisAvatarEyeInput : BasisInput
         rotationY -= lookVector.y * rotationSpeed;
 
     }
-    public void CalculateAdjustment()
-    {
-        if (rotationY > 0)
-        {
-            // Positive rotation
-            adjustment = Mathf.Abs(rotationY) * ((headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
-        }
-        else
-        {
-            // Negative rotation
-            adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
-        }
-    }
     public override void PollData()
     {
         if (hasRoleAssigned)
@@ -134,6 +123,21 @@ public class BasisAvatarEyeInput : BasisInput
             Control.TrackerData.position = LocalRawPosition;
         }
         UpdatePlayerControl();
+        FinalPosition = LocalRawPosition;
+        FinalRotation = LocalRawRotation;
         transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
+    }
+    public void CalculateAdjustment()
+    {
+        if (rotationY > 0)
+        {
+            // Positive rotation
+            adjustment = Mathf.Abs(rotationY) * ((headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
+        }
+        else
+        {
+            // Negative rotation
+            adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
+        }
     }
 }

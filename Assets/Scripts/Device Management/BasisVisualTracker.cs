@@ -3,7 +3,6 @@ using UnityEngine.Events;
 
 public class BasisVisualTracker : MonoBehaviour
 {
-    public MeshRenderer Renderer;
     public BasisInput BasisInput;
     public UnityEvent TrackedSetup = new UnityEvent();
     public Quaternion ModelRotationOffset = Quaternion.identity;
@@ -13,8 +12,20 @@ public class BasisVisualTracker : MonoBehaviour
         if(basisInput != null)
         {
             BasisInput = basisInput;
-            gameObject.transform.SetLocalPositionAndRotation(ModelPositionOffset, ModelRotationOffset);
+            UpdateVisualSizeAndOffset();
+            BasisLocalPlayer.OnPlayersHeightChanged += UpdateVisualSizeAndOffset;
+            BasisLocalPlayer.OnLocalAvatarChanged += UpdateVisualSizeAndOffset;
             TrackedSetup.Invoke();
         }
+    }
+    public void OnDestroy()
+    {
+        BasisLocalPlayer.OnLocalAvatarChanged -= UpdateVisualSizeAndOffset;
+        BasisLocalPlayer.OnPlayersHeightChanged -= UpdateVisualSizeAndOffset;
+    }
+    public void UpdateVisualSizeAndOffset()
+    {
+       gameObject.transform.localScale = Vector3.one * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+       gameObject.transform.SetLocalPositionAndRotation(ModelPositionOffset * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale, ModelRotationOffset);
     }
 }

@@ -24,6 +24,8 @@ MonoBehaviour:
     HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: vr_tracker_vive_1_0
     MatchableDeviceIds:
     - '{htc}vr_tracker_vive_1_0'
@@ -35,6 +37,8 @@ MonoBehaviour:
     HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: valve_controller_knu_left
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_left'
@@ -48,6 +52,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0.1, y: 0.06, z: -0.1}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: valve_controller_knu_right
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_right'
@@ -61,6 +67,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: -0.1, y: 0.06, z: -0.1}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: tundra_tracker
     MatchableDeviceIds:
     - tundra_tracker
@@ -72,6 +80,8 @@ MonoBehaviour:
     HasRayCastRedical: 0
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: oculus_controller_left
     MatchableDeviceIds:
     - oculus_quest_pro_controller_left
@@ -83,6 +93,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: oculus_controller_right
     MatchableDeviceIds:
     - oculus_quest_pro_controller_right
@@ -94,6 +106,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: Eye
     MatchableDeviceIds:
     - desktop eye
@@ -105,3 +119,5 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}

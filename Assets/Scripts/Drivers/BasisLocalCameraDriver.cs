@@ -1,4 +1,3 @@
-using SteamAudio;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -10,11 +9,12 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public int CameraInstanceID;
     public AudioListener Listener;
     public UniversalAdditionalCameraData CameraData;
-    public SteamAudioListener SteamAudioListener;
+    public SteamAudio.SteamAudioListener SteamAudioListener;
     public BasisLocalPlayer LocalPlayer;
     public int DefaultCameraFov = 90;
     // Static event to notify when the instance exists
     public static event System.Action InstanceExists;
+    public BasisLockToInput BasisLockToInput;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -28,7 +28,9 @@ public class BasisLocalCameraDriver : MonoBehaviour
         CameraInstanceID = Camera.GetInstanceID();
         RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
+        BasisLocalPlayer.OnPlayersHeightChanged += OnHeightChanged;
         //fire static event that says the instance exists
+        OnHeightChanged();
         InstanceExists?.Invoke();
     }
     private void OnModeSwitch(BasisBootedMode mode)
@@ -37,6 +39,11 @@ public class BasisLocalCameraDriver : MonoBehaviour
         {
             Camera.fieldOfView = DefaultCameraFov;
         }
+        OnHeightChanged();
+    }
+    public void OnHeightChanged()
+    {
+        this.gameObject.transform.localScale = Vector3.one * LocalPlayer.RatioPlayerToAvatarScale;
     }
     public void OnDisable()
     {
@@ -45,6 +52,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
         {
             LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
         }
+        BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
     }
     public void BeginCameraRendering(ScriptableRenderContext context, Camera Camera)
     {

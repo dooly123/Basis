@@ -11,7 +11,7 @@ using UnityEditor;
 public class BasisLocalPlayer : BasisPlayer
 {
     public float PlayerEyeHeight = 1.64f;
-    public float ScaledUpPlayerPositions = 1;
+    public float RatioPlayerToAvatarScale = 1;
     public static BasisLocalPlayer Instance;
     public BasisCharacterController Move;
     public static string InputActions = "InputActions";
@@ -47,22 +47,38 @@ public class BasisLocalPlayer : BasisPlayer
         await CreateAvatar();
         SceneManager.sceneLoaded += OnSceneLoadedCallback;
     }
+    public void RecalculateMyHeight()
+    {
+        Debug.Log("Attempting RecalculateMyHeight");
+        BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
+        if (BasisLockToInput != null)
+        {
+            if (BasisLockToInput.AttachedInput != null)
+            {
+                Debug.Log("recalculating local Height!");
+                float y = BasisLockToInput.AttachedInput.LocalRawPosition.y;
+                PlayerEyeHeight = y;
+                Debug.Log("Local Eye Height is " + PlayerEyeHeight);
+                SetPlayersEyeHeight(PlayerEyeHeight, AvatarDriver.ActiveEyeHeight);
+            }
+        }
+    }
     public void SetPlayersEyeHeight(float realEyeHeight, float avatarHeight)
     {
         if (BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.Desktop)
         {
-            ScaledUpPlayerPositions = 1;
+            RatioPlayerToAvatarScale = 1;
         }
         else
         {
             if (realEyeHeight <= 0 || avatarHeight <= 0)
             {
-                ScaledUpPlayerPositions = 1;
+                RatioPlayerToAvatarScale = 1;
                 Debug.LogError("Scale was below zero");
             }
             else
             {
-                ScaledUpPlayerPositions = avatarHeight / realEyeHeight;
+                RatioPlayerToAvatarScale = avatarHeight / realEyeHeight;
             }
         }
         OnPlayersHeightChanged?.Invoke();

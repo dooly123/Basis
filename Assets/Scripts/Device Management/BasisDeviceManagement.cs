@@ -161,9 +161,9 @@ public partial class BasisDeviceManagement : MonoBehaviour
     }
     public static void HideTrackers()
     {
-        foreach (var input in Instance.AllInputDevices)
+        for (int Index = 0; Index < Instance.AllInputDevices.Count; Index++)
         {
-            input.HideTrackedVisual();
+            Instance.AllInputDevices[Index].HideTrackedVisual();
         }
     }
     public void RemoveDevicesFrom(string SubSystem, string id)

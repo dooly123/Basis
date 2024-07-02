@@ -33,17 +33,20 @@ public class BasisOpenVRInput : BasisInput
             if (result == EVRCompositorError.None)
             {
                 deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
-                LocalRawPosition = deviceTransform.pos * BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
+                LocalRawPosition = deviceTransform.pos;
                 LocalRawRotation = deviceTransform.rot;
+
+                FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+                FinalRotation = LocalRawRotation;
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalPosition != Vector3.zero)
                     {
-                        Control.TrackerData.position = LocalRawPosition - LocalRawRotation * pivotOffset;
+                        Control.TrackerData.position = FinalPosition - FinalRotation * pivotOffset;
                     }
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalRotation != Quaternion.identity)
                     {
-                        Control.TrackerData.rotation = LocalRawRotation * rotationOffset;
+                        Control.TrackerData.rotation = FinalRotation * rotationOffset;
                     }
                 }
                 if (HasInputSource)
@@ -59,7 +62,7 @@ public class BasisOpenVRInput : BasisInput
             {
                 Debug.LogError("Error getting device pose: " + result);
             }
-            transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
+            transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
         }
     }
     public bool HasInputSource = false;

@@ -37,6 +37,7 @@ public class BasisHamburgerMenu : BasisUIBase
             {
                 BasisInput.InputState.OnTriggerChanged -= delegate { OnTriggerChanged(BasisInput); };
             }
+            BasisLocalPlayer.Instance.RecalculateMyHeight();
             BasisAvatarIKStageCalibration.FullBodyCalibration();
         }
     }
