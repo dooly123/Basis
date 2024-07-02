@@ -28,24 +28,28 @@ public class BasisOpenVRInputController : BasisInput
 
     public void TryAssignRole(ETrackedDeviceClass deviceClass)
     {
-        if (deviceClass == ETrackedDeviceClass.Controller)
-        {
-            bool isLeftHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand) == Device.deviceIndex;
-            if (isLeftHand)
-            {
-                TrackedRole = BasisBoneTrackedRole.LeftHand;
-                inputSource = SteamVR_Input_Sources.LeftHand;
-            }
-            bool isRightHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand) == Device.deviceIndex;
-            if (isRightHand)
-            {
-                TrackedRole = BasisBoneTrackedRole.RightHand;
-                inputSource = SteamVR_Input_Sources.RightHand;
-            }
-        }
         if (deviceClass == ETrackedDeviceClass.HMD)
         {
             TrackedRole = BasisBoneTrackedRole.CenterEye;
+            inputSource = SteamVR_Input_Sources.Head;
+        }
+        else
+        {
+            if (deviceClass == ETrackedDeviceClass.Controller)
+            {
+                bool isLeftHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand) == Device.deviceIndex;
+                if (isLeftHand)
+                {
+                    TrackedRole = BasisBoneTrackedRole.LeftHand;
+                    inputSource = SteamVR_Input_Sources.LeftHand;
+                }
+                bool isRightHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand) == Device.deviceIndex;
+                if (isRightHand)
+                {
+                    TrackedRole = BasisBoneTrackedRole.RightHand;
+                    inputSource = SteamVR_Input_Sources.RightHand;
+                }
+            }
         }
     }
     public override void PollData()

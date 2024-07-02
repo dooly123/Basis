@@ -77,13 +77,11 @@ public class BasisUIRaycastProcess
     {
         if (EventSystem.current.currentSelectedGameObject != hit.transform.gameObject)
         {
-            Debug.Log("Updating Selected GameObject " + hit.transform.gameObject);
             EventSystem.current.SetSelectedGameObject(hit.transform.gameObject, CurrentEventData);
         }
     }
     public void EffectiveMouseDown(RaycastHit hit, BasisPointerEventData CurrentEventData)
     {
-        Debug.Log("EffectiveMouseDown");
         CurrentEventData.eligibleForClick = true;
         CurrentEventData.delta = Vector2.zero;
         CurrentEventData.dragging = false;

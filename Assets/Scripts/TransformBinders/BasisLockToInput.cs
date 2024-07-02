@@ -19,7 +19,11 @@ public class BasisLockToInput : MonoBehaviour
         BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved += ResetIfNeeded;
         FindRole();
     }
-
+    public void OnDestroy()
+    {
+        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= FindRole;
+        BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved -= ResetIfNeeded;
+    }
     private void ResetIfNeeded(BasisInput input)
     {
         if(AttachedInput == null || AttachedInput == input)

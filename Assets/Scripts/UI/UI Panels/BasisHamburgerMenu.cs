@@ -6,7 +6,7 @@ public class BasisHamburgerMenu : BasisUIBase
     public Button AvatarButton;
     public Button CloseUI;
     public Button FullBody;
-    public static string AddressableID = "MainMenu";
+    public static string MainMenuAddressableID = "MainMenu";
     public static BasisHamburgerMenu Instance;
     public bool OverrideForceCalibration;
     public void Initialize()
@@ -55,12 +55,12 @@ public class BasisHamburgerMenu : BasisUIBase
     }
     public static async Task OpenHamburgerMenu()
     {
-        AddressableGenericResource resource = new AddressableGenericResource(AddressableID, AddressableExpectedResult.SingleItem);
+        AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
         await OpenThisMenu(resource);
     }
     public static void OpenHamburgerMenuNow()
     {
-        AddressableGenericResource resource = new AddressableGenericResource(AddressableID, AddressableExpectedResult.SingleItem);
+        AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
         OpenMenuNow(resource);
     }
 }

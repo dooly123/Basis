@@ -12,16 +12,15 @@ public class BasisInputState
     public event Action OnTriggerChanged;
     public event Action OnPrimary2DAxisChanged;
     public event Action OnSecondary2DAxisChanged;
-
-    private bool gripButton;
-    private bool menuButton;
-    private bool primaryButtonGetState;
-    private bool secondaryButtonGetState;
-    private bool secondary2DAxisClick;
-    private bool primary2DAxisClick;
-    private float trigger;
-    private Vector2 primary2DAxis;
-    private Vector2 secondary2DAxis;
+    [SerializeField] private bool gripButton;
+    [SerializeField] private bool menuButton;
+    [SerializeField] private bool primaryButtonGetState;
+    [SerializeField] private bool secondaryButtonGetState;
+    [SerializeField] private bool secondary2DAxisClick;
+    [SerializeField] private bool primary2DAxisClick;
+    [SerializeField] private float trigger;
+    [SerializeField] private Vector2 primary2DAxis;
+    [SerializeField] private Vector2 secondary2DAxis;
 
     public bool GripButton
     {
@@ -138,5 +137,17 @@ public class BasisInputState
                 OnSecondary2DAxisChanged?.Invoke();
             }
         }
+    }
+    public void CopyTo(BasisInputState target)
+    {
+        target.GripButton = this.GripButton;
+        target.MenuButton = this.MenuButton;
+        target.PrimaryButtonGetState = this.PrimaryButtonGetState;
+        target.SecondaryButtonGetState = this.SecondaryButtonGetState;
+        target.Secondary2DAxisClick = this.Secondary2DAxisClick;
+        target.Primary2DAxisClick = this.Primary2DAxisClick;
+        target.Trigger = this.Trigger;
+        target.Primary2DAxis = this.Primary2DAxis;
+        target.Secondary2DAxis = this.Secondary2DAxis;
     }
 }

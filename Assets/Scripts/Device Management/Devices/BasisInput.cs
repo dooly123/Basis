@@ -131,7 +131,7 @@ public BasisBoneTrackedRole TrackedRole
                 //only open ui after we have stopped pressing down on the secondary button
                 if (InputState.SecondaryButtonGetState == false && LastState.SecondaryButtonGetState)
                 {
-                    if (BasisHamburgerMenu.Instance == null )
+                    if (BasisHamburgerMenu.Instance == null)
                     {
                         BasisHamburgerMenu.OpenHamburgerMenuNow();
                         BasisDeviceManagement.ShowTrackers();
@@ -202,7 +202,7 @@ public BasisBoneTrackedRole TrackedRole
         {
             BasisPointRaycaster.RayCastUI();
         }
-        LastState = InputState;
+        InputState.CopyTo(LastState);
         AfterControlApply?.Invoke();
     }
     public async Task ShowTrackedVisual()

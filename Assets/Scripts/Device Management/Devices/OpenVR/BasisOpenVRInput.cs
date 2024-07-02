@@ -18,11 +18,11 @@ public class BasisOpenVRInput : BasisInput
     }
     public void Update()
     {
-        PollData();
+       // PollData();
     }
     public void LateUpdate()
     {
-        PollData();
+      //  PollData();
     }
     public override void PollData()
     {
