@@ -1,10 +1,10 @@
+using System;
 using UnityEngine;
 
 public class BasisLockToInput : MonoBehaviour
 {
     public BasisBoneTrackedRole TrackedRole;
     public BasisInput AttachedInput = null;
-    public bool HasInput;
     public void Awake()
     {
         Initialize();
@@ -16,10 +16,22 @@ public class BasisLockToInput : MonoBehaviour
             BasisDeviceManagement.Instance.BasisLockToInputs.Add(this);
         }
         BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += FindRole;
+        BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved += ResetIfNeeded;
         FindRole();
     }
+
+    private void ResetIfNeeded(BasisInput input)
+    {
+        if(AttachedInput == null || AttachedInput == input)
+        {
+            Debug.Log("ReParenting Camera");
+            this.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+        }
+    }
+
     public void FindRole()
     {
+        this.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
         {
             BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
@@ -30,30 +42,13 @@ public class BasisLockToInput : MonoBehaviour
                     if (Input.TrackedRole == TrackedRole)
                     {
                         AttachedInput = Input;
-                        //Debug.Log("Assigning " + AttachedInput.name);
-                        AttachedInput.AfterControlApply += Simulation;
-                        HasInput = true;
-                        this.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+                        this.transform.parent = AttachedInput.transform;
+                        this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                        this.transform.localScale = Vector3.one;
                         return;
                     }
                 }
             }
-        }
-        HasInput = false;
-    }
-    public void OnDestroy()
-    {
-        HasInput = false;
-        if (AttachedInput != null) 
-        {
-            AttachedInput.AfterControlApply -= Simulation;
-        }
-    }
-    void Simulation()
-    {
-        if (HasInput)
-        {
-            transform.SetLocalPositionAndRotation(AttachedInput.LocalRawPosition, AttachedInput.LocalRawRotation);
         }
     }
 }

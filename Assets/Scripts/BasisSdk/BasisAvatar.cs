@@ -11,7 +11,6 @@ public class BasisAvatar : MonoBehaviour
     public int[] FaceVisemeMovement = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
     public int[] BlinkViseme = new int[] { -1 };
     public int laughterBlendTarget = -1;
-    public float AvatarHeightOffset = 0.1f;
     [SerializeField]
     public List<Renderer> Renders = new List<Renderer>();
     [SerializeField]

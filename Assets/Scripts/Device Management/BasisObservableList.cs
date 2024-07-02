@@ -8,12 +8,16 @@ public class BasisObservableList<T> : IList<T>
     public List<T> _list = new List<T>();
 
     public event Action OnListChanged;
-
+    public event Action<T> OnListItemRemoved;
     public T this[int index]
     {
         get => _list[index];
         set
         {
+            if (value == null)
+            {
+                OnListItemRemoved?.Invoke(_list[index]);
+            }
             _list[index] = value;
             OnListChanged?.Invoke();
         }
@@ -51,6 +55,7 @@ public class BasisObservableList<T> : IList<T>
 
     public bool Remove(T item)
     {
+        OnListItemRemoved?.Invoke(item);
         bool result = _list.Remove(item);
         if (result)
         {
@@ -61,6 +66,7 @@ public class BasisObservableList<T> : IList<T>
 
     public void RemoveAt(int index)
     {
+        OnListItemRemoved?.Invoke(_list[index]);
         _list.RemoveAt(index);
         OnListChanged?.Invoke();
     }

@@ -224,7 +224,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     }
     public void SetInitalData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
     {
-        bone.RawLocalData.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.RestingWorldSpace.position, Player.Avatar.AvatarHeightOffset);//out Vector3 WorldSpaceFloor
+        bone.RawLocalData.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.RestingWorldSpace.position, 0.1f * animator.transform.localScale.y);//out Vector3 WorldSpaceFloor
         bone.RestingLocalSpace.position = bone.RawLocalData.position;
         bone.RestingLocalSpace.rotation = bone.RawLocalData.rotation;
         if (IsApartOfSpineVertical(Role))

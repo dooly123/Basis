@@ -6,7 +6,7 @@ public class BasisAvatarEyeInput : BasisInput
     public BasisLocalInputActions characterInputActions;
     public static BasisAvatarEyeInput Instance;
     public float RangeOfMotionBeforeTurn = 13;
-    public float headDownwardForce = 0.004f;
+    public float headDownwardForce = 0.002f;
     public float headUpwardForce = 0.001f;
     public float adjustment;
     public float crouchPercentage = 0.5f;
@@ -100,12 +100,12 @@ public class BasisAvatarEyeInput : BasisInput
         if (rotationY > 0)
         {
             // Positive rotation
-            adjustment = Mathf.Abs(rotationY) * ((headDownwardForce * BasisLocalPlayer.Instance.ScaledUpPlayerPositions) / Control.RestingLocalSpace.position.y);
+            adjustment = Mathf.Abs(rotationY) * ((headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
         }
         else
         {
             // Negative rotation
-            adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.ScaledUpPlayerPositions) / Control.RestingLocalSpace.position.y);
+            adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
         }
     }
     public override void PollData()

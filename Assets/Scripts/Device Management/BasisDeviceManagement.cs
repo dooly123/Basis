@@ -175,8 +175,8 @@ public partial class BasisDeviceManagement : MonoBehaviour
             {
                 if (device.SubSystem == SubSystem && device.UniqueID == id)
                 {
-                    GameObject.Destroy(device.gameObject);
                     AllInputDevices[Index] = null;
+                    GameObject.Destroy(device.gameObject);
                 }
             }
         }

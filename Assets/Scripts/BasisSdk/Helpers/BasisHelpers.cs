@@ -39,27 +39,6 @@ public static class BasisHelpers
         }
         return false;
     }
-
-    public static bool TryGetVector3Bone(Animator animator, HumanBodyBones bone, out Vector3 position)
-    {
-        if (animator.avatar != null && animator.avatar.isHuman)
-        {
-            Transform boneTransform = animator.GetBoneTransform(bone);
-            if (boneTransform != null)
-            {
-                position = boneTransform.position;
-                return true;
-            }
-            else
-            {
-                position = Vector3.zero;
-                return false;
-            }
-        }
-        position = Vector3.zero;
-        return false;
-    }
-
     public static bool TryGetTransformBone(Animator animator, HumanBodyBones bone, out Transform boneTransform)
     {
         boneTransform = animator.GetBoneTransform(bone);
@@ -88,6 +67,25 @@ public static class BasisHelpers
             bottom = Vector3.zero;
             return false;
         }
+    }
+    public static bool TryGetVector3Bone(Animator animator, HumanBodyBones bone, out Vector3 position)
+    {
+        if (animator.avatar != null && animator.avatar.isHuman)
+        {
+            Transform boneTransform = animator.GetBoneTransform(bone);
+            if (boneTransform != null)
+            {
+                position = boneTransform.position;
+                return true;
+            }
+            else
+            {
+                position = Vector3.zero;
+                return false;
+            }
+        }
+        position = Vector3.zero;
+        return false;
     }
 
     public static Vector3 AvatarPositionConversion(Vector2 input)
