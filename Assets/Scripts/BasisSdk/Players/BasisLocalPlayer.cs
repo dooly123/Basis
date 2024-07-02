@@ -17,6 +17,7 @@ public class BasisLocalPlayer : BasisPlayer
     public static string InputActions = "InputActions";
     public static event System.Action OnLocalAvatarChanged;
     public static event System.Action OnSpawnedEvent;
+    public static event System.Action OnPlayersHeightChanged;
     public BasisLocalCharacterBinder Binder;
     public BasisLocalBoneDriver LocalBoneDriver;
     public BasisBoneControl Hips;
@@ -48,15 +49,23 @@ public class BasisLocalPlayer : BasisPlayer
     }
     public void SetPlayersEyeHeight(float realEyeHeight, float avatarHeight)
     {
-        if (realEyeHeight <= 0 || avatarHeight <= 0)
+        if (BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.Desktop)
         {
             ScaledUpPlayerPositions = 1;
-            Debug.LogError("Scale was below zero");
         }
         else
         {
-            ScaledUpPlayerPositions = avatarHeight / realEyeHeight;
+            if (realEyeHeight <= 0 || avatarHeight <= 0)
+            {
+                ScaledUpPlayerPositions = 1;
+                Debug.LogError("Scale was below zero");
+            }
+            else
+            {
+                ScaledUpPlayerPositions = avatarHeight / realEyeHeight;
+            }
         }
+        OnPlayersHeightChanged?.Invoke();
     }
     public void Teleport(Vector3 position,Quaternion rotation)
     {
