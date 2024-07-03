@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEngine.Analytics.IAnalytic;
 public class BasisPointRaycaster : MonoBehaviour
 {
     public Vector3 Direction = Vector3.forward;
@@ -117,6 +115,10 @@ public class BasisPointRaycaster : MonoBehaviour
                 gameObject.name = BasisDeviceMatchableNames.DeviceID + "_Redical";
                 gameObject.transform.parent = this.transform;
                 highlightQuadInstance = gameObject;
+                if (highlightQuadInstance.TryGetComponent(out Canvas Canvas))
+                {
+                    Canvas.worldCamera = BasisLocalCameraDriver.Instance.Camera;
+                }
             }
         }
     }
@@ -196,7 +198,7 @@ public class BasisPointRaycaster : MonoBehaviour
             if (PhysicHit.transform != null)
             {
                 highlightQuadInstance.SetActive(true);
-                highlightQuadInstance.transform.SetPositionAndRotation(PhysicHit.point, Quaternion.LookRotation(PhysicHit.normal) * Quaternion.Euler(90, 0, 0));
+                highlightQuadInstance.transform.SetPositionAndRotation(PhysicHit.point, Quaternion.LookRotation(PhysicHit.normal));
             }
             else
             {

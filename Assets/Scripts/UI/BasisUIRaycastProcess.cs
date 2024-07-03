@@ -21,7 +21,6 @@ public class BasisUIRaycastProcess
                     List<RaycastResult> RaycastResults = input.BasisPointRaycaster.SortedRays;
                     hitData.Sort((g1, g2) => g2.graphic.depth.CompareTo(g1.graphic.depth));
                     RaycastResult hit = RaycastResults[0];
-                     Debug.Log(hitData[0].graphic.name + " at depth " + hitData[0].graphic.depth);
                     hit.gameObject = hitData[0].graphic.gameObject;
                     SimulateOnCanvas(hit, hitData[0], input.BasisPointRaycaster.CurrentEventData, input.InputState, input.LastState);
                     HasTarget = true;
