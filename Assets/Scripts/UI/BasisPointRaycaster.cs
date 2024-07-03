@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class BasisPointRaycaster : MonoBehaviour
+public class BasisPointRaycaster : BaseRaycaster
 {
     public Vector3 Direction = Vector3.forward;
     public float MaxDistance = 30;
@@ -28,8 +28,15 @@ public class BasisPointRaycaster : MonoBehaviour
     public BasisPointerEventData CurrentEventData;
     public bool HadRaycastUITarget = false;
     public bool WasCorrectLayer = false;
-    static readonly RaycastHitComparer s_RaycastHitComparer = new RaycastHitComparer();
     static readonly Vector3[] s_Corners = new Vector3[4];
+    static readonly RaycastHitComparer s_RaycastHitComparer = new RaycastHitComparer();
+    /// </summary>
+    sealed class RaycastHitComparer : IComparer<RaycastHitData>
+    {
+        public int Compare(RaycastHitData a, RaycastHitData b)
+            => b.graphic.depth.CompareTo(a.graphic.depth);
+    }
+    public override Camera eventCamera => BasisLocalCameraDriver.Instance.Camera;
     [System.Serializable]
     public struct RaycastHitData
     {
@@ -51,12 +58,6 @@ public class BasisPointRaycaster : MonoBehaviour
         public float distance;
         [SerializeField]
         public int displayIndex;
-    }
-    /// </summary>
-    sealed class RaycastHitComparer : IComparer<RaycastHitData>
-    {
-        public int Compare(RaycastHitData a, RaycastHitData b)
-            => b.graphic.depth.CompareTo(a.graphic.depth);
     }
     public async Task Initialize(BasisInput basisInput)
     {
@@ -127,7 +128,7 @@ public class BasisPointRaycaster : MonoBehaviour
         RaycastResult.displayIndex = 0;
         RaycastResult.index = 0;
         RaycastResult.depth = 0;
-        RaycastResult.module = null;
+        RaycastResult.module = this;
     }
     public void RayCastUI()
     {
@@ -290,7 +291,7 @@ public class BasisPointRaycaster : MonoBehaviour
                 var castResult = new RaycastResult
                 {
                     gameObject = go,
-                    module = null,
+                    module = this,
                     distance = hitData.distance,
                     index = resultAppendList.Count,
                     depth = hitData.graphic.depth,
@@ -456,4 +457,8 @@ public class BasisPointRaycaster : MonoBehaviour
             fourCornersArray[index] = localToWorldMatrix.MultiplyPoint(fourCornersArray[index]);
     }
 
+    public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
+    {
+        throw new System.NotImplementedException();
+    }
 }

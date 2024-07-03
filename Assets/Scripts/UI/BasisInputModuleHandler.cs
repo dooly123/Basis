@@ -16,10 +16,11 @@ public class BasisInputModuleHandler : BaseInputModule
     public bool HasEvent = false;
     public bool ForceKeyboard = false;
     public BasisUIRaycastProcess basisUIRaycastProcess = new BasisUIRaycastProcess();
+    public static BasisInputModuleHandler Instance;
     protected override void OnEnable()
     {
         base.OnEnable();
-
+        Instance = this;
         // Initialize the input actions for Tab and Enter keys
         tabAction = new InputAction(binding: "<Keyboard>/tab");
         tabAction.performed += OnTabPerformed;

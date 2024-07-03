@@ -29,7 +29,6 @@ public class BasisUIRaycastProcess
         }
         if (!HasTarget)
         {
-            Debug.Log("nothing selected!");
             EventSystem.current.SetSelectedGameObject(null, null);
         }
     }
@@ -39,9 +38,13 @@ public class BasisUIRaycastProcess
         {
             HasTarget = true;
             currentEventData.Reset();
+            currentEventData.delta = hit.screenPosition - currentEventData.position;
+          //  raycastResult.module = baseRayOverride;
+            currentEventData.position = hit.screenPosition;
+            currentEventData.pressPosition = hit.screenPosition;
             currentEventData.pointerCurrentRaycast = raycastResult;
-            currentEventData.position = raycastResult.screenPosition;
-            currentEventData.pressPosition = raycastResult.screenPosition;
+            currentEventData.pointerPressRaycast = raycastResult;
+            Debug.Log("camera " + currentEventData.enterEventCamera.name);
             bool IsDownThisFrame = Current.Trigger == 1;
             bool ReleasedThisFrame = LastCurrent.Trigger == 1 && LastCurrent.Trigger == 0;
             //Debug.Log("running "  + raycastResult.gameObject);
@@ -64,9 +67,9 @@ public class BasisUIRaycastProcess
             }
             SendUpdateEventToSelectedObject(currentEventData);//needed if you want to use the keyboard
 
-            //  ProcessScrollWheel(currentEventData);
-            //  ProcessPointerMovement(currentEventData);
-            //  ProcessPointerButtonDrag(currentEventData);
+            ProcessScrollWheel(currentEventData);
+            ProcessPointerMovement(currentEventData);
+            ProcessPointerButtonDrag(currentEventData);
         }
 
     }
@@ -93,6 +96,7 @@ public class BasisUIRaycastProcess
         CurrentEventData.pointerPressRaycast = CurrentEventData.pointerCurrentRaycast;
         CurrentEventData.useDragThreshold = true;
         CurrentEventData.selectedObject = hit.graphic.gameObject;
+        CurrentEventData.button = PointerEventData.InputButton.Left;
 
         GameObject selectHandler = ExecuteEvents.GetEventHandler<ISelectHandler>(hit.graphic.gameObject);
         if (selectHandler != EventSystem.current.currentSelectedGameObject)
@@ -162,7 +166,7 @@ public class BasisUIRaycastProcess
         ExecuteEvents.Execute(EventSystem.current.currentSelectedGameObject, CurrentEventData, ExecuteEvents.updateSelectedHandler);
         return CurrentEventData.used;
     }
-    public void ProcessScrollWheel(PointerEventData eventData)
+    public void ProcessScrollWheel(BasisPointerEventData eventData)
     {
         var scrollDelta = eventData.scrollDelta;
         if (!Mathf.Approximately(scrollDelta.sqrMagnitude, 0f))
@@ -171,7 +175,7 @@ public class BasisUIRaycastProcess
             ExecuteEvents.ExecuteHierarchy(scrollHandler, eventData, ExecuteEvents.scrollHandler);
         }
     }
-    public void ProcessPointerMovement(PointerEventData eventData)
+    public void ProcessPointerMovement(BasisPointerEventData eventData)
     {
         var currentPointerTarget = eventData.pointerCurrentRaycast.gameObject;
         // If the pointer moved, send move events to all UI elements the pointer is
@@ -230,7 +234,6 @@ public class BasisUIRaycastProcess
         }
 
         eventData.pointerEnter = currentPointerTarget;
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalse -- Could be null if it was destroyed immediately after executing above
         if (currentPointerTarget != null)
         {
             var target = currentPointerTarget.transform;
@@ -249,7 +252,68 @@ public class BasisUIRaycastProcess
             }
         }
     }
-    public void HandlePointerExitAndEnter(PointerEventData currentPointerData, GameObject newEnterTarget)
+    /// <summary>
+    /// called Correctly
+    /// </summary>
+    /// <param name="CurrentEventData"></param>
+    /// <param name="pixelDragThresholdMultiplier"></param>
+    public void ProcessPointerButtonDrag(BasisPointerEventData CurrentEventData, float pixelDragThresholdMultiplier = 1.0f)
+    {
+        if (!CurrentEventData.IsPointerMoving() || CurrentEventData.pointerDrag == null)
+        {
+            return;
+        }
+
+        if (!CurrentEventData.dragging)
+        {
+            var threshold = EventSystem.current.pixelDragThreshold * pixelDragThresholdMultiplier;
+            if (!CurrentEventData.useDragThreshold || (CurrentEventData.pressPosition - CurrentEventData.position).sqrMagnitude >= (threshold * threshold))
+            {
+                var target = CurrentEventData.pointerDrag;
+            //    Debug.Log("Started Dragging " + (CurrentEventData.pressPosition - CurrentEventData.position).sqrMagnitude);
+                ExecuteEvents.Execute(target, CurrentEventData, ExecuteEvents.beginDragHandler);
+                CurrentEventData.dragging = true;
+            }
+        }
+
+        if (CurrentEventData.dragging)
+        {
+            // If we moved from our initial press object, process an up for that object.
+            var target = CurrentEventData.pointerPress;
+            if (target != CurrentEventData.pointerDrag)
+            {
+                ExecuteEvents.Execute(target, CurrentEventData, ExecuteEvents.pointerUpHandler);
+              //  Debug.Log("pointerUpHandler");
+                CurrentEventData.eligibleForClick = false;
+                CurrentEventData.pointerPress = null;
+                CurrentEventData.rawPointerPress = null;
+            }
+            Debug.Log("dragHandler " + CurrentEventData.position);
+            ExecuteEvents.Execute(CurrentEventData.pointerDrag, CurrentEventData, ExecuteEvents.dragHandler);
+        }
+    }
+    public static GameObject FindCommonRoot(GameObject g1, GameObject g2)
+    {
+        if (g1 == null || g2 == null)
+        {
+            return null;
+        }
+
+        var t1 = g1.transform;
+        while (t1 != null)
+        {
+            var t2 = g2.transform;
+            while (t2 != null)
+            {
+                if (t1 == t2)
+                    return t1.gameObject;
+                t2 = t2.parent;
+            }
+            t1 = t1.parent;
+        }
+        return null;
+    }
+    public void HandlePointerExitAndEnter(BasisPointerEventData currentPointerData, GameObject newEnterTarget)
     {
         // if we have no target / pointerEnter has been deleted
         // just send exit events to anything we are tracking
@@ -343,59 +407,5 @@ public class BasisUIRaycastProcess
 
             }
         }
-    }
-    public void ProcessPointerButtonDrag(PointerEventData eventData, float pixelDragThresholdMultiplier = 1.0f)
-    {
-        if (!eventData.IsPointerMoving() || eventData.pointerDrag == null)
-        {
-            return;
-        }
-
-        if (!eventData.dragging)
-        {
-            var threshold = EventSystem.current.pixelDragThreshold * pixelDragThresholdMultiplier;
-            if (!eventData.useDragThreshold || (eventData.pressPosition - eventData.position).sqrMagnitude >= (threshold * threshold))
-            {
-                var target = eventData.pointerDrag;
-                ExecuteEvents.Execute(target, eventData, ExecuteEvents.beginDragHandler);
-                eventData.dragging = true;
-            }
-        }
-
-        if (eventData.dragging)
-        {
-            // If we moved from our initial press object, process an up for that object.
-            var target = eventData.pointerPress;
-            if (target != eventData.pointerDrag)
-            {
-                ExecuteEvents.Execute(target, eventData, ExecuteEvents.pointerUpHandler);
-
-                eventData.eligibleForClick = false;
-                eventData.pointerPress = null;
-                eventData.rawPointerPress = null;
-            }
-            ExecuteEvents.Execute(eventData.pointerDrag, eventData, ExecuteEvents.dragHandler);
-        }
-    }
-    public static GameObject FindCommonRoot(GameObject g1, GameObject g2)
-    {
-        if (g1 == null || g2 == null)
-        {
-            return null;
-        }
-
-        var t1 = g1.transform;
-        while (t1 != null)
-        {
-            var t2 = g2.transform;
-            while (t2 != null)
-            {
-                if (t1 == t2)
-                    return t1.gameObject;
-                t2 = t2.parent;
-            }
-            t1 = t1.parent;
-        }
-        return null;
     }
 }
