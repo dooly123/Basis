@@ -191,7 +191,6 @@ public class BasisVirtualKeyboard : BasisUIBase
                 rows.Add(basisRow);
             }
         }
-        BasisGraphicUIRayCaster.UpdateColliderSize(keyboardParent);
     }
     public void SetCommon(HorizontalOrVerticalLayoutGroup HorizontalOrVerticalLayoutGroup, float Spacing)
     {

@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static BasisPointRaycaster;
 
 public class BasisUIRaycastProcess
 {
@@ -10,29 +10,39 @@ public class BasisUIRaycastProcess
     public void Update()
     {
         HasTarget = false;
-        foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+
+        foreach (BasisInput input in BasisDeviceManagement.Instance.AllInputDevices)
         {
-            if (Input.HasUIInputSupport && Input.BasisPointRaycaster != null && Input.BasisPointRaycaster.WasCorrectLayer)
+            if (input.HasUIInputSupport && input.BasisPointRaycaster != null && input.BasisPointRaycaster.WasCorrectLayer)
             {
-                SimulateOnCanvas(Input.BasisPointRaycaster.RaycastResult, Input.BasisPointRaycaster.hit, Input.BasisPointRaycaster.CurrentEventData, Input.InputState, Input.LastState);
+                if (input.BasisPointRaycaster.SortedRays.Count != 0 && input.BasisPointRaycaster.SortedGraphics.Count != 0)
+                {
+                    List<RaycastHitData> hitData = input.BasisPointRaycaster.SortedGraphics;
+                    List<RaycastResult> RaycastResults = input.BasisPointRaycaster.SortedRays;
+                    hitData.Sort((g1, g2) => g2.graphic.depth.CompareTo(g1.graphic.depth));
+                    RaycastResult hit = RaycastResults[0];
+                     Debug.Log(hitData[0].graphic.name + " at depth " + hitData[0].graphic.depth);
+                    hit.gameObject = hitData[0].graphic.gameObject;
+                    SimulateOnCanvas(hit, hitData[0], input.BasisPointRaycaster.CurrentEventData, input.InputState, input.LastState);
+                    HasTarget = true;
+                }
             }
         }
-        if (HasTarget == false)
+        if (!HasTarget)
         {
-          //  Debug.Log("nothing selected!");
+            Debug.Log("nothing selected!");
             EventSystem.current.SetSelectedGameObject(null, null);
         }
     }
-    public void SimulateOnCanvas(RaycastResult raycastResult, RaycastHit hit, BasisPointerEventData currentEventData, BasisInputState Current, BasisInputState LastCurrent)
+    public void SimulateOnCanvas(RaycastResult raycastResult, RaycastHitData hit, BasisPointerEventData currentEventData, BasisInputState Current, BasisInputState LastCurrent)
     {
-        if (raycastResult.gameObject != null)
+        if (hit.graphic != null)
         {
             HasTarget = true;
             currentEventData.Reset();
             currentEventData.pointerCurrentRaycast = raycastResult;
             currentEventData.position = raycastResult.screenPosition;
             currentEventData.pressPosition = raycastResult.screenPosition;
-
             bool IsDownThisFrame = Current.Trigger == 1;
             bool ReleasedThisFrame = LastCurrent.Trigger == 1 && LastCurrent.Trigger == 0;
             //Debug.Log("running "  + raycastResult.gameObject);
@@ -55,32 +65,27 @@ public class BasisUIRaycastProcess
             }
             SendUpdateEventToSelectedObject(currentEventData);//needed if you want to use the keyboard
 
-          //  ProcessScrollWheel(currentEventData);
-          //  ProcessPointerMovement(currentEventData);
-          //  ProcessPointerButtonDrag(currentEventData);
+            //  ProcessScrollWheel(currentEventData);
+            //  ProcessPointerMovement(currentEventData);
+            //  ProcessPointerButtonDrag(currentEventData);
         }
 
     }
-    protected static RaycastResult FindFirstRaycast(List<RaycastResult> candidates)
+    public void CheckOrApplySelectedGameobject(RaycastHitData hit, BasisPointerEventData CurrentEventData)
     {
-        var candidatesCount = candidates.Count;
-        for (var i = 0; i < candidatesCount; ++i)
+        if (hit.graphic != null)
         {
-            if (candidates[i].gameObject == null)
-                continue;
-
-            return candidates[i];
+            if (EventSystem.current.currentSelectedGameObject != hit.graphic.gameObject)
+            {
+                EventSystem.current.SetSelectedGameObject(hit.graphic.gameObject, CurrentEventData);
+            }
         }
-        return new RaycastResult();
-    }
-    public void CheckOrApplySelectedGameobject(RaycastHit hit, BasisPointerEventData CurrentEventData)
-    {
-        if (EventSystem.current.currentSelectedGameObject != hit.transform.gameObject)
+        else
         {
-            EventSystem.current.SetSelectedGameObject(hit.transform.gameObject, CurrentEventData);
+            EventSystem.current.SetSelectedGameObject(null, CurrentEventData);
         }
     }
-    public void EffectiveMouseDown(RaycastHit hit, BasisPointerEventData CurrentEventData)
+    public void EffectiveMouseDown(RaycastHitData hit, BasisPointerEventData CurrentEventData)
     {
         CurrentEventData.eligibleForClick = true;
         CurrentEventData.delta = Vector2.zero;
@@ -88,17 +93,17 @@ public class BasisUIRaycastProcess
         CurrentEventData.pressPosition = CurrentEventData.position;
         CurrentEventData.pointerPressRaycast = CurrentEventData.pointerCurrentRaycast;
         CurrentEventData.useDragThreshold = true;
-        CurrentEventData.selectedObject = hit.transform.gameObject;
+        CurrentEventData.selectedObject = hit.graphic.gameObject;
 
-        GameObject selectHandler = ExecuteEvents.GetEventHandler<ISelectHandler>(hit.transform.gameObject);
+        GameObject selectHandler = ExecuteEvents.GetEventHandler<ISelectHandler>(hit.graphic.gameObject);
         if (selectHandler != EventSystem.current.currentSelectedGameObject)
         {
             EventSystem.current.SetSelectedGameObject(selectHandler, CurrentEventData);
         }
-        GameObject newPressed = ExecuteEvents.ExecuteHierarchy(hit.transform.gameObject, CurrentEventData, ExecuteEvents.pointerDownHandler);
+        GameObject newPressed = ExecuteEvents.ExecuteHierarchy(hit.graphic.gameObject, CurrentEventData, ExecuteEvents.pointerDownHandler);
         if (newPressed == null)
         {
-            newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.transform.gameObject);
+            newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.graphic.gameObject);
         }
         float time = Time.unscaledTime;
         if (newPressed == CurrentEventData.lastPress && ((time - CurrentEventData.clickTime) < ClickSpeed))
@@ -111,9 +116,9 @@ public class BasisUIRaycastProcess
         }
         CurrentEventData.clickTime = time;
         CurrentEventData.pointerPress = newPressed;
-        CurrentEventData.rawPointerPress = hit.transform.gameObject;
+        CurrentEventData.rawPointerPress = hit.graphic.gameObject;
         // Save the drag handler for drag events during this mouse down.
-        var dragObject = ExecuteEvents.GetEventHandler<IDragHandler>(hit.transform.gameObject);
+        var dragObject = ExecuteEvents.GetEventHandler<IDragHandler>(hit.graphic.gameObject);
         CurrentEventData.pointerDrag = dragObject;
 
         if (dragObject != null)
@@ -121,12 +126,12 @@ public class BasisUIRaycastProcess
             ExecuteEvents.Execute(dragObject, CurrentEventData, ExecuteEvents.initializePotentialDrag);
         }
     }
-    public void EffectiveMouseUp(RaycastHit hit, BasisPointerEventData CurrentEventData)
+    public void EffectiveMouseUp(RaycastHitData hit, BasisPointerEventData CurrentEventData)
     {
         var target = CurrentEventData.pointerPress;
         ExecuteEvents.Execute(target, CurrentEventData, ExecuteEvents.pointerUpHandler);
 
-        var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.transform.gameObject);
+        var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit.graphic.gameObject.gameObject);
         var pointerDrag = CurrentEventData.pointerDrag;
         if (target == pointerUpHandler && CurrentEventData.eligibleForClick)
         {
@@ -134,7 +139,7 @@ public class BasisUIRaycastProcess
         }
         else if (CurrentEventData.dragging && pointerDrag != null)
         {
-            ExecuteEvents.ExecuteHierarchy(hit.transform.gameObject, CurrentEventData, ExecuteEvents.dropHandler);
+            ExecuteEvents.ExecuteHierarchy(hit.graphic.gameObject, CurrentEventData, ExecuteEvents.dropHandler);
         }
 
         CurrentEventData.eligibleForClick = false;

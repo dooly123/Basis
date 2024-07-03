@@ -5,24 +5,9 @@ using UnityEngine.UI;
 public class BasisGraphicUIRayCaster : MonoBehaviour
 {
     public Canvas Canvas;
-    public void Start()
+    public void OnEnable()
     {
         AddCanvasCollider();
-        UpdateColliderSize(this.gameObject);
-    }
-    public void UpdateColliderSize(GameObject Parent)
-    {
-        Canvas = BasisHelpers.GetOrAddComponent<Canvas>(this.gameObject);
-        IEventSystemHandler[] ClickHandles = Parent.GetComponentsInChildren<IEventSystemHandler>(true);
-
-        foreach (IEventSystemHandler clickHandler in ClickHandles)
-        {
-            GameObject handlerGameObject = (clickHandler as MonoBehaviour).gameObject;
-            if (handlerGameObject != null)
-            {
-                SetBoxColliderToRectTransform(handlerGameObject);
-            }
-        }
     }
     public static void SetBoxColliderToRectTransform(GameObject handlerGameObject)
     {

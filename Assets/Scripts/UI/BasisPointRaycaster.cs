@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using static UnityEngine.Analytics.IAnalytic;
 public class BasisPointRaycaster : MonoBehaviour
 {
     public Vector3 Direction = Vector3.forward;
@@ -10,7 +13,7 @@ public class BasisPointRaycaster : MonoBehaviour
     public LayerMask UIMask;
     public QueryTriggerInteraction TriggerInteraction = QueryTriggerInteraction.UseGlobal;
     public Ray ray;
-    public RaycastHit hit;
+    public RaycastHit PhysicHit;
     public Material lineMaterial;
     public float lineWidth = 0.01f;
     public LineRenderer LineRenderer;
@@ -21,13 +24,42 @@ public class BasisPointRaycaster : MonoBehaviour
     public static string LoadUIRedicalAddress = "Assets/UI/Prefabs/highlightQuad.prefab";
     public BasisDeviceMatchableNames BasisDeviceMatchableNames;
     public GameObject highlightQuadInstance;
-    public GameObject LastHit;
     public Canvas FoundCanvas;
     public RaycastResult RaycastResult = new RaycastResult();
     public BasisInput BasisInput;
     public BasisPointerEventData CurrentEventData;
     public bool HadRaycastUITarget = false;
     public bool WasCorrectLayer = false;
+    static readonly RaycastHitComparer s_RaycastHitComparer = new RaycastHitComparer();
+    static readonly Vector3[] s_Corners = new Vector3[4];
+    [System.Serializable]
+    public struct RaycastHitData
+    {
+        public RaycastHitData(Graphic graphic, Vector3 worldHitPosition, Vector2 screenPosition, float distance, int displayIndex)
+        {
+            this.graphic = graphic;
+            this.worldHitPosition = worldHitPosition;
+            this.screenPosition = screenPosition;
+            this.distance = distance;
+            this.displayIndex = displayIndex;
+        }
+        [SerializeField]
+        public Graphic graphic;
+        [SerializeField]
+        public Vector3 worldHitPosition;
+        [SerializeField]
+        public Vector2 screenPosition;
+        [SerializeField]
+        public float distance;
+        [SerializeField]
+        public int displayIndex;
+    }
+    /// </summary>
+    sealed class RaycastHitComparer : IComparer<RaycastHitData>
+    {
+        public int Compare(RaycastHitData a, RaycastHitData b)
+            => b.graphic.depth.CompareTo(a.graphic.depth);
+    }
     public async Task Initialize(BasisInput basisInput)
     {
         CurrentEventData = new BasisPointerEventData(EventSystem.current);
@@ -109,34 +141,33 @@ public class BasisPointRaycaster : MonoBehaviour
     }
     private void HandleValidHit()
     {
-        WasCorrectLayer = hit.transform.gameObject.layer == UIMask;
+        WasCorrectLayer = PhysicHit.transform.gameObject.layer == UIMask;
         if (WasCorrectLayer)
         {
             UpdateRayCastResult();//sets alll RaycastResult data
             UpdateLineRenderer();//updates the line denderer
             UpdateRadicalRenderer();// moves the redical renderer
-            UpdateDebugDraw(Color.green, hit.point);
-            LastHit = hit.transform.gameObject;
+            UpdateDebugDraw(Color.green, PhysicHit.point);
         }
         else
         {
             ResetRenderers();
-            UpdateDebugDraw(Color.blue, hit.point);
+            UpdateDebugDraw(Color.blue, PhysicHit.point);
         }
     }
     private void UpdateRayCastResult()
     {
-        RaycastResult.gameObject = hit.transform.gameObject;
-        RaycastResult.distance = hit.distance;
+        RaycastResult.gameObject = PhysicHit.transform.gameObject;
+        RaycastResult.distance = PhysicHit.distance;
         RaycastResult.screenPosition = BasisLocalCameraDriver.Instance.Camera.WorldToScreenPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
-        FoundCanvas = hit.transform.gameObject.GetComponentInParent<Canvas>();
+        FoundCanvas = PhysicHit.transform.gameObject.GetComponentInParent<Canvas>();
         if (FoundCanvas != null)
         {
             RaycastResult.sortingLayer = FoundCanvas.sortingLayerID;
             RaycastResult.sortingOrder = FoundCanvas.sortingOrder;
         }
-        RaycastResult.worldPosition = ray.origin + ray.direction * hit.distance;
-        RaycastResult.worldNormal = hit.normal;
+        RaycastResult.worldPosition = ray.origin + ray.direction * PhysicHit.distance;
+        RaycastResult.worldNormal = PhysicHit.normal;
     }
     private void UpdateLineRenderer()
     {
@@ -154,7 +185,7 @@ public class BasisPointRaycaster : MonoBehaviour
         if (HasLineRenderer)
         {
             LineRenderer.SetPosition(0, ray.origin);
-            LineRenderer.SetPosition(1, hit.point);
+            LineRenderer.SetPosition(1, PhysicHit.point);
         }
     }
 
@@ -162,10 +193,10 @@ public class BasisPointRaycaster : MonoBehaviour
     {
         if (HasRedicalRenderer)
         {
-            if (hit.transform != null)
+            if (PhysicHit.transform != null)
             {
                 highlightQuadInstance.SetActive(true);
-                highlightQuadInstance.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(hit.normal) * Quaternion.Euler(90, 0, 0));
+                highlightQuadInstance.transform.SetPositionAndRotation(PhysicHit.point, Quaternion.LookRotation(PhysicHit.normal) * Quaternion.Euler(90, 0, 0));
             }
             else
             {
@@ -196,11 +227,231 @@ public class BasisPointRaycaster : MonoBehaviour
         ResetRenderers();
         UpdateDebugDraw(Color.red, transform.forward * MaxDistance);
         RaycastResult = new RaycastResult();
-        hit = new RaycastHit();
+        PhysicHit = new RaycastHit();
     }
     public bool CheckRayCast()
     {
+        SortedGraphics.Clear();
+        SortedRays.Clear();
         ray = new Ray(transform.position, Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset) * transform.forward);
-        return Physics.Raycast(ray, out hit, MaxDistance, Mask, TriggerInteraction);
+        if (Physics.Raycast(ray, out PhysicHit, MaxDistance, Mask, TriggerInteraction))
+        {
+            Canvas[] Canvases = PhysicHit.transform.gameObject.GetComponentsInChildren<Canvas>();
+            if (Canvases.Length != 0)
+            {
+                System.Array.Sort(Canvases, (c1, c2) => c2.sortingOrder.CompareTo(c1.sortingOrder));
+                foreach (Canvas CurrentTopLevel in Canvases)
+                {
+                  //  Debug.Log("TopLevel " + CurrentTopLevel.name);
+                    SortedRaycastGraphics(CurrentTopLevel, ray, MaxDistance, Mask, CurrentTopLevel.worldCamera, ref SortedGraphics);
+                    ProcessSortedHitsResults(CurrentTopLevel, ray, MaxDistance, true, SortedGraphics, SortedRays);
+                    if (SortedGraphics.Count != 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
+    [SerializeField]
+    public List<RaycastHitData> SortedGraphics = new List<RaycastHitData>();
+    [SerializeField]
+    public List<RaycastResult> SortedRays = new List<RaycastResult>();
+    public void Sort<T>(IList<T> hits, IComparer<T> comparer) where T : struct => Sort(hits, comparer, hits.Count);
+    public bool IgnoreReversedGraphics;
+    public bool ProcessSortedHitsResults(Canvas canvas, Ray ray, float hitDistance, bool hitSomething, List<RaycastHitData> raycastHitDatums, List<RaycastResult> resultAppendList)
+    {
+        // Now that we have a list of sorted hits, process any extra settings and filters.
+        foreach (var hitData in raycastHitDatums)
+        {
+            var validHit = true;
+
+            if(hitData.graphic == null)
+            {
+                continue;
+            }
+            var go = hitData.graphic.gameObject;
+            if (IgnoreReversedGraphics)
+            {
+                var forward = ray.direction;
+                var goDirection = go.transform.rotation * Vector3.forward;
+                validHit = Vector3.Dot(forward, goDirection) > 0;
+            }
+
+            validHit &= hitData.distance < hitDistance;
+
+            if (validHit)
+            {
+                var trans = go.transform;
+                var transForward = trans.forward;
+                var castResult = new RaycastResult
+                {
+                    gameObject = go,
+                    module = null,
+                    distance = hitData.distance,
+                    index = resultAppendList.Count,
+                    depth = hitData.graphic.depth,
+                    sortingLayer = canvas.sortingLayerID,
+                    sortingOrder = canvas.sortingOrder,
+                    worldPosition = hitData.worldHitPosition,
+                    worldNormal = -transForward,
+                    screenPosition = hitData.screenPosition,
+                    displayIndex = hitData.displayIndex,
+                };
+                resultAppendList.Add(castResult);
+
+                hitSomething = true;
+            }
+        }
+
+        return hitSomething;
+    }
+    public static void Sort<T>(IList<T> hits, IComparer<T> comparer, int count) where T : struct
+    {
+        if (count <= 1)
+            return;
+
+        bool fullPass;
+        do
+        {
+            fullPass = true;
+            for (var i = 1; i < count; ++i)
+            {
+                var result = comparer.Compare(hits[i - 1], hits[i]);
+                if (result > 0)
+                {
+                    (hits[i - 1], hits[i]) = (hits[i], hits[i - 1]);
+                    fullPass = false;
+                }
+            }
+        } while (fullPass == false);
+    }
+    public void SortedRaycastGraphics(Canvas canvas, Ray ray, float maxDistance, LayerMask layerMask, Camera eventCamera,ref List<RaycastHitData> results)
+    {
+        var graphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
+
+        results.Clear();
+        for (int i = 0; i < graphics.Count; ++i)
+        {
+            var graphic = graphics[i];
+
+            if (!ShouldTestGraphic(graphic, layerMask))
+                continue;
+
+            var raycastPadding = graphic.raycastPadding;
+
+            if (RayIntersectsRectTransform(graphic.rectTransform, raycastPadding, ray, out var worldPos, out var distance))
+            {
+                if (distance <= maxDistance)
+                {
+                    Vector2 screenPos = eventCamera.WorldToScreenPoint(worldPos);
+                    // mask/image intersection - See Unity docs on eventAlphaThreshold for when this does anything
+                    if (graphic.Raycast(screenPos, eventCamera))
+                    {
+                        results.Add(new RaycastHitData(graphic, worldPos, screenPos, distance, eventCamera.targetDisplay));
+                    }
+                }
+            }
+        }
+
+        Sort(results, s_RaycastHitComparer);
+    }
+
+    public bool ShouldTestGraphic(Graphic graphic, LayerMask layerMask)
+    {
+        // -1 means it hasn't been processed by the canvas, which means it isn't actually drawn
+        if (graphic.depth == -1 || !graphic.raycastTarget || graphic.canvasRenderer.cull)
+            return false;
+
+        if (((1 << graphic.gameObject.layer) & layerMask) == 0)
+            return false;
+
+        return true;
+    }
+
+    public bool SphereIntersectsRectTransform(RectTransform transform, Vector4 raycastPadding, Vector3 from, out Vector3 worldPosition, out float distance)
+    {
+        var plane = GetRectTransformPlane(transform, raycastPadding, s_Corners);
+        var closestPoint = plane.ClosestPointOnPlane(from);
+        var ray = new Ray(from, closestPoint - from);
+        return RayIntersectsRectTransform(ray, plane, out worldPosition, out distance);
+    }
+
+    public bool RayIntersectsRectTransform(RectTransform transform, Vector4 raycastPadding, Ray ray, out Vector3 worldPosition, out float distance)
+    {
+        var plane = GetRectTransformPlane(transform, raycastPadding, s_Corners);
+        return RayIntersectsRectTransform(ray, plane, out worldPosition, out distance);
+    }
+
+    public bool RayIntersectsRectTransform(Ray ray, Plane plane, out Vector3 worldPosition, out float distance)
+    {
+        if (plane.Raycast(ray, out var enter))
+        {
+            var intersection = ray.GetPoint(enter);
+
+            var bottomEdge = s_Corners[3] - s_Corners[0];
+            var leftEdge = s_Corners[1] - s_Corners[0];
+            var bottomDot = Vector3.Dot(intersection - s_Corners[0], bottomEdge);
+            var leftDot = Vector3.Dot(intersection - s_Corners[0], leftEdge);
+
+            // If the intersection is right of the left edge and above the bottom edge.
+            if (leftDot >= 0f && bottomDot >= 0f)
+            {
+                var topEdge = s_Corners[1] - s_Corners[2];
+                var rightEdge = s_Corners[3] - s_Corners[2];
+                var topDot = Vector3.Dot(intersection - s_Corners[2], topEdge);
+                var rightDot = Vector3.Dot(intersection - s_Corners[2], rightEdge);
+
+                // If the intersection is left of the right edge, and below the top edge
+                if (topDot >= 0f && rightDot >= 0f)
+                {
+                    worldPosition = intersection;
+                    distance = enter;
+                    return true;
+                }
+            }
+        }
+
+        worldPosition = Vector3.zero;
+        distance = 0f;
+        return false;
+    }
+
+    public Plane GetRectTransformPlane(RectTransform transform, Vector4 raycastPadding, Vector3[] fourCornersArray)
+    {
+        GetRectTransformWorldCorners(transform, raycastPadding, fourCornersArray);
+        return new Plane(fourCornersArray[0], fourCornersArray[1], fourCornersArray[2]);
+    }
+
+    // This method is similar to RecTransform.GetWorldCorners, but with support for the raycastPadding offset.
+    public void GetRectTransformWorldCorners(RectTransform transform, Vector4 offset, Vector3[] fourCornersArray)
+    {
+        if (fourCornersArray == null || fourCornersArray.Length < 4)
+        {
+            Debug.LogError("Calling GetRectTransformWorldCorners with an array that is null or has less than 4 elements.");
+            return;
+        }
+
+        // GraphicRaycaster.Raycast uses RectTransformUtility.RectangleContainsScreenPoint instead,
+        // which redirects to PointInRectangle defined in RectTransformUtil.cpp. However, that method
+        // uses the Camera to convert from the given screen point to a ray, but this class uses
+        // the ray from the Ray Interactor that feeds the event data.
+        // Offset calculation for raycastPadding from PointInRectangle method, which replaces RectTransform.GetLocalCorners.
+        var rect = transform.rect;
+        var x0 = rect.x + offset.x;
+        var y0 = rect.y + offset.y;
+        var x1 = rect.xMax - offset.z;
+        var y1 = rect.yMax - offset.w;
+        fourCornersArray[0] = new Vector3(x0, y0, 0f);
+        fourCornersArray[1] = new Vector3(x0, y1, 0f);
+        fourCornersArray[2] = new Vector3(x1, y1, 0f);
+        fourCornersArray[3] = new Vector3(x1, y0, 0f);
+
+        // Transform the local corners to world space, which is from RectTransform.GetWorldCorners.
+        var localToWorldMatrix = transform.localToWorldMatrix;
+        for (var index = 0; index < 4; ++index)
+            fourCornersArray[index] = localToWorldMatrix.MultiplyPoint(fourCornersArray[index]);
+    }
+
 }
