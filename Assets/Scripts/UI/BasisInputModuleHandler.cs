@@ -96,7 +96,7 @@ public class BasisInputModuleHandler : BaseInputModule
     }
     public override void Process()
     {
-        basisUIRaycastProcess.Update();
+        basisUIRaycastProcess.Simulate();
         // Process your input events here
         if (EventSystem.currentSelectedGameObject != null)
         {

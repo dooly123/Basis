@@ -3,11 +3,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static BasisPointRaycaster;
 
-public class BasisUIRaycastProcess
+public class BasisUIRaycastProcess 
 {
     public float ClickSpeed = 0.3f;
     public static bool HasTarget;
-    public void Update()
+    public void Simulate()
     {
         HasTarget = false;
 
@@ -44,7 +44,6 @@ public class BasisUIRaycastProcess
             currentEventData.pressPosition = hit.screenPosition;
             currentEventData.pointerCurrentRaycast = raycastResult;
             currentEventData.pointerPressRaycast = raycastResult;
-            Debug.Log("camera " + currentEventData.enterEventCamera.name);
             bool IsDownThisFrame = Current.Trigger == 1;
             bool ReleasedThisFrame = LastCurrent.Trigger == 1 && LastCurrent.Trigger == 0;
             //Debug.Log("running "  + raycastResult.gameObject);
@@ -288,7 +287,7 @@ public class BasisUIRaycastProcess
                 CurrentEventData.pointerPress = null;
                 CurrentEventData.rawPointerPress = null;
             }
-            Debug.Log("dragHandler " + CurrentEventData.position);
+         //   Debug.Log("dragHandler " + CurrentEventData.position);
             ExecuteEvents.Execute(CurrentEventData.pointerDrag, CurrentEventData, ExecuteEvents.dragHandler);
         }
     }

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 697764147136612878}
   - component: {fileID: 5443067033238234296}
   - component: {fileID: 3655613681521570213}
+  - component: {fileID: 8050433269165642066}
   m_Layer: 0
   m_Name: FallBack
   m_TagString: Untagged
@@ -487,6 +488,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dd1e097ac91677488bd0e0e511838c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8050433269165642066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930336014935329343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd4e2f07408da140b7c97ff24dd2aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1286943206467795689
@@ -1893,6 +1906,7 @@ MonoBehaviour:
   SettingsManagerAbstractTypeToggle:
   - {fileID: 8114261106711035974}
   SettingsManagerAbstractTypeSlider:
+  - {fileID: 8050433269165642066}
   - {fileID: 4392366896631511115}
   SettingsManagerAbstractTypeManagement:
   - {fileID: 697764147136612878}

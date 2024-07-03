@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BasisGraphicUIRayCaster
+public class BasisGraphicUIRayCaster : MonoBehaviour
 {
     public Canvas Canvas;
     public void OnEnable()

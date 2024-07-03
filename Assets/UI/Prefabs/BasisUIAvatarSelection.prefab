@@ -704,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Canvas: {fileID: 3085000715464220075}
   CanvasScaler: {fileID: 7224626457331495050}
-  GraphicUIRayCaster: {fileID: 3978596320646700803}
+  GraphicUIRayCaster: {fileID: 0}
 --- !u!114 &4544001729886002100
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,11 +8,21 @@ namespace BattlePhaze.SettingsManager.ExplanationManagement
         public int OptionIndex;
         public SettingsManager Manager;
         #endregion
+        public void OnEnable()
+        {
+            if(Manager == null)
+            {
+                Manager = FindFirstObjectByType<SettingsManager>();
+            }
+        }
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (Manager)
             {
-                SettingsManagerDescriptionSystem.ExplanationSystem(Manager, Manager.Options[OptionIndex].Explanation);
+                if (Manager.Options.Count > OptionIndex)
+                {
+                    SettingsManagerDescriptionSystem.ExplanationSystem(Manager, Manager.Options[OptionIndex].Explanation);
+                }
             }
         }
 
