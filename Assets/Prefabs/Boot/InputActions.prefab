@@ -682,6 +682,7 @@ GameObject:
   - component: {fileID: 1742149703474370130}
   - component: {fileID: 8638552490007219108}
   - component: {fileID: 1077079382445251767}
+  - component: {fileID: 1962641699494196431}
   m_Layer: 0
   m_Name: Modules
   m_TagString: Untagged
@@ -764,11 +765,16 @@ MonoBehaviour:
     Explanation: Music Audio
     Parse: 0
     Type: 3
+  - OptionName: Player Audio
+    Explanation: 
+    Parse: 0
+    Type: 3
   UseAudioListener: 1
   Mixer: {fileID: 24100000, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
   AudioMixerGroupOne: Master
   AudioMixerGroupTwo: SFX Audio
   AudioMixerGroupThree: Music Audio
+  AudioMixerGroupFour: Player Audio
 --- !u!114 &4907001347912712639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1003,6 +1009,25 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 2
+--- !u!114 &1962641699494196431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b79b7a6356e9dd40a5bc486cd555a8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Selected Microphone
+    Explanation: 
+    Parse: 1
+    Type: 2
+  Manager: {fileID: 7743749643595271440}
+  MicrophoneDevice: []
 --- !u!1 &8852770691268876905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,6 +1104,7 @@ MonoBehaviour:
     CurrentlySelectedSaveModule: {fileID: 6435900343388600922}
     CurrentlySelectedSaveModuleName: INI
   SettingsManagerOptions:
+  - {fileID: 1962641699494196431}
   - {fileID: 1077079382445251767}
   - {fileID: 8638552490007219108}
   - {fileID: 1742149703474370130}

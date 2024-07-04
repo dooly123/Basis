@@ -9,6 +9,7 @@
         public string AudioMixerGroupOne = "Master";
         public string AudioMixerGroupTwo = "SFX Audio";
         public string AudioMixerGroupThree = "Music Audio";
+        public string AudioMixerGroupFour= "Player Audio";
         public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager)
         {
             if (NameReturn(0, Option))
@@ -39,6 +40,13 @@
                     ChangeMusicAudio(Value - 80);
                 }
             }
+            if (NameReturn(3, Option))
+            {
+                if (SliderReadOption(Option, Manager, out float Value))
+                {
+                    ChangePlayerAudio(Value - 80);
+                }
+            }
         }
         public void ChangeMainAudio(float Volume)
         {
@@ -51,6 +59,10 @@
         public void ChangeMusicAudio(float Volume)
         {
             Mixer.SetFloat(AudioMixerGroupThree, Volume);
+        }
+        public void ChangePlayerAudio(float Volume)
+        {
+            Mixer.SetFloat(AudioMixerGroupFour, Volume);
         }
     }
 }

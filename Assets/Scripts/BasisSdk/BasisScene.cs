@@ -7,12 +7,25 @@ public class BasisScene : MonoBehaviour
     public Transform SpawnPoint;
     public float RespawnHeight = -100;
     public float RespawnTimer = 0.1f;
+    public UnityEngine.Audio.AudioMixerGroup Group;
     public void Awake()
     {
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
+            AttachMixerToAllSceneAudioSources();
             StartCoroutine(CheckHeightLoop());
+        }
+    }
+    public void AttachMixerToAllSceneAudioSources()
+    {
+        AudioSource[] Sources = FindObjectsByType<AudioSource>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach(AudioSource Source in Sources)
+        {
+            if (Source.outputAudioMixerGroup == null)
+            {
+                Source.outputAudioMixerGroup = Group;
+            }
         }
     }
     public void SpawnPlayer(BasisLocalPlayer Basis)

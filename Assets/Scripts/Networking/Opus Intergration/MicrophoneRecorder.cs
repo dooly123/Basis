@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 
 public class MicrophoneRecorder : MonoBehaviour
 {
@@ -31,16 +32,48 @@ public class MicrophoneRecorder : MonoBehaviour
         ProcessBufferLength = processBuffer.Length;
         samplingFrequency = BasisOpusSettings.GetSampleFreq();
         microphoneBuffer = new float[BasisOpusSettings.RecordingFullLength * samplingFrequency];
-        clip = Microphone.Start(MicrophoneDevice, true, BasisOpusSettings.RecordingFullLength, samplingFrequency);
+        ForceSetMicrophone(SMDMicrophone.SelectedMicrophone);
         rmsValues = new float[rmsWindowSize];
         bufferLength = microphoneBuffer.Length;
+        SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
+        BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
+    }
+    public void OnDestroy()
+    {
+        SMDMicrophone.OnMicrophoneChanged -= ResetMicrophones;
+        BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
+    }
+    private void OnBootModeChanged(BasisBootedMode mode)
+    {
+        ForceSetMicrophone(SMDMicrophone.SelectedMicrophone);
     }
 
     public void DeInitialize()
     {
         Microphone.End(MicrophoneDevice);
     }
-
+    public void ResetMicrophones(string NewMicrophone)
+    {
+        if (MicrophoneDevice != NewMicrophone)
+        {
+            ForceSetMicrophone(NewMicrophone);
+        }
+    }
+    public void ForceSetMicrophone(string NewMicrophone)
+    {
+        if (NewMicrophone == "system default")
+        {
+            NewMicrophone = string.Empty;
+        }
+        Debug.Log("firing off" + NewMicrophone);
+        if (Microphone.devices.Contains(NewMicrophone) || NewMicrophone == string.Empty)
+        {
+            Microphone.End(MicrophoneDevice);
+            Debug.Log("starting Microphone " + NewMicrophone);
+            clip = Microphone.Start(NewMicrophone, true, BasisOpusSettings.RecordingFullLength, samplingFrequency);
+            MicrophoneDevice = NewMicrophone;
+        }
+    }
     void Update()
     {
         position = Microphone.GetPosition(MicrophoneDevice);

@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88442c47edff2f146a5c91d510ce41ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveHeight: 1.75
+  ActiveEyeHeight: 1.75
   BeginningCalibration:
     m_PersistentCalls:
       m_Calls: []
@@ -71,6 +71,7 @@ MonoBehaviour:
     type: 2}
   SkinnedMeshRenderer: []
   Player: {fileID: 3578141255088103770}
+  InTPose: 0
   RemotePlayer: {fileID: 3578141255088103770}
 --- !u!114 &3578141255088103770
 MonoBehaviour:
@@ -98,6 +99,7 @@ MonoBehaviour:
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
     hasRigLayer: 1
@@ -125,28 +127,36 @@ MonoBehaviour:
       TaretInterpreter: 0
     RawLocalData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     LastRunData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     RestingWorldSpace:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     RestingLocalSpace:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     InitialOffset:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     TrackerData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedLastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
 --- !u!114 &7026422538752026465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +217,8 @@ AudioSource:
   m_GameObject: {fileID: 5669630751523980901}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -2845339637905098028, guid: 471a0209081144d4da2426822e8a0b47,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -443,6 +454,7 @@ MonoBehaviour:
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
     hasRigLayer: 1
@@ -470,33 +482,42 @@ MonoBehaviour:
       TaretInterpreter: 0
     RawLocalData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     LastRunData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     RestingWorldSpace:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     RestingLocalSpace:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     InitialOffset:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     TrackerData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedLastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
   Hips:
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
     hasTrackerPositionDriver: 1
     hasTrackerRotationDriver: 1
     hasRigLayer: 1
@@ -524,25 +545,33 @@ MonoBehaviour:
       TaretInterpreter: 0
     RawLocalData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     LastRunData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     RestingWorldSpace:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     RestingLocalSpace:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     InitialOffset:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     TrackerData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedLastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
