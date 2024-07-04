@@ -8,13 +8,7 @@ using UnityEngine;
 using Valve.VR;
 using System.IO;
 using System.Linq;
-
-#if UNITY_2017_2_OR_NEWER
-    using UnityEngine.XR;
-#else
-using XRSettings = UnityEngine.VR.VRSettings;
-using XRDevice = UnityEngine.VR.VRDevice;
-#endif
+using UnityEngine.XR;
 
 namespace Valve.VR
 {
@@ -34,7 +28,6 @@ namespace Valve.VR
             {
                 if (_enabled)
                 {
-#if UNITY_2020_1_OR_NEWER || OPENVR_XR_API
                     if (isSupported == null)
                     {
                         string[] supportedDevices = XRSettings.supportedDevices;
@@ -51,9 +44,6 @@ namespace Valve.VR
                         }
                     }
                     return isSupported.Value;
-#else
-                    return XRSettings.enabled;
-#endif
                 }
 
                 return false;
@@ -539,46 +529,11 @@ namespace Valve.VR
                 manifestApplication.app_key = SteamVR_Settings.instance.editorAppKey;
                 manifestApplication.action_manifest_path = fullManifestPath.FullName;
                 manifestApplication.launch_type = "url";
-                //manifestApplication.binary_path_windows = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-                //manifestApplication.binary_path_linux = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-                //manifestApplication.binary_path_osx = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
                 manifestApplication.url = "steam://launch/";
                 manifestApplication.strings.Add("en_us", new SteamVR_Input_ManifestFile_ApplicationString() { name = string.Format("{0} [Testing]", Application.productName) });
-
-                /*
-                var bindings = new System.Collections.Generic.List<SteamVR_Input_ManifestFile_Application_Binding>();
-
-                SteamVR_Input.InitializeFile();
-                if (SteamVR_Input.actionFile != null)
-                {
-                    string[] bindingFiles = SteamVR_Input.actionFile.GetFilesToCopy(true);
-                    if (bindingFiles.Length == SteamVR_Input.actionFile.default_bindings.Count)
-                    {
-                        for (int bindingIndex = 0; bindingIndex < bindingFiles.Length; bindingIndex++)
-                        {
-                            SteamVR_Input_ManifestFile_Application_Binding binding = new SteamVR_Input_ManifestFile_Application_Binding();
-                            binding.binding_url = bindingFiles[bindingIndex];
-                            binding.controller_type = SteamVR_Input.actionFile.default_bindings[bindingIndex].controller_type;
-                            bindings.Add(binding);
-                        }
-                        manifestApplication.bindings = bindings;
-                    }
-                    else
-                    {
-                        Debug.LogError("<b>[SteamVR]</b> Mismatch in available binding files.");
-                    }
-                }
-                else
-                {
-                    Debug.LogError("<b>[SteamVR]</b> Could not load actions file.");
-                }
-                */
-
                 manifestFile.applications = new System.Collections.Generic.List<SteamVR_Input_ManifestFile_Application>();
                 manifestFile.applications.Add(manifestApplication);
-
-                string json = Valve.Newtonsoft.Json.JsonConvert.SerializeObject(manifestFile, Valve.Newtonsoft.Json.Formatting.Indented,
-                    new Valve.Newtonsoft.Json.JsonSerializerSettings { NullValueHandling = Valve.Newtonsoft.Json.NullValueHandling.Ignore });
+                string json = Valve.Newtonsoft.Json.JsonConvert.SerializeObject(manifestFile, Valve.Newtonsoft.Json.Formatting.Indented,new Valve.Newtonsoft.Json.JsonSerializerSettings { NullValueHandling = Valve.Newtonsoft.Json.NullValueHandling.Ignore });
 
                 File.WriteAllText(fullPath, json);
             }
@@ -735,19 +690,13 @@ namespace Valve.VR
 
             switch (SystemInfo.graphicsDeviceType)
             {
-#if (UNITY_5_4)
-                case UnityEngine.Rendering.GraphicsDeviceType.OpenGL2:
-#endif
                 case UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore:
-                case UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2:
                 case UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3:
                     textureType = ETextureType.OpenGL;
                     break;
-#if !(UNITY_5_4)
 			case UnityEngine.Rendering.GraphicsDeviceType.Vulkan:
 				textureType = ETextureType.Vulkan;
 				break;
-#endif
                 default:
                     textureType = ETextureType.DirectX;
                     break;
