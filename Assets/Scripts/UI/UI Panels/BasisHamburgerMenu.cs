@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 public class BasisHamburgerMenu : BasisUIBase
@@ -17,26 +19,34 @@ public class BasisHamburgerMenu : BasisUIBase
         CloseUI.onClick.AddListener(CloseThisMenu);
         FullBody.onClick.AddListener(PutIntoCalibrationMode);
     }
+    private Dictionary<BasisInput, Action> triggerDelegates = new Dictionary<BasisInput, Action>();
+
     public void PutIntoCalibrationMode()
     {
         BasisBootedMode BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;
         if (OverrideForceCalibration || BasisBootedMode == BasisBootedMode.OpenVRLoader || BasisBootedMode == BasisBootedMode.OpenXRLoader)
         {
             BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
-            foreach(BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
+
+            foreach (BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
             {
-                BasisInput.InputState.OnTriggerChanged += delegate { OnTriggerChanged(BasisInput); };
+                Action triggerDelegate = () => OnTriggerChanged(BasisInput);
+                triggerDelegates[BasisInput] = triggerDelegate;
+                BasisInput.InputState.OnTriggerChanged += triggerDelegate;
             }
         }
     }
+
     public void OnTriggerChanged(BasisInput FiredOff)
     {
         if (FiredOff.InputState.Trigger >= 0.9f)
         {
-            foreach (BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
+            foreach (var entry in triggerDelegates)
             {
-                BasisInput.InputState.OnTriggerChanged -= delegate { OnTriggerChanged(BasisInput); };
+                entry.Key.InputState.OnTriggerChanged -= entry.Value;
             }
+            triggerDelegates.Clear();
+
             BasisLocalPlayer.Instance.RecalculateMyHeight();
             BasisAvatarIKStageCalibration.FullBodyCalibration();
         }

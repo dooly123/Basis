@@ -245,12 +245,19 @@ public class BasisPointRaycaster : BaseRaycaster
                 System.Array.Sort(Canvases, (c1, c2) => c2.sortingOrder.CompareTo(c1.sortingOrder));
                 foreach (Canvas CurrentTopLevel in Canvases)
                 {
-                  //  Debug.Log("TopLevel " + CurrentTopLevel.name);
-                    SortedRaycastGraphics(CurrentTopLevel, ray, MaxDistance, Mask, CurrentTopLevel.worldCamera, ref SortedGraphics);
-                    ProcessSortedHitsResults(CurrentTopLevel, ray, MaxDistance, true, SortedGraphics, SortedRays);
-                    if (SortedGraphics.Count != 0)
+                    if (CurrentTopLevel != null)
                     {
-                        return true;
+                        if (CurrentTopLevel.worldCamera == null)
+                        {
+                            CurrentTopLevel.worldCamera = BasisLocalCameraDriver.Instance.Camera;
+                        }
+                        //  Debug.Log("TopLevel " + CurrentTopLevel.name);
+                        SortedRaycastGraphics(CurrentTopLevel, ray, MaxDistance, Mask, CurrentTopLevel.worldCamera, ref SortedGraphics);
+                        ProcessSortedHitsResults(CurrentTopLevel, ray, MaxDistance, true, SortedGraphics, SortedRays);
+                        if (SortedGraphics.Count != 0)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
