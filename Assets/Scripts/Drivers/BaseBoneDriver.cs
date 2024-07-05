@@ -48,7 +48,14 @@ public abstract class BaseBoneDriver : MonoBehaviour
             {
                 Controls[Index].SetOffset();
             }
-            
+
+        }
+    }
+    public void ResetBoneModel()
+    {
+        for (int Index = 0; Index < ControlsLength; Index++)
+        {
+            Controls[Index].BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         }
     }
 #if UNITY_EDITOR
