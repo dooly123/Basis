@@ -20,12 +20,9 @@ public class SMDMicrophone : SettingsManagerOption
         get => selectedMicrophone;
         private set
         {
-            if (selectedMicrophone != value)
-            {
-                selectedMicrophone = value;
-                // Invoke the callback event
-                OnMicrophoneChanged?.Invoke(selectedMicrophone);
-            }
+            selectedMicrophone = value;
+            // Invoke the callback event
+            OnMicrophoneChanged?.Invoke(selectedMicrophone);
         }
     }
 
@@ -42,8 +39,6 @@ public class SMDMicrophone : SettingsManagerOption
 
             SettingsManagerDropDown.Clear(Manager, Option.OptionIndex);
             Option.SelectableValueList.Clear();
-            SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "System Default");
-            SMSelectableValues.AddSelection(ref Option.SelectableValueList, "System Default", "System Default");
             foreach (string device in MicrophoneDevice)
             {
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, device);
@@ -54,7 +49,7 @@ public class SMDMicrophone : SettingsManagerOption
             {
                 SettingsManagerDropDown.SetOptionsValue(Manager, 0, 0, true);
                 Option.SelectedValue = Option.SelectableValueList[0].RealValue;
-                SelectedMicrophone = string.Empty;
+                SelectedMicrophone = Option.SelectableValueList[0].UserValue;
             }
             else
             {

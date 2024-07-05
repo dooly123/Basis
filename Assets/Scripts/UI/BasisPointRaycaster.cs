@@ -91,7 +91,7 @@ public partial class BasisPointRaycaster : BaseRaycaster
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.name = BasisDeviceMatchableNames.DeviceID + "_Redical";
-                gameObject.transform.parent = this.transform;
+                gameObject.transform.SetParent(this.transform);
                 highlightQuadInstance = gameObject;
                 if (highlightQuadInstance.TryGetComponent(out Canvas Canvas))
                 {

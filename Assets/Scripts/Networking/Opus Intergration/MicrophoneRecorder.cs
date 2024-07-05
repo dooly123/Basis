@@ -12,7 +12,7 @@ public class MicrophoneRecorder : MonoBehaviour
     public int ProcessBufferLength;
     public float[] microphoneBuffer;
     public string MicrophoneDevice = null;
-    public float silenceThreshold = 0.001f; // RMS threshold for detecting silence
+    public float silenceThreshold = 0.0001f; // RMS threshold for detecting silence
     public BasisOpusSettings BasisOpusSettings;
     public int samplingFrequency;
     public float[] rmsValues;
@@ -24,7 +24,18 @@ public class MicrophoneRecorder : MonoBehaviour
     private int dataLength;
     private int position;
     private int remain;
-    public bool HasMicrophoneSetup = false;
+
+    public bool IsInitialize = false;
+    public bool TryInitalize()
+    {
+        if (IsInitialize == false)
+        {
+            Initialize();
+            IsInitialize = true;
+            return true;
+        }
+        return false;
+    }
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -32,11 +43,12 @@ public class MicrophoneRecorder : MonoBehaviour
         ProcessBufferLength = processBuffer.Length;
         samplingFrequency = BasisOpusSettings.GetSampleFreq();
         microphoneBuffer = new float[BasisOpusSettings.RecordingFullLength * samplingFrequency];
-        ResetMicrophones(SMDMicrophone.SelectedMicrophone);
         rmsValues = new float[rmsWindowSize];
         bufferLength = microphoneBuffer.Length;
+
         SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
+        ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }
     public void OnDestroy()
     {
@@ -47,76 +59,107 @@ public class MicrophoneRecorder : MonoBehaviour
     {
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }
-
-    public void DeInitialize()
-    {
-        Microphone.End(MicrophoneDevice);
-    }
     public void ResetMicrophones(string NewMicrophone)
     {
-        if (NewMicrophone.ToLower() == "system default")
+        if (Microphone.devices.Length != 0)
         {
-            NewMicrophone = string.Empty;
+            if (Microphone.IsRecording(MicrophoneDevice))
+            {
+                Debug.Log("Is Recording " + MicrophoneDevice);
+                if (MicrophoneDevice != NewMicrophone)
+                {
+                    ForceSetMicrophone(NewMicrophone);
+                }
+            }
+            else
+            {
+                Debug.Log("Is not Recording " + MicrophoneDevice);
+                ForceSetMicrophone(NewMicrophone);
+            }
         }
-        if (MicrophoneDevice != NewMicrophone || HasMicrophoneSetup == false)
+        else
         {
-            HasMicrophoneSetup = true;
-            ForceSetMicrophone(NewMicrophone);
+            Debug.LogError("No Microphones found!");
         }
     }
     public void ForceSetMicrophone(string NewMicrophone)
     {
-        Debug.Log("firing off" + NewMicrophone);
+        if (NewMicrophone == null)
+        {
+            Debug.LogError("Microphone was null!");
+            return;
+        }
         if (Microphone.devices.Contains(NewMicrophone) || NewMicrophone == string.Empty)
         {
-            Microphone.End(MicrophoneDevice);
-            Debug.Log("starting Microphone " + NewMicrophone);
+            StopMicrophone();
+            Debug.Log("Starting Microphone :" + NewMicrophone);
             clip = Microphone.Start(NewMicrophone, true, BasisOpusSettings.RecordingFullLength, samplingFrequency);
             MicrophoneDevice = NewMicrophone;
+        }
+        else
+        {
+            Debug.LogError("Microphone device not found: " + NewMicrophone);
+        }
+    }
+    private void StopMicrophone()
+    {
+        if (MicrophoneDevice != null)
+        {
+            Microphone.End(MicrophoneDevice);
+            Debug.Log("Stopped Microphone " + MicrophoneDevice);
+            MicrophoneDevice = null;
         }
     }
     void Update()
     {
-        position = Microphone.GetPosition(MicrophoneDevice);
-        if (position < 0 || head == position)
+        if (Microphone.IsRecording(MicrophoneDevice))
         {
-            return;
+            position = Microphone.GetPosition(MicrophoneDevice);
+            if (position < 0 || head == position)
+            {
+                Debug.Log("bailing out " + position + " | " + head);
+                return;
+            }
+
+            clip.GetData(microphoneBuffer, 0);
+
+            dataLength = GetDataLength(bufferLength, head, position);
+            while (dataLength > ProcessBufferLength)
+            {
+                remain = bufferLength - head;
+                if (remain < ProcessBufferLength)
+                {
+                    Array.Copy(microphoneBuffer, head, processBuffer, 0, remain);
+                    Array.Copy(microphoneBuffer, 0, processBuffer, remain, ProcessBufferLength - remain);
+                }
+                else
+                {
+                    Array.Copy(microphoneBuffer, head, processBuffer, 0, ProcessBufferLength);
+                }
+
+                float rms = GetRMS();
+                if (useMovingWindowRMS)
+                {
+                    AddRMSValue(rms);
+                    rms = GetAverageRMS();
+                }
+
+                if (rms < silenceThreshold)
+                {
+                    OnHasSilence?.Invoke();
+                }
+                else
+                {
+                    OnHasAudio?.Invoke();
+                }
+
+                head = (head + ProcessBufferLength) % bufferLength;
+                dataLength -= ProcessBufferLength;
+            }
         }
-
-        clip.GetData(microphoneBuffer, 0);
-
-        dataLength = GetDataLength(bufferLength, head, position);
-        while (dataLength > ProcessBufferLength)
+        else
         {
-            remain = bufferLength - head;
-            if (remain < ProcessBufferLength)
-            {
-                Array.Copy(microphoneBuffer, head, processBuffer, 0, remain);
-                Array.Copy(microphoneBuffer, 0, processBuffer, remain, ProcessBufferLength - remain);
-            }
-            else
-            {
-                Array.Copy(microphoneBuffer, head, processBuffer, 0, ProcessBufferLength);
-            }
-
-            float rms = GetRMS();
-            if (useMovingWindowRMS)
-            {
-                AddRMSValue(rms);
-                rms = GetAverageRMS();
-            }
-
-            if (rms < silenceThreshold)
-            {
-                OnHasSilence?.Invoke();
-            }
-            else
-            {
-                OnHasAudio?.Invoke();
-            }
-
-            head = (head + ProcessBufferLength) % bufferLength;
-            dataLength -= ProcessBufferLength;
+            Debug.Log("no microphone found " + MicrophoneDevice);
         }
     }
 
