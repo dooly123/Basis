@@ -72,6 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 6503742750137767724}
   bottomPoint: {x: 0, y: 0, z: 0}
+  LastbottomPoint: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
   RunSpeed: 2.4
   playerSpeed: 2
@@ -87,6 +88,7 @@ MonoBehaviour:
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
     hasRigLayer: 1
@@ -149,6 +151,7 @@ MonoBehaviour:
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
     hasTrackerPositionDriver: 2
     hasTrackerRotationDriver: 2
     hasRigLayer: 1
@@ -209,9 +212,13 @@ MonoBehaviour:
   HasEye: 0
   HasHead: 0
   LastWasGrounded: 1
-  RotationSpeed: 50
+  RotationSpeed: 70
   BlockMovement: 0
   IsFalling: 0
   HasJumpAction: 0
   jumpHeight: 1
   currentVerticalSpeed: 0
+  OutPosition: {x: 0, y: 0, z: 0}
+  OutRotation: {x: 0, y: 0, z: 0, w: 0}
+  OutLastPosition: {x: 0, y: 0, z: 0}
+  OutLastRotation: {x: 0, y: 0, z: 0, w: 0}
