@@ -86,7 +86,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
         }
-        MicrophoneRecorder.TryInitalize();
+        MicrophoneRecorder.TryInitialize();
         ResetAvatarAnimator();
     }
     /// <summary>

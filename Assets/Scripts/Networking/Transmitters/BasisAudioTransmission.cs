@@ -56,12 +56,12 @@ public class BasisAudioTransmission
     }
     public void OnAudioReady()
     {
-        int PacketSize = Recorder.processBuffer.Length * 4;
+        int PacketSize = Recorder.processBuffer.Count * 4;
         if (outputBuffer == null || PacketSize != outputBuffer.Length)
         {
             outputBuffer = new byte[PacketSize];
         }
-        encodedLength = encoder.Encode(Recorder.processBuffer, outputBuffer);
+        encodedLength = encoder.Encode(Recorder.processBuffer.Array, outputBuffer);
 
         encodedData = new byte[encodedLength];
         Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
@@ -91,7 +91,7 @@ public class BasisAudioTransmission
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
             using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
             {
-                BasisNetworkConnector.Instance.Client.SendMessage(msg, DeliveryMethod.Unreliable);
+                BasisNetworkConnector.Instance.Client.SendMessage(msg, DeliveryMethod.Sequenced);
             }
         }
     }
