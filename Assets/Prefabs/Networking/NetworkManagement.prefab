@@ -86,5 +86,5 @@ MonoBehaviour:
   HasUnityClient: 0
   authenticationCode: Default
   ForceConnect: 0
-  Ip: localhost
+  Ip: 170.64.184.249
   Port: 4296
