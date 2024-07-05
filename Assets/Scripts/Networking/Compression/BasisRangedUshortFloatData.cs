@@ -1,6 +1,6 @@
 ﻿using System;
 [System.Serializable]
-public class BasisRangedFloatData
+public class BasisRangedUshortFloatData
 {
     public readonly float precision;
     public readonly float inversePrecision;
@@ -11,7 +11,7 @@ public class BasisRangedFloatData
     public readonly int requiredBits;
     public readonly ushort mask;
 
-    public BasisRangedFloatData(float minValue, float maxValue, float precision)
+    public BasisRangedUshortFloatData(float minValue, float maxValue, float precision)
     {
         this.minValue = minValue;
         this.maxValue = maxValue;

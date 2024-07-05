@@ -15,6 +15,7 @@ public class BasisSetUserName : MonoBehaviour
     {
         if (string.IsNullOrEmpty(UserNameTMP_InputField.text) == false)
         {
+            Ready.interactable = false;
             BasisLocalPlayer.Instance.DisplayName = UserNameTMP_InputField.text;
             if (BasisNetworkConnector.Instance != null)
             {

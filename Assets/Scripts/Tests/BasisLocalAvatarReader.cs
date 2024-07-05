@@ -20,8 +20,8 @@ public class BasisLocalAvatarReader : MonoBehaviour
     public Vector3 PlayerPosition;
     public BasisAvatarLerpDataSettings Settings;
     public bool Ready = false;
-    public BasisRangedFloatData PositionRanged;
-    public BasisRangedFloatData ScaleRanged;
+    public BasisRangedUshortFloatData PositionRanged;
+    public BasisRangedUshortFloatData ScaleRanged;
     public DataJobs AvatarJobs;
     public async void OnEnable()
     {
@@ -34,8 +34,8 @@ public class BasisLocalAvatarReader : MonoBehaviour
         await Handle.Task;
         Settings = Handle.Result;
         Ready = true;
-        PositionRanged = new BasisRangedFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
-        ScaleRanged = new BasisRangedFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
+        PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
+        ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
     }
     public void OnDestroy()
     {

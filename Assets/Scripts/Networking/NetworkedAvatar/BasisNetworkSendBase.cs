@@ -20,9 +20,9 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
     public DataJobs AvatarJobs;
     public HumanPoseHandler PoseHandler;
     [SerializeField]
-    public BasisRangedFloatData PositionRanged;
+    public BasisRangedUshortFloatData PositionRanged;
     [SerializeField]
-    public BasisRangedFloatData ScaleRanged;
+    public BasisRangedUshortFloatData ScaleRanged;
     protected BasisNetworkSendBase()
     {
         LASM = new LocalAvatarSyncMessage()
@@ -37,8 +37,8 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
         {
             Output.Muscles.ResizeArray(95);
         }
-        PositionRanged = new BasisRangedFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
-        ScaleRanged = new BasisRangedFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
+        PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
+        ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
     }
     public void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
     {

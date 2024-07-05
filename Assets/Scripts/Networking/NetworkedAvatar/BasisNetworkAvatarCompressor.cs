@@ -20,7 +20,7 @@ public static class BasisNetworkAvatarCompressor
     {
         CompressAvatar(ref NetworkSendBase.Target, NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, out NetworkSendBase.LASM.array, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
     }
-    public static void CompressAvatar(ref BasisAvatarData AvatarData, HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender, out byte[] Bytes, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
+    public static void CompressAvatar(ref BasisAvatarData AvatarData, HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender, out byte[] Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
         SenderPoseHandler.GetHumanPose(ref CachedPose);
         AvatarData.Vectors[1] = CachedPose.bodyPosition;
@@ -30,7 +30,7 @@ public static class BasisNetworkAvatarCompressor
         AvatarData.Quaternions[0] = CachedPose.bodyRotation;
         Bytes = CompressAvatarUpdate(AvatarData.Vectors[0], AvatarData.Vectors[2], AvatarData.Vectors[1], CachedPose.bodyRotation, CachedPose.muscles, PositionRanged, ScaleRanged);
     }
-    public static byte[] CompressAvatarUpdate(Vector3 NewPosition, Vector3 Scale, Vector3 BodyPosition, Quaternion Rotation, float[] muscles, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
+    public static byte[] CompressAvatarUpdate(Vector3 NewPosition, Vector3 Scale, Vector3 BodyPosition, Quaternion Rotation, float[] muscles, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
         using (var Packer = DarkRiftWriter.Create(216))
         {
@@ -41,11 +41,11 @@ public static class BasisNetworkAvatarCompressor
             return Packer.ToArray();
         }
     }
-    public static void CompressScaleAndPosition(DarkRiftWriter packer, Vector3 position, Vector3 bodyPosition, Vector3 scale, BasisRangedFloatData PositionRanged, BasisRangedFloatData ScaleRanged)
+    public static void CompressScaleAndPosition(DarkRiftWriter packer, Vector3 position, Vector3 bodyPosition, Vector3 scale, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
         BasisCompressionOfPosition.CompressVector3(position, packer, PositionRanged);
         BasisCompressionOfPosition.CompressVector3(bodyPosition, packer, PositionRanged);
 
-        BasisCompressionOfPosition.CompressVector3(scale, packer, ScaleRanged);
+        BasisCompressionOfPosition.CompressUShortVector3(scale, packer, ScaleRanged);
     }
 }

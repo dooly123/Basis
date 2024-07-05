@@ -231,7 +231,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 0
   MinDistance: 1
-  MaxDistance: 50
+  MaxDistance: 15
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -331,7 +331,7 @@ MonoBehaviour:
   interpolation: 0
   perspectiveCorrection: 0
   distanceAttenuation: 1
-  distanceAttenuationInput: 0
+  distanceAttenuationInput: 1
   distanceAttenuationValue: 1
   airAbsorption: 1
   airAbsorptionInput: 0
@@ -357,7 +357,7 @@ MonoBehaviour:
   transmissionHigh: 1
   maxTransmissionSurfaces: 8
   directMixLevel: 1
-  reflections: 1
+  reflections: 0
   reflectionsType: 0
   useDistanceCurveForReflections: 1
   currentBakedSource: {fileID: 0}
