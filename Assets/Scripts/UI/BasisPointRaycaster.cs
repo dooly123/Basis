@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class BasisPointRaycaster : BaseRaycaster
+public partial class BasisPointRaycaster : BaseRaycaster
 {
     public Vector3 Direction = Vector3.forward;
     public float MaxDistance = 30;
@@ -30,35 +30,12 @@ public class BasisPointRaycaster : BaseRaycaster
     public bool WasCorrectLayer = false;
     static readonly Vector3[] s_Corners = new Vector3[4];
     static readonly RaycastHitComparer s_RaycastHitComparer = new RaycastHitComparer();
-    /// </summary>
-    sealed class RaycastHitComparer : IComparer<RaycastHitData>
-    {
-        public int Compare(RaycastHitData a, RaycastHitData b)
-            => b.graphic.depth.CompareTo(a.graphic.depth);
-    }
+    [SerializeField]
+    public List<RaycastHitData> SortedGraphics = new List<RaycastHitData>();
+    [SerializeField]
+    public List<RaycastResult> SortedRays = new List<RaycastResult>();
+    public bool IgnoreReversedGraphics;
     public override Camera eventCamera => BasisLocalCameraDriver.Instance.Camera;
-    [System.Serializable]
-    public struct RaycastHitData
-    {
-        public RaycastHitData(Graphic graphic, Vector3 worldHitPosition, Vector2 screenPosition, float distance, int displayIndex)
-        {
-            this.graphic = graphic;
-            this.worldHitPosition = worldHitPosition;
-            this.screenPosition = screenPosition;
-            this.distance = distance;
-            this.displayIndex = displayIndex;
-        }
-        [SerializeField]
-        public Graphic graphic;
-        [SerializeField]
-        public Vector3 worldHitPosition;
-        [SerializeField]
-        public Vector2 screenPosition;
-        [SerializeField]
-        public float distance;
-        [SerializeField]
-        public int displayIndex;
-    }
     public async Task Initialize(BasisInput basisInput)
     {
         CurrentEventData = new BasisPointerEventData(EventSystem.current);
@@ -147,7 +124,7 @@ public class BasisPointRaycaster : BaseRaycaster
         WasCorrectLayer = PhysicHit.transform.gameObject.layer == UIMask;
         if (WasCorrectLayer)
         {
-            UpdateRayCastResult();//sets alll RaycastResult data
+            UpdateRayCastResult();//sets all RaycastResult data
             UpdateLineRenderer();//updates the line denderer
             UpdateRadicalRenderer();// moves the redical renderer
             UpdateDebugDraw(Color.green, PhysicHit.point);
@@ -228,7 +205,8 @@ public class BasisPointRaycaster : BaseRaycaster
     private void HandleNoHit()
     {
         ResetRenderers();
-        UpdateDebugDraw(Color.red, transform.forward * MaxDistance);
+        Vector3 destination = ray.origin + ray.direction * MaxDistance;
+        UpdateDebugDraw(Color.red, destination);
         RaycastResult = new RaycastResult();
         PhysicHit = new RaycastHit();
     }
@@ -264,12 +242,7 @@ public class BasisPointRaycaster : BaseRaycaster
         }
         return false;
     }
-    [SerializeField]
-    public List<RaycastHitData> SortedGraphics = new List<RaycastHitData>();
-    [SerializeField]
-    public List<RaycastResult> SortedRays = new List<RaycastResult>();
     public void Sort<T>(IList<T> hits, IComparer<T> comparer) where T : struct => Sort(hits, comparer, hits.Count);
-    public bool IgnoreReversedGraphics;
     public bool ProcessSortedHitsResults(Canvas canvas, Ray ray, float hitDistance, bool hitSomething, List<RaycastHitData> raycastHitDatums, List<RaycastResult> resultAppendList)
     {
         // Now that we have a list of sorted hits, process any extra settings and filters.

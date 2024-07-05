@@ -21,7 +21,11 @@ public class BasisSetUserName : MonoBehaviour
                 Debug.Log("connecting to default");
                 await BasisSceneLoadDriver.LoadScene("GardenScene");
                 BasisNetworkConnector.Instance.Connect();
-                GameObject.Destroy(this.gameObject);
+                BasisUIComponent[] Components = FindObjectsByType<BasisUIComponent>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                foreach (BasisUIComponent Component in Components)
+                {
+                    GameObject.Destroy(Component.gameObject);
+                }
             }
         }
         else

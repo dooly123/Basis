@@ -24,7 +24,7 @@ public class MicrophoneRecorder : MonoBehaviour
     private int dataLength;
     private int position;
     private int remain;
-
+    public bool HasMicrophoneSetup = false;
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -32,7 +32,7 @@ public class MicrophoneRecorder : MonoBehaviour
         ProcessBufferLength = processBuffer.Length;
         samplingFrequency = BasisOpusSettings.GetSampleFreq();
         microphoneBuffer = new float[BasisOpusSettings.RecordingFullLength * samplingFrequency];
-        ForceSetMicrophone(SMDMicrophone.SelectedMicrophone);
+        ResetMicrophones(SMDMicrophone.SelectedMicrophone);
         rmsValues = new float[rmsWindowSize];
         bufferLength = microphoneBuffer.Length;
         SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
@@ -45,7 +45,7 @@ public class MicrophoneRecorder : MonoBehaviour
     }
     private void OnBootModeChanged(BasisBootedMode mode)
     {
-        ForceSetMicrophone(SMDMicrophone.SelectedMicrophone);
+        ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }
 
     public void DeInitialize()
@@ -54,17 +54,18 @@ public class MicrophoneRecorder : MonoBehaviour
     }
     public void ResetMicrophones(string NewMicrophone)
     {
-        if (MicrophoneDevice != NewMicrophone)
+        if (NewMicrophone.ToLower() == "system default")
         {
+            NewMicrophone = string.Empty;
+        }
+        if (MicrophoneDevice != NewMicrophone || HasMicrophoneSetup == false)
+        {
+            HasMicrophoneSetup = true;
             ForceSetMicrophone(NewMicrophone);
         }
     }
     public void ForceSetMicrophone(string NewMicrophone)
     {
-        if (NewMicrophone == "system default")
-        {
-            NewMicrophone = string.Empty;
-        }
         Debug.Log("firing off" + NewMicrophone);
         if (Microphone.devices.Contains(NewMicrophone) || NewMicrophone == string.Empty)
         {
