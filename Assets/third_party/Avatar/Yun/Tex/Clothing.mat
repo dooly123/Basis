@@ -651,10 +651,10 @@ Material:
     - _TessShrink: 0
     - _TessStrength: 0.5
     - _TransparentMode: 0
-    - _UDIMDiscardCompile: 0
+    - _UDIMDiscardCompile: 1
     - _UDIMDiscardMode: 0
     - _UDIMDiscardRow0_0: 0
-    - _UDIMDiscardRow0_1: 0
+    - _UDIMDiscardRow0_1: 1
     - _UDIMDiscardRow0_2: 0
     - _UDIMDiscardRow0_3: 0
     - _UDIMDiscardRow1_0: 0
