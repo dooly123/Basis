@@ -8,7 +8,7 @@ using DarkRift.Server.Plugins.Commands;
 [System.Serializable]
 public class BasisAudioTransmission
 {
-    public event Action<byte[]> OnEncoded;
+    public event Action OnEncoded;
     public Encoder encoder;
     public BasisNetworkedPlayer NetworkedPlayer;
     public BasisNetworkSendBase Base;
@@ -18,24 +18,32 @@ public class BasisAudioTransmission
     public int encodedLength;
     public BasisLocalPlayer Local;
     public MicrophoneRecorder Recorder;
+    public bool IsInitalized = false;
+    public AudioSegmentDataMessage AudioSegmentData = new AudioSegmentDataMessage();
+    public AudioSilentSegmentDataMessage audioSilentSegmentData = new AudioSilentSegmentDataMessage();
     public void OnEnable(BasisNetworkedPlayer networkedPlayer)
     {
-        NetworkedPlayer = networkedPlayer;
-        Base = networkedPlayer.NetworkSend;
-        settings = BasisDeviceManagement.Instance.BasisOpusSettings;
-        encoder = new Encoder(settings.SamplingFrequency, settings.NumChannels, settings.OpusApplication)
+        if (IsInitalized == false)
         {
-            Bitrate = settings.BitrateKPS,
-            Complexity = settings.Complexity,
-            Signal = settings.OpusSignal
-        };
-        OnEncoded += SendVoiceOverNetwork;
-        Local = (BasisLocalPlayer)networkedPlayer.Player;
-        Recorder = Local.AvatarDriver.MicrophoneRecorder;
-        if (Local.AvatarDriver != null && Local.AvatarDriver.MicrophoneRecorder != null)
-        {
-            Local.AvatarDriver.MicrophoneRecorder.OnHasAudio += OnAudioReady;
-            Local.AvatarDriver.MicrophoneRecorder.OnHasSilence += OnAudioSilence;
+            NetworkedPlayer = networkedPlayer;
+            Base = networkedPlayer.NetworkSend;
+            settings = BasisDeviceManagement.Instance.BasisOpusSettings;
+            encoder = new Encoder(settings.SamplingFrequency, settings.NumChannels, settings.OpusApplication)
+            {
+                Bitrate = settings.BitrateKPS,
+                Complexity = settings.Complexity,
+                Signal = settings.OpusSignal
+            };
+            OnEncoded += SendVoiceOverNetwork;
+            Local = (BasisLocalPlayer)networkedPlayer.Player;
+            Recorder = Local.AvatarDriver.MicrophoneRecorder;
+            if (Local.AvatarDriver != null && Local.AvatarDriver.MicrophoneRecorder != null)
+            {
+                Local.AvatarDriver.MicrophoneRecorder.OnHasAudio += OnAudioReady;
+                Local.AvatarDriver.MicrophoneRecorder.OnHasSilence += OnAudioSilence;
+
+            }
+            IsInitalized = true;
         }
     }
     public void OnDisable()
@@ -66,15 +74,13 @@ public class BasisAudioTransmission
         encodedData = new byte[encodedLength];
         Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
 
-        OnEncoded?.Invoke(encodedData);
+        OnEncoded?.Invoke();
     }
-    public AudioSegmentDataMessage AudioSegmentData = new AudioSegmentDataMessage();
-    public AudioSilentSegmentDataMessage audioSilentSegmentData = new AudioSilentSegmentDataMessage();
-    private void SendVoiceOverNetwork(byte[] VoiceData)
+    private void SendVoiceOverNetwork()
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            AudioSegmentData.buffer = VoiceData;
+            AudioSegmentData.buffer = encodedData;
             writer.Write(AudioSegmentData);
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
             using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))

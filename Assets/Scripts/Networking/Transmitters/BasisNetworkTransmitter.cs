@@ -56,8 +56,8 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
     {
         if (Ready)
         {
+            AudioTransmission.OnDisable();
         }
-        AudioTransmission.OnDisable();
     }
     public void SendOutLatestAvatar()
     {

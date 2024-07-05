@@ -122,7 +122,7 @@ public class MicrophoneRecorder : MonoBehaviour
 
     public void GetData()
     {
-        clip.GetData(microphoneBuffer.Array, microphoneBuffer.Offset);
+        clip.GetData(microphoneBuffer, 0);
     }
 
     void Update()
@@ -165,7 +165,6 @@ public class MicrophoneRecorder : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("firing for frame" + Time.frameCount);
                     OnHasAudio?.Invoke();
                 }
 
