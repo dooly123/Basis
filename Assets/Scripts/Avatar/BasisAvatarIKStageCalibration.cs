@@ -13,7 +13,6 @@ public static class BasisAvatarIKStageCalibration
         FullBodyCalibration();
     }
 #endif
-
     public static void FullBodyCalibration()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
@@ -110,38 +109,6 @@ public static class BasisAvatarIKStageCalibration
     {
         return (Role == BasisBoneTrackedRole.Hips || Role == BasisBoneTrackedRole.LeftFoot || Role == BasisBoneTrackedRole.RightFoot);
     }
-    public static bool CheckForNextPriority6Point(BasisBoneTrackedRole Role)
-    {
-        return (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.LeftUpperLeg || Role == BasisBoneTrackedRole.RightUpperLeg);
-    }
-    public static bool CheckForNextPriority9Point(BasisBoneTrackedRole Role)
-    {
-        return (Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.LeftUpperArm || Role == BasisBoneTrackedRole.RightUpperArm);
-    }
-    public static bool CheckForNextPriority11Point(BasisBoneTrackedRole Role)
-    {
-        return (Role == BasisBoneTrackedRole.LeftToes || Role == BasisBoneTrackedRole.RightToes || Role == BasisBoneTrackedRole.Neck);
-    }
-    public static bool CheckForNextPriority13Point(BasisBoneTrackedRole Role)
-    {
-        return true;
-    }
-    public static bool ReplaceMeOnceyouhaveTime(BasisBoneTrackedRole Role)
-    {
-        if (Role == BasisBoneTrackedRole.Head || Role == BasisBoneTrackedRole.Neck || Role == BasisBoneTrackedRole.CenterEye || Role == BasisBoneTrackedRole.Mouth)
-        {
-            return false;
-        }
-        return true;
-    }
-    public static bool DisableAsIhaveNotImplemented(BasisBoneTrackedRole Role)
-    {
-        if (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.Spine)
-        {
-            return false;
-        }
-        return true;
-    }
     public static bool IsRight(Transform TransformRightCheck, Transform avatarMiddle)
     {
         Vector3 directionToOther = TransformRightCheck.position - avatarMiddle.position;
@@ -175,25 +142,6 @@ public static class BasisAvatarIKStageCalibration
             rolesToDiscover.Add(role);
         }
         return rolesToDiscover;
-    }
-
-    private static List<BasisInput> GetUnassignedInputs(ref List<BasisBoneTrackedRole> rolesToDiscover)
-    {
-        List<BasisInput> trackInput = new List<BasisInput>();
-        foreach (BasisInput baseInput in BasisDeviceManagement.Instance.AllInputDevices)
-        {
-            if (!baseInput.hasRoleAssigned)
-            {
-                trackInput.Add(baseInput);
-            }
-            else
-            {
-                Debug.Log("Removing role " + baseInput.TrackedRole);
-                rolesToDiscover.Remove(baseInput.TrackedRole);
-            }
-        }
-        Debug.Log("Completed input tracking");
-        return trackInput;
     }
     private static List<BasisInput> GetAllInputsExcludingEyeAndHands(ref List<BasisBoneTrackedRole> rolesToDiscover)
     {
@@ -329,5 +277,37 @@ public static class BasisAvatarIKStageCalibration
                 Distances[i] = Vector3.Distance(bone.transform.position, transformsToMatch[i].BasisBoneControl.BoneModelTransform.position);
             }
         }
+    }
+    public static bool CheckForNextPriority6Point(BasisBoneTrackedRole Role)
+    {
+        return (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.LeftUpperLeg || Role == BasisBoneTrackedRole.RightUpperLeg);
+    }
+    public static bool CheckForNextPriority9Point(BasisBoneTrackedRole Role)
+    {
+        return (Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.LeftUpperArm || Role == BasisBoneTrackedRole.RightUpperArm);
+    }
+    public static bool CheckForNextPriority11Point(BasisBoneTrackedRole Role)
+    {
+        return (Role == BasisBoneTrackedRole.LeftToes || Role == BasisBoneTrackedRole.RightToes || Role == BasisBoneTrackedRole.Neck);
+    }
+    public static bool CheckForNextPriority13Point(BasisBoneTrackedRole Role)
+    {
+        return true;
+    }
+    public static bool ReplaceMeOnceyouhaveTime(BasisBoneTrackedRole Role)
+    {
+        if (Role == BasisBoneTrackedRole.Head || Role == BasisBoneTrackedRole.Neck || Role == BasisBoneTrackedRole.CenterEye || Role == BasisBoneTrackedRole.Mouth)
+        {
+            return false;
+        }
+        return true;
+    }
+    public static bool DisableAsIhaveNotImplemented(BasisBoneTrackedRole Role)
+    {
+        if (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.Spine)
+        {
+            return false;
+        }
+        return true;
     }
 }
