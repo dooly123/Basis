@@ -126,7 +126,7 @@ public abstract class BasisInput : MonoBehaviour
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-                if (TrackedRole != BasisBoneTrackedRole.CenterEye && TrackedRole != BasisBoneTrackedRole.LeftHand && TrackedRole == BasisBoneTrackedRole.RightHand)//we dont want to offset these ones
+                if (TrackedRole != BasisBoneTrackedRole.CenterEye && TrackedRole != BasisBoneTrackedRole.LeftHand && TrackedRole != BasisBoneTrackedRole.RightHand)//we dont want to offset these ones
                 {
                     Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
                     Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
