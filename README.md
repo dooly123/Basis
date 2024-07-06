@@ -78,17 +78,24 @@ This would not be possible without the following:
 
 - [DarkRift 2](https://github.com/DarkRiftNetworking/ )
 - [UnityJigglePhysics](https://github.com/naelstrof/UnityJigglePhysics)
-- [Enet](https://github.com/nxrighthere/ENet-CSharp)
+- [UnityOpus](https://github.com/TyounanMOTI/UnityOpus)
+- [Settings Manager](https://assetstore.unity.com/packages/tools/gui/settings-manager-158458)
 - [Steam Audio](https://github.com/ValveSoftware/steam-audio)
 - [Kevin Iglesias Animations](https://www.keviniglesias.com/)
 - [Unity Starter Assets - ThirdPerson](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526)
-- [Aurellia](https://github.com/CascadianVR)
+- [Aurellia](https://github.com/CascadianVR) Assets\third_party\Avatar\Aurellia\LICENSE
+- [YUN](https://github.com/yewnyx) Assets\third_party\Avatar\Yun\LICENSE
 - [vive OpenXR](https://developer.vive.com/resources/openxr/)
 - [lilToon](https://github.com/lilxyzw/lilToon)
 - [unity](https://unity.com/)
 
 
 ## Third-Party Code and Trademarks
+
+This project includes third-party copywrite
+
+libopus 1.2.1
+Copyright 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry, CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo
 
 This project includes third-party code licensed under the Apache License 2.0:
 
