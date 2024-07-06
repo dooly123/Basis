@@ -51,7 +51,7 @@ MonoBehaviour:
     HasRayCastVisual: 1
     HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: -0.01, z: -0.04}
-    RotationRaycastOffset: {x: -15, y: 0, z: 0}
+    RotationRaycastOffset: {x: 22, y: 0, z: 0}
     AvatarPositionOffset: {x: 0.1, y: 0.06, z: -0.1}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: valve_controller_knu_right
@@ -66,7 +66,7 @@ MonoBehaviour:
     HasRayCastVisual: 1
     HasRayCastRedical: 1
     PivotRaycastOffset: {x: 0, y: -0.01, z: -0.04}
-    RotationRaycastOffset: {x: -15, y: 0, z: 0}
+    RotationRaycastOffset: {x: 22, y: 0, z: 0}
     AvatarPositionOffset: {x: -0.1, y: 0.06, z: -0.1}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: tundra_tracker
