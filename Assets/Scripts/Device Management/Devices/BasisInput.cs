@@ -115,6 +115,10 @@ public abstract class BasisInput : MonoBehaviour
             Control.InitialOffset.position = Vector3.zero;
             Control.InitialOffset.rotation = Quaternion.identity;
             Control.InitialOffset.Use = false;
+            if (TrackedRole != BasisBoneTrackedRole.CenterEye && TrackedRole != BasisBoneTrackedRole.LeftHand && TrackedRole != BasisBoneTrackedRole.RightHand)
+            {
+                SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);//basically lets unassign the trackers from there jobs
+            }
         }
     }
     public void ApplyTrackerCalibration()
@@ -125,7 +129,6 @@ public abstract class BasisInput : MonoBehaviour
         {
             if (Driver.FindBone(out Control, TrackedRole))
             {
-                Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
                 if (TrackedRole != BasisBoneTrackedRole.CenterEye && TrackedRole != BasisBoneTrackedRole.LeftHand && TrackedRole != BasisBoneTrackedRole.RightHand)//we dont want to offset these ones
                 {
                     Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);

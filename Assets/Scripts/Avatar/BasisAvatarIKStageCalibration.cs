@@ -200,8 +200,9 @@ public static class BasisAvatarIKStageCalibration
         List<BasisInput> trackInput = new List<BasisInput>();
         foreach (BasisInput baseInput in BasisDeviceManagement.Instance.AllInputDevices)
         {
-            if (!baseInput.hasRoleAssigned)
+            if (baseInput.hasRoleAssigned == false)
             {
+                Debug.Log("Add Tracker with name " + baseInput.name);
                 trackInput.Add(baseInput);
             }
             else
@@ -210,6 +211,7 @@ public static class BasisAvatarIKStageCalibration
                 // rolesToDiscover.Remove(baseInput.TrackedRole);
                 if (baseInput.TrackedRole != BasisBoneTrackedRole.CenterEye && baseInput.TrackedRole != BasisBoneTrackedRole.LeftHand && baseInput.TrackedRole != BasisBoneTrackedRole.RightHand)
                 {
+                    Debug.Log("Add Tracker that had last role " + baseInput.TrackedRole + " with name " + baseInput.name);
                     trackInput.Add(baseInput);
                 }
                 else
