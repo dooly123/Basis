@@ -16,14 +16,6 @@ public class BasisOpenVRInput : BasisInput
 
         ActivateTracking(UniqueID, UnUniqueID, SubSystem);
     }
-    public void Update()
-    {
-       // PollData();
-    }
-    public void LateUpdate()
-    {
-      //  PollData();
-    }
     public override void PollData()
     {
         if (SteamVR.active)

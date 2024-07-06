@@ -54,6 +54,13 @@ public abstract class BasisInput : MonoBehaviour
     /// <param name="unUniqueDeviceID"></param>
     public void ActivateTracking(string UniqueID, string unUniqueDeviceID, string subSystems)
     {
+        Debug.Log("Finding ID " + unUniqueDeviceID);
+
+        rotationOffset = Quaternion.identity;
+        Control.InitialOffset.position = new Vector3();
+        Control.InitialOffset.rotation = Quaternion.identity;
+        Control.InitialOffset.Use = false;
+
         SubSystem = subSystems;
         this.UnUniqueDeviceID = unUniqueDeviceID;
         this.UniqueID = UniqueID;
@@ -74,16 +81,10 @@ public abstract class BasisInput : MonoBehaviour
             }
             if (hasRoleAssigned)
             {
-                Control.InitialOffset = new BasisCalibratedOffsetData();
                 Control.InitialOffset.position = BasisLocalPlayer.Instance.RatioPlayerToAvatarScale * BasisDeviceMatchableNames.AvatarPositionOffset;
-                Control.InitialOffset.rotation = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
+                Control.InitialOffset.rotation = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
                 Control.InitialOffset.Use = true;
             }
-        }
-        else
-        {
-            Debug.Log("Missing ID " + unUniqueDeviceID);
-            rotationOffset = Quaternion.identity;
         }
         Driver.OnSimulate += PollData;
     }
@@ -94,22 +95,11 @@ public abstract class BasisInput : MonoBehaviour
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-                if (TrackedRole == BasisBoneTrackedRole.CenterEye)
+                if (TrackedRole != BasisBoneTrackedRole.CenterEye && TrackedRole != BasisBoneTrackedRole.LeftHand && TrackedRole == BasisBoneTrackedRole.RightHand)
                 {
-                    Control.InitialOffset.Use = false;
-                }
-                if (TrackedRole == BasisBoneTrackedRole.CenterEye || TrackedRole == BasisBoneTrackedRole.LeftHand || TrackedRole == BasisBoneTrackedRole.RightHand)
-                {
-                    Debug.Log("skipping calibration offset for " + TrackedRole);
-                }
-                else
-                {
-                    //this is the tracker
-                    //target is the following along
                     Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
                     Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
                     Control.InitialOffset.Use = true;
-                    // Vector3 Fowards = BasisLocalCameraDriver.Instance.Camera.transform.forward;
                 }
                 // Do nothing if bone is found successfully
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
