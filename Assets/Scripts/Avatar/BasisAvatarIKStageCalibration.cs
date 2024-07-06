@@ -207,9 +207,7 @@ public static class BasisAvatarIKStageCalibration
             }
             else
             {
-                // Debug.Log("Removing role " + baseInput.TrackedRole);
-                // rolesToDiscover.Remove(baseInput.TrackedRole);
-                if (baseInput.TrackedRole != BasisBoneTrackedRole.CenterEye && baseInput.TrackedRole != BasisBoneTrackedRole.LeftHand && baseInput.TrackedRole != BasisBoneTrackedRole.RightHand)
+                if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(baseInput.TrackedRole))
                 {
                     Debug.Log("Add Tracker that had last role " + baseInput.TrackedRole + " with name " + baseInput.name);
                     trackInput.Add(baseInput);
