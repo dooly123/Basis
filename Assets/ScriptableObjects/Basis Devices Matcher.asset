@@ -45,13 +45,13 @@ MonoBehaviour:
     - '{indexcontroller}valve_controller_knu_2_0_left'
     - '{indexcontroller}valve_controller_knu_3_0_left'
     PivotOffset: {x: 0.03, y: -0.05, z: 0.14}
-    RotationOffset: {x: -25, y: -2, z: 51}
+    RotationOffset: {x: -25, y: -2, z: 53.5}
     HasRayCastSupport: 1
     HasRepresentation: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
-    RotationRaycastOffset: {x: 0, y: 0, z: 24}
+    PivotRaycastOffset: {x: 0, y: -0.01, z: -0.04}
+    RotationRaycastOffset: {x: 20, y: 0, z: 0}
     AvatarPositionOffset: {x: 0.1, y: 0.06, z: -0.1}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: valve_controller_knu_right
@@ -60,13 +60,13 @@ MonoBehaviour:
     - '{indexcontroller}valve_controller_knu_2_0_right'
     - '{indexcontroller}valve_controller_knu_3_0_right'
     PivotOffset: {x: -0.03, y: -0.05, z: 0.14}
-    RotationOffset: {x: -25, y: 2, z: -51}
+    RotationOffset: {x: 85.7, y: 2, z: -48.7}
     HasRayCastSupport: 1
     HasRepresentation: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
-    RotationRaycastOffset: {x: 0, y: 0, z: 24}
+    PivotRaycastOffset: {x: 0, y: -0.01, z: -0.04}
+    RotationRaycastOffset: {x: 20, y: 0, z: 0}
     AvatarPositionOffset: {x: -0.1, y: 0.06, z: -0.1}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: tundra_tracker

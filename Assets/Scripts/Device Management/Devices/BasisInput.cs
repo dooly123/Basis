@@ -30,7 +30,7 @@ public abstract class BasisInput : MonoBehaviour
     public BasisInputState InputState = new BasisInputState();
     [SerializeField]
     public BasisInputState LastState = new BasisInputState();
-public BasisBoneTrackedRole TrackedRole
+    public BasisBoneTrackedRole TrackedRole
     {
         get => trackedRole;
         set
@@ -72,10 +72,10 @@ public BasisBoneTrackedRole TrackedRole
             {
                 CreateRayCaster(this);
             }
-            if(hasRoleAssigned)
+            if (hasRoleAssigned)
             {
                 Control.InitialOffset = new BasisCalibratedOffsetData();
-                Control.InitialOffset.position = BasisLocalPlayer.Instance.RatioPlayerToAvatarScale *  BasisDeviceMatchableNames.AvatarPositionOffset;
+                Control.InitialOffset.position = BasisLocalPlayer.Instance.RatioPlayerToAvatarScale * BasisDeviceMatchableNames.AvatarPositionOffset;
                 Control.InitialOffset.rotation = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
                 Control.InitialOffset.Use = true;
             }
@@ -94,7 +94,7 @@ public BasisBoneTrackedRole TrackedRole
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-                if(TrackedRole == BasisBoneTrackedRole.CenterEye)
+                if (TrackedRole == BasisBoneTrackedRole.CenterEye)
                 {
                     Control.InitialOffset.Use = false;
                 }
@@ -272,7 +272,7 @@ public BasisBoneTrackedRole TrackedRole
         Debug.Log("Adding RayCaster");
         BasisPointRaycasterRef = new GameObject(nameof(BasisPointRaycaster));
         BasisPointRaycasterRef.transform.parent = this.transform;
-        BasisPointRaycasterRef.transform.SetLocalPositionAndRotation(BasisDeviceMatchableNames.PivotRaycastOffset, Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset));
+        BasisPointRaycasterRef.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         BasisPointRaycaster = BasisHelpers.GetOrAddComponent<BasisPointRaycaster>(BasisPointRaycasterRef);
         await BasisPointRaycaster.Initialize(BaseInput);
     }
