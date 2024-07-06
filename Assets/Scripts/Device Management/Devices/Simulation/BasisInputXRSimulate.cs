@@ -8,12 +8,12 @@ public class BasisInputXRSimulate : BasisInput
         FinalRotation = LocalRawRotation;
         if (hasRoleAssigned)
         {
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalPosition != Vector3.zero)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
             {
                 AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;//normally we dont do this but im doing it so we can see direct colliation
                 Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
             }
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalRotation != Quaternion.identity)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
             {
                 AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);//normally we dont do this but im doing it so we can see direct colliation
                 Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;

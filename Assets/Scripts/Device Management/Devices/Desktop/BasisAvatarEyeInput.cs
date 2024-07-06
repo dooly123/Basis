@@ -114,7 +114,7 @@ public class BasisAvatarEyeInput : BasisInput
             Vector3 adjustedHeadPosition = new Vector3(0, BasisLocalPlayer.Instance.PlayerEyeHeight, 0);
             if (characterInputActions.Crouching && BlockCrouching == false)
             {
-                adjustedHeadPosition.y -= Control.RestingLocalSpace.position.y * crouchPercentage;
+                adjustedHeadPosition.y -= Control.TposeLocal.position.y * crouchPercentage;
             }
 
             CalculateAdjustment();
@@ -132,12 +132,12 @@ public class BasisAvatarEyeInput : BasisInput
         if (rotationY > 0)
         {
             // Positive rotation
-            adjustment = Mathf.Abs(rotationY) * ((headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
+            adjustment = Mathf.Abs(rotationY) * ((headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.TposeLocal.position.y);
         }
         else
         {
             // Negative rotation
-            adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.RestingLocalSpace.position.y);
+            adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.TposeLocal.position.y);
         }
     }
 }
