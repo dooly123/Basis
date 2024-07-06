@@ -74,13 +74,13 @@ public class BasisOpenVRInputController : BasisInput
         transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
         if (hasRoleAssigned)
         {
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalPosition != Vector3.zero)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
             {
-                Control.TrackerData.position = FinalPosition - FinalRotation * pivotOffset;
+                Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
             }
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalRotation != Quaternion.identity)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
             {
-                Control.TrackerData.rotation = FinalRotation * rotationOffset;
+                Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
             }
         }
     }

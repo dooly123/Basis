@@ -16,14 +16,6 @@ public class BasisOpenVRInput : BasisInput
 
         ActivateTracking(UniqueID, UnUniqueID, SubSystem);
     }
-    public void Update()
-    {
-       // PollData();
-    }
-    public void LateUpdate()
-    {
-      //  PollData();
-    }
     public override void PollData()
     {
         if (SteamVR.active)
@@ -40,13 +32,13 @@ public class BasisOpenVRInput : BasisInput
                 FinalRotation = LocalRawRotation;
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalPosition != Vector3.zero)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
                     {
-                        Control.TrackerData.position = FinalPosition - FinalRotation * pivotOffset;
+                        Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
                     }
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalRotation != Quaternion.identity)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
                     {
-                        Control.TrackerData.rotation = FinalRotation * rotationOffset;
+                        Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
                     }
                 }
                 if (HasInputSource)

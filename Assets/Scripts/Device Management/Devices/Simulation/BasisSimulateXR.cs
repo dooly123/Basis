@@ -15,7 +15,7 @@ public class BasisSimulateXR
     {
 
     }
-    public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "")
+    public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "BasisSimulateXR")
     {
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
@@ -87,20 +87,32 @@ public class BasisSimulateXR
     [MenuItem("Basis/Create Vive Right Controller")]
     public static void CreateViveRightTracker()
     {
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_right", BasisBoneTrackedRole.RightHand,true);
+        BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl RightHand, BasisBoneTrackedRole.RightHand);
+        BasisInputXRSimulate RightTracker = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_right", BasisBoneTrackedRole.RightHand, true);
+        RightTracker.LocalRawPosition = RightHand.BoneModelTransform.localPosition;
+        RightTracker.LocalRawRotation = Quaternion.identity;
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Create Vive Left Controller")]
     public static void CreateViveLeftTracker()
     {
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_left", BasisBoneTrackedRole.LeftHand, true);
+        BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl LeftHand, BasisBoneTrackedRole.LeftHand);
+        BasisInputXRSimulate LeftTracker = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_left", BasisBoneTrackedRole.LeftHand, true);
+        LeftTracker.LocalRawPosition = LeftHand.BoneModelTransform.localPosition;
+        LeftTracker.LocalRawRotation = Quaternion.identity;
         BasisDeviceManagement.ShowTrackers();
+    }
+    [MenuItem("Basis/Create Left And Right Hands")]
+    public static void CreateLRTracker()
+    {
+        CreateViveLeftTracker();
+        CreateViveRightTracker();
     }
     [MenuItem("Basis/Create 3Point Tracking")]
     public static void CreatePuck3Tracker()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999,999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
         BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
         BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
 
@@ -116,10 +128,13 @@ public class BasisSimulateXR
         Vector3 leftFootPosition = ModifyVector(leftFoot.position);
         Vector3 rightFootPosition = ModifyVector(rightFoot.position);
 
-        BasisHips.transform.SetPositionAndRotation(HipsPosition, Random.rotation);//* Random.rotation
-        BasisLeftFoot.transform.SetPositionAndRotation(leftFootPosition, Random.rotation);//* Random.rotation
-        BasisRightFoot.transform.SetPositionAndRotation(rightFootPosition, Random.rotation);//* Random.rotation
+        BasisHips.LocalRawPosition = HipsPosition;
+        BasisLeftFoot.LocalRawPosition = leftFootPosition;
+        BasisRightFoot.LocalRawPosition = rightFootPosition;
 
+        BasisHips.LocalRawRotation = Random.rotation;
+        BasisLeftFoot.LocalRawRotation = Random.rotation;
+        BasisRightFoot.LocalRawRotation = Random.rotation;
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
         //  BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
@@ -159,7 +174,8 @@ public class BasisSimulateXR
         {
             Transform bodyPart = bodyParts[Index];
             Vector3 bodyPartPosition = ModifyVector(bodyPart.position);
-            trackers[Index].transform.SetPositionAndRotation(bodyPartPosition, Random.rotation);
+            trackers[Index].LocalRawPosition = bodyPartPosition;
+            trackers[Index].LocalRawRotation = Random.rotation;
         }
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 

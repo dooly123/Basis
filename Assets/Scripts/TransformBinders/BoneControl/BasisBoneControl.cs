@@ -77,9 +77,9 @@ public class BasisBoneControl
     [SerializeField]
     public BasisCalibratedOffsetData LastRunData = new BasisCalibratedOffsetData();
     [SerializeField]
-    public BasisCalibratedOffsetData RestingWorldSpace = new BasisCalibratedOffsetData();
+    public BasisCalibratedOffsetData TposeWorld = new BasisCalibratedOffsetData();
     [SerializeField]
-    public BasisCalibratedOffsetData RestingLocalSpace = new BasisCalibratedOffsetData();
+    public BasisCalibratedOffsetData TposeLocal = new BasisCalibratedOffsetData();
     [SerializeField]
     public BasisCalibratedOffsetData InitialOffset = new BasisCalibratedOffsetData();
     [SerializeField]
@@ -169,7 +169,7 @@ public class BasisBoneControl
     }
     public void SetOffset()
     {
-        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, RestingWorldSpace.rotation);
+        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Inverse(BasisLocalPlayer.Instance.LocalBoneDriver.transform.rotation) * TposeWorld.rotation);
     }
     public void RunRotationChange()
     {

@@ -38,9 +38,9 @@ public class BasisOpenXRInput : BasisInput
                 FinalRotation = LocalRawRotation;
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
                     {
-                        Control.TrackerData.rotation = FinalRotation * rotationOffset;
+                        Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
                     }
                 }
             }
@@ -49,9 +49,9 @@ public class BasisOpenXRInput : BasisInput
                 FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
+                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
                     {
-                        Control.TrackerData.position = LocalRawPosition - LocalRawRotation * pivotOffset;
+                        Control.TrackerData.position = LocalRawPosition - LocalRawRotation * AvatarPositionOffset;
                     }
                 }
             }

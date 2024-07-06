@@ -4,26 +4,24 @@ public class BasisInputXRSimulate : BasisInput
 {
     public override void PollData()
     {
-        if (Control.HasBone)
+        FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+        FinalRotation = LocalRawRotation;
+        if (hasRoleAssigned)
         {
-            this.transform.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
-            FinalPosition = LocalRawPosition;
-            FinalRotation = LocalRawRotation;
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalPosition != Vector3.zero)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
             {
-                if (hasRoleAssigned)
-                {
-                    Control.TrackerData.position = FinalPosition;
-                }
+                AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;//normally we dont do this but im doing it so we can see direct colliation
+                Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
             }
-            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalRotation != Quaternion.identity)
+            if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
             {
-                if (hasRoleAssigned)
-                {
-                    Control.TrackerData.rotation = FinalRotation;
-                }
+                AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);//normally we dont do this but im doing it so we can see direct colliation
+                Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
             }
-            UpdatePlayerControl();
+
+
         }
+        UpdatePlayerControl();
+        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
     }
 }

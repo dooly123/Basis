@@ -27,3 +27,14 @@
 
     Mouth
 }
+public static class BasisBoneTrackedRoleCommonCheck
+{
+    public static bool CheckItsFBTracker(BasisBoneTrackedRole Role)
+    {
+        if (Role != BasisBoneTrackedRole.CenterEye && Role != BasisBoneTrackedRole.LeftHand && Role != BasisBoneTrackedRole.RightHand)
+        {
+            return true;
+        }
+        return false;
+    }
+}

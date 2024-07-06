@@ -4,18 +4,21 @@ using UnityEngine;
 [System.Serializable]
 public class BasisDeviceMatchableNames
 {
-    public string DeviceID;
+    public string DeviceID = string.Empty;
+    [Header("Match with Ids")]
     public List<string> MatchableDeviceIds = new List<string>();
-    public Vector3 PivotOffset;
-    public Vector3 RotationOffset;
-    public bool HasRayCastSupport;
-    public bool HasRepresentation = false;
-    public bool HasRayCastVisual;
-    public bool HasRayCastRedical;
+    [Header("Raycast Support")]
+    public bool HasRayCastSupport = false;
+    [Header("Phsyical Device")]
+    public bool CanDisplayPhysicalTracker = false;
+    [Header("Raycast Visuals")]
+    public bool HasRayCastVisual = false;
+    public bool HasRayCastRedical = false;
 
-    public Vector3 PivotRaycastOffset;
+    [Header("Raycast Offsets")]
+    public Vector3 RayCastOffset;
     public Vector3 RotationRaycastOffset;
-    //useful for things like the avatars hands
+    [Header("Avatar Offsets")]
     public Vector3 AvatarPositionOffset;
     public Vector3 AvatarRotationOffset;
 }

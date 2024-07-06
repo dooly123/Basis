@@ -25,6 +25,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e0b6944e9ffc474e98f52ce606485c7
+    m_Address: Assets/third_party/Avatar/doolys avatars that cant be replicated wahahaha/Lumain
+      V2 Basis/Materials/Atlas+TrebleMask.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1599b83511bbe754ab292ae68f39dd6d
     m_Address: Aurellia
     m_ReadOnly: 0
@@ -37,6 +43,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 18406c2d98a4b874e9ccd06d2741d401
     m_Address: vr_tracker_vive_3_0
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fe62cc9f3469084e82acb340fc4b227
+    m_Address: Lumain
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -110,6 +121,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 910b36edb7faecd4897fb239fbf1e6f5
+    m_Address: Vowgan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 98a748106e6c47748a99038c99c23bb8
     m_Address: LoadingAvatar
     m_ReadOnly: 0
@@ -122,6 +138,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b8e3db83cb310c40afaa430d0071a18
     m_Address: Assets/ScriptableObjects/Basis Devices Matcher.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a41099f28ad63ef4b928ce0e605732e1
+    m_Address: Lyuma
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4de3e9cefcbae649b752fcfb14efd98
+    m_Address: boo
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

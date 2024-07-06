@@ -16,26 +16,22 @@ MonoBehaviour:
   - DeviceID: vr_tracker_vive_3_0
     MatchableDeviceIds:
     - '{htc}vr_tracker_vive_3_0'
-    PivotOffset: {x: 0, y: 0, z: 0}
-    RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
-    HasRepresentation: 1
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: vr_tracker_vive_1_0
     MatchableDeviceIds:
     - '{htc}vr_tracker_vive_1_0'
-    PivotOffset: {x: 0, y: 0, z: 0}
-    RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
-    HasRepresentation: 1
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
@@ -44,80 +40,68 @@ MonoBehaviour:
     - '{indexcontroller}valve_controller_knu_1_0_left'
     - '{indexcontroller}valve_controller_knu_2_0_left'
     - '{indexcontroller}valve_controller_knu_3_0_left'
-    PivotOffset: {x: 0.03, y: -0.05, z: 0.14}
-    RotationOffset: {x: -25, y: -2, z: 51}
     HasRayCastSupport: 1
-    HasRepresentation: 1
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
-    RotationRaycastOffset: {x: 0, y: 0, z: 0}
-    AvatarPositionOffset: {x: 0.1, y: 0.06, z: -0.1}
-    AvatarRotationOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
+    RotationRaycastOffset: {x: 22, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: -0.06, z: 0.13}
+    AvatarRotationOffset: {x: -18, y: -2, z: 55.6}
   - DeviceID: valve_controller_knu_right
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_right'
     - '{indexcontroller}valve_controller_knu_2_0_right'
     - '{indexcontroller}valve_controller_knu_3_0_right'
-    PivotOffset: {x: -0.03, y: -0.05, z: 0.14}
-    RotationOffset: {x: -25, y: 2, z: -51}
     HasRayCastSupport: 1
-    HasRepresentation: 1
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
-    RotationRaycastOffset: {x: 0, y: 0, z: 0}
-    AvatarPositionOffset: {x: -0.1, y: 0.06, z: -0.1}
-    AvatarRotationOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
+    RotationRaycastOffset: {x: 22, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: -0.06, z: 0.13}
+    AvatarRotationOffset: {x: -18, y: -2, z: -55.6}
   - DeviceID: tundra_tracker
     MatchableDeviceIds:
     - tundra_tracker
-    PivotOffset: {x: 0, y: 0, z: 0}
-    RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 0
-    HasRepresentation: 1
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: oculus_controller_left
     MatchableDeviceIds:
     - oculus_quest_pro_controller_left
-    PivotOffset: {x: 0.03, y: -0.05, z: 0.14}
-    RotationOffset: {x: -25, y: -2, z: 51}
     HasRayCastSupport: 1
-    HasRepresentation: 1
+    CanDisplayPhysicalTracker: 0
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: oculus_controller_right
     MatchableDeviceIds:
     - oculus_quest_pro_controller_right
-    PivotOffset: {x: -0.03, y: -0.05, z: 0.14}
-    RotationOffset: {x: -25, y: 2, z: -51}
     HasRayCastSupport: 1
-    HasRepresentation: 1
+    CanDisplayPhysicalTracker: 0
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
   - DeviceID: Eye
     MatchableDeviceIds:
     - desktop eye
-    PivotOffset: {x: 0, y: 0, z: 0}
-    RotationOffset: {x: 0, y: 0, z: 0}
     HasRayCastSupport: 1
-    HasRepresentation: 0
+    CanDisplayPhysicalTracker: 0
     HasRayCastVisual: 0
     HasRayCastRedical: 1
-    PivotRaycastOffset: {x: 0, y: 0, z: 0}
+    RayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
