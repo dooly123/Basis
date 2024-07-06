@@ -7,20 +7,20 @@ public class BasisInputXRSimulate : BasisInput
         if (Control.HasBone)
         {
             this.transform.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
-            FinalPosition = LocalRawPosition;
+            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
             FinalRotation = LocalRawRotation;
             if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalPosition != Vector3.zero)
             {
                 if (hasRoleAssigned)
                 {
-                    Control.TrackerData.position = FinalPosition;
+                    Control.TrackerData.position = FinalPosition - FinalRotation * pivotOffset;
                 }
             }
             if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && FinalRotation != Quaternion.identity)
             {
                 if (hasRoleAssigned)
                 {
-                    Control.TrackerData.rotation = FinalRotation;
+                    Control.TrackerData.rotation = FinalRotation * rotationOffset;
                 }
             }
             UpdatePlayerControl();
