@@ -218,7 +218,7 @@ public partial class BasisPointRaycaster : BaseRaycaster
         Quaternion rotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
 
         // Apply the transform's rotation to the offset
-        Vector3 directionAdjustedOffset = transform.rotation * BasisDeviceMatchableNames.PivotRaycastOffset;
+        Vector3 directionAdjustedOffset = transform.rotation * BasisDeviceMatchableNames.RayCastOffset;
 
         // Calculate the starting position
         Vector3 startingPosition = transform.position + directionAdjustedOffset;

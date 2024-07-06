@@ -4,20 +4,23 @@ using UnityEngine;
 using static BaseBoneDriver;
 public abstract class BasisInput : MonoBehaviour
 {
+    public bool HasAssignedEvents = false;
     public string SubSystem;
     public BasisLocalBoneDriver Driver;
     private BasisBoneTrackedRole trackedRole;
     public bool hasRoleAssigned = false;
     public BasisBoneControl Control = new BasisBoneControl();
     public string UniqueID;
+    [Header("Raw data from tracker unmodified")]
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
-
+    [Header("Final Data normally just modified by EyeHeight/AvatarEyeHeight)")]
     public Vector3 FinalPosition;
     public Quaternion FinalRotation;
+    [Header("Avatar Offset Applied Per Frame")]
+    public Vector3 AvatarPositionOffset = Vector3.zero;
+    public Quaternion AvatarRotationOffset = Quaternion.identity;
 
-    public Vector3 pivotOffset;
-    public Quaternion rotationOffset;
     public bool HasUIInputSupport = false;
     public string UnUniqueDeviceID;
     public BasisVisualTracker BasisVisualTracker;
@@ -56,10 +59,8 @@ public abstract class BasisInput : MonoBehaviour
     {
         Debug.Log("Finding ID " + unUniqueDeviceID);
 
-        rotationOffset = Quaternion.identity;
-        Control.InitialOffset.position = new Vector3();
-        Control.InitialOffset.rotation = Quaternion.identity;
-        Control.InitialOffset.Use = false;
+        AvatarRotationOffset = Quaternion.identity;
+        OnAvatarSwitched();
 
         SubSystem = subSystems;
         this.UnUniqueDeviceID = unUniqueDeviceID;
@@ -70,32 +71,62 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Missing Driver!");
             return;
         }
-        ApplyRole();
-        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(unUniqueDeviceID, out BasisDeviceMatchableNames))
+        ApplyDeviceAssocatedData();
+        if (HasAssignedEvents == false)
         {
-            rotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.RotationOffset);
-            HasUIInputSupport = BasisDeviceMatchableNames.HasRayCastSupport;
-            if (HasUIInputSupport)
+            Driver.OnSimulate += PollData;
+            HasAssignedEvents = true;
+            BasisLocalPlayer.Instance.OnAvatarSwitched += OnAvatarSwitched;
+        }
+    }
+    public void ApplyDeviceAssocatedData()
+    {
+        if (hasRoleAssigned)
+        {
+            //unassign last
+            SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
+            if (Driver.FindBone(out Control, TrackedRole))
             {
-                CreateRayCaster(this);
-            }
-            if (hasRoleAssigned)
-            {
-                Control.InitialOffset.position = BasisLocalPlayer.Instance.RatioPlayerToAvatarScale * BasisDeviceMatchableNames.AvatarPositionOffset;
-                Control.InitialOffset.rotation = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
-                Control.InitialOffset.Use = true;
+                Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+                if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(this.UnUniqueDeviceID, out BasisDeviceMatchableNames))
+                {
+                    AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
+                    AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
+
+                    HasUIInputSupport = BasisDeviceMatchableNames.HasRayCastSupport;
+                    if (HasUIInputSupport)
+                    {
+                        CreateRayCaster(this);
+                    }
+                }
+                // Do nothing if bone is found successfully
+                SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
             }
         }
-        Driver.OnSimulate += PollData;
     }
-    public void ApplyRole()
+
+    /// <summary>
+    /// this api makes it so after a calibration the inital offset is reset.
+    /// </summary>
+    public void OnAvatarSwitched()
     {
+        if (hasRoleAssigned)
+        {
+            Control.InitialOffset.position = Vector3.zero;
+            Control.InitialOffset.rotation = Quaternion.identity;
+            Control.InitialOffset.Use = false;
+        }
+    }
+    public void ApplyTrackerCalibration()
+    {
+        //unassign last
+        SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
         if (hasRoleAssigned)
         {
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-                if (TrackedRole != BasisBoneTrackedRole.CenterEye && TrackedRole != BasisBoneTrackedRole.LeftHand && TrackedRole == BasisBoneTrackedRole.RightHand)
+                if (TrackedRole != BasisBoneTrackedRole.CenterEye && TrackedRole != BasisBoneTrackedRole.LeftHand && TrackedRole == BasisBoneTrackedRole.RightHand)//we dont want to offset these ones
                 {
                     Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
                     Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
@@ -119,7 +150,7 @@ public abstract class BasisInput : MonoBehaviour
     public abstract void PollData();
     public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
     {
-        if (Driver.FindBone(out Control, TrackedRole))
+        if (Control.HasBone)
         {
             Control.HasTrackerPositionDriver = hasTracked;
             Control.HasTrackerRotationDriver = hasTracked;
@@ -213,11 +244,11 @@ public abstract class BasisInput : MonoBehaviour
     {
         if (BasisVisualTracker == null && LoadedDeviceRequest == null)
         {
-            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceID(UnUniqueDeviceID, out string LoadRequest, out bool ShowVisual))
+            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(UnUniqueDeviceID, out BasisDeviceMatchableNames Match))
             {
-                if (ShowVisual)
+                if (Match.CanDisplayPhysicalTracker)
                 {
-                    (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadRequest, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+                    (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(Match.DeviceID, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
                     List<GameObject> gameObjects = data.Item1;
                     if (gameObjects == null)
                     {

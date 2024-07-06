@@ -40,7 +40,7 @@ public class BasisOpenXRInput : BasisInput
                 {
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawRotation != Quaternion.identity)
                     {
-                        Control.TrackerData.rotation = FinalRotation * rotationOffset;
+                        Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
                     }
                 }
             }
@@ -51,7 +51,7 @@ public class BasisOpenXRInput : BasisInput
                 {
                     if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker && LocalRawPosition != Vector3.zero)
                     {
-                        Control.TrackerData.position = LocalRawPosition - LocalRawRotation * pivotOffset;
+                        Control.TrackerData.position = LocalRawPosition - LocalRawRotation * AvatarPositionOffset;
                     }
                 }
             }

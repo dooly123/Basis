@@ -294,7 +294,7 @@ public static class BasisAvatarIKStageCalibration
     {
         // Assign the tracked role and apply it
         Input.TrackedRole = Role;
-        Input.ApplyRole();
+        Input.ApplyTrackerCalibration();
         Debug.Log($"Tracker role assigned for {Input.name}: {Input.TrackedRole}");
     }
     public static bool WasThereASmallerIndex(List<BoneTransformMapping> boneTransformMappings, BoneTransformMapping mapping, int topDistanceIndex, float topdistance)

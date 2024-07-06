@@ -15,7 +15,7 @@ public class BasisSimulateXR
     {
 
     }
-    public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "")
+    public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "BasisSimulateXR")
     {
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
@@ -128,10 +128,13 @@ public class BasisSimulateXR
         Vector3 leftFootPosition = ModifyVector(leftFoot.position);
         Vector3 rightFootPosition = ModifyVector(rightFoot.position);
 
-        BasisHips.transform.SetPositionAndRotation(HipsPosition, Random.rotation);//* Random.rotation
-        BasisLeftFoot.transform.SetPositionAndRotation(leftFootPosition, Random.rotation);//* Random.rotation
-        BasisRightFoot.transform.SetPositionAndRotation(rightFootPosition, Random.rotation);//* Random.rotation
+        BasisHips.LocalRawPosition = HipsPosition;
+        BasisLeftFoot.LocalRawPosition = leftFootPosition;
+        BasisRightFoot.LocalRawPosition = rightFootPosition;
 
+        BasisHips.LocalRawRotation = Random.rotation;
+        BasisLeftFoot.LocalRawRotation = Random.rotation;
+        BasisRightFoot.LocalRawRotation = Random.rotation;
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
         //  BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
@@ -171,7 +174,8 @@ public class BasisSimulateXR
         {
             Transform bodyPart = bodyParts[Index];
             Vector3 bodyPartPosition = ModifyVector(bodyPart.position);
-            trackers[Index].transform.SetPositionAndRotation(bodyPartPosition, Random.rotation);
+            trackers[Index].LocalRawPosition = bodyPartPosition;
+            trackers[Index].LocalRawRotation = Random.rotation;
         }
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
