@@ -115,7 +115,7 @@ public class BasisOpenVRManagement
         var error = new ETrackedPropertyError();
         var id = new StringBuilder(64);
         OpenVR.System.GetStringTrackedDeviceProperty(device, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
-        ETrackedDeviceClass = OpenVR.System.GetTrackedDeviceClass(device);
+       ETrackedDeviceClass = OpenVR.System.GetTrackedDeviceClass(device);
         uniqueID = $"{device}|{id}";
         notUnique = id.ToString();
     }

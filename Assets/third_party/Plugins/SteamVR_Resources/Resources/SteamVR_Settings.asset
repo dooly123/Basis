@@ -22,9 +22,9 @@ MonoBehaviour:
   activateFirstActionSetOnStart: 1
   editorAppKey: application.generated.unity.basis.exe
   autoEnableVR: 0
-  legacyMixedRealityCamera: 1
+  legacyMixedRealityCamera: 0
   mixedRealityCameraPose:
-    actionPath: /actions//in/ExternalCamera
+    actionPath: /actions/default/in/Pose
     needsReinit: 1
   mixedRealityCameraInputSource: 11
   mixedRealityActionSetAutoEnable: 1

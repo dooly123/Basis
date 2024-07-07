@@ -86,6 +86,14 @@ public abstract class BasisInput : MonoBehaviour
     {
         //unassign last
         SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
+        if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(this.UnUniqueDeviceID, out BasisDeviceMatchableNames))
+        {
+            if (BasisDeviceMatchableNames.HasTrackedRole)
+            {
+                Debug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID);
+                TrackedRole = BasisDeviceMatchableNames.TrackedRole;
+            }
+        }
         if (Driver.FindBone(out Control, TrackedRole))
         {
             Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;

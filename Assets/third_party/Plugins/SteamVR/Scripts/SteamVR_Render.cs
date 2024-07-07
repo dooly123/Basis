@@ -162,46 +162,30 @@ namespace Valve.VR
                 }
                 else
                 {
-                    if (SteamVR_Settings.instance.legacyMixedRealityCamera)
-                    {
-                        if (SteamVR_ExternalCamera_LegacyManager.hasCamera == false)
-                            return false;
+                    SteamVR_Action_Pose cameraPose = SteamVR_Settings.instance.mixedRealityCameraPose;
+                    SteamVR_Input_Sources cameraSource = SteamVR_Settings.instance.mixedRealityCameraInputSource;
 
+                    if (cameraPose != null && SteamVR_Settings.instance.mixedRealityActionSetAutoEnable)
+                    {
+                        if (cameraPose.actionSet != null && cameraPose.actionSet.IsActive(cameraSource) == false)
+                            cameraPose.actionSet.Activate(cameraSource);
+                    }
+
+                    if (cameraPose == null)
+                    {
+                        doesPathExist = false;
+                        return false;
+                    }
+
+                    if (cameraPose != null && cameraPose[cameraSource].active && cameraPose[cameraSource].deviceIsConnected)
+                    {
                         GameObject instance = Instantiate(prefab);
                         instance.gameObject.name = "External Camera";
 
                         externalCamera = instance.transform.GetChild(0).GetComponent<SteamVR_ExternalCamera>();
                         externalCamera.configPath = externalCameraConfigPath;
                         externalCamera.ReadConfig();
-                        externalCamera.SetupDeviceIndex(SteamVR_ExternalCamera_LegacyManager.cameraIndex);
-                    }
-                    else
-                    {
-                        SteamVR_Action_Pose cameraPose = SteamVR_Settings.instance.mixedRealityCameraPose;
-                        SteamVR_Input_Sources cameraSource = SteamVR_Settings.instance.mixedRealityCameraInputSource;
-
-                        if (cameraPose != null && SteamVR_Settings.instance.mixedRealityActionSetAutoEnable)
-                        {
-                            if (cameraPose.actionSet != null && cameraPose.actionSet.IsActive(cameraSource) == false)
-                                cameraPose.actionSet.Activate(cameraSource);
-                        }
-
-                        if (cameraPose == null)
-                        {
-                            doesPathExist = false;
-                            return false;
-                        }
-
-                        if (cameraPose != null && cameraPose[cameraSource].active && cameraPose[cameraSource].deviceIsConnected)
-                        {
-                            GameObject instance = Instantiate(prefab);
-                            instance.gameObject.name = "External Camera";
-
-                            externalCamera = instance.transform.GetChild(0).GetComponent<SteamVR_ExternalCamera>();
-                            externalCamera.configPath = externalCameraConfigPath;
-                            externalCamera.ReadConfig();
-                            externalCamera.SetupPose(cameraPose, cameraSource);
-                        }
+                        externalCamera.SetupPose(cameraPose, cameraSource);
                     }
                 }
             }
@@ -297,9 +281,6 @@ namespace Valve.VR
             StartCoroutine(RenderLoop());
             SteamVR_Events.InputFocus.Listen(OnInputFocus);
             SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Listen(OnRequestScreenshot);
-
-            if (SteamVR_Settings.instance.legacyMixedRealityCamera)
-                SteamVR_ExternalCamera_LegacyManager.SubscribeToNewPoses();
 
             Application.onBeforeRender += OnBeforeRender;
 
