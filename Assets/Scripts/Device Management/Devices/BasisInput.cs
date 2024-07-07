@@ -55,40 +55,58 @@ public abstract class BasisInput : MonoBehaviour
     /// </summary>
     /// <param name="UniqueID"></param>
     /// <param name="unUniqueDeviceID"></param>
-    public void ActivateTracking(string UniqueID, string unUniqueDeviceID, string subSystems)
+    public void ActivateTracking(string UniqueID, string unUniqueDeviceID, string subSystems,bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
     {
+        this.TrackedRole = BasisBoneTrackedRole.CenterEye;
+        hasRoleAssigned = false;
         Debug.Log("Finding ID " + unUniqueDeviceID);
 
         AvatarRotationOffset = Quaternion.identity;
-        OnAvatarSwitched();
-
         SubSystem = subSystems;
         this.UnUniqueDeviceID = unUniqueDeviceID;
         this.UniqueID = UniqueID;
+        if (AssignTrackedRole)
+        {
+            this.TrackedRole = basisBoneTrackedRole;
+        }
         Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         if (Driver == null)
         {
             Debug.LogError("Missing Driver!");
             return;
         }
-        ApplyDeviceAssocatedData();
+        OnAvatarSwitched();
+        ApplyDeviceAssociatedData();
         if (HasAssignedEvents == false)
         {
             Driver.OnSimulate += PollData;
             HasAssignedEvents = true;
             BasisLocalPlayer.Instance.OnAvatarSwitched += OnAvatarSwitched;
         }
+        else
+        {
+            Debug.Log("has device events assigned already " + UniqueID);
+        }
     }
-    public void ApplyDeviceAssocatedData()
+    public void ApplyDeviceAssociatedData()
     {
+        //unassign last
+        SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
+        bool AssociatedFound = BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(this.UnUniqueDeviceID, out BasisDeviceMatchableNames);
+        if (AssociatedFound)
+        {
+            if (BasisDeviceMatchableNames.HasTrackedRole)
+            {
+                Debug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID);
+                TrackedRole = BasisDeviceMatchableNames.TrackedRole;
+            }
+        }
         if (hasRoleAssigned)
         {
-            //unassign last
-            SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
             if (Driver.FindBone(out Control, TrackedRole))
             {
                 Control.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-                if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(this.UnUniqueDeviceID, out BasisDeviceMatchableNames))
+                if (AssociatedFound)
                 {
                     AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
                     AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
@@ -102,11 +120,16 @@ public abstract class BasisInput : MonoBehaviour
                 // Do nothing if bone is found successfully
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
             }
+            else
+            {
+                Debug.LogError("Missing Tracked Role " + TrackedRole);
+            }
         }
     }
 
     /// <summary>
     /// this api makes it so after a calibration the inital offset is reset.
+    /// will only do its logic if has role assigned
     /// </summary>
     public void OnAvatarSwitched()
     {
@@ -121,23 +144,22 @@ public abstract class BasisInput : MonoBehaviour
             }
         }
     }
-    public void ApplyTrackerCalibration()
+    public void ApplyTrackerCalibration(BasisBoneTrackedRole Role)
     {
+        TrackedRole = Role;
+        hasRoleAssigned = true;
         //unassign last
         SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
-        if (hasRoleAssigned)
+        if (Driver.FindBone(out Control, TrackedRole))
         {
-            if (Driver.FindBone(out Control, TrackedRole))
+            if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(TrackedRole))//we dont want to offset these ones
             {
-                if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(TrackedRole))//we dont want to offset these ones
-                {
-                    Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
-                    Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
-                    Control.InitialOffset.Use = true;
-                }
-                // Do nothing if bone is found successfully
-                SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
+                Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
+                Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
+                Control.InitialOffset.Use = true;
             }
+            // Do nothing if bone is found successfully
+            SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
         }
     }
     public void DisableTracking()
@@ -150,7 +172,6 @@ public abstract class BasisInput : MonoBehaviour
         Driver.OnSimulate -= PollData;
         SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
     }
-    public abstract void PollData();
     public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
     {
         if (Control.HasBone)
@@ -158,8 +179,17 @@ public abstract class BasisInput : MonoBehaviour
             Control.HasTrackerPositionDriver = hasTracked;
             Control.HasTrackerRotationDriver = hasTracked;
             Control.HasRigLayer = HasLayer;
+            if (Control.HasRigLayer == BasisHasRigLayer.HasNoRigLayer)
+            {
+                hasRoleAssigned = false;
+            }
+            else
+            {
+                hasRoleAssigned = true;
+            }
         }
     }
+    public abstract void PollData();
     public void UpdatePlayerControl()
     {
         switch (TrackedRole)

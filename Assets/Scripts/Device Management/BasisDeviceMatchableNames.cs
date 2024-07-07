@@ -21,4 +21,8 @@ public class BasisDeviceMatchableNames
     [Header("Avatar Offsets")]
     public Vector3 AvatarPositionOffset;
     public Vector3 AvatarRotationOffset;
+
+    [Header("Tracked Role Override")]
+    public bool HasTrackedRole = false;
+    public BasisBoneTrackedRole TrackedRole;
 }

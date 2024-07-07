@@ -20,21 +20,13 @@ public class BasisSimulateXR
         GameObject gameObject = new GameObject(UniqueID);
         gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
         BasisInputXRSimulate BasisInput = gameObject.AddComponent<BasisInputXRSimulate>();
-        if (hasrole)
-        {
-            BasisInput.TrackedRole = Role;
-        }
-        Initalize(BasisInput, UniqueID, UnUniqueID, subSystems);
+        BasisInput.ActivateTracking(UniqueID, UnUniqueID, subSystems, hasrole, Role);
         if (Inputs.Contains(BasisInput) == false)
         {
             Inputs.Add(BasisInput);
         }
         BasisDeviceManagement.Instance.TryAdd(BasisInput);
         return BasisInput;
-    }
-    public void Initalize(BasisInput BasisInput, string UniqueID, string UnUniqueID, string subSystems)
-    {
-        BasisInput.ActivateTracking(UniqueID, UnUniqueID, subSystems);
     }
     public void DestroyXRInput(string ID)
     {

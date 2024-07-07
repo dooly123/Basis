@@ -6,11 +6,11 @@ public class BasisOpenVRInputController : BasisInput
     public OpenVRDevice Device;
     public SteamVR_Input_Sources inputSource;
     public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
-    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems)
+    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
     {
+        inputSource = SteamVR_Input_Sources;
         Device = device;
-        TryAssignRole(Device.deviceClass);
-        ActivateTracking(UniqueID, UnUniqueID, subSystems);
+        ActivateTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
@@ -24,33 +24,6 @@ public class BasisOpenVRInputController : BasisInput
         }
         historyBuffer.Clear();
         base.OnDestroy();
-    }
-
-    public void TryAssignRole(ETrackedDeviceClass deviceClass)
-    {
-        if (deviceClass == ETrackedDeviceClass.HMD)
-        {
-            TrackedRole = BasisBoneTrackedRole.CenterEye;
-            inputSource = SteamVR_Input_Sources.Head;
-        }
-        else
-        {
-            if (deviceClass == ETrackedDeviceClass.Controller)
-            {
-                bool isLeftHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand) == Device.deviceIndex;
-                if (isLeftHand)
-                {
-                    TrackedRole = BasisBoneTrackedRole.LeftHand;
-                    inputSource = SteamVR_Input_Sources.LeftHand;
-                }
-                bool isRightHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand) == Device.deviceIndex;
-                if (isRightHand)
-                {
-                    TrackedRole = BasisBoneTrackedRole.RightHand;
-                    inputSource = SteamVR_Input_Sources.RightHand;
-                }
-            }
-        }
     }
     public override void PollData()
     {

@@ -172,10 +172,6 @@ public class MicrophoneRecorder : MonoBehaviour
                 dataLength -= ProcessBufferLength;
             }
         }
-        else
-        {
-            Debug.Log("No microphone found " + MicrophoneDevice);
-        }
     }
 
     public float GetRMS()
