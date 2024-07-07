@@ -14,7 +14,7 @@ public class BasisOpenVRInput : BasisInput
     {
         Device = device;
 
-        ActivateTracking(UniqueID, UnUniqueID, SubSystem);
+        ActivateTracking(UniqueID, UnUniqueID, subSystems);
     }
     public override void PollData()
     {

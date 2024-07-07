@@ -125,29 +125,33 @@ public class BasisOpenVRManagement
         {
             transform = { parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform }
         };
-        if (device.deviceClass == ETrackedDeviceClass.HMD)
+
+        switch (device.deviceClass)
         {
-            // CreateTracker(gameObject, device, uniqueID, unUniqueID);
-            CreateController(gameObject, device, uniqueID, unUniqueID);
-        }
-        else
-        {
-            if (device.deviceClass == ETrackedDeviceClass.Controller)
-            {
+            case ETrackedDeviceClass.HMD:
+                CreateHMD(gameObject, device, uniqueID, unUniqueID);
+                break;
+            case ETrackedDeviceClass.Controller:
                 CreateController(gameObject, device, uniqueID, unUniqueID);
-            }
-            else
-            {
-                if (device.deviceClass == ETrackedDeviceClass.GenericTracker)
-                {
-                    CreateTracker(gameObject, device, uniqueID, unUniqueID);
-                }
-                else
-                {
-                    CreateTracker(gameObject, device, uniqueID, unUniqueID);
-                }
-            }
+                break;
+
+            case ETrackedDeviceClass.TrackingReference:
+                Debug.Log("was Tracked Reference Returning (lighthouse)");
+                break;
+            case ETrackedDeviceClass.GenericTracker:
+            case ETrackedDeviceClass.DisplayRedirect:
+            default:
+                CreateTracker(gameObject, device, uniqueID, unUniqueID);
+                break;
         }
+    }
+
+    private void CreateHMD(GameObject gameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
+    {
+        // Implement HMD specific initialization if needed
+        Debug.Log($"Creating HMD: {uniqueID}");
+        // For now, we'll treat it as a generic tracker
+        CreateController(gameObject, device, uniqueID, unUniqueID);
     }
     public void CreateController(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
     {
