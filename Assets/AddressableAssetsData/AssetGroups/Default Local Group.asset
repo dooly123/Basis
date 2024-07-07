@@ -51,6 +51,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2132f695afb44ed48be36f1727377fb0
+    m_Address: Lanowen
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26ade42e4ff7eb64eb194e1a6453ad85
     m_Address: NetworkManagement
     m_ReadOnly: 0
