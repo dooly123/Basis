@@ -144,23 +144,22 @@ public abstract class BasisInput : MonoBehaviour
             }
         }
     }
-    public void ApplyTrackerCalibration()
+    public void ApplyTrackerCalibration(BasisBoneTrackedRole Role)
     {
+        TrackedRole = Role;
+        hasRoleAssigned = true;
         //unassign last
         SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
-        if (hasRoleAssigned)
+        if (Driver.FindBone(out Control, TrackedRole))
         {
-            if (Driver.FindBone(out Control, TrackedRole))
+            if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(TrackedRole))//we dont want to offset these ones
             {
-                if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(TrackedRole))//we dont want to offset these ones
-                {
-                    Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
-                    Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
-                    Control.InitialOffset.Use = true;
-                }
-                // Do nothing if bone is found successfully
-                SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
+                Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
+                Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
+                Control.InitialOffset.Use = true;
             }
+            // Do nothing if bone is found successfully
+            SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
         }
     }
     public void DisableTracking()
