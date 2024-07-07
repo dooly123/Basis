@@ -92,13 +92,71 @@ public class BasisOpenXRManagement
             }
         };
         var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
-        basisXRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenXRManagement");
+        bool state = GetControllerOrHMD(device, out BasisBoneTrackedRole BasisBoneTrackedRole);
+        basisXRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenXRManagement", state, BasisBoneTrackedRole);
         BasisDeviceManagement.Instance.TryAdd(basisXRInput);
     }
-
+    private bool GetControllerOrHMD(InputDevice device,out BasisBoneTrackedRole BasisBoneTrackedRole)
+    {
+        BasisBoneTrackedRole = BasisBoneTrackedRole.CenterEye;
+        if (device.characteristics == Characteristics.hmd)
+        {
+            BasisBoneTrackedRole = BasisBoneTrackedRole.CenterEye;
+            return true;
+        }
+        else if (device.characteristics == Characteristics.leftController || device.characteristics == Characteristics.leftTrackedHand)
+        {
+            BasisBoneTrackedRole = BasisBoneTrackedRole.LeftHand;
+            return true;
+        }
+        else if (device.characteristics == Characteristics.rightController || device.characteristics == Characteristics.rightTrackedHand)
+        {
+            BasisBoneTrackedRole = BasisBoneTrackedRole.RightHand;
+            return true;
+        }
+        return false;
+    }
     public void DestroyPhysicalTrackedDevice(string id)
     {
         TypicalDevices.Remove(id);
         BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisOpenXRManagement", id);
+    }
+    public static class Characteristics
+    {
+        /// <summary>
+        /// HMD characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
+        /// </summary>
+        public static InputDeviceCharacteristics hmd => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.TrackedDevice;
+
+        /// <summary>
+        /// Eye gaze characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.EyeTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
+        /// </summary>
+        public static InputDeviceCharacteristics eyeGaze => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.EyeTracking | InputDeviceCharacteristics.TrackedDevice;
+
+        /// <summary>
+        /// Left controller characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
+        /// </summary>
+        public static InputDeviceCharacteristics leftController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
+
+        /// <summary>
+        /// Right controller characteristics.
+        /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
+        /// </summary>
+        public static InputDeviceCharacteristics rightController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
+
+        /// <summary>
+        /// Left tracked hand characteristics.
+        /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
+        /// </summary>
+        public static InputDeviceCharacteristics leftTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Left;
+
+        /// <summary>
+        /// Right tracked hand characteristics.
+        /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
+        /// </summary>
+        public static InputDeviceCharacteristics rightTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Right;
     }
 }

@@ -33,8 +33,7 @@ public class BasisAvatarEyeInput : BasisInput
         }
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;
-        TrackedRole = BasisBoneTrackedRole.CenterEye;
-        ActivateTracking(ID, ID, subSystems);
+        ActivateTracking(ID, ID, subSystems,true, BasisBoneTrackedRole.CenterEye);
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;

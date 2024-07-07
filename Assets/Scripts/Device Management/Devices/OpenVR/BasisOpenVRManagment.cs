@@ -156,16 +156,49 @@ public class BasisOpenVRManagement
     public void CreateController(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
     {
         BasisOpenVRInputController BasisOpenVRInputController = GameObject.AddComponent<BasisOpenVRInputController>();
-        BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement");
+        bool FoundRole = TryAssignRole(device.deviceClass, device.deviceIndex, out BasisBoneTrackedRole Role, out SteamVR_Input_Sources Source);
+        BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement",FoundRole, Role, Source);
         BasisDeviceManagement.Instance.TryAdd(BasisOpenVRInputController);
     }
     public void CreateTracker(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
     {
         BasisOpenVRInput basisOpenVRInput = GameObject.AddComponent<BasisOpenVRInput>();
-        basisOpenVRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement");
+        basisOpenVRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement",false, BasisBoneTrackedRole.CenterEye);
         BasisDeviceManagement.Instance.TryAdd(basisOpenVRInput);
     }
+    public bool TryAssignRole(ETrackedDeviceClass deviceClass,uint deviceIndex, out BasisBoneTrackedRole Role,out SteamVR_Input_Sources Source )
+    {
+        Source = SteamVR_Input_Sources.Any;
+        Role = BasisBoneTrackedRole.CenterEye;
 
+        if (deviceClass == ETrackedDeviceClass.HMD)
+        {
+            Role = BasisBoneTrackedRole.CenterEye;
+            Source = SteamVR_Input_Sources.Head;
+            return true;
+        }
+        else
+        {
+            if (deviceClass == ETrackedDeviceClass.Controller)
+            {
+                bool isLeftHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand) == deviceIndex;
+                if (isLeftHand)
+                {
+                    Role = BasisBoneTrackedRole.LeftHand;
+                    Source = SteamVR_Input_Sources.LeftHand;
+                    return true;
+                }
+                bool isRightHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand) == deviceIndex;
+                if (isRightHand)
+                {
+                    Role = BasisBoneTrackedRole.RightHand;
+                    Source = SteamVR_Input_Sources.RightHand;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public void DestroyPhysicalTrackedDevice(string id)
     {
         TypicalDevices.Remove(id);

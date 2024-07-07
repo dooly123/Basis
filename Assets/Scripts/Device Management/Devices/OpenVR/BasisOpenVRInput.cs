@@ -9,19 +9,18 @@ public class BasisOpenVRInput : BasisInput
     public TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
     public SteamVR_Utils.RigidTransform deviceTransform;
     public EVRCompositorError result;
-
-    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID,string subSystems)
+    public bool HasInputSource = false;
+    public SteamVR_Input_Sources inputSource;
+    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID,string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
     {
         Device = device;
-
-        ActivateTracking(UniqueID, UnUniqueID, subSystems);
+        ActivateTracking(UniqueID, UnUniqueID, subSystems,AssignTrackedRole, basisBoneTrackedRole);
     }
     public override void PollData()
     {
         if (SteamVR.active)
         {
             result = SteamVR.instance.compositor.GetLastPoseForTrackedDeviceIndex(Device.deviceIndex, ref devicePose, ref deviceGamePose);
-
             if (result == EVRCompositorError.None)
             {
                 deviceTransform = new SteamVR_Utils.RigidTransform(deviceGamePose.mDeviceToAbsoluteTracking);
@@ -57,6 +56,4 @@ public class BasisOpenVRInput : BasisInput
             transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
         }
     }
-    public bool HasInputSource = false;
-    public SteamVR_Input_Sources inputSource;
 }
