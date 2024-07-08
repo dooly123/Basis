@@ -40,7 +40,6 @@ public class BasisCharacterController : MonoBehaviour
     public float currentVerticalSpeed = 0f; // Vertical speed of the character
     public Vector3 OutPosition;
     public Quaternion OutRotation;
-
     public Vector3 OutLastPosition;
     public Quaternion OutLastRotation;
     public void OnEnable()
@@ -64,26 +63,18 @@ public class BasisCharacterController : MonoBehaviour
         HasEye = driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye);
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
         characterController.minMoveDistance = 0;
+        characterController.skinWidth = 0.1f;
         currentRotation = Quaternion.identity;
-        GetLatestSkinWidth();
-    }
-    public float SkinModifiedHeight;
-    public void GetLatestSkinWidth()
-    {
-        characterController.skinWidth = 0.1f / (characterController.height / BasisLocalPlayer.DefaultAvatarEyeHeight);
-        SkinModifiedHeight = characterController.skinWidth * 2;
     }
     public void Simulate()
     {
         CalculateCharacterSize();
-        GetLatestSkinWidth();
         HandleRotation();
         HandleMovement();
         GroundCheck();
         OutLastPosition = OutPosition;
         OutLastRotation = OutRotation;
         transform.GetPositionAndRotation(out OutPosition, out OutRotation);
-        OutPosition -= new Vector3(0, SkinModifiedHeight, 0);
         ReadyToRead?.Invoke();
     }
 
@@ -104,9 +95,10 @@ public class BasisCharacterController : MonoBehaviour
     {
         LastbottomPoint = bottomPoint;
         Vector3 rotatedCenter = characterController.transform.rotation * characterController.center;
-        bottomPoint = characterController.transform.position + (rotatedCenter - new Vector3(0, characterController.height / 2 - characterController.radius + characterController.skinWidth, 0));
+        float HeightOffset = (characterController.height / 2) - characterController.radius + characterController.skinWidth;
+        bottomPoint = characterController.transform.position + (rotatedCenter - new Vector3(0, HeightOffset, 0));
         groundedPlayer = characterController.isGrounded;
-           IsFalling = !groundedPlayer;
+        IsFalling = !groundedPlayer;
 
         if (groundedPlayer && !LastWasGrounded)
         {
@@ -170,8 +162,7 @@ public class BasisCharacterController : MonoBehaviour
     public void CalculateCharacterSize()
     {
         eyeHeight = HasEye ? Eye.RawLocalData.position.y : 1.73f;
-        float skinWidth = characterController.skinWidth;
-        float adjustedHeight = eyeHeight + skinWidth * 2f;
+        float adjustedHeight = eyeHeight;
         adjustedHeight = Mathf.Max(adjustedHeight, MinimumColliderSize);
         SetCharacterHeight(adjustedHeight);
     }
@@ -179,8 +170,8 @@ public class BasisCharacterController : MonoBehaviour
     public void SetCharacterHeight(float height)
     {
         characterController.height = height;
-        float SkinModifiedHeight = height / 2 - characterController.skinWidth;
+        float SkinModifiedHeight = height / 2;
 
-        characterController.center = HasHead ? new Vector3(Head.RawLocalData.position.x, SkinModifiedHeight, Head.RawLocalData.position.z): new Vector3(0, SkinModifiedHeight, 0);
+        characterController.center = HasHead ? new Vector3(Head.RawLocalData.position.x, SkinModifiedHeight, Head.RawLocalData.position.z) : new Vector3(0, SkinModifiedHeight, 0);
     }
 }
