@@ -176,6 +176,6 @@ public class BasisCharacterController : MonoBehaviour
         characterController.height = height;
         float SkinModifiedHeight = height / 2;
 
-        characterController.center = HasHead ? new Vector3(Head.RawLocalData.position.x, SkinModifiedHeight, Head.RawLocalData.position.z) : new Vector3(0, SkinModifiedHeight, 0);
+        characterController.center = HasEye ? new Vector3(Eye.RawLocalData.position.x, SkinModifiedHeight, Eye.RawLocalData.position.z) : new Vector3(0, SkinModifiedHeight, 0);
     }
 }

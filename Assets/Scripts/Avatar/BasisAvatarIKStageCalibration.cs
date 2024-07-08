@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public static partial class BasisAvatarIKStageCalibration
 {
-    public static float MaxDistanceBeforeMax = 0.2f;
+    public static float MaxDistanceBeforeMax = 0.25f;
     public static void FullBodyCalibration()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
