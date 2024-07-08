@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 public class BasisHamburgerMenu : BasisUIBase
 {
@@ -46,11 +49,26 @@ public class BasisHamburgerMenu : BasisUIBase
                 entry.Key.InputState.OnTriggerChanged -= entry.Value;
             }
             TriggerDelegates.Clear();
-
-            BasisLocalPlayer.Instance.RecalculateMyHeight();
-            BasisAvatarIKStageCalibration.FullBodyCalibration();
+            StartCalibration();
         }
     }
+    public static void StartCalibration()
+    {
+      BasisLocalPlayer.Instance.StartCoroutine(CompleteCalibration());
+    }
+    static IEnumerator CompleteCalibration()
+    {
+        BasisLocalPlayer.Instance.RecalculateMyHeight();
+        yield return new WaitForEndOfFrame();
+        BasisAvatarIKStageCalibration.FullBodyCalibration();
+    }
+#if UNITY_EDITOR
+        [MenuItem("Basis/CalibrateFB")]
+    public static void CalibrateEditor()
+    {
+        StartCalibration();
+    }
+#endif
     private static void AvatarButtonPanel()
     {
         BasisHamburgerMenu.Instance.CloseThisMenu();

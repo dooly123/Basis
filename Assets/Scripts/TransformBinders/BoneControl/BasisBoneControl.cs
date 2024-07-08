@@ -240,6 +240,7 @@ public class BasisBoneControl
         }
     }
 #if UNITY_EDITOR
+    public static float DefaultGizmoSize = 0.05f;
     public void DrawGizmos()
     {
         if (HasBone)
@@ -250,8 +251,12 @@ public class BasisBoneControl
             {
                 Gizmos.DrawLine(BonePosition, PositionControl.Target.FinalisedWorldData.position);
             }
-            Gizmos.DrawWireSphere(BonePosition, 0.05f * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale);
+            Gizmos.DrawWireSphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioPlayerToEyeDefaultScale);
             Handles.Label(BonePosition, Name);
+            if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
+            {
+                Gizmos.DrawWireSphere(BonePosition, BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioPlayerToEyeDefaultScale);
+            }
         }
     }
 #endif

@@ -10,8 +10,10 @@ using UnityEditor;
 #endif
 public class BasisLocalPlayer : BasisPlayer
 {
+    public static float DefaultPlayerHeight = 1.64f;
     public float PlayerEyeHeight = 1.64f;
     public float RatioPlayerToAvatarScale = 1;
+    public float RatioPlayerToEyeDefaultScale = 1;
     public static BasisLocalPlayer Instance;
     public BasisCharacterController Move;
     public event Action OnLocalAvatarChanged;
@@ -78,6 +80,7 @@ public class BasisLocalPlayer : BasisPlayer
                 RatioPlayerToAvatarScale = avatarHeight / realEyeHeight;
             }
         }
+       RatioPlayerToEyeDefaultScale = realEyeHeight / DefaultPlayerHeight;
         OnPlayersHeightChanged?.Invoke();
     }
     public void Teleport(Vector3 position,Quaternion rotation)

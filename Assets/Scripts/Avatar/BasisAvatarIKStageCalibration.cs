@@ -4,15 +4,9 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
-public static class BasisAvatarIKStageCalibration
+public static partial class BasisAvatarIKStageCalibration
 {
-#if UNITY_EDITOR
-    [MenuItem("Basis/CalibrateFB")]
-    public static void CalibrateEditor()
-    {
-        FullBodyCalibration();
-    }
-#endif
+    public static float MaxDistanceBeforeMax = 0.15f;
     public static void FullBodyCalibration()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
@@ -60,61 +54,18 @@ public static class BasisAvatarIKStageCalibration
         for (int Index = 0; Index < Connectors.Count; Index++)
         {
             CalibrationConnector Connector = Connectors[Index];
-
-            if (AvaliableTrackersCount <= 3)
+            // Case for 3 or fewer trackers
+            if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(Connector.BasisBoneTrackedRole) == false)
             {
-                // Case for 3 or fewer trackers
-                if (CheckFor3Point(Connector.BasisBoneTrackedRole))
-                {
-                    LatestConnectors.Add(Connector);
-                }
-            }
-            /*
-            else if (AvaliableTrackersCount >= 4 && AvaliableTrackersCount <= 5)
-            {
-                // Case for 4 or 5 trackers
-                if (CheckFor3Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority6Point(Connector.BasisBoneTrackedRole))
-                {
-                    LatestConnectors.Add(Connector);
-                }
-            }
-            else if (AvaliableTrackersCount >= 6 && AvaliableTrackersCount <= 8)
-            {
-                // Case for 6 to 8 trackers
-                if (CheckFor3Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority6Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority9Point(Connector.BasisBoneTrackedRole))
-                {
-                    LatestConnectors.Add(Connector);
-                }
-            }
-            else if (AvaliableTrackersCount >= 9 && AvaliableTrackersCount <= 10)
-            {
-                // Case for 9 or 10 trackers
-                if (CheckFor3Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority6Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority9Point(Connector.BasisBoneTrackedRole) && CheckForNextPriority11Point(Connector.BasisBoneTrackedRole))
-                {
-                    LatestConnectors.Add(Connector);
-                }
-            }
-            */
-            else// if (AvaliableTrackersCount >= 11)
-            {
-                // Case for 11 or more trackers
-                //  if (CheckForNextPriority13Point(Connector.BasisBoneTrackedRole) && ReplaceMeOnceyouhaveTime(Connector.BasisBoneTrackedRole) && DisableAsIhaveNotImplemented(Connector.BasisBoneTrackedRole))
-                // {
-                //    LatestConnectors.Add(Connector);
-                // }
+                LatestConnectors.Add(Connector);
             }
         }
-    }
-    public static bool CheckFor3Point(BasisBoneTrackedRole Role)
-    {
-        return (Role == BasisBoneTrackedRole.Hips || Role == BasisBoneTrackedRole.LeftFoot || Role == BasisBoneTrackedRole.RightFoot);
     }
     public static bool IsRight(Transform TransformRightCheck, Transform avatarMiddle)
     {
         Vector3 directionToOther = TransformRightCheck.position - avatarMiddle.position;
         // Vector3 avatarForward = avatarMiddle.forward;
         Vector3 avatarRight = avatarMiddle.right;
-
         // Check if the other transform is to the left or right
         float dotProduct = Vector3.Dot(avatarRight, directionToOther);
 
@@ -207,30 +158,20 @@ public static class BasisAvatarIKStageCalibration
         Debug.Log("Completed bone control setup");
         return availableBoneControl;
     }
-    public struct CalibrationConnector
-    {
-        public BasisBoneControl BasisBoneControl;
-        public BasisBoneTrackedRole BasisBoneTrackedRole;
-        public GeneralLocation GeneralLocation;
-    }
-    public enum GeneralLocation
-    {
-        Middle, Left, Right
-    }
     private static void FindOptimalMatches(List<BasisInput> inputDevices, List<CalibrationConnector> Connectors)
     {
-        List<BoneTransformMapping> boneTransformMappings = new List<BoneTransformMapping>();
+        List<BasisBoneTransformMapping> boneTransformMappings = new List<BasisBoneTransformMapping>();
+        float Scaler = MaxDistanceBeforeMax / BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
         foreach (BasisInput bone in inputDevices)
         {
-            BoneTransformMapping mapping = new BoneTransformMapping(bone, Connectors.ToArray());
+            BasisBoneTransformMapping mapping = new BasisBoneTransformMapping(bone, Connectors.ToArray(), Scaler);
             boneTransformMappings.Add(mapping);
         }
-        foreach (BoneTransformMapping mapping in boneTransformMappings)
+        foreach (BasisBoneTransformMapping mapping in boneTransformMappings)
         {
             for (int topDistanceIndex = 0; topDistanceIndex < mapping.Distances.Length; topDistanceIndex++)
             {
-                float topdistance = mapping.Distances[topDistanceIndex];
-                if (WasThereASmallerIndex(boneTransformMappings, mapping, topDistanceIndex, topdistance) == false)
+                if (WasThereASmallerIndex(boneTransformMappings, mapping, topDistanceIndex, mapping.Distances[topDistanceIndex]) == false)
                 {
                     mapping.Closest = Connectors[topDistanceIndex];
                     ApplyToTarget(mapping.Bone, mapping.Closest.BasisBoneTrackedRole);
@@ -245,9 +186,9 @@ public static class BasisAvatarIKStageCalibration
         Input.ApplyTrackerCalibration(Role);
         Debug.Log($"Tracker role assigned for {Input.name}: {Input.TrackedRole}");
     }
-    public static bool WasThereASmallerIndex(List<BoneTransformMapping> boneTransformMappings, BoneTransformMapping mapping, int topDistanceIndex, float topdistance)
+    public static bool WasThereASmallerIndex(List<BasisBoneTransformMapping> boneTransformMappings, BasisBoneTransformMapping mapping, int topDistanceIndex, float topdistance)
     {
-        foreach (BoneTransformMapping secondPass in boneTransformMappings)
+        foreach (BasisBoneTransformMapping secondPass in boneTransformMappings)
         {
             if (secondPass != mapping)
             {
@@ -258,25 +199,6 @@ public static class BasisAvatarIKStageCalibration
             }
         }
         return false;
-    }
-    [System.Serializable]
-    public class BoneTransformMapping
-    {
-        public BasisInput Bone;
-        [SerializeField]
-        public float[] Distances;
-        [SerializeField]
-        public CalibrationConnector Closest;
-
-        public BoneTransformMapping(BasisInput bone, CalibrationConnector[] transformsToMatch)
-        {
-            Bone = bone;
-            Distances = new float[transformsToMatch.Length];
-            for (int i = 0; i < transformsToMatch.Length; i++)
-            {
-                Distances[i] = Vector3.Distance(bone.transform.position, transformsToMatch[i].BasisBoneControl.BoneModelTransform.position);
-            }
-        }
     }
     public static bool CheckForNextPriority6Point(BasisBoneTrackedRole Role)
     {
