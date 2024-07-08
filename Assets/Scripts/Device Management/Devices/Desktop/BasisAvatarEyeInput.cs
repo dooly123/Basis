@@ -6,7 +6,7 @@ public class BasisAvatarEyeInput : BasisInput
     public BasisLocalInputActions characterInputActions;
     public static BasisAvatarEyeInput Instance;
     public float RangeOfMotionBeforeTurn = 13;
-    public float headDownwardForce = 0.002f;
+    public float headDownwardForce = 0.003f;
     public float headUpwardForce = 0.001f;
     public float adjustment;
     public float crouchPercentage = 0.5f;
