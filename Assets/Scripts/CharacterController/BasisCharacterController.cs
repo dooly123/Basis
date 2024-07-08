@@ -95,7 +95,7 @@ public class BasisCharacterController : MonoBehaviour
     {
         LastbottomPoint = bottomPoint;
         Vector3 rotatedCenter = characterController.transform.rotation * characterController.center;
-        float HeightOffset = (characterController.height / 2) - characterController.radius + characterController.skinWidth;
+        float HeightOffset = (characterController.height / 2) - characterController.radius; //+ characterController.skinWidth;
         bottomPoint = characterController.transform.position + (rotatedCenter - new Vector3(0, HeightOffset, 0));
         groundedPlayer = characterController.isGrounded;
         IsFalling = !groundedPlayer;
@@ -140,6 +140,10 @@ public class BasisCharacterController : MonoBehaviour
         {
             currentVerticalSpeed += gravityValue * Time.deltaTime;
         }
+
+        // Ensure we don't exceed maximum gravity value speed
+        currentVerticalSpeed = Mathf.Max(currentVerticalSpeed, -Mathf.Abs(gravityValue));
+
 
         HasJumpAction = false;
         totalMoveDirection.y = currentVerticalSpeed * Time.deltaTime;
