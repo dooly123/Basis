@@ -141,7 +141,7 @@ public class BasisOpenVRManagement
             case ETrackedDeviceClass.GenericTracker:
             case ETrackedDeviceClass.DisplayRedirect:
             default:
-                CreateTracker(gameObject, device, uniqueID, unUniqueID);
+                CreateTracker(gameObject, device, uniqueID, unUniqueID,false, BasisBoneTrackedRole.CenterEye);
                 break;
         }
     }
@@ -151,7 +151,7 @@ public class BasisOpenVRManagement
         // Implement HMD specific initialization if needed
         Debug.Log($"Creating HMD: {uniqueID}");
         // For now, we'll treat it as a generic tracker
-        CreateController(gameObject, device, uniqueID, unUniqueID);
+        CreateTracker(gameObject, device, uniqueID, unUniqueID, true, BasisBoneTrackedRole.CenterEye);
     }
     public void CreateController(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
     {
@@ -160,10 +160,10 @@ public class BasisOpenVRManagement
         BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement",FoundRole, Role, Source);
         BasisDeviceManagement.Instance.TryAdd(BasisOpenVRInputController);
     }
-    public void CreateTracker(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
+    public void CreateTracker(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID,bool AutoAssignRole, BasisBoneTrackedRole role)
     {
         BasisOpenVRInput basisOpenVRInput = GameObject.AddComponent<BasisOpenVRInput>();
-        basisOpenVRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement",false, BasisBoneTrackedRole.CenterEye);
+        basisOpenVRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement", AutoAssignRole, role);
         BasisDeviceManagement.Instance.TryAdd(basisOpenVRInput);
     }
     public bool TryAssignRole(ETrackedDeviceClass deviceClass,uint deviceIndex, out BasisBoneTrackedRole Role,out SteamVR_Input_Sources Source )

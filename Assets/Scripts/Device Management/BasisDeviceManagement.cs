@@ -229,13 +229,16 @@ public partial class BasisDeviceManagement : MonoBehaviour
     {
         foreach (var device in AllInputDevices)
         {
-            if (device.Control.HasBone)
+            if (device != null && device.Control != null)
             {
-                if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(device.Control, out BasisBoneTrackedRole role))
+                if (device.Control.HasBone)
                 {
-                    if (FindRole == role)
+                    if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(device.Control, out BasisBoneTrackedRole role))
                     {
-                        FindDevice = device;
+                        if (FindRole == role)
+                        {
+                            FindDevice = device;
+                        }
                     }
                 }
             }
