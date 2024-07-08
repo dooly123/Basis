@@ -17,8 +17,8 @@ public class BasisLocalInputActions : MonoBehaviour
     public InputActionReference LeftMousePressed;
     public InputActionReference RightMousePressed;
 
-    [SerializeField] public bool Crouching;
-    [SerializeField] public Vector2 LookDirection;
+    [SerializeField] public static bool Crouching;
+    [SerializeField] public static Vector2 LookDirection;
     public BasisAvatarEyeInput CharacterEyeInput;
     public static BasisLocalInputActions Instance;
     public BasisLocalPlayer basisLocalPlayer;

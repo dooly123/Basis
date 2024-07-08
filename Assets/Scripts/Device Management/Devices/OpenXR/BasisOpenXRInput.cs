@@ -21,7 +21,7 @@ public class BasisOpenXRInput : BasisInput
                 FinalRotation = LocalRawRotation;
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
+                    if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
                         Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
                     }
@@ -32,7 +32,7 @@ public class BasisOpenXRInput : BasisInput
                 FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
+                    if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
                         Control.TrackerData.position = LocalRawPosition - LocalRawRotation * AvatarPositionOffset;
                     }

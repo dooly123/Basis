@@ -12,27 +12,29 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     private Vector3 previousRawVelocity = Vector3.zero;
     public BasisCharacterController Controller;
     public BasisBoneControl Hips;
+    public Vector3 currentVelocity;
+    public Vector3 dampenedVelocity;
     void Simulate()
     {
         if (localPlayer.AvatarDriver.InTPose == false)
         {
             //calculate the velocity of the character controller taking into the account the direction occuring to the hips
             //this works well in fullbody
-            Vector3 currentVelocity = Quaternion.Inverse(Hips.FinalisedWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / Time.deltaTime;
+            currentVelocity = Quaternion.Inverse(Hips.FinalisedWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / Time.deltaTime;
 
-            Vector3 dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
+            dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
 
             basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = dampenedVelocity;
             basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > IsMoving;
 
             basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 1;
-
-            basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = localPlayer.Move.IsFalling;
-
-            if (BasisLocalInputActions.Instance != null)
+            if (HasHipsInput && basisAnimatorVariableApply.BasisAnimatorVariables.isMoving && HipsInput.hasRoleAssigned && HipsInput.TrackedRole == BasisBoneTrackedRole.Hips)
             {
-                basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Instance.Crouching;
+                basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 0;
             }
+            basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = localPlayer.Move.IsFalling;
+            basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Crouching;
+
             basisAnimatorVariableApply.UpdateAnimator(ScaleMovementBy);
 
             if (basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling)
@@ -62,6 +64,14 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         basisAnimatorVariableApply.LoadCachedAnimatorHashes(animator);
         Controller = BasisLocalPlayer.Instance.Move;
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
+        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += OnListChanged;
+        OnListChanged();
+    }
+    public BasisInput HipsInput;
+    public bool HasHipsInput = false;
+    public void OnListChanged()
+    {
+        HasHipsInput = BasisDeviceManagement.Instance.FindDevice(out HipsInput, BasisBoneTrackedRole.Hips);
     }
     private void FindReferences()
     {

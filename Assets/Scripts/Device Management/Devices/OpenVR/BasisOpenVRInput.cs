@@ -31,11 +31,11 @@ public class BasisOpenVRInput : BasisInput
                 FinalRotation = LocalRawRotation;
                 if (hasRoleAssigned)
                 {
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
+                    if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
                         Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
                     }
-                    if (Control.HasTrackerPositionDriver != BasisHasTracked.HasNoTracker)
+                    if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
                         Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
                     }

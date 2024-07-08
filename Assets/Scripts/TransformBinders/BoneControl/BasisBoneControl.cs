@@ -16,37 +16,21 @@ public class BasisBoneControl
     [SerializeField]
     public Transform BoneModelTransform;
     // Events for property changes
-    public event System.Action<BasisHasTracked> OnHasTrackerPositionDriverChanged;
-    public event System.Action<BasisHasTracked> OnHasTrackerRotationDriverChanged;
+    public event System.Action<BasisHasTracked> OnHasTrackerDriverChanged;
     // Backing fields for the properties
     [SerializeField]
-    private BasisHasTracked hasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
-    [SerializeField]
-    private BasisHasTracked hasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
+    private BasisHasTracked hasTrackerDriver = BasisHasTracked.HasNoTracker;
     // Properties with get/set accessors
-    public BasisHasTracked HasTrackerPositionDriver
+    public BasisHasTracked HasTracked
     {
-        get => hasTrackerPositionDriver;
+        get => hasTrackerDriver;
         set
         {
-            if (hasTrackerPositionDriver != value)
+            if (hasTrackerDriver != value)
             {
                // Debug.Log("Setting Tracker To has Tracker Position Driver " + value);
-                hasTrackerPositionDriver = value;
-                OnHasTrackerPositionDriverChanged?.Invoke(value);
-            }
-        }
-    }
-    public BasisHasTracked HasTrackerRotationDriver
-    {
-        get => hasTrackerRotationDriver;
-        set
-        {
-            if (hasTrackerRotationDriver != value)
-            {
-               // Debug.Log("Setting Tracker To has Tracker Rotation Driver " + value);
-                hasTrackerRotationDriver = value;
-                OnHasTrackerRotationDriverChanged?.Invoke(value);
+                hasTrackerDriver = value;
+                OnHasTrackerDriverChanged?.Invoke(value);
             }
         }
     }
@@ -109,7 +93,7 @@ public class BasisBoneControl
             return;
         }
 
-        if (HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
+        if (HasTracked == BasisHasTracked.HasNoTracker)
         {
             //if angle is larger then 4 then lets then lets begin checking to see if we can snap it back
             if (RotationControl.UseAngle && AngleCheck(RawLocalData.rotation, RawLocalData.rotation, RotationControl.AngleBeforeMove))
@@ -145,12 +129,12 @@ public class BasisBoneControl
             }
         }
 
-        if (HasTrackerPositionDriver == BasisHasTracked.HasNoTracker)
+        if (HasTracked == BasisHasTracked.HasNoTracker)
         {
             ApplyTargetPosition(ref RawLocalData.position, PositionControl);
             ApplyLerpToVector(ref RawLocalData.position, PositionControl);
         }
-        if (HasTrackerRotationDriver == BasisHasTracked.HasTracker && HasTrackerPositionDriver == BasisHasTracked.HasTracker)
+        if (HasTracked == BasisHasTracked.HasTracker)
         {
             if (InverseOffsetFromBone.Use)
             {

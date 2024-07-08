@@ -225,6 +225,24 @@ public partial class BasisDeviceManagement : MonoBehaviour
         }
          return false;
     }
+    public bool FindDevice(out BasisInput FindDevice, BasisBoneTrackedRole FindRole)
+    {
+        foreach (var device in AllInputDevices)
+        {
+            if (device.Control.HasBone)
+            {
+                if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(device.Control, out BasisBoneTrackedRole role))
+                {
+                    if (FindRole == role)
+                    {
+                        FindDevice = device;
+                    }
+                }
+            }
+        }
+        FindDevice = null;
+        return false;
+    }
 #if UNITY_EDITOR
     [MenuItem("Basis/Hide Trackers")]
     public static void HideTrackersEditor()

@@ -13,13 +13,11 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
         FindBone(out Hips, BasisBoneTrackedRole.Hips);
         if (Head != null)
         {
-            Head.HasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
-            Head.HasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
+            Head.HasTracked = BasisHasTracked.HasNoTracker;
         }
         if (Hips != null)
         {
-            Hips.HasTrackerPositionDriver = BasisHasTracked.HasNoTracker;
-            Hips.HasTrackerRotationDriver = BasisHasTracked.HasNoTracker;
+            Hips.HasTracked = BasisHasTracked.HasNoTracker;
         }
         OnSimulate += CalculateHeadBoneData;
     }

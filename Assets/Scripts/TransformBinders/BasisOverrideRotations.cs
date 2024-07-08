@@ -28,19 +28,19 @@ public class BasisOverrideRotations : MonoBehaviour
         if (AngleCheck(coreRotation, Hips.RawLocalData.rotation, RangeOfMotionBeforeTurn))
         {
             // Slerp rotation for hips and upper body
-            if (Hips.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
+            if (Hips.HasTracked == BasisHasTracked.HasNoTracker)
             {
                 Hips.RawLocalData.rotation = SlerpYRotation(Hips.RawLocalData.rotation, coreRotation, DelayedHips * DeltaTime);
             }
-            if (UpperChest.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
+            if (UpperChest.HasTracked == BasisHasTracked.HasNoTracker)
             {
                 UpperChest.RawLocalData.rotation = SlerpYRotation(UpperChest.RawLocalData.rotation, coreRotation, DelayedUpperChest * DeltaTime);
             }
-            if (Chest.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
+            if (Chest.HasTracked == BasisHasTracked.HasNoTracker)
             {
                 Chest.RawLocalData.rotation = SlerpYRotation(Chest.RawLocalData.rotation, coreRotation, DelayedChest * DeltaTime);
             }
-            if (Spine.HasTrackerRotationDriver == BasisHasTracked.HasNoTracker)
+            if (Spine.HasTracked == BasisHasTracked.HasNoTracker)
             {
                 Spine.RawLocalData.rotation = SlerpYRotation(Spine.RawLocalData.rotation, coreRotation, DelayedSpine * DeltaTime);
             }

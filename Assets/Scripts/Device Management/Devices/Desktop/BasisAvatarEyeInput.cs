@@ -111,7 +111,7 @@ public class BasisAvatarEyeInput : BasisInput
         if (hasRoleAssigned)
         {
             Vector3 adjustedHeadPosition = new Vector3(0, BasisLocalPlayer.Instance.PlayerEyeHeight, 0);
-            if (characterInputActions.Crouching && BlockCrouching == false)
+            if (BasisLocalInputActions.Crouching && BlockCrouching == false)
             {
                 adjustedHeadPosition.y -= Control.TposeLocal.position.y * crouchPercentage;
             }

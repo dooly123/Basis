@@ -176,8 +176,7 @@ public abstract class BasisInput : MonoBehaviour
     {
         if (Control.HasBone)
         {
-            Control.HasTrackerPositionDriver = hasTracked;
-            Control.HasTrackerRotationDriver = hasTracked;
+            Control.HasTracked = hasTracked;
             Control.HasRigLayer = HasLayer;
             if (Control.HasRigLayer == BasisHasRigLayer.HasNoRigLayer)
             {
