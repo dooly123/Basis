@@ -31,7 +31,7 @@ public class BasisCharacterController : MonoBehaviour
     public SimulationHandler JustJumped;
     public SimulationHandler JustLanded;
     public bool LastWasGrounded = true;
-    public float RotationSpeed = 50;
+    public float RotationSpeed = 90;
     public event SimulationHandler ReadyToRead;
     public bool BlockMovement = false;
     public bool IsFalling;

@@ -6,6 +6,6 @@ public static partial class BasisAvatarIKStageCalibration
     {
         public BasisBoneControl BasisBoneControl;
         public BasisBoneTrackedRole BasisBoneTrackedRole;
-        public GeneralLocation GeneralLocation;
+       // public GeneralLocation GeneralLocation;
     }
 }

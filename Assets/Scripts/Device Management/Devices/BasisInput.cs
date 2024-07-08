@@ -75,13 +75,13 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Missing Driver!");
             return;
         }
-        OnAvatarSwitched();
+        UnAssignTracker();
         ApplyDeviceAssociatedData();
         if (HasAssignedEvents == false)
         {
             Driver.OnSimulate += PollData;
             HasAssignedEvents = true;
-            BasisLocalPlayer.Instance.OnAvatarSwitched += OnAvatarSwitched;
+            BasisLocalPlayer.Instance.OnAvatarSwitched += UnAssignTracker;
         }
         else
         {
@@ -131,7 +131,7 @@ public abstract class BasisInput : MonoBehaviour
     /// this api makes it so after a calibration the inital offset is reset.
     /// will only do its logic if has role assigned
     /// </summary>
-    public void OnAvatarSwitched()
+    public void UnAssignTracker()
     {
         if (hasRoleAssigned)
         {

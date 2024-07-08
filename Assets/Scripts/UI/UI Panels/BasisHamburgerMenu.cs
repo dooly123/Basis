@@ -55,6 +55,10 @@ public class BasisHamburgerMenu : BasisUIBase
     public static void StartCalibration()
     {
         BasisLocalPlayer.Instance.RecalculateMyHeight();
+        foreach(BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+        {
+            Input.UnAssignTracker();
+        }
         //now lets grab and apply the height
         BasisLocalPlayer.Instance.LocalBoneDriver.Simulate();
         BasisLocalPlayer.Instance.LocalBoneDriver.ApplyMovement();

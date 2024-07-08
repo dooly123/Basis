@@ -11,77 +11,12 @@ public static partial class BasisAvatarIKStageCalibration
         List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
         List<BasisInput> Trackers = GetAllInputsExcludingEyeAndHands(ref rolesToDiscover);
         List<CalibrationConnector> availableBoneControl = GetAvailableBoneControls(rolesToDiscover);
-
-        List<CalibrationConnector> Left = new List<CalibrationConnector>();
-        List<CalibrationConnector> Right = new List<CalibrationConnector>();
-        List<CalibrationConnector> Middle = new List<CalibrationConnector>();
-
-        foreach (CalibrationConnector Connector in availableBoneControl)
-        {
-            if (Connector.GeneralLocation == GeneralLocation.Left)
-            {
-                Left.Add(Connector);
-            }
-            else
-            {
-                if (Connector.GeneralLocation == GeneralLocation.Right)
-                {
-                    Right.Add(Connector);
-                }
-                else
-                {
-                    if (Connector.GeneralLocation == GeneralLocation.Middle)
-                    {
-                        Middle.Add(Connector);
-                    }
-                }
-            }
-        }
-
-        RunFor(Trackers.Count, availableBoneControl, out List<CalibrationConnector> MiddleOutput);
-        FindOptimalMatches(Trackers, MiddleOutput);
+        FindOptimalMatches(Trackers, availableBoneControl);
 
         BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
     }
-    public static void RunFor(int AvaliableTrackersCount, List<CalibrationConnector> Connectors, out List<CalibrationConnector> LatestConnectors)
-    {
-        LatestConnectors = new List<CalibrationConnector>();
-
-        for (int Index = 0; Index < Connectors.Count; Index++)
-        {
-            CalibrationConnector Connector = Connectors[Index];
-            // Case for 3 or fewer trackers
-            if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(Connector.BasisBoneTrackedRole) == false)
-            {
-                LatestConnectors.Add(Connector);
-            }
-        }
-    }
-    public static bool IsRight(Transform TransformRightCheck, Transform avatarMiddle)
-    {
-        Vector3 directionToOther = TransformRightCheck.position - avatarMiddle.position;
-        // Vector3 avatarForward = avatarMiddle.forward;
-        Vector3 avatarRight = avatarMiddle.right;
-        // Check if the other transform is to the left or right
-        float dotProduct = Vector3.Dot(avatarRight, directionToOther);
-
-        if (dotProduct > 0)
-        {
-          //  Debug.Log(TransformRightCheck.name + " is on the right.");
-            return true;
-        }
-        else if (dotProduct < 0)
-        {
-           // Debug.Log(TransformRightCheck.name + " is on the left.");
-            return false;
-        }
-        else
-        {
-          //  Debug.Log(TransformRightCheck.name + " is directly in front or behind.");
-        }
-        return false;
-    }
+    #region DiscoverWhatsPossible
     private static List<BasisBoneTrackedRole> GetAllRoles()
     {
         List<BasisBoneTrackedRole> rolesToDiscover = new List<BasisBoneTrackedRole>();
@@ -89,6 +24,35 @@ public static partial class BasisAvatarIKStageCalibration
         {
             rolesToDiscover.Add(role);
         }
+        // Define the desired order
+        BasisBoneTrackedRole[] desiredOrder = new BasisBoneTrackedRole[]
+        {
+            BasisBoneTrackedRole.Hips,
+            BasisBoneTrackedRole.LeftFoot,
+            BasisBoneTrackedRole.RightFoot,
+            BasisBoneTrackedRole.LeftUpperLeg,
+            BasisBoneTrackedRole.RightUpperLeg,
+            BasisBoneTrackedRole.LeftLowerLeg,
+            BasisBoneTrackedRole.RightLowerLeg,
+            BasisBoneTrackedRole.LeftShoulder,
+            BasisBoneTrackedRole.RightShoulder,
+            BasisBoneTrackedRole.LeftUpperArm,
+            BasisBoneTrackedRole.RightUpperArm,
+            BasisBoneTrackedRole.LeftLowerArm,
+            BasisBoneTrackedRole.RightLowerArm,
+            BasisBoneTrackedRole.LeftToes,
+            BasisBoneTrackedRole.RightToes,
+            BasisBoneTrackedRole.CenterEye,
+            BasisBoneTrackedRole.Head,
+            BasisBoneTrackedRole.Neck,
+            BasisBoneTrackedRole.Chest,
+            BasisBoneTrackedRole.LeftHand,
+            BasisBoneTrackedRole.RightHand,
+        };
+
+        // Sort the list based on the desired order
+        rolesToDiscover.Sort((x, y) => Array.IndexOf(desiredOrder, x).CompareTo(Array.IndexOf(desiredOrder, y)));
+
         return rolesToDiscover;
     }
     private static List<BasisInput> GetAllInputsExcludingEyeAndHands(ref List<BasisBoneTrackedRole> rolesToDiscover)
@@ -130,21 +94,6 @@ public static partial class BasisAvatarIKStageCalibration
                     BasisBoneTrackedRole = role,
                     BasisBoneControl = control
                 };
-                if (BasisAvatarDriver.IsApartOfSpineVertical(calibrationConnector.BasisBoneTrackedRole))
-                {
-                    calibrationConnector.GeneralLocation = GeneralLocation.Middle;
-                }
-                else
-                {
-                    if (IsRight(calibrationConnector.BasisBoneControl.BoneModelTransform, BasisLocalCameraDriver.Instance.Camera.transform))
-                    {
-                        calibrationConnector.GeneralLocation = GeneralLocation.Right;
-                    }
-                    else
-                    {
-                        calibrationConnector.GeneralLocation = GeneralLocation.Left;
-                    }
-                }
                 availableBoneControl.Add(calibrationConnector);
             }
             else
@@ -155,78 +104,37 @@ public static partial class BasisAvatarIKStageCalibration
         Debug.Log("Completed bone control setup");
         return availableBoneControl;
     }
+    #endregion
     private static void FindOptimalMatches(List<BasisInput> inputDevices, List<CalibrationConnector> Connectors)
     {
         List<BasisBoneTransformMapping> boneTransformMappings = new List<BasisBoneTransformMapping>();
-        float Scaler = MaxDistanceBeforeMax / BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+        float Scaler = BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
         foreach (BasisInput bone in inputDevices)
         {
-            BasisBoneTransformMapping mapping = new BasisBoneTransformMapping(bone, Connectors.ToArray(), Scaler);
+            BasisBoneTransformMapping mapping = new BasisBoneTransformMapping(bone, Connectors, Scaler);
             boneTransformMappings.Add(mapping);
         }
-        foreach (BasisBoneTransformMapping mapping in boneTransformMappings)
+        List<BasisBoneTrackedRole> FoundRoles = new List<BasisBoneTrackedRole>();
+        foreach (BasisBoneTransformMapping connector in boneTransformMappings)
         {
-            for (int topDistanceIndex = 0; topDistanceIndex < mapping.Distances.Length; topDistanceIndex++)
+            float SmallestForConnector = float.MaxValue;
+            CalibrationConnector CalibrationConnector = new CalibrationConnector();
+            bool HasFoundTarget = false;
+            foreach (KeyValuePair<CalibrationConnector, float> Distance in connector.Distances)
             {
-                if (WasThereASmallerIndex(boneTransformMappings, mapping, topDistanceIndex, mapping.Distances[topDistanceIndex]) == false)
+                if (Distance.Value < SmallestForConnector && FoundRoles.Contains(Distance.Key.BasisBoneTrackedRole) == false)
                 {
-                    mapping.Closest = Connectors[topDistanceIndex];
-                    ApplyToTarget(mapping.Bone, mapping.Closest.BasisBoneTrackedRole);
+                    SmallestForConnector = Distance.Value;
+                    CalibrationConnector = Distance.Key;
+                    HasFoundTarget = true;
+                    Debug.Log("Found Con at distance " + Distance.Value + " " + Distance.Key.BasisBoneTrackedRole + "with bone name " + connector.Bone.name);
                 }
             }
-        }
-    }
-    public static void ApplyToTarget(BasisInput Input, BasisBoneTrackedRole Role)
-    {
-        Debug.Log($"Tracker role assigning for {Input.name}: {Input.TrackedRole}");
-        // Assign the tracked role and apply it
-        Input.ApplyTrackerCalibration(Role);
-        Debug.Log($"Tracker role assigned for {Input.name}: {Input.TrackedRole}");
-    }
-    public static bool WasThereASmallerIndex(List<BasisBoneTransformMapping> boneTransformMappings, BasisBoneTransformMapping mapping, int topDistanceIndex, float topdistance)
-    {
-        foreach (BasisBoneTransformMapping secondPass in boneTransformMappings)
-        {
-            if (secondPass != mapping)
+            if(HasFoundTarget)
             {
-                if (secondPass.Distances[topDistanceIndex] < topdistance)
-                {
-                    return true;
-                }
+                FoundRoles.Add(CalibrationConnector.BasisBoneTrackedRole);
+                connector.Bone.ApplyTrackerCalibration(CalibrationConnector.BasisBoneTrackedRole);
             }
         }
-        return false;
-    }
-    public static bool CheckForNextPriority6Point(BasisBoneTrackedRole Role)
-    {
-        return (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.LeftUpperLeg || Role == BasisBoneTrackedRole.RightUpperLeg);
-    }
-    public static bool CheckForNextPriority9Point(BasisBoneTrackedRole Role)
-    {
-        return (Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.LeftUpperArm || Role == BasisBoneTrackedRole.RightUpperArm);
-    }
-    public static bool CheckForNextPriority11Point(BasisBoneTrackedRole Role)
-    {
-        return (Role == BasisBoneTrackedRole.LeftToes || Role == BasisBoneTrackedRole.RightToes || Role == BasisBoneTrackedRole.Neck);
-    }
-    public static bool CheckForNextPriority13Point(BasisBoneTrackedRole Role)
-    {
-        return true;
-    }
-    public static bool ReplaceMeOnceyouhaveTime(BasisBoneTrackedRole Role)
-    {
-        if (Role == BasisBoneTrackedRole.Head || Role == BasisBoneTrackedRole.Neck || Role == BasisBoneTrackedRole.CenterEye || Role == BasisBoneTrackedRole.Mouth)
-        {
-            return false;
-        }
-        return true;
-    }
-    public static bool DisableAsIhaveNotImplemented(BasisBoneTrackedRole Role)
-    {
-        if (Role == BasisBoneTrackedRole.Chest || Role == BasisBoneTrackedRole.UpperChest || Role == BasisBoneTrackedRole.Spine)
-        {
-            return false;
-        }
-        return true;
     }
 }
