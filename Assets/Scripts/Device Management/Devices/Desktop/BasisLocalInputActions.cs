@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class BasisLocalInputActions : MonoBehaviour
@@ -21,6 +23,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public static BasisLocalInputActions Instance;
     public BasisLocalPlayer basisLocalPlayer;
     public PlayerInput Input;
+    public static string InputActions = "InputActions";
     public void OnEnable()
     {
         DesktopSwitch.action.Enable();
@@ -35,6 +38,21 @@ public class BasisLocalInputActions : MonoBehaviour
             Instance = this;
         }
         BasisLocalCameraDriver.InstanceExists += SetupCamera;
+    }
+    public static async Task CreateInputAction(BasisLocalPlayer Local)
+    {
+        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(InputActions, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+        List<GameObject> Gameobjects = data.Item1;
+        if (Gameobjects.Count != 0)
+        {
+            foreach (GameObject gameObject in Gameobjects)
+            {
+                if (gameObject.TryGetComponent(out BasisLocalInputActions CharacterInputActions))
+                {
+                    CharacterInputActions.Initialize(Local);
+                }
+            }
+        }
     }
     public void SetupCamera()
     {

@@ -11,7 +11,7 @@ public class BasisRemotePlayer : BasisPlayer
         IsLocal = false;
         RemoteBoneDriver.CreateInitialArrays(RemoteBoneDriver.transform);
         RemoteBoneDriver.Initialize();
-        RemoteAvatarDriver.CalibrationComplete.AddListener(RemoteCalibration);
+        RemoteAvatarDriver.CalibrationComplete += RemoteCalibration;
         if (Avatar == null)
         {
             CreateAvatar(AvatarURL);

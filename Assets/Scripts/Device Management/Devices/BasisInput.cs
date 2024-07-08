@@ -135,9 +135,9 @@ public abstract class BasisInput : MonoBehaviour
     {
         if (hasRoleAssigned)
         {
-            Control.InitialOffset.position = Vector3.zero;
-            Control.InitialOffset.rotation = Quaternion.identity;
-            Control.InitialOffset.Use = false;
+            Control.InverseOffsetFromBone.position = Vector3.zero;
+            Control.InverseOffsetFromBone.rotation = Quaternion.identity;
+            Control.InverseOffsetFromBone.Use = false;
             if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(TrackedRole))
             {
                 SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);//basically lets unassign the trackers from there jobs
@@ -154,9 +154,9 @@ public abstract class BasisInput : MonoBehaviour
         {
             if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(TrackedRole))//we dont want to offset these ones
             {
-                Control.InitialOffset.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
-                Control.InitialOffset.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
-                Control.InitialOffset.Use = true;
+                Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
+                Control.InverseOffsetFromBone.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
+                Control.InverseOffsetFromBone.Use = true;
             }
             // Do nothing if bone is found successfully
             SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);

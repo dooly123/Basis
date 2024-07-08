@@ -17,7 +17,6 @@ public class BasisRemoteAvatarDriver : BasisAvatarDriver
         Calibration(RemotePlayer.Avatar);
         SetMatrixRecalculation(false);
         updateWhenOffscreen(false);
-        BeginningCalibration.Invoke();
         for (int Index = 0; Index < SkinnedMeshRenderer.Length; Index++)
         {
             SkinnedMeshRenderer Render = SkinnedMeshRenderer[Index];
@@ -26,7 +25,7 @@ public class BasisRemoteAvatarDriver : BasisAvatarDriver
         CalculateTransformPositions(RemotePlayer.Avatar.Animator, remotePlayer.RemoteBoneDriver);
         ComputeOffsets(remotePlayer.RemoteBoneDriver);
         RemotePlayer.Avatar.Animator.enabled = false;
-        CalibrationComplete.Invoke();
+        CalibrationComplete?.Invoke();
     }
     public void ComputeOffsets(BaseBoneDriver BaseBoneDriver)
     {

@@ -46,14 +46,14 @@ public class BasisCharacterController : MonoBehaviour
     private float SkinModifiedHeight;
     public void OnEnable()
     {
-        BasisLocalPlayer.OnLocalAvatarChanged += Initialize;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged += Initialize;
         BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
         Initialize();
     }
 
     public void OnDisable()
     {
-        BasisLocalPlayer.OnLocalAvatarChanged -= Initialize;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= Initialize;
         BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead -= Simulate;
     }
 

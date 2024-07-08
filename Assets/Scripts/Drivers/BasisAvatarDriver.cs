@@ -2,15 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.Events;
 
 public abstract class BasisAvatarDriver : MonoBehaviour
 {
     public float ActiveEyeHeight = 1.75f;
     private static string TPose = "Assets/Animator/Animated TPose.controller";
     public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
-    public UnityEvent BeginningCalibration = new UnityEvent();
-    public UnityEvent CalibrationComplete = new UnityEvent();
+    public Action BeginningCalibration;
+    public Action CalibrationComplete;
     public BasisTransformMapping References = new BasisTransformMapping();
     public RuntimeAnimatorController runtimeAnimatorController;
     public SkinnedMeshRenderer[] SkinnedMeshRenderer;
@@ -18,18 +17,18 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public bool InTPose = false;
     public void Calibration(BasisAvatar Avatar)
     {
-        BeginningCalibration.Invoke();
+        BeginningCalibration?.Invoke();
         FindSkinnedMeshRenders();
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
         ActiveEyeHeight = Avatar.AvatarEyePosition.x;
-        BasisLocalPlayer.Instance.LocalBoneDriver.Calibrate();
+        BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
         if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
         {
             BasisFacialBlinkDriver FacialBlinkDriver = BasisHelpers.GetOrAddComponent<BasisFacialBlinkDriver>(Avatar.gameObject);
             FacialBlinkDriver.Initialize(Avatar);
         }
     }
-    public void PutAvatarIntoTpose()
+    public void PutAvatarIntoTPose()
     {
         InTPose = true;
         if (runtimeAnimatorController == null)
@@ -109,14 +108,14 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
             {
                 GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out Control.TposeWorld.rotation, out Control.TposeWorld.position);
-                SetInitalData(anim, Control, driver.trackedRoles[Index]);
+                SetInitialData(anim, Control, driver.trackedRoles[Index]);
             }
             else
             {
                 if (driver.trackedRoles[Index] == BasisBoneTrackedRole.Mouth)
                 {
                     GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out Control.TposeWorld.rotation, out Control.TposeWorld.position);
-                    SetInitalData(anim, Control, driver.trackedRoles[Index]);
+                    SetInitialData(anim, Control, driver.trackedRoles[Index]);
                 }
                 else
                 {
@@ -127,7 +126,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                         if (TryConvertToHumanoidRole(driver.trackedRoles[Index], out HumanBodyBones HumanBones))
                         {
                             GetBoneRotAndPos(driver, anim, HumanBones, FallBackBone.PositionPercentage, out Control.TposeWorld.rotation, out Control.TposeWorld.position, out bool UsedFallback);
-                            SetInitalData(anim, Control, driver.trackedRoles[Index]);
+                            SetInitialData(anim, Control, driver.trackedRoles[Index]);
                         }
                     }
                 }
@@ -222,7 +221,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             return false;
         }
     }
-    public void SetInitalData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
+    public void SetInitialData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
     {
         bone.RawLocalData.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.TposeWorld.position, 0.1f * animator.transform.localScale.y);//out Vector3 WorldSpaceFloor
         bone.TposeLocal.position = bone.RawLocalData.position;

@@ -45,7 +45,7 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
                 if (LocalPlayer.AvatarDriver != null)
                 {
-                    LocalPlayer.AvatarDriver.CalibrationComplete.RemoveListener(CalibrationComplete);
+                    LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
                 }
                 else
                 {
@@ -57,7 +57,7 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
                 if (RemotePlayer.RemoteAvatarDriver != null)
                 {
-                    RemotePlayer.RemoteAvatarDriver.CalibrationComplete.RemoveListener(CalibrationComplete);
+                    RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
                 }
                 else
                 {
@@ -74,7 +74,7 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
                 if (LocalPlayer.AvatarDriver != null)
                 {
-                    LocalPlayer.AvatarDriver.CalibrationComplete.AddListener(CalibrationComplete);
+                    LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
                     LocalPlayer.LocalBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
                 }
                 else
@@ -87,7 +87,7 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
                 if (RemotePlayer.RemoteAvatarDriver != null)
                 {
-                    RemotePlayer.RemoteAvatarDriver.CalibrationComplete.AddListener(CalibrationComplete);
+                    RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
                     RemotePlayer.RemoteBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
                 }
                 else

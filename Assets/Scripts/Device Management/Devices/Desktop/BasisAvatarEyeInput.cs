@@ -39,14 +39,14 @@ public class BasisAvatarEyeInput : BasisInput
             Instance = this;
         }
         PlayerInitialized();
-        BasisLocalPlayer.OnLocalAvatarChanged += PlayerInitialized;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged += PlayerInitialized;
         LockCursor();
-        BasisLocalPlayer.OnPlayersHeightChanged += BasisLocalPlayer_OnPlayersHeightChanged;
+        BasisLocalPlayer.Instance.OnPlayersHeightChanged += BasisLocalPlayer_OnPlayersHeightChanged;
     }
     public new void OnDestroy()
     {
-        BasisLocalPlayer.OnLocalAvatarChanged -= PlayerInitialized;
-        BasisLocalPlayer.OnPlayersHeightChanged -= BasisLocalPlayer_OnPlayersHeightChanged;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= PlayerInitialized;
+        BasisLocalPlayer.Instance.OnPlayersHeightChanged -= BasisLocalPlayer_OnPlayersHeightChanged;
         base.OnDestroy();
     }
 
@@ -72,7 +72,7 @@ public class BasisAvatarEyeInput : BasisInput
     }
     public new void OnDisable()
     {
-        BasisLocalPlayer.OnLocalAvatarChanged -= PlayerInitialized;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= PlayerInitialized;
         base.OnDisable();
         UnlockCursor();
     }

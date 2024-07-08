@@ -71,7 +71,7 @@ public class BasisSimulateXR
     [MenuItem("Basis/Create Puck Tracker")]
     public static void CreatePuckTracker()
     {
-        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
         BasisDeviceManagement.ShowTrackers();
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
@@ -103,7 +103,7 @@ public class BasisSimulateXR
     [MenuItem("Basis/Create 3Point Tracking")]
     public static void CreatePuck3Tracker()
     {
-        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
         BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
         BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
@@ -136,7 +136,7 @@ public class BasisSimulateXR
     [MenuItem("Basis/Create MaxTracker Tracking")]
     public static void CreateFullMaxTracker()
     {
-        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         // Create an array of the tracker names for simplicity
         string trackerName = "{htc}vr_tracker_vive_3_0";
 
@@ -178,7 +178,7 @@ public class BasisSimulateXR
     [MenuItem("Basis/TPose Animator")]
     public static void PutAvatarIntoTpose()
     {
-        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
     }
     [MenuItem("Basis/Normal Animator")]
     public static void ResetAvatarAnimator()

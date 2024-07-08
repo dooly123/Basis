@@ -15,7 +15,7 @@ public static class BasisAvatarIKStageCalibration
 #endif
     public static void FullBodyCalibration()
     {
-        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
 
         List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
         List<BasisInput> Trackers = GetAllInputsExcludingEyeAndHands(ref rolesToDiscover);

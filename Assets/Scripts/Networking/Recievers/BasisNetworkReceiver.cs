@@ -123,7 +123,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
             RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
             AudioReceiverModule.OnEnable(networkedPlayer, gameObject);
             OnAvatarCalibration();
-            RemotePlayer.RemoteAvatarDriver.CalibrationComplete.AddListener(OnCalibration);
+            RemotePlayer.RemoteAvatarDriver.CalibrationComplete += OnCalibration;
         }
         silentData = new float[silentDataSize];
         Array.Fill(silentData, 0f);

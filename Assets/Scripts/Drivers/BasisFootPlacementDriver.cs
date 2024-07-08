@@ -17,7 +17,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.Foot, BasisBoneTrackedRole.LeftFoot);
         Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.Foot, BasisBoneTrackedRole.RightFoot);
         OnCalibration();
-        Localplayer.AvatarDriver.CalibrationComplete.AddListener(OnCalibration);
+        Localplayer.AvatarDriver.CalibrationComplete += OnCalibration;
     }
     public void OnCalibration()
     {

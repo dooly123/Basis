@@ -14,10 +14,9 @@ public class BasisLocalPlayer : BasisPlayer
     public float RatioPlayerToAvatarScale = 1;
     public static BasisLocalPlayer Instance;
     public BasisCharacterController Move;
-    public static string InputActions = "InputActions";
-    public static event System.Action OnLocalAvatarChanged;
-    public static event System.Action OnSpawnedEvent;
-    public static event System.Action OnPlayersHeightChanged;
+    public event Action OnLocalAvatarChanged;
+    public event Action OnSpawnedEvent;
+    public event Action OnPlayersHeightChanged;
     public BasisLocalCharacterBinder Binder;
     public BasisLocalBoneDriver LocalBoneDriver;
     public BasisBoneControl Hips;
@@ -36,11 +35,9 @@ public class BasisLocalPlayer : BasisPlayer
         Instance = this;
         IsLocal = true;
         LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
-        await CreateInputAction();
+        await BasisLocalInputActions.CreateInputAction(this);
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Character Controller.prefab", new InstantiationParameters());
-        //  FootPlacementDriver = Helpers.GetOrAddComponent<FootPlacementDriver>(this.gameObject);
-        //  FootPlacementDriver.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
         Instance.LocalBoneDriver.ReadyToRead += Simulate;
         OnLocalAvatarChanged += OnCalibration;
@@ -144,21 +141,6 @@ public class BasisLocalPlayer : BasisPlayer
         SelfOutput.Play();
         VisemeDriver.audioSource = SelfOutput;
         VisemeDriver.Initialize(Avatar);
-    }
-    public async Task CreateInputAction()
-    {
-        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(InputActions, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
-        List<GameObject> Gameobjects = data.Item1;
-        if (Gameobjects.Count != 0)
-        {
-            foreach (GameObject gameObject in Gameobjects)
-            {
-                if (gameObject.TryGetComponent(out BasisLocalInputActions CharacterInputActions))
-                {
-                    CharacterInputActions.Initialize(this);
-                }
-            }
-        }
     }
     public void OnDestroy()
     {

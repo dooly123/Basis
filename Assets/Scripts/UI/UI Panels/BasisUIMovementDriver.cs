@@ -12,14 +12,14 @@ public class BasisUIMovementDriver : MonoBehaviour
         LocalPlayer = BasisLocalPlayer.Instance;
         CameraDriver = BasisLocalCameraDriver.Instance;
         StartCoroutine(WaitAndSetUILocation());
-        BasisLocalPlayer.OnLocalAvatarChanged += OnLocalAvatarChanged;
-        BasisLocalPlayer.OnPlayersHeightChanged += OnPlayersHeightChanged;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged += OnLocalAvatarChanged;
+        BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnPlayersHeightChanged;
     }
 
     public void OnDisable()
     {
-        BasisLocalPlayer.OnLocalAvatarChanged -= OnLocalAvatarChanged;
-        BasisLocalPlayer.OnPlayersHeightChanged -= OnPlayersHeightChanged;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= OnLocalAvatarChanged;
+        BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnPlayersHeightChanged;
     }
 
     private void OnPlayersHeightChanged()

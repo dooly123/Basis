@@ -40,7 +40,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
         }
         ReadyToRead?.Invoke();
     }
-    public void Calibrate()
+    public void CalibrateOffsets()
     {
         for (int Index = 0; Index < ControlsLength; Index++)
         {

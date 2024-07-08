@@ -81,7 +81,7 @@ public class BasisBoneControl
     [SerializeField]
     public BasisCalibratedOffsetData TposeLocal = new BasisCalibratedOffsetData();
     [SerializeField]
-    public BasisCalibratedOffsetData InitialOffset = new BasisCalibratedOffsetData();
+    public BasisCalibratedOffsetData InverseOffsetFromBone = new BasisCalibratedOffsetData();
     [SerializeField]
     public BasisCalibratedOffsetData TrackerData = new BasisCalibratedOffsetData();
     [SerializeField]
@@ -152,13 +152,13 @@ public class BasisBoneControl
         }
         if (HasTrackerRotationDriver == BasisHasTracked.HasTracker && HasTrackerPositionDriver == BasisHasTracked.HasTracker)
         {
-            if (InitialOffset.Use)
+            if (InverseOffsetFromBone.Use)
             {
                 // Update the position of the secondary transform to maintain the initial offset
-                RawLocalData.position = TrackerData.position + TrackerData.rotation * InitialOffset.position;
+                RawLocalData.position = TrackerData.position + TrackerData.rotation * InverseOffsetFromBone.position;
 
                 // Update the rotation of the secondary transform to maintain the initial offset
-                RawLocalData.rotation = TrackerData.rotation * InitialOffset.rotation;
+                RawLocalData.rotation = TrackerData.rotation * InverseOffsetFromBone.rotation;
             }
             else
             {

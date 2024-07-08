@@ -8,7 +8,7 @@ public static class BasisAvatarFactory
     {
         DeleteLastAvatar(Player);
         LoadLoadingAvatar(Player, "LoadingAvatar");
-        Player.OnAvatarSwitchedFallBack?.Invoke();
+        Player.AvatarSwitchedFallBack();
         UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Player.transform.rotation, null);
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
         List<GameObject> Gameobjects = data.Item1;
@@ -31,13 +31,13 @@ public static class BasisAvatarFactory
             }
         }
         Player.SetPlayersEyeHeight(Player.PlayerEyeHeight, Player.AvatarDriver.ActiveEyeHeight);
-        Player.OnAvatarSwitched?.Invoke();
+        Player.AvatarSwitched();
     }
     public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
     {
         DeleteLastAvatar(Player);
         LoadLoadingAvatar(Player, "LoadingAvatar");
-        Player.OnAvatarSwitchedFallBack?.Invoke();
+        Player.AvatarSwitchedFallBack();
         UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Player.transform.rotation, null);
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
         List<GameObject> Gameobjects = data.Item1;
@@ -55,7 +55,7 @@ public static class BasisAvatarFactory
                 }
             }
         }
-        Player.OnAvatarSwitched?.Invoke();
+        Player.AvatarSwitched();
     }
     public static void LoadLoadingAvatar(BasisPlayer Player, string LoadingAvatarToUse = "Assets/Prefabs/Loadins/LankyLoad.prefab")
     {

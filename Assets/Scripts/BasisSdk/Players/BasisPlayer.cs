@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public abstract class BasisPlayer : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public abstract class BasisPlayer : MonoBehaviour
     public string AvatarUrl;
     public bool HasAvatarDriver;
     public const string FallBackAvatar = "LoadingAvatar";
-    public System.Action OnAvatarSwitched;
-    public System.Action OnAvatarSwitchedFallBack;
+    public event Action OnAvatarSwitched;
+    public event Action OnAvatarSwitchedFallBack;
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)
     {
         if (LocalAvatarDriver != null)
@@ -23,5 +24,13 @@ public abstract class BasisPlayer : MonoBehaviour
             Debug.LogError("Mising CharacterIKCalibration");
             HasAvatarDriver = false;
         }
+    }
+    public void AvatarSwitchedFallBack()
+    {
+        OnAvatarSwitchedFallBack?.Invoke();
+    }
+    public void AvatarSwitched()
+    {
+        OnAvatarSwitched?.Invoke();
     }
 }

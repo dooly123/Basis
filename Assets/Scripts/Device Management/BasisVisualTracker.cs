@@ -13,15 +13,15 @@ public class BasisVisualTracker : MonoBehaviour
         {
             BasisInput = basisInput;
             UpdateVisualSizeAndOffset();
-            BasisLocalPlayer.OnPlayersHeightChanged += UpdateVisualSizeAndOffset;
-            BasisLocalPlayer.OnLocalAvatarChanged += UpdateVisualSizeAndOffset;
+            BasisLocalPlayer.Instance.OnPlayersHeightChanged += UpdateVisualSizeAndOffset;
+            BasisLocalPlayer.Instance.OnLocalAvatarChanged += UpdateVisualSizeAndOffset;
             TrackedSetup.Invoke();
         }
     }
     public void OnDestroy()
     {
-        BasisLocalPlayer.OnLocalAvatarChanged -= UpdateVisualSizeAndOffset;
-        BasisLocalPlayer.OnPlayersHeightChanged -= UpdateVisualSizeAndOffset;
+        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= UpdateVisualSizeAndOffset;
+        BasisLocalPlayer.Instance.OnPlayersHeightChanged -= UpdateVisualSizeAndOffset;
     }
     public void UpdateVisualSizeAndOffset()
     {

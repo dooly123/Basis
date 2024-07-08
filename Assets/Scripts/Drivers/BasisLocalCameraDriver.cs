@@ -28,7 +28,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
         CameraInstanceID = Camera.GetInstanceID();
         RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
-        BasisLocalPlayer.OnPlayersHeightChanged += OnHeightChanged;
+        BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
         //fire static event that says the instance exists
         OnHeightChanged();
         InstanceExists?.Invoke();

@@ -52,7 +52,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         CleanupBeforeContinue();
         AdditionalTransforms.Clear();
         Rigs.Clear();
-        PutAvatarIntoTpose();
+        PutAvatarIntoTPose();
         if (Builder == null)
         {
             Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
@@ -79,7 +79,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
         ComputeOffsets(LocalDriver);
         Builder.Build();
-        CalibrationComplete.Invoke();
+        CalibrationComplete?.Invoke();
         AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
         AnimatorDriver.Initialize(Player.Avatar.Animator);
         if (MicrophoneRecorder == null)

@@ -19,19 +19,19 @@ public class BasisHamburgerMenu : BasisUIBase
         CloseUI.onClick.AddListener(CloseThisMenu);
         FullBody.onClick.AddListener(PutIntoCalibrationMode);
     }
-    private Dictionary<BasisInput, Action> triggerDelegates = new Dictionary<BasisInput, Action>();
+    private Dictionary<BasisInput, Action> TriggerDelegates = new Dictionary<BasisInput, Action>();
 
     public void PutIntoCalibrationMode()
     {
         BasisBootedMode BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;
         if (OverrideForceCalibration || BasisBootedMode == BasisBootedMode.OpenVRLoader || BasisBootedMode == BasisBootedMode.OpenXRLoader)
         {
-            BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTpose();
+            BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
 
             foreach (BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
             {
                 Action triggerDelegate = () => OnTriggerChanged(BasisInput);
-                triggerDelegates[BasisInput] = triggerDelegate;
+                TriggerDelegates[BasisInput] = triggerDelegate;
                 BasisInput.InputState.OnTriggerChanged += triggerDelegate;
             }
         }
@@ -41,11 +41,11 @@ public class BasisHamburgerMenu : BasisUIBase
     {
         if (FiredOff.InputState.Trigger >= 0.9f)
         {
-            foreach (var entry in triggerDelegates)
+            foreach (var entry in TriggerDelegates)
             {
                 entry.Key.InputState.OnTriggerChanged -= entry.Value;
             }
-            triggerDelegates.Clear();
+            TriggerDelegates.Clear();
 
             BasisLocalPlayer.Instance.RecalculateMyHeight();
             BasisAvatarIKStageCalibration.FullBodyCalibration();
