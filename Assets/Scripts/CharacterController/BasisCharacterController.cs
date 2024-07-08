@@ -43,7 +43,6 @@ public class BasisCharacterController : MonoBehaviour
 
     public Vector3 OutLastPosition;
     public Quaternion OutLastRotation;
-    private float SkinModifiedHeight;
     public void OnEnable()
     {
         BasisLocalPlayer.Instance.OnLocalAvatarChanged += Initialize;
@@ -68,13 +67,16 @@ public class BasisCharacterController : MonoBehaviour
         currentRotation = Quaternion.identity;
         GetLatestSkinWidth();
     }
+    public float SkinModifiedHeight;
     public void GetLatestSkinWidth()
     {
+        characterController.skinWidth = 0.1f / (characterController.height / BasisLocalPlayer.DefaultAvatarEyeHeight);
         SkinModifiedHeight = characterController.skinWidth * 2;
     }
     public void Simulate()
     {
         CalculateCharacterSize();
+        GetLatestSkinWidth();
         HandleRotation();
         HandleMovement();
         GroundCheck();
@@ -85,7 +87,7 @@ public class BasisCharacterController : MonoBehaviour
         ReadyToRead?.Invoke();
     }
 
-    public void OnDrawGizmos()
+    public void OnDrawGizmosSelected()
     {
         Gizmos.color = groundedPlayer ? Color.green : Color.red;
         Gizmos.DrawWireSphere(bottomPoint, characterController.radius);

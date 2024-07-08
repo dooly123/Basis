@@ -54,12 +54,11 @@ public class BasisHamburgerMenu : BasisUIBase
     }
     public static void StartCalibration()
     {
-      BasisLocalPlayer.Instance.StartCoroutine(CompleteCalibration());
-    }
-    static IEnumerator CompleteCalibration()
-    {
         BasisLocalPlayer.Instance.RecalculateMyHeight();
-        yield return new WaitForEndOfFrame();
+        //now lets grab and apply the height
+        BasisLocalPlayer.Instance.LocalBoneDriver.Simulate();
+        BasisLocalPlayer.Instance.LocalBoneDriver.ApplyMovement();
+        //now that we have latest * scale we can run calibration
         BasisAvatarIKStageCalibration.FullBodyCalibration();
     }
 #if UNITY_EDITOR

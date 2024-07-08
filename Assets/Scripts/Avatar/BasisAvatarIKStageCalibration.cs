@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 public static partial class BasisAvatarIKStageCalibration
 {
-    public static float MaxDistanceBeforeMax = 0.15f;
+    public static float MaxDistanceBeforeMax = 0.2f;
     public static void FullBodyCalibration()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
