@@ -1,11 +1,11 @@
 using UnityEngine;
-using static BasisAvatarIKStageCalibration;
+using static BasisAvatarIKStageCalibration.BasisTrackerMapping;
 
 public static class BasisLeftRightMiddleCalculator
 {
     public static void SetSpot(CalibrationConnector calibrationConnector)
     {
-        if (BasisAvatarDriver.IsApartOfSpineVertical(calibrationConnector.BasisBoneTrackedRole))
+        if (BasisAvatarDriver.IsApartOfSpineVertical(calibrationConnector.BasisBoneControlRole))
         {
           //  calibrationConnector.GeneralLocation = GeneralLocation.Middle;
         }

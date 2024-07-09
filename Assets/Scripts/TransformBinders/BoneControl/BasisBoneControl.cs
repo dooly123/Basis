@@ -255,7 +255,7 @@ public class BasisBoneControl
             Handles.Label(BonePosition, Name);
             if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
             {
-                Gizmos.DrawWireSphere(BonePosition, BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+                Gizmos.DrawWireSphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale) /2);
             }
         }
     }

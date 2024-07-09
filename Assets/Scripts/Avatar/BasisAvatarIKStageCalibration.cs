@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static BasisAvatarIKStageCalibration.BasisTrackerMapping;
 public static partial class BasisAvatarIKStageCalibration
 {
-    public static float MaxDistanceBeforeMax = 0.25f;
+    public static float MaxDistanceBeforeMax = 0.2f;
     public static void FullBodyCalibration()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
@@ -11,10 +12,18 @@ public static partial class BasisAvatarIKStageCalibration
         List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
         List<BasisInput> Trackers = GetAllInputsExcludingEyeAndHands(ref rolesToDiscover);
         List<CalibrationConnector> availableBoneControl = GetAvailableBoneControls(rolesToDiscover);
+        DebugOptimalRoles(availableBoneControl);
         FindOptimalMatches(Trackers, availableBoneControl);
 
         BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+    }
+    private static void DebugOptimalRoles(List<CalibrationConnector> CC)
+    {
+        foreach (CalibrationConnector CalibrationConnector in CC)
+        {
+            //  Debug.Log("Order " + CalibrationConnector.BasisBoneTrackedRole);
+        }
     }
     #region DiscoverWhatsPossible
     private static List<BasisBoneTrackedRole> GetAllRoles()
@@ -24,34 +33,25 @@ public static partial class BasisAvatarIKStageCalibration
         {
             rolesToDiscover.Add(role);
         }
-        // Define the desired order
-        BasisBoneTrackedRole[] desiredOrder = new BasisBoneTrackedRole[]
+
+
+        // Create a dictionary for quick index lookup
+        Dictionary<BasisBoneTrackedRole, int> orderLookup = new Dictionary<BasisBoneTrackedRole, int>();
+        for (int i = 0; i < desiredOrder.Length; i++)
         {
-            BasisBoneTrackedRole.Hips,
-            BasisBoneTrackedRole.LeftFoot,
-            BasisBoneTrackedRole.RightFoot,
-            BasisBoneTrackedRole.LeftUpperLeg,
-            BasisBoneTrackedRole.RightUpperLeg,
-            BasisBoneTrackedRole.LeftLowerLeg,
-            BasisBoneTrackedRole.RightLowerLeg,
-            BasisBoneTrackedRole.LeftShoulder,
-            BasisBoneTrackedRole.RightShoulder,
-            BasisBoneTrackedRole.LeftUpperArm,
-            BasisBoneTrackedRole.RightUpperArm,
-            BasisBoneTrackedRole.LeftLowerArm,
-            BasisBoneTrackedRole.RightLowerArm,
-            BasisBoneTrackedRole.LeftToes,
-            BasisBoneTrackedRole.RightToes,
-            BasisBoneTrackedRole.CenterEye,
-            BasisBoneTrackedRole.Head,
-            BasisBoneTrackedRole.Neck,
-            BasisBoneTrackedRole.Chest,
-            BasisBoneTrackedRole.LeftHand,
-            BasisBoneTrackedRole.RightHand,
-        };
+            orderLookup[desiredOrder[i]] = i;
+        }
+
+        // Assign a large index value to roles not in the desired order
+        int largeIndex = desiredOrder.Length;
 
         // Sort the list based on the desired order
-        rolesToDiscover.Sort((x, y) => Array.IndexOf(desiredOrder, x).CompareTo(Array.IndexOf(desiredOrder, y)));
+        rolesToDiscover.Sort((x, y) =>
+        {
+            int indexX = orderLookup.ContainsKey(x) ? orderLookup[x] : largeIndex;
+            int indexY = orderLookup.ContainsKey(y) ? orderLookup[y] : largeIndex;
+            return indexX.CompareTo(indexY);
+        });
 
         return rolesToDiscover;
     }
@@ -74,7 +74,7 @@ public static partial class BasisAvatarIKStageCalibration
                 }
                 else
                 {
-                    Debug.Log("Removing role " + baseInput.TrackedRole);
+                    Debug.Log("excluding role " + baseInput.TrackedRole + " from being used during FB");
                     rolesToDiscover.Remove(baseInput.TrackedRole);
                 }
             }
@@ -91,7 +91,7 @@ public static partial class BasisAvatarIKStageCalibration
             {
                 CalibrationConnector calibrationConnector = new CalibrationConnector
                 {
-                    BasisBoneTrackedRole = role,
+                    BasisBoneControlRole = role,
                     BasisBoneControl = control
                 };
                 availableBoneControl.Add(calibrationConnector);
@@ -105,36 +105,59 @@ public static partial class BasisAvatarIKStageCalibration
         return availableBoneControl;
     }
     #endregion
-    private static void FindOptimalMatches(List<BasisInput> inputDevices, List<CalibrationConnector> Connectors)
+    private static void FindOptimalMatches(List<BasisInput> inputDevices, List<CalibrationConnector> connectors)
     {
-        List<BasisBoneTransformMapping> boneTransformMappings = new List<BasisBoneTransformMapping>();
-        float Scaler = BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
-        foreach (BasisInput bone in inputDevices)
+        List<BasisTrackerMapping> boneTransformMappings = new List<BasisTrackerMapping>();
+        float scaler = BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
+        Debug.Log("Using a Scaled max Distance for trackers of " + scaler);
+
+        // Create tracker mappings
+        foreach (var tracker in inputDevices)
         {
-            BasisBoneTransformMapping mapping = new BasisBoneTransformMapping(bone, Connectors, Scaler);
-            boneTransformMappings.Add(mapping);
-        }
-        List<BasisBoneTrackedRole> FoundRoles = new List<BasisBoneTrackedRole>();
-        foreach (BasisBoneTransformMapping connector in boneTransformMappings)
-        {
-            float SmallestForConnector = float.MaxValue;
-            CalibrationConnector CalibrationConnector = new CalibrationConnector();
-            bool HasFoundTarget = false;
-            foreach (KeyValuePair<CalibrationConnector, float> Distance in connector.Distances)
+            if (tracker == null)
             {
-                if (Distance.Value < SmallestForConnector && FoundRoles.Contains(Distance.Key.BasisBoneTrackedRole) == false)
+                Debug.LogError("missing tracker");
+            }
+            else
+            {
+                BasisTrackerMapping mapping = new BasisTrackerMapping(tracker, connectors, scaler);
+                boneTransformMappings.Add(mapping);
+            }
+        }
+        IterateOver(boneTransformMappings);
+    }
+    public static List<BasisBoneTrackedRole> roles = new List<BasisBoneTrackedRole>();
+    public static List<BasisTrackerMapping> maps = new List<BasisTrackerMapping>();
+    private static void IterateOver(List<BasisTrackerMapping> boneTransformMappings)
+    {
+        roles.Clear();
+        maps.Clear();
+        // Find optimal matches
+        foreach (BasisTrackerMapping mapping in boneTransformMappings)
+        {
+            if (mapping.Tracker != null && mapping.Candidates.Count > 0)
+            {
+                // Find the closest candidate
+                for (int Index = 0; Index < mapping.Candidates.Count; Index++)
                 {
-                    SmallestForConnector = Distance.Value;
-                    CalibrationConnector = Distance.Key;
-                    HasFoundTarget = true;
-                    Debug.Log("Found Con at distance " + Distance.Value + " " + Distance.Key.BasisBoneTrackedRole + "with bone name " + connector.Bone.name);
+                    CalibrationConnector candidate = mapping.Candidates[Index];
+                    if (roles.Contains(candidate.BasisBoneControlRole) == false && maps.Contains(mapping) == false)
+                    {
+                        ApplyToTarget(candidate, mapping);
+                    }
                 }
             }
-            if(HasFoundTarget)
+            else
             {
-                FoundRoles.Add(CalibrationConnector.BasisBoneTrackedRole);
-                connector.Bone.ApplyTrackerCalibration(CalibrationConnector.BasisBoneTrackedRole);
+                Debug.LogError("Missing Tracker for index " + boneTransformMappings.IndexOf(mapping) + " with ID " + mapping.Tracker.name);
             }
         }
+
+    }
+    public static void ApplyToTarget(CalibrationConnector candidate, BasisTrackerMapping mapping)
+    {
+        mapping.Tracker.ApplyTrackerCalibration(candidate.BasisBoneControlRole);
+        roles.Add(candidate.BasisBoneControlRole);
+        maps.Add(mapping);
     }
 }
