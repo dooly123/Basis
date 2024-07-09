@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 #if UNITY_EDITOR
@@ -222,9 +223,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
             {
                 if (CheckBeforeOverride(PreviousDevice))
                 {
-                    Debug.Log("device is restored " + PreviousDevice.trackedRole);
-                    basisXRInput.ApplyTrackerCalibration(PreviousDevice.trackedRole);
-                    basisXRInput.Control.InverseOffsetFromBone = PreviousDevice.InverseOffsetFromBone;
+                    StartCoroutine(RestoreInversetOffsets(basisXRInput, PreviousDevice));
                 }
                 else
                 {
@@ -239,7 +238,21 @@ public partial class BasisDeviceManagement : MonoBehaviour
         }
         return false;
     }
-    public bool CheckBeforeOverride(StoredPreviousDevice Stored)
+    IEnumerator RestoreInversetOffsets(BasisInput basisXRInput, StoredPreviousDevice PreviousDevice)
+    {
+        yield return new WaitForEndOfFrame();
+        if (basisXRInput != null && basisXRInput.Control != null)
+        {
+            if (CheckBeforeOverride(PreviousDevice))
+            {
+                Debug.Log("device is restored " + PreviousDevice.trackedRole);
+                basisXRInput.ApplyTrackerCalibration(PreviousDevice.trackedRole);
+                basisXRInput.Control.InverseOffsetFromBone = PreviousDevice.InverseOffsetFromBone;
+            }
+        }
+
+    }
+        public bool CheckBeforeOverride(StoredPreviousDevice Stored)
     {
         foreach(var device in AllInputDevices)
         {
