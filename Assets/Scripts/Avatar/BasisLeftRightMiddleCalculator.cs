@@ -1,8 +1,10 @@
 using UnityEngine;
+using static BasisAvatarIKStageCalibration;
 using static BasisAvatarIKStageCalibration.BasisTrackerMapping;
 
 public static class BasisLeftRightMiddleCalculator
 {
+    /*
     public static void SetSpot(CalibrationConnector calibrationConnector)
     {
         if (BasisAvatarDriver.IsApartOfSpineVertical(calibrationConnector.BasisBoneControlRole))
@@ -21,6 +23,7 @@ public static class BasisLeftRightMiddleCalculator
             }
         }
     }
+    */
     public static bool IsRight(Transform TransformRightCheck, Transform avatarMiddle)
     {
         Vector3 directionToOther = TransformRightCheck.position - avatarMiddle.position;
