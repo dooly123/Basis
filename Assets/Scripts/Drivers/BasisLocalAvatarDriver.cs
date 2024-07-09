@@ -279,19 +279,23 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     {
         if (RoleWithHint == BasisBoneTrackedRole.RightLowerLeg)
         {
+            Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
             RightFootTwoBoneIK.data.hintWeight = weight;
         }
         if (RoleWithHint == BasisBoneTrackedRole.LeftLowerLeg)
         {
+            Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
             LeftFootTwoBoneIK.data.hintWeight = weight;
 
         }
         if (RoleWithHint == BasisBoneTrackedRole.RightUpperArm)
         {
+            Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
             RightHandTwoBoneIK.data.hintWeight = weight;
         }
         if (RoleWithHint == BasisBoneTrackedRole.LeftUpperArm)
         {
+            Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
             LeftHandTwoBoneIK.data.hintWeight = weight;
         }
     }

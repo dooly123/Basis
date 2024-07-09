@@ -273,7 +273,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         Constraint.data.targetRotationWeight = 1;
         Constraint.data.maintainTargetPositionOffset = maintainTargetPositionOffset;
         Constraint.data.maintainTargetRotationOffset = maintainTargetRotationOffset;
-        Constraint.data.hintWeight = 1;
     }
     public void Damp(BaseBoneDriver driver, GameObject Parent, Transform Source, BasisBoneTrackedRole Role, float rotationWeight = 1, float positionWeight = 1)
     {
@@ -352,7 +351,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             if (driver.FindBone(out BasisBoneControl BendBoneControl, BendRole))
             {
                 TwoBoneIKConstraint.data.hint = BendBoneControl.BoneModelTransform;
-                TwoBoneIKConstraint.data.hintWeight = 1;
             }
         }
         TwoBoneIKConstraint.data.root = root;
