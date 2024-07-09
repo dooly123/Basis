@@ -5,7 +5,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     private BasisAnimatorVariableApply basisAnimatorVariableApply = new BasisAnimatorVariableApply();
     [SerializeField]
     private Animator animator;
-    public float IsMoving = 0.1f;
+    public float LargerThenVelocityCheck = 0.01f;
     private BasisLocalPlayer localPlayer;
     public float ScaleMovementBy = 1;
     public float dampeningFactor = 0.1f; // Adjust this value to control the dampening effect
@@ -25,10 +25,10 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
             dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
 
             basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = dampenedVelocity;
-            basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > IsMoving;
+            basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > LargerThenVelocityCheck;
 
             basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 1;
-            if (HasHipsInput && basisAnimatorVariableApply.BasisAnimatorVariables.isMoving && HipsInput.hasRoleAssigned && HipsInput.TrackedRole == BasisBoneTrackedRole.Hips)
+            if (HasHipsInput && basisAnimatorVariableApply.BasisAnimatorVariables.isMoving == false && HipsInput.hasRoleAssigned && HipsInput.TrackedRole == BasisBoneTrackedRole.Hips)
             {
                 basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 0;
             }
@@ -64,12 +64,12 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         basisAnimatorVariableApply.LoadCachedAnimatorHashes(animator);
         Controller = BasisLocalPlayer.Instance.Move;
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += OnListChanged;
-        OnListChanged();
+        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += AssignHipsFBTracker;
+        AssignHipsFBTracker();
     }
     public BasisInput HipsInput;
     public bool HasHipsInput = false;
-    public void OnListChanged()
+    public void AssignHipsFBTracker()
     {
         HasHipsInput = BasisDeviceManagement.Instance.FindDevice(out HipsInput, BasisBoneTrackedRole.Hips);
     }

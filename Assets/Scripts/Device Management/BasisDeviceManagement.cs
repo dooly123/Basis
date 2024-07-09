@@ -274,12 +274,11 @@ public partial class BasisDeviceManagement : MonoBehaviour
             {
                 if (device.Control.HasBone)
                 {
-                    if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(device.Control, out BasisBoneTrackedRole role))
+                    if(device.TrackedRole == FindRole)
                     {
-                        if (FindRole == role)
-                        {
-                            FindDevice = device;
-                        }
+                        FindDevice = device;
+                        return true;
+                        
                     }
                 }
             }

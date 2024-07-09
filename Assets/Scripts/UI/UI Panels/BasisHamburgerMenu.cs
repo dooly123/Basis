@@ -59,11 +59,14 @@ public class BasisHamburgerMenu : BasisUIBase
         {
             Input.UnAssignTracker();
         }
+        BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = false;
         //now lets grab and apply the height
         BasisLocalPlayer.Instance.LocalBoneDriver.Simulate();
         BasisLocalPlayer.Instance.LocalBoneDriver.ApplyMovement();
         //now that we have latest * scale we can run calibration
         BasisAvatarIKStageCalibration.FullBodyCalibration();
+        BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
+        BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = true;
     }
 #if UNITY_EDITOR
         [MenuItem("Basis/CalibrateFB")]
