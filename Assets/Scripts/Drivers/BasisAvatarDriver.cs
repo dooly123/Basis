@@ -349,9 +349,11 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         TwoBoneIKConstraint.data.target = BoneControl.BoneModelTransform;
         if (UseBoneRole)
         {
-            driver.FindBone(out BasisBoneControl BendBoneControl, BendRole);
-            TwoBoneIKConstraint.data.hint = BendBoneControl.BoneModelTransform;
-            TwoBoneIKConstraint.data.hintWeight = 1;
+            if (driver.FindBone(out BasisBoneControl BendBoneControl, BendRole))
+            {
+                TwoBoneIKConstraint.data.hint = BendBoneControl.BoneModelTransform;
+                TwoBoneIKConstraint.data.hintWeight = 1;
+            }
         }
         TwoBoneIKConstraint.data.root = root;
         TwoBoneIKConstraint.data.mid = mid;

@@ -246,7 +246,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftHandLayer);
         }
-        CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftUpperArm, false, out LeftHandTwoBoneIK, false, false);
+        CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftUpperArm, true, out LeftHandTwoBoneIK, false, false);
     }
     public void RightHand(BasisLocalBoneDriver driver)
     {
@@ -255,7 +255,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightHandLayer);
         }
-        CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightUpperArm, false, out RightHandTwoBoneIK, false, false);
+        CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightUpperArm, true, out RightHandTwoBoneIK, false, false);
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {
@@ -264,7 +264,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftFootLayer);
         }
-        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, false, out LeftFootTwoBoneIK, false, false);
+        CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, true, out LeftFootTwoBoneIK, false, false);
     }
     public void RightFoot(BasisLocalBoneDriver driver)
     {
@@ -273,7 +273,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightFootLayer);
         }
-        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, false, out RightFootTwoBoneIK, false, false);
+        CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, false);
     }
     public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)
     {
