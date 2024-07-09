@@ -59,6 +59,7 @@ public class BasisHamburgerMenu : BasisUIBase
         {
             Input.UnAssignTracker();
         }
+        //disable builder and it will be updated when the animator updates
         BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = false;
         //now lets grab and apply the height
         BasisLocalPlayer.Instance.LocalBoneDriver.Simulate();
