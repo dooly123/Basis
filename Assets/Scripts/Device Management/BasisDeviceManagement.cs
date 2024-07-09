@@ -175,6 +175,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
             {
                 if (device.SubSystem == SubSystem && device.UniqueID == id)
                 {
+                    CacheDevice(device);
                     AllInputDevices[Index] = null;
                     GameObject.Destroy(device.gameObject);
                 }
@@ -217,13 +218,40 @@ public partial class BasisDeviceManagement : MonoBehaviour
         if (AllInputDevices.Contains(basisXRInput) == false)
         {
             AllInputDevices.Add(basisXRInput);
+            if (RestoreDevice(basisXRInput.SubSystem, basisXRInput.UniqueID, out StoredPreviousDevice PreviousDevice))
+            {
+                if (CheckBeforeOverride(PreviousDevice))
+                {
+                    Debug.Log("device is restored " + PreviousDevice.trackedRole);
+                    basisXRInput.ApplyTrackerCalibration(PreviousDevice.trackedRole);
+                    basisXRInput.Control.InverseOffsetFromBone = PreviousDevice.InverseOffsetFromBone;
+                }
+                else
+                {
+                    Debug.Log("bailing out of restore already has a replacement");
+                }
+            }
             return true;
         }
         else
         {
             Debug.LogError("already added a Input Device thats identical!");
         }
-         return false;
+        return false;
+    }
+    public bool CheckBeforeOverride(StoredPreviousDevice Stored)
+    {
+        foreach(var device in AllInputDevices)
+        {
+            if (device.hasRoleAssigned)
+            {
+                if (device.TrackedRole == Stored.trackedRole)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     public bool FindDevice(out BasisInput FindDevice, BasisBoneTrackedRole FindRole)
     {
@@ -244,6 +272,46 @@ public partial class BasisDeviceManagement : MonoBehaviour
             }
         }
         FindDevice = null;
+        return false;
+    }
+    [System.Serializable]
+    public class StoredPreviousDevice
+    {
+        public BasisCalibratedOffsetData InverseOffsetFromBone;
+        public BasisBoneTrackedRole trackedRole;
+        public bool hasRoleAssigned = false;
+        public string SubSystem;
+        public string UniqueID;
+    }
+    [SerializeField]
+    public List<StoredPreviousDevice> PreviouslyConnectedDevices = new List<StoredPreviousDevice>();
+    public void CacheDevice(BasisInput DevicesThatsGettingPurged)
+    {
+        if (DevicesThatsGettingPurged.hasRoleAssigned && DevicesThatsGettingPurged.Control != null)
+        {
+            StoredPreviousDevice StoredPreviousDevice = new StoredPreviousDevice 
+            { InverseOffsetFromBone = DevicesThatsGettingPurged.Control.InverseOffsetFromBone };;
+            StoredPreviousDevice.trackedRole = DevicesThatsGettingPurged.TrackedRole;
+            StoredPreviousDevice.hasRoleAssigned = DevicesThatsGettingPurged.hasRoleAssigned;
+            StoredPreviousDevice.SubSystem = DevicesThatsGettingPurged.SubSystem;
+            StoredPreviousDevice.UniqueID = DevicesThatsGettingPurged.UniqueID;
+            PreviouslyConnectedDevices.Add(StoredPreviousDevice);
+        }
+    }
+    public bool RestoreDevice(string SubSystem, string id, out StoredPreviousDevice StoredPreviousDevice)
+    {
+        foreach (StoredPreviousDevice Device in PreviouslyConnectedDevices)
+        {
+            if (Device.UniqueID == id && Device.SubSystem == SubSystem)
+            {
+                //ok it was lastr
+                Debug.Log("this device is restoreable restoring..");
+                PreviouslyConnectedDevices.Remove(Device);
+                StoredPreviousDevice = Device;
+                return true;
+            }
+        }
+        StoredPreviousDevice = null;
         return false;
     }
 #if UNITY_EDITOR

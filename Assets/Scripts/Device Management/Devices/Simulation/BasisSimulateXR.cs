@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
+using static BasisDeviceManagement;
 using Random = UnityEngine.Random;
 public class BasisSimulateXR
 {
@@ -33,46 +34,28 @@ public class BasisSimulateXR
         BasisDeviceManagement.Instance.TryAdd(BasisInput);
         return BasisInput;
     }
-    public void DestroyXRInput(string ID)
+#if UNITY_EDITOR
+    [MenuItem("Basis/Destroy XR Input")]
+    public static void DestroyXRInput()
     {
-        // Create a list to hold devices to remove from Inputs
-        List<BasisInput> devicesToRemove = new List<BasisInput>();
-
-        // Iterate over the Inputs list and find devices to remove
-        foreach (var device in Inputs)
-        {
-            if (device.UniqueID == ID)
-            {
-                devicesToRemove.Add(device);
-            }
-        }
-
-        // Remove devices from Inputs list after iteration
-        foreach (var device in devicesToRemove)
-        {
-            Inputs.Remove((BasisInputXRSimulate)device);
-        }
-
-        // Create a list to hold devices to remove from AllInputDevices
-        List<BasisInput> allDevicesToRemove = new List<BasisInput>();
-
-        // Iterate over a copy of the AllInputDevices list to find devices to remove
-        List<BasisInput> duplicate = new List<BasisInput>(BasisDeviceManagement.Instance.AllInputDevices);
-        foreach (var device in duplicate)
-        {
-            if (device.UniqueID == ID)
-            {
-                allDevicesToRemove.Add(device);
-            }
-        }
+        List<BasisInput> allDevicesToRemove = new List<BasisInput>(BasisDeviceManagement.Instance.AllInputDevices);
 
         // Remove devices from AllInputDevices list after iteration
         foreach (var device in allDevicesToRemove)
         {
-            BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisSimulateXR), ID);
+            BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisSimulateXR", device.UniqueID);
         }
     }
-#if UNITY_EDITOR
+    [MenuItem("Basis/Destroy And Restore XR Input")]
+    public static void DestroyAndRebuildXRInput()
+    {
+        DestroyXRInput();
+        List<StoredPreviousDevice> allDevicesToRemove = new List<StoredPreviousDevice>(BasisDeviceManagement.Instance.PreviouslyConnectedDevices);
+        foreach (var device in allDevicesToRemove)
+        {
+            BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice(device.UniqueID, "{htc}vr_tracker_vive_3_0");
+        }
+    }
     [MenuItem("Basis/Create Puck Tracker")]
     public static void CreatePuckTracker()
     {

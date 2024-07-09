@@ -28,4 +28,12 @@ public class BasisInputXRSimulate : BasisInput
         UpdatePlayerControl();
         transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
     }
+    public new void OnDestroy()
+    {
+        if(FollowMovement != null)
+        {
+            GameObject.Destroy(FollowMovement.gameObject);
+        }
+        base.OnDestroy();   
+    }
 }
