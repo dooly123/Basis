@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -14,17 +15,25 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public TwoBoneIKConstraint LeftHandTwoBoneIK;
     public TwoBoneIKConstraint RightHandTwoBoneIK;
     public TwoBoneIKConstraint UpperChestTwoBoneIK;
-    public Rig RigHead;
+
+    public Rig LeftToeRig;
+    public Rig RightToeRig;
+
+    public Rig RigHeadRig;
     public Rig LeftHandRig;
     public Rig RightHandRig;
     public Rig LeftFootRig;
     public Rig RightFootRig;
-    public Rig ChestSpine;
-    public Rig Spine;
+    public Rig ChestSpineRig;
+    public Rig SpineRig;
+
     public RigLayer LeftHandLayer;
     public RigLayer RightHandLayer;
     public RigLayer LeftFootLayer;
     public RigLayer RightFootLayer;
+    public RigLayer LeftToeLayer;
+    public RigLayer RightToeLayer;
+
     public RigLayer HeadLayer;
     public RigLayer UpperChestLayer;
     public RigLayer SpineLayer;
@@ -115,9 +124,9 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             Destroy(Builder);
         }
         Builder = null;
-        if (RigHead != null)
+        if (RigHeadRig != null)
         {
-            Destroy(RigHead.gameObject);
+            Destroy(RigHeadRig.gameObject);
         }
         if (LeftHandRig != null)
         {
@@ -135,13 +144,22 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             Destroy(RightFootRig.gameObject);
         }
-        if (ChestSpine != null)
+        if (ChestSpineRig != null)
         {
-            Destroy(ChestSpine.gameObject);
+            Destroy(ChestSpineRig.gameObject);
         }
-        if (Spine != null)
+        if (SpineRig != null)
         {
-            Destroy(Spine.gameObject);
+            Destroy(SpineRig.gameObject);
+        }
+
+        if (LeftToeRig != null)
+        {
+            Destroy(LeftToeRig.gameObject);
+        }
+        if (RightToeRig != null)
+        {
+            Destroy(RightToeRig.gameObject);
         }
     }
     public void ComputeOffsets(BaseBoneDriver BaseBoneDriver)
@@ -205,15 +223,16 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void SetBodySettings(BasisLocalBoneDriver driver)
     {
-        GameObject HeadRig = CreateRig("Head", true, out RigHead, out HeadLayer);
+        GameObject HeadRig = CreateRig("Head", true, out RigHeadRig, out HeadLayer);
         Hands(driver);
         Feet(driver);
+        Toes(driver);
         CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Head,false, out HeadTwoBoneIK, false, false);
 
-        GameObject Body = CreateRig("Upper Chest", true, out ChestSpine, out UpperChestLayer);
+        GameObject Body = CreateRig("Upper Chest", true, out ChestSpineRig, out UpperChestLayer);
         CreateTwoBone(driver, Body, null, References.spine, References.chest, BasisBoneTrackedRole.UpperChest, BasisBoneTrackedRole.UpperChest, false, out UpperChestTwoBoneIK, false, false);
 
-        GameObject SpineGo = CreateRig("Spine", true, out Spine, out SpineLayer);
+        GameObject SpineGo = CreateRig("Spine", true, out SpineRig, out SpineLayer);
         CreateTwoBone(driver, SpineGo, null, null, References.spine, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Spine, false, out UpperChestTwoBoneIK, false, false);
 
         if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.Head))
@@ -238,6 +257,11 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     {
         LeftFoot(driver);
         RightFoot(driver);
+    }
+    public void Toes(BasisLocalBoneDriver driver)
+    {
+        LeftToe(driver);
+        RightToe(driver);
     }
     public void LeftHand(BasisLocalBoneDriver driver)
     {
@@ -274,6 +298,25 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             WriteUpEvents(Control, RightFootLayer);
         }
         CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, false);
+    }
+
+    public void LeftToe(BasisLocalBoneDriver driver)
+    {
+        GameObject feet = CreateRig("LeftToe", false, out LeftToeRig, out LeftToeLayer);
+        if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftToes))
+        {
+            WriteUpEvents(Control, LeftToeLayer);
+        }
+        Damp(driver, feet, References.leftToes, BasisBoneTrackedRole.LeftToes, 0, 0);
+    }
+    public void RightToe(BasisLocalBoneDriver driver)
+    {
+        GameObject feet = CreateRig("RightToe", false, out RightToeRig, out RightToeLayer);
+        if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightToes))
+        {
+            WriteUpEvents(Control, RightToeLayer);
+        }
+        Damp(driver, feet, References.rightToes, BasisBoneTrackedRole.RightToes,0,0);
     }
     public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)
     {
