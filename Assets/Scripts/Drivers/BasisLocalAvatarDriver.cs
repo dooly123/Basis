@@ -47,6 +47,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void InitialLocalCalibration(BasisLocalPlayer Player)
     {
+        Debug.Log("InitialLocalCalibration");
         LocalPlayer = Player;
 
         this.LocalDriver = LocalPlayer.LocalBoneDriver;
@@ -97,25 +98,6 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         }
         MicrophoneRecorder.TryInitialize();
         ResetAvatarAnimator();
-    }
-    /// <summary>
-    /// only called when dealing with trackers
-    /// </summary>
-    public void CalibrateRoles()
-    {
-        for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles.Length; Index++)
-        {
-            BasisBoneTrackedRole role = BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles[Index];
-            BasisBoneControl BoneControl = BasisLocalPlayer.Instance.LocalBoneDriver.Controls[Index];
-            if (BoneControl.HasRigLayer == BasisHasRigLayer.HasRigLayer)
-            {
-                ApplyHint(role, 1);
-            }
-            else
-            {
-                ApplyHint(role, 0);
-            }
-        }
     }
     public void CleanupBeforeContinue()
     {
@@ -302,21 +284,37 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
 
     public void LeftToe(BasisLocalBoneDriver driver)
     {
-        GameObject feet = CreateRig("LeftToe", false, out LeftToeRig, out LeftToeLayer);
+        GameObject LeftToe = CreateRig("LeftToe", false, out LeftToeRig, out LeftToeLayer);
         if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftToes))
         {
             WriteUpEvents(Control, LeftToeLayer);
         }
-        Damp(driver, feet, References.leftToes, BasisBoneTrackedRole.LeftToes, 0, 0);
+        Damp(driver, LeftToe, References.leftToes, BasisBoneTrackedRole.LeftToes, 0, 0);
     }
     public void RightToe(BasisLocalBoneDriver driver)
     {
-        GameObject feet = CreateRig("RightToe", false, out RightToeRig, out RightToeLayer);
+        GameObject RightToe = CreateRig("RightToe", false, out RightToeRig, out RightToeLayer);
         if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightToes))
         {
             WriteUpEvents(Control, RightToeLayer);
         }
-        Damp(driver, feet, References.rightToes, BasisBoneTrackedRole.RightToes,0,0);
+        Damp(driver, RightToe, References.rightToes, BasisBoneTrackedRole.RightToes,0,0);
+    }
+    public void CalibrateRoles()
+    {
+        for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles.Length; Index++)
+        {
+            BasisBoneTrackedRole role = BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles[Index];
+            BasisBoneControl BoneControl = BasisLocalPlayer.Instance.LocalBoneDriver.Controls[Index];
+            if (BoneControl.HasRigLayer == BasisHasRigLayer.HasRigLayer)
+            {
+                ApplyHint(role, 1);
+            }
+            else
+            {
+                ApplyHint(role, 0);
+            }
+        }
     }
     public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)
     {
@@ -325,17 +323,20 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
             RightFootTwoBoneIK.data.hintWeight = weight;
         }
+        else
         if (RoleWithHint == BasisBoneTrackedRole.LeftLowerLeg)
         {
             Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
             LeftFootTwoBoneIK.data.hintWeight = weight;
 
         }
+        else
         if (RoleWithHint == BasisBoneTrackedRole.RightUpperArm)
         {
             Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
             RightHandTwoBoneIK.data.hintWeight = weight;
         }
+        else
         if (RoleWithHint == BasisBoneTrackedRole.LeftUpperArm)
         {
             Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);

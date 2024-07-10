@@ -12,9 +12,9 @@ public static partial class BasisAvatarIKStageCalibration
         List<BasisInput> Trackers = GetAllInputsExcludingEyeAndHands(ref rolesToDiscover);
         List<CalibrationConnector> availableBoneControl = GetAvailableBoneControls(Trackers);
         FindOptimalMatches(availableBoneControl, rolesToDiscover);
-
-        BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+        //do the roles after to stop the animator switch issue
+        BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
     }
     #region DiscoverWhatsPossible
     private static List<BasisBoneTrackedRole> GetAllRoles()

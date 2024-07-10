@@ -139,7 +139,7 @@ public class BasisSimulateXR
         BasisInputXRSimulate[] trackers = new BasisInputXRSimulate[bodyParts.Length];
         for (int Index = 0; Index < bodyParts.Length; Index++)
         {
-            BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice(trackerName, trackerName);
+            BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice(trackerName + " part " + bodyParts[Index].name, trackerName);
             trackers[Index] = BasisDeviceManagement.Instance.BasisSimulateXR.Inputs[Index];
         }
 

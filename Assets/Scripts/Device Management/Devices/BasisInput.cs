@@ -44,7 +44,7 @@ public abstract class BasisInput : MonoBehaviour
         BasisBoneTrackedRole = BasisBoneTrackedRole.CenterEye;
         return false;
     }
-    public void AssignRole(BasisBoneTrackedRole Role)
+    public void AssignRoleAndTracker(BasisBoneTrackedRole Role)
     {
         hasRoleAssigned = true;
         trackedRole = Role;
@@ -67,7 +67,7 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Attempted to find " + Role + " but it did not exist");
         }
     }
-    public void UnAssignRole()
+    public void UnAssignRoleAndTracker()
     {
         //unassign last
         if (hasRoleAssigned)
@@ -110,7 +110,7 @@ public abstract class BasisInput : MonoBehaviour
             if (BasisDeviceMatchableNames.HasTrackedRole)
             {
                 Debug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID);
-                AssignRole(BasisDeviceMatchableNames.TrackedRole);
+                AssignRoleAndTracker(BasisDeviceMatchableNames.TrackedRole);
             }
 
             if (hasRoleAssigned)
@@ -137,7 +137,7 @@ public abstract class BasisInput : MonoBehaviour
             //assign a new tracker if requested
             if (ForceAssignTrackedRole)
             {
-                AssignRole(basisBoneTrackedRole);
+                AssignRoleAndTracker(basisBoneTrackedRole);
             }
         }
         //events
@@ -178,14 +178,14 @@ public abstract class BasisInput : MonoBehaviour
                 Control.InverseOffsetFromBone.rotation = Quaternion.identity;
                 Control.InverseOffsetFromBone.Use = false;
             }
-            UnAssignRole();
+            UnAssignRoleAndTracker();
         }
     }
     public void ApplyTrackerCalibration(BasisBoneTrackedRole Role)
     {
         UnAssignTracker();
         Debug.Log("ApplyTrackerCalibration " + Role + " to tracker " + UniqueDeviceIdentifier);
-        AssignRole(Role);
+        AssignRoleAndTracker(Role);
     }
     public void StopTracking()
     {
@@ -195,7 +195,7 @@ public abstract class BasisInput : MonoBehaviour
             return;
         }
         BasisLocalPlayer.Instance.LocalBoneDriver.OnSimulate -= PollData;
-        UnAssignRole();
+        UnAssignRoleAndTracker();
     }
     public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
     {
@@ -206,10 +206,18 @@ public abstract class BasisInput : MonoBehaviour
             if (Control.HasRigLayer == BasisHasRigLayer.HasNoRigLayer)
             {
                 hasRoleAssigned = false;
+                if (TryGetRole(out BasisBoneTrackedRole Role))
+                {
+                    BasisLocalPlayer.Instance.AvatarDriver.ApplyHint(Role, 0);
+                }
             }
             else
             {
                 hasRoleAssigned = true;
+                if (TryGetRole(out BasisBoneTrackedRole Role))
+                {
+                    BasisLocalPlayer.Instance.AvatarDriver.ApplyHint(Role, 1);
+                }
             }
             Debug.Log("Set Tracker State for tracker " + UniqueDeviceIdentifier + " with bone " + Control.Name + " as " + Control.HasTracked.ToString() + " | " + Control.HasRigLayer.ToString());
         }
