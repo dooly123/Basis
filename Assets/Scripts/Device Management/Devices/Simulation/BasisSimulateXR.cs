@@ -92,9 +92,9 @@ public class BasisSimulateXR
     public static void CreatePuck3Tracker()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
-        BasisInputXRSimulate BasisHips = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
-        BasisInputXRSimulate BasisLeftFoot = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
-        BasisInputXRSimulate BasisRightFoot = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisHips = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisHips | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisLeftFoot = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisLeftFoot | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisRightFoot = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisRightFoot | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
 
         var hips = BasisLocalPlayer.Instance.AvatarDriver.References.Hips;
         var leftFoot = BasisLocalPlayer.Instance.AvatarDriver.References.leftFoot;
