@@ -157,6 +157,54 @@ public class BasisSimulateXR
         // Show the trackers
         BasisDeviceManagement.ShowTrackers();
     }
+    [MenuItem("Basis/Create Mostly MaxTracker Tracking")]
+    public static void CreateSemiMaxTracker()
+    {
+        //  BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
+        // Create an array of the tracker names for simplicity
+        string trackerName = "{htc}vr_tracker_vive_3_0";
+
+        var avatarDriver = BasisLocalPlayer.Instance.AvatarDriver.References;
+
+        // Array of all relevant body parts
+        Transform[] bodyParts = new Transform[]
+        {
+            avatarDriver.Hips,
+            avatarDriver.leftShoulder, avatarDriver.leftUpperArm,
+            avatarDriver.leftLowerArm, avatarDriver.RightShoulder, avatarDriver.RightUpperArm,
+            avatarDriver.RightLowerArm, avatarDriver.LeftUpperLeg, avatarDriver.LeftLowerLeg,
+            avatarDriver.leftFoot, avatarDriver.leftToes, avatarDriver.RightUpperLeg, avatarDriver.RightLowerLeg,
+            avatarDriver.rightFoot, avatarDriver.rightToes //  avatarDriver.chest,  avatarDriver.neck, avatarDriver.head, avatarDriver.spine, avatarDriver.rightHand, avatarDriver.leftHand,  avatarDriver.LeftEye, avatarDriver.RightEye,
+        };
+
+        // Create an array of the BasisInputXRSimulate instances
+        BasisInputXRSimulate[] trackers = new BasisInputXRSimulate[bodyParts.Length];
+        for (int Index = 0; Index < bodyParts.Length; Index++)
+        {
+            if (bodyParts[Index] != null)
+            {
+                BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice(trackerName + " part " + bodyParts[Index].name, trackerName);
+                trackers[Index] = BasisDeviceManagement.Instance.BasisSimulateXR.Inputs[Index];
+            }
+        }
+
+        // Set positions and rotations for each tracker
+        for (int Index = 0; Index < bodyParts.Length; Index++)
+        {
+            Transform bodyPart = bodyParts[Index];
+            if (bodyPart != null)
+            {
+                Vector3 bodyPartPosition = ModifyVector(bodyPart.position);
+                trackers[Index].FollowMovement.position = bodyPartPosition;
+                trackers[Index].FollowMovement.rotation = Random.rotation;
+            }
+        }
+        //   BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+
+        // BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
+        // Show the trackers
+        BasisDeviceManagement.ShowTrackers();
+    }
     [MenuItem("Basis/TPose Animator")]
     public static void PutAvatarIntoTpose()
     {

@@ -7,7 +7,7 @@ public abstract class BasisInput : MonoBehaviour
     public bool HasAssignedEvents = false;
     public string SubSystemIdentifier;
     [SerializeField] private BasisBoneTrackedRole trackedRole;
-    [SerializeField] public bool hasRoleAssigned { get; private set; }
+    [SerializeField] public bool hasRoleAssigned;
     public BasisBoneControl Control = new BasisBoneControl();
     public bool HasControl = false;
     public string UniqueDeviceIdentifier;
@@ -47,6 +47,17 @@ public abstract class BasisInput : MonoBehaviour
     public void AssignRoleAndTracker(BasisBoneTrackedRole Role)
     {
         hasRoleAssigned = true;
+        foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+        {
+            if (Input.TryGetRole(out var found) && Input != this)
+            {
+                if (found == Role)
+                {
+                    Debug.LogError("Already Found tracker for  " + Role);
+                    return;
+                }
+            }
+        }
         trackedRole = Role;
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Control, trackedRole))
         {
@@ -69,13 +80,16 @@ public abstract class BasisInput : MonoBehaviour
     }
     public void UnAssignRoleAndTracker()
     {
-        //unassign last
-        if (hasRoleAssigned)
+        if (BasisDeviceMatchableNames == null || BasisDeviceMatchableNames.HasTrackedRole == false)
         {
-            SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
+            //unassign last
+            if (hasRoleAssigned)
+            {
+                SetRealTrackers(BasisHasTracked.HasNoTracker, BasisHasRigLayer.HasNoRigLayer);
+            }
+            hasRoleAssigned = false;
+            trackedRole = BasisBoneTrackedRole.CenterEye;
         }
-        hasRoleAssigned = false;
-        trackedRole = BasisBoneTrackedRole.CenterEye;
     }
     public void OnDisable()
     {

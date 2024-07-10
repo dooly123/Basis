@@ -106,9 +106,6 @@ public class BasisAvatarEyeInput : BasisInput
             // Clamp rotationY to stay within the specified range
             rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
             LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
-        }
-        if (hasRoleAssigned)
-        {
             Vector3 adjustedHeadPosition = new Vector3(0, BasisLocalPlayer.Instance.PlayerEyeHeight, 0);
             if (BasisLocalInputActions.Crouching && BlockCrouching == false)
             {
@@ -120,10 +117,10 @@ public class BasisAvatarEyeInput : BasisInput
             LocalRawPosition = adjustedHeadPosition; // / BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
             Control.TrackerData.position = LocalRawPosition;
         }
-        UpdatePlayerControl();
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;
-        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
+        UpdatePlayerControl();
+        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
     }
     public void CalculateAdjustment()
     {

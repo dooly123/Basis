@@ -49,26 +49,23 @@ public static partial class BasisAvatarIKStageCalibration
         List<BasisInput> trackInput = new List<BasisInput>();
         foreach (BasisInput baseInput in BasisDeviceManagement.Instance.AllInputDevices)
         {
-            if (baseInput.hasRoleAssigned == false)
+            if (baseInput.TryGetRole(out BasisBoneTrackedRole role))
             {
-                Debug.Log("Add Tracker with name " + baseInput.name);
-                trackInput.Add(baseInput);
+                if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(role))
+                {
+                    Debug.Log("Add Tracker that had last role " + role + " with name " + baseInput.name);
+                    trackInput.Add(baseInput);
+                }
+                else
+                {
+                    Debug.Log("excluding role " + role + " from being used during FB");
+                    rolesToDiscover.Remove(role);
+                }
             }
             else
             {
-                if (baseInput.TryGetRole(out BasisBoneTrackedRole role))
-                {
-                    if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(role))
-                    {
-                        Debug.Log("Add Tracker that had last role " + role + " with name " + baseInput.name);
-                        trackInput.Add(baseInput);
-                    }
-                    else
-                    {
-                        Debug.Log("excluding role " + role + " from being used during FB");
-                        rolesToDiscover.Remove(role);
-                    }
-                }
+                Debug.Log("Add Tracker with name " + baseInput.name);
+                trackInput.Add(baseInput);
             }
         }
         Debug.Log("Completed input tracking");
