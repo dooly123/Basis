@@ -41,9 +41,9 @@ public class BasisLockToInput : MonoBehaviour
             BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
             if (Input != null)
             {
-                if (Input.hasRoleAssigned)
+                if (Input.TryGetRole(out BasisBoneTrackedRole role))
                 {
-                    if (Input.TrackedRole == TrackedRole)
+                    if (role == TrackedRole)
                     {
                         AttachedInput = Input;
                         this.transform.parent = AttachedInput.transform;

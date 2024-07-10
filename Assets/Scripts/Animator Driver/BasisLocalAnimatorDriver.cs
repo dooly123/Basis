@@ -28,9 +28,15 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
             basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > LargerThenVelocityCheck;
 
             basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 1;
-            if (HasHipsInput && basisAnimatorVariableApply.BasisAnimatorVariables.isMoving == false && HipsInput.hasRoleAssigned && HipsInput.TrackedRole == BasisBoneTrackedRole.Hips)
+            if (HasHipsInput && basisAnimatorVariableApply.BasisAnimatorVariables.isMoving == false)
             {
-                basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 0;
+                if (HipsInput.TryGetRole(out BasisBoneTrackedRole role))
+                {
+                    if (role == BasisBoneTrackedRole.Hips)
+                    {
+                        basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 0;
+                    }
+                }
             }
             basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = localPlayer.Move.IsFalling;
             basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Crouching;

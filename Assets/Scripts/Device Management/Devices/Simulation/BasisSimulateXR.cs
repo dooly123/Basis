@@ -26,7 +26,7 @@ public class BasisSimulateXR
 
         BasisInputXRSimulate BasisInput = gameObject.AddComponent<BasisInputXRSimulate>();
         BasisInput.FollowMovement = Moveable.transform;
-        BasisInput.ActivateTracking(UniqueID, UnUniqueID, subSystems, hasrole, Role);
+        BasisInput.InitalizeTracking(UniqueID, UnUniqueID, subSystems, hasrole, Role);
         if (Inputs.Contains(BasisInput) == false)
         {
             Inputs.Add(BasisInput);
@@ -43,7 +43,7 @@ public class BasisSimulateXR
         // Remove devices from AllInputDevices list after iteration
         foreach (var device in allDevicesToRemove)
         {
-            BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisSimulateXR", device.UniqueID);
+            BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisSimulateXR", device.UniqueDeviceIdentifier);
         }
     }
     [MenuItem("Basis/Destroy And Restore XR Input")]
@@ -92,17 +92,13 @@ public class BasisSimulateXR
     public static void CreatePuck3Tracker()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
-        BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisHips = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisLeftFoot = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisRightFoot = BasisDeviceManagement.Instance.BasisSimulateXR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
 
         var hips = BasisLocalPlayer.Instance.AvatarDriver.References.Hips;
         var leftFoot = BasisLocalPlayer.Instance.AvatarDriver.References.leftFoot;
         var rightFoot = BasisLocalPlayer.Instance.AvatarDriver.References.rightFoot;
-
-        BasisInputXRSimulate BasisHips = BasisDeviceManagement.Instance.BasisSimulateXR.Inputs[0];
-        BasisInputXRSimulate BasisLeftFoot = BasisDeviceManagement.Instance.BasisSimulateXR.Inputs[1];
-        BasisInputXRSimulate BasisRightFoot = BasisDeviceManagement.Instance.BasisSimulateXR.Inputs[2];
 
         Vector3 HipsPosition = ModifyVector(hips.position);
         Vector3 leftFootPosition = ModifyVector(leftFoot.position);
@@ -116,15 +112,13 @@ public class BasisSimulateXR
         BasisLeftFoot.FollowMovement.rotation = Random.rotation;
         BasisRightFoot.FollowMovement.rotation = Random.rotation;
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
-
-        //  BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Create MaxTracker Tracking")]
     public static void CreateFullMaxTracker()
     {
-        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
+      //  BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         // Create an array of the tracker names for simplicity
         string trackerName = "{htc}vr_tracker_vive_3_0";
 
@@ -157,7 +151,7 @@ public class BasisSimulateXR
             trackers[Index].FollowMovement.position = bodyPartPosition;
             trackers[Index].FollowMovement.rotation = Random.rotation;
         }
-        BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+     //   BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
         // BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers

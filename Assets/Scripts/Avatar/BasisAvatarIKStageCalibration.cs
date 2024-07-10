@@ -56,15 +56,18 @@ public static partial class BasisAvatarIKStageCalibration
             }
             else
             {
-                if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(baseInput.TrackedRole))
+                if (baseInput.TryGetRole(out BasisBoneTrackedRole role))
                 {
-                    Debug.Log("Add Tracker that had last role " + baseInput.TrackedRole + " with name " + baseInput.name);
-                    trackInput.Add(baseInput);
-                }
-                else
-                {
-                    Debug.Log("excluding role " + baseInput.TrackedRole + " from being used during FB");
-                    rolesToDiscover.Remove(baseInput.TrackedRole);
+                    if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(role))
+                    {
+                        Debug.Log("Add Tracker that had last role " + role + " with name " + baseInput.name);
+                        trackInput.Add(baseInput);
+                    }
+                    else
+                    {
+                        Debug.Log("excluding role " + role + " from being used during FB");
+                        rolesToDiscover.Remove(role);
+                    }
                 }
             }
         }
@@ -126,7 +129,7 @@ public static partial class BasisAvatarIKStageCalibration
         {
             if (roles.Contains(mapping.BasisBoneControlRole) == false && maps.Contains(mapping) == false && BasisInputs.Contains(Connector.Tracker) == false)
             {
-                Debug.Log("Apply Tracked Data for " + mapping.BasisBoneControlRole + " attached to tracker " + Connector.Tracker.UniqueID);
+                Debug.Log("Apply Tracked Data for " + mapping.BasisBoneControlRole + " attached to tracker " + Connector.Tracker.UniqueDeviceIdentifier);
                 Connector.Tracker.ApplyTrackerCalibration(mapping.BasisBoneControlRole);
                 roles.Add(mapping.BasisBoneControlRole);
                 maps.Add(mapping);

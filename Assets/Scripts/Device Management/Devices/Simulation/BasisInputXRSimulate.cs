@@ -14,12 +14,26 @@ public class BasisInputXRSimulate : BasisInput
         {
             if (Control.HasTracked != BasisHasTracked.HasNoTracker)
             {
-                AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;//normally we dont do this but im doing it so we can see direct colliation
+                if (AssociatedFound)
+                {
+                    AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;//normally we dont do this but im doing it so we can see direct colliation
+                }
+                else
+                {
+                    AvatarPositionOffset = Vector3.zero;
+                }
                 Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
             }
             if (Control.HasTracked != BasisHasTracked.HasNoTracker)
             {
-                AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);//normally we dont do this but im doing it so we can see direct colliation
+                if (AssociatedFound)
+                {
+                    AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);//normally we dont do this but im doing it so we can see direct colliation
+                }
+                else
+                {
+                    AvatarRotationOffset = Quaternion.identity;
+                }
                 Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
             }
 

@@ -33,7 +33,7 @@ public class BasisAvatarEyeInput : BasisInput
         }
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;
-        ActivateTracking(ID, ID, subSystems,true, BasisBoneTrackedRole.CenterEye);
+        InitalizeTracking(ID, ID, subSystems,true, BasisBoneTrackedRole.CenterEye);
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
@@ -57,7 +57,6 @@ public class BasisAvatarEyeInput : BasisInput
 
     public void PlayerInitialized()
     {
-        Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
         characterInputActions = BasisLocalInputActions.Instance;
         if (characterInputActions != null)
         {

@@ -174,7 +174,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
             BasisInput device = AllInputDevices[Index];
             if (device != null)
             {
-                if (device.SubSystem == SubSystem && device.UniqueID == id)
+                if (device.SubSystemIdentifier == SubSystem && device.UniqueDeviceIdentifier == id)
                 {
                     CacheDevice(device);
                     AllInputDevices[Index] = null;
@@ -219,7 +219,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
         if (AllInputDevices.Contains(basisXRInput) == false)
         {
             AllInputDevices.Add(basisXRInput);
-            if (RestoreDevice(basisXRInput.SubSystem, basisXRInput.UniqueID, out StoredPreviousDevice PreviousDevice))
+            if (RestoreDevice(basisXRInput.SubSystemIdentifier, basisXRInput.UniqueDeviceIdentifier, out StoredPreviousDevice PreviousDevice))
             {
                 if (CheckBeforeOverride(PreviousDevice))
                 {
@@ -252,13 +252,13 @@ public partial class BasisDeviceManagement : MonoBehaviour
         }
 
     }
-        public bool CheckBeforeOverride(StoredPreviousDevice Stored)
+    public bool CheckBeforeOverride(StoredPreviousDevice Stored)
     {
-        foreach(var device in AllInputDevices)
+        foreach (var device in AllInputDevices)
         {
-            if (device.hasRoleAssigned)
+            if (device.TryGetRole(out BasisBoneTrackedRole Role))
             {
-                if (device.TrackedRole == Stored.trackedRole)
+                if (Role == Stored.trackedRole)
                 {
                     return false;
                 }
@@ -274,11 +274,14 @@ public partial class BasisDeviceManagement : MonoBehaviour
             {
                 if (device.Control.HasBone)
                 {
-                    if(device.TrackedRole == FindRole)
+                    if (device.TryGetRole(out BasisBoneTrackedRole Role))
                     {
-                        FindDevice = device;
-                        return true;
-                        
+                        if (Role == FindRole)
+                        {
+                            FindDevice = device;
+                            return true;
+
+                        }
                     }
                 }
             }
@@ -299,14 +302,15 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public List<StoredPreviousDevice> PreviouslyConnectedDevices = new List<StoredPreviousDevice>();
     public void CacheDevice(BasisInput DevicesThatsGettingPurged)
     {
-        if (DevicesThatsGettingPurged.hasRoleAssigned && DevicesThatsGettingPurged.Control != null)
+        if (DevicesThatsGettingPurged.TryGetRole(out BasisBoneTrackedRole Role) && DevicesThatsGettingPurged.Control != null)
         {
-            StoredPreviousDevice StoredPreviousDevice = new StoredPreviousDevice 
-            { InverseOffsetFromBone = DevicesThatsGettingPurged.Control.InverseOffsetFromBone };;
-            StoredPreviousDevice.trackedRole = DevicesThatsGettingPurged.TrackedRole;
+            StoredPreviousDevice StoredPreviousDevice = new StoredPreviousDevice
+            { InverseOffsetFromBone = DevicesThatsGettingPurged.Control.InverseOffsetFromBone }; ;
+
+            StoredPreviousDevice.trackedRole = Role;
             StoredPreviousDevice.hasRoleAssigned = DevicesThatsGettingPurged.hasRoleAssigned;
-            StoredPreviousDevice.SubSystem = DevicesThatsGettingPurged.SubSystem;
-            StoredPreviousDevice.UniqueID = DevicesThatsGettingPurged.UniqueID;
+            StoredPreviousDevice.SubSystem = DevicesThatsGettingPurged.SubSystemIdentifier;
+            StoredPreviousDevice.UniqueID = DevicesThatsGettingPurged.UniqueDeviceIdentifier;
             PreviouslyConnectedDevices.Add(StoredPreviousDevice);
         }
     }
