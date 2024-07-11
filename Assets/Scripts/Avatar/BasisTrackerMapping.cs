@@ -23,14 +23,16 @@ public static partial class BasisAvatarIKStageCalibration
            Vector3 CameraRotation = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
             Quaternion SanitisedRotation = Quaternion.Euler(0, CameraRotation.y, 0);
           Quaternion InversedSanitisedRotation =  Quaternion.Inverse(SanitisedRotation);
+            Quaternion MoveRotation = BasisLocalPlayer.Instance.Move.transform.localRotation;
+            Quaternion Output = MoveRotation * InversedSanitisedRotation;
             foreach (CalibrationConnector connector in calibration)
             {
-                connector.Distance = Vector3.Distance(InversedSanitisedRotation * connector.BasisInput.FinalPosition, TargetControl.TposeLocal.position);
-                connector.BasisInput.GeneralLocation = GetLocation(connector.BasisInput.transform, BasisLocalCameraDriver.Instance.Camera.transform, BasisLocalCameraDriver.Instance.Camera.transform);
+                connector.Distance = Vector3.Distance(Output * connector.BasisInput.FinalPosition, TargetControl.TposeLocal.position);
+              //  connector.BasisInput.GeneralLocation = GetLocation(connector.BasisInput.LocalRawPosition, BasisLocalPlayer.Instance.Move.transform.position, BasisLocalCameraDriver.Instance.Camera.transform);
 
                 if (connector.Distance < calibrationMaxDistance)
                 {
-                    Debug.DrawLine(InversedSanitisedRotation * connector.BasisInput.LocalRawPosition, TargetControl.TposeLocal.position, Color.blue, 40f);
+                    Debug.DrawLine(Output * connector.BasisInput.LocalRawPosition, TargetControl.TposeLocal.position, Color.blue, 40f);
                     Candidates.Add(connector);
                     /*
                     if (BakedIn == GeneralLocation.Center)
@@ -54,17 +56,17 @@ public static partial class BasisAvatarIKStageCalibration
                 }
                 else
                 {
-                    Debug.DrawLine(InversedSanitisedRotation * connector.BasisInput.FinalPosition,TargetControl.TposeLocal.position, Color.red, 40f);
+                    Debug.DrawLine(Output * connector.BasisInput.FinalPosition,TargetControl.TposeLocal.position, Color.red, 40f);
                 }
             }
 
             // Debug.Log("Bone " + TargetControl.Name + " has " + Candidates.Count + " Trackers Available");
         }
     }
-    public static GeneralLocation GetLocation(Transform Tracker, Transform Eye, Transform forward)
+    public static GeneralLocation GetLocation(Vector3 Tracker, Vector3 Eye, Transform forward)
     {
         // Calculate the direction from Eye to Tracker
-        Vector3 delta = (Tracker.position - Eye.position).normalized;
+        Vector3 delta = (Tracker - Eye).normalized;
 
         // Calculate the right direction based on the forward direction
         Vector3 right = forward.forward;

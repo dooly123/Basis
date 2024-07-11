@@ -94,7 +94,7 @@ public class BasisLocalPlayer : BasisPlayer
         if (Move != null)
         {
             Move.enabled = false;
-            Move.transform.SetPositionAndRotation(position, rotation);
+            Move.transform.SetPositionAndRotation(position, Quaternion.identity);
 Move.enabled = true;
         }
         if(AvatarDriver != null && AvatarDriver.AnimatorDriver != null)
