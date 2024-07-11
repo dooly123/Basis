@@ -22,14 +22,15 @@ public static partial class BasisAvatarIKStageCalibration
             GeneralLocation BakedIn = FindGeneralLocation(BasisBoneControlRole);
            Vector3 CameraRotation = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
             Quaternion SanitisedRotation = Quaternion.Euler(0, CameraRotation.y, 0);
+          Quaternion InversedSanitisedRotation =  Quaternion.Inverse(SanitisedRotation);
             foreach (CalibrationConnector connector in calibration)
             {
-                connector.Distance = Vector3.Distance(Quaternion.Inverse(SanitisedRotation) * connector.BasisInput.FinalPosition, TargetControl.TposeLocal.position);
+                connector.Distance = Vector3.Distance(InversedSanitisedRotation * connector.BasisInput.FinalPosition, TargetControl.TposeLocal.position);
                 connector.BasisInput.GeneralLocation = GetLocation(connector.BasisInput.transform, BasisLocalCameraDriver.Instance.Camera.transform, BasisLocalCameraDriver.Instance.Camera.transform);
 
                 if (connector.Distance < calibrationMaxDistance)
                 {
-                    Debug.DrawLine(Quaternion.Inverse(SanitisedRotation) * connector.BasisInput.LocalRawPosition, TargetControl.TposeLocal.position, Color.blue, 40f);
+                    Debug.DrawLine(InversedSanitisedRotation * connector.BasisInput.LocalRawPosition, TargetControl.TposeLocal.position, Color.blue, 40f);
                     Candidates.Add(connector);
                     /*
                     if (BakedIn == GeneralLocation.Center)
@@ -53,7 +54,7 @@ public static partial class BasisAvatarIKStageCalibration
                 }
                 else
                 {
-                    Debug.DrawLine(Quaternion.Inverse(SanitisedRotation) * connector.BasisInput.FinalPosition,TargetControl.TposeLocal.position, Color.red, 40f);
+                    Debug.DrawLine(InversedSanitisedRotation * connector.BasisInput.FinalPosition,TargetControl.TposeLocal.position, Color.red, 40f);
                 }
             }
 
