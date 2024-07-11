@@ -18,17 +18,20 @@ public class BasisAvatarEyeInput : BasisInput
     public float DelayedResponseForRotation = 0.6f;
     public float FallBackHeight = 1.73f;
     public bool BlockCrouching;
+
+    public float InjectedX = 0;
+    public float InjectedZ = 0;
     public void Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
     {
         Debug.Log("Initalizing Avatar Eye");
         if (BasisLocalPlayer.Instance.AvatarDriver != null)
         {
-            LocalRawPosition = new Vector3(0, BasisLocalPlayer.Instance.PlayerEyeHeight, 0);
+            LocalRawPosition = new Vector3(InjectedX, BasisLocalPlayer.Instance.PlayerEyeHeight, InjectedZ);
             LocalRawRotation = Quaternion.identity;
         }
         else
         {
-            LocalRawPosition = new Vector3(0, FallBackHeight, 0);
+            LocalRawPosition = new Vector3(InjectedX, FallBackHeight, InjectedZ);
             LocalRawRotation = Quaternion.identity;
         }
         FinalPosition = LocalRawPosition;
@@ -106,7 +109,7 @@ public class BasisAvatarEyeInput : BasisInput
             // Clamp rotationY to stay within the specified range
             rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
             LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
-            Vector3 adjustedHeadPosition = new Vector3(0, BasisLocalPlayer.Instance.PlayerEyeHeight, 0);
+            Vector3 adjustedHeadPosition = new Vector3(InjectedX, BasisLocalPlayer.Instance.PlayerEyeHeight, InjectedZ);
             if (BasisLocalInputActions.Crouching && BlockCrouching == false)
             {
                 adjustedHeadPosition.y -= Control.TposeLocal.position.y * crouchPercentage;

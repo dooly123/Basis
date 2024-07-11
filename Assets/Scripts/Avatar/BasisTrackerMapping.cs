@@ -20,43 +20,34 @@ public static partial class BasisAvatarIKStageCalibration
             Candidates = new List<CalibrationConnector>();
 
             GeneralLocation BakedIn = FindGeneralLocation(BasisBoneControlRole);
-           Vector3 CameraRotation = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
+            Vector3 CameraRotation = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
             Quaternion SanitisedRotation = Quaternion.Euler(0, CameraRotation.y, 0);
-          Quaternion InversedSanitisedRotation =  Quaternion.Inverse(SanitisedRotation);
+            Quaternion InversedSanitisedRotation = Quaternion.Inverse(SanitisedRotation);
             Quaternion MoveRotation = BasisLocalPlayer.Instance.Move.transform.localRotation;
             Quaternion Output = MoveRotation * InversedSanitisedRotation;
+            Vector3 CameraPosition = new Vector3();
+            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Eye, BasisBoneTrackedRole.CenterEye))
+            {
+                CameraPosition = Eye.RawLocalData.position;
+            }
+            else
+            {
+                Debug.Log("cant find eye!");
+            }
             foreach (CalibrationConnector connector in calibration)
             {
-                connector.Distance = Vector3.Distance(Output * connector.BasisInput.FinalPosition, TargetControl.TposeLocal.position);
-              //  connector.BasisInput.GeneralLocation = GetLocation(connector.BasisInput.LocalRawPosition, BasisLocalPlayer.Instance.Move.transform.position, BasisLocalCameraDriver.Instance.Camera.transform);
-
+                Vector3 JustXZ = new Vector3(CameraPosition.x - connector.BasisInput.FinalPosition.x, connector.BasisInput.FinalPosition.y, CameraPosition.z - connector.BasisInput.FinalPosition.z);
+                //i need to minus away the heads position from the calibration
+                Vector3 Position = Output * (JustXZ);
+                connector.Distance = Vector3.Distance(Position, TargetControl.TposeLocal.position);
                 if (connector.Distance < calibrationMaxDistance)
                 {
-                    Debug.DrawLine(Output * connector.BasisInput.LocalRawPosition, TargetControl.TposeLocal.position, Color.blue, 40f);
+                    Debug.DrawLine(Position, TargetControl.TposeLocal.position, Color.blue, 40f);
                     Candidates.Add(connector);
-                    /*
-                    if (BakedIn == GeneralLocation.Center)
-                    {
-                        Candidates.Add(connector);
-                    }
-                    else
-                    {
-
-                        if (connector.Tracker.GeneralLocation == BakedIn || connector.Tracker.GeneralLocation == GeneralLocation.Center)
-                        {
-                            Candidates.Add(connector);
-
-                        }
-                        else
-                        {
-                            Debug.Log("Wrong side detected: " + connector.Tracker.GeneralLocation + " |" + BakedIn + " for bone " + connector.Tracker.name, connector.Tracker.gameObject);
-                        }
-                    }
-                    */
                 }
                 else
                 {
-                    Debug.DrawLine(Output * connector.BasisInput.FinalPosition,TargetControl.TposeLocal.position, Color.red, 40f);
+                    Debug.DrawLine(Position, TargetControl.TposeLocal.position, Color.red, 40f);
                 }
             }
 

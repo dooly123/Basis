@@ -57,7 +57,7 @@ public class BasisHamburgerMenu : BasisUIBase
         BasisLocalPlayer.Instance.RecalculateMyHeight();
         foreach(BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
         {
-            Input.UnAssignTracker();
+            Input.UnAssignFBTracker();
         }
         //disable builder and it will be updated when the animator updates
         BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = false;

@@ -91,6 +91,8 @@ public abstract class BasisInput : MonoBehaviour
             }
             hasRoleAssigned = false;
             trackedRole = BasisBoneTrackedRole.CenterEye;
+            Control = null;
+            HasControl = false;
         }
     }
     public void OnDisable()
@@ -178,7 +180,13 @@ public abstract class BasisInput : MonoBehaviour
             }
         }
     }
-
+    public void UnAssignFBTracker()
+    {
+        if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(trackedRole))
+        {
+            UnAssignTracker();
+        }
+    }
     /// <summary>
     /// this api makes it so after a calibration the inital offset is reset.
     /// will only do its logic if has role assigned
@@ -263,7 +271,10 @@ public abstract class BasisInput : MonoBehaviour
                         BasisDeviceManagement.HideTrackers();
                     }
                 }
-                Control.ApplyMovement();
+                if (HasControl)
+                {
+                    Control.ApplyMovement();
+                }
                 break;
             case BasisBoneTrackedRole.RightHand:
                 BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
@@ -271,10 +282,16 @@ public abstract class BasisInput : MonoBehaviour
                 {
                     BasisLocalPlayer.Instance.Move.HandleJump();
                 }
-                Control.ApplyMovement();
+                if (HasControl)
+                {
+                    Control.ApplyMovement();
+                }
                 break;
             case BasisBoneTrackedRole.CenterEye:
-                Control.ApplyMovement();
+                if (HasControl)
+                {
+                    Control.ApplyMovement();
+                }
                 break;
             case BasisBoneTrackedRole.Head:
                 break;
