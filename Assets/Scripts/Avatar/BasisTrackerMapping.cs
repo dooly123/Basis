@@ -18,8 +18,6 @@ public static partial class BasisAvatarIKStageCalibration
             TargetControl = Bone;
             BasisBoneControlRole = Role;
             Candidates = new List<CalibrationConnector>();
-
-            GeneralLocation BakedIn = FindGeneralLocation(BasisBoneControlRole);
             Vector3 CameraRotation = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
             Quaternion SanitisedRotation = Quaternion.Euler(0, CameraRotation.y, 0);
             Quaternion InversedSanitisedRotation = Quaternion.Inverse(SanitisedRotation);
@@ -36,10 +34,9 @@ public static partial class BasisAvatarIKStageCalibration
             }
             foreach (CalibrationConnector connector in calibration)
             {
-                Vector3 JustXZ = new Vector3(CameraPosition.x - connector.BasisInput.FinalPosition.x, connector.BasisInput.FinalPosition.y, CameraPosition.z - connector.BasisInput.FinalPosition.z);
-                //i need to minus away the heads position from the calibration
-                Vector3 Position = Output * (JustXZ);
-                connector.Distance = Vector3.Distance(Position, TargetControl.TposeLocal.position);
+                Vector3 LocalisedPosition = new Vector3(CameraPosition.x - connector.BasisInput.FinalPosition.x, connector.BasisInput.FinalPosition.y, CameraPosition.z - connector.BasisInput.FinalPosition.z);
+                Vector3 Position = Output * LocalisedPosition;
+                    connector.Distance = Vector3.Distance(Position,TargetControl.TposeLocal.position);
                 if (connector.Distance < calibrationMaxDistance)
                 {
                     Debug.DrawLine(Position, TargetControl.TposeLocal.position, Color.blue, 40f);
@@ -50,10 +47,15 @@ public static partial class BasisAvatarIKStageCalibration
                     Debug.DrawLine(Position, TargetControl.TposeLocal.position, Color.red, 40f);
                 }
             }
-
-            // Debug.Log("Bone " + TargetControl.Name + " has " + Candidates.Count + " Trackers Available");
         }
     }
+    /// <summary>
+    ///             GeneralLocation BakedIn = FindGeneralLocation(BasisBoneControlRole);
+    /// </summary>
+    /// <param name="Tracker"></param>
+    /// <param name="Eye"></param>
+    /// <param name="forward"></param>
+    /// <returns></returns>
     public static GeneralLocation GetLocation(Vector3 Tracker, Vector3 Eye, Transform forward)
     {
         // Calculate the direction from Eye to Tracker

@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UIElements;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -44,7 +46,7 @@ public class BasisLocalPlayer : BasisPlayer
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Character Controller.prefab", new InstantiationParameters());
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-        Instance.LocalBoneDriver.ReadyToRead += Simulate;
+        Instance.LocalBoneDriver.ReadyToRead += SimulateHips;
         OnLocalAvatarChanged += OnCalibration;
         await CreateAvatar();
         SceneManager.sceneLoaded += OnSceneLoadedCallback;
@@ -112,15 +114,29 @@ Move.enabled = true;
             BasisScene.Instance.SpawnPlayer(this);
         }
     }
-    public void Simulate()
+    public void SimulateHips()
     {
-        if (Hips.HasBone && Avatar != null && Avatar.Animator != null)
+        if (Hips.HasBone)
         {
-            Quaternion rotation = Hips.BoneTransform.rotation;
+            Quaternion rotation = Hips.BoneModelTransform.rotation;
             Vector3 rotatedOffset = rotation * Hips.TposeLocal.position;
             rotatedOffset = Hips.FinalisedWorldData.position - rotatedOffset;
 
-            Avatar.Animator.transform.SetPositionAndRotation(rotatedOffset, rotation);
+            SimulateHips(rotatedOffset, rotation);
+        }
+    }
+    public void SimulateHIpsRotation(Quaternion Rotation)
+    {
+        if (Avatar != null && Avatar.Animator != null)
+        {
+            Avatar.Animator.transform.rotation = Rotation;
+        }
+    }
+    public void SimulateHips(Vector3 Position, Quaternion Rotation)
+    {
+        if (Avatar != null && Avatar.Animator != null)
+        {
+            Avatar.Animator.transform.SetPositionAndRotation(Position, Rotation);
         }
     }
 #if UNITY_EDITOR

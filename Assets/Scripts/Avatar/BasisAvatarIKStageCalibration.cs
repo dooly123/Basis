@@ -158,7 +158,7 @@ public static partial class BasisAvatarIKStageCalibration
         {
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl control, role))
             {
-               float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
+                float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
                 Debug.Log("Using a scaler of  " + BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale + " leading to a scaled Distance of " + ScaledDistance);
                 BasisTrackerMapping mapping = new BasisTrackerMapping(control, role, connectors, ScaledDistance);
                 boneTransformMappings.Add(mapping);
@@ -189,6 +189,9 @@ public static partial class BasisAvatarIKStageCalibration
     }
     public static void RunThroughConnectors(BasisTrackerMapping mapping, ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles)
     {
+        // List to store the calibration actions
+        List<Action> calibrationActions = new List<Action>();
+
         int CandidateCount = mapping.Candidates.Count;
         for (int Index = 0; Index < CandidateCount; Index++)
         {
@@ -197,10 +200,15 @@ public static partial class BasisAvatarIKStageCalibration
             {
                 if (roles.Contains(mapping.BasisBoneControlRole) == false)
                 {
-                    //  Debug.Log("Apply Tracked Data for " + mapping.BasisBoneControlRole + " attached to tracker " + Connector.Tracker.UniqueDeviceIdentifier);
-                    Connector.BasisInput.ApplyTrackerCalibration(mapping.BasisBoneControlRole);
                     roles.Add(mapping.BasisBoneControlRole);
                     BasisInputs.Add(Connector.BasisInput);
+                    // Store the calibration action instead of executing it directly
+                    calibrationActions.Add(() =>
+                    {
+                        Connector.BasisInput.ApplyTrackerCalibration(mapping.BasisBoneControlRole);
+                    });
+
+                    // Once we found a valid connector, we can stop the search
                     break;
                 }
                 else
@@ -210,8 +218,14 @@ public static partial class BasisAvatarIKStageCalibration
             }
             else
             {
-             //   Debug.Log("Already assigned " + Connector.Tracker);
+                //Debug.Log("Already assigned " + Connector.Tracker);
             }
+        }
+
+        // Execute all stored calibration actions
+        foreach (var action in calibrationActions)
+        {
+            action();
         }
     }
 }

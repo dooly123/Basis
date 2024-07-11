@@ -9,7 +9,7 @@ public static class BasisAvatarFactory
         DeleteLastAvatar(Player);
         LoadLoadingAvatar(Player, "LoadingAvatar");
         Player.AvatarSwitchedFallBack();
-        UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Player.transform.rotation, null);
+        UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
         List<GameObject> Gameobjects = data.Item1;
         Player.AvatarUrl = AvatarAddress;
@@ -38,7 +38,7 @@ public static class BasisAvatarFactory
         DeleteLastAvatar(Player);
         LoadLoadingAvatar(Player, "LoadingAvatar");
         Player.AvatarSwitchedFallBack();
-        UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Player.transform.rotation, null);
+        UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
         (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
         List<GameObject> Gameobjects = data.Item1;
         Player.AvatarUrl = AvatarAddress;
@@ -61,7 +61,7 @@ public static class BasisAvatarFactory
     {
         UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(LoadingAvatarToUse);
         GameObject LoadingAvatar = op.WaitForCompletion();
-        GameObject InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar, Player.transform.position, Player.transform.rotation);
+        GameObject InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar, Player.transform.position, Quaternion.identity);
         if (InSceneLoadingAvatar.TryGetComponent(out BasisAvatar Avatar))
         {
             Player.Avatar = Avatar;
