@@ -102,6 +102,8 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     }
     public void CalculateTransformPositions(Animator anim, BaseBoneDriver driver)
     {
+        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
+        BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
         for (int Index = 0; Index < driver.Controls.Length; Index++)
         {
             BasisBoneControl Control = driver.Controls[Index];
@@ -119,8 +121,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                 }
                 else
                 {
-                    UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
-                    BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
                     if (FBBD.FindBone(out BasisFallBone FallBackBone, driver.trackedRoles[Index]))
                     {
                         if (TryConvertToHumanoidRole(driver.trackedRoles[Index], out HumanBodyBones HumanBones))
@@ -132,6 +132,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                 }
             }
         }
+        Addressables.Release(BasisFallBackBoneDataAsync);
     }
     public void GetBoneRotAndPos(BaseBoneDriver driver, Animator anim, HumanBodyBones bone, Vector3 heightPercentage, out Quaternion Rotation, out Vector3 Position, out bool UsedFallback)
     {

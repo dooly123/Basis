@@ -12,72 +12,68 @@ public static partial class BasisAvatarIKStageCalibration
         switch (role)
         {
             case BasisBoneTrackedRole.CenterEye:
-                return 0.2f;
+                return 0.6f;
             case BasisBoneTrackedRole.Head:
-                return 0.2f;
+                return 0.6f;
             case BasisBoneTrackedRole.Neck:
-                return 0.2f;
+                return 0.6f;
             case BasisBoneTrackedRole.Chest:
-                return 0.3f;
+                return 0.8f;
             case BasisBoneTrackedRole.Hips:
-                return 0.3f;
+                return 0.8f;
             case BasisBoneTrackedRole.Spine:
-                return 0.3f;
+                return 0.8f;
+
             case BasisBoneTrackedRole.LeftUpperLeg:
-                return 0.3f;
+                return 0.8f;
             case BasisBoneTrackedRole.RightUpperLeg:
-                return 0.3f;
+                return 0.8f;
+
             case BasisBoneTrackedRole.LeftLowerLeg:
-                return 0.3f;
+                return 0.8f;
             case BasisBoneTrackedRole.RightLowerLeg:
-                return 0.3f;
+                return 0.8f;
+
             case BasisBoneTrackedRole.LeftFoot:
-                return 0.2f;
+                return 0.6f;
             case BasisBoneTrackedRole.RightFoot:
-                return 0.2f;
+                return 0.6f;
+
             case BasisBoneTrackedRole.UpperChest:
-                return 0.3f;
+                return 0.8f;
+
             case BasisBoneTrackedRole.LeftShoulder:
-                return 0.2f;
+                return 0.6f;
             case BasisBoneTrackedRole.RightShoulder:
-                return 0.2f;
+                return 0.6f;
+
             case BasisBoneTrackedRole.LeftUpperArm:
-                return 0.3f;
+                return 0.8f;
             case BasisBoneTrackedRole.RightUpperArm:
-                return 0.3f;
+                return 0.8f;
+
             case BasisBoneTrackedRole.LeftLowerArm:
-                return 0.3f;
+                return 0.8f;
             case BasisBoneTrackedRole.RightLowerArm:
-                return 0.2f;
+                return 0.8f;
+
             case BasisBoneTrackedRole.LeftHand:
-                return 0.2f;
+                return 0.6f;
             case BasisBoneTrackedRole.RightHand:
-                return 0.3f;
+                return 0.6f;
+
             case BasisBoneTrackedRole.LeftToes:
-                return 0.2f;
+                return 0.6f;
             case BasisBoneTrackedRole.RightToes:
-                return 0.2f;
+                return 0.6f;
+
             case BasisBoneTrackedRole.Mouth:
-                return 0.3f;
+                return 0.6f;
             default:
                 Console.WriteLine("Unknown role");
-                return 0.4f;
+                return 0.8f;
         }
     }
-
-    public static void FullBodyCalibration()
-    {
-        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
-
-        List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
-        List<BasisInput> Trackers = GetAllInputsExcludingEyeAndHands(ref rolesToDiscover);
-        List<CalibrationConnector> availableBoneControl = GetAvailableBoneControls(Trackers);
-        FindOptimalMatches(availableBoneControl, rolesToDiscover);
-        BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
-        //do the roles after to stop the animator switch issue
-        BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
-    }
-    #region DiscoverWhatsPossible
     private static List<BasisBoneTrackedRole> GetAllRoles()
     {
         List<BasisBoneTrackedRole> rolesToDiscover = new List<BasisBoneTrackedRole>();
@@ -105,58 +101,66 @@ public static partial class BasisAvatarIKStageCalibration
 
         return rolesToDiscover;
     }
-    private static List<BasisInput> GetAllInputsExcludingEyeAndHands(ref List<BasisBoneTrackedRole> rolesToDiscover)
+    /*
+    public void LockAllBonesToActualTargets(List<BasisBoneTrackedRole> rolesToDiscover)
     {
-        List<BasisInput> trackInput = new List<BasisInput>();
-        foreach (BasisInput baseInput in BasisDeviceManagement.Instance.AllInputDevices)
+        foreach(BasisBoneTrackedRole Role in rolesToDiscover)
         {
+            BasisLocalPlayer Local = BasisLocalPlayer.Instance;
+            Local.AvatarDriver.GetBoneRotAndPos(Local.LocalBoneDriver, Local.Avatar.Animator,);
+        }
+    }
+    */
+    public static void FullBodyCalibration()
+    {
+        BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
+        List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
+        List<BasisBoneTrackedRole> trackInputRoles = new List<BasisBoneTrackedRole>();
+        for (int Index = 0; Index < rolesToDiscover.Count; Index++)
+        {
+            BasisBoneTrackedRole Role = rolesToDiscover[Index];
+            if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(Role))
+            {
+                trackInputRoles.Add(Role);
+            }
+        }
+        List<CalibrationConnector> connectors = new List<CalibrationConnector>();
+        for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
+        {
+            BasisInput baseInput = BasisDeviceManagement.Instance.AllInputDevices[Index];
             if (baseInput.TryGetRole(out BasisBoneTrackedRole role))
             {
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(role))
                 {
-                  //  Debug.Log("Add Tracker that had last role " + role + " with name " + baseInput.name);
+                    //in use un assign first
                     baseInput.UnAssignFullBodyTrackers();
-                    trackInput.Add(baseInput);
+                    CalibrationConnector calibrationConnector = new CalibrationConnector
+                    {
+                        BasisInput = baseInput,
+                        Distance = float.MaxValue
+                    };
+                    connectors.Add(calibrationConnector);
                 }
-                else
+            }
+            else//no assigned role
+            {
+                CalibrationConnector calibrationConnector = new CalibrationConnector
                 {
-                    //Debug.Log("excluding role " + role + " from being used during FB");
-                    rolesToDiscover.Remove(role);
-                }
-            }
-            else
-            {
-               // Debug.Log("Add Tracker with name " + baseInput.name);
-                trackInput.Add(baseInput);
+                    BasisInput = baseInput,
+                    Distance = float.MaxValue
+                };
+                //tracker was a uncalibrated type
+                connectors.Add(calibrationConnector);
             }
         }
-        Debug.Log("Completed input tracking");
-        return trackInput;
-    }
-    private static List<CalibrationConnector> GetAvailableBoneControls(List<BasisInput> Trackers)
-    {
-        List<CalibrationConnector> availableBoneControl = new List<CalibrationConnector>();
-        foreach (BasisInput baseInput in Trackers)
-        {
-            CalibrationConnector calibrationConnector = new CalibrationConnector
-            {
-                Tracker = baseInput,
-                Distance = float.MaxValue
-            };
-            availableBoneControl.Add(calibrationConnector);
-        }
-        return availableBoneControl;
-    }
-    #endregion
-    private static void FindOptimalMatches(List<CalibrationConnector> connectors, List<BasisBoneTrackedRole> rolesToDiscover)
-    {
         List<BasisTrackerMapping> boneTransformMappings = new List<BasisTrackerMapping>();
-        foreach (BasisBoneTrackedRole role in rolesToDiscover)
+        foreach (BasisBoneTrackedRole role in trackInputRoles)
         {
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl control, role))
             {
-                float scaler = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
-                BasisTrackerMapping mapping = new BasisTrackerMapping(control, role, connectors, scaler);
+               float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
+                Debug.Log("Using a scaler of  " + BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale + " leading to a scaled Distance of " + ScaledDistance);
+                BasisTrackerMapping mapping = new BasisTrackerMapping(control, role, connectors, ScaledDistance);
                 boneTransformMappings.Add(mapping);
             }
             else
@@ -165,7 +169,6 @@ public static partial class BasisAvatarIKStageCalibration
             }
         }
         List<BasisBoneTrackedRole> roles = new List<BasisBoneTrackedRole>();
-        List<BasisTrackerMapping> maps = new List<BasisTrackerMapping>();
         List<BasisInput> BasisInputs = new List<BasisInput>();
         // Find optimal matches
         for (int Index = 0; Index < boneTransformMappings.Count; Index++)
@@ -173,26 +176,41 @@ public static partial class BasisAvatarIKStageCalibration
             BasisTrackerMapping mapping = boneTransformMappings[Index];
             if (mapping.TargetControl != null)
             {
-                RunThroughConnectors(mapping,ref BasisInputs, ref roles,ref maps);
+                RunThroughConnectors(mapping, ref BasisInputs, ref roles);
             }
             else
             {
                 Debug.LogError("Missing Tracker for index " + Index + " with ID " + mapping);
             }
         }
+        BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+        //do the roles after to stop the animator switch issue
+        BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
     }
-    public static void RunThroughConnectors(BasisTrackerMapping mapping,ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles, ref List<BasisTrackerMapping> maps)
+    public static void RunThroughConnectors(BasisTrackerMapping mapping, ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles)
     {
-        foreach (CalibrationConnector Connector in mapping.Candidates)
+        int CandidateCount = mapping.Candidates.Count;
+        for (int Index = 0; Index < CandidateCount; Index++)
         {
-            if (roles.Contains(mapping.BasisBoneControlRole) == false && maps.Contains(mapping) == false && BasisInputs.Contains(Connector.Tracker) == false)
+            CalibrationConnector Connector = mapping.Candidates[Index];
+            if (BasisInputs.Contains(Connector.BasisInput) == false)
             {
-              //  Debug.Log("Apply Tracked Data for " + mapping.BasisBoneControlRole + " attached to tracker " + Connector.Tracker.UniqueDeviceIdentifier);
-                Connector.Tracker.ApplyTrackerCalibration(mapping.BasisBoneControlRole);
-                roles.Add(mapping.BasisBoneControlRole);
-                maps.Add(mapping);
-                BasisInputs.Add(Connector.Tracker);
-                break;
+                if (roles.Contains(mapping.BasisBoneControlRole) == false)
+                {
+                    //  Debug.Log("Apply Tracked Data for " + mapping.BasisBoneControlRole + " attached to tracker " + Connector.Tracker.UniqueDeviceIdentifier);
+                    Connector.BasisInput.ApplyTrackerCalibration(mapping.BasisBoneControlRole);
+                    roles.Add(mapping.BasisBoneControlRole);
+                    BasisInputs.Add(Connector.BasisInput);
+                    break;
+                }
+                else
+                {
+                    //Debug.Log("we have already assigned role " + mapping.BasisBoneControlRole);
+                }
+            }
+            else
+            {
+             //   Debug.Log("Already assigned " + Connector.Tracker);
             }
         }
     }

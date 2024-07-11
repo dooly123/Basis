@@ -19,39 +19,41 @@ public static partial class BasisAvatarIKStageCalibration
             BasisBoneControlRole = Role;
             Candidates = new List<CalibrationConnector>();
 
-            GeneralLocation bonesLocation = FindGeneralLocation(BasisBoneControlRole);
-
-            foreach (var connector in calibration)
+            GeneralLocation BakedIn = FindGeneralLocation(BasisBoneControlRole);
+           Vector3 CameraRotation = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
+            Quaternion SanitisedRotation = Quaternion.Euler(0, CameraRotation.y, 0);
+            foreach (CalibrationConnector connector in calibration)
             {
-                float distance = Vector3.Distance(connector.Tracker.transform.position, TargetControl.BoneModelTransform.position);
-                connector.Distance = distance;
+                connector.Distance = Vector3.Distance(Quaternion.Inverse(SanitisedRotation) * connector.BasisInput.FinalPosition, TargetControl.TposeLocal.position);
+                connector.BasisInput.GeneralLocation = GetLocation(connector.BasisInput.transform, BasisLocalCameraDriver.Instance.Camera.transform, BasisLocalCameraDriver.Instance.Camera.transform);
 
-                if (distance < calibrationMaxDistance)
+                if (connector.Distance < calibrationMaxDistance)
                 {
-                    Debug.DrawLine(connector.Tracker.transform.position, TargetControl.BoneModelTransform.position, Color.blue, 8f);
-
-                    if (bonesLocation == GeneralLocation.Center)
+                    Debug.DrawLine(Quaternion.Inverse(SanitisedRotation) * connector.BasisInput.LocalRawPosition, TargetControl.TposeLocal.position, Color.blue, 40f);
+                    Candidates.Add(connector);
+                    /*
+                    if (BakedIn == GeneralLocation.Center)
                     {
                         Candidates.Add(connector);
                     }
                     else
                     {
-                        connector.Tracker.GeneralLocation = GetLocation(connector.Tracker.transform, BasisLocalCameraDriver.Instance.Camera.transform, BasisLocalCameraDriver.Instance.Camera.transform);
 
-                        if (connector.Tracker.GeneralLocation == bonesLocation || connector.Tracker.GeneralLocation == GeneralLocation.Center)
+                        if (connector.Tracker.GeneralLocation == BakedIn || connector.Tracker.GeneralLocation == GeneralLocation.Center)
                         {
                             Candidates.Add(connector);
 
                         }
                         else
                         {
-                            Debug.Log("Wrong side detected: " + connector.Tracker.GeneralLocation + " |" + bonesLocation + " for bone " + connector.Tracker.name, connector.Tracker.gameObject);
+                            Debug.Log("Wrong side detected: " + connector.Tracker.GeneralLocation + " |" + BakedIn + " for bone " + connector.Tracker.name, connector.Tracker.gameObject);
                         }
                     }
+                    */
                 }
                 else
                 {
-                    Debug.DrawLine(connector.Tracker.transform.position, TargetControl.BoneModelTransform.position, Color.red, 4f);
+                    Debug.DrawLine(Quaternion.Inverse(SanitisedRotation) * connector.BasisInput.FinalPosition,TargetControl.TposeLocal.position, Color.red, 40f);
                 }
             }
 
@@ -64,8 +66,8 @@ public static partial class BasisAvatarIKStageCalibration
         Vector3 delta = (Tracker.position - Eye.position).normalized;
 
         // Calculate the right direction based on the forward direction
-        Vector3 right = forward.right;
-
+        Vector3 right = forward.forward;
+       Debug.DrawLine (delta, delta +  right * 3, Color.magenta,12f);
         // Calculate the dot product between delta and right
         float dot = Vector3.Dot(delta, right);
 
@@ -89,7 +91,7 @@ public static partial class BasisAvatarIKStageCalibration
     public class CalibrationConnector
     {
         [SerializeField]
-        public BasisInput Tracker;
+        public BasisInput BasisInput;
         public float Distance;
     }
     public static GeneralLocation FindGeneralLocation(BasisBoneTrackedRole Role)
