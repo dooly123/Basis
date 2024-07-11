@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using static BasisAvatarIKStageCalibration;
 [System.Serializable]
 public class BasisBoneControl
 {
@@ -52,6 +53,7 @@ public class BasisBoneControl
             }
         }
     }
+    public GeneralLocation GeneralLocation;
     [SerializeField]
     public BasisRotationalControl RotationControl = new BasisRotationalControl();
     [SerializeField]
@@ -255,7 +257,10 @@ public class BasisBoneControl
             Handles.Label(BonePosition, Name);
             if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
             {
-                Gizmos.DrawWireSphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale) /2);
+                if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(this, out BasisBoneTrackedRole role))
+                {
+                    Gizmos.DrawWireSphere(BonePosition, BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+                }
             }
         }
     }

@@ -4,6 +4,6 @@ public static partial class BasisAvatarIKStageCalibration
 {
     public enum GeneralLocation
     {
-        Middle, Left, Right
+        Center, Left, Right
     }
 }

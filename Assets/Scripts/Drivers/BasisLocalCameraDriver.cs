@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -27,6 +28,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
         QualitySettings.maxQueuedFrames = -1;
         CameraInstanceID = Camera.GetInstanceID();
         RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
+      //  RenderPipelineManager.endCameraRendering += OnEndCameraRenderering;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
         BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
         //fire static event that says the instance exists
@@ -48,6 +50,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public void OnDisable()
     {
         RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
+      //  RenderPipelineManager.endCameraRendering -= OnEndCameraRenderering;
         if (LocalPlayer.AvatarDriver && LocalPlayer.AvatarDriver.References != null && LocalPlayer.AvatarDriver.References.head != null)
         {
             LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;

@@ -43,6 +43,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
     }
     public async void Initialize()
     {
+        CommandLineArgs.Initialize();
         InstantiationParameters parameters = new InstantiationParameters();
         await BasisPlayerFactory.CreateLocalPlayer(parameters);
 

@@ -89,6 +89,12 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
             localPlayer.Move.JustLanded += JustLanded;
         }
     }
+    public void HandleTeleport()
+    {
+        currentVelocity = Vector3.zero;
+        dampenedVelocity = Vector3.zero;
+
+    }
     private void OnDestroy()
     {
         if (localPlayer != null)

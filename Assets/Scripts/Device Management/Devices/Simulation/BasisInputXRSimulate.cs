@@ -6,7 +6,7 @@ public class BasisInputXRSimulate : BasisInput
     public override void PollData()
     {
         FollowMovement.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
-        LocalRawPosition = LocalRawPosition / BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+        LocalRawPosition /= BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
 
         FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
         FinalRotation = LocalRawRotation;

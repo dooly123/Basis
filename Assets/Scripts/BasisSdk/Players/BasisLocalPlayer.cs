@@ -98,6 +98,10 @@ public class BasisLocalPlayer : BasisPlayer
             Move.transform.SetPositionAndRotation(position, rotation);
             Move.enabled = true;
         }
+        if(AvatarDriver != null && AvatarDriver.AnimatorDriver != null)
+        {
+            AvatarDriver.AnimatorDriver.HandleTeleport();
+        }
         BasisAvatarStrainJiggleDriver.FinishTeleport();
         OnSpawnedEvent?.Invoke();
     }

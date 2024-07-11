@@ -3,7 +3,68 @@ using System.Collections.Generic;
 using UnityEngine;
 public static partial class BasisAvatarIKStageCalibration
 {
-    public static float MaxDistanceBeforeMax = 0.4f;
+    /// <summary>
+    ///  = 0.4f;
+    /// </summary>
+    public static float MaxDistanceBeforeMax(BasisBoneTrackedRole role)
+    {
+
+        switch (role)
+        {
+            case BasisBoneTrackedRole.CenterEye:
+                return 0.2f;
+            case BasisBoneTrackedRole.Head:
+                return 0.2f;
+            case BasisBoneTrackedRole.Neck:
+                return 0.2f;
+            case BasisBoneTrackedRole.Chest:
+                return 0.3f;
+            case BasisBoneTrackedRole.Hips:
+                return 0.3f;
+            case BasisBoneTrackedRole.Spine:
+                return 0.3f;
+            case BasisBoneTrackedRole.LeftUpperLeg:
+                return 0.3f;
+            case BasisBoneTrackedRole.RightUpperLeg:
+                return 0.3f;
+            case BasisBoneTrackedRole.LeftLowerLeg:
+                return 0.3f;
+            case BasisBoneTrackedRole.RightLowerLeg:
+                return 0.3f;
+            case BasisBoneTrackedRole.LeftFoot:
+                return 0.2f;
+            case BasisBoneTrackedRole.RightFoot:
+                return 0.2f;
+            case BasisBoneTrackedRole.UpperChest:
+                return 0.3f;
+            case BasisBoneTrackedRole.LeftShoulder:
+                return 0.2f;
+            case BasisBoneTrackedRole.RightShoulder:
+                return 0.2f;
+            case BasisBoneTrackedRole.LeftUpperArm:
+                return 0.3f;
+            case BasisBoneTrackedRole.RightUpperArm:
+                return 0.3f;
+            case BasisBoneTrackedRole.LeftLowerArm:
+                return 0.3f;
+            case BasisBoneTrackedRole.RightLowerArm:
+                return 0.2f;
+            case BasisBoneTrackedRole.LeftHand:
+                return 0.2f;
+            case BasisBoneTrackedRole.RightHand:
+                return 0.3f;
+            case BasisBoneTrackedRole.LeftToes:
+                return 0.2f;
+            case BasisBoneTrackedRole.RightToes:
+                return 0.2f;
+            case BasisBoneTrackedRole.Mouth:
+                return 0.3f;
+            default:
+                Console.WriteLine("Unknown role");
+                return 0.4f;
+        }
+    }
+
     public static void FullBodyCalibration()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
@@ -53,18 +114,19 @@ public static partial class BasisAvatarIKStageCalibration
             {
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(role))
                 {
-                    Debug.Log("Add Tracker that had last role " + role + " with name " + baseInput.name);
+                  //  Debug.Log("Add Tracker that had last role " + role + " with name " + baseInput.name);
+                    baseInput.UnAssignFullBodyTrackers();
                     trackInput.Add(baseInput);
                 }
                 else
                 {
-                    Debug.Log("excluding role " + role + " from being used during FB");
+                    //Debug.Log("excluding role " + role + " from being used during FB");
                     rolesToDiscover.Remove(role);
                 }
             }
             else
             {
-                Debug.Log("Add Tracker with name " + baseInput.name);
+               // Debug.Log("Add Tracker with name " + baseInput.name);
                 trackInput.Add(baseInput);
             }
         }
@@ -89,12 +151,11 @@ public static partial class BasisAvatarIKStageCalibration
     private static void FindOptimalMatches(List<CalibrationConnector> connectors, List<BasisBoneTrackedRole> rolesToDiscover)
     {
         List<BasisTrackerMapping> boneTransformMappings = new List<BasisTrackerMapping>();
-        float scaler = BasisAvatarIKStageCalibration.MaxDistanceBeforeMax * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
-        Debug.Log("Using a Scaled max Distance for trackers of " + scaler);
         foreach (BasisBoneTrackedRole role in rolesToDiscover)
         {
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl control, role))
             {
+                float scaler = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
                 BasisTrackerMapping mapping = new BasisTrackerMapping(control, role, connectors, scaler);
                 boneTransformMappings.Add(mapping);
             }
@@ -126,7 +187,7 @@ public static partial class BasisAvatarIKStageCalibration
         {
             if (roles.Contains(mapping.BasisBoneControlRole) == false && maps.Contains(mapping) == false && BasisInputs.Contains(Connector.Tracker) == false)
             {
-                Debug.Log("Apply Tracked Data for " + mapping.BasisBoneControlRole + " attached to tracker " + Connector.Tracker.UniqueDeviceIdentifier);
+              //  Debug.Log("Apply Tracked Data for " + mapping.BasisBoneControlRole + " attached to tracker " + Connector.Tracker.UniqueDeviceIdentifier);
                 Connector.Tracker.ApplyTrackerCalibration(mapping.BasisBoneControlRole);
                 roles.Add(mapping.BasisBoneControlRole);
                 maps.Add(mapping);

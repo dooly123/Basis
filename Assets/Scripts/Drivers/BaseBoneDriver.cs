@@ -123,6 +123,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
             Control.BoneModelTransform = BoneModelOffset.transform;
             Control.BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             Control.HasBone = true;
+            Control.GeneralLocation = BasisAvatarIKStageCalibration.FindGeneralLocation(role);
             Control.Initialize();
             FillOutBasicInformation(Control, role.ToString(), Colors[Index]);
             newControls.Add(Control);

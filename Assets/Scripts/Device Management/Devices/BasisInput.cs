@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using static BaseBoneDriver;
+using static BasisAvatarIKStageCalibration;
 public abstract class BasisInput : MonoBehaviour
 {
     public bool HasAssignedEvents = false;
@@ -34,6 +35,7 @@ public abstract class BasisInput : MonoBehaviour
     [SerializeField]
     public BasisInputState LastState = new BasisInputState();
     public bool AssociatedFound;
+    public GeneralLocation GeneralLocation;
     public bool TryGetRole(out BasisBoneTrackedRole BasisBoneTrackedRole)
     {
         if (hasRoleAssigned)

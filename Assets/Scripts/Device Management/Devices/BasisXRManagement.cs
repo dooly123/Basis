@@ -28,7 +28,17 @@ public class BasisXRManagement
         }
         BasisDeviceManagement.Instance.StartCoroutine(LoadXR());
     }
-
+    public void ForceDisableXRSolution(BasisBootedMode BasisBootedMode)
+    {
+        IReadOnlyList<XRLoader> Loaders = xRManagerSettings.activeLoaders;
+        foreach (XRLoader loader in Loaders)
+        {
+            if (loader?.name == BasisBootedMode.ToString())
+            {
+                xRManagerSettings.TryRemoveLoader(loader);
+            }
+        }
+    }
     public IEnumerator LoadXR()
     {
         // Initialize the XR loader
