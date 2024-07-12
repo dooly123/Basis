@@ -11,6 +11,8 @@ public class BasisTransformMapping
     public bool Hasspine;
     public Transform chest;
     public bool Haschest;
+    public Transform Upperchest;
+    public bool HasUpperchest;
     public Transform neck;
     public bool Hasneck;
     public Transform head;
@@ -71,8 +73,12 @@ public class BasisTransformMapping
         references.HasHips = BoolState(references.Hips);
         references.spine = Anim.GetBoneTransform(HumanBodyBones.Spine);
         references.Hasspine = BoolState(references.spine);
+
         references.chest = Anim.GetBoneTransform(HumanBodyBones.Chest);
         references.Haschest = BoolState(references.chest);
+        references.Upperchest = Anim.GetBoneTransform(HumanBodyBones.UpperChest);
+        references.HasUpperchest = BoolState(references.Upperchest);
+
         references.neck = Anim.GetBoneTransform(HumanBodyBones.Neck);
         references.Hasneck = BoolState(references.neck);
         references.head = Anim.GetBoneTransform(HumanBodyBones.Head);

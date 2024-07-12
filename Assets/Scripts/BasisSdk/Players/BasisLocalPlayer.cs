@@ -1,12 +1,8 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using System;
-using UnityEngine.UIElements;
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -118,7 +114,7 @@ Move.enabled = true;
     {
         if (Hips.HasBone)
         {
-            Quaternion rotation = Hips.BoneModelTransform.rotation;
+            Quaternion rotation = Hips.BoneTransform.rotation;//we dont use Hips.BoneModelTransform.rotation as it introduces a offset that is unwanted.
             Vector3 rotatedOffset = rotation * Hips.TposeLocal.position;
             rotatedOffset = Hips.FinalisedWorldData.position - rotatedOffset;
 

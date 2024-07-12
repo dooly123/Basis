@@ -63,11 +63,6 @@ public class BasisHamburgerMenu : BasisUIBase
         //now lets grab and apply the height
         BasisLocalPlayer.Instance.LocalBoneDriver.Simulate();
         BasisLocalPlayer.Instance.LocalBoneDriver.ApplyMovement();
-        Vector3 CamerRot = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
-        CamerRot.x = 0;
-        CamerRot.z = 0;
-      //  Quaternion Rot = Quaternion.Euler(CamerRot);
-      // BasisLocalPlayer.Instance.SimulateHIpsRotation(Rot);
         //now that we have latest * scale we can run calibration
         BasisAvatarIKStageCalibration.FullBodyCalibration();
         BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
