@@ -34,6 +34,7 @@ public class BasisInputModuleHandler : BaseInputModule
         keypadEnterAction = new InputAction(binding: "<Keyboard>/numpadEnter");
         keypadEnterAction.performed += OnEnterPerformed;
         keypadEnterAction.Enable();
+        basisUIRaycastProcess.Initalize();
     }
 
     protected override void OnDisable()

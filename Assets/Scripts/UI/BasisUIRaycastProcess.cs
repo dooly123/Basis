@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static BasisPointRaycaster;
@@ -7,12 +8,26 @@ public class BasisUIRaycastProcess
 {
     public float ClickSpeed = 0.3f;
     public static bool HasTarget;
+    public BasisDeviceManagement BasisDeviceManagement;
+    public List<BasisInput> Inputs;
+    public void Initalize()
+    {
+        BasisDeviceManagement = BasisDeviceManagement.Instance;
+        BasisDeviceManagement.AllInputDevices.OnListChanged += AllInputDevices;
+        AllInputDevices();
+    }
+    public void AllInputDevices()
+    {
+        Inputs = BasisDeviceManagement.AllInputDevices.ToList();
+    }
     public void Simulate()
     {
+       int DevicesCount = Inputs.Count;
         HasTarget = false;
 
-        foreach (BasisInput input in BasisDeviceManagement.Instance.AllInputDevices)
+        for (int Index = 0; Index < DevicesCount; Index++)
         {
+            BasisInput input = Inputs[Index];
             if (input.HasUIInputSupport && input.BasisPointRaycaster != null && input.BasisPointRaycaster.WasCorrectLayer)
             {
                 if (input.BasisPointRaycaster.SortedRays.Count != 0 && input.BasisPointRaycaster.SortedGraphics.Count != 0)

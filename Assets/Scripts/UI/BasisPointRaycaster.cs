@@ -210,6 +210,7 @@ public partial class BasisPointRaycaster : BaseRaycaster
         RaycastResult = new RaycastResult();
         PhysicHit = new RaycastHit();
     }
+    public List<Canvas> Results = new List<Canvas>();
     public bool CheckRayCast()
     {
         SortedGraphics.Clear();
@@ -227,11 +228,11 @@ public partial class BasisPointRaycaster : BaseRaycaster
          ray = new Ray(startingPosition, (rotationOffset * transform.forward));
         if (Physics.Raycast(ray, out PhysicHit, MaxDistance, Mask, TriggerInteraction))
         {
-            Canvas[] Canvases = PhysicHit.transform.gameObject.GetComponentsInChildren<Canvas>();
-            if (Canvases.Length != 0)
+           PhysicHit.transform.gameObject.GetComponentsInChildren<Canvas>(false, Results);
+            if (Results.Count != 0)
             {
-                System.Array.Sort(Canvases, (c1, c2) => c2.sortingOrder.CompareTo(c1.sortingOrder));
-                foreach (Canvas CurrentTopLevel in Canvases)
+                Results.Sort((c1, c2) => c2.sortingOrder.CompareTo(c1.sortingOrder));
+                foreach (Canvas CurrentTopLevel in Results)
                 {
                     if (CurrentTopLevel != null)
                     {
