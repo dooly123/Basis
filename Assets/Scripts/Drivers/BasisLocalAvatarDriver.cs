@@ -327,35 +327,47 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)
     {
-        if (RoleWithHint == BasisBoneTrackedRole.Neck)
+        switch (RoleWithHint)
         {
-            //  Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
-            HeadTwoBoneIK.data.hintWeight = weight;
-        }
-        else
-if (RoleWithHint == BasisBoneTrackedRole.RightLowerLeg)
-        {
-            //  Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
-            RightFootTwoBoneIK.data.hintWeight = weight;
-        }
-        else
-        if (RoleWithHint == BasisBoneTrackedRole.LeftLowerLeg)
-        {
-            //Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
-            LeftFootTwoBoneIK.data.hintWeight = weight;
+            case BasisBoneTrackedRole.Neck:
+                // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                HeadTwoBoneIK.data.hintWeight = weight;
+                break;
 
-        }
-        else
-        if (RoleWithHint == BasisBoneTrackedRole.RightUpperArm)
-        {
-            //Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
-            RightHandTwoBoneIK.data.hintWeight = weight;
-        }
-        else
-        if (RoleWithHint == BasisBoneTrackedRole.LeftUpperArm)
-        {
-            // Debug.Log("Setting Hint  For  " + RoleWithHint + " with weight " + weight);
-            LeftHandTwoBoneIK.data.hintWeight = weight;
+            case BasisBoneTrackedRole.RightLowerLeg:
+                // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                RightFootTwoBoneIK.data.hintWeight = weight;
+                break;
+
+            case BasisBoneTrackedRole.LeftLowerLeg:
+                // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                LeftFootTwoBoneIK.data.hintWeight = weight;
+                break;
+
+            case BasisBoneTrackedRole.RightUpperArm:
+                // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                RightHandTwoBoneIK.data.hintWeight = weight;
+                break;
+
+            case BasisBoneTrackedRole.LeftUpperArm:
+                // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                LeftHandTwoBoneIK.data.hintWeight = weight;
+                break;
+
+            case BasisBoneTrackedRole.LeftShoulder:
+                // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                LeftShoulderTwoBoneIK.data.hintWeight = weight;
+                break;
+
+            case BasisBoneTrackedRole.RightShoulder:
+                // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                RightShoulderTwoBoneIK.data.hintWeight = weight;
+                break;
+
+            default:
+                // Optional: Handle cases where RoleWithHint does not match any of the expected roles
+                // Debug.Log("Unknown role: " + RoleWithHint);
+                break;
         }
     }
     public void WriteUpEvents(BasisBoneControl Control, RigLayer Layer)

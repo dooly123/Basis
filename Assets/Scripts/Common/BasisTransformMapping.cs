@@ -159,7 +159,8 @@ public class BasisTransformMapping
             { "RightUpperLeg", RightUpperLeg },
             { "RightLowerLeg", RightLowerLeg },
             { "RightFoot", rightFoot },
-            { "RightToes", rightToes }
+            { "RightToes", rightToes },
+            { "Upperchest", Upperchest },
         };
         return transforms;
     }

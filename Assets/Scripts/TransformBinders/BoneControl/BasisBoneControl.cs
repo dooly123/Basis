@@ -254,7 +254,7 @@ public class BasisBoneControl
                 Gizmos.DrawLine(BonePosition, PositionControl.Target.FinalisedWorldData.position);
             }
             Gizmos.DrawWireSphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
-            Gizmos.DrawWireSphere(TposeLocal.position, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+         //   Gizmos.DrawWireSphere(TposeLocal.position, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
             Handles.Label(BonePosition, Name);
             if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
             {
