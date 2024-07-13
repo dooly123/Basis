@@ -180,20 +180,15 @@ public class BasisOpenVRManagement
         {
             if (deviceClass == ETrackedDeviceClass.Controller)
             {
-                uint leftHandIndex = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand);
-                uint rightHandIndex = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand);
-
-                bool isLeftHand = leftHandIndex != OpenVR.k_unTrackedDeviceIndexInvalid && leftHandIndex == deviceIndex;
-                bool isRightHand = rightHandIndex != OpenVR.k_unTrackedDeviceIndexInvalid && rightHandIndex == deviceIndex;
-
-                if (isLeftHand)
+                ETrackedControllerRole ETrackedControllerRole = SteamVR.instance.hmd.GetControllerRoleForTrackedDeviceIndex(deviceIndex);
+                if (ETrackedControllerRole == ETrackedControllerRole.LeftHand)
                 {
                     Role = BasisBoneTrackedRole.LeftHand;
                     Source = SteamVR_Input_Sources.LeftHand;
                     return true;
                 }
 
-                if (isRightHand)
+                if (ETrackedControllerRole == ETrackedControllerRole.RightHand)
                 {
                     Role = BasisBoneTrackedRole.RightHand;
                     Source = SteamVR_Input_Sources.RightHand;
@@ -201,8 +196,9 @@ public class BasisOpenVRManagement
                 }
 
                 Role = BasisBoneTrackedRole.LeftHand;
-                Source = SteamVR_Input_Sources.LeftHand;
-                Debug.LogError($"Device {deviceIndex} is not recognized as left or right controller. Defaulting to unknown role. Left Controller was ID " + leftHandIndex + " right Controller was " + rightHandIndex + " but we where after " + deviceIndex);
+                Source =  SteamVR_Input_Sources.LeftHand;
+                Debug.LogError($"Device unknown");
+           //     Debug.LogError($"Device {deviceIndex} is not recognized as left or right controller. Defaulting to LeftHand role. Left Controller was ID " + leftHandIndex + " right Controller was " + rightHandIndex + " but we where after " + deviceIndex);
             }
         }
         return false;
