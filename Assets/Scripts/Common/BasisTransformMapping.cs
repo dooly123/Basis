@@ -39,6 +39,7 @@ public class BasisTransformMapping
     public bool HasRightLowerArm;
     public Transform rightHand;
     public bool HasrightHand;
+
     public Transform LeftUpperLeg;
     public bool HasLeftUpperLeg;
     public Transform LeftLowerLeg;
@@ -56,6 +57,77 @@ public class BasisTransformMapping
     public bool HasrightFoot;
     public Transform rightToes;
     public bool HasrightToes;
+
+    // Finger bones
+    public Transform LeftThumbProximal;
+    public bool HasLeftThumbProximal;
+    public Transform LeftThumbIntermediate;
+    public bool HasLeftThumbIntermediate;
+    public Transform LeftThumbDistal;
+    public bool HasLeftThumbDistal;
+
+    public Transform LeftIndexProximal;
+    public bool HasLeftIndexProximal;
+    public Transform LeftIndexIntermediate;
+    public bool HasLeftIndexIntermediate;
+    public Transform LeftIndexDistal;
+    public bool HasLeftIndexDistal;
+
+    public Transform LeftMiddleProximal;
+    public bool HasLeftMiddleProximal;
+    public Transform LeftMiddleIntermediate;
+    public bool HasLeftMiddleIntermediate;
+    public Transform LeftMiddleDistal;
+    public bool HasLeftMiddleDistal;
+
+    public Transform LeftRingProximal;
+    public bool HasLeftRingProximal;
+    public Transform LeftRingIntermediate;
+    public bool HasLeftRingIntermediate;
+    public Transform LeftRingDistal;
+    public bool HasLeftRingDistal;
+
+    public Transform LeftLittleProximal;
+    public bool HasLeftLittleProximal;
+    public Transform LeftLittleIntermediate;
+    public bool HasLeftLittleIntermediate;
+    public Transform LeftLittleDistal;
+    public bool HasLeftLittleDistal;
+
+    public Transform RightThumbProximal;
+    public bool HasRightThumbProximal;
+    public Transform RightThumbIntermediate;
+    public bool HasRightThumbIntermediate;
+    public Transform RightThumbDistal;
+    public bool HasRightThumbDistal;
+
+    public Transform RightIndexProximal;
+    public bool HasRightIndexProximal;
+    public Transform RightIndexIntermediate;
+    public bool HasRightIndexIntermediate;
+    public Transform RightIndexDistal;
+    public bool HasRightIndexDistal;
+
+    public Transform RightMiddleProximal;
+    public bool HasRightMiddleProximal;
+    public Transform RightMiddleIntermediate;
+    public bool HasRightMiddleIntermediate;
+    public Transform RightMiddleDistal;
+    public bool HasRightMiddleDistal;
+
+    public Transform RightRingProximal;
+    public bool HasRightRingProximal;
+    public Transform RightRingIntermediate;
+    public bool HasRightRingIntermediate;
+    public Transform RightRingDistal;
+    public bool HasRightRingDistal;
+
+    public Transform RightLittleProximal;
+    public bool HasRightLittleProximal;
+    public Transform RightLittleIntermediate;
+    public bool HasRightLittleIntermediate;
+    public Transform RightLittleDistal;
+    public bool HasRightLittleDistal;
 
     public static bool AutoDetectReferences(Animator Anim, Transform AnimatorRoot, out BasisTransformMapping references)
     {
@@ -125,6 +197,78 @@ public class BasisTransformMapping
         references.rightToes = Anim.GetBoneTransform(HumanBodyBones.RightToes);
         references.HasrightToes = BoolState(references.rightToes);
 
+        // Left Hand Fingers
+        references.LeftThumbProximal = Anim.GetBoneTransform(HumanBodyBones.LeftThumbProximal);
+        references.HasLeftThumbProximal = BoolState(references.LeftThumbProximal);
+        references.LeftThumbIntermediate = Anim.GetBoneTransform(HumanBodyBones.LeftThumbIntermediate);
+        references.HasLeftThumbIntermediate = BoolState(references.LeftThumbIntermediate);
+        references.LeftThumbDistal = Anim.GetBoneTransform(HumanBodyBones.LeftThumbDistal);
+        references.HasLeftThumbDistal = BoolState(references.LeftThumbDistal);
+
+        references.LeftIndexProximal = Anim.GetBoneTransform(HumanBodyBones.LeftIndexProximal);
+        references.HasLeftIndexProximal = BoolState(references.LeftIndexProximal);
+        references.LeftIndexIntermediate = Anim.GetBoneTransform(HumanBodyBones.LeftIndexIntermediate);
+        references.HasLeftIndexIntermediate = BoolState(references.LeftIndexIntermediate);
+        references.LeftIndexDistal = Anim.GetBoneTransform(HumanBodyBones.LeftIndexDistal);
+        references.HasLeftIndexDistal = BoolState(references.LeftIndexDistal);
+
+        references.LeftMiddleProximal = Anim.GetBoneTransform(HumanBodyBones.LeftMiddleProximal);
+        references.HasLeftMiddleProximal = BoolState(references.LeftMiddleProximal);
+        references.LeftMiddleIntermediate = Anim.GetBoneTransform(HumanBodyBones.LeftMiddleIntermediate);
+        references.HasLeftMiddleIntermediate = BoolState(references.LeftMiddleIntermediate);
+        references.LeftMiddleDistal = Anim.GetBoneTransform(HumanBodyBones.LeftMiddleDistal);
+        references.HasLeftMiddleDistal = BoolState(references.LeftMiddleDistal);
+
+        references.LeftRingProximal = Anim.GetBoneTransform(HumanBodyBones.LeftRingProximal);
+        references.HasLeftRingProximal = BoolState(references.LeftRingProximal);
+        references.LeftRingIntermediate = Anim.GetBoneTransform(HumanBodyBones.LeftRingIntermediate);
+        references.HasLeftRingIntermediate = BoolState(references.LeftRingIntermediate);
+        references.LeftRingDistal = Anim.GetBoneTransform(HumanBodyBones.LeftRingDistal);
+        references.HasLeftRingDistal = BoolState(references.LeftRingDistal);
+
+        references.LeftLittleProximal = Anim.GetBoneTransform(HumanBodyBones.LeftLittleProximal);
+        references.HasLeftLittleProximal = BoolState(references.LeftLittleProximal);
+        references.LeftLittleIntermediate = Anim.GetBoneTransform(HumanBodyBones.LeftLittleIntermediate);
+        references.HasLeftLittleIntermediate = BoolState(references.LeftLittleIntermediate);
+        references.LeftLittleDistal = Anim.GetBoneTransform(HumanBodyBones.LeftLittleDistal);
+        references.HasLeftLittleDistal = BoolState(references.LeftLittleDistal);
+
+        // Right Hand Fingers
+        references.RightThumbProximal = Anim.GetBoneTransform(HumanBodyBones.RightThumbProximal);
+        references.HasRightThumbProximal = BoolState(references.RightThumbProximal);
+        references.RightThumbIntermediate = Anim.GetBoneTransform(HumanBodyBones.RightThumbIntermediate);
+        references.HasRightThumbIntermediate = BoolState(references.RightThumbIntermediate);
+        references.RightThumbDistal = Anim.GetBoneTransform(HumanBodyBones.RightThumbDistal);
+        references.HasRightThumbDistal = BoolState(references.RightThumbDistal);
+
+        references.RightIndexProximal = Anim.GetBoneTransform(HumanBodyBones.RightIndexProximal);
+        references.HasRightIndexProximal = BoolState(references.RightIndexProximal);
+        references.RightIndexIntermediate = Anim.GetBoneTransform(HumanBodyBones.RightIndexIntermediate);
+        references.HasRightIndexIntermediate = BoolState(references.RightIndexIntermediate);
+        references.RightIndexDistal = Anim.GetBoneTransform(HumanBodyBones.RightIndexDistal);
+        references.HasRightIndexDistal = BoolState(references.RightIndexDistal);
+
+        references.RightMiddleProximal = Anim.GetBoneTransform(HumanBodyBones.RightMiddleProximal);
+        references.HasRightMiddleProximal = BoolState(references.RightMiddleProximal);
+        references.RightMiddleIntermediate = Anim.GetBoneTransform(HumanBodyBones.RightMiddleIntermediate);
+        references.HasRightMiddleIntermediate = BoolState(references.RightMiddleIntermediate);
+        references.RightMiddleDistal = Anim.GetBoneTransform(HumanBodyBones.RightMiddleDistal);
+        references.HasRightMiddleDistal = BoolState(references.RightMiddleDistal);
+
+        references.RightRingProximal = Anim.GetBoneTransform(HumanBodyBones.RightRingProximal);
+        references.HasRightRingProximal = BoolState(references.RightRingProximal);
+        references.RightRingIntermediate = Anim.GetBoneTransform(HumanBodyBones.RightRingIntermediate);
+        references.HasRightRingIntermediate = BoolState(references.RightRingIntermediate);
+        references.RightRingDistal = Anim.GetBoneTransform(HumanBodyBones.RightRingDistal);
+        references.HasRightRingDistal = BoolState(references.RightRingDistal);
+
+        references.RightLittleProximal = Anim.GetBoneTransform(HumanBodyBones.RightLittleProximal);
+        references.HasRightLittleProximal = BoolState(references.RightLittleProximal);
+        references.RightLittleIntermediate = Anim.GetBoneTransform(HumanBodyBones.RightLittleIntermediate);
+        references.HasRightLittleIntermediate = BoolState(references.RightLittleIntermediate);
+        references.RightLittleDistal = Anim.GetBoneTransform(HumanBodyBones.RightLittleDistal);
+        references.HasRightLittleDistal = BoolState(references.RightLittleDistal);
+
         return true;
     }
 
@@ -132,6 +276,7 @@ public class BasisTransformMapping
     {
         return Transform != null;
     }
+
     public Dictionary<string, Transform> GetAllTransforms()
     {
         Dictionary<string, Transform> transforms = new Dictionary<string, Transform>
@@ -140,6 +285,7 @@ public class BasisTransformMapping
             { "Hips", Hips },
             { "Spine", spine },
             { "Chest", chest },
+            { "Upperchest", Upperchest },
             { "Neck", neck },
             { "Head", head },
             { "LeftEye", LeftEye },
@@ -160,8 +306,38 @@ public class BasisTransformMapping
             { "RightLowerLeg", RightLowerLeg },
             { "RightFoot", rightFoot },
             { "RightToes", rightToes },
-            { "Upperchest", Upperchest },
+            { "LeftThumbProximal", LeftThumbProximal },
+            { "LeftThumbIntermediate", LeftThumbIntermediate },
+            { "LeftThumbDistal", LeftThumbDistal },
+            { "LeftIndexProximal", LeftIndexProximal },
+            { "LeftIndexIntermediate", LeftIndexIntermediate },
+            { "LeftIndexDistal", LeftIndexDistal },
+            { "LeftMiddleProximal", LeftMiddleProximal },
+            { "LeftMiddleIntermediate", LeftMiddleIntermediate },
+            { "LeftMiddleDistal", LeftMiddleDistal },
+            { "LeftRingProximal", LeftRingProximal },
+            { "LeftRingIntermediate", LeftRingIntermediate },
+            { "LeftRingDistal", LeftRingDistal },
+            { "LeftLittleProximal", LeftLittleProximal },
+            { "LeftLittleIntermediate", LeftLittleIntermediate },
+            { "LeftLittleDistal", LeftLittleDistal },
+            { "RightThumbProximal", RightThumbProximal },
+            { "RightThumbIntermediate", RightThumbIntermediate },
+            { "RightThumbDistal", RightThumbDistal },
+            { "RightIndexProximal", RightIndexProximal },
+            { "RightIndexIntermediate", RightIndexIntermediate },
+            { "RightIndexDistal", RightIndexDistal },
+            { "RightMiddleProximal", RightMiddleProximal },
+            { "RightMiddleIntermediate", RightMiddleIntermediate },
+            { "RightMiddleDistal", RightMiddleDistal },
+            { "RightRingProximal", RightRingProximal },
+            { "RightRingIntermediate", RightRingIntermediate },
+            { "RightRingDistal", RightRingDistal },
+            { "RightLittleProximal", RightLittleProximal },
+            { "RightLittleIntermediate", RightLittleIntermediate },
+            { "RightLittleDistal", RightLittleDistal }
         };
+
         return transforms;
     }
 }

@@ -127,7 +127,6 @@ MonoBehaviour:
   FaceVisemeMovement: 
   BlinkViseme: ffffffffffffffff
   laughterBlendTarget: -1
-  AvatarHeightOffset: 0.1
   Renders:
   - {fileID: 8839165641088738499}
   JiggleStrains: []

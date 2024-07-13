@@ -242,7 +242,8 @@ public class BasisBoneControl
         }
     }
 #if UNITY_EDITOR
-    public static float DefaultGizmoSize = 0.1f;
+    public static float DefaultGizmoSize = 0.05f;
+    public static float HandGizmoSize = 0.015f;
     public void DrawGizmos()
     {
         if (HasBone)
@@ -253,7 +254,17 @@ public class BasisBoneControl
             {
                 Gizmos.DrawLine(BonePosition, PositionControl.Target.FinalisedWorldData.position);
             }
-            Gizmos.DrawWireSphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(this, out BasisBoneTrackedRole Frole))
+            {
+                if (BasisBoneTrackedRoleCommonCheck.CheckIfRightHand(Frole) || BasisBoneTrackedRoleCommonCheck.CheckIfLeftHand(Frole))
+                {
+                    Gizmos.DrawWireSphere(BonePosition, HandGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+                }
+                else
+                {
+                    Gizmos.DrawWireSphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+                }
+            }
          //   Gizmos.DrawWireSphere(TposeLocal.position, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
             Handles.Label(BonePosition, Name);
             if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)

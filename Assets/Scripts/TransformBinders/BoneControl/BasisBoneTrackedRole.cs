@@ -61,12 +61,62 @@
 }
 public static class BasisBoneTrackedRoleCommonCheck
 {
-    public static bool CheckItsFBTracker(BasisBoneTrackedRole Role)
+    public static bool CheckItsFBTracker(BasisBoneTrackedRole role)
     {
-        if (Role != BasisBoneTrackedRole.CenterEye && Role != BasisBoneTrackedRole.LeftHand && Role != BasisBoneTrackedRole.RightHand)
+        return role != BasisBoneTrackedRole.CenterEye &&
+               role != BasisBoneTrackedRole.LeftHand &&
+               role != BasisBoneTrackedRole.RightHand &&
+               CheckIfLeftHand(role)== false &&
+               CheckIfRightHand(role)== false;
+    }
+
+    public static bool CheckIfLeftHand(BasisBoneTrackedRole role)
+    {
+        switch (role)
         {
-            return true;
+            case BasisBoneTrackedRole.LeftThumbProximal:
+            case BasisBoneTrackedRole.LeftThumbIntermediate:
+            case BasisBoneTrackedRole.LeftThumbDistal:
+            case BasisBoneTrackedRole.LeftIndexProximal:
+            case BasisBoneTrackedRole.LeftIndexIntermediate:
+            case BasisBoneTrackedRole.LeftIndexDistal:
+            case BasisBoneTrackedRole.LeftMiddleProximal:
+            case BasisBoneTrackedRole.LeftMiddleIntermediate:
+            case BasisBoneTrackedRole.LeftMiddleDistal:
+            case BasisBoneTrackedRole.LeftRingProximal:
+            case BasisBoneTrackedRole.LeftRingIntermediate:
+            case BasisBoneTrackedRole.LeftRingDistal:
+            case BasisBoneTrackedRole.LeftLittleProximal:
+            case BasisBoneTrackedRole.LeftLittleIntermediate:
+            case BasisBoneTrackedRole.LeftLittleDistal:
+                return true;
+            default:
+                return false;
         }
-        return false;
+    }
+
+    public static bool CheckIfRightHand(BasisBoneTrackedRole role)
+    {
+        switch (role)
+        {
+            case BasisBoneTrackedRole.RightThumbProximal:
+            case BasisBoneTrackedRole.RightThumbIntermediate:
+            case BasisBoneTrackedRole.RightThumbDistal:
+            case BasisBoneTrackedRole.RightIndexProximal:
+            case BasisBoneTrackedRole.RightIndexIntermediate:
+            case BasisBoneTrackedRole.RightIndexDistal:
+            case BasisBoneTrackedRole.RightMiddleProximal:
+            case BasisBoneTrackedRole.RightMiddleIntermediate:
+            case BasisBoneTrackedRole.RightMiddleDistal:
+            case BasisBoneTrackedRole.RightRingProximal:
+            case BasisBoneTrackedRole.RightRingIntermediate:
+            case BasisBoneTrackedRole.RightRingDistal:
+            case BasisBoneTrackedRole.RightLittleProximal:
+            case BasisBoneTrackedRole.RightLittleIntermediate:
+            case BasisBoneTrackedRole.RightLittleDistal:
+                return true;
+            default:
+                return false;
+        }
     }
 }

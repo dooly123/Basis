@@ -18,6 +18,9 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public TwoBoneIKConstraint LeftShoulderTwoBoneIK;
     public TwoBoneIKConstraint RightShoulderTwoBoneIK;
 
+
+
+
     public Rig LeftToeRig;
     public Rig RightToeRig;
 
@@ -29,6 +32,12 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public Rig ChestSpineRig;
     public Rig LeftShoulderRig;
     public Rig RightShoulderRig;
+
+    public Rig LeftFingersRig;
+    public Rig RightFingersRig;
+
+    public RigLayer LeftFingersLayer;
+    public RigLayer RightFingersLayer;
 
     public RigLayer LeftHandLayer;
     public RigLayer RightHandLayer;
@@ -191,6 +200,50 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
 
         SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftToes, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
         SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightToes, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+
+
+        // Setting up locks for Left Hand
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftThumbProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftThumbProximal, BasisBoneTrackedRole.LeftThumbIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftThumbIntermediate, BasisBoneTrackedRole.LeftThumbDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftIndexProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftIndexProximal, BasisBoneTrackedRole.LeftIndexIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftIndexIntermediate, BasisBoneTrackedRole.LeftIndexDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftMiddleProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftMiddleProximal, BasisBoneTrackedRole.LeftMiddleIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftMiddleIntermediate, BasisBoneTrackedRole.LeftMiddleDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftRingProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftRingProximal, BasisBoneTrackedRole.LeftRingIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftRingIntermediate, BasisBoneTrackedRole.LeftRingDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftLittleProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftLittleProximal, BasisBoneTrackedRole.LeftLittleIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftLittleIntermediate, BasisBoneTrackedRole.LeftLittleDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        // Setting up locks for Right Hand
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightThumbProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightThumbProximal, BasisBoneTrackedRole.RightThumbIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightThumbIntermediate, BasisBoneTrackedRole.RightThumbDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightIndexProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightIndexProximal, BasisBoneTrackedRole.RightIndexIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightIndexIntermediate, BasisBoneTrackedRole.RightIndexDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightMiddleProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightMiddleProximal, BasisBoneTrackedRole.RightMiddleIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightMiddleIntermediate, BasisBoneTrackedRole.RightMiddleDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightRingProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightRingProximal, BasisBoneTrackedRole.RightRingIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightRingIntermediate, BasisBoneTrackedRole.RightRingDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLittleProximal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightLittleProximal, BasisBoneTrackedRole.RightLittleIntermediate, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightLittleIntermediate, BasisBoneTrackedRole.RightLittleDistal, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
     }
     public bool IsAble()
     {
@@ -253,6 +306,8 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         RightFoot(driver);
         LeftToe(driver);
         RightToe(driver);
+        CreateLeftHandFingers(driver);
+        CreateRightHandFingers(driver);
     }
     public void LeftHand(BasisLocalBoneDriver driver)
     {
@@ -271,6 +326,34 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             WriteUpEvents(Control, RightHandLayer);
         }
         CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLowerArm, true, out RightHandTwoBoneIK, false, false);
+    }
+    public void CreateLeftHandFingers(BasisLocalBoneDriver driver)
+    {
+        GameObject Hands = CreateRig("Left Hand Fingers", false, out LeftFingersRig, out LeftFingersLayer);
+        if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftHand))
+        {
+            WriteUpEvents(Control, LeftFingersLayer);
+        }
+        // Create fingers
+        CreateTwoBone(driver, Hands, References.LeftThumbProximal, References.LeftThumbIntermediate, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbIntermediate, false, out TwoBoneIKConstraint A, false, false);
+        CreateTwoBone(driver, Hands, References.LeftIndexProximal, References.LeftIndexIntermediate, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexIntermediate, false, out TwoBoneIKConstraint B, false, false);
+        CreateTwoBone(driver, Hands, References.LeftMiddleProximal, References.LeftMiddleIntermediate, References.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
+        CreateTwoBone(driver, Hands, References.LeftRingProximal, References.LeftRingIntermediate, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, BasisBoneTrackedRole.LeftRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
+        CreateTwoBone(driver, Hands, References.LeftLittleProximal, References.LeftLittleIntermediate, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
+    }
+    public void CreateRightHandFingers(BasisLocalBoneDriver driver)
+    {
+        GameObject Hands = CreateRig("Right Hand Fingers", false, out RightFingersRig, out RightFingersLayer);
+        if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightHand))
+        {
+            WriteUpEvents(Control, RightFingersLayer);
+        }
+        // Create fingers
+        CreateTwoBone(driver, Hands, References.RightThumbProximal, References.RightThumbIntermediate, References.RightThumbDistal, BasisBoneTrackedRole.RightThumbDistal, BasisBoneTrackedRole.RightThumbIntermediate, false, out TwoBoneIKConstraint A, false, false);
+        CreateTwoBone(driver, Hands, References.RightIndexProximal, References.RightIndexIntermediate, References.RightIndexDistal, BasisBoneTrackedRole.RightIndexDistal, BasisBoneTrackedRole.RightIndexIntermediate, false, out TwoBoneIKConstraint B, false, false);
+        CreateTwoBone(driver, Hands, References.RightMiddleProximal, References.RightMiddleIntermediate, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
+        CreateTwoBone(driver, Hands, References.RightRingProximal, References.RightRingIntermediate, References.RightRingDistal, BasisBoneTrackedRole.RightRingDistal, BasisBoneTrackedRole.RightRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
+        CreateTwoBone(driver, Hands, References.RightLittleProximal, References.RightLittleIntermediate, References.RightLittleDistal, BasisBoneTrackedRole.RightLittleDistal, BasisBoneTrackedRole.RightLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {

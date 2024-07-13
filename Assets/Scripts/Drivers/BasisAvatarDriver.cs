@@ -128,6 +128,14 @@ public abstract class BasisAvatarDriver : MonoBehaviour
                             GetBoneRotAndPos(driver, anim, HumanBones, FallBackBone.PositionPercentage, out Control.TposeWorld.rotation, out Control.TposeWorld.position, out bool UsedFallback);
                             SetInitialData(anim, Control, driver.trackedRoles[Index]);
                         }
+                        else
+                        {
+                            Debug.LogError("cant Convert to humanbodybone "  + driver.trackedRoles[Index]);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("cant find Fallback Bone for " + driver.trackedRoles[Index]);
                     }
                 }
             }
