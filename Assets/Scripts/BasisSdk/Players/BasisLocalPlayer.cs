@@ -29,6 +29,7 @@ public class BasisLocalPlayer : BasisPlayer
     public AudioSource SelfOutput;
     [SerializeField]
     public LayerMask GroundMask;
+    public static string LoadFileName = "LastUsedAvatar.BAS";
     public async Task LocalInitialize()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -44,7 +45,8 @@ public class BasisLocalPlayer : BasisPlayer
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
         Instance.LocalBoneDriver.ReadyToRead += SimulateHips;
         OnLocalAvatarChanged += OnCalibration;
-        await CreateAvatar();
+        string LastUsedAvatar = BasisDataStore.LoadString(LoadFileName, FallBackAvatar);
+        await CreateAvatar(LastUsedAvatar);
         SceneManager.sceneLoaded += OnSceneLoadedCallback;
     }
     public void RecalculateMyHeight()
@@ -145,6 +147,7 @@ Move.enabled = true;
     public async Task CreateAvatar(string AddressableID = FallBackAvatar)
     {
         await BasisAvatarFactory.LoadAvatar(this, AddressableID);
+        BasisDataStore.SaveString(AddressableID, LoadFileName);
         OnLocalAvatarChanged?.Invoke();
     }
     public void OnCalibration()

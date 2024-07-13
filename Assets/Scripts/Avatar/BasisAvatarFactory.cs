@@ -90,17 +90,6 @@ public static class BasisAvatarFactory
             AddressableLoadFactory.ReleaseResource(Player.AvatarAddressableGenericResource);
         }
     }
-    public static async Task LoadAvatar(BasisPlayer Player, string AvatarAddress)
-    {
-        if (Player.IsLocal)
-        {
-            await LoadAvatar((BasisLocalPlayer)Player, AvatarAddress);
-        }
-        else
-        {
-            await LoadAvatar((BasisRemotePlayer)Player, AvatarAddress);
-        }
-    }
     public static void CreateRemote(BasisRemotePlayer Player)
     {
         if (Player == null)
