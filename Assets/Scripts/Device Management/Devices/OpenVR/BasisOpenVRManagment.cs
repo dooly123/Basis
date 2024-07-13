@@ -53,8 +53,13 @@ public class BasisOpenVRManagement
         }
 
         SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
+        SteamVR_Input.onSkeletonsUpdated += OnDeviceConnectedSkeleton;
     }
 
+    private void OnDeviceConnectedSkeleton(bool skipSendingEvents)
+    {
+
+    }
     private void OnDeviceConnected(int deviceIndex, bool deviceConnected)
     {
         uint DeviceID = (uint)deviceIndex;
@@ -159,6 +164,10 @@ public class BasisOpenVRManagement
         bool FoundRole = TryAssignRole(device.deviceClass, device.deviceIndex, out BasisBoneTrackedRole Role, out SteamVR_Input_Sources Source);
         BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement",FoundRole, Role, Source);
         BasisDeviceManagement.Instance.TryAdd(BasisOpenVRInputController);
+    }
+    public void CreateHandPose()
+    {
+
     }
     public void CreateTracker(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID,bool AutoAssignRole, BasisBoneTrackedRole role)
     {

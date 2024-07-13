@@ -14,13 +14,12 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public TwoBoneIKConstraint LeftHandTwoBoneIK;
     public TwoBoneIKConstraint RightHandTwoBoneIK;
     public TwoBoneIKConstraint UpperChestTwoBoneIK;
-
     public TwoBoneIKConstraint LeftShoulderTwoBoneIK;
     public TwoBoneIKConstraint RightShoulderTwoBoneIK;
-
-
-
-
+    [SerializeField]
+    public List<TwoBoneIKConstraint> LeftFingers = new List<TwoBoneIKConstraint>();
+    [SerializeField]
+    public List<TwoBoneIKConstraint> RightFingers = new List<TwoBoneIKConstraint>();
     public Rig LeftToeRig;
     public Rig RightToeRig;
 
@@ -67,7 +66,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         this.LocalDriver = LocalPlayer.LocalBoneDriver;
         if (IsAble())
         {
-           // Debug.Log("LocalCalibration Underway");
+            // Debug.Log("LocalCalibration Underway");
         }
         else
         {
@@ -174,7 +173,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.Neck, BasisBoneTrackedRole.UpperChest, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, true, 4);
         SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.UpperChest, BasisBoneTrackedRole.Chest, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, true, 4);
         SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.Chest, BasisBoneTrackedRole.Spine, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, true, 4);
-        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Hips, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, true, 4        );
+        SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Hips, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, true, 4);
 
         SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.UpperChest, BasisBoneTrackedRole.LeftShoulder, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
         SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.UpperChest, BasisBoneTrackedRole.RightShoulder, BasisTargetController.TargetDirectional, 40, BasisClampData.None, 0, 12, false, 4);
@@ -340,6 +339,11 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         CreateTwoBone(driver, Hands, References.LeftMiddleProximal, References.LeftMiddleIntermediate, References.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
         CreateTwoBone(driver, Hands, References.LeftRingProximal, References.LeftRingIntermediate, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, BasisBoneTrackedRole.LeftRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
         CreateTwoBone(driver, Hands, References.LeftLittleProximal, References.LeftLittleIntermediate, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
+        LeftFingers.Add(A);
+        LeftFingers.Add(B);
+        LeftFingers.Add(C);
+        LeftFingers.Add(D);
+        LeftFingers.Add(E);
     }
     public void CreateRightHandFingers(BasisLocalBoneDriver driver)
     {
@@ -354,6 +358,11 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         CreateTwoBone(driver, Hands, References.RightMiddleProximal, References.RightMiddleIntermediate, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
         CreateTwoBone(driver, Hands, References.RightRingProximal, References.RightRingIntermediate, References.RightRingDistal, BasisBoneTrackedRole.RightRingDistal, BasisBoneTrackedRole.RightRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
         CreateTwoBone(driver, Hands, References.RightLittleProximal, References.RightLittleIntermediate, References.RightLittleDistal, BasisBoneTrackedRole.RightLittleDistal, BasisBoneTrackedRole.RightLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
+        RightFingers.Add(A);
+        RightFingers.Add(B);
+        RightFingers.Add(C);
+        RightFingers.Add(D);
+        RightFingers.Add(E);
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {
@@ -390,7 +399,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightToeLayer);
         }
-        Damp(driver, RightToe, References.rightToes, BasisBoneTrackedRole.RightToes,0,0);
+        Damp(driver, RightToe, References.rightToes, BasisBoneTrackedRole.RightToes, 0, 0);
     }
     public void CalibrateRoles()
     {
@@ -476,5 +485,4 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         Builder.layers.Add(RigLayer);
         return RigGameobject;
     }
-
 }
