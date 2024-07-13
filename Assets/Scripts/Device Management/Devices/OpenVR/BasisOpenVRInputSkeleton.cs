@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 [System.Serializable]
@@ -81,10 +79,6 @@ public class BasisOpenVRInputSkeleton
                 InitializeBones(BasisBoneTrackedRole.RightLittleDistal, out LittleDistal);
             }
             Quaternion[] Rotations = skeletonAction.GetBoneRotations();
-            for (int Index = 0; Index < Rotations.Length; Index++)
-            {
-                InputToNames.Add(Index + " | " + skeletonAction.GetBoneName(Index));
-            }
             SteamVR_Input.onSkeletonsUpdated += SteamVR_Input_OnSkeletonsUpdated;
         }
         else
@@ -98,12 +92,10 @@ public class BasisOpenVRInputSkeleton
         boneControl.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         boneControl.HasTracked = BasisHasTracked.HasTracker;
     }
-
     private void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
     {
         onTrackingChanged();
     }
-    public List<string> InputToNames = new List<string>();
     private void onTrackingChanged()
     {
         if(BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.LeftHand || BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.RightHand)
@@ -119,7 +111,7 @@ public class BasisOpenVRInputSkeleton
                         break;
                     case 1:
                         // 1 | wrist_l
-                        Debug.Log("wrist" + Positions[Index]);
+                     //  Debug.Log("wrist" + Positions[Index]);
                         break;
                     case 2:
                         //2 | finger_thumb_0_l
@@ -143,15 +135,23 @@ public class BasisOpenVRInputSkeleton
                         ThumbDistal.ApplyMovement();
                         break;
                     case 6:
-  
+  //skip
                         break;
                     case 7:
-      
+                        IndexProximal.TrackerData.rotation = Rotations[Index];
+                        IndexProximal.TrackerData.position = BasisOpenVRInputController.FinalPosition + Positions[Index];
+                        IndexProximal.ApplyMovement();
                         break;
                     case 8:
+                        IndexIntermediate.TrackerData.rotation = Rotations[Index];
+                        IndexIntermediate.TrackerData.position = BasisOpenVRInputController.FinalPosition + Positions[Index];
+                        IndexIntermediate.ApplyMovement();
                         // Logic for index 8
                         break;
                     case 9:
+                        IndexDistal.TrackerData.rotation = Rotations[Index];
+                        IndexDistal.TrackerData.position = BasisOpenVRInputController.FinalPosition + Positions[Index];
+                        IndexDistal.ApplyMovement();
                         // Logic for index 9
                         break;
                     // Continue adding cases for each index up to 31

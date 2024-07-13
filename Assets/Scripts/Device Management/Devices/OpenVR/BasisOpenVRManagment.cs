@@ -53,12 +53,6 @@ public class BasisOpenVRManagement
         }
 
         SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
-        SteamVR_Input.onSkeletonsUpdated += OnDeviceConnectedSkeleton;
-    }
-
-    private void OnDeviceConnectedSkeleton(bool skipSendingEvents)
-    {
-
     }
     private void OnDeviceConnected(int deviceIndex, bool deviceConnected)
     {
@@ -165,17 +159,13 @@ public class BasisOpenVRManagement
         BasisOpenVRInputController.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement",FoundRole, Role, Source);
         BasisDeviceManagement.Instance.TryAdd(BasisOpenVRInputController);
     }
-    public void CreateHandPose()
-    {
-
-    }
     public void CreateTracker(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID,bool AutoAssignRole, BasisBoneTrackedRole role)
     {
         BasisOpenVRInput basisOpenVRInput = GameObject.AddComponent<BasisOpenVRInput>();
         basisOpenVRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenVRManagement", AutoAssignRole, role);
         BasisDeviceManagement.Instance.TryAdd(basisOpenVRInput);
     }
-    public bool TryAssignRole(ETrackedDeviceClass deviceClass,uint deviceIndex, out BasisBoneTrackedRole Role,out SteamVR_Input_Sources Source )
+    public bool TryAssignRole(ETrackedDeviceClass deviceClass, uint deviceIndex, out BasisBoneTrackedRole Role, out SteamVR_Input_Sources Source)
     {
         Source = SteamVR_Input_Sources.Any;
         Role = BasisBoneTrackedRole.CenterEye;
@@ -190,20 +180,29 @@ public class BasisOpenVRManagement
         {
             if (deviceClass == ETrackedDeviceClass.Controller)
             {
-                bool isLeftHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand) == deviceIndex;
+                uint leftHandIndex = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand);
+                uint rightHandIndex = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand);
+
+                bool isLeftHand = leftHandIndex != OpenVR.k_unTrackedDeviceIndexInvalid && leftHandIndex == deviceIndex;
+                bool isRightHand = rightHandIndex != OpenVR.k_unTrackedDeviceIndexInvalid && rightHandIndex == deviceIndex;
+
                 if (isLeftHand)
                 {
                     Role = BasisBoneTrackedRole.LeftHand;
                     Source = SteamVR_Input_Sources.LeftHand;
                     return true;
                 }
-                bool isRightHand = SteamVR.instance.hmd.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand) == deviceIndex;
+
                 if (isRightHand)
                 {
                     Role = BasisBoneTrackedRole.RightHand;
                     Source = SteamVR_Input_Sources.RightHand;
                     return true;
                 }
+
+                Role = BasisBoneTrackedRole.LeftHand;
+                Source = SteamVR_Input_Sources.LeftHand;
+                Debug.LogError($"Device {deviceIndex} is not recognized as left or right controller. Defaulting to unknown role. Left Controller was ID " + leftHandIndex + " right Controller was " + rightHandIndex + " but we where after " + deviceIndex);
             }
         }
         return false;
