@@ -15,5 +15,6 @@ public struct BasisAnimatorVariables
     public bool cachedIsCrouching;
     public float AnimationsCurrentSpeed;
     public bool isMoving;
+    public Vector3 AngularVelocity;
     public Vector3 Velocity;
 }

@@ -334,16 +334,18 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             WriteUpEvents(Control, LeftFingersLayer);
         }
         // Create fingers
-        CreateTwoBone(driver, Hands, References.LeftThumbProximal, References.LeftThumbIntermediate, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbIntermediate, false, out TwoBoneIKConstraint A, false, false);
-        CreateTwoBone(driver, Hands, References.LeftIndexProximal, References.LeftIndexIntermediate, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexIntermediate, false, out TwoBoneIKConstraint B, false, false);
-        CreateTwoBone(driver, Hands, References.LeftMiddleProximal, References.LeftMiddleIntermediate, References.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
-        CreateTwoBone(driver, Hands, References.LeftRingProximal, References.LeftRingIntermediate, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, BasisBoneTrackedRole.LeftRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
-        CreateTwoBone(driver, Hands, References.LeftLittleProximal, References.LeftLittleIntermediate, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
-        LeftFingers.Add(A);
-        LeftFingers.Add(B);
-        LeftFingers.Add(C);
-        LeftFingers.Add(D);
-        LeftFingers.Add(E);
+        /*
+     CreateTwoBone(driver, Hands, References.LeftThumbProximal, References.LeftThumbIntermediate, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbIntermediate, false, out TwoBoneIKConstraint A, false, false);
+     CreateTwoBone(driver, Hands, References.LeftIndexProximal, References.LeftIndexIntermediate, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexIntermediate, false, out TwoBoneIKConstraint B, false, false);
+     CreateTwoBone(driver, Hands, References.LeftMiddleProximal, References.LeftMiddleIntermediate, References.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
+     CreateTwoBone(driver, Hands, References.LeftRingProximal, References.LeftRingIntermediate, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, BasisBoneTrackedRole.LeftRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
+     CreateTwoBone(driver, Hands, References.LeftLittleProximal, References.LeftLittleIntermediate, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
+     LeftFingers.Add(A);
+     LeftFingers.Add(B);
+     LeftFingers.Add(C);
+     LeftFingers.Add(D);
+     LeftFingers.Add(E);
+            */
     }
     public void CreateRightHandFingers(BasisLocalBoneDriver driver)
     {
@@ -353,6 +355,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             WriteUpEvents(Control, RightFingersLayer);
         }
         // Create fingers
+        /*
         CreateTwoBone(driver, Hands, References.RightThumbProximal, References.RightThumbIntermediate, References.RightThumbDistal, BasisBoneTrackedRole.RightThumbDistal, BasisBoneTrackedRole.RightThumbIntermediate, false, out TwoBoneIKConstraint A, false, false);
         CreateTwoBone(driver, Hands, References.RightIndexProximal, References.RightIndexIntermediate, References.RightIndexDistal, BasisBoneTrackedRole.RightIndexDistal, BasisBoneTrackedRole.RightIndexIntermediate, false, out TwoBoneIKConstraint B, false, false);
         CreateTwoBone(driver, Hands, References.RightMiddleProximal, References.RightMiddleIntermediate, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
@@ -363,6 +366,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         RightFingers.Add(C);
         RightFingers.Add(D);
         RightFingers.Add(E);
+        */
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {
