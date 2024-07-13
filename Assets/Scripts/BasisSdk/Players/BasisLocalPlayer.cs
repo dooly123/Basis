@@ -45,7 +45,7 @@ public class BasisLocalPlayer : BasisPlayer
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
         Instance.LocalBoneDriver.ReadyToRead += SimulateHips;
         OnLocalAvatarChanged += OnCalibration;
-        string LastUsedAvatar = BasisDataStore.LoadString(LoadFileName, FallBackAvatar);
+        string LastUsedAvatar = BasisDataStore.LoadString(LoadFileName, BasisAvatarFactory.LoadingAvatar);
         await CreateAvatar(LastUsedAvatar);
         SceneManager.sceneLoaded += OnSceneLoadedCallback;
     }
@@ -144,7 +144,7 @@ Move.enabled = true;
       await  BasisLocalPlayer.Instance.CreateAvatar();
     }
 #endif
-    public async Task CreateAvatar(string AddressableID = FallBackAvatar)
+    public async Task CreateAvatar(string AddressableID = BasisAvatarFactory.LoadingAvatar)
     {
         await BasisAvatarFactory.LoadAvatar(this, AddressableID);
         BasisDataStore.SaveString(AddressableID, LoadFileName);

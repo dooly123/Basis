@@ -10,7 +10,6 @@ public abstract class BasisPlayer : MonoBehaviour
     public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
     public string AvatarUrl;
     public bool HasAvatarDriver;
-    public const string FallBackAvatar = "LoadingAvatar";
     public event Action OnAvatarSwitched;
     public event Action OnAvatarSwitchedFallBack;
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)

@@ -23,12 +23,12 @@ public class BasisRemotePlayer : BasisPlayer
     {
         AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
     }
-    public async void CreateAvatar(string Loader = FallBackAvatar)
+    public async void CreateAvatar(string Loader = BasisAvatarFactory.LoadingAvatar)
     {
         if (string.IsNullOrEmpty(Loader))
         {
             Debug.Log("Avatar Load string was null or empty using fallback!");
-            await BasisAvatarFactory.LoadAvatar(this, FallBackAvatar);
+            await BasisAvatarFactory.LoadAvatar(this, BasisAvatarFactory.LoadingAvatar);
         }
         else
         {
