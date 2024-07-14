@@ -12,6 +12,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 using static SerializableDarkRift;
 public class BasisNetworkConnector : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class BasisNetworkConnector : MonoBehaviour
     public string Ip = "170.64.184.249";
     public ushort Port = 4296;
     public static string LocalHost = "localhost";
+    public bool TryToReconnectAutomatically = true;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -53,8 +55,8 @@ public class BasisNetworkConnector : MonoBehaviour
             IpString = IpStrings[0];
         }
         IPAddress Ip = IPAddress.Parse(IpString);
-        Client.ConnectInBackground(Ip, Port, Callback);
         Client.Disconnected += Disconnected;
+        Client.ConnectInBackground(Ip, Port, Callback);
     }
     public string[] ResolveLocahost(string localhost)
     {
@@ -92,6 +94,14 @@ public class BasisNetworkConnector : MonoBehaviour
     private void Disconnected(object sender, DisconnectedEventArgs e)
     {
         Debug.LogError("Disconnected from Server " + e.Error);
+        if (TryToReconnectAutomatically)
+        {
+            Connect(Port, Ip);
+        }
+        else
+        {
+            SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
+        }
     }
     public void Disconnect()
     {

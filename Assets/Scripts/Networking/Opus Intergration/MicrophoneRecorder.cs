@@ -119,12 +119,6 @@ public class MicrophoneRecorder : MonoBehaviour
             MicrophoneDevice = null;
         }
     }
-
-    public void GetData()
-    {
-        clip.GetData(microphoneBuffer, 0);
-    }
-
     void Update()
     {
         if (Microphone.IsRecording(MicrophoneDevice))
@@ -136,7 +130,7 @@ public class MicrophoneRecorder : MonoBehaviour
                 return;
             }
 
-            GetData();
+            clip.GetData(microphoneBuffer, 0);
 
             dataLength = GetDataLength(bufferLength, head, position);
             while (dataLength > ProcessBufferLength)
@@ -176,12 +170,16 @@ public class MicrophoneRecorder : MonoBehaviour
 
     public float GetRMS()
     {
-        float sum = 0.0f;
-        for (int i = 0; i < processBuffer.Count; i++)
+        // Use a double for the sum to avoid overflow and precision issues
+        double sum = 0.0;
+
+        for (int i = 0; i < ProcessBufferLength; i++)
         {
-            sum += processBuffer.Array[i + processBuffer.Offset] * processBuffer.Array[i + processBuffer.Offset];
+            float value = processBuffer[i];
+            sum += value * value;
         }
-        return Mathf.Sqrt(sum / processBuffer.Count);
+
+        return Mathf.Sqrt((float)(sum / ProcessBufferLength));
     }
 
     private void AddRMSValue(float rms)
@@ -193,9 +191,9 @@ public class MicrophoneRecorder : MonoBehaviour
     private float GetAverageRMS()
     {
         float sum = 0.0f;
-        for (int i = 0; i < rmsValues.Length; i++)
+        for (int Index = 0; Index < rmsValues.Length; Index++)
         {
-            sum += rmsValues[i];
+            sum += rmsValues[Index];
         }
         return sum / rmsWindowSize;
     }

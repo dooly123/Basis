@@ -49,24 +49,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActiveEyeHeight: 1.75
-  BeginningCalibration:
-    m_PersistentCalls:
-      m_Calls: []
-  CalibrationComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7026422538752026465}
-        m_TargetAssemblyTypeName: AvatarStrainJiggleDriver, Assembly-CSharp
-        m_MethodName: OnCalibration
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   runtimeAnimatorController: {fileID: 9100000, guid: 78f02360f31c1a547b937559d34b03b1,
     type: 2}
   SkinnedMeshRenderer: []
@@ -100,9 +82,9 @@ MonoBehaviour:
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
-    hasTrackerPositionDriver: 2
-    hasTrackerRotationDriver: 2
+    hasTrackerDriver: 1
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -133,15 +115,15 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    RestingWorldSpace:
+    TposeWorld:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    RestingLocalSpace:
+    TposeLocal:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    InitialOffset:
+    InverseOffsetFromBone:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -328,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   directBinaural: 1
-  interpolation: 0
+  interpolation: 1
   perspectiveCorrection: 0
   distanceAttenuation: 1
   distanceAttenuationInput: 1
@@ -341,7 +323,7 @@ MonoBehaviour:
   directivity: 1
   directivityInput: 0
   dipoleWeight: 0.25
-  dipolePower: 4
+  dipolePower: 1
   directivityValue: 1
   occlusion: 0
   occlusionInput: 0
@@ -455,9 +437,9 @@ MonoBehaviour:
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
-    hasTrackerPositionDriver: 2
-    hasTrackerRotationDriver: 2
+    hasTrackerDriver: 1
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -488,15 +470,15 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    RestingWorldSpace:
+    TposeWorld:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    RestingLocalSpace:
+    TposeLocal:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    InitialOffset:
+    InverseOffsetFromBone:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -518,9 +500,9 @@ MonoBehaviour:
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
-    hasTrackerPositionDriver: 1
-    hasTrackerRotationDriver: 1
+    hasTrackerDriver: 1
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -551,15 +533,15 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    RestingWorldSpace:
+    TposeWorld:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    RestingLocalSpace:
+    TposeLocal:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    InitialOffset:
+    InverseOffsetFromBone:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
