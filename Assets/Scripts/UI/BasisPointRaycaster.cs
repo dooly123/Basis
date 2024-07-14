@@ -450,6 +450,5 @@ public partial class BasisPointRaycaster : BaseRaycaster
 
     public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
     {
-        throw new System.NotImplementedException();
     }
 }
