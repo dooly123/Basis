@@ -25,6 +25,24 @@ public class SMDMicrophone : SettingsManagerOption
             OnMicrophoneChanged?.Invoke(selectedMicrophone);
         }
     }
+    public delegate void MicrophoneVolumeChangedHandler(float Volume);
+
+    // Create an event of the delegate type
+    public static event MicrophoneVolumeChangedHandler OnMicrophoneVolumeChanged;
+    // Backing field for the SelectedMicrophone property
+    private static float selectedVolumeMicrophone;
+
+    // Property with a callback in the set accessor
+    public static float SelectedVolumeMicrophone
+    {
+        get => selectedVolumeMicrophone;
+        private set
+        {
+            selectedVolumeMicrophone = value;
+            // Invoke the callback event
+            OnMicrophoneVolumeChanged?.Invoke(selectedVolumeMicrophone);
+        }
+    }
 
     public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager = null)
     {
@@ -62,6 +80,13 @@ public class SMDMicrophone : SettingsManagerOption
                         return;
                     }
                 }
+            }
+        }
+        if (NameReturn(1, Option))
+        {
+            if (SliderReadOption(Option, Manager, out float Value))
+            {
+                SelectedVolumeMicrophone = Value;
             }
         }
     }

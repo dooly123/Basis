@@ -445,7 +445,7 @@ MonoBehaviour:
     Index: 18
     SelectableValueList: []
     Min: 0
-    Max: 80
+    Max: 0
   - Name: Music Audio
     DefaultValue: 50
     SelectedValue: 50
@@ -455,25 +455,32 @@ MonoBehaviour:
     Max: 80
   - Name: Player Audio
     DefaultValue: 
-    SelectedValue: 0
+    SelectedValue: 
     Index: 20
     SelectableValueList: []
     Min: 0
-    Max: 80
+    Max: 0
   - Name: Microphone Volume
     DefaultValue: 
-    SelectedValue: 0
+    SelectedValue: 
     Index: 21
     SelectableValueList: []
     Min: 0
-    Max: 80
-  - Name: 
+    Max: 0
+  - Name: Selected Microphone
     DefaultValue: 
     SelectedValue: 
     Index: 22
     SelectableValueList: []
     Min: 0
     Max: 0
+  - Name: 
+    DefaultValue: 
+    SelectedValue: 0
+    Index: 23
+    SelectableValueList: []
+    Min: 0
+    Max: 1
   Manager: {fileID: 7743749643595271440}
 --- !u!114 &697764147136612878
 MonoBehaviour:
@@ -590,8 +597,6 @@ MonoBehaviour:
     type: 3}
   RightMousePressed: {fileID: -240064975923332847, guid: 5e4c3601c6a155f43af19da3bdd35a64,
     type: 3}
-  Crouching: 0
-  LookDirection: {x: 0, y: 0}
   CharacterEyeInput: {fileID: 0}
   basisLocalPlayer: {fileID: 0}
   Input: {fileID: 4506459589283058818}
@@ -1026,6 +1031,10 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 2
+  - OptionName: Mcrophone Volume
+    Explanation: 
+    Parse: 1
+    Type: 3
   Manager: {fileID: 7743749643595271440}
   MicrophoneDevice: []
 --- !u!1 &8852770691268876905
@@ -1887,7 +1896,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
@@ -1917,7 +1926,7 @@ MonoBehaviour:
       DefaultPlatform: 1
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
@@ -1947,7 +1956,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
@@ -1977,7 +1986,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
@@ -2007,7 +2016,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 2
@@ -2022,6 +2031,36 @@ MonoBehaviour:
     Explanation: 
     selectedValue: 
     Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 1
+    SliderMinValue: 0
+    Name: Mcrophone Volume
+    ValueDescriptor: Microphone Volume
+    SelectedValueDefault: 
+    ValueDefault: 1
+    Explanation: 
+    selectedValue: 
+    Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
     ApplyInput: {fileID: 0}

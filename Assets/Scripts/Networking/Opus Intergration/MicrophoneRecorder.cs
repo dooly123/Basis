@@ -1,32 +1,16 @@
 ﻿using UnityEngine;
 using System;
 using System.Linq;
-
-public class MicrophoneRecorder : MonoBehaviour
+public class MicrophoneRecorder : MicrophoneRecorderBase
 {
-    public event Action OnHasAudio;
-    public event Action OnHasSilence; // Event triggered when silence is detected
-    public AudioClip clip;
     public int head = 0;
-    public ArraySegment<float> processBuffer; // Changed to ArraySegment<float>
-    public int ProcessBufferLength;
-    public ArraySegment<float> microphoneBuffer; // Changed to ArraySegment<float>
-    public string MicrophoneDevice = null;
-    public float silenceThreshold = 0.0001f; // RMS threshold for detecting silence
-    public BasisOpusSettings BasisOpusSettings;
-    public int samplingFrequency;
     public float[] rmsValues;
     public int rmsIndex = 0;
     public int rmsWindowSize = 10; // Size of the moving average window
-    public bool useMovingWindowRMS = false; // Flag to enable/disable moving window RMS (needs refinement)
-
     private int bufferLength;
     private int dataLength;
     private int position;
     private int remain;
-
-    public bool IsInitialize = false;
-
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -37,7 +21,6 @@ public class MicrophoneRecorder : MonoBehaviour
         }
         return false;
     }
-
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -51,21 +34,20 @@ public class MicrophoneRecorder : MonoBehaviour
         bufferLength = microphoneBufferArray.Length;
 
         SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
+        SMDMicrophone.OnMicrophoneVolumeChanged += ChangeAudio;
         BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
+        ChangeAudio(SMDMicrophone.SelectedVolumeMicrophone);
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }
-
     public void OnDestroy()
     {
         SMDMicrophone.OnMicrophoneChanged -= ResetMicrophones;
         BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
     }
-
     private void OnBootModeChanged(BasisBootedMode mode)
     {
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }
-
     public void ResetMicrophones(string newMicrophone)
     {
         if (Microphone.devices.Length != 0)
@@ -89,7 +71,6 @@ public class MicrophoneRecorder : MonoBehaviour
             Debug.LogError("No Microphones found!");
         }
     }
-
     public void ForceSetMicrophone(string newMicrophone)
     {
         if (newMicrophone == null)
@@ -109,7 +90,6 @@ public class MicrophoneRecorder : MonoBehaviour
             Debug.LogError("Microphone device not found: " + newMicrophone);
         }
     }
-
     private void StopMicrophone()
     {
         if (MicrophoneDevice != null)
@@ -146,12 +126,12 @@ public class MicrophoneRecorder : MonoBehaviour
                     CopyToProcessBuffer(head, ProcessBufferLength);
                 }
 
+                AdjustVolume(Volume); // Adjust the volume of the audio data
+
                 float rms = GetRMS();
-                if (useMovingWindowRMS)
-                {
-                    AddRMSValue(rms);
-                    rms = GetAverageRMS();
-                }
+                rmsValues[rmsIndex] = rms;
+                rmsIndex = (rmsIndex + 1) % rmsWindowSize;
+                rms = rmsValues.Average();
 
                 if (rms < silenceThreshold)
                 {
@@ -166,45 +146,5 @@ public class MicrophoneRecorder : MonoBehaviour
                 dataLength -= ProcessBufferLength;
             }
         }
-    }
-
-    public float GetRMS()
-    {
-        // Use a double for the sum to avoid overflow and precision issues
-        double sum = 0.0;
-
-        for (int i = 0; i < ProcessBufferLength; i++)
-        {
-            float value = processBuffer[i];
-            sum += value * value;
-        }
-
-        return Mathf.Sqrt((float)(sum / ProcessBufferLength));
-    }
-
-    private void AddRMSValue(float rms)
-    {
-        rmsValues[rmsIndex] = rms;
-        rmsIndex = (rmsIndex + 1) % rmsWindowSize;
-    }
-
-    private float GetAverageRMS()
-    {
-        float sum = 0.0f;
-        for (int Index = 0; Index < rmsValues.Length; Index++)
-        {
-            sum += rmsValues[Index];
-        }
-        return sum / rmsWindowSize;
-    }
-
-    private void CopyToProcessBuffer(int sourceIndex, int length)
-    {
-        Array.Copy(microphoneBuffer.Array, sourceIndex + microphoneBuffer.Offset, processBuffer.Array, processBuffer.Offset, length);
-    }
-
-    static int GetDataLength(int bufferLength, int head, int tail)
-    {
-        return head <= tail ? tail - head : bufferLength - head + tail;
     }
 }
