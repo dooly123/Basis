@@ -4,10 +4,12 @@ using UnityOpus;
 
 public class BasisAudioDecoder : MonoBehaviour
 {
-    public event Action<float[], int> OnDecoded;
+    public event Action OnDecoded;
     AudioDecoder decoder;
     public float[] pcmBuffer;
     public BasisOpusSettings Settings;
+
+    public int pcmLength;
     void OnEnable()
     {
         Initialize();
@@ -31,7 +33,7 @@ public class BasisAudioDecoder : MonoBehaviour
 
     public void OnEncoded(byte[] data)
     {
-        var pcmLength = decoder.Decode(data, data.Length, pcmBuffer);
-        OnDecoded?.Invoke(pcmBuffer, pcmLength);
+        pcmLength = decoder.Decode(data, data.Length, pcmBuffer);
+        OnDecoded?.Invoke();
     }
 }

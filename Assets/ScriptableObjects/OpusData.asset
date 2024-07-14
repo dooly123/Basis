@@ -19,4 +19,4 @@ MonoBehaviour:
   NumChannels: 1
   OpusApplication: 2049
   OpusSignal: -1000
-  DesiredDurationInSeconds: 0.02
+  DesiredDurationInSeconds: 0.01

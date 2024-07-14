@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 [System.Serializable]
@@ -16,7 +16,6 @@ public class BasisAudioReceiver
     public int samplingFrequency;
     public int numChannels;
     public int SampleLength;
-
     public float[] ringBuffer;
     public int head = 0;
     public float lastDataReceivedTime;
@@ -29,23 +28,28 @@ public class BasisAudioReceiver
         {
             if (audioSource.isPlaying)
             {
-                audioSource.Stop();
                 ClearRingBuffer();
             }
         }
     }
-    // API to clear the ring buffer and reset the head
+
     public void ClearRingBuffer()
     {
         Array.Clear(ringBuffer, 0, SampleLength);
         head = 0;
     }
+
+    public void OnDecoded()
+    {
+        OnDecoded(decoder.pcmBuffer, decoder.pcmLength);
+    }
+
     public void OnDecoded(float[] pcm, int pcmLength)
     {
         // Write incoming PCM data into the ring buffer
-        for (int Index = 0; Index < pcmLength; Index++)
+        for (int index = 0; index < pcmLength; index++)
         {
-            ringBuffer[(head + Index) % SampleLength] = pcm[Index];
+            ringBuffer[(head + index) % SampleLength] = pcm[index];
         }
 
         head = (head + pcmLength) % SampleLength;
@@ -53,7 +57,7 @@ public class BasisAudioReceiver
         // Update the AudioClip with the new data
         audioSource.clip.SetData(ringBuffer, 0);
 
-        //do we have enough data
+        // Do we have enough data
         if (!audioSource.isPlaying && head > SampleLength / 2)
         {
             audioSource.Play();
@@ -65,9 +69,9 @@ public class BasisAudioReceiver
 
     public void OnDecodedSilence(float[] pcm, int pcmLength)
     {
-      //  Debug.Log(" OnDecodedSilence");
         OnDecoded(pcm, pcmLength);
     }
+
     public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
     {
         settings = BasisDeviceManagement.Instance.BasisOpusSettings;
