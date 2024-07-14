@@ -6,6 +6,7 @@ public class BasisAvatarStrainJiggleDriver : MonoBehaviour
     public BasisPlayer player;
     public JiggleRigBuilder Jiggler;
     public JiggleRigSimpleLOD SimpleJiggleLOD = new JiggleRigSimpleLOD();
+
     public void OnCalibration()
     {
         if (Jiggler != null)
@@ -18,7 +19,7 @@ public class BasisAvatarStrainJiggleDriver : MonoBehaviour
             {
                 if (Jiggler == null)
                 {
-                    CreateJiggler();
+                    Jiggler = BasisHelpers.GetOrAddComponent<JiggleRigBuilder>(player.Avatar.Animator.gameObject);
                 }
                 SimpleJiggleLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
                 Jiggler.interpolate = true;
@@ -54,16 +55,6 @@ public class BasisAvatarStrainJiggleDriver : MonoBehaviour
     public void SetWind(Vector3 Wind)
     {
         Jiggler.wind = Wind;
-    }
-    public void CreateJiggler()
-    {
-        Transform Transform = player.Avatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
-        if (Transform == null)
-        {
-            Transform = player.Avatar.transform;
-        }
-        Jiggler = Transform.gameObject.AddComponent<JiggleRigBuilder>();
-        //  SimpleJiggleLOD = Hips.gameObject.AddComponent<JiggleRigSimpleLOD>();
     }
     public JiggleRigBuilder.JiggleRig Conversion(BasisJiggleStrain Strain)
     {

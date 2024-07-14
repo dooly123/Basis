@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4496089132972522230}
   - component: {fileID: 3578141255088103770}
   - component: {fileID: 7026422538752026465}
+  - component: {fileID: 8753016558906673911}
   m_Layer: 3
   m_Name: RemotePlayer
   m_TagString: Untagged
@@ -32,7 +33,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3868150337281897813}
   - {fileID: 3207512861414392396}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -73,7 +73,7 @@ MonoBehaviour:
   BasisAvatarStrainJiggleDriver: {fileID: 7026422538752026465}
   AvatarUrl: 
   HasAvatarDriver: 0
-  RemoteBoneDriver: {fileID: 3382825646792045376}
+  RemoteBoneDriver: {fileID: 8753016558906673911}
   RemoteAvatarDriver: {fileID: 4496089132972522230}
   AudioSourceGameobject: {fileID: 5669630751523980901}
   MouthControl:
@@ -157,6 +157,152 @@ MonoBehaviour:
     distance: 30
     blend: 0.5
     currentCamera: {fileID: 0}
+--- !u!114 &8753016558906673911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353202728008673533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f68993623fe3c4d839ea080a9841d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlsLength: 0
+  Controls: []
+  trackedRoles: 
+  HasControls: 0
+  ProvidedTime: 0
+  RemotePlayer: {fileID: 3578141255088103770}
+  HeadAvatar: {fileID: 0}
+  HipsAvatar: {fileID: 0}
+  Head:
+    Name: 
+    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
+    HasBone: 0
+    BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
+    hasTrackerDriver: 1
+    hasRigLayer: 1
+    GeneralLocation: 0
+    RotationControl:
+      Lerp: 0
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      TaretInterpreter: 0
+      Offset: {x: 0, y: 0, z: 0, w: 0}
+      ClampStats: 0
+      ClampableAxis: 0
+      ClampSize: 0
+      UseAngle: 0
+      AngleBeforeMove: 0
+      AngleBeforeSame: 0
+      ResetAfterTime: 0
+      NextReset: 0
+      HasActiveTimer: 0
+      RotationOverride: 0
+    PositionControl:
+      Offset: {x: 0, y: 0, z: 0}
+      LerpAmount: 0
+      Lerp: 0
+      TaretInterpreter: 0
+    RawLocalData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastRunData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TrackerData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedLastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+  Hips:
+    Name: 
+    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
+    HasBone: 0
+    BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
+    hasTrackerDriver: 1
+    hasRigLayer: 1
+    GeneralLocation: 0
+    RotationControl:
+      Lerp: 0
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      TaretInterpreter: 0
+      Offset: {x: 0, y: 0, z: 0, w: 0}
+      ClampStats: 0
+      ClampableAxis: 0
+      ClampSize: 0
+      UseAngle: 0
+      AngleBeforeMove: 0
+      AngleBeforeSame: 0
+      ResetAfterTime: 0
+      NextReset: 0
+      HasActiveTimer: 0
+      RotationOverride: 0
+    PositionControl:
+      Offset: {x: 0, y: 0, z: 0}
+      LerpAmount: 0
+      Lerp: 0
+      TaretInterpreter: 0
+    RawLocalData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastRunData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TrackerData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedLastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
 --- !u!1 &5669630751523980901
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,181 +525,3 @@ MonoBehaviour:
   - 0
   applyHRTFToPathing: 0
   pathingMixLevel: 1
---- !u!1 &6703780597886759135
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3868150337281897813}
-  - component: {fileID: 3382825646792045376}
-  m_Layer: 3
-  m_Name: Rig
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3868150337281897813
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6703780597886759135}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3249565482574355061}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3382825646792045376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6703780597886759135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2f68993623fe3c4d839ea080a9841d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ControlsLength: 0
-  Controls: []
-  trackedRoles: 
-  HasControls: 0
-  ProvidedTime: 0
-  RemotePlayer: {fileID: 3578141255088103770}
-  HeadAvatar: {fileID: 0}
-  HipsAvatar: {fileID: 0}
-  Head:
-    Name: 
-    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
-    HasBone: 0
-    BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
-    hasTrackerDriver: 1
-    hasRigLayer: 1
-    GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    RawLocalData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TrackerData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    FinalisedWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    FinalisedLastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-  Hips:
-    Name: 
-    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
-    HasBone: 0
-    BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
-    hasTrackerDriver: 1
-    hasRigLayer: 1
-    GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    RawLocalData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TrackerData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    FinalisedWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    FinalisedLastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}

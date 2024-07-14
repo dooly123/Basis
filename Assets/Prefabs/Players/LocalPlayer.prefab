@@ -1,55 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6560236137931555752
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2297729881852288}
-  - component: {fileID: 7188108507121798985}
-  m_Layer: 3
-  m_Name: Rig
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2297729881852288
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6560236137931555752}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 303201899784742928}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7188108507121798985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6560236137931555752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b8f519e8dedb04bb1f5592499e5e61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ControlsLength: 0
-  Controls: []
-  trackedRoles: 
-  HasControls: 0
-  ProvidedTime: 0
-  IsFlip: 0
 --- !u!1 &8538648612911191307
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,6 +13,7 @@ GameObject:
   - component: {fileID: 5000096567804979388}
   - component: {fileID: 4587526044252889482}
   - component: {fileID: 277109516044041921}
+  - component: {fileID: 1116109802514353462}
   m_Layer: 3
   m_Name: LocalPlayer
   m_TagString: Untagged
@@ -82,8 +33,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.502, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2297729881852288}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8640748518353179972
@@ -98,10 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c44de2a33e8c6004f9ab065673b900d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Rig: {fileID: 2297729881852288}
+  Rig: {fileID: 303201899784742928}
   Move: {fileID: 0}
-  Position: {x: 0, y: 0, z: 0}
-  Rotation: {x: 0, y: 0, z: 0, w: 0}
+  AssignedReadyToRead: 0
 --- !u!114 &5000096567804979388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,32 +63,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5838aa3334f5e5a40b4f9837a0d7cd65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveHeight: 1.75
-  BeginningCalibration:
-    m_PersistentCalls:
-      m_Calls: []
-  CalibrationComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 277109516044041921}
-        m_TargetAssemblyTypeName: AvatarStrainJiggleDriver, Assembly-CSharp
-        m_MethodName: OnCalibration
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  ActiveEyeHeight: 1.75
   runtimeAnimatorController: {fileID: 9100000, guid: 44e34e57747369b4791afeff1fe21695,
     type: 2}
   SkinnedMeshRenderer: []
   Player: {fileID: 4587526044252889482}
+  InTPose: 0
   HeadScale: {x: 0, y: 0, z: 0}
   HeadScaledDown: {x: 0, y: 0, z: 0}
-  LocalDriver: {fileID: 7188108507121798985}
+  LocalDriver: {fileID: 0}
   AnimatorDriver: {fileID: 0}
   LocalPlayer: {fileID: 4587526044252889482}
   HeadTwoBoneIK: {fileID: 0}
@@ -148,13 +80,28 @@ MonoBehaviour:
   LeftHandTwoBoneIK: {fileID: 0}
   RightHandTwoBoneIK: {fileID: 0}
   UpperChestTwoBoneIK: {fileID: 0}
-  RigHead: {fileID: 0}
+  LeftShoulderTwoBoneIK: {fileID: 0}
+  RightShoulderTwoBoneIK: {fileID: 0}
+  LeftFingers: []
+  RightFingers: []
+  LeftToeRig: {fileID: 0}
+  RightToeRig: {fileID: 0}
+  RigHeadRig: {fileID: 0}
   LeftHandRig: {fileID: 0}
   RightHandRig: {fileID: 0}
   LeftFootRig: {fileID: 0}
   RightFootRig: {fileID: 0}
-  ChestSpine: {fileID: 0}
-  Spine: {fileID: 0}
+  ChestSpineRig: {fileID: 0}
+  LeftShoulderRig: {fileID: 0}
+  RightShoulderRig: {fileID: 0}
+  LeftFingersRig: {fileID: 0}
+  RightFingersRig: {fileID: 0}
+  LeftFingersLayer:
+    m_Rig: {fileID: 0}
+    m_Active: 0
+  RightFingersLayer:
+    m_Rig: {fileID: 0}
+    m_Active: 0
   LeftHandLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
@@ -167,13 +114,22 @@ MonoBehaviour:
   RightFootLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
+  LeftToeLayer:
+    m_Rig: {fileID: 0}
+    m_Active: 0
+  RightToeLayer:
+    m_Rig: {fileID: 0}
+    m_Active: 0
   HeadLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
   UpperChestLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
-  SpineLayer:
+  LeftShoulderLayer:
+    m_Rig: {fileID: 0}
+    m_Active: 0
+  RightShoulderLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
   Rigs: []
@@ -198,17 +154,22 @@ MonoBehaviour:
   BasisAvatarStrainJiggleDriver: {fileID: 277109516044041921}
   AvatarUrl: 
   HasAvatarDriver: 0
+  PlayerEyeHeight: 1.64
+  RatioPlayerToAvatarScale: 1
+  RatioPlayerToEyeDefaultScale: 1
+  RatioAvatarToAvatarEyeDefaultScale: 1
   Move: {fileID: 0}
   Binder: {fileID: 8640748518353179972}
-  LocalBoneDriver: {fileID: 7188108507121798985}
+  LocalBoneDriver: {fileID: 1116109802514353462}
   Hips:
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
-    hasTrackerPositionDriver: 1
-    hasTrackerRotationDriver: 1
+    BoneModelTransform: {fileID: 0}
+    hasTrackerDriver: 1
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -233,28 +194,36 @@ MonoBehaviour:
       TaretInterpreter: 0
     RawLocalData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     LastRunData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    RestingWorldSpace:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    RestingLocalSpace:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    InitialOffset:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     TrackerData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedLastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
   AvatarDriver: {fileID: 5000096567804979388}
   FootPlacementDriver: {fileID: 0}
   VisemeDriver: {fileID: 0}
@@ -280,3 +249,20 @@ MonoBehaviour:
     distance: 30
     blend: 0.5
     currentCamera: {fileID: 0}
+--- !u!114 &1116109802514353462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8538648612911191307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b8f519e8dedb04bb1f5592499e5e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlsLength: 0
+  Controls: []
+  trackedRoles: 
+  HasControls: 0
+  ProvidedTime: 0

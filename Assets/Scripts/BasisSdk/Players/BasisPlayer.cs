@@ -23,6 +23,10 @@ public abstract class BasisPlayer : MonoBehaviour
             Debug.LogError("Mising CharacterIKCalibration");
             HasAvatarDriver = false;
         }
+        if (BasisAvatarStrainJiggleDriver != null)
+        {
+            BasisAvatarStrainJiggleDriver.OnCalibration();
+        }
     }
     public void AvatarSwitchedFallBack()
     {

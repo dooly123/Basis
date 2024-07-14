@@ -1796,7 +1796,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1807,7 +1807,7 @@ MonoBehaviour:
     Name: ScreenMode
     ValueDescriptor: ScreenMode
     SelectedValueDefault: 
-    ValueDefault: exclusive fullscreen
+    ValueDefault: windowed
     Explanation: 
     selectedValue: exclusive fullscreen
     Type: 2
@@ -2046,7 +2046,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
