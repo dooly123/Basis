@@ -61,8 +61,7 @@ public class BasisHamburgerMenu : BasisUIBase
         //disable builder and it will be updated when the animator updates
         //   BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = false;
         //now lets grab and apply the height
-        BasisLocalPlayer.Instance.LocalBoneDriver.Simulate();
-        BasisLocalPlayer.Instance.LocalBoneDriver.ApplyMovement();
+        BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
         //now that we have latest * scale we can run calibration
         BasisAvatarIKStageCalibration.FullBodyCalibration();
         BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
@@ -86,8 +85,7 @@ public class BasisHamburgerMenu : BasisUIBase
     [MenuItem("Basis/CalibrateFB/StepB")]
     public static void StartBCali()
     {
-        BasisLocalPlayer.Instance.LocalBoneDriver.Simulate();
-        BasisLocalPlayer.Instance.LocalBoneDriver.ApplyMovement();
+        BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
     }
     [MenuItem("Basis/CalibrateFB/StepC")]
     public static void StartCali()

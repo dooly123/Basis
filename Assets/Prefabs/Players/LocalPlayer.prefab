@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 303201899784742928}
-  - component: {fileID: 8640748518353179972}
-  - component: {fileID: 5000096567804979388}
   - component: {fileID: 4587526044252889482}
-  - component: {fileID: 277109516044041921}
   - component: {fileID: 1116109802514353462}
+  - component: {fileID: 5000096567804979388}
+  - component: {fileID: 277109516044041921}
   m_Layer: 3
   m_Name: LocalPlayer
   m_TagString: Untagged
@@ -36,7 +35,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8640748518353179972
+--- !u!114 &4587526044252889482
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,12 +44,109 @@ MonoBehaviour:
   m_GameObject: {fileID: 8538648612911191307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c44de2a33e8c6004f9ab065673b900d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 19f412872e0df964494751723e9f3838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Rig: {fileID: 303201899784742928}
+  DisplayName: 
+  UUID: 
+  Avatar: {fileID: 0}
+  BasisAvatarStrainJiggleDriver: {fileID: 277109516044041921}
+  AvatarUrl: 
+  HasAvatarDriver: 0
+  PlayerEyeHeight: 1.64
+  RatioPlayerToAvatarScale: 1
+  RatioPlayerToEyeDefaultScale: 1
+  RatioAvatarToAvatarEyeDefaultScale: 1
   Move: {fileID: 0}
-  AssignedReadyToRead: 0
+  Binder: {fileID: 0}
+  LocalBoneDriver: {fileID: 1116109802514353462}
+  Hips:
+    Name: 
+    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
+    HasBone: 0
+    BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
+    hasTrackerDriver: 1
+    hasRigLayer: 1
+    GeneralLocation: 0
+    RotationControl:
+      Lerp: 0
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      TaretInterpreter: 0
+      Offset: {x: 0, y: 0, z: 0, w: 0}
+      ClampStats: 0
+      ClampableAxis: 0
+      ClampSize: 0
+      UseAngle: 0
+      AngleBeforeMove: 0
+      AngleBeforeSame: 0
+      ResetAfterTime: 0
+      NextReset: 0
+      HasActiveTimer: 0
+      RotationOverride: 0
+    PositionControl:
+      Offset: {x: 0, y: 0, z: 0}
+      LerpAmount: 0
+      Lerp: 0
+      TaretInterpreter: 0
+    RawLocalData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastRunData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TrackerData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    FinalisedLastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+  AvatarDriver: {fileID: 5000096567804979388}
+  FootPlacementDriver: {fileID: 0}
+  VisemeDriver: {fileID: 0}
+  SelfOutput: {fileID: 0}
+  GroundMask:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &1116109802514353462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8538648612911191307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b8f519e8dedb04bb1f5592499e5e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlsLength: 0
+  Controls: []
+  trackedRoles: 
+  HasControls: 0
+  ProvidedTime: 0
 --- !u!114 &5000096567804979388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,101 +232,6 @@ MonoBehaviour:
   Builder: {fileID: 0}
   AdditionalTransforms: []
   MicrophoneRecorder: {fileID: 0}
---- !u!114 &4587526044252889482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8538648612911191307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19f412872e0df964494751723e9f3838, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DisplayName: 
-  UUID: 
-  Avatar: {fileID: 0}
-  BasisAvatarStrainJiggleDriver: {fileID: 277109516044041921}
-  AvatarUrl: 
-  HasAvatarDriver: 0
-  PlayerEyeHeight: 1.64
-  RatioPlayerToAvatarScale: 1
-  RatioPlayerToEyeDefaultScale: 1
-  RatioAvatarToAvatarEyeDefaultScale: 1
-  Move: {fileID: 0}
-  Binder: {fileID: 8640748518353179972}
-  LocalBoneDriver: {fileID: 1116109802514353462}
-  Hips:
-    Name: 
-    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
-    HasBone: 0
-    BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
-    hasTrackerDriver: 1
-    hasRigLayer: 1
-    GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    RawLocalData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TrackerData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    FinalisedWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    FinalisedLastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-  AvatarDriver: {fileID: 5000096567804979388}
-  FootPlacementDriver: {fileID: 0}
-  VisemeDriver: {fileID: 0}
-  SelfOutput: {fileID: 0}
-  GroundMask:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!114 &277109516044041921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,20 +250,3 @@ MonoBehaviour:
     distance: 30
     blend: 0.5
     currentCamera: {fileID: 0}
---- !u!114 &1116109802514353462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8538648612911191307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b8f519e8dedb04bb1f5592499e5e61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ControlsLength: 0
-  Controls: []
-  trackedRoles: 
-  HasControls: 0
-  ProvidedTime: 0

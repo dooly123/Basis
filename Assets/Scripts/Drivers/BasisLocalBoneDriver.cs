@@ -4,14 +4,10 @@ public class BasisLocalBoneDriver : BaseBoneDriver
 {
     public void Start()
     {
-        InputSystem.onAfterUpdate += Simulate;
+        InputSystem.onAfterUpdate += SimulateAndApply;
     }
     public void OnDestroy()
     {
-        InputSystem.onAfterUpdate -= Simulate;
-    }
-    public void Update()
-    {
-        ApplyMovement();
+        InputSystem.onAfterUpdate -= SimulateAndApply;
     }
 }

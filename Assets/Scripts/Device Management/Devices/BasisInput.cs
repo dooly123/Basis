@@ -277,7 +277,7 @@ public abstract class BasisInput : MonoBehaviour
                 }
                 break;
             case BasisBoneTrackedRole.RightHand:
-                BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
+              //  BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
                 if (InputState.PrimaryButtonGetState)
                 {
                     BasisLocalPlayer.Instance.Move.HandleJump();

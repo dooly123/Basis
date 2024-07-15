@@ -40,6 +40,11 @@ public abstract class BaseBoneDriver : MonoBehaviour
         }
         ReadyToRead?.Invoke();
     }
+    public void SimulateAndApply()
+    {
+        Simulate();
+        ApplyMovement();
+    }
     public void CalibrateOffsets()
     {
         for (int Index = 0; Index < ControlsLength; Index++)

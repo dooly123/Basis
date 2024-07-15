@@ -91,6 +91,7 @@ MonoBehaviour:
     BoneModelTransform: {fileID: 0}
     hasTrackerDriver: 1
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -153,6 +154,7 @@ MonoBehaviour:
     BoneModelTransform: {fileID: 0}
     hasTrackerDriver: 1
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -210,7 +212,7 @@ MonoBehaviour:
   HasEye: 0
   HasHead: 0
   LastWasGrounded: 1
-  RotationSpeed: 90
+  RotationSpeed: 140
   BlockMovement: 0
   IsFalling: 0
   HasJumpAction: 0

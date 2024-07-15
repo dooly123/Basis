@@ -20,7 +20,6 @@ public class BasisLocalPlayer : BasisPlayer
     public event Action OnLocalAvatarChanged;
     public event Action OnSpawnedEvent;
     public event Action OnPlayersHeightChanged;
-    public BasisLocalCharacterBinder Binder;
     public BasisLocalBoneDriver LocalBoneDriver;
     public BasisBoneControl Hips;
     public BasisLocalAvatarDriver AvatarDriver;

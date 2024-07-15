@@ -39,6 +39,10 @@ public class BasisLocalInputActions : MonoBehaviour
         }
         BasisLocalCameraDriver.InstanceExists += SetupCamera;
     }
+    public void Update()
+    {
+        InputSystem.Update();
+    }
     public static async Task CreateInputAction(BasisLocalPlayer Local)
     {
         var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(InputActions, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
@@ -189,15 +193,6 @@ public class BasisLocalInputActions : MonoBehaviour
     public void MoveActionStarted(Vector2 MovementVector)
     {
         basisLocalPlayer.Move.MovementVector = MovementVector;
-    }
-    public void RotateActionCancelled()
-    {
-        basisLocalPlayer.Move.Rotation = new Vector2();
-    }
-    public void RotateActionStarted(Vector2 Rotation)
-    {
-        // Calculate the rotation amount
-        basisLocalPlayer.Move.Rotation = Rotation;
     }
     public void LookActionCancelled()
     {
