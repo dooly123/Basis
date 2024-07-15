@@ -39,7 +39,7 @@ public class BasisLocalInputActions : MonoBehaviour
         }
         BasisLocalCameraDriver.InstanceExists += SetupCamera;
     }
-    public void Update()
+    public void LateUpdate()
     {
         InputSystem.Update();
         BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();

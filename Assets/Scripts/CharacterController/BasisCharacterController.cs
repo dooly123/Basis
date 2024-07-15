@@ -29,19 +29,10 @@ public class BasisCharacterController : MonoBehaviour
     public bool HasJumpAction = false;
     public float jumpHeight = 1.0f; // Jump height set to 1 meter
     public float currentVerticalSpeed = 0f; // Vertical speed of the character
-    public Vector3 OutPosition;
-    public Vector3 OutLastPosition;
     public Vector2 Rotation;
     public float RotationSpeed = 200;
-    public void OnEnable()
+    public void OnDestroy()
     {
-        BasisLocalPlayer.Instance.OnLocalAvatarChanged += Initialize;
-        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead += Simulate;
-        Initialize();
-    }
-    public void OnDisable()
-    {
-        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= Initialize;
         BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead -= Simulate;
     }
     public void Initialize()
@@ -52,15 +43,13 @@ public class BasisCharacterController : MonoBehaviour
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
         characterController.minMoveDistance = 0;
         characterController.skinWidth = 0.1f;
-        currentRotation = Quaternion.identity;
+        driver.ReadyToRead += Simulate;
     }
     public void Simulate()
     {
         CalculateCharacterSize();
         HandleMovement();
         GroundCheck();
-        OutLastPosition = OutPosition;
-        OutPosition = transform.position;
 
         // Calculate the rotation amount for this frame
         float rotationAmount = Rotation.x * RotationSpeed * Time.deltaTime;
@@ -70,11 +59,7 @@ public class BasisCharacterController : MonoBehaviour
 
         // Add the rotation amount to the current y-axis rotation and use modulo to keep it within 0-360 degrees
         float newRotationY = (currentRotation.y + rotationAmount) % 360f;
-
-        // Apply the new rotation to the player
-        BasisLocalPlayer.Instance.transform.eulerAngles = new Vector3(currentRotation.x, newRotationY, currentRotation.z);
-
-        BasisLocalPlayer.Instance.transform.position = OutPosition;
+        this.transform.RotateAround(Eye.CurrentWorldData.position, Vector3.up, rotationAmount);
         ReadyToRead?.Invoke();
     }
     public void OnDrawGizmosSelected()

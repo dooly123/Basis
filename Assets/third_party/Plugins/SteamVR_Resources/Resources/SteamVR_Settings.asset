@@ -18,14 +18,13 @@ MonoBehaviour:
   actionsFilePath: actions.json
   steamVRInputPath: SteamVR_Input
   inputUpdateMode: 2
-  poseUpdateMode: 8
+  poseUpdateMode: 16
   activateFirstActionSetOnStart: 1
   editorAppKey: application.generated.unity.basis.exe
   autoEnableVR: 0
-  legacyMixedRealityCamera: 0
   mixedRealityCameraPose:
     actionPath: /actions/default/in/Pose
-    needsReinit: 1
+    needsReinit: 0
   mixedRealityCameraInputSource: 11
   mixedRealityActionSetAutoEnable: 1
   previewHandLeft: {fileID: 0}

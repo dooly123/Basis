@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 07132e11222fce241973d5e194e108b6
-    m_Address: Assets/Prefabs/Loadins/Character Controller.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0e0b6944e9ffc474e98f52ce606485c7
     m_Address: Assets/third_party/Avatar/doolys avatars that cant be replicated wahahaha/Lumain
       V2 Basis/Materials/Atlas+TrebleMask.mat

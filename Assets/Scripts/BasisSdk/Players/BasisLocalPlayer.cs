@@ -40,7 +40,7 @@ public class BasisLocalPlayer : BasisPlayer
         LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
         await BasisLocalInputActions.CreateInputAction(this);
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
-        await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Character Controller.prefab", new InstantiationParameters());
+        Move.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
         Instance.LocalBoneDriver.ReadyToRead += SimulateHips;
         OnLocalAvatarChanged += OnCalibration;
@@ -86,17 +86,14 @@ public class BasisLocalPlayer : BasisPlayer
         RatioPlayerToEyeDefaultScale = realEyeHeight / DefaultPlayerEyeHeight;
         OnPlayersHeightChanged?.Invoke();
     }
-    public void Teleport(Vector3 position,Quaternion rotation)
+    public void Teleport(Vector3 position, Quaternion rotation)
     {
         BasisAvatarStrainJiggleDriver.PrepareTeleport();
         Debug.Log("Teleporting");
-        if (Move != null)
-        {
-            Move.enabled = false;
-            Move.transform.SetPositionAndRotation(position, Quaternion.identity);
-Move.enabled = true;
-        }
-        if(AvatarDriver != null && AvatarDriver.AnimatorDriver != null)
+        Move.enabled = false;
+        transform.SetPositionAndRotation(position, rotation);
+        Move.enabled = true;
+        if (AvatarDriver != null && AvatarDriver.AnimatorDriver != null)
         {
             AvatarDriver.AnimatorDriver.HandleTeleport();
         }

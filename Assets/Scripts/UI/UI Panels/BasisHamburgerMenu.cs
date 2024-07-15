@@ -83,11 +83,6 @@ public class BasisHamburgerMenu : BasisUIBase
         }
     }
     [MenuItem("Basis/CalibrateFB/StepB")]
-    public static void StartBCali()
-    {
-        BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
-    }
-    [MenuItem("Basis/CalibrateFB/StepC")]
     public static void StartCali()
     {
         Vector3 CamerRot = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
