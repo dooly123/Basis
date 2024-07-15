@@ -117,7 +117,7 @@ Move.enabled = true;
         {
             Quaternion rotation = Hips.BoneTransform.rotation;//we dont use Hips.BoneModelTransform.rotation as it introduces a offset that is unwanted.
             Vector3 rotatedOffset = rotation * Hips.TposeLocal.position;
-            rotatedOffset = Hips.FinalisedWorldData.position - rotatedOffset;
+            rotatedOffset = Hips.CurrentWorldData.position - rotatedOffset;
 
             SimulateHips(rotatedOffset, rotation);
         }

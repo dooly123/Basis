@@ -144,8 +144,8 @@ public class BasisOpenVRInputSkeleton
                         // ThumbDistal.TrackerData.rotation = Rotations[Index];
                         SetASTracked(ThumbDistal);
                         Vector3 Difference = ThumbDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        ThumbDistal.TrackerData.position = Vector3.Lerp(ActiveHand.FinalisedWorldData.position + Difference, ActiveHand.FinalisedWorldData.position, skeletonAction.thumbCurl);
-                        ThumbDistal.ApplyMovement();
+                        ThumbDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.thumbCurl);
+                        //ThumbDistal.ApplyMovement();
                         break;
                     case 6:
                         // skip
@@ -164,8 +164,8 @@ public class BasisOpenVRInputSkeleton
                         //  IndexDistal.TrackerData.rotation = Rotations[Index];
                         SetASTracked(IndexDistal);
                         Difference = IndexDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        IndexDistal.TrackerData.position = Vector3.Lerp(ActiveHand.FinalisedWorldData.position + Difference, ActiveHand.FinalisedWorldData.position, skeletonAction.indexCurl);
-                        IndexDistal.ApplyMovement();
+                        IndexDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.indexCurl);
+                      //  IndexDistal.ApplyMovement();
                         break;
                     case 10:
                         // skip
@@ -184,8 +184,8 @@ public class BasisOpenVRInputSkeleton
                         //  MiddleDistal.TrackerData.rotation = Rotations[Index];
                         SetASTracked(MiddleDistal);
                         Difference = MiddleDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        MiddleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.FinalisedWorldData.position + Difference, ActiveHand.FinalisedWorldData.position, skeletonAction.middleCurl);
-                        MiddleDistal.ApplyMovement();
+                        MiddleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.middleCurl);
+                       // MiddleDistal.ApplyMovement();
                         break;
                     case 14:
                         // skip
@@ -204,8 +204,8 @@ public class BasisOpenVRInputSkeleton
                         //   RingDistal.TrackerData.rotation = Rotations[Index];
                         SetASTracked(RingDistal);
                         Difference = RingDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        RingDistal.TrackerData.position = Vector3.Lerp(ActiveHand.FinalisedWorldData.position + Difference, ActiveHand.FinalisedWorldData.position, skeletonAction.ringCurl);
-                        RingDistal.ApplyMovement();
+                        RingDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.ringCurl);
+                       // RingDistal.ApplyMovement();
                         break;
                     case 18:
                         // skip
@@ -224,8 +224,8 @@ public class BasisOpenVRInputSkeleton
                         //   LittleDistal.TrackerData.rotation = Rotations[Index];
                         SetASTracked(LittleDistal);
                         Difference = LittleDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        LittleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.FinalisedWorldData.position + Difference, ActiveHand.FinalisedWorldData.position, skeletonAction.pinkyCurl);
-                        LittleDistal.ApplyMovement();
+                        LittleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.pinkyCurl);
+                     //   LittleDistal.ApplyMovement();
                         break;
                     // Add cases for other bones if necessary
                     default:

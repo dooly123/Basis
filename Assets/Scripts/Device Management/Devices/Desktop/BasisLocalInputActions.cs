@@ -42,6 +42,8 @@ public class BasisLocalInputActions : MonoBehaviour
     public void Update()
     {
         InputSystem.Update();
+        BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
+
     }
     public static async Task CreateInputAction(BasisLocalPlayer Local)
     {

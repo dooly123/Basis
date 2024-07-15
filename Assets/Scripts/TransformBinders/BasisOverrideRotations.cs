@@ -22,27 +22,27 @@ public class BasisOverrideRotations : MonoBehaviour
     {
         float DeltaTime = Time.deltaTime;
 
-        roty = Head.RawLocalData.rotation.eulerAngles.y;
+        roty = Head.FinalApplied.rotation.eulerAngles.y;
         Quaternion coreRotation = Quaternion.Euler(0, roty, 0);
 
-        if (AngleCheck(coreRotation, Hips.RawLocalData.rotation, RangeOfMotionBeforeTurn))
+        if (AngleCheck(coreRotation, Hips.FinalApplied.rotation, RangeOfMotionBeforeTurn))
         {
             // Slerp rotation for hips and upper body
             if (Hips.HasTracked == BasisHasTracked.HasNoTracker)
             {
-                Hips.RawLocalData.rotation = SlerpYRotation(Hips.RawLocalData.rotation, coreRotation, DelayedHips * DeltaTime);
+                Hips.FinalApplied.rotation = SlerpYRotation(Hips.FinalApplied.rotation, coreRotation, DelayedHips * DeltaTime);
             }
             if (UpperChest.HasTracked == BasisHasTracked.HasNoTracker)
             {
-                UpperChest.RawLocalData.rotation = SlerpYRotation(UpperChest.RawLocalData.rotation, coreRotation, DelayedUpperChest * DeltaTime);
+                UpperChest.FinalApplied.rotation = SlerpYRotation(UpperChest.FinalApplied.rotation, coreRotation, DelayedUpperChest * DeltaTime);
             }
             if (Chest.HasTracked == BasisHasTracked.HasNoTracker)
             {
-                Chest.RawLocalData.rotation = SlerpYRotation(Chest.RawLocalData.rotation, coreRotation, DelayedChest * DeltaTime);
+                Chest.FinalApplied.rotation = SlerpYRotation(Chest.FinalApplied.rotation, coreRotation, DelayedChest * DeltaTime);
             }
             if (Spine.HasTracked == BasisHasTracked.HasNoTracker)
             {
-                Spine.RawLocalData.rotation = SlerpYRotation(Spine.RawLocalData.rotation, coreRotation, DelayedSpine * DeltaTime);
+                Spine.FinalApplied.rotation = SlerpYRotation(Spine.FinalApplied.rotation, coreRotation, DelayedSpine * DeltaTime);
             }
         }
     }

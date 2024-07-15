@@ -36,7 +36,7 @@ public class BasisAvatarEyeInput : BasisInput
         }
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;
-        InitalizeTracking(ID, ID, subSystems,true, BasisBoneTrackedRole.CenterEye);
+        InitalizeTracking(ID, ID, subSystems, true, BasisBoneTrackedRole.CenterEye);
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
@@ -102,7 +102,6 @@ public class BasisAvatarEyeInput : BasisInput
     {
         if (hasRoleAssigned)
         {
-            Control.TrackerData.rotation = LocalRawRotation;
             // Apply modulo operation to keep rotation within 0 to 360 range
             rotationX %= 360f;
             rotationY %= 360f;
@@ -117,8 +116,9 @@ public class BasisAvatarEyeInput : BasisInput
 
             CalculateAdjustment();
             adjustedHeadPosition.y -= adjustment;
-            LocalRawPosition = adjustedHeadPosition; // / BasisLocalPlayer.Instance.ScaledUpPlayerPositions;
+            LocalRawPosition = adjustedHeadPosition;
             Control.TrackerData.position = LocalRawPosition;
+            Control.TrackerData.rotation = LocalRawRotation;
         }
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;

@@ -31,6 +31,8 @@ public class BasisCharacterController : MonoBehaviour
     public float currentVerticalSpeed = 0f; // Vertical speed of the character
     public Vector3 OutPosition;
     public Vector3 OutLastPosition;
+    public Vector2 Rotation;
+    public float RotationSpeed = 200;
     public void OnEnable()
     {
         BasisLocalPlayer.Instance.OnLocalAvatarChanged += Initialize;
@@ -59,8 +61,20 @@ public class BasisCharacterController : MonoBehaviour
         GroundCheck();
         OutLastPosition = OutPosition;
         OutPosition = transform.position;
+
+        // Calculate the rotation amount for this frame
+        float rotationAmount = Rotation.x * RotationSpeed * Time.deltaTime;
+
+        // Get the current rotation of the player
+        Vector3 currentRotation = BasisLocalPlayer.Instance.transform.eulerAngles;
+
+        // Add the rotation amount to the current y-axis rotation and use modulo to keep it within 0-360 degrees
+        float newRotationY = (currentRotation.y + rotationAmount) % 360f;
+
+        // Apply the new rotation to the player
+        BasisLocalPlayer.Instance.transform.eulerAngles = new Vector3(currentRotation.x, newRotationY, currentRotation.z);
+
         BasisLocalPlayer.Instance.transform.position = OutPosition;
-        //  BasisLocalPlayer.Instance.transform.SetPositionAndRotation(OutPosition, transform.rotation);
         ReadyToRead?.Invoke();
     }
     public void OnDrawGizmosSelected()
@@ -102,7 +116,7 @@ public class BasisCharacterController : MonoBehaviour
         }
 
         // Cache current rotation and zero out x and z components
-        currentRotation = Head.FinalisedWorldData.rotation;
+        currentRotation = Head.CurrentWorldData.rotation;
         Vector3 rotationEulerAngles = currentRotation.eulerAngles;
         rotationEulerAngles.x = 0;
         rotationEulerAngles.z = 0;
@@ -143,7 +157,7 @@ public class BasisCharacterController : MonoBehaviour
 
     public void CalculateCharacterSize()
     {
-        eyeHeight = HasEye ? Eye.RawLocalData.position.y : 1.73f;
+        eyeHeight = HasEye ? Eye.FinalApplied.position.y : 1.73f;
         float adjustedHeight = eyeHeight;
         adjustedHeight = Mathf.Max(adjustedHeight, MinimumColliderSize);
         SetCharacterHeight(adjustedHeight);
@@ -154,6 +168,6 @@ public class BasisCharacterController : MonoBehaviour
         characterController.height = height;
         float SkinModifiedHeight = height / 2;
 
-        characterController.center = HasEye ? new Vector3(Eye.RawLocalData.position.x, SkinModifiedHeight, Eye.RawLocalData.position.z) : new Vector3(0, SkinModifiedHeight, 0);
+        characterController.center = HasEye ? new Vector3(Eye.FinalApplied.position.x, SkinModifiedHeight, Eye.FinalApplied.position.z) : new Vector3(0, SkinModifiedHeight, 0);
     }
 }

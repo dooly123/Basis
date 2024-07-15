@@ -69,8 +69,8 @@ public abstract class BasisInput : MonoBehaviour
         {
             if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(trackedRole))//we dont want to offset these ones
             {
-                Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.FinalisedWorldData.position - transform.position);
-                Control.InverseOffsetFromBone.rotation = Quaternion.Inverse(transform.rotation) * Control.FinalisedWorldData.rotation;
+                Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.CurrentWorldData.position - transform.position);
+                Control.InverseOffsetFromBone.rotation = Quaternion.Inverse(transform.rotation) * Control.CurrentWorldData.rotation;
                 Control.InverseOffsetFromBone.Use = true;
             }
             SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
@@ -271,27 +271,15 @@ public abstract class BasisInput : MonoBehaviour
                         BasisDeviceManagement.HideTrackers();
                     }
                 }
-                if (HasControl)
-                {
-                    Control.ApplyMovement();
-                }
                 break;
             case BasisBoneTrackedRole.RightHand:
-              //  BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
+               BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
                 if (InputState.PrimaryButtonGetState)
                 {
                     BasisLocalPlayer.Instance.Move.HandleJump();
                 }
-                if (HasControl)
-                {
-                    Control.ApplyMovement();
-                }
                 break;
             case BasisBoneTrackedRole.CenterEye:
-                if (HasControl)
-                {
-                    Control.ApplyMovement();
-                }
                 break;
             case BasisBoneTrackedRole.Head:
                 break;

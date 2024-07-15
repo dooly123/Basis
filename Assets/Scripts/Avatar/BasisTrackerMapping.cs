@@ -26,7 +26,7 @@ public static partial class BasisAvatarIKStageCalibration
             Vector3 CameraPosition = new Vector3();
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Eye, BasisBoneTrackedRole.CenterEye))
             {
-                CameraPosition = Eye.RawLocalData.position;
+                CameraPosition = Eye.FinalApplied.position;
             }
             else
             {
