@@ -150,7 +150,11 @@ public class BasisOpenVRManagement
         // Implement HMD specific initialization if needed
         Debug.Log($"Creating HMD: {uniqueID}");
         // For now, we'll treat it as a generic tracker
-        CreateTracker(gameObject, device, uniqueID, unUniqueID, true, BasisBoneTrackedRole.CenterEye);
+        //  CreateTracker(gameObject, device, uniqueID, unUniqueID, true, BasisBoneTrackedRole.CenterEye);
+        BasisOpenVRInputSpatial BasisOpenVRInputSpatial = gameObject.AddComponent<BasisOpenVRInputSpatial>();
+        bool FoundRole = TryAssignRole(device.deviceClass, device.deviceIndex, out BasisBoneTrackedRole Role, out SteamVR_Input_Sources Source);
+        BasisOpenVRInputSpatial.Initialize(UnityEngine.SpatialTracking.TrackedPoseDriver.TrackedPose.Center, uniqueID, unUniqueID, "BasisOpenVRManagement", FoundRole, Role, Source);
+        BasisDeviceManagement.Instance.TryAdd(BasisOpenVRInputSpatial);
     }
     public void CreateController(GameObject GameObject, OpenVRDevice device, string uniqueID, string unUniqueID)
     {
