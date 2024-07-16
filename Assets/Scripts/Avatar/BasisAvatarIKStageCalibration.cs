@@ -170,8 +170,9 @@ public static partial class BasisAvatarIKStageCalibration
         }
         List<BasisBoneTrackedRole> roles = new List<BasisBoneTrackedRole>();
         List<BasisInput> BasisInputs = new List<BasisInput>();
+        int cachedCount = boneTransformMappings.Count;
         // Find optimal matches
-        for (int Index = 0; Index < boneTransformMappings.Count; Index++)
+        for (int Index = 0; Index < cachedCount; Index++)
         {
             BasisTrackerMapping mapping = boneTransformMappings[Index];
             if (mapping.TargetControl != null)

@@ -13,32 +13,31 @@ public static partial class BasisAvatarIKStageCalibration
         public BasisBoneTrackedRole BasisBoneControlRole;
         [SerializeField]
         public List<CalibrationConnector> Candidates = new List<CalibrationConnector>();
-
+        public List<Vector3> Stored = new List<Vector3>();
         public BasisTrackerMapping(BasisBoneControl Bone, BasisBoneTrackedRole Role, List<CalibrationConnector> calibration, float calibrationMaxDistance)
         {
             TargetControl = Bone;
             BasisBoneControlRole = Role;
             Candidates = new List<CalibrationConnector>();
             BasisLocalPlayer.Instance.SimulateHips();
-            //  Debug.Break();
-            foreach (CalibrationConnector connector in calibration)
+            for (int Index = 0; Index < calibration.Count; Index++)
             {
-                Vector3 Input = connector.BasisInput.transform.position;
-                Vector3 BoneControl = TargetControl.BoneModelTransform.position;
-                connector.Distance = Vector3.Distance(BoneControl, Input);
+                Vector3 Input = calibration[Index].BasisInput.transform.position;
+                Vector3 BoneControl = TargetControl.BoneTransform.position;
+                calibration[Index].Distance = Vector3.Distance(BoneControl, Input);
 
-                if (connector.Distance < calibrationMaxDistance)
+                if (calibration[Index].Distance < calibrationMaxDistance)
                 {
                     Color randomColor = UnityEngine.Random.ColorHSV();
                     Debug.DrawLine(BoneControl, Input, randomColor, 40f);
-                    Candidates.Add(connector);
+                    Candidates.Add(calibration[Index]);
                 }
                 else
                 {
                     // Debug.DrawLine(BoneControl, Input, Color.red, 40f);
                 }
-                //  Debug.Break();
             }
+            Candidates.Sort((a, b) => a.Distance.CompareTo(b.Distance));
         }
     }
     public static GeneralLocation GetLocation(Vector3 Tracker, Vector3 Eye, Transform forward)
@@ -48,7 +47,7 @@ public static partial class BasisAvatarIKStageCalibration
 
         // Calculate the right direction based on the forward direction
         Vector3 right = forward.forward;
-       Debug.DrawLine (delta, delta +  right * 3, Color.magenta,12f);
+        Debug.DrawLine(delta, delta + right * 3, Color.magenta, 12f);
         // Calculate the dot product between delta and right
         float dot = Vector3.Dot(delta, right);
 
@@ -139,8 +138,8 @@ public static partial class BasisAvatarIKStageCalibration
     public static BasisBoneTrackedRole[] desiredOrder = new BasisBoneTrackedRole[]
     {
         BasisBoneTrackedRole.Hips,
-        BasisBoneTrackedRole.LeftFoot,
         BasisBoneTrackedRole.RightFoot,
+        BasisBoneTrackedRole.LeftFoot,
         BasisBoneTrackedRole.LeftLowerLeg,
         BasisBoneTrackedRole.RightLowerLeg,
         BasisBoneTrackedRole.LeftLowerArm,
