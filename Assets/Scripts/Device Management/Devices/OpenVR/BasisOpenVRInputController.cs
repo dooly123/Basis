@@ -7,19 +7,24 @@ public class BasisOpenVRInputController : BasisInput
     public SteamVR_Input_Sources inputSource;
     public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
     public BasisOpenVRInputSkeleton SkeletonHandInput = null;
+    public bool HasOnUpate = false;
     public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
     {
+        if (HasOnUpate && poseAction != null)
+        {
+            poseAction[inputSource].onUpdate -= SteamVR_Behaviour_Pose_OnUpdate;
+        }
         inputSource = SteamVR_Input_Sources;
         Device = device;
         InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
+            HasOnUpate = true;
         }
-        if(inputSource == SteamVR_Input_Sources.LeftHand || inputSource == SteamVR_Input_Sources.RightHand)
+        if (inputSource == SteamVR_Input_Sources.LeftHand || inputSource == SteamVR_Input_Sources.RightHand)
         {
             SkeletonHandInput = new BasisOpenVRInputSkeleton();
-         // disabled for now  SkeletonHandInput.Initalize(this);
         }
     }
     public new void OnDestroy()

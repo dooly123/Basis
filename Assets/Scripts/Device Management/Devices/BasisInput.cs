@@ -12,6 +12,7 @@ public abstract class BasisInput : MonoBehaviour
     public BasisBoneControl Control = new BasisBoneControl();
     public bool HasControl = false;
     public string UniqueDeviceIdentifier;
+    public string ClassName;
     [Header("Raw data from tracker unmodified")]
     public Vector3 LocalRawPosition;
     public Quaternion LocalRawRotation;
