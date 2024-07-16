@@ -88,21 +88,23 @@ public class BasisOpenVRManagement
 
     private void OnDeviceConnected(uint deviceIndex, bool deviceConnected)
     {
-        Debug.Log($"Device index {deviceIndex} is connected: {deviceConnected}");
-        var error = new ETrackedPropertyError();
-        var id = new StringBuilder(64);
-        OpenVR.System.GetStringTrackedDeviceProperty(deviceIndex, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
-        ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass(deviceIndex);
-        string uniqueID = $"{deviceIndex}|{id}";
-        string notUnique = id.ToString();
-
-        if (deviceConnected)
+        if (deviceIndex != OpenVR.k_unTrackedDeviceIndexInvalid)
         {
-            CreateTrackerDevice(deviceIndex, deviceClass, uniqueID, notUnique);
-        }
-        else
-        {
-            DestroyPhysicalTrackedDevice(uniqueID);
+            Debug.Log($"Device index {deviceIndex} is connected: {deviceConnected}");
+            var error = new ETrackedPropertyError();
+            var id = new StringBuilder(64);
+            OpenVR.System.GetStringTrackedDeviceProperty(deviceIndex, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
+            ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass(deviceIndex);
+            string uniqueID = $"{deviceIndex}|{id}";
+            string notUnique = id.ToString();
+            if (deviceConnected)
+            {
+                CreateTrackerDevice(deviceIndex, deviceClass, uniqueID, notUnique);
+            }
+            else
+            {
+                DestroyPhysicalTrackedDevice(uniqueID);
+            }
         }
     }
 

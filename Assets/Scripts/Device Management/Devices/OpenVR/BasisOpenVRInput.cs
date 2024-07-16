@@ -4,6 +4,7 @@ using Valve.VR;
 ///only used for trackers!
 public class BasisOpenVRInput : BasisInput
 {
+    [SerializeField]
     public OpenVRDevice Device;
     public TrackedDevicePose_t devicePose = new TrackedDevicePose_t();
     public TrackedDevicePose_t deviceGamePose = new TrackedDevicePose_t();
