@@ -155,7 +155,7 @@ public class BasisBoneControl
     }
     public void SetOffset()
     {
-        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Inverse(BasisLocalPlayer.Instance.LocalBoneDriver.transform.rotation) * TposeWorld.rotation);
+        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Inverse(BasisLocalPlayer.Instance.transform.rotation) * TposeWorld.rotation);
     }
     public void RunRotationChange()
     {

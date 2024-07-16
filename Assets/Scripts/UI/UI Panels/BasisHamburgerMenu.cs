@@ -82,15 +82,6 @@ public class BasisHamburgerMenu : BasisUIBase
             Input.UnAssignFBTracker();
         }
     }
-    [MenuItem("Basis/CalibrateFB/StepB")]
-    public static void StartCali()
-    {
-        Vector3 CamerRot = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
-        CamerRot.x = 0;
-        CamerRot.z = 0;
-        Quaternion Rot = Quaternion.Euler(CamerRot);
-        BasisLocalPlayer.Instance.SimulateHIpsRotation(Rot);
-    }
     [MenuItem("Basis/CalibrateFB/StepC")]
     public static void StartDali()
     {

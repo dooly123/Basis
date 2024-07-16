@@ -85,6 +85,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
             Builder.Clear();
         }
         Calibration(Player.Avatar);
+        BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
         BasisLocalEyeFollowDriver EyeFollowBase = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
         EyeFollowBase.CreateEyeLook(this);
         HeadScaledDown = Vector3.zero;

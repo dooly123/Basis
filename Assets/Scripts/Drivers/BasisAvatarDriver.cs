@@ -21,7 +21,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         FindSkinnedMeshRenders();
         BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
         ActiveEyeHeight = Avatar.AvatarEyePosition.x;
-        BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
         if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
         {
             BasisFacialBlinkDriver FacialBlinkDriver = BasisHelpers.GetOrAddComponent<BasisFacialBlinkDriver>(Avatar.gameObject);

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using System;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -112,32 +113,28 @@ public class BasisLocalPlayer : BasisPlayer
     {
         if (Hips.HasBone)
         {
-            Quaternion rotation = Hips.BoneTransform.rotation;//we dont use Hips.BoneModelTransform.rotation as it introduces a offset that is unwanted.
-            Vector3 rotatedOffset = rotation * Hips.TposeLocal.position;
-            rotatedOffset = Hips.CurrentWorldData.position - rotatedOffset;
+            if (Avatar != null && Avatar.Animator != null)
+            {
+                // Get the current rotation of the hips bone
+                Quaternion currentRotation = Hips.BoneModelTransform.rotation;
 
-            SimulateHips(rotatedOffset, rotation);
-        }
-    }
-    public void SimulateHIpsRotation(Quaternion Rotation)
-    {
-        if (Avatar != null && Avatar.Animator != null)
-        {
-            Avatar.Animator.transform.rotation = Rotation;
-        }
-    }
-    public void SimulateHips(Vector3 Position, Quaternion Rotation)
-    {
-        if (Avatar != null && Avatar.Animator != null)
-        {
-            Avatar.Animator.transform.SetPositionAndRotation(Position, Rotation);
+                // Calculate the rotated T-pose position using the current rotation
+                Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
+                Vector3 positionDifference = Hips.BoneModelTransform.position - rotatedTposePosition;
+
+                // Calculate the difference between the current rotation and the T-pose rotation
+                Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeLocal.rotation);
+
+                // Apply the calculated position and rotation to the Avatar's animator transform
+                Avatar.Animator.transform.SetPositionAndRotation(positionDifference, rotationDifference);
+            }
         }
     }
 #if UNITY_EDITOR
     [MenuItem("Basis/ReloadAvatar")]
     public static async void ReloadAvatar()
     {
-      await  BasisLocalPlayer.Instance.CreateAvatar();
+        await BasisLocalPlayer.Instance.CreateAvatar();
     }
 #endif
     public async Task CreateAvatar(string AddressableID = BasisAvatarFactory.LoadingAvatar)
