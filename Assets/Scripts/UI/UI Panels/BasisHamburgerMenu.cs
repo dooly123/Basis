@@ -48,48 +48,15 @@ public class BasisHamburgerMenu : BasisUIBase
                 entry.Key.InputState.OnTriggerChanged -= entry.Value;
             }
             TriggerDelegates.Clear();
-            StartCalibration();
+            BasisAvatarIKStageCalibration.FullBodyCalibration();
         }
-    }
-    public static void StartCalibration()
-    {
-        BasisLocalPlayer.Instance.RecalculateMyHeight();
-        foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
-        {
-            Input.UnAssignFBTracker();
-        }
-        //disable builder and it will be updated when the animator updates
-        //   BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = false;
-        //now lets grab and apply the height
-        BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
-        //now that we have latest * scale we can run calibration
-        BasisAvatarIKStageCalibration.FullBodyCalibration();
-        BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
-        // BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = true;
     }
 #if UNITY_EDITOR
     [MenuItem("Basis/CalibrateFB")]
     public static void CalibrateEditor()
     {
-        StartCalibration();
-    }
-    [MenuItem("Basis/CalibrateFB/StepA")]
-    public static void StartACali()
-    {
-        BasisLocalPlayer.Instance.RecalculateMyHeight();
-        foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
-        {
-            Input.UnAssignFBTracker();
-        }
-    }
-    [MenuItem("Basis/CalibrateFB/StepC")]
-    public static void StartDali()
-    {
-        //now that we have latest * scale we can run calibration
         BasisAvatarIKStageCalibration.FullBodyCalibration();
-        BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
     }
-#endif
     private static void AvatarButtonPanel()
     {
         BasisHamburgerMenu.Instance.CloseThisMenu();
@@ -113,4 +80,5 @@ public class BasisHamburgerMenu : BasisUIBase
         AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
         OpenMenuNow(resource);
     }
+#endif
 }

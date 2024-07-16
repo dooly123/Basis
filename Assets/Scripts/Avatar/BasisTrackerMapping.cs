@@ -13,49 +13,34 @@ public static partial class BasisAvatarIKStageCalibration
         public BasisBoneTrackedRole BasisBoneControlRole;
         [SerializeField]
         public List<CalibrationConnector> Candidates = new List<CalibrationConnector>();
+
         public BasisTrackerMapping(BasisBoneControl Bone, BasisBoneTrackedRole Role, List<CalibrationConnector> calibration, float calibrationMaxDistance)
         {
             TargetControl = Bone;
             BasisBoneControlRole = Role;
             Candidates = new List<CalibrationConnector>();
-            Vector3 CameraRotation = BasisLocalCameraDriver.Instance.Camera.transform.eulerAngles;
-            Quaternion SanitisedRotation = Quaternion.Euler(0, CameraRotation.y, 0);
-            Quaternion InversedSanitisedRotation = Quaternion.Inverse(SanitisedRotation);
-            Quaternion MoveRotation = BasisLocalPlayer.Instance.Move.transform.localRotation;
-            Quaternion Output = MoveRotation * InversedSanitisedRotation;
-            Vector3 CameraPosition = new Vector3();
-            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Eye, BasisBoneTrackedRole.CenterEye))
-            {
-                CameraPosition = Eye.FinalApplied.position;
-            }
-            else
-            {
-                Debug.Log("cant find eye!");
-            }
+            BasisLocalPlayer.Instance.SimulateHips();
+            //  Debug.Break();
             foreach (CalibrationConnector connector in calibration)
             {
-                Vector3 LocalisedPosition = new Vector3(CameraPosition.x - connector.BasisInput.FinalPosition.x, connector.BasisInput.FinalPosition.y, CameraPosition.z - connector.BasisInput.FinalPosition.z);
-                Vector3 Position = Output * LocalisedPosition;
-                    connector.Distance = Vector3.Distance(Position,TargetControl.TposeLocal.position);
+                Vector3 Input = connector.BasisInput.transform.position;
+                Vector3 BoneControl = TargetControl.BoneModelTransform.position;
+                connector.Distance = Vector3.Distance(BoneControl, Input);
+
                 if (connector.Distance < calibrationMaxDistance)
                 {
-                    Debug.DrawLine(Position, TargetControl.TposeLocal.position, Color.blue, 40f);
+                    Color randomColor = UnityEngine.Random.ColorHSV();
+                    Debug.DrawLine(BoneControl, Input, randomColor, 40f);
                     Candidates.Add(connector);
                 }
                 else
                 {
-                    Debug.DrawLine(Position, TargetControl.TposeLocal.position, Color.red, 40f);
+                    // Debug.DrawLine(BoneControl, Input, Color.red, 40f);
                 }
+                //  Debug.Break();
             }
         }
     }
-    /// <summary>
-    ///             GeneralLocation BakedIn = FindGeneralLocation(BasisBoneControlRole);
-    /// </summary>
-    /// <param name="Tracker"></param>
-    /// <param name="Eye"></param>
-    /// <param name="forward"></param>
-    /// <returns></returns>
     public static GeneralLocation GetLocation(Vector3 Tracker, Vector3 Eye, Transform forward)
     {
         // Calculate the direction from Eye to Tracker
@@ -151,7 +136,6 @@ public static partial class BasisAvatarIKStageCalibration
                 return BasisAvatarIKStageCalibration.GeneralLocation.Center;
         }
     }
-    // Define the desired order
     public static BasisBoneTrackedRole[] desiredOrder = new BasisBoneTrackedRole[]
     {
         BasisBoneTrackedRole.Hips,

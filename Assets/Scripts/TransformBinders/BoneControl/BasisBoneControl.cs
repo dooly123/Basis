@@ -88,7 +88,7 @@ public class BasisBoneControl
     /// 2. 
     /// </summary>
     /// <param name="time"></param>
-    public void ComputeMovement(double time)
+    public void ComputeMovement(double time, float DeltaTime)
     {
         if (!HasBone)
         {
@@ -106,7 +106,7 @@ public class BasisBoneControl
                     {
                         ApplyTargetRotation(ref FinalApplied.rotation, RotationControl);
                         QuaternionClamp(ref FinalApplied.rotation, RotationControl);
-                        ApplyLerpToQuaternion(ref FinalApplied.rotation, RotationControl, (RotationControl.LerpAmountNormal / 2) * Time.deltaTime);
+                        ApplyLerpToQuaternion(ref FinalApplied.rotation, RotationControl, (RotationControl.LerpAmountNormal / 2) * DeltaTime);
                         if (AngleCheck(FinalApplied.rotation, RotationControl.Target.FinalApplied.rotation))
                         {
                             RotationControl.NextReset = double.MaxValue;
@@ -115,7 +115,7 @@ public class BasisBoneControl
                     }
                     else
                     {
-                        RunRotationChange();
+                        RunRotationChange(DeltaTime);
                     }
                 }
                 else
@@ -127,47 +127,40 @@ public class BasisBoneControl
             else
             {
                 //normal
-                RunRotationChange();
+                RunRotationChange(DeltaTime);
             }
-        }
-
-        if (HasTracked == BasisHasTracked.HasNoTracker)
-        {
             ApplyTargetPosition(ref FinalApplied.position, PositionControl);
-            ApplyLerpToVector(ref FinalApplied.position, PositionControl);
+            ApplyLerpToVector(ref FinalApplied.position, PositionControl, PositionControl.LerpAmount * DeltaTime);
         }
-        if (HasTracked == BasisHasTracked.HasTracker)
+        else
         {
-            if (InverseOffsetFromBone.Use)
+            if (HasTracked == BasisHasTracked.HasTracker)
             {
-                // Update the position of the secondary transform to maintain the initial offset
-                FinalApplied.position = TrackerData.position + TrackerData.rotation * InverseOffsetFromBone.position;
+                if (InverseOffsetFromBone.Use)
+                {
+                    // Update the position of the secondary transform to maintain the initial offset
+                    FinalApplied.position = TrackerData.position + TrackerData.rotation * InverseOffsetFromBone.position;
 
-                // Update the rotation of the secondary transform to maintain the initial offset
-                FinalApplied.rotation = TrackerData.rotation * InverseOffsetFromBone.rotation;
-            }
-            else
-            {
-                FinalApplied.rotation = TrackerData.rotation;
-                FinalApplied.position = TrackerData.position;
+                    // Update the rotation of the secondary transform to maintain the initial offset
+                    FinalApplied.rotation = TrackerData.rotation * InverseOffsetFromBone.rotation;
+                }
+                else
+                {
+                    FinalApplied.rotation = TrackerData.rotation;
+                    FinalApplied.position = TrackerData.position;
+                }
             }
         }
     }
-    public void SetOffset()
+    public void SetOffset(Quaternion Rotation)
     {
-        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Inverse(BasisLocalPlayer.Instance.transform.rotation) * TposeWorld.rotation);
+        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Rotation * TposeWorld.rotation);
     }
-    public void RunRotationChange()
+    public void RunRotationChange(float DeltaTime)
     {
         ApplyTargetRotation(ref FinalApplied.rotation, RotationControl);
         QuaternionClamp(ref FinalApplied.rotation, RotationControl);
-        ApplyLerpToQuaternion(ref FinalApplied.rotation, RotationControl);
-    }
-    public bool HasNoAngleChange(Quaternion AngleA, Quaternion AngleB, float MaximumTolerance = 0.005f)
-    {
-        float Angle = Quaternion.Angle(AngleA, AngleB);
-        bool AngleLargeEnough = Angle < MaximumTolerance;
-        return AngleLargeEnough;
+        ApplyLerpToQuaternion(ref FinalApplied.rotation, RotationControl, DeltaTime);
     }
     public bool AngleCheck(Quaternion AngleA, Quaternion AngleB, float MaximumTolerance = 0.005f)
     {
@@ -278,7 +271,7 @@ public class BasisBoneControl
         }
     }
 #endif
-    private void ApplyLerpToQuaternion(ref Quaternion quaternionRotation, BasisRotationalControl Rotation)
+    private void ApplyLerpToQuaternion(ref Quaternion quaternionRotation, BasisRotationalControl Rotation,float DeltaTime)
     {
         if (Rotation.Lerp != BasisAxisLerp.None)
         {
@@ -286,11 +279,11 @@ public class BasisBoneControl
             float Timing = Mathf.Clamp01(angleDifference / Rotation.AngleBeforeSpeedup);
             float lerpAmount = Mathf.Lerp(Rotation.LerpAmountNormal, Rotation.LerpAmountFastMovement, Timing);
 
-            float lerpFactor = lerpAmount * Time.deltaTime;
-            ApplyLerpToQuaternion(ref quaternionRotation, Rotation, lerpFactor);
+            float lerpFactor = lerpAmount * DeltaTime;
+            ApplyActualLerpToQuaternion(ref quaternionRotation, Rotation, lerpFactor);
         }
     }
-    private void ApplyLerpToQuaternion(ref Quaternion NewQuaternionRotation, BasisRotationalControl Rotation, float lerpFactor)
+    private void ApplyActualLerpToQuaternion(ref Quaternion NewQuaternionRotation, BasisRotationalControl Rotation, float lerpFactor)
     {
 
         switch (Rotation.Lerp)
@@ -309,23 +302,23 @@ public class BasisBoneControl
                 break;
         }
     }
-    private void ApplyLerpToVector(ref Vector3 position, BasisPositionControl axis)
+    private void ApplyLerpToVector(ref Vector3 position, BasisPositionControl axis,float DeltaTime)
     {
         switch (axis.Lerp)
         {
             case BasisVectorLerp.None:
                 break;
             case BasisVectorLerp.Lerp:
-                position = Vector3.Lerp(LastRunData.position, position, axis.LerpAmount * Time.deltaTime);
+                position = Vector3.Lerp(LastRunData.position, position, axis.LerpAmount * DeltaTime);
                 break;
             case BasisVectorLerp.SphericalLerp:
-                position = Vector3.Slerp(LastRunData.position, position, axis.LerpAmount * Time.deltaTime);
+                position = Vector3.Slerp(LastRunData.position, position, axis.LerpAmount * DeltaTime);
                 break;
             case BasisVectorLerp.LerpUnclamped:
-                position = Vector3.LerpUnclamped(LastRunData.position, position, axis.LerpAmount * Time.deltaTime);
+                position = Vector3.LerpUnclamped(LastRunData.position, position, axis.LerpAmount * DeltaTime);
                 break;
             case BasisVectorLerp.SphericalLerpUnclamped:
-                position = Vector3.SlerpUnclamped(LastRunData.position, position, axis.LerpAmount * Time.deltaTime);
+                position = Vector3.SlerpUnclamped(LastRunData.position, position, axis.LerpAmount * DeltaTime);
                 break;
         }
     }

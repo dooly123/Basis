@@ -101,18 +101,18 @@ public static partial class BasisAvatarIKStageCalibration
 
         return rolesToDiscover;
     }
-    /*
-    public void LockAllBonesToActualTargets(List<BasisBoneTrackedRole> rolesToDiscover)
-    {
-        foreach(BasisBoneTrackedRole Role in rolesToDiscover)
-        {
-            BasisLocalPlayer Local = BasisLocalPlayer.Instance;
-            Local.AvatarDriver.GetBoneRotAndPos(Local.LocalBoneDriver, Local.Avatar.Animator,);
-        }
-    }
-    */
     public static void FullBodyCalibration()
     {
+        BasisLocalPlayer.Instance.RecalculateMyHeight();
+        foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+        {
+            Input.UnAssignFBTracker();
+        }
+        //disable builder and it will be updated when the animator updates
+        //now lets grab and apply the height
+        BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApplyWithoutLerp();
+        //now that we have latest * scale we can run calibration
+
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
         List<BasisBoneTrackedRole> trackInputRoles = new List<BasisBoneTrackedRole>();
@@ -186,6 +186,8 @@ public static partial class BasisAvatarIKStageCalibration
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
         //do the roles after to stop the animator switch issue
         BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();
+        BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
+        // BasisLocalPlayer.Instance.AvatarDriver.Builder.enabled = true;
     }
     public static void RunThroughConnectors(BasisTrackerMapping mapping, ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles)
     {

@@ -13,6 +13,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
     public BasisBoneTrackedRole[] trackedRoles;
     public bool HasControls = false;
     public double ProvidedTime;
+    public float DeltaTime;
     public delegate void SimulationHandler();
     public event SimulationHandler OnSimulate;
     public event SimulationHandler OnPostSimulate;
@@ -27,9 +28,27 @@ public abstract class BaseBoneDriver : MonoBehaviour
         OnSimulate?.Invoke();
         //make sure to update time only after we invoke (its going to take time)
         ProvidedTime = Time.timeAsDouble;
+        DeltaTime = Time.deltaTime;
         for (int Index = 0; Index < ControlsLength; Index++)
         {
-            Controls[Index].ComputeMovement(ProvidedTime);
+            Controls[Index].ComputeMovement(ProvidedTime, DeltaTime);
+        }
+        OnPostSimulate?.Invoke();
+    }
+    public void SimulateWithoutLerp()
+    {
+        // sequence all other devices to run at the same time
+        OnSimulate?.Invoke();
+        //make sure to update time only after we invoke (its going to take time)
+        ProvidedTime = Time.timeAsDouble;
+        DeltaTime = Time.deltaTime;
+        for (int Index = 0; Index < ControlsLength; Index++)
+        {
+            Controls[Index].LastRunData.position = Controls[Index].FinalApplied.position;
+            Controls[Index].LastRunData.rotation = Controls[Index].FinalApplied.rotation;
+            Controls[Index].LastWorldData.position = Controls[Index].CurrentWorldData.position;
+            Controls[Index].LastWorldData.rotation = Controls[Index].CurrentWorldData.rotation;
+            Controls[Index].ComputeMovement(ProvidedTime, DeltaTime);
         }
         OnPostSimulate?.Invoke();
     }
@@ -46,13 +65,19 @@ public abstract class BaseBoneDriver : MonoBehaviour
         Simulate();
         ApplyMovement();
     }
+    public void SimulateAndApplyWithoutLerp()
+    {
+        SimulateWithoutLerp();
+        ApplyMovement();
+    }
     public void CalibrateOffsets()
     {
+        Quaternion Rotation = Quaternion.Inverse(BasisLocalPlayer.Instance.transform.rotation);
         for (int Index = 0; Index < ControlsLength; Index++)
         {
             if (trackedRoles[Index] != BasisBoneTrackedRole.Head)
             {
-                Controls[Index].SetOffset();
+                Controls[Index].SetOffset(Rotation);
             }
 
         }
