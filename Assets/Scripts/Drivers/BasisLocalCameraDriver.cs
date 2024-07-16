@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-
 public class BasisLocalCameraDriver : MonoBehaviour
 {
     public static BasisLocalCameraDriver Instance;
@@ -15,6 +14,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     // Static event to notify when the instance exists
     public static event System.Action InstanceExists;
     public BasisLockToInput BasisLockToInput;
+    public bool HasHooks = false;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -26,13 +26,16 @@ public class BasisLocalCameraDriver : MonoBehaviour
         Camera.farClipPlane = 1500;
         QualitySettings.maxQueuedFrames = -1;
         CameraInstanceID = Camera.GetInstanceID();
-        RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
-        //  RenderPipelineManager.endCameraRendering += OnEndCameraRenderering;
-        BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
-        BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
         //fire static event that says the instance exists
         OnHeightChanged();
-        InstanceExists?.Invoke();
+        if (HasHooks == false)
+        {
+            RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
+            BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
+            BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
+            InstanceExists?.Invoke();
+            HasHooks = true;
+        }
     }
     private void OnModeSwitch(BasisBootedMode mode)
     {
@@ -48,13 +51,16 @@ public class BasisLocalCameraDriver : MonoBehaviour
     }
     public void OnDisable()
     {
-        RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
-        //  RenderPipelineManager.endCameraRendering -= OnEndCameraRenderering;
         if (LocalPlayer.AvatarDriver && LocalPlayer.AvatarDriver.References != null && LocalPlayer.AvatarDriver.References.head != null)
         {
             LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
         }
-        BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
+        if (HasHooks)
+        {
+            RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
+            BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
+            HasHooks = false;
+        }
     }
     public void BeginCameraRendering(ScriptableRenderContext context, Camera Camera)
     {
@@ -62,11 +68,17 @@ public class BasisLocalCameraDriver : MonoBehaviour
         {
             if (Camera.GetInstanceID() == CameraInstanceID)
             {
-                LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScaledDown;
+                if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScaledDown)
+                {
+                    LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScaledDown;
+                }
             }
             else
             {
-                LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
+                if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScale)
+                {
+                    LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
+                }
             }
         }
     }

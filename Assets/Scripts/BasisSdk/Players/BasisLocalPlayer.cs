@@ -58,8 +58,7 @@ public class BasisLocalPlayer : BasisPlayer
             if (BasisLockToInput.AttachedInput != null)
             {
                 Debug.Log("recalculating local Height!");
-                float y = BasisLockToInput.AttachedInput.LocalRawPosition.y;
-                PlayerEyeHeight = y;
+                PlayerEyeHeight = BasisLockToInput.AttachedInput.LocalRawPosition.y;
                 Debug.Log("Local Eye Height is " + PlayerEyeHeight);
                 SetPlayersEyeHeight(PlayerEyeHeight, AvatarDriver.ActiveEyeHeight);
             }
