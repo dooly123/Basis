@@ -57,6 +57,7 @@ public class BasisHamburgerMenu : BasisUIBase
     {
         BasisAvatarIKStageCalibration.FullBodyCalibration();
     }
+#endif
     private static void AvatarButtonPanel()
     {
         BasisHamburgerMenu.Instance.CloseThisMenu();
@@ -80,5 +81,4 @@ public class BasisHamburgerMenu : BasisUIBase
         AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
         OpenMenuNow(resource);
     }
-#endif
 }
