@@ -71,12 +71,11 @@ public abstract class BaseBoneDriver : MonoBehaviour
     }
     public void CalibrateOffsets()
     {
-        Quaternion Rotation = Quaternion.Inverse(BasisLocalPlayer.Instance.transform.rotation);
         for (int Index = 0; Index < ControlsLength; Index++)
         {
             if (trackedRoles[Index] != BasisBoneTrackedRole.Head)
             {
-                Controls[Index].SetOffset(Rotation);
+                Controls[Index].SetOffset();
             }
 
         }

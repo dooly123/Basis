@@ -152,9 +152,9 @@ public class BasisBoneControl
             }
         }
     }
-    public void SetOffset(Quaternion Rotation)
+    public void SetOffset()
     {
-        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Rotation * TposeWorld.rotation);
+        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero,TposeWorld.rotation);
     }
     public void RunRotationChange(float DeltaTime)
     {

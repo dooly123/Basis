@@ -3,8 +3,23 @@
 public class BasisInputXRSimulate : BasisInput
 {
     public Transform FollowMovement;
+    public bool AddSomeRandomizedInput = false;
+    public float MinMaxOffset = 0.0001f;
+    public float LerpAmount = 0.1f;
     public override void PollData()
     {
+        if (AddSomeRandomizedInput)
+        {
+            Vector3 randomOffset = new Vector3(Random.Range(-MinMaxOffset, MinMaxOffset),Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset));
+
+            Quaternion randomRotation = Random.rotation;
+            Quaternion lerpedRotation = Quaternion.Lerp(FollowMovement.localRotation, randomRotation, LerpAmount * Time.deltaTime);
+
+            Vector3 originalPosition = FollowMovement.localPosition;
+            Vector3 newPosition = Vector3.Lerp(originalPosition, originalPosition + randomOffset, LerpAmount * Time.deltaTime);
+
+            FollowMovement.SetLocalPositionAndRotation(newPosition, lerpedRotation);
+        }
         FollowMovement.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
         LocalRawPosition /= BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
 
