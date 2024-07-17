@@ -117,8 +117,8 @@ MonoBehaviour:
   m_PrefilterSSAOInterleaved: 0
   m_PrefilterSSAOBlueNoise: 1
   m_PrefilterSSAOSampleCountLow: 1
-  m_PrefilterSSAOSampleCountMedium: 1
-  m_PrefilterSSAOSampleCountHigh: 0
+  m_PrefilterSSAOSampleCountMedium: 0
+  m_PrefilterSSAOSampleCountHigh: 1
   m_PrefilterDBufferMRT1: 1
   m_PrefilterDBufferMRT2: 1
   m_PrefilterDBufferMRT3: 0

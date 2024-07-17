@@ -39,9 +39,6 @@ public static partial class BasisAvatarIKStageCalibration
             case BasisBoneTrackedRole.RightFoot:
                 return 0.6f;
 
-            case BasisBoneTrackedRole.UpperChest:
-                return 0.8f;
-
             case BasisBoneTrackedRole.LeftShoulder:
                 return 0.6f;
             case BasisBoneTrackedRole.RightShoulder:

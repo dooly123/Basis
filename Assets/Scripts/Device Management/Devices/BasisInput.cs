@@ -304,8 +304,6 @@ public abstract class BasisInput : MonoBehaviour
                 break;
             case BasisBoneTrackedRole.RightFoot:
                 break;
-            case BasisBoneTrackedRole.UpperChest:
-                break;
             case BasisBoneTrackedRole.LeftShoulder:
                 break;
             case BasisBoneTrackedRole.RightShoulder:

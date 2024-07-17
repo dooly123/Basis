@@ -13,7 +13,6 @@
     RightLowerLeg,
     LeftFoot,
     RightFoot,
-    UpperChest,
     LeftShoulder,
     RightShoulder,
     LeftUpperArm,

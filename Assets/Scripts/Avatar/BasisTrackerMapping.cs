@@ -91,8 +91,6 @@ public static partial class BasisAvatarIKStageCalibration
                 return BasisAvatarIKStageCalibration.GeneralLocation.Center;
             case BasisBoneTrackedRole.Spine:
                 return BasisAvatarIKStageCalibration.GeneralLocation.Center;
-            case BasisBoneTrackedRole.UpperChest:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
             case BasisBoneTrackedRole.Mouth:
                 return BasisAvatarIKStageCalibration.GeneralLocation.Center;
 

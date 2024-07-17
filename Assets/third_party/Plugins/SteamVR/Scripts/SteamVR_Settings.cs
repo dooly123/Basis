@@ -1,9 +1,6 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.Serialization;
 
 namespace Valve.VR
@@ -20,9 +17,6 @@ namespace Valve.VR
                 return _instance;
             }
         }
-
-        public bool pauseGameWhenDashboardVisible = true;
-        public bool lockPhysicsUpdateRateToRenderFrequency = true;
         public ETrackingUniverseOrigin trackingSpace
         {
             get
@@ -54,9 +48,6 @@ namespace Valve.VR
 
         [Tooltip("This is the app key the unity editor will use to identify your application. (can be \"steam.app.[appid]\" to persist bindings between editor steam)")]
         public string editorAppKey;
-
-        [Tooltip("The SteamVR Plugin can automatically make sure VR is enabled in your player settings and if not, enable it.")]
-        public bool autoEnableVR = true;
 
         [Tooltip("[NON-LEGACY] This is the pose action that will be used for positioning a mixed reality camera if connected")]
         public SteamVR_Action_Pose mixedRealityCameraPose = SteamVR_Input.GetPoseAction("ExternalCamera");
@@ -122,9 +113,6 @@ namespace Valve.VR
             UnityEditor.AssetDatabase.SaveAssets();
 #endif
         }
-
-        private const string defaultSettingsAssetName = "SteamVR_Settings";
-
         private static void SetDefaultsIfNeeded()
         {
             if (string.IsNullOrEmpty(_instance.editorAppKey))

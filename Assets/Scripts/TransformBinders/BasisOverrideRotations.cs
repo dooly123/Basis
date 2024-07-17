@@ -4,7 +4,6 @@ public class BasisOverrideRotations : MonoBehaviour
 {
     public BasisBoneControl Head;
     public BasisBoneControl Hips;
-    public BasisBoneControl UpperChest;
     public BasisBoneControl Chest;
     public BasisBoneControl Spine;
 
@@ -31,10 +30,6 @@ public class BasisOverrideRotations : MonoBehaviour
             if (Hips.HasTracked == BasisHasTracked.HasNoTracker)
             {
                 Hips.FinalApplied.rotation = SlerpYRotation(Hips.FinalApplied.rotation, coreRotation, DelayedHips * DeltaTime);
-            }
-            if (UpperChest.HasTracked == BasisHasTracked.HasNoTracker)
-            {
-                UpperChest.FinalApplied.rotation = SlerpYRotation(UpperChest.FinalApplied.rotation, coreRotation, DelayedUpperChest * DeltaTime);
             }
             if (Chest.HasTracked == BasisHasTracked.HasNoTracker)
             {
@@ -70,10 +65,6 @@ public class BasisOverrideRotations : MonoBehaviour
         if (Driver.FindBone(out Hips, BasisBoneTrackedRole.Hips))
         {
             Hips.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-        }
-        if (Driver.FindBone(out UpperChest, BasisBoneTrackedRole.UpperChest))
-        {
-            UpperChest.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
         if (Driver.FindBone(out Chest, BasisBoneTrackedRole.Chest))
         {

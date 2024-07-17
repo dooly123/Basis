@@ -88,7 +88,6 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     {
         if (Role == BasisBoneTrackedRole.Hips ||
             Role == BasisBoneTrackedRole.Chest ||
-            Role == BasisBoneTrackedRole.UpperChest ||
             Role == BasisBoneTrackedRole.Hips ||
             Role == BasisBoneTrackedRole.Spine ||
             Role == BasisBoneTrackedRole.CenterEye ||
