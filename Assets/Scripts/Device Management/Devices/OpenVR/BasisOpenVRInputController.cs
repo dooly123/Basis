@@ -13,14 +13,18 @@ public class BasisOpenVRInputController : BasisInput
         if (HasOnUpate && poseAction != null)
         {
             poseAction[inputSource].onUpdate -= SteamVR_Behaviour_Pose_OnUpdate;
+            HasOnUpate = false;
         }
         inputSource = SteamVR_Input_Sources;
         Device = device;
         InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
         if (poseAction != null)
         {
-            poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
-            HasOnUpate = true;
+            if (HasOnUpate == false)
+            {
+                poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;
+                HasOnUpate = true;
+            }
         }
         if (inputSource == SteamVR_Input_Sources.LeftHand || inputSource == SteamVR_Input_Sources.RightHand)
         {
@@ -32,6 +36,7 @@ public class BasisOpenVRInputController : BasisInput
         if (poseAction != null)
         {
             poseAction[inputSource].onUpdate -= SteamVR_Behaviour_Pose_OnUpdate;
+            HasOnUpate = false;
         }
         if(SkeletonHandInput != null)
         {
@@ -59,7 +64,6 @@ public class BasisOpenVRInputController : BasisInput
 
         FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
         FinalRotation = LocalRawRotation;
-        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
         if (hasRoleAssigned)
         {
             if (Control.HasTracked != BasisHasTracked.HasNoTracker)

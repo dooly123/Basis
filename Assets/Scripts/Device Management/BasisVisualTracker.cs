@@ -7,21 +7,30 @@ public class BasisVisualTracker : MonoBehaviour
     public UnityEvent TrackedSetup = new UnityEvent();
     public Quaternion ModelRotationOffset = Quaternion.identity;
     public Vector3 ModelPositionOffset = Vector3.zero;
+    public bool HasEvents = false;
     public void Initialization(BasisInput basisInput)
     {
         if(basisInput != null)
         {
             BasisInput = basisInput;
             UpdateVisualSizeAndOffset();
-            BasisLocalPlayer.Instance.OnPlayersHeightChanged += UpdateVisualSizeAndOffset;
-            BasisLocalPlayer.Instance.OnLocalAvatarChanged += UpdateVisualSizeAndOffset;
+            if (HasEvents == false)
+            {
+                BasisLocalPlayer.Instance.OnPlayersHeightChanged += UpdateVisualSizeAndOffset;
+                BasisLocalPlayer.Instance.OnLocalAvatarChanged += UpdateVisualSizeAndOffset;
+                HasEvents = true;
+            }
             TrackedSetup.Invoke();
         }
     }
     public void OnDestroy()
     {
-        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= UpdateVisualSizeAndOffset;
-        BasisLocalPlayer.Instance.OnPlayersHeightChanged -= UpdateVisualSizeAndOffset;
+        if (HasEvents)
+        {
+            BasisLocalPlayer.Instance.OnLocalAvatarChanged -= UpdateVisualSizeAndOffset;
+            BasisLocalPlayer.Instance.OnPlayersHeightChanged -= UpdateVisualSizeAndOffset;
+            HasEvents = false;
+        }
     }
     public void UpdateVisualSizeAndOffset()
     {

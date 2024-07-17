@@ -31,9 +31,14 @@ public class BasisCharacterController : MonoBehaviour
     public float currentVerticalSpeed = 0f; // Vertical speed of the character
     public Vector2 Rotation;
     public float RotationSpeed = 200;
+    public bool HasEvents = false;
     public void OnDestroy()
     {
-        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead -= Simulate;
+        if (HasEvents)
+        {
+            driver.ReadyToRead -= Simulate;
+            HasEvents = false;
+        }
     }
     public void Initialize()
     {
@@ -43,7 +48,11 @@ public class BasisCharacterController : MonoBehaviour
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
         characterController.minMoveDistance = 0;
         characterController.skinWidth = 0.1f;
-        driver.ReadyToRead += Simulate;
+        if (HasEvents == false)
+        {
+            driver.ReadyToRead += Simulate;
+            HasEvents = true;
+        }
     }
     public void Simulate()
     {
@@ -134,12 +143,10 @@ public class BasisCharacterController : MonoBehaviour
         // Move character
         characterController.Move(totalMoveDirection);
     }
-
     public void RunningToggle()
     {
         Running = !Running;
     }
-
     public void CalculateCharacterSize()
     {
         eyeHeight = HasEye ? Eye.FinalApplied.position.y : 1.73f;
@@ -147,7 +154,6 @@ public class BasisCharacterController : MonoBehaviour
         adjustedHeight = Mathf.Max(adjustedHeight, MinimumColliderSize);
         SetCharacterHeight(adjustedHeight);
     }
-
     public void SetCharacterHeight(float height)
     {
         characterController.height = height;

@@ -6,18 +6,34 @@ public class BasisRemotePlayer : BasisPlayer
     public BasisRemoteAvatarDriver RemoteAvatarDriver;
     public GameObject AudioSourceGameobject;
     public BasisBoneControl MouthControl;
+    public bool HasEvents = false;
     public async void RemoteInitialize(string AvatarURL)
     {
         IsLocal = false;
         RemoteBoneDriver.CreateInitialArrays(RemoteBoneDriver.transform);
         RemoteBoneDriver.Initialize();
-        RemoteAvatarDriver.CalibrationComplete += RemoteCalibration;
+        if (HasEvents == false)
+        {
+            RemoteAvatarDriver.CalibrationComplete += RemoteCalibration;
+            HasEvents = true;
+        }
         if (Avatar == null)
         {
             CreateAvatar(AvatarURL);
         }
         RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
         await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
+    }
+    public void OnDestroy()
+    {
+        if (HasEvents)
+        {
+            if (RemoteAvatarDriver != null)
+            {
+                RemoteAvatarDriver.CalibrationComplete -= RemoteCalibration;
+                HasEvents = false;
+            }
+        }
     }
     public void UpdateTransform(Vector3 position, Quaternion rotation)
     {

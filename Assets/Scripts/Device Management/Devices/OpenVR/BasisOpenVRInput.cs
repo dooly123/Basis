@@ -16,11 +16,6 @@ public class BasisOpenVRInput : BasisInput
     {
         Device = device;
         InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
-        BasisLocalPlayer.Instance.Move.ReadyToRead += ApplyFinalMovement;
-    }
-    public void ApplyFinalMovement()
-    {
-        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
     }
     public override void PollData()
     {

@@ -18,7 +18,6 @@ public class BasisOpenXRInput : BasisInput
         {
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out LocalRawRotation))
             {
-                FinalRotation = LocalRawRotation;
                 if (hasRoleAssigned)
                 {
                     if (Control.HasTracked != BasisHasTracked.HasNoTracker)
@@ -29,7 +28,6 @@ public class BasisOpenXRInput : BasisInput
             }
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out LocalRawPosition))
             {
-                FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
                 if (hasRoleAssigned)
                 {
                     if (Control.HasTracked != BasisHasTracked.HasNoTracker)
@@ -38,6 +36,10 @@ public class BasisOpenXRInput : BasisInput
                     }
                 }
             }
+
+            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+            FinalRotation = LocalRawRotation;
+
             if (Device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out Vector2 Primary2DAxis))
             {
                 InputState.Primary2DAxis = Primary2DAxis;
@@ -79,6 +81,5 @@ public class BasisOpenXRInput : BasisInput
 
             UpdatePlayerControl();
         }
-        transform.SetLocalPositionAndRotation(LocalRawPosition, LocalRawRotation);
     }
 }

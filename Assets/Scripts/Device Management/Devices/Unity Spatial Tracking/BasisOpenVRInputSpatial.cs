@@ -23,7 +23,6 @@ public class BasisOpenVRInputSpatial : BasisInput
 
             FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
             FinalRotation = LocalRawRotation;
-            transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
             if (hasRoleAssigned)
             {
                 if (Control.HasTracked != BasisHasTracked.HasNoTracker)

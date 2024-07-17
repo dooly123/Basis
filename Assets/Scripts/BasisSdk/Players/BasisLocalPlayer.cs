@@ -30,6 +30,7 @@ public class BasisLocalPlayer : BasisPlayer
     [SerializeField]
     public LayerMask GroundMask;
     public static string LoadFileName = "LastUsedAvatar.BAS";
+    public bool HasEvents = false;
     public async Task LocalInitialize()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -43,11 +44,15 @@ public class BasisLocalPlayer : BasisPlayer
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
         Move.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-        Instance.LocalBoneDriver.ReadyToRead += SimulateHips;
-        OnLocalAvatarChanged += OnCalibration;
+        if (HasEvents == false)
+        {
+            LocalBoneDriver.ReadyToRead += SimulateHips;
+            OnLocalAvatarChanged += OnCalibration;
+            SceneManager.sceneLoaded += OnSceneLoadedCallback;
+            HasEvents = true;
+        }
         string LastUsedAvatar = BasisDataStore.LoadString(LoadFileName, BasisAvatarFactory.LoadingAvatar);
         await CreateAvatar(LastUsedAvatar);
-        SceneManager.sceneLoaded += OnSceneLoadedCallback;
     }
     public void RecalculateMyHeight()
     {
@@ -161,6 +166,16 @@ public class BasisLocalPlayer : BasisPlayer
     }
     public void OnDestroy()
     {
+        if (HasEvents)
+        {
+            if (LocalBoneDriver != null)
+            {
+                LocalBoneDriver.ReadyToRead -= SimulateHips;
+            }
+            OnLocalAvatarChanged -= OnCalibration;
+            SceneManager.sceneLoaded -= OnSceneLoadedCallback;
+            HasEvents = false;
+        }
         if (VisemeDriver != null)
         {
             GameObject.Destroy(VisemeDriver);

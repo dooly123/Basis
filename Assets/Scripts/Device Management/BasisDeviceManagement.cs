@@ -27,6 +27,7 @@ public partial class BasisDeviceManagement : MonoBehaviour
     public delegate Task InitializationCompletedHandler();
     public event InitializationCompletedHandler OnInitializationCompleted;
     public bool FireOffNetwork = true;
+    public bool HasEvents = false;
     void Start()
     {
         if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -40,6 +41,12 @@ public partial class BasisDeviceManagement : MonoBehaviour
         ShutDownXR(true);
         BasisDesktopManagement.StopDesktop();
         BasisSimulateXR.StopXR();
+        if (HasEvents)
+        {
+            BasisXRManagement.CheckForPass -= CheckForPass;
+
+            OnInitializationCompleted -= RunAfterInitialized;
+        }
     }
     public async void Initialize()
     {
@@ -51,10 +58,13 @@ public partial class BasisDeviceManagement : MonoBehaviour
         basisXRHeadToBodyOverride.Initialize();
 
         SwitchMode(DefaultMode);
+        if (HasEvents == false)
+        {
+            BasisXRManagement.CheckForPass += CheckForPass;
 
-        BasisXRManagement.CheckForPass += CheckForPass;
-
-        OnInitializationCompleted += RunAfterInitialized;
+            OnInitializationCompleted += RunAfterInitialized;
+            HasEvents = true;
+        }
         await OnInitializationCompleted?.Invoke();
     }
     public async Task RunAfterInitialized()

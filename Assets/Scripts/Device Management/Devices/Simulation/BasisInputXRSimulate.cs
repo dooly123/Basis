@@ -55,7 +55,6 @@ public class BasisInputXRSimulate : BasisInput
 
         }
         UpdatePlayerControl();
-        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
     }
     public new void OnDestroy()
     {

@@ -8,11 +8,13 @@ public static class BootSequence
 {
     public static GameObject LoadedBootManager;
     public static string BootManager = "BootManager";
+    public static bool HasEvents = false;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void OnBeforeSceneLoadRuntimeMethod()
     {
         AsyncOperationHandle<IResourceLocator> Address = Addressables.InitializeAsync(false);
         Address.Completed += OnAddressablesInitializationComplete;
+        HasEvents = true;
     }
     private static async void OnAddressablesInitializationComplete(AsyncOperationHandle<IResourceLocator> obj)
     {

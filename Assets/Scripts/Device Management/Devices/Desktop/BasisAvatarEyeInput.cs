@@ -21,6 +21,7 @@ public class BasisAvatarEyeInput : BasisInput
 
     public float InjectedX = 0;
     public float InjectedZ = 0;
+    public bool HasEyeEvents = false;
     public void Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
     {
         Debug.Log("Initalizing Avatar Eye");
@@ -42,14 +43,22 @@ public class BasisAvatarEyeInput : BasisInput
             Instance = this;
         }
         PlayerInitialized();
-        BasisLocalPlayer.Instance.OnLocalAvatarChanged += PlayerInitialized;
         LockCursor();
-        BasisLocalPlayer.Instance.OnPlayersHeightChanged += BasisLocalPlayer_OnPlayersHeightChanged;
+        if (HasEyeEvents == false)
+        {
+            BasisLocalPlayer.Instance.OnLocalAvatarChanged += PlayerInitialized;
+            BasisLocalPlayer.Instance.OnPlayersHeightChanged += BasisLocalPlayer_OnPlayersHeightChanged;
+            HasEyeEvents = true;
+        }
     }
     public new void OnDestroy()
     {
-        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= PlayerInitialized;
-        BasisLocalPlayer.Instance.OnPlayersHeightChanged -= BasisLocalPlayer_OnPlayersHeightChanged;
+        if (HasEyeEvents )
+        {
+            BasisLocalPlayer.Instance.OnLocalAvatarChanged -= PlayerInitialized;
+            BasisLocalPlayer.Instance.OnPlayersHeightChanged -= BasisLocalPlayer_OnPlayersHeightChanged;
+            HasEyeEvents = false;
+        }
         base.OnDestroy();
     }
 
@@ -123,7 +132,6 @@ public class BasisAvatarEyeInput : BasisInput
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;
         UpdatePlayerControl();
-        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
     }
     public void CalculateAdjustment()
     {

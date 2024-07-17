@@ -5,7 +5,7 @@ using static BaseBoneDriver;
 using static BasisAvatarIKStageCalibration;
 public abstract class BasisInput : MonoBehaviour
 {
-    public bool HasAssignedEvents = false;
+    public bool HasEvents = false;
     public string SubSystemIdentifier;
     [SerializeField] private BasisBoneTrackedRole trackedRole;
     [SerializeField] public bool hasRoleAssigned;
@@ -160,16 +160,21 @@ public abstract class BasisInput : MonoBehaviour
             }
         }
         //events
-        if (HasAssignedEvents == false)
+        if (HasEvents == false)
         {
-            HasAssignedEvents = true;
             BasisLocalPlayer.Instance.LocalBoneDriver.OnSimulate += PollData;
             BasisLocalPlayer.Instance.OnAvatarSwitched += UnAssignFullBodyTrackers;
+            BasisLocalPlayer.Instance.Move.ReadyToRead += ApplyFinalMovement;
+            HasEvents = true;
         }
         else
         {
             Debug.Log("has device events assigned already " + UniqueDeviceIdentifier);
         }
+    }
+    public void ApplyFinalMovement()
+    {
+        transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
     }
     public void UnAssignFullBodyTrackers()
     {
@@ -219,8 +224,18 @@ public abstract class BasisInput : MonoBehaviour
             Debug.LogError("Missing Driver!");
             return;
         }
-        BasisLocalPlayer.Instance.LocalBoneDriver.OnSimulate -= PollData;
         UnAssignRoleAndTracker();
+        if (HasEvents)
+        {
+            BasisLocalPlayer.Instance.LocalBoneDriver.OnSimulate -= PollData;
+            BasisLocalPlayer.Instance.OnAvatarSwitched -= UnAssignFullBodyTrackers;
+            BasisLocalPlayer.Instance.Move.ReadyToRead -= ApplyFinalMovement;
+            HasEvents = false;
+        }
+        else
+        {
+            Debug.Log("has device events assigned already " + UniqueDeviceIdentifier);
+        }
     }
     public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
     {
@@ -274,7 +289,7 @@ public abstract class BasisInput : MonoBehaviour
                 }
                 break;
             case BasisBoneTrackedRole.RightHand:
-               BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
+                BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
                 if (InputState.PrimaryButtonGetState)
                 {
                     BasisLocalPlayer.Instance.Move.HandleJump();

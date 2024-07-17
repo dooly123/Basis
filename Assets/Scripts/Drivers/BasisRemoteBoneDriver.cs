@@ -7,6 +7,7 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
     public Transform HipsAvatar;
     public BasisBoneControl Head;
     public BasisBoneControl Hips;
+    public bool HasEvent = false;
     public void Initialize()
     {
         FindBone(out Head, BasisBoneTrackedRole.Head);
@@ -19,11 +20,18 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
         {
             Hips.HasTracked = BasisHasTracked.HasNoTracker;
         }
-        OnSimulate += CalculateHeadBoneData;
+        if (HasEvent == false)
+        {
+            OnSimulate += CalculateHeadBoneData;
+            HasEvent = true;
+        }
     }
     public void OnDestroy()
     {
-        OnSimulate -= CalculateHeadBoneData;
+        if (HasEvent)
+        {
+            OnSimulate -= CalculateHeadBoneData;
+        }
     }
     public void CalculateHeadBoneData()
     {

@@ -24,6 +24,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public BasisLocalPlayer basisLocalPlayer;
     public PlayerInput Input;
     public static string InputActions = "InputActions";
+    public bool HasEvents = false;
     public void OnEnable()
     {
         DesktopSwitch.action.Enable();
@@ -32,12 +33,16 @@ public class BasisLocalInputActions : MonoBehaviour
         MoveAction.action.Enable();
         LookAction.action.Enable();
         JumpAction.action.Enable();
-        AddCallback();
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
         }
-        BasisLocalCameraDriver.InstanceExists += SetupCamera;
+        if (HasEvents == false)
+        {
+            BasisLocalCameraDriver.InstanceExists += SetupCamera;
+            AddCallback();
+            HasEvents = true;
+        }
     }
     public void LateUpdate()
     {
@@ -72,7 +77,12 @@ public class BasisLocalInputActions : MonoBehaviour
         MoveAction.action.Disable();
         LookAction.action.Disable();
         JumpAction.action.Disable();
-        RemoveCallback();
+        if (HasEvents)
+        {
+            BasisLocalCameraDriver.InstanceExists -= SetupCamera;
+            RemoveCallback();
+            HasEvents = false;
+        }
     }
     public void Initialize(BasisLocalPlayer localPlayer)
     {

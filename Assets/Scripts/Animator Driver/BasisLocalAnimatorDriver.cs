@@ -21,7 +21,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     public Vector3 angularVelocity;
     public Vector3 dampenedAngularVelocity; // New field for dampened angular velocity
     public Quaternion deltaRotation;
-
+    public bool HasEvents = false;
     void Simulate()
     {
         if (localPlayer.AvatarDriver.InTPose)
@@ -104,7 +104,11 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         basisAnimatorVariableApply.LoadCachedAnimatorHashes(animator);
         Controller = BasisLocalPlayer.Instance.Move;
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += AssignHipsFBTracker;
+        if (HasEvents == false)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += AssignHipsFBTracker;
+            HasEvents = true;
+        }
         AssignHipsFBTracker();
     }
 
@@ -141,6 +145,10 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
             localPlayer.Move.ReadyToRead -= Simulate;
             localPlayer.Move.JustJumped -= JustJumped;
             localPlayer.Move.JustLanded -= JustLanded;
+        }
+        if(HasEvents)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= AssignHipsFBTracker;
         }
     }
 }
