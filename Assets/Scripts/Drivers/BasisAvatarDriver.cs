@@ -261,11 +261,22 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     {
         SkinnedMeshRenderer = Player.Avatar.Animator.GetComponentsInChildren<SkinnedMeshRenderer>(true);
     }
-    public void SetMatrixRecalculation(bool State)
+    public void SetAllMatrixRecalculation(bool State)
     {
         foreach (SkinnedMeshRenderer Render in SkinnedMeshRenderer)
         {
             Render.forceMatrixRecalculationPerRender = State;
+        }
+    }
+    public void SetHeadMatrixRecalculation(bool State)
+    {
+        if (Player.Avatar.FaceBlinkMesh != null)
+        {
+            Player.Avatar.FaceBlinkMesh.forceMatrixRecalculationPerRender = State;
+        }
+        if (Player.Avatar.FaceVisemeMesh != null)
+        {
+            Player.Avatar.FaceVisemeMesh.forceMatrixRecalculationPerRender = State;
         }
     }
     public void updateWhenOffscreen(bool State)

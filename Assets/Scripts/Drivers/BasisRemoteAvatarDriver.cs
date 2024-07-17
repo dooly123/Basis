@@ -15,7 +15,7 @@ public class BasisRemoteAvatarDriver : BasisAvatarDriver
             return;
         }
         Calibration(RemotePlayer.Avatar);
-        SetMatrixRecalculation(false);
+        SetAllMatrixRecalculation(false);
         updateWhenOffscreen(false);
         for (int Index = 0; Index < SkinnedMeshRenderer.Length; Index++)
         {
