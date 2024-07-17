@@ -18,7 +18,6 @@ public abstract class BaseBoneDriver : MonoBehaviour
     public event SimulationHandler OnSimulate;
     public event SimulationHandler OnPostSimulate;
     public event SimulationHandler ReadyToRead;
-    public Quaternion WorldRotation;
     /// <summary>
     /// call this after updating the bone data
     /// </summary>

@@ -51,13 +51,6 @@ public class BasisHamburgerMenu : BasisUIBase
             BasisAvatarIKStageCalibration.FullBodyCalibration();
         }
     }
-#if UNITY_EDITOR
-    [MenuItem("Basis/CalibrateFB")]
-    public static void CalibrateEditor()
-    {
-        BasisAvatarIKStageCalibration.FullBodyCalibration();
-    }
-#endif
     private static void AvatarButtonPanel()
     {
         BasisHamburgerMenu.Instance.CloseThisMenu();

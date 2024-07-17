@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -118,7 +119,7 @@ public class BasisSimulateXR
     [MenuItem("Basis/Create MaxTracker Tracking")]
     public static void CreateFullMaxTracker()
     {
-      //  BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
+        //  BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         // Create an array of the tracker names for simplicity
         string trackerName = "{htc}vr_tracker_vive_3_0";
 
@@ -151,7 +152,7 @@ public class BasisSimulateXR
             trackers[Index].FollowMovement.position = bodyPartPosition;
             trackers[Index].FollowMovement.rotation = Random.rotation;
         }
-     //   BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
+        //   BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
 
         // BasisAvatarIKStageCalibration.Calibrate();//disable for delayed testing
         // Show the trackers
@@ -222,6 +223,37 @@ public class BasisSimulateXR
         float randomY = Random.Range(-randomRange, randomRange);
         float randomZ = Random.Range(-randomRange, randomRange);
         return new Vector3(original.x + randomX, original.y + randomY, original.z + randomZ);
+    }
+    [MenuItem("Basis/CalibrateFB")]
+    public static void CalibrateEditor()
+    {
+        BasisAvatarIKStageCalibration.FullBodyCalibration();
+    }
+    [MenuItem("Basis/ProvideRandomData and create 3 point")]
+    public static void ProvideRandomData()
+    {
+        Vector3 RotationVector = Random.rotation.eulerAngles;
+        Vector3 OnlyY = new Vector3(0, RotationVector.y, 0);
+        BasisLocalPlayer.Instance.transform.eulerAngles = OnlyY;
+
+        BasisAvatarEyeInput basisAvatarEyeInput = GameObject.FindFirstObjectByType<BasisAvatarEyeInput>();
+        if (basisAvatarEyeInput != null)
+        {
+            basisAvatarEyeInput.InjectedX = Random.Range(-3, 3);
+            basisAvatarEyeInput.InjectedZ = Random.Range(-3, 3);
+            basisAvatarEyeInput.rotationX = Random.Range(-360, 360);
+        }
+        BasisLocalPlayer.Instance.StartCoroutine(WaitAndCreatePuck3Tracker());
+    }
+
+    private static IEnumerator WaitAndCreatePuck3Tracker()
+    {
+        // Wait for the end of the frame
+        yield return null;
+        yield return new WaitForEndOfFrame();
+        yield return null;
+      // Call the final API
+      CreatePuck3Tracker();
     }
 #endif
 }

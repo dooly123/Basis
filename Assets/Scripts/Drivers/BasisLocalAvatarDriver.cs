@@ -89,7 +89,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         BasisLocalEyeFollowDriver EyeFollowBase = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
         EyeFollowBase.CreateEyeLook(this);
         HeadScaledDown = Vector3.zero;
-        SetHeadMatrixRecalculation(true);
+        SetAllMatrixRecalculation(true);
         updateWhenOffscreen(true);
         if (References.Hashead)
         {
