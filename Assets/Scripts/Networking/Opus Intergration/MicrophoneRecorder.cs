@@ -11,6 +11,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     private int dataLength;
     private int position;
     private int remain;
+    public bool HasEvents = false;
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -33,16 +34,25 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         rmsValues = new float[rmsWindowSize];
         bufferLength = microphoneBufferArray.Length;
 
-        SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
-        SMDMicrophone.OnMicrophoneVolumeChanged += ChangeAudio;
-        BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
+        if (HasEvents == false)
+        {
+            SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
+            SMDMicrophone.OnMicrophoneVolumeChanged += ChangeAudio;
+            BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
+            HasEvents = true;
+        }
         ChangeAudio(SMDMicrophone.SelectedVolumeMicrophone);
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }
     public void OnDestroy()
     {
-        SMDMicrophone.OnMicrophoneChanged -= ResetMicrophones;
-        BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
+        if (HasEvents)
+        {
+            SMDMicrophone.OnMicrophoneChanged -= ResetMicrophones;
+            SMDMicrophone.OnMicrophoneVolumeChanged -= ChangeAudio;
+            BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
+            HasEvents = false;
+        }
     }
     private void OnBootModeChanged(BasisBootedMode mode)
     {

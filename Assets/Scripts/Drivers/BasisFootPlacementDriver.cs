@@ -9,6 +9,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
     public BasisIKFootSolver LeftFootSolver = new BasisIKFootSolver();
     [SerializeField]
     public BasisIKFootSolver RightFootSolver = new BasisIKFootSolver();
+    public bool HasEvents = false;
     public void Initialize()
     {
         Localplayer = BasisLocalPlayer.Instance;
@@ -17,7 +18,11 @@ public class BasisFootPlacementDriver : MonoBehaviour
         Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.Foot, BasisBoneTrackedRole.LeftFoot);
         Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.Foot, BasisBoneTrackedRole.RightFoot);
         OnCalibration();
-        Localplayer.AvatarDriver.CalibrationComplete += OnCalibration;
+        if (HasEvents == false)
+        {
+            Localplayer.AvatarDriver.CalibrationComplete += OnCalibration;
+            HasEvents = true;
+        }
     }
     public void OnCalibration()
     {
@@ -34,6 +39,14 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
         LeftFootSolver.Initialize(RightFootSolver);
         RightFootSolver.Initialize(LeftFootSolver);
+    }
+    public void OnDestroy()
+    {
+        if (HasEvents)
+        {
+            Localplayer.AvatarDriver.CalibrationComplete -= OnCalibration;
+            HasEvents = false;
+        }
     }
     void Update()
     {

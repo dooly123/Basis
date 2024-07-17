@@ -46,6 +46,10 @@ public class BasisNetworkConnector : MonoBehaviour
     }
     public void Connect(ushort Port, string IpString)
     {
+        if (Client != null)
+        {
+            GameObject.Destroy(Client);
+        }
         HasUnityClient = false;
         Client = BasisHelpers.GetOrAddComponent<BasisLowLevelClient>(this.gameObject);
         Client.Initialize();
@@ -94,6 +98,10 @@ public class BasisNetworkConnector : MonoBehaviour
     private void Disconnected(object sender, DisconnectedEventArgs e)
     {
         Debug.LogError("Disconnected from Server " + e.Error);
+        if (Client != null)
+        {
+            GameObject.Destroy(Client);
+        }
         if (TryToReconnectAutomatically)
         {
             Connect(Port, Ip);
@@ -299,7 +307,6 @@ public class BasisNetworkConnector : MonoBehaviour
         reader.Read(out ServerReadyMessage SRM);
         await CreateRemotePlayer(SRM);
     }
-
     private async Task HandleCreateAllRemoteClients(DarkRiftReader reader)
     {
         reader.Read(out CreateAllRemoteMessage allRemote);
@@ -319,7 +326,7 @@ public class BasisNetworkConnector : MonoBehaviour
         }
         else
         {
-         //   Debug.Log("requesting Avatar load " + avatarID);
+            //   Debug.Log("requesting Avatar load " + avatarID);
         }
         BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID);
         remote.DisplayName = ServerReadyMessage.LocalReadyMessage.playerMetaDataMessage.playerDisplayName;

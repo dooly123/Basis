@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using static UnityEditor.Experimental.GraphView.GraphView;
 public class BasisLocalAvatarDriver : BasisAvatarDriver
 {
     public Vector3 HeadScale;
@@ -468,17 +470,22 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void WriteUpEvents(BasisBoneControl Control, RigLayer Layer)
     {
-        // Define a method to update the active state of the Layer
-        void UpdateLayerActiveState()
+        if (Control.HasEvents)
         {
-            Layer.active = Control.HasRigLayer == BasisHasRigLayer.HasRigLayer;
+            Control.OnHasRigChanged -= delegate { UpdateLayerActiveState(Control, Layer); };
+            Control.HasEvents = false;
+            Debug.Log("already had a event dedelegating");
         }
-
         // Subscribe to the events
-        Control.OnHasRigChanged += delegate { UpdateLayerActiveState(); };
-
+        Control.OnHasRigChanged += delegate { UpdateLayerActiveState(Control, Layer); };
+        Control.HasEvents = true;
         // Set the initial state
-        UpdateLayerActiveState();
+        UpdateLayerActiveState(Control, Layer);
+    }
+    // Define a method to update the active state of the Layer
+    void UpdateLayerActiveState(BasisBoneControl Control, RigLayer Layer)
+    {
+        Layer.active = Control.HasRigLayer == BasisHasRigLayer.HasRigLayer;
     }
     public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
     {

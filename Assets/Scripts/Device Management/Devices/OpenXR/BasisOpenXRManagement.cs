@@ -10,12 +10,16 @@ public class BasisOpenXRManagement
 {
     public List<InputDevice> inputDevices = new List<InputDevice>();
     public Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
-
+    public bool HasEvents = false;
     public void StartXRSDK()
     {
         Debug.Log("Starting BasisOpenXRManagement");
-        InputDevices.deviceConnected += OnDeviceConnected;
-        InputDevices.deviceDisconnected += OnDeviceDisconnected;
+        if (HasEvents == false)
+        {
+            InputDevices.deviceConnected += OnDeviceConnected;
+            InputDevices.deviceDisconnected += OnDeviceDisconnected;
+            HasEvents = true;
+        }
         UpdateDeviceList();
     }
 
@@ -27,8 +31,12 @@ public class BasisOpenXRManagement
         {
             DestroyPhysicalTrackedDevice(device);
         }
-        InputDevices.deviceConnected -= OnDeviceConnected;
-        InputDevices.deviceDisconnected -= OnDeviceDisconnected;
+        if (HasEvents)
+        {
+            InputDevices.deviceConnected -= OnDeviceConnected;
+            InputDevices.deviceDisconnected -= OnDeviceDisconnected;
+            HasEvents = false;
+        }
     }
 
     private void OnDeviceConnected(InputDevice device)

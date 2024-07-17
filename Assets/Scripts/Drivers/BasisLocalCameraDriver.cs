@@ -14,7 +14,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     // Static event to notify when the instance exists
     public static event System.Action InstanceExists;
     public BasisLockToInput BasisLockToInput;
-    public bool HasHooks = false;
+    public bool HasEvents = false;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -28,14 +28,21 @@ public class BasisLocalCameraDriver : MonoBehaviour
         CameraInstanceID = Camera.GetInstanceID();
         //fire static event that says the instance exists
         OnHeightChanged();
-        if (HasHooks == false)
+        if (HasEvents == false)
         {
             RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
             BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
             BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
             InstanceExists?.Invoke();
-            HasHooks = true;
+            HasEvents = true;
         }
+    }
+    public void OnDestroy()
+    {
+        RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
+        BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
+        BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnHeightChanged;
+        HasEvents = false;
     }
     private void OnModeSwitch(BasisBootedMode mode)
     {
@@ -55,11 +62,11 @@ public class BasisLocalCameraDriver : MonoBehaviour
         {
             LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
         }
-        if (HasHooks)
+        if (HasEvents)
         {
             RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
             BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
-            HasHooks = false;
+            HasEvents = false;
         }
     }
     public void BeginCameraRendering(ScriptableRenderContext context, Camera Camera)

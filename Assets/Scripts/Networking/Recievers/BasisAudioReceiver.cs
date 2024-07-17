@@ -22,6 +22,7 @@ public class BasisAudioReceiver
     public float dataTimeout = 0.1f; // Timeout period in seconds
     public float[] SilentData;
     public int DataSize;
+    public bool HasEvents = false;
     public void LateUpdate()
     {
         if (Time.time - lastDataReceivedTime > dataTimeout)
@@ -92,10 +93,22 @@ public class BasisAudioReceiver
         {
             decoder = BasisHelpers.GetOrAddComponent<BasisAudioDecoder>(audioParent);
         }
-        decoder.OnDecoded += OnDecoded;
+        if (HasEvents == false)
+        {
+            decoder.OnDecoded += OnDecoded;
+            HasEvents = true;
+        }
         audioSource.loop = false;
         audioSource.Play();
         OnCalibration(networkedPlayer);
+    }
+    public void OnDestroy()
+    {
+        if (HasEvents)
+        {
+            decoder.OnDecoded += OnDecoded;
+            HasEvents = false;
+        }
     }
 
     public void OnDisable()

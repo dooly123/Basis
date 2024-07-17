@@ -16,17 +16,26 @@ public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
     public Vector3 FowardsLookPoint;
     public Vector3 AppliedOffset;
     public float DistanceBeforeTeleport = 30;
+    public bool HasEvents = false;
     public void Start()
     {
         // Initialize look speed
         lookSpeed = Random.Range(minLookSpeed, maxLookSpeed);
-        BasisLocalPlayer.Instance.OnSpawnedEvent += AfterTeleport;
+        if (HasEvents)
+        {
+            BasisLocalPlayer.Instance.OnSpawnedEvent += AfterTeleport;
+            HasEvents = false;
+        }
        //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged += AfterTeleport;
     }
     public new void OnDestroy()
     {
         base.OnDestroy();
-        BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
+        if (HasEvents == false)
+        {
+            BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
+            HasEvents = true;
+        }
         //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged -= AfterTeleport;
     }
     public void LateUpdate()

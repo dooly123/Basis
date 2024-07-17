@@ -23,7 +23,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     public BasisAudioReceiver AudioReceiverModule = new BasisAudioReceiver();
 
     public BasisRemotePlayer RemotePlayer;
-
+    public bool HasEvents = false;
     public override void Compute()
     {
         if (!IsAbleToUpdate())
@@ -122,7 +122,11 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
             RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
             AudioReceiverModule.OnEnable(networkedPlayer, gameObject);
             OnAvatarCalibration();
-            RemotePlayer.RemoteAvatarDriver.CalibrationComplete += OnCalibration;
+            if (HasEvents == false)
+            {
+                RemotePlayer.RemoteAvatarDriver.CalibrationComplete += OnCalibration;
+                HasEvents = true;
+            }
         }
         silentData = new float[silentDataSize];
         Array.Fill(silentData, 0f);
@@ -136,6 +140,17 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         Output.Vectors.Dispose();
         Output.Quaternions.Dispose();
         Output.Muscles.Dispose();
+
+        if (HasEvents && RemotePlayer != null && RemotePlayer.RemoteAvatarDriver != null)
+        {
+            RemotePlayer.RemoteAvatarDriver.CalibrationComplete -= OnCalibration;
+            HasEvents = false;
+        }
+
+        if (AudioReceiverModule != null)
+        {
+            AudioReceiverModule.OnDestroy();
+        }
     }
     public void OnCalibration()
     {

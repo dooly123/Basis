@@ -16,8 +16,9 @@ public class BasisBoneControl
     public Transform BoneTransform;
     [SerializeField]
     public Transform BoneModelTransform;
+    public bool HasEvents = false;
     // Events for property changes
-    public event System.Action<BasisHasTracked> OnHasTrackerDriverChanged;
+    public System.Action<BasisHasTracked> OnHasTrackerDriverChanged;
     // Backing fields for the properties
     [SerializeField]
     private BasisHasTracked hasTrackerDriver = BasisHasTracked.HasNoTracker;
@@ -36,7 +37,7 @@ public class BasisBoneControl
         }
     }
     // Events for property changes
-    public event System.Action<BasisHasRigLayer> OnHasRigChanged;
+    public System.Action<BasisHasRigLayer> OnHasRigChanged;
     // Backing fields for the properties
     [SerializeField]
     private BasisHasRigLayer hasRigLayer = BasisHasRigLayer.HasNoRigLayer;

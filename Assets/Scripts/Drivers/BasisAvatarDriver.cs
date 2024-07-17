@@ -15,6 +15,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public SkinnedMeshRenderer[] SkinnedMeshRenderer;
     public BasisPlayer Player;
     public bool InTPose = false;
+    public bool HasEvents = false;
     public void Calibration(BasisAvatar Avatar)
     {
         BeginningCalibration?.Invoke();

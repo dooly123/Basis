@@ -21,6 +21,7 @@ public class BasisAudioTransmission
     public bool IsInitalized = false;
     public AudioSegmentDataMessage AudioSegmentData = new AudioSegmentDataMessage();
     public AudioSilentSegmentDataMessage audioSilentSegmentData = new AudioSilentSegmentDataMessage();
+    public bool HasEvents = false;
     public void OnEnable(BasisNetworkedPlayer networkedPlayer)
     {
         if (IsInitalized == false)
@@ -34,14 +35,17 @@ public class BasisAudioTransmission
                 Complexity = settings.Complexity,
                 Signal = settings.OpusSignal
             };
-            OnEncoded += SendVoiceOverNetwork;
             Local = (BasisLocalPlayer)networkedPlayer.Player;
             Recorder = Local.AvatarDriver.MicrophoneRecorder;
-            if (Local.AvatarDriver != null && Local.AvatarDriver.MicrophoneRecorder != null)
+            if (HasEvents == false)
             {
-                Local.AvatarDriver.MicrophoneRecorder.OnHasAudio += OnAudioReady;
-                Local.AvatarDriver.MicrophoneRecorder.OnHasSilence += OnAudioSilence;
-
+                if (Recorder != null)
+                {
+                    Recorder.OnHasAudio += OnAudioReady;
+                    Recorder.OnHasSilence += OnAudioSilence;
+                    OnEncoded += SendVoiceOverNetwork;
+                    HasEvents = true;
+                }
             }
             IsInitalized = true;
         }
@@ -52,11 +56,15 @@ public class BasisAudioTransmission
         {
             GameObject.Destroy(Recorder.gameObject);
         }
-        Recorder.OnHasAudio -= OnAudioReady;
-        Recorder.OnHasSilence -= OnAudioSilence;
+        if (HasEvents)
+        {
+            Recorder.OnHasAudio -= OnAudioReady;
+            Recorder.OnHasSilence -= OnAudioSilence;
+            OnEncoded -= SendVoiceOverNetwork;
+            HasEvents = false;
+        }
         encoder.Dispose();
         encoder = null;
-        OnEncoded -= SendVoiceOverNetwork;
     }
     public void OnAudioSilence()
     {

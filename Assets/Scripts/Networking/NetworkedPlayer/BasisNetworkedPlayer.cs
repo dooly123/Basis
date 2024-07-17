@@ -34,7 +34,7 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
     {
         LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage();
         Stub.array = new byte[] { };
-        ReInitialize(player,PlayerID, Stub);
+        ReInitialize(player, PlayerID, Stub);
     }
     public void ReInitialize(BasisPlayer player, ushort PlayerID, LocalAvatarSyncMessage sspm)
     {
@@ -45,7 +45,11 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
                 if (LocalPlayer.AvatarDriver != null)
                 {
-                    LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
+                    if (LocalPlayer.AvatarDriver.HasEvents == false)
+                    {
+                        LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
+                        LocalPlayer.AvatarDriver.HasEvents = true;
+                    }
                 }
                 else
                 {
@@ -57,7 +61,11 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
                 if (RemotePlayer.RemoteAvatarDriver != null)
                 {
-                    RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
+                    if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
+                    {
+                        RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
+                        RemotePlayer.RemoteAvatarDriver.HasEvents = true;
+                    }
                 }
                 else
                 {
@@ -74,7 +82,11 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
                 if (LocalPlayer.AvatarDriver != null)
                 {
-                    LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
+                    if (LocalPlayer.AvatarDriver.HasEvents == false)
+                    {
+                        LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
+                        LocalPlayer.AvatarDriver.HasEvents = true;
+                    }
                     LocalPlayer.LocalBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
                 }
                 else
@@ -87,7 +99,11 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
                 BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
                 if (RemotePlayer.RemoteAvatarDriver != null)
                 {
-                    RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
+                    if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
+                    {
+                        RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
+                        RemotePlayer.RemoteAvatarDriver.HasEvents = true;
+                    }
                     RemotePlayer.RemoteBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
                 }
                 else
