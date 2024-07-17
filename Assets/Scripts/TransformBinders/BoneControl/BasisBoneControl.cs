@@ -142,7 +142,7 @@ public class BasisBoneControl
                     FinalApplied.position = TrackerData.position + TrackerData.rotation * InverseOffsetFromBone.position;
 
                     // Update the rotation of the secondary transform to maintain the initial offset
-                    FinalApplied.rotation = TrackerData.rotation * InverseOffsetFromBone.rotation;
+                    FinalApplied.rotation =  TrackerData.rotation * InverseOffsetFromBone.rotation;
                 }
                 else
                 {
