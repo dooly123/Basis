@@ -4,6 +4,7 @@ public class BasisLockToInput : MonoBehaviour
 {
     public BasisBoneTrackedRole TrackedRole;
     public BasisInput AttachedInput = null;
+    public bool HasEvent = false;
     public void Awake()
     {
         Initialize();
@@ -14,14 +15,22 @@ public class BasisLockToInput : MonoBehaviour
         {
             BasisDeviceManagement.Instance.BasisLockToInputs.Add(this);
         }
-        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += FindRole;
-        BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved += ResetIfNeeded;
+        if (HasEvent == false)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += FindRole;
+            BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved += ResetIfNeeded;
+            HasEvent = true;
+        }
         FindRole();
     }
     public void OnDestroy()
     {
-        BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= FindRole;
-        BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved -= ResetIfNeeded;
+        if (HasEvent)
+        {
+            BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= FindRole;
+            BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved -= ResetIfNeeded;
+            HasEvent = false;
+        }
     }
     private void ResetIfNeeded(BasisInput input)
     {

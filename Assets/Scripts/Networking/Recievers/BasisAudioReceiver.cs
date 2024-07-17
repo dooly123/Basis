@@ -106,7 +106,7 @@ public class BasisAudioReceiver
     {
         if (HasEvents)
         {
-            decoder.OnDecoded += OnDecoded;
+            decoder.OnDecoded -= OnDecoded;
             HasEvents = false;
         }
     }

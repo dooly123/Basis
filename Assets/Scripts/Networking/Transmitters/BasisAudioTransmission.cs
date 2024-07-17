@@ -52,16 +52,16 @@ public class BasisAudioTransmission
     }
     public void OnDisable()
     {
-        if (Recorder != null)
-        {
-            GameObject.Destroy(Recorder.gameObject);
-        }
         if (HasEvents)
         {
             Recorder.OnHasAudio -= OnAudioReady;
             Recorder.OnHasSilence -= OnAudioSilence;
             OnEncoded -= SendVoiceOverNetwork;
             HasEvents = false;
+        }
+        if (Recorder != null)
+        {
+            GameObject.Destroy(Recorder.gameObject);
         }
         encoder.Dispose();
         encoder = null;

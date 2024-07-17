@@ -10,11 +10,24 @@ public class BasisUIRaycastProcess
     public static bool HasTarget;
     public BasisDeviceManagement BasisDeviceManagement;
     public List<BasisInput> Inputs;
+    public bool HasEvent = false;
     public void Initalize()
     {
         BasisDeviceManagement = BasisDeviceManagement.Instance;
-        BasisDeviceManagement.AllInputDevices.OnListChanged += AllInputDevices;
+        if (HasEvent == false)
+        {
+            BasisDeviceManagement.AllInputDevices.OnListChanged += AllInputDevices;
+            HasEvent = true;
+        }
         AllInputDevices();
+    }
+    public void OnDeInitalize()
+    {
+        if (HasEvent)
+        {
+            BasisDeviceManagement.AllInputDevices.OnListChanged -= AllInputDevices;
+            HasEvent = false;
+        }
     }
     public void AllInputDevices()
     {

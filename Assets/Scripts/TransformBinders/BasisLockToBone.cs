@@ -6,6 +6,7 @@ public class BasisLockToBone : MonoBehaviour
     public BasisBoneTrackedRole Role = BasisBoneTrackedRole.Head;
     public bool hasCharacterTransformDriver = false;
     public bool HasBoneControl = false;
+    public bool HasEvent = false;
     public void Initialize(BasisLocalPlayer LocalPlayer)
     {
         if (LocalPlayer != null)
@@ -26,13 +27,21 @@ public class BasisLockToBone : MonoBehaviour
         {
             Debug.LogError("Missing LocalPlayer");
         }
-        CharacterTransformDriver.ReadyToRead += Simulation;
+        if (HasEvent == false)
+        {
+            CharacterTransformDriver.ReadyToRead += Simulation;
+            HasEvent = true;
+        }
     }
     public void OnDestroy()
     {
         if (CharacterTransformDriver != null)
         {
-            CharacterTransformDriver.ReadyToRead -= Simulation;
+            if (HasEvent)
+            {
+                CharacterTransformDriver.ReadyToRead -= Simulation;
+                HasEvent = false;
+            }
         }
     }
     void Simulation()

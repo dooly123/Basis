@@ -45,6 +45,12 @@ public class BasisInputModuleHandler : BaseInputModule
         tabAction.Disable();
         enterAction.Disable();
         keypadEnterAction.Disable();
+
+        tabAction.performed -= OnTabPerformed;
+        enterAction.performed -= OnEnterPerformed;
+        keypadEnterAction.performed -= OnEnterPerformed;
+        basisUIRaycastProcess.OnDeInitalize();
+
     }
     private void OnTextInput(char character)
     {

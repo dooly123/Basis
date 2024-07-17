@@ -32,6 +32,7 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
     {
         DeInitialize();
     }
+    public bool HasEvents = false;
     public override void Initialize(BasisNetworkedPlayer networkedPlayer)
     {
         if (Ready == false)
@@ -43,9 +44,13 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
             NetworkedPlayer = networkedPlayer;
             AudioTransmission.OnEnable(networkedPlayer);
             OnAvatarCalibration();
-            networkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
-            networkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
-            networkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
+            if (HasEvents == false)
+            {
+                NetworkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
+                NetworkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
+                NetworkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
+                HasEvents = true;
+            }
         }
         else
         {
@@ -57,6 +62,13 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
         if (Ready)
         {
             AudioTransmission.OnDisable();
+        }
+        if (HasEvents)
+        {
+            NetworkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
+            NetworkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
+            NetworkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
+            HasEvents = false;
         }
     }
     public void SendOutLatestAvatar()

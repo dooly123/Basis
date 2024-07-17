@@ -14,6 +14,7 @@ public class BasisOverrideRotations : MonoBehaviour
     public float RangeOfMotionBeforeTurn = 13;
     public float roty;
     public BasisLocalBoneDriver Driver;
+    public bool HasEvent = false;
     /// <summary>
     /// this is used to simulate the rest of the body if no tracked is issued to said bonecontrol
     /// </summary>
@@ -74,10 +75,18 @@ public class BasisOverrideRotations : MonoBehaviour
         {
             Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
         }
-        Driver.ReadyToRead += Simulate;
+        if (HasEvent == false)
+        {
+            Driver.ReadyToRead += Simulate;
+            HasEvent = true;
+        }
     }
     public void OnDestroy()
     {
-        Driver.ReadyToRead -= Simulate;
+        if (HasEvent)
+        {
+            Driver.ReadyToRead -= Simulate;
+            HasEvent = false;
+        }
     }
 }
