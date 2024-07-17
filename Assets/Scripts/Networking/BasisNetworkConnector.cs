@@ -17,7 +17,7 @@ using static SerializableDarkRift;
 public class BasisNetworkConnector : MonoBehaviour
 {
     public BasisLowLevelClient Client;
-    public bool HasUnityClient = false;
+    public bool HasAuthenticated = false;
     public static BasisNetworkConnector Instance;
     public string authenticationCode = "Default";
     public PlayerIdMessage PlayerID = new PlayerIdMessage();
@@ -28,11 +28,16 @@ public class BasisNetworkConnector : MonoBehaviour
     public ushort Port = 4296;
     public static string LocalHost = "localhost";
     public bool TryToReconnectAutomatically = true;
+    public bool HasInitalizedClient = false;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;
+        }
+        if (Client == null)
+        {
+            Client = GetComponent<BasisLowLevelClient>();
         }
         this.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         if (ForceConnect)
@@ -46,20 +51,19 @@ public class BasisNetworkConnector : MonoBehaviour
     }
     public void Connect(ushort Port, string IpString)
     {
-        if (Client != null)
+        HasAuthenticated = false;
+        if (HasInitalizedClient == false)
         {
-            GameObject.Destroy(Client);
+            Client.Initialize();
+            Client.Disconnected += Disconnected;
+            HasInitalizedClient = true;
         }
-        HasUnityClient = false;
-        Client = BasisHelpers.GetOrAddComponent<BasisLowLevelClient>(this.gameObject);
-        Client.Initialize();
         if (IpString.ToLower() == LocalHost)
         {
             string[] IpStrings = ResolveLocahost(IpString);
             IpString = IpStrings[0];
         }
         IPAddress Ip = IPAddress.Parse(IpString);
-        Client.Disconnected += Disconnected;
         Client.ConnectInBackground(Ip, Port, Callback);
     }
     public string[] ResolveLocahost(string localhost)
@@ -98,10 +102,7 @@ public class BasisNetworkConnector : MonoBehaviour
     private void Disconnected(object sender, DisconnectedEventArgs e)
     {
         Debug.LogError("Disconnected from Server " + e.Error);
-        if (Client != null)
-        {
-            GameObject.Destroy(Client);
-        }
+        Disconnect();
         if (TryToReconnectAutomatically)
         {
             Connect(Port, Ip);
@@ -113,11 +114,12 @@ public class BasisNetworkConnector : MonoBehaviour
     }
     public void Disconnect()
     {
-        if (Client != null)
+        if (HasAuthenticated)
         {
-            Client.Close();
-            Destroy(Client);
+            Client.MessageReceived -= MessageReceived;
+            HasAuthenticated = false;
         }
+        Client.Close();
     }
     public void Callback([CanBeNull] Exception e)
     {
@@ -143,79 +145,13 @@ public class BasisNetworkConnector : MonoBehaviour
             {
                 Client.SendMessage(msg, DeliveryMethod.ReliableOrdered);
                 Debug.Log("sent Authentication");
-                Client.MessageReceived += OnAuthResponse;
-            }
-        }
-    }
-    private async void OnAuthResponse(object sender, MessageReceivedEventArgs e)
-    {
-        await AsyncOnAuthResponse(sender, e);
-    }
-    private async Task AsyncOnAuthResponse(object sender, MessageReceivedEventArgs e)
-    {
-        try
-        {
-            Message message = e.GetMessage();
-
-            if (message.Tag == BasisTags.AuthSuccess)
-            {
-                await HandleAuthenticationSuccess();
-            }
-            else
-            {
-                if (message.Tag == BasisTags.AuthFailure)
+                if (HasAuthenticated == false)
                 {
-                    Debug.LogError("Failed PassCode Check " + message.Tag);
-                }
-                else
-                {
-                    Debug.LogError("Unexpected message tag: " + message.Tag);
+                    HasAuthenticated = true;
+                    Client.MessageReceived += MessageReceived;
                 }
             }
         }
-        catch (Exception ex)
-        {
-            Debug.LogError("Exception in AsyncOnAuthResponse: " + ex);
-        }
-        finally
-        {
-            Client.MessageReceived -= OnAuthResponse;
-        }
-    }
-    private async Task HandleAuthenticationSuccess()
-    {
-        HasUnityClient = true;
-        BasisNetworkedPlayer player = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(transform.position, transform.rotation, transform));
-        ushort playerID = Client.ID;
-        BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
-        player.ReInitialize(BasisLocalPlayer.Instance, playerID);
-        if (Players.TryAdd(playerID, player))
-        {
-
-            Debug.Log("added local Player " + Client.ID);
-        }
-        else
-        {
-            Debug.LogError("Cant add " + playerID);
-        }
-        using (DarkRiftWriter writer = DarkRiftWriter.Create())
-        {
-            BasisNetworkAvatarCompressor.CompressIntoSendBase(player.NetworkSend, BasisLocalPlayer.Avatar.Animator);
-            readyMessage.localAvatarSyncMessage = player.NetworkSend.LASM;
-            readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
-            {
-                avatarID = BasisLocalPlayer.AvatarUrl
-            };
-            readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
-            {
-                playerUUID = BasisLocalPlayer.UUID,
-                playerDisplayName = BasisLocalPlayer.DisplayName
-            };
-            writer.Write(readyMessage);
-            Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
-            Client.SendMessage(ReadyMessage, DeliveryMethod.ReliableOrdered);
-        }
-        Client.MessageReceived += MessageReceived;
     }
     private async void MessageReceived(object sender, MessageReceivedEventArgs e)
     {
@@ -225,6 +161,38 @@ public class BasisNetworkConnector : MonoBehaviour
             {
                 switch (message.Tag)
                 {
+                    case BasisTags.AuthSuccess:
+                        BasisNetworkedPlayer player = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(transform.position, transform.rotation, transform));
+                        ushort playerID = Client.ID;
+                        BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
+                        player.ReInitialize(BasisLocalPlayer.Instance, playerID);
+                        if (Players.TryAdd(playerID, player))
+                        {
+
+                            Debug.Log("added local Player " + Client.ID);
+                        }
+                        else
+                        {
+                            Debug.LogError("Cant add " + playerID);
+                        }
+                        using (DarkRiftWriter writer = DarkRiftWriter.Create())
+                        {
+                            BasisNetworkAvatarCompressor.CompressIntoSendBase(player.NetworkSend, BasisLocalPlayer.Avatar.Animator);
+                            readyMessage.localAvatarSyncMessage = player.NetworkSend.LASM;
+                            readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
+                            {
+                                avatarID = BasisLocalPlayer.AvatarUrl
+                            };
+                            readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
+                            {
+                                playerUUID = BasisLocalPlayer.UUID,
+                                playerDisplayName = BasisLocalPlayer.DisplayName
+                            };
+                            writer.Write(readyMessage);
+                            Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
+                            Client.SendMessage(ReadyMessage, DeliveryMethod.ReliableOrdered);
+                        }
+                        break;
                     case BasisTags.AvatarMuscleUpdateTag:
                         HandleAvatarUpdate(reader);
                         break;

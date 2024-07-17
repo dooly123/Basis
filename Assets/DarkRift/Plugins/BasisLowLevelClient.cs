@@ -159,7 +159,7 @@ namespace DarkRift.Client.Unity
                     }
                     else
                     {
-                        Debug.Log("Connection failed to " + ip + " on port " + port);
+                        Debug.LogError("Connection failed to " + ip + " on port " + port);
                         Close();
                     }
                 }
@@ -260,6 +260,12 @@ namespace DarkRift.Client.Unity
         /// </summary>
         public void Close()
         {
+            Debug.Log("Closing Connection");
+            if (Dispatcher != null)
+            {
+                Dispatcher.Dispose();
+                Dispatcher = null;
+            }
             if (Client != null)
             {
                 Client.MessageReceived -= Client_MessageReceived;
@@ -267,8 +273,6 @@ namespace DarkRift.Client.Unity
 
                 Client.Dispose();
                 Client = null;
-                Dispatcher.Dispose();
-                Dispatcher = null;
             }
             if (LiteNetLibConnnection != null)
             {
