@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using static UnityEditor.Experimental.GraphView.GraphView;
 public class BasisLocalAvatarDriver : BasisAvatarDriver
 {
     public Vector3 HeadScale;
