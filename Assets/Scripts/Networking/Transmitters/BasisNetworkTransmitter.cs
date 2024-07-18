@@ -80,7 +80,7 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
             writer.Write(ClientAvatarChangeMessage);
             using (var msg = Message.Create(BasisTags.AvatarChangeMessage, writer))
             {
-                BasisNetworkConnector.Instance.Client.SendMessage(msg, DeliveryMethod.ReliableOrdered);
+                BasisNetworkConnector.Instance.Client.SendMessage(msg, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
             }
         }
     }

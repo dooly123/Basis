@@ -43,7 +43,7 @@ public class BasisSettingsPanelMenu : BasisUIBase
         }
         if (Password != null)
         {
-            NetworkConnector.authenticationCode = Password.text;
+            NetworkConnector.Client.LiteNetLibConnnection.authenticationKey = Password.text;
         }
         if (IP != null)
         {

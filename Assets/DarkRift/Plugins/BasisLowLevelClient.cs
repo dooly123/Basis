@@ -171,9 +171,9 @@ namespace DarkRift.Client.Unity
         /// </summary>
         /// <param name="message">The message template to send.</param>
         /// <returns>Whether the send was successful.</returns>
-        public bool SendMessage(Message message, DeliveryMethod sendMode)
+        public bool SendMessage(Message message,byte channel, DeliveryMethod sendMode)
         {
-            return Client.SendMessage(message, sendMode);
+            return Client.SendMessage(message, channel, sendMode);
         }
 
         /// <summary>

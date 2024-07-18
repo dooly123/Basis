@@ -83,8 +83,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Client: {fileID: 1950411994380251594}
-  HasUnityClient: 0
-  authenticationCode: Default
+  HasAuthenticated: 0
   ForceConnect: 0
   Ip: 170.64.184.249
   Port: 4296
+  TryToReconnectAutomatically: 1
+  HasInitalizedClient: 0

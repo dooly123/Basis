@@ -19,7 +19,6 @@ public class BasisNetworkConnector : MonoBehaviour
     public BasisLowLevelClient Client;
     public bool HasAuthenticated = false;
     public static BasisNetworkConnector Instance;
-    public string authenticationCode = "Default";
     public PlayerIdMessage PlayerID = new PlayerIdMessage();
     public ReadyMessage readyMessage = new ReadyMessage();
     public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
@@ -64,6 +63,11 @@ public class BasisNetworkConnector : MonoBehaviour
             IpString = IpStrings[0];
         }
         IPAddress Ip = IPAddress.Parse(IpString);
+        if (HasAuthenticated == false)
+        {
+            HasAuthenticated = true;
+            Client.MessageReceived += MessageReceived;
+        }
         Client.ConnectInBackground(Ip, Port, Callback);
     }
     public string[] ResolveLocahost(string localhost)
@@ -125,32 +129,10 @@ public class BasisNetworkConnector : MonoBehaviour
     {
         if (e == null)
         {
-            Authentication();
         }
         else
         {
             Debug.LogError("Failed to connect: " + e.Message);
-        }
-    }
-    public void Authentication()
-    {
-        using (DarkRiftWriter writer = DarkRiftWriter.Create())
-        {
-            AuthenticationToServerMessage Auth = new AuthenticationToServerMessage
-            {
-                password = authenticationCode
-            };
-            writer.Write(Auth);
-            using (Message msg = Message.Create(BasisTags.AuthTag, writer))
-            {
-                Client.SendMessage(msg, DeliveryMethod.ReliableOrdered);
-                Debug.Log("sent Authentication");
-                if (HasAuthenticated == false)
-                {
-                    HasAuthenticated = true;
-                    Client.MessageReceived += MessageReceived;
-                }
-            }
         }
     }
     private async void MessageReceived(object sender, MessageReceivedEventArgs e)
@@ -190,7 +172,7 @@ public class BasisNetworkConnector : MonoBehaviour
                             };
                             writer.Write(readyMessage);
                             Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
-                            Client.SendMessage(ReadyMessage, DeliveryMethod.ReliableOrdered);
+                            Client.SendMessage(ReadyMessage, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
                         }
                         break;
                     case BasisTags.AvatarMuscleUpdateTag:
@@ -211,7 +193,9 @@ public class BasisNetworkConnector : MonoBehaviour
                     case BasisTags.AvatarChangeMessage:
                         HandleAvatarChangeMessage(reader);
                         break;
-
+                    default:
+                        Debug.Log("Unknown message at " + message.Tag);
+                        break;
                 }
             }
         }
