@@ -34,7 +34,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         lerpTimeSpeedRotation = deltaTime * Settings.LerpSpeedRotation;
         lerpTimeSpeedMuscles = deltaTime * Settings.LerpSpeedMuscles;
 
-        BasisAvatarLerp.UpdateAvatar(ref Output, Target,AvatarJobs, lerpTimeSpeedMovement, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
+        BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, lerpTimeSpeedMovement, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
 
         ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, Output, ref HumanPose);
         PoseHandler.SetHumanPose(ref HumanPose);
@@ -95,7 +95,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         if (AudioReceiverModule.decoder != null)
         {
-            AudioReceiverModule.OnDecodedSilence(silentData, dataSize);
+            AudioReceiverModule.OnDecoded(silentData, dataSize);
         }
     }
 
