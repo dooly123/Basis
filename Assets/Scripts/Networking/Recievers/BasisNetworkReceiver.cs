@@ -93,19 +93,14 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         if (AudioReceiverModule.decoder != null)
         {
-<<<<<<< Updated upstream
-            AudioReceiverModule.OnDecodedSilence(silentData, dataSize);
-=======
             if (silentData == null || silentData.Length != BasisAudioReceiver.SegmentSize)
             {
                 silentData = new float[BasisAudioReceiver.SegmentSize];
                 Array.Fill(silentData, 0f);
             }
-            AudioReceiverModule.OnDecoded(silentData, BasisAudioReceiver.SegmentSize);
->>>>>>> Stashed changes
+            AudioReceiverModule.OnDecoded(silentData);
         }
     }
-
     public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)
     {
         BasisNetworkAvatarDecompressor.DeCompress(this, serverSideSyncPlayerMessage);

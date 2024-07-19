@@ -4,13 +4,6 @@ using UnityEngine;
 [System.Serializable]
 public class BasisAudioReceiver : BasisAudioReceiverBase
 {
-#if UNITY_EDITOR
-    [MenuItem("Basis/Playback/Test")]
-    public static void PlayBackThisAudio()
-    {
-        BasisAudioReceiver Rec = GameObject.FindFirstObjectByType<BasisNetworkReceiver>().AudioReceiverModule;
-        Rec.PlayEntireBuffer();
-    }
     public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
     {
         // Initialize settings and audio source
@@ -31,7 +24,7 @@ public class BasisAudioReceiver : BasisAudioReceiverBase
 
         // Create AudioClip
         Buffer = new CircularBuffer(SegmentSize, MaximumStored);
-        audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Buffer.BufferSize, numChannels, samplingFrequency, false);
+     //   audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Buffer.BufferSize, numChannels, samplingFrequency, false);
         // Ensure decoder is initialized and subscribe to events
         if (decoder == null)
         {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BasisAudioReceiverBase : MonoBehaviour
+public class BasisAudioReceiverBase
 {
     [SerializeField]
     public BasisAudioDecoder decoder;
@@ -13,54 +13,39 @@ public class BasisAudioReceiverBase : MonoBehaviour
     public BasisOpusSettings settings;
     [SerializeField]
     public CircularBuffer Buffer;
+
     public int samplingFrequency;
     public int numChannels;
     public int SampleLength;
-    public static int SegmentSize = 5760;
-    public static int MaximumStored = 5;
+    public static int SegmentSize = 480;
+    public static int MaximumStored = 150;
 
-    private void Start()
+    public void OnDecoded()
     {
-        // Initialize buffer with SegmentSize and MaximumStored
-        Buffer = new CircularBuffer(SegmentSize, MaximumStored);
+        float[] newBuffer = new float[decoder.pcmLength];
+        Array.Copy(decoder.pcmBuffer, 0, newBuffer, 0, decoder.pcmLength);
+        OnDecoded(newBuffer);
     }
 
-    public void OnDecoded(float[] pcm, int pcmLength)
+    public void OnDecoded(float[] pcm)
     {
         if (pcm.Length != SegmentSize)
         {
             Debug.LogError($"PCM length {pcm.Length} does not match SegmentSize {SegmentSize}");
             return;
         }
-
-        if (!Buffer.IsFull())
-        {
-            Buffer.Add(pcm);
-            Debug.Log("Added PCM segment to buffer");
-        }
-        else
-        {
-            Debug.LogError("Buffer is full. Clearing old data.");
-            Buffer.Clear();
-            Buffer.Add(pcm);
-        }
-    }
-
-    public void OnDecoded()
-    {
-        OnDecoded(decoder.pcmBuffer, decoder.pcmLength);
+        Buffer.Add(pcm);
     }
 
     public void LateUpdate()
     {
-        // Example of triggering playback if the buffer has enough data
         if (Buffer.CurrentCount >= MaximumStored)
         {
             PlayEntireBuffer();
         }
     }
 
-    public void PlayEntireBuffer()
+    private void PlayEntireBuffer()
     {
         int totalSegments = Buffer.CurrentCount;
         float[] entireBuffer = new float[totalSegments * SegmentSize];
@@ -75,8 +60,6 @@ public class BasisAudioReceiverBase : MonoBehaviour
                 position += segment.Length;
             }
         }
-
-        Debug.Log($"Playing audio buffer with {entireBuffer.Length} samples");
 
         AudioClip clip = AudioClip.Create("BufferedAudio", entireBuffer.Length, numChannels, samplingFrequency, false);
         clip.SetData(entireBuffer, 0);
@@ -112,22 +95,24 @@ public class BasisAudioReceiverBase : MonoBehaviour
             Tail = 0;
             CurrentCount = 0;
             Array.Clear(Buffer, 0, BufferSize);
-            Debug.Log("Buffer cleared");
         }
 
-        public bool Add(float[] data)
+        public void Add(float[] data)
         {
             if (data.Length != SegmentSize)
+            {
                 throw new ArgumentException($"Data length must be {SegmentSize}");
-
+            }
             if (IsFull())
-                return false;
+            {
+                // Buffer is full, overwrite the oldest data
+                Head = (Head + SegmentSize) % BufferSize;
+                Debug.Log("Buffer was full old data was overwritten");
+            }
 
             Array.Copy(data, 0, Buffer, Tail, SegmentSize);
             Tail = (Tail + SegmentSize) % BufferSize;
-            CurrentCount++;
-            Debug.Log("Data added to buffer");
-            return true;
+            CurrentCount = IsFull() ? SegmentCount : CurrentCount + 1;
         }
 
         public float[] GetNextSegment()

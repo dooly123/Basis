@@ -6,9 +6,8 @@ public class BasisAudioDecoder : MonoBehaviour
 {
     public event Action OnDecoded;
     AudioDecoder decoder;
-    public float[] pcmBuffer;
     public BasisOpusSettings Settings;
-
+    public float[] pcmBuffer;
     public int pcmLength;
     void OnEnable()
     {
@@ -31,6 +30,12 @@ public class BasisAudioDecoder : MonoBehaviour
         decoder = null;
     }
 
+    /// <summary>
+    /// decodes data into the pcm buffer
+    /// note that the pcm buffer is always going to have more data then submited.
+    /// the pcm length is how much was actually encoded.
+    /// </summary>
+    /// <param name="data"></param>
     public void OnEncoded(byte[] data)
     {
         pcmLength = decoder.Decode(data, data.Length, pcmBuffer);
