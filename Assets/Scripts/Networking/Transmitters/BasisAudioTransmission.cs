@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityOpus;
 using DarkRift;
@@ -82,15 +81,29 @@ public class BasisAudioTransmission
         encodedData = new byte[encodedLength];
         Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
 
+<<<<<<< Updated upstream
         OnEncoded?.Invoke();
     }
     private void SendVoiceOverNetwork()
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
+=======
+        if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
+        {
+            AudioSegmentData.buffer = new byte[encodedLength];
+        }
+        Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer, 0, encodedLength);
+        using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
+>>>>>>> Stashed changes
         {
             AudioSegmentData.buffer = encodedData;
             writer.Write(AudioSegmentData);
+<<<<<<< Updated upstream
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
+=======
+            BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
+
+>>>>>>> Stashed changes
             using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
             {
                 BasisNetworkConnector.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);

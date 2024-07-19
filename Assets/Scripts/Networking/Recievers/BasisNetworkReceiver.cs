@@ -14,8 +14,6 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     private float lerpTimeSpeedMovement = 0;
     private float lerpTimeSpeedRotation = 0;
     private float lerpTimeSpeedMuscles = 0;
-    private int dataSize = 1920;
-    private int silentDataSize = 5760;
     public float[] silentData;
     public BasisAvatarLerpDataSettings Settings;
 
@@ -95,7 +93,16 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         if (AudioReceiverModule.decoder != null)
         {
+<<<<<<< Updated upstream
             AudioReceiverModule.OnDecodedSilence(silentData, dataSize);
+=======
+            if (silentData == null || silentData.Length != BasisAudioReceiver.SegmentSize)
+            {
+                silentData = new float[BasisAudioReceiver.SegmentSize];
+                Array.Fill(silentData, 0f);
+            }
+            AudioReceiverModule.OnDecoded(silentData, BasisAudioReceiver.SegmentSize);
+>>>>>>> Stashed changes
         }
     }
 
@@ -128,8 +135,6 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
                 HasEvents = true;
             }
         }
-        silentData = new float[silentDataSize];
-        Array.Fill(silentData, 0f);
     }
     public void OnDestroy()
     {

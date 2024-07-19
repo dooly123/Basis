@@ -1,10 +1,17 @@
+<<<<<<< Updated upstream
 ﻿using System;
 using System.Collections;
+=======
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
+>>>>>>> Stashed changes
 using UnityEngine;
 
 [System.Serializable]
-public class BasisAudioReceiver
+public class BasisAudioReceiver : BasisAudioReceiverBase
 {
+<<<<<<< Updated upstream
     [SerializeField]
     public BasisAudioDecoder decoder;
     [SerializeField]
@@ -73,6 +80,16 @@ public class BasisAudioReceiver
         OnDecoded(pcm, pcmLength);
     }
 
+=======
+#if UNITY_EDITOR
+    [MenuItem("Basis/Playback/Test")]
+    public static void PlayBackThisAudio()
+    {
+        BasisAudioReceiver Rec = GameObject.FindFirstObjectByType<BasisNetworkReceiver>().AudioReceiverModule;
+        Rec.PlayEntireBuffer();
+    }
+#endif
+>>>>>>> Stashed changes
     public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
     {
         settings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -87,8 +104,16 @@ public class BasisAudioReceiver
         samplingFrequency = settings.GetSampleFreq();
         numChannels = settings.GetChannelAsInt();
         SampleLength = samplingFrequency * numChannels;
+<<<<<<< Updated upstream
         ringBuffer = new float[SampleLength];
         audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", SampleLength, numChannels, samplingFrequency, false);
+=======
+
+        // Create AudioClip
+        Buffer = new CircularBuffer(SegmentSize, MaximumStored);
+        audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Buffer.BufferSize, numChannels, samplingFrequency, false);
+        // Ensure decoder is initialized and subscribe to events
+>>>>>>> Stashed changes
         if (decoder == null)
         {
             decoder = BasisHelpers.GetOrAddComponent<BasisAudioDecoder>(audioParent);
@@ -131,6 +156,10 @@ public class BasisAudioReceiver
         }
     }
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     public void OnCalibration(BasisNetworkedPlayer networkedPlayer)
     {
         if (visemeDriver == null)
