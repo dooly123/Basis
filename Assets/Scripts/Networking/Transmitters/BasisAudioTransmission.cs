@@ -41,7 +41,7 @@ public class BasisAudioTransmission
                 if (Recorder != null)
                 {
                     Recorder.OnHasAudio += OnAudioReady;
-                    Recorder.OnHasSilence += OnAudioSilence;
+                    Recorder.OnHasSilence += SendSilenceOverNetwork;
                     OnEncoded += SendVoiceOverNetwork;
                     HasEvents = true;
                 }
@@ -54,7 +54,7 @@ public class BasisAudioTransmission
         if (HasEvents)
         {
             Recorder.OnHasAudio -= OnAudioReady;
-            Recorder.OnHasSilence -= OnAudioSilence;
+            Recorder.OnHasSilence -= SendSilenceOverNetwork;
             OnEncoded -= SendVoiceOverNetwork;
             HasEvents = false;
         }
@@ -65,18 +65,13 @@ public class BasisAudioTransmission
         encoder.Dispose();
         encoder = null;
     }
-    public void OnAudioSilence()
-    {
-        SendSilenceOverNetwork();
-    }
     public void OnAudioReady()
     {
-        int PacketSize = Recorder.processBuffer.Count * 4;
-        if (outputBuffer == null || PacketSize != outputBuffer.Length)
+        if (outputBuffer == null || Recorder.PacketSize != outputBuffer.Length)
         {
-            outputBuffer = new byte[PacketSize];
+            outputBuffer = new byte[Recorder.PacketSize];
         }
-        encodedLength = encoder.Encode(Recorder.processBuffer.Array, outputBuffer);
+        encodedLength = encoder.Encode(Recorder.processBufferArray, outputBuffer);
 
         encodedData = new byte[encodedLength];
         Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
@@ -85,10 +80,10 @@ public class BasisAudioTransmission
     private void SendVoiceOverNetwork()
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
-        if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
-        {
-            AudioSegmentData.buffer = new byte[encodedLength];
-        }
+            if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
+            {
+                AudioSegmentData.buffer = new byte[encodedLength];
+            }
         Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer, 0, encodedLength);
 
         using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
