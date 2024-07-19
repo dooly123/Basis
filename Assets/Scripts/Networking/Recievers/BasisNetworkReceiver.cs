@@ -14,8 +14,6 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     private float lerpTimeSpeedMovement = 0;
     private float lerpTimeSpeedRotation = 0;
     private float lerpTimeSpeedMuscles = 0;
-    private int dataSize = 1920;
-    private int silentDataSize = 5760;
     public float[] silentData;
     public BasisAvatarLerpDataSettings Settings;
 
@@ -34,7 +32,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         lerpTimeSpeedRotation = deltaTime * Settings.LerpSpeedRotation;
         lerpTimeSpeedMuscles = deltaTime * Settings.LerpSpeedMuscles;
 
-        BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, lerpTimeSpeedMovement, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
+        BasisAvatarLerp.UpdateAvatar(ref Output, Target,AvatarJobs, lerpTimeSpeedMovement, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
 
         ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, Output, ref HumanPose);
         PoseHandler.SetHumanPose(ref HumanPose);
@@ -95,10 +93,14 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         if (AudioReceiverModule.decoder != null)
         {
-            AudioReceiverModule.OnDecoded(silentData, dataSize);
+            if (silentData == null || silentData.Length != BasisAudioReceiver.SegmentSize)
+            {
+                silentData = new float[BasisAudioReceiver.SegmentSize];
+                Array.Fill(silentData, 0f);
+            }
+            AudioReceiverModule.OnDecoded(silentData);
         }
     }
-
     public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)
     {
         BasisNetworkAvatarDecompressor.DeCompress(this, serverSideSyncPlayerMessage);
@@ -128,8 +130,6 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
                 HasEvents = true;
             }
         }
-        silentData = new float[silentDataSize];
-        Array.Fill(silentData, 0f);
     }
     public void OnDestroy()
     {

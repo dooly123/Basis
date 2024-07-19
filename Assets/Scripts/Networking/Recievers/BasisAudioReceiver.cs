@@ -1,82 +1,9 @@
-﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
-public class BasisAudioReceiver
+public class BasisAudioReceiver : BasisAudioReceiverBase
 {
-    [SerializeField] public BasisAudioDecoder decoder;
-    [SerializeField] public AudioSource audioSource;
-    [SerializeField] public BasisVisemeDriver visemeDriver;
-    [SerializeField] public BasisOpusSettings settings;
-
-    public int samplingFrequency;
-    public int numChannels;
-    public int SampleLength;
-    public float[] ringBuffer;
-    public int head = 0;
-    public float lastDataReceivedTime;
-    public float dataTimeout = 0.1f; // Timeout period in seconds
-
-    // Constructor
-    public BasisAudioReceiver()
-    {
-        // Initialize settings or other variables if needed
-    }
-
-    public void LateUpdate()
-    {
-        // Check for data timeout
-        if (Time.time - lastDataReceivedTime > dataTimeout)
-        {
-            if (audioSource.isPlaying)
-            {
-                ClearRingBuffer();
-            }
-        }
-    }
-
-    public void ClearRingBuffer()
-    {
-        Array.Clear(ringBuffer, 0, SampleLength);
-        head = 0;
-    }
-
-    public void OnDecoded(float[] pcm, int pcmLength)
-    {
-        // Ensure incoming data fits within buffer
-        if (pcmLength > SampleLength)
-        {
-            Debug.LogWarning("Received PCM data longer than buffer size. Dropping old data.");
-            head = 0; // Reset head position
-        }
-        else if (head + pcmLength > SampleLength)
-        {
-            // Handle wrap-around if data doesn't fit at the current head position
-            int remainingSpace = SampleLength - head;
-            Array.Copy(pcm, 0, ringBuffer, head, remainingSpace);
-            Array.Copy(pcm, remainingSpace, ringBuffer, 0, pcmLength - remainingSpace);
-        }
-        else
-        {
-            // Data fits normally in the buffer
-            Array.Copy(pcm, 0, ringBuffer, head, pcmLength);
-        }
-
-        head = (head + pcmLength) % SampleLength;
-
-        // Update AudioClip with new data
-        audioSource.clip.SetData(ringBuffer, 0);
-
-        // Start playback if stopped and buffer is sufficiently filled
-        if (!audioSource.isPlaying && head > SampleLength / 2)
-        {
-            audioSource.Play();
-        }
-
-        // Update last received data time
-        lastDataReceivedTime = Time.time;
-    }
-
     public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
     {
         // Initialize settings and audio source
@@ -94,11 +21,10 @@ public class BasisAudioReceiver
         samplingFrequency = settings.GetSampleFreq();
         numChannels = settings.GetChannelAsInt();
         SampleLength = samplingFrequency * numChannels;
-        ringBuffer = new float[SampleLength];
 
         // Create AudioClip
-        audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", SampleLength, numChannels, samplingFrequency, false);
-
+        Buffer = new CircularBuffer(SegmentSize, MaximumStored);
+     //   audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Buffer.BufferSize, numChannels, samplingFrequency, false);
         // Ensure decoder is initialized and subscribe to events
         if (decoder == null)
         {
@@ -144,10 +70,6 @@ public class BasisAudioReceiver
         }
     }
 
-    private void OnDecoded()
-    {
-        OnDecoded(decoder.pcmBuffer, decoder.pcmLength);
-    }
 
     public void OnCalibration(BasisNetworkedPlayer networkedPlayer)
     {
