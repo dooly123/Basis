@@ -107,7 +107,7 @@ public class BasisAudioReceiverBase
             {
                 // Buffer is full, overwrite the oldest data
                 Head = (Head + SegmentSize) % BufferSize;
-                Debug.Log("Buffer was full old data was overwritten");
+          //we will want to speed up and slow down      Debug.Log("Buffer was full old data was overwritten");
             }
 
             Array.Copy(data, 0, Buffer, Tail, SegmentSize);
