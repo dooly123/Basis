@@ -93,9 +93,9 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         if (AudioReceiverModule.decoder != null)
         {
-            if (silentData == null || silentData.Length != BasisAudioReceiver.SegmentSize)
+            if (silentData == null || silentData.Length != AudioReceiverModule.SegmentSize)
             {
-                silentData = new float[BasisAudioReceiver.SegmentSize];
+                silentData = new float[AudioReceiverModule.SegmentSize];
                 Array.Fill(silentData, 0f);
             }
             AudioReceiverModule.OnDecoded(silentData);
