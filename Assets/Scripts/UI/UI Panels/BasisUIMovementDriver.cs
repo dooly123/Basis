@@ -46,7 +46,10 @@ public class BasisUIMovementDriver : MonoBehaviour
         if (CameraDriver != null && CameraDriver.Camera != null)
         {
             Vector3 cameraPosition = CameraDriver.Camera.transform.position;
-            transform.SetPositionAndRotation(cameraPosition + CameraDriver.Camera.transform.rotation * WorldOffset, CameraDriver.Camera.transform.rotation);
+            Vector3 Rotation = CameraDriver.Camera.transform.eulerAngles;
+            Rotation = new Vector3(Rotation.x, Rotation.y, 0);
+            Quaternion Rot = Quaternion.Euler(Rotation);
+            transform.SetPositionAndRotation(cameraPosition + CameraDriver.Camera.transform.rotation * WorldOffset, Rot);
         }
     }
 }

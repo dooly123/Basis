@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.Events;
 using static BasisAvatarIKStageCalibration;
 [System.Serializable]
 public class BasisBoneControl
@@ -37,7 +38,7 @@ public class BasisBoneControl
         }
     }
     // Events for property changes
-    public System.Action<BasisHasRigLayer> OnHasRigChanged;
+    public UnityEvent OnHasRigChanged = new UnityEvent();
     // Backing fields for the properties
     [SerializeField]
     private BasisHasRigLayer hasRigLayer = BasisHasRigLayer.HasNoRigLayer;
@@ -50,7 +51,7 @@ public class BasisBoneControl
             if (hasRigLayer != value)
             {
                 hasRigLayer = value;
-                OnHasRigChanged?.Invoke(value);
+                OnHasRigChanged.Invoke();
             }
         }
     }

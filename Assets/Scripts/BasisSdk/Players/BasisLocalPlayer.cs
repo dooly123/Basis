@@ -42,6 +42,8 @@ public class BasisLocalPlayer : BasisPlayer
         LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
         await BasisLocalInputActions.CreateInputAction(this);
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
+     //   FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
+      //  FootPlacementDriver.Initialize();
         Move.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
         if (HasEvents == false)

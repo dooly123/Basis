@@ -77,7 +77,7 @@ public class BasisOverrideRotations : MonoBehaviour
         }
         if (HasEvent == false)
         {
-            Driver.ReadyToRead += Simulate;
+            Driver.OnPostSimulate += Simulate;
             HasEvent = true;
         }
     }
@@ -85,7 +85,7 @@ public class BasisOverrideRotations : MonoBehaviour
     {
         if (HasEvent)
         {
-            Driver.ReadyToRead -= Simulate;
+            Driver.OnPostSimulate -= Simulate;
             HasEvent = false;
         }
     }

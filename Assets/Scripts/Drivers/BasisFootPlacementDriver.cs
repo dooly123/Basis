@@ -29,7 +29,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         LeftFootSolver.Driver = this;
         RightFootSolver.Driver = this;
 
-        LeftFootSolver.Foot.HasTracked =  BasisHasTracked.HasNoTracker;
+        LeftFootSolver.Foot.HasTracked = BasisHasTracked.HasNoTracker;
         RightFootSolver.Foot.HasTracked = BasisHasTracked.HasNoTracker;
 
         LeftFootSolver.MyIkConstraint = Localplayer.AvatarDriver.LeftFootTwoBoneIK;
@@ -48,11 +48,6 @@ public class BasisFootPlacementDriver : MonoBehaviour
             HasEvents = false;
         }
     }
-    void Update()
-    {
-        LeftFootSolver.Simulate();
-        RightFootSolver.Simulate();
-    }
     public void OnDrawGizmos()
     {
         LeftFootSolver.Gizmo();
@@ -65,40 +60,43 @@ public class BasisFootPlacementDriver : MonoBehaviour
         public BasisFootPlacementDriver Driver;
         public TwoBoneIKConstraint MyIkConstraint;
         public BasisIKFootSolver OtherFoot;
-        public Vector3 Offset;
+        public float percentage = 0.5f;
+        public float PercentagePastFoot = 5;
         private RaycastHit _hitInfo;
         private Vector3 _topPoint;
         private Vector3 _bottomPoint;
-
+        public bool HasEvent = false;
         public void Initialize(BasisIKFootSolver otherFoot)
         {
             OtherFoot = otherFoot;
+            if (HasEvent == false)
+            {
+                BasisLocalPlayer.Instance.LocalBoneDriver.OnPostSimulate += Simulate;
+                HasEvent = true;
+            }
         }
 
         public void Simulate()
         {
-            SimulateTopPoint();
-            SimulateBottomPoint();
+            Vector3 LocalTposeFoot = Foot.TposeLocal.position;
+         //   Vector3 BodyPose = BasisLocalPlayer.Instance.Avatar.Animator.transform.position + LocalTposeFoot;
+
+            Vector3 HipHeightFootVector = new Vector3(LocalTposeFoot.x, Driver.Hips.CurrentWorldData.position.y, LocalTposeFoot.z);
+            _topPoint = Vector3.Lerp(HipHeightFootVector, LocalTposeFoot, percentage);
+
+            float y = LocalTposeFoot.y - HipHeightFootVector.y;
+
+            _bottomPoint = LocalTposeFoot + new Vector3(0, (y / PercentagePastFoot), 0);
+
             if (Physics.Linecast(_topPoint, _bottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
             {
                 Vector3 footPosition = _hitInfo.point;
-                Foot.BoneTransform.position = footPosition;
+                Foot.FinalApplied.position = footPosition;
                 // Calculate the rotation to align the foot with the normal and up direction
-                Foot.BoneTransform.rotation = Quaternion.LookRotation(Vector3.forward, _hitInfo.normal);
+                Foot.FinalApplied.rotation = Quaternion.LookRotation(Driver.Hips.BoneTransform.forward, _hitInfo.normal);
             }
-            Foot.BoneTransform.eulerAngles = new Vector3(Foot.BoneTransform.eulerAngles.x, Driver.Hips.BoneTransform.eulerAngles.y, Foot.BoneTransform.eulerAngles.z);
+            Foot.FinalApplied.rotation.eulerAngles = new Vector3(Foot.BoneTransform.localEulerAngles.x, Driver.Hips.BoneTransform.localEulerAngles.y, Foot.BoneTransform.localEulerAngles.z);
         }
-
-        private void SimulateTopPoint()
-        {
-            _topPoint = Driver.Hips.CurrentWorldData.rotation * (Driver.Hips.CurrentWorldData.position + Foot.TposeLocal.position + Offset);
-        }
-
-        private void SimulateBottomPoint()
-        {
-            _bottomPoint = Driver.Hips.CurrentWorldData.rotation * (Driver.Hips.CurrentWorldData.position + new Vector3(Foot.TposeLocal.position.x, -Driver.Hips.TposeLocal.position.y, Foot.TposeLocal.position.z) + Offset);
-        }
-
         public void Gizmo()
         {
             Gizmos.DrawLine(_topPoint, _bottomPoint);
