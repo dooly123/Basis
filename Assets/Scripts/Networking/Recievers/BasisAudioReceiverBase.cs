@@ -18,7 +18,7 @@ public class BasisAudioReceiverBase
     public int numChannels;
     public int SampleLength;
     public static int SegmentSize = 480;
-    public static int MaximumStored = 150;
+    public static int MaximumStored = 50;
 
     public void OnDecoded()
     {
