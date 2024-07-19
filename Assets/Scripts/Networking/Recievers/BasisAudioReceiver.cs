@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
@@ -23,8 +22,8 @@ public class BasisAudioReceiver : BasisAudioReceiverBase
         SampleLength = samplingFrequency * numChannels;
 
         // Create AudioClip
-        Buffer = new CircularBuffer(SegmentSize, MaximumStored);
-     //   audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Buffer.BufferSize, numChannels, samplingFrequency, false);
+        Buffer = new BasisFloatCircularBuffer(SegmentSize, MaximumStored);
+        audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Buffer.BufferSize, numChannels, samplingFrequency, false);
         // Ensure decoder is initialized and subscribe to events
         if (decoder == null)
         {
