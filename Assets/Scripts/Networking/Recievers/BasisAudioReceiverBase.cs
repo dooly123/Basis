@@ -19,12 +19,15 @@ public partial class BasisAudioReceiverBase
     public int SampleLength;
     public int SegmentSize = 480;
     public static int MaximumStored = 50;
-
+    public float[] LatestBuffer;
     public void OnDecoded()
     {
-        float[] newBuffer = new float[decoder.pcmLength];
-        Array.Copy(decoder.pcmBuffer, 0, newBuffer, 0, decoder.pcmLength);
-        OnDecoded(newBuffer);
+        if (LatestBuffer == null || LatestBuffer.Length != decoder.pcmLength)
+        {
+            LatestBuffer = new float[decoder.pcmLength];
+        }
+        Array.Copy(decoder.pcmBuffer, 0, LatestBuffer, 0, decoder.pcmLength);
+        OnDecoded(LatestBuffer);
     }
 
     public void OnDecoded(float[] pcm)

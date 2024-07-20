@@ -17,6 +17,8 @@ public class BasisLocalPlayer : BasisPlayer
     public float RatioPlayerToEyeDefaultScale = 1f;
     public float RatioAvatarToAvatarEyeDefaultScale = 1f;
     public static BasisLocalPlayer Instance;
+    public static Action OnLocalPlayerCreatedAndReady;
+    public static Action OnLocalPlayerCreated;
     public BasisCharacterController Move;
     public event Action OnLocalAvatarChanged;
     public event Action OnSpawnedEvent;
@@ -38,6 +40,7 @@ public class BasisLocalPlayer : BasisPlayer
             Instance = this;
         }
         Instance = this;
+        OnLocalPlayerCreated?.Invoke();
         IsLocal = true;
         LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
         await BasisLocalInputActions.CreateInputAction(this);
@@ -55,6 +58,7 @@ public class BasisLocalPlayer : BasisPlayer
         }
         string LastUsedAvatar = BasisDataStore.LoadString(LoadFileName, BasisAvatarFactory.LoadingAvatar);
         await CreateAvatar(LastUsedAvatar);
+        OnLocalPlayerCreatedAndReady?.Invoke();
     }
     public void RecalculateMyHeight()
     {

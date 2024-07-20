@@ -6,20 +6,39 @@ public class BasisUIMovementDriver : MonoBehaviour
     public BasisLocalPlayer LocalPlayer;
     public BasisLocalCameraDriver CameraDriver;
     public Vector3 WorldOffset;
-
+    public bool hasLocalCreationEvent = false;
     public void OnEnable()
     {
         LocalPlayer = BasisLocalPlayer.Instance;
         CameraDriver = BasisLocalCameraDriver.Instance;
-        StartCoroutine(WaitAndSetUILocation());
+        if (BasisLocalPlayer.Instance != null)
+        {
+            LocalPlayerGenerated();
+            StartCoroutine(WaitAndSetUILocation());
+        }
+        else
+        {
+            if (hasLocalCreationEvent == false)
+            {
+                BasisLocalPlayer.OnLocalPlayerCreated += LocalPlayerGenerated;
+                hasLocalCreationEvent = true;
+            }
+        }
+    }
+    public void LocalPlayerGenerated()
+    {
         BasisLocalPlayer.Instance.OnLocalAvatarChanged += OnLocalAvatarChanged;
         BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnPlayersHeightChanged;
     }
-
     public void OnDisable()
     {
         BasisLocalPlayer.Instance.OnLocalAvatarChanged -= OnLocalAvatarChanged;
         BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnPlayersHeightChanged;
+        if(hasLocalCreationEvent)
+        {
+            BasisLocalPlayer.OnLocalPlayerCreated -= LocalPlayerGenerated;
+            hasLocalCreationEvent = false;
+        }
     }
 
     private void OnPlayersHeightChanged()
@@ -34,9 +53,7 @@ public class BasisUIMovementDriver : MonoBehaviour
 
     private IEnumerator WaitAndSetUILocation()
     {
-        // Wait for the end of frame to ensure all camera updates are complete
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+        yield return null;
         SetUILocation();
     }
 
