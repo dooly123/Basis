@@ -11,6 +11,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
     public BasisIKFootSolver RightFootSolver = new BasisIKFootSolver();
     public bool HasEvents = false;
     public float DefaultFootOffset = 0.5f;
+    public float LargerThenBeforeRotating = 400;
     public void Initialize()
     {
         Localplayer = BasisLocalPlayer.Instance;
@@ -30,8 +31,22 @@ public class BasisFootPlacementDriver : MonoBehaviour
     {
         Vector3 Angular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity;
         float Square = Angular.sqrMagnitude;
-        RightFootSolver.Simulate(Square);
-        LeftFootSolver.Simulate(Square);
+        Vector3 localTposeHips = Hips.TposeLocal.position;
+        Vector3 HipsPosLocal = Hips.FinalApplied.position;
+        /*
+        if(Square <= LargerThenBeforeRotating)
+        {
+            Localplayer.AvatarDriver.LeftFootLayer.active = false;
+            Localplayer.AvatarDriver.RightFootLayer.active = false;
+        }
+        else
+        {
+            Localplayer.AvatarDriver.LeftFootLayer.active = true;
+            Localplayer.AvatarDriver.RightFootLayer.active = true;
+        }
+        */
+        RightFootSolver.Simulate(Square, localTposeHips, HipsPosLocal);
+        LeftFootSolver.Simulate(Square, localTposeHips, HipsPosLocal);
     }
     public void OnCalibration()
     {
@@ -93,15 +108,13 @@ public class BasisFootPlacementDriver : MonoBehaviour
         {
             return lerp < 1;
         }
-        public void Simulate(float RotationMagnitude)
+        public void Simulate(float RotationMagnitude, Vector3 localTposeHips, Vector3 HipsPosLocal)
         {
             // Get the local position of the foot in T-pose
             Vector3 localTposeFoot = Foot.TposeLocal.position;
-            Vector3 localTposeHips = Driver.Hips.TposeLocal.position;
-            Vector3 HipsPosLocal = Driver.Hips.FinalApplied.position;
 
             Vector3 Offset = localTposeFoot - localTposeHips;
-            Vector3 RotatedOffset = Driver.Hips.CurrentWorldData.rotation * Offset;
+            Vector3 RotatedOffset = Driver.transform.rotation * Driver.Hips.CurrentWorldData.rotation * Offset;
             Vector3 FootExtendedPositionWorld = HipsPosLocal + RotatedOffset;
 
             // Create a vector for the hip height at the foot's X and Z coordinates
@@ -118,14 +131,14 @@ public class BasisFootPlacementDriver : MonoBehaviour
             WorldBottomPoint = bottomPointLocal + BasisLocalPlayer.Instance.LocalBoneDriver.transform.position;
 
             Vector3 FinalApplied = bottomPointLocal;
-            if (Physics.Linecast(WorldTopPoint, WorldBottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
+            if (RotationMagnitude > LargerThenThisMoveFeet && OtherFoot.IsMoving() == false && lerp >= 1)//only can move one up at at a time
             {
-                if (RotationMagnitude > LargerThenThisMoveFeet && OtherFoot.IsMoving() == false && lerp >= 1)//only can move one up at at a time
+              //disabled as world top and world bottom is wrong  if (Physics.Linecast(WorldTopPoint, WorldBottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
                 {
                     lerp = 0;
                 }
             }
-            if (lerp < 1)
+            if (lerp <= 1)
             {
                 FinalApplied = new Vector3(bottomPointLocal.x, bottomPointLocal.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight, bottomPointLocal.z);
                 lerp += Time.deltaTime * FootStepSpeed;

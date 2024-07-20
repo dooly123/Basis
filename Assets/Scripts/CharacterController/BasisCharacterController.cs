@@ -47,7 +47,7 @@ public class BasisCharacterController : MonoBehaviour
         HasEye = driver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye);
         HasHead = driver.FindBone(out Head, BasisBoneTrackedRole.Head);
         characterController.minMoveDistance = 0;
-        characterController.skinWidth = 0.1f;
+        characterController.skinWidth = 0.01f;
         if (HasEvents == false)
         {
             driver.ReadyToRead += Simulate;
