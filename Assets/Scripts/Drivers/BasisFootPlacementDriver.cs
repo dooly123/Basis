@@ -1,3 +1,4 @@
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -10,6 +11,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
     [SerializeField]
     public BasisIKFootSolver RightFootSolver = new BasisIKFootSolver();
     public bool HasEvents = false;
+    public float DefaultFootOffset = 0.5f;
     public void Initialize()
     {
         Localplayer = BasisLocalPlayer.Instance;
@@ -21,8 +23,16 @@ public class BasisFootPlacementDriver : MonoBehaviour
         if (HasEvents == false)
         {
             Localplayer.AvatarDriver.CalibrationComplete += OnCalibration;
+            Localplayer.LocalBoneDriver.OnPostSimulate += Simulate;
             HasEvents = true;
         }
+    }
+    public void Simulate()
+    {
+        Vector3 Angular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity;
+        float Square = Angular.sqrMagnitude;
+        RightFootSolver.Simulate(Square);
+        LeftFootSolver.Simulate(Square);
     }
     public void OnCalibration()
     {
@@ -39,6 +49,8 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
         LeftFootSolver.Initialize(RightFootSolver);
         RightFootSolver.Initialize(LeftFootSolver);
+        LeftFootSolver.stepHeight = DefaultFootOffset * Localplayer.RatioAvatarToAvatarEyeDefaultScale;
+        RightFootSolver.stepHeight = DefaultFootOffset * Localplayer.RatioAvatarToAvatarEyeDefaultScale;
     }
     public void OnDestroy()
     {
@@ -61,45 +73,116 @@ public class BasisFootPlacementDriver : MonoBehaviour
         public TwoBoneIKConstraint MyIkConstraint;
         public BasisIKFootSolver OtherFoot;
         public float percentage = 0.5f;
-        public float PercentagePastFoot = 5;
+        public float PercentagePastFoot = 4;
+        private Vector3 topPointLocal;
+        private Vector3 bottomPointLocal;
+        public Vector3 WorldTopPoint;
+        public Vector3 WorldBottomPoint;
+        [SerializeField] public float FootStepSpeed = 3;
+        [SerializeField] public float stepHeight;
+        public float LargerThenThisMoveFeet = 500;
+
+        public float lerp = 0;
         private RaycastHit _hitInfo;
-        private Vector3 _topPoint;
-        private Vector3 _bottomPoint;
-        public bool HasEvent = false;
+
         public void Initialize(BasisIKFootSolver otherFoot)
         {
             OtherFoot = otherFoot;
-            if (HasEvent == false)
-            {
-                BasisLocalPlayer.Instance.LocalBoneDriver.OnPostSimulate += Simulate;
-                HasEvent = true;
-            }
+            lerp = 1;
         }
-
-        public void Simulate()
+        public bool IsMoving()
         {
-            Vector3 LocalTposeFoot = Foot.TposeLocal.position;
-         //   Vector3 BodyPose = BasisLocalPlayer.Instance.Avatar.Animator.transform.position + LocalTposeFoot;
+            return lerp < 1;
+        }
+        public void Simulate(float RotationMagnitude)
+        {
+            // Get the local position of the foot in T-pose
+            Vector3 localTposeFoot = Foot.TposeLocal.position;
+            Vector3 localTposeHips = Driver.Hips.TposeLocal.position;
+            Vector3 HipsPosLocal = Driver.Hips.FinalApplied.position;
 
-            Vector3 HipHeightFootVector = new Vector3(LocalTposeFoot.x, Driver.Hips.CurrentWorldData.position.y, LocalTposeFoot.z);
-            _topPoint = Vector3.Lerp(HipHeightFootVector, LocalTposeFoot, percentage);
+            Vector3 Offset = localTposeFoot - localTposeHips;
+            Vector3 RotatedOffset = Driver.Hips.CurrentWorldData.rotation * Offset;
+            Vector3 FootExtendedPositionWorld = HipsPosLocal + RotatedOffset;
 
-            float y = LocalTposeFoot.y - HipHeightFootVector.y;
+            // Create a vector for the hip height at the foot's X and Z coordinates
+            Vector3 hipHeightFootVector = new Vector3(FootExtendedPositionWorld.x, Driver.Hips.CurrentWorldData.position.y, FootExtendedPositionWorld.z);
 
-            _bottomPoint = LocalTposeFoot + new Vector3(0, (y / PercentagePastFoot), 0);
+            // Calculate the vertical difference
+            float yDifference = FootExtendedPositionWorld.y - hipHeightFootVector.y;
 
-            if (Physics.Linecast(_topPoint, _bottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
+            // Interpolate between the hip height vector and the T-pose foot position
+            topPointLocal = Vector3.Lerp(hipHeightFootVector, FootExtendedPositionWorld, percentage);
+            WorldTopPoint = topPointLocal + BasisLocalPlayer.Instance.LocalBoneDriver.transform.position;
+            // Determine the bottom point with the vertical difference adjusted
+            bottomPointLocal = FootExtendedPositionWorld + new Vector3(0, (yDifference / PercentagePastFoot), 0);
+            WorldBottomPoint = bottomPointLocal + BasisLocalPlayer.Instance.LocalBoneDriver.transform.position;
+
+            Vector3 FinalApplied = bottomPointLocal;
+            if (Physics.Linecast(WorldTopPoint, WorldBottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
             {
-                Vector3 footPosition = _hitInfo.point;
-                Foot.FinalApplied.position = footPosition;
-                // Calculate the rotation to align the foot with the normal and up direction
-                Foot.FinalApplied.rotation = Quaternion.LookRotation(Driver.Hips.BoneTransform.forward, _hitInfo.normal);
+                if (RotationMagnitude > LargerThenThisMoveFeet && OtherFoot.IsMoving() == false && lerp >= 1)//only can move one up at at a time
+                {
+                    lerp = 0;
+                }
             }
-            Foot.FinalApplied.rotation.eulerAngles = new Vector3(Foot.BoneTransform.localEulerAngles.x, Driver.Hips.BoneTransform.localEulerAngles.y, Foot.BoneTransform.localEulerAngles.z);
+            if (lerp < 1)
+            {
+                FinalApplied = new Vector3(bottomPointLocal.x, bottomPointLocal.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight, bottomPointLocal.z);
+                lerp += Time.deltaTime * FootStepSpeed;
+            }
+            Foot.FinalApplied.position = FinalApplied;
+            Foot.FinalApplied.rotation = Quaternion.Euler(Foot.BoneTransform.localEulerAngles.x, Driver.Hips.BoneTransform.localEulerAngles.y, Foot.BoneTransform.localEulerAngles.z);
         }
         public void Gizmo()
         {
-            Gizmos.DrawLine(_topPoint, _bottomPoint);
+            Gizmos.DrawLine(WorldTopPoint, WorldBottomPoint);
         }
     }
 }
+[System.Serializable]
+public class SpringLerp
+{
+    public float damping = 0.5f;  // Damping factor, controls how quickly the spring settles
+    public float stiffness = 0.5f; // Stiffness factor, controls the springiness
+    public float velocity;  // Current velocity of the spring
+
+    // Method to update the spring interpolation
+    public float Update(float currentValue, float targetValue, float deltaTime)
+    {
+        float force = stiffness * (targetValue - currentValue);
+        float dampingForce = -damping * velocity;
+        float acceleration = force + dampingForce;
+
+        velocity += acceleration * deltaTime;
+        currentValue += velocity * deltaTime;
+
+        return currentValue;
+    }
+
+    // Method to reset the velocity (useful if the spring is to be reused)
+    public void Reset()
+    {
+        velocity = 0f;
+    }
+
+}
+//            springLerp = new SpringLerp();
+// float timedelta = Time.deltaTime;
+//float TimeDeltaMulti = timedelta * TimeMultiplier;
+//   Foot.FinalApplied.rotation = Driver.Hips.
+/*
+if (Physics.Linecast(_topPoint, _bottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
+{
+    Vector3 footPosition = _hitInfo.point;
+    Foot.FinalApplied.position = footPosition;
+    // Calculate the rotation to align the foot with the normal and up direction
+    Foot.FinalApplied.rotation = Quaternion.LookRotation(Driver.Hips.BoneTransform.forward, _hitInfo.normal);
+}            //   Vector3 BodyPose = BasisLocalPlayer.Instance.Avatar.Animator.transform.position + LocalTposeFoot;
+        private RaycastHit _hitInfo;
+            // Interpolate position using SpringLerp
+    //    Vector3 SpringAppliedPosition = new Vector3(springLerp.Update(LastPosition.x, FinalPosition.x, TimeDeltaMulti), springLerp.Update(LastPosition.y, FinalPosition.y, TimeDeltaMulti), springLerp.Update(LastPosition.z, FinalPosition.z, TimeDeltaMulti) );
+
+        // Apply the final local position and rotation to the foot
+*/
+//  
