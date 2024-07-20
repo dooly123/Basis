@@ -1,5 +1,4 @@
  ### Basis lets you set up your own Social VR and Networked VR games with ease.
- ## Find our latest release <a href="https://github.com/dooly123/Basis/releases">here</a>.
 
 <table border="0">
  <tr>
@@ -33,6 +32,8 @@ Do you have a suggestion to improve Basis? Please Fork the repo and create a pul
 Not sure how to contribute but still wanting to help out? Consider donating! We appreciate any help possible.
 
 <noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+[Github Sponsor](https://github.com/sponsors/dooly123)</br>
+[KoFi](https://ko-fi.com/dooly)</br>
 
 Please help shape the future of Basis and leave your mark in its foundation. 
 
