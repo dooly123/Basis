@@ -53,7 +53,7 @@ MonoBehaviour:
     AvatarPositionOffset: {x: 0, y: -0.06, z: 0.13}
     AvatarRotationOffset: {x: -18, y: -2, z: 55.6}
     HasTrackedRole: 1
-    TrackedRole: 19
+    TrackedRole: 18
   - DeviceID: valve_controller_knu_right
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_right'
@@ -68,7 +68,7 @@ MonoBehaviour:
     AvatarPositionOffset: {x: 0, y: -0.06, z: 0.13}
     AvatarRotationOffset: {x: -18, y: -2, z: -55.6}
     HasTrackedRole: 1
-    TrackedRole: 20
+    TrackedRole: 19
   - DeviceID: tundra_tracker
     MatchableDeviceIds:
     - tundra_tracker
@@ -94,7 +94,7 @@ MonoBehaviour:
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
-    TrackedRole: 19
+    TrackedRole: 18
   - DeviceID: oculus_controller_right
     MatchableDeviceIds:
     - oculus_quest_pro_controller_right
@@ -107,7 +107,7 @@ MonoBehaviour:
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
-    TrackedRole: 20
+    TrackedRole: 19
   - DeviceID: Eye
     MatchableDeviceIds:
     - desktop eye

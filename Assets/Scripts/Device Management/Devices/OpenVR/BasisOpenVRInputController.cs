@@ -30,6 +30,7 @@ public class BasisOpenVRInputController : BasisInput
         {
             SkeletonHandInput = new BasisOpenVRInputSkeleton();
         }
+        Debug.Log("set Controller to inputSource " + inputSource + " bone role " + basisBoneTrackedRole);
     }
     public new void OnDestroy()
     {
@@ -59,9 +60,11 @@ public class BasisOpenVRInputController : BasisInput
     private void SteamVR_Behaviour_Pose_OnUpdate(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
     {
         UpdateHistoryBuffer();
-        LocalRawPosition = poseAction[inputSource].localPosition;
-        LocalRawRotation = poseAction[inputSource].localRotation;
-
+        if (HasOnUpate)
+        {
+            LocalRawPosition = poseAction[inputSource].localPosition;
+            LocalRawRotation = poseAction[inputSource].localRotation;
+        }
         FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
         FinalRotation = LocalRawRotation;
         if (hasRoleAssigned)

@@ -52,7 +52,7 @@ public abstract class BasisInput : MonoBehaviour
         hasRoleAssigned = true;
         foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
         {
-            if (Input.TryGetRole(out var found) && Input != this)
+            if (Input.TryGetRole(out BasisBoneTrackedRole found) && Input != this)
             {
                 if (found == Role)
                 {

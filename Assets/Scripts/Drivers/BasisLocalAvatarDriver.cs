@@ -475,7 +475,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     // Define a method to update the active state of the Layer
     void UpdateLayerActiveState(BasisBoneControl Control, RigLayer Layer)
     {
-        Debug.Log("setting Layer State to " + Control.HasRigLayer == BasisHasRigLayer.HasRigLayer + " for " + Control.Name);
+    //    Debug.Log("setting Layer State to " + Control.HasRigLayer == BasisHasRigLayer.HasRigLayer + " for " + Control.Name);
         Layer.active = Control.HasRigLayer == BasisHasRigLayer.HasRigLayer;
     }
     public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
