@@ -31,9 +31,7 @@ After a half-year of development we have only recently put Basis on github, that
 Do you have a suggestion to improve Basis? Please Fork the repo and create a pull request! You can also open an issue with the tag “improvement”.
 Not sure how to contribute but still wanting to help out? Consider donating! We appreciate any help possible.
 
-<noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
-[Github Sponsor](https://github.com/sponsors/dooly123)</br>
-[KoFi](https://ko-fi.com/dooly)</br>
+<noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript> [Github Sponsor](https://github.com/sponsors/dooly123)</br>[KoFi](https://ko-fi.com/dooly)</br>
 
 Please help shape the future of Basis and leave your mark in its foundation. 
 
