@@ -1,164 +1,165 @@
 ﻿using BattlePhaze.SettingsManager.DebugSystem;
 using UnityEngine;
+using System.Globalization;
+
 namespace BattlePhaze.SettingsManager
 {
     public static class SettingsManagerSlider
     {
-        public static void SliderExecution(int OptionIndex, SettingsManager Manager, float CurrentValue, bool Save)
+        public static void SliderExecution(int optionIndex, SettingsManager manager, float currentValue, bool save)
         {
-            if (Manager.Options[OptionIndex].Type == SettingsManagerEnums.IsType.Slider)
+            if (!IsSliderOption(manager, optionIndex)) return;
+
+            if (IsIntValue(manager, optionIndex))
             {
-                if (Manager.Options[OptionIndex].ParseController == SettingsManagerEnums.ItemParse.intValue)
+                currentValue = (int)currentValue;
+            }
+
+            manager.Options[optionIndex].SelectedValue = currentValue.ToString(manager.ManagerSettings.CInfo);
+
+            if (TryGetSliderMaxValue(manager, optionIndex, out float sliderMaxValue))
+            {
+                bool isPercentage = manager.Options[optionIndex].ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage;
+                SetTextDescription(manager, optionIndex, currentValue, sliderMaxValue, manager.Options[optionIndex], isPercentage);
+
+                if (save)
                 {
-                    CurrentValue = (int)CurrentValue;
+                    SettingsManagerStorageManagement.Save(manager);
                 }
-                Manager.Options[OptionIndex].SelectedValue = CurrentValue.ToString(Manager.ManagerSettings.CInfo);
-                if (float.TryParse(Manager.Options[OptionIndex].SliderMaxValue, System.Globalization.NumberStyles.Any, Manager.ManagerSettings.CInfo, out float SliderMaxValue))
-                {
-                    if (Manager.Options[OptionIndex].ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage)
-                    {
-                        SetTextDescription(Manager, OptionIndex, CurrentValue, SliderMaxValue, Manager.Options[OptionIndex].Round, true, Manager.Options[OptionIndex].RoundTo, Manager.Options[OptionIndex].MaxPercentage, Manager.Options[OptionIndex].MinPercentage);
-                    }
-                    else
-                    {
-                        SetTextDescription(Manager, OptionIndex, CurrentValue, SliderMaxValue, Manager.Options[OptionIndex].Round, false, Manager.Options[OptionIndex].RoundTo, Manager.Options[OptionIndex].MaxPercentage, Manager.Options[OptionIndex].MinPercentage);
-                    }
-                    if (Save)
-                    {
-                        SettingsManagerStorageManagement.Save(Manager);
-                    }
-                    Manager.SendOption(Manager.Options[OptionIndex]);
-                }
-                else
-                {
-                    SettingsManagerDebug.LogError("Could not parse Slider Max Value SliderExecution Failed!");
-                }
+                manager.SendOption(manager.Options[optionIndex]);
+            }
+            else
+            {
+                SettingsManagerDebug.LogError("Could not parse Slider Max Value. SliderExecution Failed!");
             }
         }
-        public static void SetSliderDescription(int OptionIndex, SettingsManager Manager, float CurrentValue)
+
+        public static void SetSliderDescription(int optionIndex, SettingsManager manager, float currentValue)
         {
-            if (Manager.Options[OptionIndex].Type == SettingsManagerEnums.IsType.Slider)
+            if (!IsSliderOption(manager, optionIndex))
             {
-                if (Manager.Options[OptionIndex].ParseController == SettingsManagerEnums.ItemParse.intValue)
-                {
-                    CurrentValue = (int)CurrentValue;
-                }
-                if (float.TryParse(Manager.Options[OptionIndex].SliderMaxValue, System.Globalization.NumberStyles.Any, Manager.ManagerSettings.CInfo, out float SliderMaxValue))
-                {
-                    if (Manager.Options[OptionIndex].ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage)
-                    {
-                        SetTextDescription(Manager, OptionIndex, CurrentValue, SliderMaxValue, Manager.Options[OptionIndex].Round, true, Manager.Options[OptionIndex].RoundTo, Manager.Options[OptionIndex].MaxPercentage, Manager.Options[OptionIndex].MinPercentage);
-                    }
-                    else
-                    {
-                        SetTextDescription(Manager, OptionIndex, CurrentValue, SliderMaxValue, Manager.Options[OptionIndex].Round, false, Manager.Options[OptionIndex].RoundTo, Manager.Options[OptionIndex].MaxPercentage, Manager.Options[OptionIndex].MinPercentage);
-                    }
-                }
-                else
-                {
-                    SettingsManagerDebug.LogError("Could not parse Slider Max Value SliderExecution Failed!");
-                }
+                return;
+            }
+
+            if (IsIntValue(manager, optionIndex))
+            {
+                currentValue = (int)currentValue;
+            }
+
+            if (TryGetSliderMaxValue(manager, optionIndex, out float sliderMaxValue))
+            {
+                bool isPercentage = manager.Options[optionIndex].ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage;
+                SetTextDescription(manager, optionIndex, currentValue, sliderMaxValue, manager.Options[optionIndex], isPercentage);
+            }
+            else
+            {
+                SettingsManagerDebug.LogError("Could not parse Slider Max Value. SetSliderDescription Failed!");
             }
         }
-        public static void SetTextDescription(SettingsManager Manager, int OptionIndex, float SliderValue, float SliderMaxValue, bool Round, bool Percentage, int RoundTo, float MaxPercentage, float MinPercentageOffset)
+
+        private static void SetTextDescription(SettingsManager manager, int optionIndex, float sliderValue, float sliderMaxValue, SettingsMenuInput option, bool isPercentage)
         {
-            if (Manager.Options[OptionIndex].TextDescription != null)
+            if (option.TextDescription != null)
             {
-                if (Manager.Options[OptionIndex].ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage)
-                {
-                    Manager.Options[OptionIndex].ValueDescriptor = Information.SettingsManagerInformationConverter.PostProcessValue(Round, Percentage, RoundTo, SliderValue, SliderMaxValue, MaxPercentage, MinPercentageOffset);
-                }
-                else
-                {
-                    Manager.Options[OptionIndex].ValueDescriptor = SliderValue.ToString(Manager.ManagerSettings.CInfo);
-                }
-                SettingsManagerDescriptionSystem.TxtDescriptionSetText(Manager, OptionIndex);
+                option.ValueDescriptor = Information.SettingsManagerInformationConverter.PostProcessValue(option.Round, isPercentage, option.RoundTo, sliderValue, sliderMaxValue, option.MaxPercentage, option.MinPercentage);
+
+                SettingsManagerDescriptionSystem.TxtDescriptionSetText(manager, optionIndex);
             }
         }
-        public static void SliderOptionReadValue(SettingsManager Manager, int OptionIndex, out bool HasValue, out float Value)
+
+        public static void SliderOptionReadValue(SettingsManager manager, int optionIndex, out bool hasValue, out float value)
         {
-            HasValue = false;
-            Value = 0;
-            for (int textsIndex = 0; textsIndex < SettingsManager.Instance.SettingsManagerAbstractTypeSlider.Count; textsIndex++)
-            {
-                if (Manager.SettingsManagerAbstractTypeSlider[textsIndex] != null)
-                {
-                    Manager.SettingsManagerAbstractTypeSlider[textsIndex].SliderOptionReadValue(Manager, OptionIndex, out HasValue, out Value);
-                    if (HasValue)
-                    {
-                        return;
-                    }
-                }
-            }
+            ReadValue(manager, optionIndex, out hasValue, out value);
         }
-        public static void SliderOptionReadValue(SettingsManager Manager, SettingsMenuInput Option, out bool HasValue, out float Value)
+
+        public static void SliderOptionReadValue(SettingsManager manager, SettingsMenuInput option, out bool hasValue, out float value)
         {
-            HasValue = false;
-            Value = 0;
-            for (int OptionsIndex = 0; OptionsIndex < Manager.Options.Count; OptionsIndex++)
+            for (int Index = 0; Index < manager.Options.Count; Index++)
             {
-                if (Manager.Options[OptionsIndex] == Option)
+                if (manager.Options[Index] == option)
                 {
-                    for (int textsIndex = 0; textsIndex < SettingsManager.Instance.SettingsManagerAbstractTypeSlider.Count; textsIndex++)
-                    {
-                        if (Manager.SettingsManagerAbstractTypeSlider[textsIndex] != null)
-                        {
-                            Manager.SettingsManagerAbstractTypeSlider[textsIndex].SliderOptionReadValue(Manager, OptionsIndex, out HasValue, out Value);
-                            if (HasValue)
-                            {
-                                return;
-                            }
-                        }
-                    }
+                    ReadValue(manager, Index, out hasValue, out value);
                     return;
                 }
             }
+            hasValue = false;
+            value = 0;
         }
-        public static void SliderEnabledState(SettingsManager Manager, int OptionIndex, bool outcome)
+
+        private static void ReadValue(SettingsManager manager, int optionIndex, out bool hasValue, out float value)
         {
-            for (int textsIndex = 0; textsIndex < SettingsManager.Instance.SettingsManagerAbstractTypeSlider.Count; textsIndex++)
+            hasValue = false;
+            value = 0;
+            foreach (Types.SettingsManagerAbstractTypeSlider slider in manager.SettingsManagerAbstractTypeSlider)
             {
-                if (Manager.SettingsManagerAbstractTypeSlider[textsIndex] != null)
+                if (slider != null)
                 {
-                    Manager.SettingsManagerAbstractTypeSlider[textsIndex].SliderEnabledState(Manager, OptionIndex, outcome);
+                    slider.SliderOptionReadValue(manager, optionIndex, out hasValue, out value);
+                    if (hasValue) return;
                 }
             }
         }
-        public static void SliderGetOptionsGameobject(SettingsManager Manager, int OptionIndex, out bool HasValue, out GameObject Value)
+
+        public static void SliderEnabledState(SettingsManager manager, int optionIndex, bool outcome)
         {
-            HasValue = false;
-            Value = null;
-            for (int textsIndex = 0; textsIndex < SettingsManager.Instance.SettingsManagerAbstractTypeSlider.Count; textsIndex++)
+            foreach (Types.SettingsManagerAbstractTypeSlider slider in manager.SettingsManagerAbstractTypeSlider)
             {
-                if (Manager.SettingsManagerAbstractTypeSlider[textsIndex] != null)
+                slider?.SliderEnabledState(manager, optionIndex, outcome);
+            }
+        }
+
+        public static void SliderGetOptionsGameobject(SettingsManager manager, int optionIndex, out bool hasValue, out GameObject value)
+        {
+            hasValue = false;
+            value = null;
+            foreach (Types.SettingsManagerAbstractTypeSlider slider in manager.SettingsManagerAbstractTypeSlider)
+            {
+                if (slider != null)
                 {
-                    Manager.SettingsManagerAbstractTypeSlider[textsIndex].SliderGetOptionsGameobject(Manager, OptionIndex, out HasValue, out Value);
-                    if (HasValue)
-                    {
-                        return;
-                    }
+                    slider.SliderGetOptionsGameobject(manager, optionIndex, out hasValue, out value);
+                    if (hasValue) return;
                 }
             }
         }
-        public static void InitalizeSlider(SettingsManager Manager, int OptionIndex)
+
+        public static void InitializeSlider(SettingsManager manager, int optionIndex)
         {
-            SettingsMenuInput Option = Manager.Options[OptionIndex];
-            float.TryParse(Option.SelectedValue, System.Globalization.NumberStyles.Any, Manager.ManagerSettings.CInfo, out float SliderValue);
-            float.TryParse(Option.SliderMinValue, System.Globalization.NumberStyles.Any, Manager.ManagerSettings.CInfo, out float SliderMinValue);
-            float.TryParse(Option.SliderMaxValue, System.Globalization.NumberStyles.Any, Manager.ManagerSettings.CInfo, out float SliderMaxValue);
-            SetTextDescription(Manager, Option.OptionIndex, SliderValue, SliderMaxValue, Option.Round, Option.ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage, Option.RoundTo, Option.MaxPercentage, Option.MinPercentage);
-            for (int AbstractModulesListIndex = 0; AbstractModulesListIndex < Manager.SettingsManagerAbstractTypeSlider.Count; AbstractModulesListIndex++)
+            var option = manager.Options[optionIndex];
+            float sliderValue = ParseFloat(option.SelectedValue, manager.ManagerSettings.CInfo);
+            float sliderMinValue = ParseFloat(option.SliderMinValue, manager.ManagerSettings.CInfo);
+            float sliderMaxValue = ParseFloat(option.SliderMaxValue, manager.ManagerSettings.CInfo);
+
+            SetTextDescription(manager, optionIndex, sliderValue, sliderMaxValue, option, option.ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage);
+
+            foreach (Types.SettingsManagerAbstractTypeSlider slider in manager.SettingsManagerAbstractTypeSlider)
             {
-                if (Manager.SettingsManagerAbstractTypeSlider[AbstractModulesListIndex] != null)
+                if (slider != null)
                 {
-                    Manager.SettingsManagerAbstractTypeSlider[AbstractModulesListIndex].SliderOptionSetValue(Manager, OptionIndex, SliderValue, SliderMinValue, SliderMaxValue);
-                    Manager.SettingsManagerAbstractTypeSlider[AbstractModulesListIndex].SliderOnValueChanged(Manager, OptionIndex, out bool RequestSuccessful);
-                    if (RequestSuccessful)
-                    {
-                        return;
-                    }
+                    slider.SliderOptionSetValue(manager, optionIndex, sliderValue, sliderMinValue, sliderMaxValue);
+                    slider.SliderOnValueChanged(manager, optionIndex, out bool requestSuccessful);
+                    if (requestSuccessful) return;
                 }
             }
+        }
+
+        private static bool IsSliderOption(SettingsManager manager, int optionIndex)
+        {
+            return manager.Options[optionIndex].Type == SettingsManagerEnums.IsType.Slider;
+        }
+
+        private static bool IsIntValue(SettingsManager manager, int optionIndex)
+        {
+            return manager.Options[optionIndex].ParseController == SettingsManagerEnums.ItemParse.intValue;
+        }
+
+        private static bool TryGetSliderMaxValue(SettingsManager manager, int optionIndex, out float sliderMaxValue)
+        {
+            return float.TryParse(manager.Options[optionIndex].SliderMaxValue, NumberStyles.Any, manager.ManagerSettings.CInfo, out sliderMaxValue);
+        }
+
+        private static float ParseFloat(string value, CultureInfo cultureInfo)
+        {
+            return float.TryParse(value, NumberStyles.Any, cultureInfo, out float result) ? result : 0;
         }
     }
 }

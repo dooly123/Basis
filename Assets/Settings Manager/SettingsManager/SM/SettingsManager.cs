@@ -137,16 +137,16 @@
                     SettingsManagerOptionVisiblitySystem.SetOptionVisible(option.OptionIndex, false, this);
                     break;
                 case SettingsManagerEnums.IsType.DropDown:
-                    SettingsManagerDropDown.InitalizeDropDown(this, option.OptionIndex);
+                    SettingsManagerDropDown.InitializeDropDown(this, option.OptionIndex);
                     break;
                 case SettingsManagerEnums.IsType.Slider:
-                    SettingsManagerSlider.InitalizeSlider(this, option.OptionIndex);
+                    SettingsManagerSlider.InitializeSlider(this, option.OptionIndex);
                     break;
                 case SettingsManagerEnums.IsType.Toggle:
-                    SettingsManagerToggle.InitalizeToggle(this, option.OptionIndex);
+                    SettingsManagerToggle.InitializeToggle(this, option.OptionIndex);
                     break;
                 case SettingsManagerEnums.IsType.Dynamic:
-                    SettingsManagerDropDown.InitalizeDropDown(this, option.OptionIndex);
+                    SettingsManagerDropDown.InitializeDropDown(this, option.OptionIndex);
                     break;
             }
         }

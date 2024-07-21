@@ -121,7 +121,7 @@ MonoBehaviour:
   WorkArounds:
   - Name: Antialiasing
     DefaultValue: smaa
-    SelectedValue: 0
+    SelectedValue: smaa
     Index: 0
     SelectableValueList:
     - realValue: taa
@@ -351,7 +351,7 @@ MonoBehaviour:
     Max: 0
   - Name: Resolution
     DefaultValue: 
-    SelectedValue: 24
+    SelectedValue: 21
     Index: 14
     SelectableValueList:
     - realValue: 640x480
@@ -364,8 +364,6 @@ MonoBehaviour:
       UserValue: 800x600
     - realValue: 1024x768
       UserValue: 1024x768
-    - realValue: 1152x720
-      UserValue: 1152x720
     - realValue: 1152x864
       UserValue: 1152x864
     - realValue: 1176x664
@@ -410,7 +408,7 @@ MonoBehaviour:
     Max: 0
   - Name: ScreenMode
     DefaultValue: 
-    SelectedValue: exclusive fullscreen
+    SelectedValue: 3
     Index: 15
     SelectableValueList:
     - realValue: exclusive fullscreen
@@ -433,7 +431,7 @@ MonoBehaviour:
     Min: 0
     Max: 0
   - Name: Main Audio
-    DefaultValue: 50
+    DefaultValue: 1
     SelectedValue: 1
     Index: 17
     SelectableValueList: []
@@ -441,27 +439,27 @@ MonoBehaviour:
     Max: 1
   - Name: SFX Audio
     DefaultValue: 50
-    SelectedValue: 50
+    SelectedValue: 80
     Index: 18
     SelectableValueList: []
     Min: 0
     Max: 80
   - Name: Music Audio
     DefaultValue: 50
-    SelectedValue: 50
+    SelectedValue: 80
     Index: 19
     SelectableValueList: []
     Min: 0
     Max: 80
   - Name: Player Audio
-    DefaultValue: 
-    SelectedValue: 50
+    DefaultValue: 50
+    SelectedValue: 80
     Index: 20
     SelectableValueList: []
     Min: 0
     Max: 80
   - Name: Microphone Volume
-    DefaultValue: 
+    DefaultValue: 1
     SelectedValue: 1
     Index: 21
     SelectableValueList: []
@@ -469,18 +467,56 @@ MonoBehaviour:
     Max: 1
   - Name: Selected Microphone
     DefaultValue: 
-    SelectedValue: 
+    SelectedValue: 6
     Index: 22
-    SelectableValueList: []
+    SelectableValueList:
+    - realValue: microphone (nvidia broadcast)
+      UserValue: Microphone (NVIDIA Broadcast)
+    - realValue: microphone (logitech streamcam)
+      UserValue: Microphone (Logitech StreamCam)
+    - realValue: headset microphone (oculus virtual audio device)
+      UserValue: Headset Microphone (Oculus Virtual Audio Device)
+    - realValue: microphone (2- antlion wireless microphone)
+      UserValue: Microphone (2- Antlion Wireless Microphone)
+    - realValue: microphone (steam streaming microphone)
+      UserValue: Microphone (Steam Streaming Microphone)
+    - realValue: microphone (2- rode nt-usb)
+      UserValue: Microphone (2- RODE NT-USB)
+    - realValue: digital audio interface (valve vr radio & hmd mic)
+      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
     Min: 0
     Max: 0
-  - Name: 
-    DefaultValue: 
+  - Name: Mcrophone Volume
+    DefaultValue: 1
     SelectedValue: 1
     Index: 23
     SelectableValueList: []
     Min: 0
     Max: 1
+  - Name: Render Resolution
+    DefaultValue: 1
+    SelectedValue: 1
+    Index: 24
+    SelectableValueList: []
+    Min: 0.45
+    Max: 1.5
+  - Name: Upscaler
+    DefaultValue: 
+    SelectedValue: false
+    Index: 25
+    SelectableValueList:
+    - realValue: auto
+      UserValue: Auto
+    - realValue: linear upscaling
+      UserValue: Linear Upscaling
+    - realValue: point upscaling
+      UserValue: Point Upscaling
+    - realValue: fsr upscaling
+      UserValue: FSR Upscaling
+    - realValue: spatial temporal upscaling
+      UserValue: Spatial Temporal Upscaling
+    Min: 0
+    Max: 0
   Manager: {fileID: 6378574261833472064}
 --- !u!114 &697764147136612878
 MonoBehaviour:
@@ -543,11 +579,11 @@ GameObject:
   - component: {fileID: 2682791463296768347}
   - component: {fileID: 6858255495859468344}
   - component: {fileID: 4506459589283058818}
-  - component: {fileID: 6378574261833472064}
   - component: {fileID: 3753039974563469601}
   - component: {fileID: 8271215996735340422}
   - component: {fileID: 256212325347645450}
   - component: {fileID: 6482417607131076391}
+  - component: {fileID: 6378574261833472064}
   m_Layer: 0
   m_Name: InputActions
   m_TagString: Untagged
@@ -671,6 +707,54 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3753039974563469601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82bdf5e34837d4c469ade8d39276e8b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8271215996735340422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae8ec4604032aa43add9ddf96000535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &256212325347645450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5289782b0b11143aba520ce9fad6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6482417607131076391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 220f03ccc3871d546ab6d12d7927cbc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6378574261833472064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,6 +793,11 @@ MonoBehaviour:
     CurrentlySelectedSaveModule: {fileID: 256212325347645450}
     CurrentlySelectedSaveModuleName: JSON
   SettingsManagerOptions:
+  - {fileID: 1027479742639559022}
+  - {fileID: 1776921867475573335}
+  - {fileID: 6183288642828014269}
+  - {fileID: 7074081770173294057}
+  - {fileID: 734679581483801923}
   - {fileID: 1962641699494196431}
   - {fileID: 1077079382445251767}
   - {fileID: 8638552490007219108}
@@ -718,12 +807,8 @@ MonoBehaviour:
   - {fileID: 8449095911647677582}
   - {fileID: 7626703953093772756}
   - {fileID: 2999677633599871041}
-  - {fileID: 673822432540484547}
-  - {fileID: 4942735700325845565}
   - {fileID: 4907001347912712639}
   - {fileID: 5896743050639982037}
-  - {fileID: 6042927766578467380}
-  - {fileID: 8352518869527864548}
   Options:
   - EditorBasedUIToggles:
       SupportedRenderPipelines: 0
@@ -826,7 +911,7 @@ MonoBehaviour:
       DefaultPlatform: 1
       ExcludePlatform: 1
       ValueToggle: 1
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1323,7 +1408,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: 640x480
     Explanation: 
-    selectedValue: 2560x1440
+    selectedValue: 1920x1080
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1403,7 +1488,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: windowed
     Explanation: 
-    selectedValue: exclusive fullscreen
+    selectedValue: windowed
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1460,7 +1545,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 1
@@ -1490,7 +1575,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
@@ -1503,7 +1588,7 @@ MonoBehaviour:
     SelectedValueDefault: 50
     ValueDefault: 50
     Explanation: SFX Audio
-    selectedValue: 50
+    selectedValue: 80
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1533,7 +1618,7 @@ MonoBehaviour:
     SelectedValueDefault: 50
     ValueDefault: 50
     Explanation: Music Audio
-    selectedValue: 50
+    selectedValue: 80
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1563,7 +1648,7 @@ MonoBehaviour:
     SelectedValueDefault: 50
     ValueDefault: 50
     Explanation: 
-    selectedValue: 50
+    selectedValue: 80
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1623,7 +1708,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: False
     Explanation: 
-    selectedValue: microphone (nvidia broadcast)
+    selectedValue: digital audio interface (valve vr radio & hmd mic)
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1679,6 +1764,76 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 0
     SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 1
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 1.5
+    SliderMinValue: 0.45
+    Name: Render Resolution
+    ValueDescriptor: Render Resolution
+    SelectedValueDefault: 1
+    ValueDefault: 1.105
+    Explanation: 
+    selectedValue: 1
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 1
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: UpScaler
+    ValueDescriptor: UpScaler
+    SelectedValueDefault: False
+    ValueDefault: False
+    Explanation: UpScaler
+    selectedValue: false
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: auto
+      UserValue: Auto
+    - realValue: linear upscaling
+      UserValue: Linear Upscaling
+    - realValue: point upscaling
+      UserValue: Point Upscaling
+    - realValue: fsr upscaling
+      UserValue: FSR Upscaling
+    - realValue: spatial temporal upscaling
+      UserValue: Spatial Temporal Upscaling
   SaveModules:
   - {fileID: 6482417607131076391}
   - {fileID: 256212325347645450}
@@ -1716,54 +1871,6 @@ MonoBehaviour:
   OnSettingsSaved:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3753039974563469601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286943206467795689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82bdf5e34837d4c469ade8d39276e8b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8271215996735340422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286943206467795689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ae8ec4604032aa43add9ddf96000535, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &256212325347645450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286943206467795689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f5289782b0b11143aba520ce9fad6aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6482417607131076391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286943206467795689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 220f03ccc3871d546ab6d12d7927cbc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7884915406730103288
 GameObject:
   m_ObjectHideFlags: 0
@@ -1773,12 +1880,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2755666493907349224}
-  - component: {fileID: 8352518869527864548}
-  - component: {fileID: 6042927766578467380}
   - component: {fileID: 5896743050639982037}
   - component: {fileID: 4907001347912712639}
-  - component: {fileID: 4942735700325845565}
-  - component: {fileID: 673822432540484547}
   - component: {fileID: 2999677633599871041}
   - component: {fileID: 7626703953093772756}
   - component: {fileID: 8449095911647677582}
@@ -1788,6 +1891,11 @@ GameObject:
   - component: {fileID: 8638552490007219108}
   - component: {fileID: 1077079382445251767}
   - component: {fileID: 1962641699494196431}
+  - component: {fileID: 734679581483801923}
+  - component: {fileID: 7074081770173294057}
+  - component: {fileID: 6183288642828014269}
+  - component: {fileID: 1776921867475573335}
+  - component: {fileID: 1027479742639559022}
   m_Layer: 0
   m_Name: Modules
   m_TagString: Untagged
@@ -1810,41 +1918,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4563181907587156597}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8352518869527864548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7884915406730103288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8176cf7d415d3e944a2795ea1012ed22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ManagerModuleOptions:
-  - OptionName: Ambient Occlusion
-    Explanation: Ambient Occlusion
-    Parse: 1
-    Type: 1
---- !u!114 &6042927766578467380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7884915406730103288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbd89c128da2752409f7284b2a78bf60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ManagerModuleOptions:
-  - OptionName: Antialiasing
-    Explanation: Antialiasing
-    Parse: 1
-    Type: 1
-  Cam: {fileID: 0}
 --- !u!114 &5896743050639982037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1896,65 +1969,6 @@ MonoBehaviour:
     Explanation: Close Point Shadows
     Parse: 1
     Type: 1
---- !u!114 &4942735700325845565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7884915406730103288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95c17ca6a7c8f2344aae88dc7fd5b2f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ManagerModuleOptions:
-  - OptionName: HDR Support
-    Explanation: HDR Support
-    Parse: 1
-    Type: 1
-  Camera: {fileID: 0}
---- !u!114 &673822432540484547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7884915406730103288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a93fe78a7221b84b88e9c5334214f3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ManagerModuleOptions:
-  - OptionName: Shadow Quality
-    Explanation: Shadow Quality
-    Parse: 1
-    Type: 1
-  - OptionName: Shadow Distance
-    Explanation: Shadow Distance
-    Parse: 1
-    Type: 1
-  VeryLowShadowCascades: 1
-  VeryLowShadowQuality: 1
-  VeryLowResolution: 0
-  VeryLowShadowDistance: 3
-  LowShadowCascades: 2
-  LowShadowQuality: 1
-  LowResolution: 0
-  LowShadowDistance: 5
-  mediumShadowCascades: 2
-  mediumShadowQuality: 2
-  mediumResolution: 0
-  MediumShadowDistance: 10
-  HighShadowCascades: 3
-  highShadowQuality: 2
-  highResolution: 0
-  HighShadowDistance: 20
-  UltraShadowCascades: 4
-  ultraShadowQuality: 2
-  ultraResolution: 3
-  UltraShadowDistance: 30
 --- !u!114 &2999677633599871041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2143,3 +2157,125 @@ MonoBehaviour:
   - Microphone (Steam Streaming Microphone)
   - Microphone (2- RODE NT-USB)
   - Digital Audio Interface (Valve VR Radio & HMD Mic)
+--- !u!114 &734679581483801923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a764032e485f7241aa66d76d9b524dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Ambient Occlusion
+    Explanation: Ambient Occlusion
+    Parse: 1
+    Type: 1
+  rendererData: {fileID: 11400000, guid: c40be3174f62c4acf8c1216858c64956, type: 2}
+  AmbientOcclusionRenderData: SSAO
+  AmbientOcclusion: {fileID: -1878332245247344467, guid: c40be3174f62c4acf8c1216858c64956,
+    type: 2}
+--- !u!114 &7074081770173294057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc8df63894ddda14cb55be55c4b1ef3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Antialiasing
+    Explanation: Antialiasing
+    Parse: 1
+    Type: 1
+  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
+  Camera: {fileID: 0}
+  Data: {fileID: 0}
+  veryLowmsaaSampleCount: 1
+  LowmsaaSampleCount: 2
+  MediumLowmsaaSampleCount: 4
+  HighmsaaSampleCount: 8
+--- !u!114 &6183288642828014269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8998dd8911f2d564681606559676bd44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Render Resolution
+    Explanation: 
+    Parse: 1
+    Type: 3
+  - OptionName: Render Resolution
+    Explanation: 
+    Parse: 1
+    Type: 3
+  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
+--- !u!114 &1776921867475573335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 683272fbf0dd1314b8a35ec2f5d6d851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: HDR Support
+    Explanation: HDR Support
+    Parse: 1
+    Type: 1
+  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
+--- !u!114 &1027479742639559022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b38bf286b32cb645beea7403572d0c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Shadow Quality
+    Explanation: Shadow Quality
+    Parse: 1
+    Type: 1
+  - OptionName: Shadow Distance
+    Explanation: Shadow Distance
+    Parse: 1
+    Type: 1
+  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
+  VeryLowShadowQualityAdditional: 256
+  VeryLowShadowQuality: 256
+  VeryLowShadowDistance: 150
+  LowShadowQualityAdditional: 256
+  LowShadowQuality: 512
+  LowShadowDistance: 250
+  MediumShadowQualityAdditional: 512
+  mediumShadowQuality: 1024
+  MediumShadowDistance: 350
+  HighShadowQualityAdditional: 1024
+  highShadowQuality: 2048
+  HighShadowDistance: 500
+  ultraShadowQualityAdditional: 2048
+  ultraShadowQuality: 4096
+  UltraShadowDistance: 1000

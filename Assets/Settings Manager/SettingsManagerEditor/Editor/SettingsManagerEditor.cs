@@ -249,34 +249,46 @@
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginVertical();
-            for (int Index = 0; Index < option.PlatFormDefaultState.Count; Index++)
+            if (option != null && option.PlatFormDefaultState != null)
             {
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("Platform", SettingsmanagerStyle.DescriptorStyling);
-                option.PlatFormDefaultState[Index].Platform = DisplayEnumPopup(option.PlatFormDefaultState[Index].Platform, SettingsmanagerStyle.EnumStyling);
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("Graphics Vendor", SettingsmanagerStyle.DescriptorStyling);
-                option.PlatFormDefaultState[Index].GraphicsVendor = DisplayEnumPopup(option.PlatFormDefaultState[Index].GraphicsVendor, SettingsmanagerStyle.EnumStyling);
-                EditorGUILayout.EndHorizontal();
-
-                if (option.SelectableValueList.Count != 0)
+                for (int index = 0; index < option.PlatFormDefaultState.Count; index++)
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    GUILayout.Label("Default Value", SettingsmanagerStyle.DescriptorStyling);
-                    int selectedIndex = FindIndexOfSelectableValue(option.PlatFormDefaultState[Index].SetString, option.SelectableValueList);
-                    List<string> selectableValues = GetSelectableValues(option.SelectableValueList);
-                    selectedIndex = EditorGUILayout.Popup(selectedIndex, selectableValues.ToArray(), SettingsmanagerStyle.ValueStyling);
-                    option.PlatFormDefaultState[Index].SetString = option.SelectableValueList[selectedIndex].RealValue;
-                    EditorGUILayout.EndHorizontal();
-                }
+                    var platformState = option.PlatFormDefaultState[index];
 
-                EditorGUILayout.Space();
+                    if (platformState == null)
+                        continue; // Skip this iteration if platformState is null
+
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label("Platform", SettingsmanagerStyle.DescriptorStyling);
+                    platformState.Platform = DisplayEnumPopup(platformState.Platform, SettingsmanagerStyle.EnumStyling);
+                    EditorGUILayout.EndHorizontal();
+
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label("Graphics Vendor", SettingsmanagerStyle.DescriptorStyling);
+                    platformState.GraphicsVendor = DisplayEnumPopup(platformState.GraphicsVendor, SettingsmanagerStyle.EnumStyling);
+                    EditorGUILayout.EndHorizontal();
+
+                    if (option.SelectableValueList != null && option.SelectableValueList.Count != 0)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        GUILayout.Label("Default Value", SettingsmanagerStyle.DescriptorStyling);
+                        int selectedIndex = FindIndexOfSelectableValue(platformState.SetString, option.SelectableValueList);
+                        List<string> selectableValues = GetSelectableValues(option.SelectableValueList);
+                        selectedIndex = EditorGUILayout.Popup(selectedIndex, selectableValues.ToArray(), SettingsmanagerStyle.ValueStyling);
+
+                        // Check if selectedIndex is within the bounds of SelectableValueList
+                        if (option.SelectableValueList.Count > selectedIndex)
+                        {
+                            platformState.SetString = option.SelectableValueList[selectedIndex].RealValue;
+                        }
+                        EditorGUILayout.EndHorizontal();
+                    }
+
+                    EditorGUILayout.Space();
+                }
             }
-            EditorGUILayout.EndVertical();
         }
-        public void SelectBuildPipeline(int optionIndex)
+            public void SelectBuildPipeline(int optionIndex)
         {
             var option = manager.Options[optionIndex];
             OptionSet(ref option.EditorBasedUIToggles.SupportedRenderPipelines, "Supported Render Pipeline");

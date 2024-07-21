@@ -38,11 +38,12 @@ namespace BattlePhaze.SettingsManager
         }
         public static void DropDownEnabledState(int OptionIndex, bool enabled)
         {
-            for (int textsIndex = 0; textsIndex < SettingsManager.Instance.SettingsManagerAbstractTypeDropdown.Count; textsIndex++)
+            SettingsManager Manager = SettingsManager.Instance;
+            for (int textsIndex = 0; textsIndex < Manager.SettingsManagerAbstractTypeDropdown.Count; textsIndex++)
             {
-                if (SettingsManager.Instance.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
+                if (Manager.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
                 {
-                    SettingsManager.Instance.SettingsManagerAbstractTypeDropdown[textsIndex].DropDownEnabledState(SettingsManager.Instance, OptionIndex, enabled);
+                    Manager.SettingsManagerAbstractTypeDropdown[textsIndex].DropDownEnabledState(Manager, OptionIndex, enabled);
                 }
             }
         }
@@ -50,7 +51,7 @@ namespace BattlePhaze.SettingsManager
         {
             for (int textsIndex = 0; textsIndex < Manager.SettingsManagerAbstractTypeDropdown.Count; textsIndex++)
             {
-                if (SettingsManager.Instance.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
+                if (Manager.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
                 {
                     Manager.SettingsManagerAbstractTypeDropdown[textsIndex].DropDownSetOptionsValue(Manager, OptionIndex, OptionsIndexValue, Silent);
                 }
@@ -61,7 +62,7 @@ namespace BattlePhaze.SettingsManager
             Value = null;
             for (int textsIndex = 0; textsIndex < Manager.SettingsManagerAbstractTypeDropdown.Count; textsIndex++)
             {
-                if (SettingsManager.Instance.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
+                if (Manager.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
                 {
                     if (Manager.SettingsManagerAbstractTypeDropdown[textsIndex].DropDownGetOptionsGameobject(Manager, OptionIndex, out Value))
                     {
@@ -75,7 +76,7 @@ namespace BattlePhaze.SettingsManager
         {
             for (int textsIndex = 0; textsIndex < Manager.SettingsManagerAbstractTypeDropdown.Count; textsIndex++)
             {
-                if (SettingsManager.Instance.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
+                if (Manager.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
                 {
                     Manager.SettingsManagerAbstractTypeDropdown[textsIndex].DropDownClearDropDown(Manager, OptionIndex);
                 }
@@ -85,17 +86,17 @@ namespace BattlePhaze.SettingsManager
         {
             for (int textsIndex = 0; textsIndex < Manager.SettingsManagerAbstractTypeDropdown.Count; textsIndex++)
             {
-                if (SettingsManager.Instance.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
+                if (Manager.SettingsManagerAbstractTypeDropdown[textsIndex] != null)
                 {
                     Manager.SettingsManagerAbstractTypeDropdown[textsIndex].DropDownAddOption(Manager, OptionIndex, Option);
                 }
             }
         }
-        public static void InitalizeDropDown(SettingsManager Manager, int OptionIndex)
+        public static void InitializeDropDown(SettingsManager Manager, int OptionIndex)
         {
             for (int AbstractModulesListIndex = 0; AbstractModulesListIndex < Manager.SettingsManagerAbstractTypeDropdown.Count; AbstractModulesListIndex++)
             {
-                if (SettingsManager.Instance.SettingsManagerAbstractTypeDropdown[AbstractModulesListIndex] != null)
+                if (Manager.SettingsManagerAbstractTypeDropdown[AbstractModulesListIndex] != null)
                 {
                     switch (Manager.Options[OptionIndex].Type)
                     {

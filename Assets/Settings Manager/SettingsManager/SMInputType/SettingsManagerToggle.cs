@@ -81,7 +81,7 @@
                 }
             }
         }
-        public static void InitalizeToggle(SettingsManager Manager, int OptionIndex)
+        public static void InitializeToggle(SettingsManager Manager, int OptionIndex)
         {
             SettingsMenuInput Option = Manager.Options[OptionIndex];
             bool.TryParse(Option.SelectedValue, out bool ToggleValue);
