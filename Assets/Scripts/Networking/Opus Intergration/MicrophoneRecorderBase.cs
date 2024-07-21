@@ -11,7 +11,7 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public float silenceThreshold = 0.0007f; // RMS threshold for detecting silence
     public int samplingFrequency;
     public int ProcessBufferLength;
-    public float Volume = 0.5f; // Volume adjustment factor, default to 1 (no adjustment)
+    public float Volume = 0.2f; // Volume adjustment factor, default to 1 (no adjustment)
     public float[] microphoneBufferArray;
     public float[] processBufferArray;
     public void AdjustVolume(float volume)

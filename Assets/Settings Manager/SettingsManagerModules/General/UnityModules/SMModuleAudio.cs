@@ -6,7 +6,6 @@
     {
         public bool UseAudioListener = true;
         public AudioMixer Mixer;
-        public string AudioMixerGroupOne = "Master";
         public string AudioMixerGroupTwo = "SFX Audio";
         public string AudioMixerGroupThree = "Music Audio";
         public string AudioMixerGroupFour= "Player Audio";
@@ -16,14 +15,7 @@
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
-                    if (UseAudioListener)
-                    {
-                        AudioListener.volume = Value;
-                    }
-                    else
-                    {
-                        ChangeMainAudio(Value);
-                    }
+                    AudioListener.volume = Value;
                 }
             }
             if (NameReturn(1, Option))
@@ -47,10 +39,6 @@
                     ChangePlayerAudio(Value - 80);
                 }
             }
-        }
-        public void ChangeMainAudio(float Volume)
-        {
-            Mixer.SetFloat(AudioMixerGroupOne, Volume);
         }
         public void ChangeSFXAudio(float Volume)
         {

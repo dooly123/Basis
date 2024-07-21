@@ -1581,7 +1581,7 @@ MonoBehaviour:
   LocalPlayer: {fileID: 0}
   CameraDriver: {fileID: 0}
   WorldOffset: {x: 0, y: 0, z: 0}
-  ModifyOnlyPosition: 0
+  hasLocalCreationEvent: 0
 --- !u!1 &9209209851754077519
 GameObject:
   m_ObjectHideFlags: 0

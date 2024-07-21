@@ -14,7 +14,10 @@ public class SMTypeFallbackDataHolder : MonoBehaviour
         {
             Manager = SettingsManager.Instance;
         }
-        Initalize();
+        if (Manager != null)
+        {
+            Initalize();
+        }
     }
     public void Initalize()
     {
@@ -33,9 +36,12 @@ public class SMTypeFallbackDataHolder : MonoBehaviour
     }
     public int FindOrAddOption(int Index)
     {
-        if (WorkArounds.Count != Manager.Options.Count)
+        if (Manager != null)
         {
-            Initalize();
+            if (WorkArounds.Count != Manager.Options.Count)
+            {
+                Initalize();
+            }
         }
         return Index;
     }

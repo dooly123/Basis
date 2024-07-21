@@ -35,11 +35,11 @@ Transform:
   m_GameObject: {fileID: 930336014935329343}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 20.814209, y: 8.46147, z: 9.887683}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 36357243023420718}
+  m_Father: {fileID: 4563181907587156597}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1469491627460388504
 MonoBehaviour:
@@ -121,7 +121,7 @@ MonoBehaviour:
   WorkArounds:
   - Name: Antialiasing
     DefaultValue: smaa
-    SelectedValue: smaa
+    SelectedValue: 0
     Index: 0
     SelectableValueList:
     - realValue: taa
@@ -136,7 +136,7 @@ MonoBehaviour:
     Max: 0
   - Name: Master Quality
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 1
     SelectableValueList:
     - realValue: very low
@@ -153,7 +153,7 @@ MonoBehaviour:
     Max: 0
   - Name: Ambient Occlusion
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 2
     SelectableValueList:
     - realValue: very low
@@ -170,7 +170,7 @@ MonoBehaviour:
     Max: 0
   - Name: Contact Shadows
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 3
     SelectableValueList:
     - realValue: very low
@@ -187,7 +187,7 @@ MonoBehaviour:
     Max: 0
   - Name: Quality Level
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 4
     SelectableValueList:
     - realValue: very low
@@ -204,7 +204,7 @@ MonoBehaviour:
     Max: 0
   - Name: Shadow Quality
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 5
     SelectableValueList:
     - realValue: very low
@@ -221,7 +221,7 @@ MonoBehaviour:
     Max: 0
   - Name: Shadow Distance
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 6
     SelectableValueList:
     - realValue: very low
@@ -238,7 +238,7 @@ MonoBehaviour:
     Max: 0
   - Name: Texture Quality
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 7
     SelectableValueList:
     - realValue: very low
@@ -268,7 +268,7 @@ MonoBehaviour:
     Max: 0
   - Name: Volumetric Quality
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 9
     SelectableValueList:
     - realValue: very low
@@ -306,7 +306,7 @@ MonoBehaviour:
     Max: 0
   - Name: Close Point Shadows
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 11
     SelectableValueList:
     - realValue: very low
@@ -334,7 +334,7 @@ MonoBehaviour:
     Max: 0
   - Name: Terrain Quality
     DefaultValue: ultra
-    SelectedValue: very low
+    SelectedValue: ultra
     Index: 13
     SelectableValueList:
     - realValue: very low
@@ -351,7 +351,7 @@ MonoBehaviour:
     Max: 0
   - Name: Resolution
     DefaultValue: 
-    SelectedValue: 2560x1440
+    SelectedValue: 24
     Index: 14
     SelectableValueList:
     - realValue: 640x480
@@ -434,18 +434,18 @@ MonoBehaviour:
     Max: 0
   - Name: Main Audio
     DefaultValue: 50
-    SelectedValue: 50
+    SelectedValue: 1
     Index: 17
     SelectableValueList: []
     Min: 0
-    Max: 0
+    Max: 1
   - Name: SFX Audio
     DefaultValue: 50
     SelectedValue: 50
     Index: 18
     SelectableValueList: []
     Min: 0
-    Max: 0
+    Max: 80
   - Name: Music Audio
     DefaultValue: 50
     SelectedValue: 50
@@ -455,18 +455,18 @@ MonoBehaviour:
     Max: 80
   - Name: Player Audio
     DefaultValue: 
-    SelectedValue: 
+    SelectedValue: 50
     Index: 20
     SelectableValueList: []
     Min: 0
-    Max: 0
+    Max: 80
   - Name: Microphone Volume
     DefaultValue: 
-    SelectedValue: 
+    SelectedValue: 1
     Index: 21
     SelectableValueList: []
     Min: 0
-    Max: 0
+    Max: 1
   - Name: Selected Microphone
     DefaultValue: 
     SelectedValue: 
@@ -476,12 +476,12 @@ MonoBehaviour:
     Max: 0
   - Name: 
     DefaultValue: 
-    SelectedValue: 0
+    SelectedValue: 1
     Index: 23
     SelectableValueList: []
     Min: 0
     Max: 1
-  Manager: {fileID: 7743749643595271440}
+  Manager: {fileID: 6378574261833472064}
 --- !u!114 &697764147136612878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,6 +543,11 @@ GameObject:
   - component: {fileID: 2682791463296768347}
   - component: {fileID: 6858255495859468344}
   - component: {fileID: 4506459589283058818}
+  - component: {fileID: 6378574261833472064}
+  - component: {fileID: 3753039974563469601}
+  - component: {fileID: 8271215996735340422}
+  - component: {fileID: 256212325347645450}
+  - component: {fileID: 6482417607131076391}
   m_Layer: 0
   m_Name: InputActions
   m_TagString: Untagged
@@ -563,7 +568,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 36357243023420718}
+  - {fileID: 7236260345192759045}
+  - {fileID: 2755666493907349224}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5604905376641563031
@@ -600,6 +606,7 @@ MonoBehaviour:
   CharacterEyeInput: {fileID: 0}
   basisLocalPlayer: {fileID: 0}
   Input: {fileID: 4506459589283058818}
+  HasEvents: 0
 --- !u!114 &2682791463296768347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,6 +671,1099 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6378574261833472064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf13421e0162df1468bc366a695f14f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerSettings:
+    SuccessfullyGenerated: 1
+    ActiveCanvasLikeObject: {fileID: 0}
+    BuildValues: 4
+    FileName: Settings Manager
+    CType: 0
+    CurrentPipeline: 4
+    MarkAsDontDestroyOnLoad: 1
+    ExplanationText: {fileID: 0}
+    SettingsManagerObjectpaths:
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Dropdown.prefab
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Dynamic Dropdown.prefab
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Slider.prefab
+    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
+      Standard Toggle.prefab
+    SettingsManagerObjects:
+    - {fileID: 7449501133343338555, guid: 91c995af67f8e7c46b15c8cd8184a723, type: 3}
+    - {fileID: 7449501133343338555, guid: c4d7177423c74af4fafb9699c399dafb, type: 3}
+    - {fileID: 4698753801063083922, guid: 19e5030522240f4459ed288c663e390f, type: 3}
+    - {fileID: -892464885040180822, guid: e814fefd40c6ef445bfacef072a362ca, type: 3}
+    CurrentlySelectedSaveModule: {fileID: 256212325347645450}
+    CurrentlySelectedSaveModuleName: JSON
+  SettingsManagerOptions:
+  - {fileID: 1962641699494196431}
+  - {fileID: 1077079382445251767}
+  - {fileID: 8638552490007219108}
+  - {fileID: 1742149703474370130}
+  - {fileID: 6164862947249097587}
+  - {fileID: 3784412682251115113}
+  - {fileID: 8449095911647677582}
+  - {fileID: 7626703953093772756}
+  - {fileID: 2999677633599871041}
+  - {fileID: 673822432540484547}
+  - {fileID: 4942735700325845565}
+  - {fileID: 4907001347912712639}
+  - {fileID: 5896743050639982037}
+  - {fileID: 6042927766578467380}
+  - {fileID: 8352518869527864548}
+  Options:
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Antialiasing
+    ValueDescriptor: Antialiasing
+    SelectedValueDefault: smaa
+    ValueDefault: smaa
+    Explanation: Antialiasing
+    selectedValue: smaa
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 7
+      GraphicsVendor: 3
+      SetString: smaa
+    - Platform: 2
+      GraphicsVendor: 0
+      SetString: smaa
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 1
+    SelectableValueList:
+    - realValue: taa
+      UserValue: TAA
+    - realValue: fxaa
+      UserValue: FXAA
+    - realValue: smaa
+      UserValue: SMAA
+    - realValue: noaa
+      UserValue: NOAA
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Master Quality
+    ValueDescriptor: Master Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: 
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 2
+      GraphicsVendor: 3
+      SetString: ultra
+    - Platform: 0
+      GraphicsVendor: 3
+      SetString: medium
+    - Platform: 7
+      GraphicsVendor: 3
+      SetString: ultra
+    - Platform: 1
+      GraphicsVendor: 0
+      SetString: medium
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 2
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Ambient Occlusion
+    ValueDescriptor: Ambient Occlusion
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Ambient Occlusion
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 0
+      GraphicsVendor: 0
+      SetString: very low
+    ExcludeFromThesePlatforms:
+    - Platform: 0
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Contact Shadows
+    ValueDescriptor: Contact Shadows
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Contact Shadows
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Quality Level
+    ValueDescriptor: Quality Level
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Quality Level
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Shadow Quality
+    ValueDescriptor: Shadow Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Shadow Quality
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Shadow Distance
+    ValueDescriptor: Shadow Distance
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Shadow Distance
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Texture Quality
+    ValueDescriptor: Texture Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Texture Quality
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 000000000300000004000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Vertical Sync
+    ValueDescriptor: Vertical Sync
+    SelectedValueDefault: on
+    ValueDefault: on
+    Explanation: Vertical Sync
+    selectedValue: on
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: on
+      UserValue: On
+    - realValue: half
+      UserValue: Half
+    - realValue: off
+      UserValue: Off
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Volumetric Quality
+    ValueDescriptor: Volumetric Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Volumetric Quality
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 1
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Memory Allocation
+    ValueDescriptor: Memory Allocation
+    SelectedValueDefault: dynamic
+    ValueDefault: dynamic
+    Explanation: Memory Allocation
+    selectedValue: dynamic
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState:
+    - Platform: 2
+      GraphicsVendor: 3
+      SetString: dynamic
+    - Platform: 7
+      GraphicsVendor: 3
+      SetString: dynamic
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: 256
+      UserValue: 256
+    - realValue: 512
+      UserValue: 512
+    - realValue: 1024
+      UserValue: 1024
+    - realValue: 2048
+      UserValue: 2048
+    - realValue: 4096
+      UserValue: 4096
+    - realValue: 8192
+      UserValue: 8192
+    - realValue: dynamic
+      UserValue: Dynamic
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Close Point Shadows
+    ValueDescriptor: Close Point Shadows
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Close Point Shadows
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: HDR Support
+    ValueDescriptor: HDR Support
+    SelectedValueDefault: true
+    ValueDefault: true
+    Explanation: HDR Support
+    selectedValue: true
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Terrain Quality
+    ValueDescriptor: Terrain Quality
+    SelectedValueDefault: ultra
+    ValueDefault: ultra
+    Explanation: Terrain Quality
+    selectedValue: ultra
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 1
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Resolution
+    ValueDescriptor: Resolution
+    SelectedValueDefault: 
+    ValueDefault: 640x480
+    Explanation: 
+    selectedValue: 2560x1440
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: 640x480
+      UserValue: 640x480
+    - realValue: 720x480
+      UserValue: 720x480
+    - realValue: 720x576
+      UserValue: 720x576
+    - realValue: 800x600
+      UserValue: 800x600
+    - realValue: 1024x768
+      UserValue: 1024x768
+    - realValue: 1152x864
+      UserValue: 1152x864
+    - realValue: 1176x664
+      UserValue: 1176x664
+    - realValue: 1280x720
+      UserValue: 1280x720
+    - realValue: 1280x768
+      UserValue: 1280x768
+    - realValue: 1280x800
+      UserValue: 1280x800
+    - realValue: 1280x960
+      UserValue: 1280x960
+    - realValue: 1280x1024
+      UserValue: 1280x1024
+    - realValue: 1360x768
+      UserValue: 1360x768
+    - realValue: 1366x768
+      UserValue: 1366x768
+    - realValue: 1400x1050
+      UserValue: 1400x1050
+    - realValue: 1440x900
+      UserValue: 1440x900
+    - realValue: 1440x1080
+      UserValue: 1440x1080
+    - realValue: 1600x900
+      UserValue: 1600x900
+    - realValue: 1600x1024
+      UserValue: 1600x1024
+    - realValue: 1600x1200
+      UserValue: 1600x1200
+    - realValue: 1680x1050
+      UserValue: 1680x1050
+    - realValue: 1920x1080
+      UserValue: 1920x1080
+    - realValue: 1920x1200
+      UserValue: 1920x1200
+    - realValue: 1920x1440
+      UserValue: 1920x1440
+    - realValue: 2560x1440
+      UserValue: 2560x1440
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: ScreenMode
+    ValueDescriptor: ScreenMode
+    SelectedValueDefault: 
+    ValueDefault: windowed
+    Explanation: 
+    selectedValue: exclusive fullscreen
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: exclusive fullscreen
+      UserValue: Exclusive FullScreen
+    - realValue: fullscreen
+      UserValue: Fullscreen
+    - realValue: maximized window
+      UserValue: Maximized Window
+    - realValue: windowed
+      UserValue: Windowed
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 0
+    MinPercentage: 0
+    SliderMaxValue: 0
+    SliderMinValue: 0
+    Name: Monitor
+    ValueDescriptor: Monitor
+    SelectedValueDefault: 
+    ValueDefault: 0
+    Explanation: 
+    selectedValue: 0
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: 0
+      UserValue: 0
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 1
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 1
+    SliderMinValue: 0
+    Name: Main Audio
+    ValueDescriptor: 62%
+    SelectedValueDefault: 1
+    ValueDefault: 1
+    Explanation: Main Audio
+    selectedValue: 1
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 80
+    SliderMinValue: 0
+    Name: SFX Audio
+    ValueDescriptor: 62%
+    SelectedValueDefault: 50
+    ValueDefault: 50
+    Explanation: SFX Audio
+    selectedValue: 50
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 1
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 80
+    SliderMinValue: 0
+    Name: Music Audio
+    ValueDescriptor: 62%
+    SelectedValueDefault: 50
+    ValueDefault: 50
+    Explanation: Music Audio
+    selectedValue: 50
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 80
+    SliderMinValue: 0
+    Name: Player Audio
+    ValueDescriptor: 
+    SelectedValueDefault: 50
+    ValueDefault: 50
+    Explanation: 
+    selectedValue: 50
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 1
+    SliderMinValue: 0
+    Name: Microphone Volume
+    ValueDescriptor: 
+    SelectedValueDefault: 1
+    ValueDefault: 1
+    Explanation: 
+    selectedValue: 1
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Selected Microphone
+    ValueDescriptor: 
+    SelectedValueDefault: 
+    ValueDefault: False
+    Explanation: 
+    selectedValue: microphone (nvidia broadcast)
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: microphone (nvidia broadcast)
+      UserValue: Microphone (NVIDIA Broadcast)
+    - realValue: microphone (logitech streamcam)
+      UserValue: Microphone (Logitech StreamCam)
+    - realValue: headset microphone (oculus virtual audio device)
+      UserValue: Headset Microphone (Oculus Virtual Audio Device)
+    - realValue: microphone (2- antlion wireless microphone)
+      UserValue: Microphone (2- Antlion Wireless Microphone)
+    - realValue: microphone (steam streaming microphone)
+      UserValue: Microphone (Steam Streaming Microphone)
+    - realValue: microphone (2- rode nt-usb)
+      UserValue: Microphone (2- RODE NT-USB)
+    - realValue: digital audio interface (valve vr radio & hmd mic)
+      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 1
+    SliderMinValue: 0
+    Name: Mcrophone Volume
+    ValueDescriptor: Microphone Volume
+    SelectedValueDefault: 1
+    ValueDefault: 1
+    Explanation: 
+    selectedValue: 1
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList: []
+  SaveModules:
+  - {fileID: 6482417607131076391}
+  - {fileID: 256212325347645450}
+  - {fileID: 8271215996735340422}
+  - {fileID: 3753039974563469601}
+  SettingsManagerAbstractTypeDropdown:
+  - {fileID: 5443067033238234296}
+  - {fileID: 1469491627460388504}
+  SettingsManagerAbstractTypeToggle:
+  - {fileID: 8114261106711035974}
+  SettingsManagerAbstractTypeSlider:
+  - {fileID: 8050433269165642066}
+  - {fileID: 4392366896631511115}
+  SettingsManagerAbstractTypeManagement:
+  - {fileID: 697764147136612878}
+  - {fileID: 8189430712937981822}
+  SettingsManagerAbstractTypeText:
+  - {fileID: 3655613681521570213}
+  - {fileID: 6501620817872612099}
+  PlatformSaveDefault:
+  - Platform: 2
+    SaveType: JSON
+  - Platform: 7
+    SaveType: JSON
+  - Platform: 16
+    SaveType: JSON
+  - Platform: 13
+    SaveType: JSON
+  DefaultSaveType:
+    Platform: 0
+    SaveType: JSON
+  OnSettingsSaving:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSettingsSaved:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3753039974563469601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82bdf5e34837d4c469ade8d39276e8b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8271215996735340422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae8ec4604032aa43add9ddf96000535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &256212325347645450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5289782b0b11143aba520ce9fad6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6482417607131076391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 220f03ccc3871d546ab6d12d7927cbc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7884915406730103288
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,12 +1803,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7884915406730103288}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 20.814209, y: 8.46147, z: 9.887683}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 36357243023420718}
+  m_Father: {fileID: 4563181907587156597}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8352518869527864548
 MonoBehaviour:
@@ -760,7 +1860,7 @@ MonoBehaviour:
   ManagerModuleOptions:
   - OptionName: Main Audio
     Explanation: Main Audio
-    Parse: 0
+    Parse: 1
     Type: 3
   - OptionName: SFX Audio
     Explanation: SFX Audio
@@ -776,7 +1876,6 @@ MonoBehaviour:
     Type: 3
   UseAudioListener: 1
   Mixer: {fileID: 24100000, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
-  AudioMixerGroupOne: Master
   AudioMixerGroupTwo: SFX Audio
   AudioMixerGroupThree: Music Audio
   AudioMixerGroupFour: Player Audio
@@ -979,7 +2078,7 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 2
-  Manager: {fileID: 7743749643595271440}
+  Manager: {fileID: 0}
 --- !u!114 &8638552490007219108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1035,1124 +2134,12 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 3
-  Manager: {fileID: 7743749643595271440}
-  MicrophoneDevice: []
---- !u!1 &8852770691268876905
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 36357243023420718}
-  - component: {fileID: 7743749643595271440}
-  - component: {fileID: 6435900343388600922}
-  - component: {fileID: 2324246957475388958}
-  - component: {fileID: 4638345324399635204}
-  - component: {fileID: 8473322279503238074}
-  m_Layer: 0
-  m_Name: Settings Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: b7063a98511ecee40b70479ad8b88749, type: 3}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &36357243023420718
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8852770691268876905}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.814209, y: 8.46147, z: 9.887683}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7236260345192759045}
-  - {fileID: 2755666493907349224}
-  m_Father: {fileID: 4563181907587156597}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7743749643595271440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8852770691268876905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf13421e0162df1468bc366a695f14f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ManagerSettings:
-    SuccessfullyGenerated: 1
-    ActiveCanvasLikeObject: {fileID: 0}
-    BuildValues: 4
-    FileName: Settings Manager
-    CType: 0
-    CurrentPipeline: 4
-    MarkAsDontDestroyOnLoad: 1
-    ExplanationText: {fileID: 0}
-    SettingsManagerObjectpaths:
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Dropdown.prefab
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Dynamic Dropdown.prefab
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Slider.prefab
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Toggle.prefab
-    SettingsManagerObjects:
-    - {fileID: 7449501133343338555, guid: 91c995af67f8e7c46b15c8cd8184a723, type: 3}
-    - {fileID: 7449501133343338555, guid: c4d7177423c74af4fafb9699c399dafb, type: 3}
-    - {fileID: 4698753801063083922, guid: 19e5030522240f4459ed288c663e390f, type: 3}
-    - {fileID: -892464885040180822, guid: e814fefd40c6ef445bfacef072a362ca, type: 3}
-    CurrentlySelectedSaveModule: {fileID: 6435900343388600922}
-    CurrentlySelectedSaveModuleName: INI
-  SettingsManagerOptions:
-  - {fileID: 1962641699494196431}
-  - {fileID: 1077079382445251767}
-  - {fileID: 8638552490007219108}
-  - {fileID: 1742149703474370130}
-  - {fileID: 6164862947249097587}
-  - {fileID: 3784412682251115113}
-  - {fileID: 8449095911647677582}
-  - {fileID: 7626703953093772756}
-  - {fileID: 2999677633599871041}
-  - {fileID: 673822432540484547}
-  - {fileID: 4942735700325845565}
-  - {fileID: 4907001347912712639}
-  - {fileID: 5896743050639982037}
-  - {fileID: 6042927766578467380}
-  - {fileID: 8352518869527864548}
-  Options:
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Antialiasing
-    ValueDescriptor: Antialiasing
-    SelectedValueDefault: smaa
-    ValueDefault: smaa
-    Explanation: Antialiasing
-    selectedValue: smaa
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState:
-    - Platform: 7
-      GraphicsVendor: 3
-      SetString: smaa
-    - Platform: 2
-      GraphicsVendor: 0
-      SetString: smaa
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 1
-    SelectableValueList:
-    - realValue: taa
-      UserValue: TAA
-    - realValue: fxaa
-      UserValue: FXAA
-    - realValue: smaa
-      UserValue: SMAA
-    - realValue: noaa
-      UserValue: NOAA
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Master Quality
-    ValueDescriptor: Master Quality
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: 
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState:
-    - Platform: 2
-      GraphicsVendor: 3
-      SetString: ultra
-    - Platform: 0
-      GraphicsVendor: 3
-      SetString: medium
-    - Platform: 7
-      GraphicsVendor: 3
-      SetString: ultra
-    - Platform: 1
-      GraphicsVendor: 0
-      SetString: medium
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 2
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 1
-      DefaultPlatform: 1
-      ExcludePlatform: 1
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Ambient Occlusion
-    ValueDescriptor: Ambient Occlusion
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Ambient Occlusion
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState:
-    - Platform: 0
-      GraphicsVendor: 0
-      SetString: very low
-    ExcludeFromThesePlatforms:
-    - Platform: 0
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Contact Shadows
-    ValueDescriptor: Contact Shadows
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Contact Shadows
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Quality Level
-    ValueDescriptor: Quality Level
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Quality Level
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 1
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Shadow Quality
-    ValueDescriptor: Shadow Quality
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Shadow Quality
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Shadow Distance
-    ValueDescriptor: Shadow Distance
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Shadow Distance
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Texture Quality
-    ValueDescriptor: Texture Quality
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Texture Quality
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 000000000300000004000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Vertical Sync
-    ValueDescriptor: Vertical Sync
-    SelectedValueDefault: on
-    ValueDefault: on
-    Explanation: Vertical Sync
-    selectedValue: on
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: on
-      UserValue: On
-    - realValue: half
-      UserValue: Half
-    - realValue: off
-      UserValue: Off
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 1
-      DefaultPlatform: 1
-      ExcludePlatform: 1
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Volumetric Quality
-    ValueDescriptor: Volumetric Quality
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Volumetric Quality
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 1
-      ExcludePlatform: 0
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Memory Allocation
-    ValueDescriptor: Memory Allocation
-    SelectedValueDefault: dynamic
-    ValueDefault: dynamic
-    Explanation: Memory Allocation
-    selectedValue: dynamic
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState:
-    - Platform: 2
-      GraphicsVendor: 3
-      SetString: dynamic
-    - Platform: 7
-      GraphicsVendor: 3
-      SetString: dynamic
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: 256
-      UserValue: 256
-    - realValue: 512
-      UserValue: 512
-    - realValue: 1024
-      UserValue: 1024
-    - realValue: 2048
-      UserValue: 2048
-    - realValue: 4096
-      UserValue: 4096
-    - realValue: 8192
-      UserValue: 8192
-    - realValue: dynamic
-      UserValue: Dynamic
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 1
-      ExcludePlatform: 1
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: Close Point Shadows
-    ValueDescriptor: Close Point Shadows
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Close Point Shadows
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: HDR Support
-    ValueDescriptor: HDR Support
-    SelectedValueDefault: true
-    ValueDefault: true
-    Explanation: HDR Support
-    selectedValue: true
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: true
-      UserValue: true
-    - realValue: false
-      UserValue: false
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: Terrain Quality
-    ValueDescriptor: Terrain Quality
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Terrain Quality
-    selectedValue: very low
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Resolution
-    ValueDescriptor: Resolution
-    SelectedValueDefault: 
-    ValueDefault: 640x480
-    Explanation: 
-    selectedValue: 2560x1440
-    Type: 2
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: 640x480
-      UserValue: 640x480
-    - realValue: 720x480
-      UserValue: 720x480
-    - realValue: 720x576
-      UserValue: 720x576
-    - realValue: 800x600
-      UserValue: 800x600
-    - realValue: 1024x768
-      UserValue: 1024x768
-    - realValue: 1152x720
-      UserValue: 1152x720
-    - realValue: 1152x864
-      UserValue: 1152x864
-    - realValue: 1176x664
-      UserValue: 1176x664
-    - realValue: 1280x720
-      UserValue: 1280x720
-    - realValue: 1280x768
-      UserValue: 1280x768
-    - realValue: 1280x800
-      UserValue: 1280x800
-    - realValue: 1280x960
-      UserValue: 1280x960
-    - realValue: 1280x1024
-      UserValue: 1280x1024
-    - realValue: 1360x768
-      UserValue: 1360x768
-    - realValue: 1366x768
-      UserValue: 1366x768
-    - realValue: 1400x1050
-      UserValue: 1400x1050
-    - realValue: 1440x900
-      UserValue: 1440x900
-    - realValue: 1440x1080
-      UserValue: 1440x1080
-    - realValue: 1600x900
-      UserValue: 1600x900
-    - realValue: 1600x1024
-      UserValue: 1600x1024
-    - realValue: 1600x1200
-      UserValue: 1600x1200
-    - realValue: 1680x1050
-      UserValue: 1680x1050
-    - realValue: 1920x1080
-      UserValue: 1920x1080
-    - realValue: 1920x1200
-      UserValue: 1920x1200
-    - realValue: 1920x1440
-      UserValue: 1920x1440
-    - realValue: 2560x1440
-      UserValue: 2560x1440
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 1
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: ScreenMode
-    ValueDescriptor: ScreenMode
-    SelectedValueDefault: 
-    ValueDefault: windowed
-    Explanation: 
-    selectedValue: exclusive fullscreen
-    Type: 2
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: exclusive fullscreen
-      UserValue: Exclusive FullScreen
-    - realValue: fullscreen
-      UserValue: Fullscreen
-    - realValue: maximized window
-      UserValue: Maximized Window
-    - realValue: windowed
-      UserValue: Windowed
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Monitor
-    ValueDescriptor: Monitor
-    SelectedValueDefault: 
-    ValueDefault: 0
-    Explanation: 
-    selectedValue: 0
-    Type: 2
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: 0
-      UserValue: 0
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 1
-    RoundTo: 0
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 80
-    SliderMinValue: 0
-    Name: Main Audio
-    ValueDescriptor: 62%
-    SelectedValueDefault: 50
-    ValueDefault: 50
-    Explanation: Main Audio
-    selectedValue: 50
-    Type: 3
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 0
-    ReturnedValueTextType: 0
-    SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 1
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 1
-    RoundTo: 0
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 80
-    SliderMinValue: 0
-    Name: SFX Audio
-    ValueDescriptor: 62%
-    SelectedValueDefault: 50
-    ValueDefault: 50
-    Explanation: SFX Audio
-    selectedValue: 50
-    Type: 3
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 0
-    ReturnedValueTextType: 0
-    SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 1
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 1
-    RoundTo: 0
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 80
-    SliderMinValue: 0
-    Name: Music Audio
-    ValueDescriptor: 62%
-    SelectedValueDefault: 50
-    ValueDefault: 50
-    Explanation: Music Audio
-    selectedValue: 50
-    Type: 3
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 0
-    ReturnedValueTextType: 0
-    SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 1
-    RoundTo: 0
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 80
-    SliderMinValue: 0
-    Name: Player Audio
-    ValueDescriptor: 
-    SelectedValueDefault: 
-    ValueDefault: 50
-    Explanation: 
-    selectedValue: 
-    Type: 3
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 0
-    ReturnedValueTextType: 0
-    SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 1
-    RoundTo: 0
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 80
-    SliderMinValue: 0
-    Name: Microphone Volume
-    ValueDescriptor: 
-    SelectedValueDefault: 
-    ValueDefault: 80
-    Explanation: 
-    selectedValue: 
-    Type: 3
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 0
-    ReturnedValueTextType: 0
-    SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: Selected Microphone
-    ValueDescriptor: 
-    SelectedValueDefault: 
-    ValueDefault: False
-    Explanation: 
-    selectedValue: 
-    Type: 2
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 1
-    RoundTo: 0
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 1
-    SliderMinValue: 0
-    Name: Mcrophone Volume
-    ValueDescriptor: Microphone Volume
-    SelectedValueDefault: 
-    ValueDefault: 1
-    Explanation: 
-    selectedValue: 
-    Type: 3
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList: []
-  SaveModules:
-  - {fileID: 8473322279503238074}
-  - {fileID: 4638345324399635204}
-  - {fileID: 2324246957475388958}
-  - {fileID: 6435900343388600922}
-  SettingsManagerAbstractTypeDropdown:
-  - {fileID: 5443067033238234296}
-  - {fileID: 1469491627460388504}
-  SettingsManagerAbstractTypeToggle:
-  - {fileID: 8114261106711035974}
-  SettingsManagerAbstractTypeSlider:
-  - {fileID: 8050433269165642066}
-  - {fileID: 4392366896631511115}
-  SettingsManagerAbstractTypeManagement:
-  - {fileID: 697764147136612878}
-  - {fileID: 8189430712937981822}
-  SettingsManagerAbstractTypeText:
-  - {fileID: 3655613681521570213}
-  - {fileID: 6501620817872612099}
-  PlatformSaveDefault:
-  - Platform: 2
-    SaveType: INI
-  - Platform: 7
-    SaveType: INI
-  - Platform: 16
-    SaveType: PlayerPref
-  - Platform: 13
-    SaveType: PlayerPref
-  DefaultSaveType:
-    Platform: 0
-    SaveType: PlayerPref
-  OnSettingsSaving:
-    m_PersistentCalls:
-      m_Calls: []
-  OnSettingsSaved:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &6435900343388600922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8852770691268876905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82bdf5e34837d4c469ade8d39276e8b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2324246957475388958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8852770691268876905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ae8ec4604032aa43add9ddf96000535, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4638345324399635204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8852770691268876905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f5289782b0b11143aba520ce9fad6aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8473322279503238074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8852770691268876905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 220f03ccc3871d546ab6d12d7927cbc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  Manager: {fileID: 0}
+  MicrophoneDevice:
+  - Microphone (NVIDIA Broadcast)
+  - Microphone (Logitech StreamCam)
+  - Headset Microphone (Oculus Virtual Audio Device)
+  - Microphone (2- Antlion Wireless Microphone)
+  - Microphone (Steam Streaming Microphone)
+  - Microphone (2- RODE NT-USB)
+  - Digital Audio Interface (Valve VR Radio & HMD Mic)

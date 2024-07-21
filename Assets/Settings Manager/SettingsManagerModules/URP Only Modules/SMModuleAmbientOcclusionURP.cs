@@ -3,7 +3,7 @@ using BattlePhaze.SettingsManager;
 using UnityEngine.Rendering.Universal;
 public class SMModuleAmbientOcclusionURP : SettingsManagerOption
 {
-    public ForwardRendererData rendererData;
+    public UniversalRendererData rendererData;
     public string AmbientOcclusionRenderData = "SSAO";
     public ScriptableRendererFeature AmbientOcclusion;
     public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager)

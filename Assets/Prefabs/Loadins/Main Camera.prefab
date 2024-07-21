@@ -189,6 +189,7 @@ MonoBehaviour:
   LocalPlayer: {fileID: 0}
   DefaultCameraFov: 90
   BasisLockToInput: {fileID: 5985133177976618905}
+  HasEvents: 0
 --- !u!114 &5985133177976618905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,3 +204,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TrackedRole: 0
   AttachedInput: {fileID: 0}
+  HasEvent: 0

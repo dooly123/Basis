@@ -83,9 +83,14 @@ MonoBehaviour:
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
-    hasTrackerPositionDriver: 1
-    hasTrackerRotationDriver: 1
+    BoneModelTransform: {fileID: 0}
+    HasEvents: 0
+    hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -108,38 +113,51 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    RawLocalData:
+    FinalApplied:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     LastRunData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    RestingWorldSpace:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    RestingLocalSpace:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    InitialOffset:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     TrackerData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    CurrentWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
   MouthTarget:
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
-    hasTrackerPositionDriver: 1
-    hasTrackerRotationDriver: 1
+    BoneModelTransform: {fileID: 0}
+    HasEvents: 0
+    hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    GeneralLocation: 0
     RotationControl:
       Lerp: 0
       LerpAmountNormal: 0
@@ -162,31 +180,39 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    RawLocalData:
+    FinalApplied:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     LastRunData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    RestingWorldSpace:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    RestingLocalSpace:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-    InitialOffset:
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
     TrackerData:
       Use: 0
-      Rotation: {x: 0, y: 0, z: 0, w: 0}
-      Position: {x: 0, y: 0, z: 0}
-  Offset: {x: 0, y: -0.5, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    CurrentWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+  FloatOffset: -0.5
   Text: {fileID: 5913064765185686731}
 --- !u!114 &2997356888555999241
 MonoBehaviour:
@@ -314,7 +340,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
+    m_NormalColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 0.2}
     m_HighlightedColor: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 1}
     m_PressedColor: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
     m_SelectedColor: {r: 0.23529413, g: 0.23529413, b: 0.23529413, a: 1}

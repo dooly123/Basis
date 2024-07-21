@@ -54,6 +54,7 @@ MonoBehaviour:
   SkinnedMeshRenderer: []
   Player: {fileID: 3578141255088103770}
   InTPose: 0
+  HasEvents: 0
   RemotePlayer: {fileID: 3578141255088103770}
 --- !u!114 &3578141255088103770
 MonoBehaviour:
@@ -82,7 +83,11 @@ MonoBehaviour:
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
+    HasEvents: 0
     hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
     GeneralLocation: 0
     RotationControl:
@@ -107,7 +112,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    RawLocalData:
+    FinalApplied:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -131,14 +136,15 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    FinalisedWorldData:
+    CurrentWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    FinalisedLastWorldData:
+    LastWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
+  HasEvents: 0
 --- !u!114 &7026422538752026465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,6 +180,7 @@ MonoBehaviour:
   trackedRoles: 
   HasControls: 0
   ProvidedTime: 0
+  DeltaTime: 0
   RemotePlayer: {fileID: 3578141255088103770}
   HeadAvatar: {fileID: 0}
   HipsAvatar: {fileID: 0}
@@ -183,7 +190,11 @@ MonoBehaviour:
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
+    HasEvents: 0
     hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
     GeneralLocation: 0
     RotationControl:
@@ -208,7 +219,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    RawLocalData:
+    FinalApplied:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -232,11 +243,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    FinalisedWorldData:
+    CurrentWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    FinalisedLastWorldData:
+    LastWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -246,7 +257,11 @@ MonoBehaviour:
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
+    HasEvents: 0
     hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
     GeneralLocation: 0
     RotationControl:
@@ -271,7 +286,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    RawLocalData:
+    FinalApplied:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -295,14 +310,15 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    FinalisedWorldData:
+    CurrentWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    FinalisedLastWorldData:
+    LastWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
+  HasEvent: 0
 --- !u!1 &5669630751523980901
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,13 +394,13 @@ AudioSource:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.4
-      value: 0.4
-      inSlope: -1.497126
-      outSlope: -1.497126
+      time: 0.33333334
+      value: 0.25
+      inSlope: -0.9985193
+      outSlope: -0.9985193
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.3036212
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
@@ -459,7 +475,7 @@ MonoBehaviour:
   interpolation: 1
   perspectiveCorrection: 0
   distanceAttenuation: 1
-  distanceAttenuationInput: 1
+  distanceAttenuationInput: 0
   distanceAttenuationValue: 1
   airAbsorption: 1
   airAbsorptionInput: 0
@@ -471,7 +487,7 @@ MonoBehaviour:
   dipoleWeight: 0.25
   dipolePower: 1
   directivityValue: 1
-  occlusion: 0
+  occlusion: 1
   occlusionInput: 0
   occlusionType: 1
   occlusionRadius: 1
@@ -483,9 +499,9 @@ MonoBehaviour:
   transmissionLow: 1
   transmissionMid: 1
   transmissionHigh: 1
-  maxTransmissionSurfaces: 8
+  maxTransmissionSurfaces: 4
   directMixLevel: 1
-  reflections: 0
+  reflections: 1
   reflectionsType: 0
   useDistanceCurveForReflections: 1
   currentBakedSource: {fileID: 0}
@@ -497,7 +513,7 @@ MonoBehaviour:
   hybridReverbEQHigh: 1
   hybridReverbDelay: 0
   applyHRTFToReflections: 1
-  reflectionsMixLevel: 1
+  reflectionsMixLevel: 0.1
   pathing: 0
   pathingProbeBatch: {fileID: 0}
   pathValidation: 1
