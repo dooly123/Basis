@@ -10,11 +10,22 @@ namespace BattlePhaze.SettingsManager
 #if UNITY_EDITOR
             paths = new List<string>();
             objects = new List<SettingsManagerObject>();
-
+            if (Application.isPlaying == false)
+            {
+                return;
+            }
             string[] guids = AssetDatabase.FindAssets("t:GameObject");
             foreach (string guid in guids)
             {
+                if (string.IsNullOrEmpty(guid))
+                {
+                    continue;
+                }
                 string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (string.IsNullOrEmpty(path))
+                {
+                    continue;
+                }
                 GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 
                 if (obj.TryGetComponent<SettingsManagerObject>(out var smObject))

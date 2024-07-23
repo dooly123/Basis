@@ -8,7 +8,7 @@ namespace BattlePhaze.SettingsManager
     /// </summary>
     public class SMTypeFallBackDropdown : SettingsManagerAbstractTypeDropdown
     {
-        public SMTypeFallbackDataHolder SMTypeFallbackDataHolder;
+        public SettingsManager DataHolder;
         /// <summary>
         /// DropDown Listener
         /// </summary>
@@ -28,7 +28,7 @@ namespace BattlePhaze.SettingsManager
             {
                 if (Manager.Options[OptionIndex].ObjectInput == null)
                 {
-                    SMTypeFallbackDataHolder.WorkArounds[SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex)].SelectedValue = Manager.Options[OptionIndex].SelectedValue;
+                    DataHolder.WorkArounds[DataHolder.FindOrAddOption(OptionIndex)].SelectedValue = Manager.Options[OptionIndex].SelectedValue;
                     return true;
                 }
             }
@@ -57,7 +57,7 @@ namespace BattlePhaze.SettingsManager
         {
             if (Manager.Options[OptionIndex].ObjectInput == null)
             {
-                SMWorkAround WorkAround = SMTypeFallbackDataHolder.WorkArounds[SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex)];
+                SMWorkAround WorkAround = DataHolder.WorkArounds[DataHolder.FindOrAddOption(OptionIndex)];
                 WorkAround.SelectedValue = OptionsIndexValue.ToString(Manager.ManagerSettings.CInfo);
             }
         }
@@ -90,7 +90,7 @@ namespace BattlePhaze.SettingsManager
         {
             if (Manager.Options[OptionIndex].TextDescription == null)
             {
-                SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex);
+                DataHolder.FindOrAddOption(OptionIndex);
             }
             return;
         }

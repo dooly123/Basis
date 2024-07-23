@@ -72,6 +72,7 @@ namespace BattlePhaze.SettingsManager
         /// </summary>
         public static void SettingsList(SettingsManagerEditor editor, SettingsManager manager)
         {
+
             EditorGUILayout.LabelField("Settings", SettingsmanagerStyle.FoldoutHeaderLarge);
             EditorGUILayout.Space();
 
@@ -84,7 +85,8 @@ namespace BattlePhaze.SettingsManager
 
             for (int optionIndex = 0; optionIndex < manager.Options.Count; optionIndex++)
             {
-                if (GUILayout.Button(SettingsmanagerStyle.FoldDownGeneration(manager, optionIndex, manager.Options[optionIndex].EditorBasedUIToggles.EditorVisable), SettingsmanagerStyle.FoldoutHeader))
+                GUIContent GUIContent = SettingsmanagerStyle.FoldDownGeneration(manager, optionIndex, manager.Options[optionIndex].EditorBasedUIToggles.EditorVisable);
+                if (GUILayout.Button(GUIContent, SettingsmanagerStyle.FoldoutHeader))
                 {
                     manager.Options[optionIndex].EditorBasedUIToggles.EditorVisable = !manager.Options[optionIndex].EditorBasedUIToggles.EditorVisable;
                 }
@@ -106,7 +108,7 @@ namespace BattlePhaze.SettingsManager
         /// <param name="optionIndex"></param>
         public static void DisplayOptionsList(SettingsManagerEditor editor, SettingsManager manager, int optionIndex)
         {
-            var option = manager.Options[optionIndex];
+            SettingsMenuInput option = manager.Options[optionIndex];
             EditorGUILayout.BeginHorizontal();
             option.Type = (SettingsManagerEnums.IsType)EditorGUILayout.EnumPopup(option.Type, SettingsmanagerStyle.ButtonDominateStyling);
             if (GUILayout.Button("Up↑", SettingsmanagerStyle.ButtonDominateStyling) && optionIndex - 1 >= 0)
@@ -194,6 +196,7 @@ namespace BattlePhaze.SettingsManager
                     editor.DropDownValueSystem(optionIndex);
                     editor.PlatformDefaultDropDownValues(optionIndex);
                     editor.ExcludeFromPlatform(optionIndex);
+
                     break;
 
                 case SettingsManagerEnums.IsType.Dynamic:
@@ -239,16 +242,29 @@ namespace BattlePhaze.SettingsManager
                     GUILayout.Label("Default Value", SettingsmanagerStyle.DescriptorStyling);
                     if (option.RealValues.Count != 0)
                     {
-
                         int Index = 0;
                         if (option.ValueDefault != string.Empty)
                         {
-                            if(ConvertStringArrayToIndex(option.ValueDefault, option.RealValues.ToArray(),out Index))
+
+                            if (ConvertStringArrayToIndex(option.ValueDefault, option.RealValues.ToArray(), out Index))
+                            {
+                                Index = EditorGUILayout.Popup(Index, option.RealValues.ToArray(), SettingsmanagerStyle.EnumStyling);
+                                option.ValueDefault = option.RealValues[Index];
+                            }
+                            else
                             {
                                 Index = EditorGUILayout.Popup(Index, option.RealValues.ToArray(), SettingsmanagerStyle.EnumStyling);
                                 option.ValueDefault = option.RealValues[Index];
                             }
                         }
+                        else
+                        {
+                            option.ValueDefault = option.RealValues[Index];
+                        }
+                    }
+                    else
+                    {
+                        //Debug.LogError("Log");
                     }
                     EditorGUILayout.EndHorizontal();
                     break;
@@ -289,7 +305,8 @@ namespace BattlePhaze.SettingsManager
                         SliderValue = Value;
                     }
                     var newValue = EditorGUILayout.Slider(SliderValue, sliderMinValue, sliderMaxValue);
-                    option.ValueDefault = newValue.ToString(manager.ManagerSettings.CInfo);
+                    option.ValueDefault = Information.SettingsManagerInformationConverter.PostProcessValue(option.Round,false, option.RoundTo, newValue, sliderMaxValue, option.MaxPercentage, option.MinPercentage);
+                   // option.ValueDefault = newValue.ToString(manager.ManagerSettings.CInfo);
                     EditorGUILayout.EndHorizontal();
                     break;
                 case SettingsManagerEnums.IsType.Toggle:

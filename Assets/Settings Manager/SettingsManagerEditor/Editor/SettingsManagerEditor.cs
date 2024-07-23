@@ -19,23 +19,31 @@
         public SettingsManagerEnums.SupportedRenderPipelines PreCachedPipeline;
         public override void OnInspectorGUI()
         {
-            manager = (SettingsManager)target;
-            SettingsmanagerStyle.Style();
-            EditorGUI.BeginChangeCheck();
-            SettingsManager.Instance = manager;
-            if (manager.ManagerSettings.SuccessfullyGenerated == false)
+            try
             {
-                manager.ManagerSettings.SuccessfullyGenerated = true;
-                EditorUtility.DisplayDialog("Settings Manager Dialog", "Please Select a Render Pipeline To use in Settings manager", "Sure thing");
+                manager = (SettingsManager)target;
+                SettingsmanagerStyle.Style();
+                EditorGUI.BeginChangeCheck();
+                SettingsManager.Instance = manager;
+                if (manager.ManagerSettings.SuccessfullyGenerated == false)
+                {
+                    manager.ManagerSettings.SuccessfullyGenerated = true;
+                    EditorUtility.DisplayDialog("Settings Manager Dialog", "Please Select a Render Pipeline To use in Settings manager", "Sure thing");
+                }
+                DrawBuildPipelineSettings();
+                DrawSettingsList();
+                DrawManagerSettings();
+                DrawModuleDisplay();
+                DrawTypeList();
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(target, "Settings Manager Panel");
+                    EditorUtility.SetDirty(manager);
+                }
             }
-            DrawBuildPipelineSettings();
-            DrawSettingsList();
-            DrawManagerSettings();
-            DrawModuleDisplay();
-            DrawTypeList();
-            if (EditorGUI.EndChangeCheck())
+            catch (Exception e)
             {
-                EditorUtility.SetDirty(manager);
+                Debug.LogException(e);
             }
         }
         private void DrawBuildPipelineSettings()
@@ -228,20 +236,40 @@
         }
         public void PlatformDefaultDropDownValues(int optionIndex)
         {
+            // Check if optionIndex is within the bounds of Options
+            if (optionIndex < 0 || optionIndex >= manager.Options.Count)
+            {
+                Debug.LogError("Option index is out of range.");
+                return;
+            }
+
             var option = manager.Options[optionIndex];
+
+            // Ensure option is not null
+            if (option == null)
+            {
+                Debug.LogError("Option is null.");
+                return;
+            }
+
             OptionSet(ref option.EditorBasedUIToggles.DefaultPlatform, "Platform Default Values");
             if (!option.EditorBasedUIToggles.DefaultPlatform)
             {
                 return;
             }
+
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add Platform Default", SettingsmanagerStyle.ButtonStyling))
             {
+                if (option.PlatFormDefaultState == null)
+                {
+                    option.PlatFormDefaultState = new List<SMPlatFormDefault>();
+                }
                 option.PlatFormDefaultState.Add(new SMPlatFormDefault());
             }
             if (GUILayout.Button("Remove Platform Default", SettingsmanagerStyle.ButtonStyling))
             {
-                if (option.PlatFormDefaultState.Count != 0)
+                if (option.PlatFormDefaultState != null && option.PlatFormDefaultState.Count > 0)
                 {
                     option.PlatFormDefaultState.RemoveAt(option.PlatFormDefaultState.Count - 1);
                 }
@@ -249,14 +277,16 @@
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginVertical();
-            if (option != null && option.PlatFormDefaultState != null)
+            if (option.PlatFormDefaultState != null)
             {
                 for (int index = 0; index < option.PlatFormDefaultState.Count; index++)
                 {
                     var platformState = option.PlatFormDefaultState[index];
 
                     if (platformState == null)
+                    {
                         continue; // Skip this iteration if platformState is null
+                    }
 
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Label("Platform", SettingsmanagerStyle.DescriptorStyling);
@@ -268,7 +298,7 @@
                     platformState.GraphicsVendor = DisplayEnumPopup(platformState.GraphicsVendor, SettingsmanagerStyle.EnumStyling);
                     EditorGUILayout.EndHorizontal();
 
-                    if (option.SelectableValueList != null && option.SelectableValueList.Count != 0)
+                    if (option.SelectableValueList != null && option.SelectableValueList.Count > 0)
                     {
                         EditorGUILayout.BeginHorizontal();
                         GUILayout.Label("Default Value", SettingsmanagerStyle.DescriptorStyling);
@@ -277,7 +307,7 @@
                         selectedIndex = EditorGUILayout.Popup(selectedIndex, selectableValues.ToArray(), SettingsmanagerStyle.ValueStyling);
 
                         // Check if selectedIndex is within the bounds of SelectableValueList
-                        if (option.SelectableValueList.Count > selectedIndex)
+                        if (selectedIndex >= 0 && selectedIndex < option.SelectableValueList.Count)
                         {
                             platformState.SetString = option.SelectableValueList[selectedIndex].RealValue;
                         }
@@ -287,8 +317,9 @@
                     EditorGUILayout.Space();
                 }
             }
+            EditorGUILayout.EndVertical();
         }
-            public void SelectBuildPipeline(int optionIndex)
+        public void SelectBuildPipeline(int optionIndex)
         {
             var option = manager.Options[optionIndex];
             OptionSet(ref option.EditorBasedUIToggles.SupportedRenderPipelines, "Supported Render Pipeline");

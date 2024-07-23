@@ -14,16 +14,19 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public float Volume = 0.2f; // Volume adjustment factor, default to 1 (no adjustment)
     public float[] microphoneBufferArray;
     public float[] processBufferArray;
-    public void AdjustVolume(float volume)
+    public float noiseGateThreshold = 0.01f; // Threshold for the noise gate
+    public float ProcessedLogVolume;
+    public void AdjustVolume()
     {
-        if(volume == 1)
+        if (ProcessedLogVolume == 1)
         {
-            //no need to modify
+            // No need to modify
             return;
         }
-        for (int i = 0; i < ProcessBufferLength; i++)
+
+        for (int Index = 0; Index < ProcessBufferLength; Index++)
         {
-            processBufferArray[i] *= volume;
+            processBufferArray[Index] *= ProcessedLogVolume;
         }
     }
     public float GetRMS()
@@ -53,5 +56,19 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public void ChangeAudio(float volume)
     {
         Volume = volume;
+        // Convert the volume to a logarithmic scale
+        float Scaled = 1 + 9 * Volume;
+        ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
+    }
+    public void ApplyNoiseGate()
+    {
+        for (int Index = 0; Index < ProcessBufferLength; Index++)
+        {
+            if (Mathf.Abs(processBufferArray[Index]) < noiseGateThreshold)
+            {
+                processBufferArray[Index] = 0;
+
+            }
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 public class BasisVisemeDriver : OVRLipSyncContextBase
@@ -9,7 +8,6 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
     public int smoothAmount = 70;
     public BasisAvatar Avatar;
     public bool audioLoopback = false;
-    public bool skipAudioSource = false;
     public float gain = 1.0f;
     public float laughterScore = 0.0f;
 
@@ -155,18 +153,5 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
         PreprocessAudioSamples(data, channels);
         ProcessAudioSamplesRaw(data, channels);
         PostprocessAudioSamples(data, channels);
-    }
-
-    /// <summary>
-    /// Raises the audio filter read event.
-    /// </summary>
-    /// <param name="data">Data.</param>
-    /// <param name="channels">Channels.</param>
-    void OnAudioFilterRead(float[] data, int channels)
-    {
-        if (!skipAudioSource)
-        {
-            ProcessAudioSamples(data, channels);
-        }
     }
 }

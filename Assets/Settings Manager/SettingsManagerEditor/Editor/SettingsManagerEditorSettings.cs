@@ -102,7 +102,7 @@ namespace BattlePhaze.SettingsManager
             if (GUILayout.Button("Auto Find Save Modules", SettingsmanagerStyle.ButtonStyling))
             {
                 SettingsManagerEditor.manager.SaveModules.Clear();
-                SMSaveModuleBase[] Base = GameObject.FindObjectsOfType<SMSaveModuleBase>();
+                SMSaveModuleBase[] Base = GameObject.FindObjectsByType<SMSaveModuleBase>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID);
                 SettingsManagerEditor.manager.SaveModules.AddRange(Base);
             }
             EditorGUILayout.EndHorizontal();

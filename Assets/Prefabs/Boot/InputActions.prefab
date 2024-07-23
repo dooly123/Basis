@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4392366896631511115}
   - component: {fileID: 8114261106711035974}
   - component: {fileID: 6501620817872612099}
-  - component: {fileID: 8937679370050399871}
   - component: {fileID: 697764147136612878}
   - component: {fileID: 5443067033238234296}
   - component: {fileID: 3655613681521570213}
@@ -53,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446e38a2f3c745e43ae2db29c4350a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+  DataHolder: {fileID: 6378574261833472064}
 --- !u!114 &8189430712937981822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +65,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9e4f284417b3ab489d8d9472147c9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
 --- !u!114 &4392366896631511115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e91725a631429ab4093ffd9511dc43b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+  SettingsManager: {fileID: 6378574261833472064}
 --- !u!114 &8114261106711035974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211723899a659bc48b75cddae23a6951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
+  SettingsManager: {fileID: 6378574261833472064}
 --- !u!114 &6501620817872612099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,419 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd436ea24dd244e4fbee26933da59fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SMTypeFallbackDataHolder: {fileID: 8937679370050399871}
---- !u!114 &8937679370050399871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930336014935329343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ae54136d6e8f554fa1df508de801eba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WorkArounds:
-  - Name: Antialiasing
-    DefaultValue: smaa
-    SelectedValue: smaa
-    Index: 0
-    SelectableValueList:
-    - realValue: taa
-      UserValue: TAA
-    - realValue: fxaa
-      UserValue: FXAA
-    - realValue: smaa
-      UserValue: SMAA
-    - realValue: noaa
-      UserValue: NOAA
-    Min: 0
-    Max: 0
-  - Name: Master Quality
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 1
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Ambient Occlusion
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 2
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Contact Shadows
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 3
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Quality Level
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 4
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Shadow Quality
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 5
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Shadow Distance
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 6
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Texture Quality
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 7
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Vertical Sync
-    DefaultValue: on
-    SelectedValue: on
-    Index: 8
-    SelectableValueList:
-    - realValue: on
-      UserValue: On
-    - realValue: half
-      UserValue: Half
-    - realValue: off
-      UserValue: Off
-    Min: 0
-    Max: 0
-  - Name: Volumetric Quality
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 9
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Memory Allocation
-    DefaultValue: dynamic
-    SelectedValue: dynamic
-    Index: 10
-    SelectableValueList:
-    - realValue: 256
-      UserValue: 256
-    - realValue: 512
-      UserValue: 512
-    - realValue: 1024
-      UserValue: 1024
-    - realValue: 2048
-      UserValue: 2048
-    - realValue: 4096
-      UserValue: 4096
-    - realValue: 8192
-      UserValue: 8192
-    - realValue: dynamic
-      UserValue: Dynamic
-    Min: 0
-    Max: 0
-  - Name: Close Point Shadows
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 11
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: HDR Support
-    DefaultValue: true
-    SelectedValue: true
-    Index: 12
-    SelectableValueList:
-    - realValue: true
-      UserValue: true
-    - realValue: false
-      UserValue: false
-    Min: 0
-    Max: 0
-  - Name: Terrain Quality
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 13
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
-  - Name: Resolution
-    DefaultValue: 
-    SelectedValue: 21
-    Index: 14
-    SelectableValueList:
-    - realValue: 640x480
-      UserValue: 640x480
-    - realValue: 720x480
-      UserValue: 720x480
-    - realValue: 720x576
-      UserValue: 720x576
-    - realValue: 800x600
-      UserValue: 800x600
-    - realValue: 1024x768
-      UserValue: 1024x768
-    - realValue: 1152x864
-      UserValue: 1152x864
-    - realValue: 1176x664
-      UserValue: 1176x664
-    - realValue: 1280x720
-      UserValue: 1280x720
-    - realValue: 1280x768
-      UserValue: 1280x768
-    - realValue: 1280x800
-      UserValue: 1280x800
-    - realValue: 1280x960
-      UserValue: 1280x960
-    - realValue: 1280x1024
-      UserValue: 1280x1024
-    - realValue: 1360x768
-      UserValue: 1360x768
-    - realValue: 1366x768
-      UserValue: 1366x768
-    - realValue: 1400x1050
-      UserValue: 1400x1050
-    - realValue: 1440x900
-      UserValue: 1440x900
-    - realValue: 1440x1080
-      UserValue: 1440x1080
-    - realValue: 1600x900
-      UserValue: 1600x900
-    - realValue: 1600x1024
-      UserValue: 1600x1024
-    - realValue: 1600x1200
-      UserValue: 1600x1200
-    - realValue: 1680x1050
-      UserValue: 1680x1050
-    - realValue: 1920x1080
-      UserValue: 1920x1080
-    - realValue: 1920x1200
-      UserValue: 1920x1200
-    - realValue: 1920x1440
-      UserValue: 1920x1440
-    - realValue: 2560x1440
-      UserValue: 2560x1440
-    Min: 0
-    Max: 0
-  - Name: ScreenMode
-    DefaultValue: 
-    SelectedValue: 3
-    Index: 15
-    SelectableValueList:
-    - realValue: exclusive fullscreen
-      UserValue: Exclusive FullScreen
-    - realValue: fullscreen
-      UserValue: Fullscreen
-    - realValue: maximized window
-      UserValue: Maximized Window
-    - realValue: windowed
-      UserValue: Windowed
-    Min: 0
-    Max: 0
-  - Name: Monitor
-    DefaultValue: 
-    SelectedValue: 0
-    Index: 16
-    SelectableValueList:
-    - realValue: 0
-      UserValue: 0
-    Min: 0
-    Max: 0
-  - Name: Main Audio
-    DefaultValue: 1
-    SelectedValue: 1
-    Index: 17
-    SelectableValueList: []
-    Min: 0
-    Max: 1
-  - Name: SFX Audio
-    DefaultValue: 50
-    SelectedValue: 80
-    Index: 18
-    SelectableValueList: []
-    Min: 0
-    Max: 80
-  - Name: Music Audio
-    DefaultValue: 50
-    SelectedValue: 80
-    Index: 19
-    SelectableValueList: []
-    Min: 0
-    Max: 80
-  - Name: Player Audio
-    DefaultValue: 50
-    SelectedValue: 80
-    Index: 20
-    SelectableValueList: []
-    Min: 0
-    Max: 80
-  - Name: Microphone Volume
-    DefaultValue: 1
-    SelectedValue: 1
-    Index: 21
-    SelectableValueList: []
-    Min: 0
-    Max: 1
-  - Name: Selected Microphone
-    DefaultValue: 
-    SelectedValue: 6
-    Index: 22
-    SelectableValueList:
-    - realValue: microphone (nvidia broadcast)
-      UserValue: Microphone (NVIDIA Broadcast)
-    - realValue: microphone (logitech streamcam)
-      UserValue: Microphone (Logitech StreamCam)
-    - realValue: headset microphone (oculus virtual audio device)
-      UserValue: Headset Microphone (Oculus Virtual Audio Device)
-    - realValue: microphone (2- antlion wireless microphone)
-      UserValue: Microphone (2- Antlion Wireless Microphone)
-    - realValue: microphone (steam streaming microphone)
-      UserValue: Microphone (Steam Streaming Microphone)
-    - realValue: microphone (2- rode nt-usb)
-      UserValue: Microphone (2- RODE NT-USB)
-    - realValue: digital audio interface (valve vr radio & hmd mic)
-      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
-    Min: 0
-    Max: 0
-  - Name: Mcrophone Volume
-    DefaultValue: 1
-    SelectedValue: 1
-    Index: 23
-    SelectableValueList: []
-    Min: 0
-    Max: 1
-  - Name: Render Resolution
-    DefaultValue: 1
-    SelectedValue: 1
-    Index: 24
-    SelectableValueList: []
-    Min: 0.45
-    Max: 1.5
-  - Name: Upscaler
-    DefaultValue: 
-    SelectedValue: false
-    Index: 25
-    SelectableValueList:
-    - realValue: auto
-      UserValue: Auto
-    - realValue: linear upscaling
-      UserValue: Linear Upscaling
-    - realValue: point upscaling
-      UserValue: Point Upscaling
-    - realValue: fsr upscaling
-      UserValue: FSR Upscaling
-    - realValue: spatial temporal upscaling
-      UserValue: Spatial Temporal Upscaling
-    Min: 0
-    Max: 0
-  Manager: {fileID: 6378574261833472064}
 --- !u!114 &697764147136612878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,20 +361,8 @@ MonoBehaviour:
     CurrentPipeline: 4
     MarkAsDontDestroyOnLoad: 1
     ExplanationText: {fileID: 0}
-    SettingsManagerObjectpaths:
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Dropdown.prefab
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Dynamic Dropdown.prefab
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Slider.prefab
-    - Assets/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo Types/Unity/Unity
-      Standard Toggle.prefab
-    SettingsManagerObjects:
-    - {fileID: 7449501133343338555, guid: 91c995af67f8e7c46b15c8cd8184a723, type: 3}
-    - {fileID: 7449501133343338555, guid: c4d7177423c74af4fafb9699c399dafb, type: 3}
-    - {fileID: 4698753801063083922, guid: 19e5030522240f4459ed288c663e390f, type: 3}
-    - {fileID: -892464885040180822, guid: e814fefd40c6ef445bfacef072a362ca, type: 3}
+    SettingsManagerObjectpaths: []
+    SettingsManagerObjects: []
     CurrentlySelectedSaveModule: {fileID: 256212325347645450}
     CurrentlySelectedSaveModuleName: JSON
   SettingsManagerOptions:
@@ -837,9 +410,6 @@ MonoBehaviour:
     PlatFormDefaultState:
     - Platform: 7
       GraphicsVendor: 3
-      SetString: smaa
-    - Platform: 2
-      GraphicsVendor: 0
       SetString: smaa
     ExcludeFromThesePlatforms: []
     MasterQualityState: 0
@@ -907,11 +477,11 @@ MonoBehaviour:
     - realValue: ultra
       UserValue: Ultra
   - EditorBasedUIToggles:
-      SupportedRenderPipelines: 1
-      DefaultPlatform: 1
-      ExcludePlatform: 1
-      ValueToggle: 1
-      EditorVisable: 1
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1408,7 +978,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: 640x480
     Explanation: 
-    selectedValue: 1920x1080
+    selectedValue: 2560x1440
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1586,7 +1156,7 @@ MonoBehaviour:
     Name: SFX Audio
     ValueDescriptor: 62%
     SelectedValueDefault: 50
-    ValueDefault: 50
+    ValueDefault: 70
     Explanation: SFX Audio
     selectedValue: 80
     Type: 3
@@ -1616,7 +1186,7 @@ MonoBehaviour:
     Name: Music Audio
     ValueDescriptor: 62%
     SelectedValueDefault: 50
-    ValueDefault: 50
+    ValueDefault: 70
     Explanation: Music Audio
     selectedValue: 80
     Type: 3
@@ -1646,7 +1216,7 @@ MonoBehaviour:
     Name: Player Audio
     ValueDescriptor: 
     SelectedValueDefault: 50
-    ValueDefault: 50
+    ValueDefault: 70
     Explanation: 
     selectedValue: 80
     Type: 3
@@ -1708,7 +1278,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: False
     Explanation: 
-    selectedValue: digital audio interface (valve vr radio & hmd mic)
+    selectedValue: microphone (nvidia broadcast)
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1743,9 +1313,9 @@ MonoBehaviour:
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
-    MaxPercentage: 100
+    MaxPercentage: 150
     MinPercentage: 0
-    SliderMaxValue: 1
+    SliderMaxValue: 1.5
     SliderMinValue: 0
     Name: Mcrophone Volume
     ValueDescriptor: Microphone Volume
@@ -1769,7 +1339,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 1
@@ -1780,9 +1350,9 @@ MonoBehaviour:
     Name: Render Resolution
     ValueDescriptor: Render Resolution
     SelectedValueDefault: 1
-    ValueDefault: 1.105
+    ValueDefault: 1
     Explanation: 
-    selectedValue: 1
+    selectedValue: 0.9795281
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1792,13 +1362,13 @@ MonoBehaviour:
     ExcludeFromThesePlatforms: []
     MasterQualityState: 0
     ParseController: 1
-    ReturnedValueTextType: 1
+    ReturnedValueTextType: 0
     SelectableValueList: []
   - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
       EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
@@ -1810,9 +1380,9 @@ MonoBehaviour:
     Name: UpScaler
     ValueDescriptor: UpScaler
     SelectedValueDefault: False
-    ValueDefault: False
+    ValueDefault: auto
     Explanation: UpScaler
-    selectedValue: false
+    selectedValue: linear upscaling
     Type: 1
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1862,6 +1432,7 @@ MonoBehaviour:
     SaveType: JSON
   - Platform: 13
     SaveType: JSON
+  WorkArounds: []
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -2174,8 +1745,6 @@ MonoBehaviour:
     Explanation: Ambient Occlusion
     Parse: 1
     Type: 1
-  rendererData: {fileID: 11400000, guid: c40be3174f62c4acf8c1216858c64956, type: 2}
-  AmbientOcclusionRenderData: SSAO
   AmbientOcclusion: {fileID: -1878332245247344467, guid: c40be3174f62c4acf8c1216858c64956,
     type: 2}
 --- !u!114 &7074081770173294057

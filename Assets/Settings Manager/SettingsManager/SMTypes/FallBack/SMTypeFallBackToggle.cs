@@ -1,11 +1,10 @@
 ﻿using BattlePhaze.SettingsManager.Types;
-using System.Collections.Generic;
 using UnityEngine;
 namespace BattlePhaze.SettingsManager
 {
     public class SMTypeFallBackToggle : SettingsManagerAbstractTypeToggle
     {
-        public SMTypeFallbackDataHolder SMTypeFallbackDataHolder;
+        public SettingsManager SettingsManager;
         /// <summary>
         /// Toggle Is On
         /// </summary>
@@ -18,7 +17,7 @@ namespace BattlePhaze.SettingsManager
             Value = 0;
             if (Manager.Options[OptionIndex].ObjectInput == null)
             {
-                SMWorkAround WorkAround = SMTypeFallbackDataHolder.WorkArounds[SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex)];
+                SMWorkAround WorkAround = SettingsManager.WorkArounds[SettingsManager.FindOrAddOption(OptionIndex)];
                 int IntValue;
                 if (int.TryParse(WorkAround.SelectedValue, System.Globalization.NumberStyles.Any, Manager.ManagerSettings.CInfo, out IntValue))
                 {
@@ -62,7 +61,7 @@ namespace BattlePhaze.SettingsManager
         {
             if (Manager.Options[OptionIndex].ObjectInput == null)
             {
-                SMWorkAround WorkAround = SMTypeFallbackDataHolder.WorkArounds[SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex)];
+                SMWorkAround WorkAround = SettingsManager.WorkArounds[SettingsManager.FindOrAddOption(OptionIndex)];
                 WorkAround.SelectedValue = State.ToString(Manager.ManagerSettings.CInfo);
             }
         }

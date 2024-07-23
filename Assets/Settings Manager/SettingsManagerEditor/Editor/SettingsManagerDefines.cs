@@ -4,53 +4,42 @@
     using System;
     using System.Linq;
     using UnityEditor;
+    using UnityEditor.Build;
+
     public static class SettingsManagerDefines
     {
         public static void AddDefineIfNecessary(string define, BuildTargetGroup buildTargetGroup)
         {
-            var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
-            if (string.IsNullOrEmpty(defines))
+            NamedBuildTarget NamedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget, out string[] Defines);
+            if (Defines.Contains(define) == false)
             {
-                defines = define;
+                List<string> DefinesList = new List<string>
+                {
+                    define
+                };
+                DefinesList.AddRange(Defines);
+                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget, DefinesList.ToArray());
             }
-            else if (!defines.Contains(define))
-            {
-                defines += ";" + define;
-            }
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, defines);
         }
 
         public static bool CheckDefineExistence(string define, BuildTargetGroup buildTargetGroup)
         {
-            var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            NamedBuildTarget NamedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            var defines = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget);
             return !string.IsNullOrEmpty(defines) && defines.Contains(define);
         }
 
         public static void RemoveDefineIfNecessary(string define, BuildTargetGroup buildTargetGroup)
         {
-            var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
-            if (string.IsNullOrEmpty(defines)) return;
-
-            var separator = new[] { ";" };
-            var parts = defines.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-
-            var newParts = new List<string>(parts.Length);
-            for (int i = 0; i < parts.Length; i++)
+            NamedBuildTarget NamedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget, out string[] Defines);
+            if (Defines.Contains(define))
             {
-                if (parts[i] != define)
-                {
-                    newParts.Add(parts[i]);
-                }
-            }
-
-            if (newParts.Count == 0)
-            {
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, string.Empty);
-            }
-            else
-            {
-                var newDefines = string.Join(";", newParts.ToArray());
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, newDefines);
+                List<string> DefinesList = new List<string>();
+                DefinesList.AddRange(Defines);
+                DefinesList.Remove(define);
+                PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget, DefinesList.ToArray());
             }
         }
 
@@ -75,29 +64,6 @@
                     AddDefineIfNecessary("SETTINGS_MANAGER_UNIVERSAL", buildTargetGroup);
                     break;
             }
-        }
-        public static void IntegrationGenerate(string className, string defineName)
-        {
-            string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
-
-            if (defines.Contains(defineName))
-            {
-                DebugSystem.SettingsManagerDebug.Log($"{defineName} : Already exists.");
-                return;
-            }
-
-            System.Type assemblyDomain = (from assembly in System.AppDomain.CurrentDomain.GetAssemblies()
-                                          from type in assembly.GetTypes()
-                                          where type.Name == className
-                                          select type).FirstOrDefault();
-
-            if (assemblyDomain == null)
-            {
-                return;
-            }
-
-            AddDefineIfNecessary(defineName, EditorUserBuildSettings.selectedBuildTargetGroup);
-            DebugSystem.SettingsManagerDebug.Log($"{defineName} : Was added to Defines!");
         }
     }
 }

@@ -5,7 +5,6 @@ namespace BattlePhaze.SettingsManager
 {
     public class SMTypeFallBackManagement : SettingsManagerAbstractTypeManagement
     {
-        public SMTypeFallbackDataHolder SMTypeFallbackDataHolder;
         public override void ManagerCompile()
         {
             return; //Manager Compile is used for Compiling code that does not have a define for intergrations

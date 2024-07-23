@@ -24,6 +24,7 @@
         public List<Types.SettingsManagerAbstractTypeManagement> SettingsManagerAbstractTypeManagement = new List<Types.SettingsManagerAbstractTypeManagement>();
         public List<Types.SettingsManagerAbstractTypeText> SettingsManagerAbstractTypeText = new List<Types.SettingsManagerAbstractTypeText>();
         public List<SMPlatFormDefaultSave> PlatformSaveDefault = new List<SMPlatFormDefaultSave>();
+        public List<SMWorkAround> WorkArounds = new List<SMWorkAround>();
         public SMPlatFormDefaultSave DefaultSaveType;
         public UnityEvent OnSettingsSaving = new UnityEvent();
         public UnityEvent OnSettingsSaved = new UnityEvent();
@@ -47,14 +48,40 @@
                 Destroy(gameObject);
             }
         }
+        public void InitalizeStoredData()
+        {
+            WorkArounds.Clear();
+            for (int WorkAroundIndex = 0; WorkAroundIndex < Options.Count; WorkAroundIndex++)
+            {
+                SMWorkAround WorkAround = new SMWorkAround
+                {
+                    Name = Options[WorkAroundIndex].Name,
+                    Index = WorkAroundIndex,
+                    SelectedValue = Options[WorkAroundIndex].SelectedValue,
+                    DefaultValue = Options[WorkAroundIndex].SelectedValueDefault,
+                    SelectableValueList = Options[WorkAroundIndex].SelectableValueList
+                };
+
+                WorkArounds.Add(WorkAround);
+            }
+        }
+        public int FindOrAddOption(int Index)
+        {
+            if (WorkArounds.Count != Options.Count)
+            {
+                InitalizeStoredData();
+            }
+            return Index;
+        }
         private void OnDestroy()
         {
             SceneManager.sceneLoaded -= SettingsManagerSceneSystem.OnSceneLoaded;
         }
         private void CheckSupportedPlatforms()
         {
-            foreach (var option in Options)
+            for (int Index = 0; Index < Options.Count; Index++)
             {
+                SettingsMenuInput option = Options[Index];
                 bool foundPipeline = false;
                 if (option.SupportedRenderPipeline.Count == 0)
                 {
@@ -78,8 +105,9 @@
         }
         private SMSaveModuleBase AssignActiveSaveModule(string currentSaveType)
         {
-            foreach (SMSaveModuleBase saveModule in SaveModules)
+            for (int Index = 0; Index < SaveModules.Count; Index++)
             {
+                SMSaveModuleBase saveModule = SaveModules[Index];
                 if (saveModule == null)
                 {
                     SettingsManagerDebug.Log("Please assign an active save module with the name " + currentSaveType);
@@ -113,8 +141,9 @@
             InitializeSaveSystem();
             RemoveNullOptions();
             SettingsManagerExclusionSystem.ExcludeFromPlatform(this);
-            foreach (var option in Options)
+            for (int Index = 0; Index < Options.Count; Index++)
             {
+                SettingsMenuInput option = Options[Index];
                 SettingsManagerOptionVisiblitySystem.SetOptionVisible(option.OptionIndex, true, this);
                 SettingsManagerStorageManagement.Read(this, option.OptionIndex, readFromFile);
                 InitializeOption(option);
@@ -153,11 +182,11 @@
         public void SendOption(SettingsMenuInput Option)
         {
             SettingsManagerDebug.Log($"Sent update: {Option.Name}: {Option.SelectedValue}");
-            foreach (var optionReceiver in SettingsManagerOptions)
+            for (int Index = 0; Index < SettingsManagerOptions.Count; Index++)
             {
                 try
                 {
-                    optionReceiver?.ReceiveOption(Option, this);
+                    SettingsManagerOptions[Index]?.ReceiveOption(Option, this);
                 }
                 catch (Exception e)
                 {

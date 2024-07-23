@@ -1,11 +1,9 @@
 ﻿using BattlePhaze.SettingsManager.Types;
-using System.Collections.Generic;
 using UnityEngine;
 namespace BattlePhaze.SettingsManager
 {
     public class SMTypeFallBackText : SettingsManagerAbstractTypeText
     {
-        public SMTypeFallbackDataHolder SMTypeFallbackDataHolder;
         /// <summary>
         /// Sets Text on Description Text UI;
         /// </summary>

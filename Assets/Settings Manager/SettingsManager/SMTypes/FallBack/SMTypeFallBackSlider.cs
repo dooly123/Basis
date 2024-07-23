@@ -7,7 +7,7 @@ namespace BattlePhaze.SettingsManager
 {
     public class SMTypeFallBackSlider : SettingsManagerAbstractTypeSlider
     {
-        public SMTypeFallbackDataHolder SMTypeFallbackDataHolder;
+        public SettingsManager SettingsManager;
         /// <summary>
         /// Slider Option Set Value
         /// </summary>
@@ -24,8 +24,8 @@ namespace BattlePhaze.SettingsManager
                     {
                         if (Manager.Options[OptionIndex].TextDescription == null)
                         {
-                            int Index = SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex);
-                            SMWorkAround WorkAround = SMTypeFallbackDataHolder.WorkArounds[Index];
+                            int Index = SettingsManager.FindOrAddOption(OptionIndex);
+                            SMWorkAround WorkAround = SettingsManager.WorkArounds[Index];
                             WorkAround.SelectedValue = Value.ToString(Manager.ManagerSettings.CInfo);
                             WorkAround.Min = Min;
                             WorkAround.Max = Max;
@@ -50,8 +50,8 @@ namespace BattlePhaze.SettingsManager
             Value = 0f;
             if (Manager.Options[OptionIndex].ObjectInput == null)
             {
-                int Index = SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex);
-                SMWorkAround WorkAround = SMTypeFallbackDataHolder.WorkArounds[Index];
+                int Index = SettingsManager.FindOrAddOption(OptionIndex);
+                SMWorkAround WorkAround = SettingsManager.WorkArounds[Index];
                 float FloatValue;
                 if (float.TryParse(WorkAround.SelectedValue, System.Globalization.NumberStyles.Any, Manager.ManagerSettings.CInfo, out FloatValue))
                 {
@@ -72,7 +72,7 @@ namespace BattlePhaze.SettingsManager
             Value = 0f;
             if (Manager.Options[OptionIndex].ObjectInput == null)
             {
-                SMWorkAround WorkAround = SMTypeFallbackDataHolder.WorkArounds[SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex)];
+                SMWorkAround WorkAround = SettingsManager.WorkArounds[SettingsManager.FindOrAddOption(OptionIndex)];
                 HasValue = true;
                 Value = WorkAround.Max;
             }
@@ -89,7 +89,7 @@ namespace BattlePhaze.SettingsManager
             Value = 0f;
             if (Manager.Options[OptionIndex].ObjectInput == null)
             {
-                SMWorkAround WorkAround = SMTypeFallbackDataHolder.WorkArounds[SMTypeFallbackDataHolder.FindOrAddOption(OptionIndex)];
+                SMWorkAround WorkAround = SettingsManager.WorkArounds[SettingsManager.FindOrAddOption(OptionIndex)];
                 HasValue = true;
                 Value = WorkAround.Min;
             }

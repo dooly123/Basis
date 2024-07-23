@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Linq;
+
 public class MicrophoneRecorder : MicrophoneRecorderBase
 {
     public int head = 0;
@@ -148,7 +149,9 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
                     Array.Copy(microphoneBufferArray, head, processBufferArray, 0, ProcessBufferLength);
                 }
 
-                AdjustVolume(Volume); // Adjust the volume of the audio data
+                ApplyNoiseGate(); // Apply noise gate before processing the audio
+
+                AdjustVolume(); // Adjust the volume of the audio data
 
                 float rms = GetRMS();
                 rmsValues[rmsIndex] = rms;
