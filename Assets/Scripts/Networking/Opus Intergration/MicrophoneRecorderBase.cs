@@ -11,7 +11,7 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public float silenceThreshold = 0.0007f; // RMS threshold for detecting silence
     public int samplingFrequency;
     public int ProcessBufferLength;
-    public float Volume = 0.2f; // Volume adjustment factor, default to 1 (no adjustment)
+    public float Volume = 1; // Volume adjustment factor, default to 1 (no adjustment)
     public float[] microphoneBufferArray;
     public float[] processBufferArray;
     public float noiseGateThreshold = 0.01f; // Threshold for the noise gate
@@ -56,10 +56,10 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public void ChangeAudio(float volume)
     {
         Volume = volume;
-        ProcessedLogVolume = volume;
+       // ProcessedLogVolume = volume;
         // Convert the volume to a logarithmic scale
-        //   float Scaled = 1 + 9 * Volume;
-        //   ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
+          float Scaled = 1 + 9 * Volume;
+          ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
     }
     public void ApplyNoiseGate()
     {
