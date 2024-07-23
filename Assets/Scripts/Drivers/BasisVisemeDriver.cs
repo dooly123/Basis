@@ -7,7 +7,6 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
     public float laughterMultiplier = 1.5f;
     public int smoothAmount = 70;
     public BasisAvatar Avatar;
-    public float gain = 1.0f;
     public float laughterScore = 0.0f;
     public void Initialize(BasisAvatar avatar)
     {
@@ -57,24 +56,11 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
         }
     }
     /// <summary>
-    /// Preprocess F32 PCM audio buffer
+    /// Process F32 audio sample and pass it to the lip sync module for computation
     /// </summary>
     /// <param name="data">Data.</param>
     /// <param name="channels">Channels.</param>
-    public void PreprocessAudioSamples(float[] data)
-    {
-        // Increase the gain of the input
-        for (int Index = 0; Index < data.Length; ++Index)
-        {
-            data[Index] = data[Index] * gain;
-        }
-    }
-    /// <summary>
-    /// Pass F32 PCM audio buffer to the lip sync module
-    /// </summary>
-    /// <param name="data">Data.</param>
-    /// <param name="channels">Channels.</param>
-    public void ProcessAudioSamplesRaw(float[] data, int channels)
+    public void ProcessAudioSamples(float[] data)
     {
         // Send data into Phoneme context for processing (if context is not 0)
         lock (this)
@@ -83,23 +69,8 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
             {
                 return;
             }
-            var frame = this.Frame;
-            OVRLipSync.ProcessFrame(Context, data, frame, channels == 2);
+            OVRLipSync.Frame frame = this.Frame;
+            OVRLipSync.ProcessFrame(Context, data, frame, false);
         }
-    }
-    /// <summary>
-    /// Process F32 audio sample and pass it to the lip sync module for computation
-    /// </summary>
-    /// <param name="data">Data.</param>
-    /// <param name="channels">Channels.</param>
-    public void ProcessAudioSamples(float[] data, int channels)
-    {
-        // Do not process if we are not initialized, or if there is no
-        if ((OVRLipSync.IsInitialized() != OVRLipSync.Result.Success))
-        {
-            return;
-        }
-        PreprocessAudioSamples(data);
-        ProcessAudioSamplesRaw(data, channels);
     }
 }

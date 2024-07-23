@@ -191,6 +191,6 @@ public class BasisLocalPlayer : BasisPlayer
     }
     public void DriveAudioToViseme()
     {
-        VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray, MicrophoneRecorder.Channels);
+        VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray);
     }
 }

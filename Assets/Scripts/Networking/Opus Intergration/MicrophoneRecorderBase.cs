@@ -56,9 +56,10 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public void ChangeAudio(float volume)
     {
         Volume = volume;
+        ProcessedLogVolume = volume;
         // Convert the volume to a logarithmic scale
-        float Scaled = 1 + 9 * Volume;
-        ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
+        //   float Scaled = 1 + 9 * Volume;
+        //   ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
     }
     public void ApplyNoiseGate()
     {

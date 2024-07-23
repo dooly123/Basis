@@ -71,7 +71,7 @@ public partial class BasisAudioReceiverBase
         audioSource.Play();
         if (visemeDriver != null)
         {
-            visemeDriver.ProcessAudioSamples(entireBuffer, numChannels);
+            visemeDriver.ProcessAudioSamples(entireBuffer);
         }
     }
 }
