@@ -35,10 +35,6 @@ using UnityEngine;
 /// </summary>
 public class OVRLipSyncContextBase : MonoBehaviour
 {
-    // * * * * * * * * * * * * *
-    // Public members
-    public AudioSource audioSource = null;
-
     [Tooltip("Which lip sync provider to use for viseme computation.")]
     public OVRLipSync.ContextProviders provider = OVRLipSync.ContextProviders.Enhanced;
     [Tooltip("Enable DSP offload on supported Android devices.")]
@@ -100,11 +96,6 @@ public class OVRLipSyncContextBase : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        // Cache the audio source we are going to be using to pump data to the SR
-        if (!audioSource)
-        {
-            audioSource = GetComponent<AudioSource>();
-        }
 
         lock (this)
         {

@@ -77,8 +77,6 @@ public class BasisAudioReceiver : BasisAudioReceiverBase
         {
             visemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(audioSource.gameObject);
         }
-        visemeDriver.audioLoopback = true;
-        visemeDriver.audioSource = audioSource;
         visemeDriver.Initialize(networkedPlayer.Player.Avatar);
     }
 }

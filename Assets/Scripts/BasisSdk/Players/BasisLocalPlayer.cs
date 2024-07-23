@@ -28,11 +28,11 @@ public class BasisLocalPlayer : BasisPlayer
     public BasisLocalAvatarDriver AvatarDriver;
     public BasisFootPlacementDriver FootPlacementDriver;
     public BasisVisemeDriver VisemeDriver;
-    public AudioSource SelfOutput;
     [SerializeField]
     public LayerMask GroundMask;
     public static string LoadFileName = "LastUsedAvatar.BAS";
     public bool HasEvents = false;
+    public MicrophoneRecorder MicrophoneRecorder;
     public async Task LocalInitialize()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -45,8 +45,8 @@ public class BasisLocalPlayer : BasisPlayer
         LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
         await BasisLocalInputActions.CreateInputAction(this);
         await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
-      //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
-      //  FootPlacementDriver.Initialize();
+        //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
+        //  FootPlacementDriver.Initialize();
         Move.Initialize();
         LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
         if (HasEvents == false)
@@ -58,6 +58,11 @@ public class BasisLocalPlayer : BasisPlayer
         }
         string LastUsedAvatar = BasisDataStore.LoadString(LoadFileName, BasisAvatarFactory.LoadingAvatar);
         await CreateAvatar(LastUsedAvatar);
+        if (MicrophoneRecorder == null)
+        {
+            MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
+        }
+        MicrophoneRecorder.TryInitialize();
         OnLocalPlayerCreatedAndReady?.Invoke();
     }
     public void RecalculateMyHeight()
@@ -159,16 +164,10 @@ public class BasisLocalPlayer : BasisPlayer
         {
             VisemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(this.gameObject);
         }
-        if (SelfOutput == null)
-        {
-            SelfOutput = BasisHelpers.GetOrAddComponent<AudioSource>(this.gameObject);
-        }
-        SelfOutput.loop = true;     // Set the AudioClip to loop
-        SelfOutput.mute = false;
-        SelfOutput.clip = AvatarDriver.MicrophoneRecorder.clip;
-        SelfOutput.Play();
-        VisemeDriver.audioSource = SelfOutput;
         VisemeDriver.Initialize(Avatar);
+        BasisLocalInputActions.LateUpdateEvent += VisemeDriver.EventLateUpdate;
+        MicrophoneRecorderBase.OnHasAudio += DriveAudioToViseme;
+        MicrophoneRecorderBase.OnHasSilence += DriveAudioToViseme;
     }
     public void OnDestroy()
     {
@@ -182,13 +181,16 @@ public class BasisLocalPlayer : BasisPlayer
             SceneManager.sceneLoaded -= OnSceneLoadedCallback;
             HasEvents = false;
         }
+        BasisLocalInputActions.LateUpdateEvent -= VisemeDriver.EventLateUpdate;
+        MicrophoneRecorderBase.OnHasAudio -= DriveAudioToViseme;
+        MicrophoneRecorderBase.OnHasSilence -= DriveAudioToViseme;
         if (VisemeDriver != null)
         {
             GameObject.Destroy(VisemeDriver);
         }
-        if (SelfOutput != null)
-        {
-            GameObject.Destroy(SelfOutput);
-        }
+    }
+    public void DriveAudioToViseme()
+    {
+        VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray, MicrophoneRecorder.Channels);
     }
 }

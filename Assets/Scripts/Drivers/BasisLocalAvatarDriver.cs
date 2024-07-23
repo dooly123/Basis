@@ -53,7 +53,6 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public List<Rig> Rigs = new List<Rig>();
     public RigBuilder Builder;
     public List<RigTransform> AdditionalTransforms = new List<RigTransform>();
-    public MicrophoneRecorder MicrophoneRecorder;
     public void LocalCalibration()
     {
         InitialLocalCalibration(BasisLocalPlayer.Instance);
@@ -106,11 +105,6 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         CalibrationComplete?.Invoke();
         AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
         AnimatorDriver.Initialize(Player.Avatar.Animator);
-        if (MicrophoneRecorder == null)
-        {
-            MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
-        }
-        MicrophoneRecorder.TryInitialize();
         ResetAvatarAnimator();
     }
     public void CleanupBeforeContinue()

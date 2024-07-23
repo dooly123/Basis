@@ -7,17 +7,15 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
     public float laughterMultiplier = 1.5f;
     public int smoothAmount = 70;
     public BasisAvatar Avatar;
-    public bool audioLoopback = false;
     public float gain = 1.0f;
     public float laughterScore = 0.0f;
-
     public void Initialize(BasisAvatar avatar)
     {
-       // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
+        // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
         Avatar = avatar;
         Smoothing = smoothAmount;
     }
-    void Update()
+    public void EventLateUpdate()
     {
         if (Avatar != null)
         {
@@ -25,9 +23,26 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
             OVRLipSync.Frame frame = GetCurrentPhonemeFrame();
             if (frame != null)
             {
-                SetVisemeToMorphTarget(frame);
+                for (int Index = 0; Index < Avatar.FaceVisemeMovement.Length; Index++)
+                {
+                    if (Avatar.FaceVisemeMovement[Index] != -1)
+                    {
+                        // Viseme blend weights are in range of 0->1.0, we need to make range 100
+                        Avatar.FaceVisemeMesh.SetBlendShapeWeight(Avatar.FaceVisemeMovement[Index], frame.Visemes[Index] * 100.0f);
+                    }
+                }
+                if (laughterBlendTarget != -1)
+                {
+                    // Laughter score will be raw classifier output in [0,1]
+                    float laughterScore = frame.laughterScore;
 
-                SetLaughterToMorphTarget(frame);
+                    // Threshold then re-map to [0,1]
+                    laughterScore = laughterScore < laughterThreshold ? 0.0f : laughterScore - laughterThreshold;
+                    laughterScore = Mathf.Min(laughterScore * laughterMultiplier, 1.0f);
+                    laughterScore *= 1.0f / laughterThreshold;
+
+                    Avatar.FaceVisemeMesh.SetBlendShapeWeight(laughterBlendTarget, laughterScore * 100.0f);
+                }
             }
             else
             {
@@ -41,38 +56,12 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
             }
         }
     }
-    void SetVisemeToMorphTarget(OVRLipSync.Frame frame)
-    {
-        for (int Index = 0; Index < Avatar.FaceVisemeMovement.Length; Index++)
-        {
-            if (Avatar.FaceVisemeMovement[Index] != -1)
-            {
-                // Viseme blend weights are in range of 0->1.0, we need to make range 100
-                Avatar.FaceVisemeMesh.SetBlendShapeWeight(Avatar.FaceVisemeMovement[Index], frame.Visemes[Index] * 100.0f);
-            }
-        }
-    }
-    void SetLaughterToMorphTarget(OVRLipSync.Frame frame)
-    {
-        if (laughterBlendTarget != -1)
-        {
-            // Laughter score will be raw classifier output in [0,1]
-            float laughterScore = frame.laughterScore;
-
-            // Threshold then re-map to [0,1]
-            laughterScore = laughterScore < laughterThreshold ? 0.0f : laughterScore - laughterThreshold;
-            laughterScore = Mathf.Min(laughterScore * laughterMultiplier, 1.0f);
-            laughterScore *= 1.0f / laughterThreshold;
-
-            Avatar.FaceVisemeMesh.SetBlendShapeWeight(laughterBlendTarget, laughterScore * 100.0f);
-        }
-    }
     /// <summary>
     /// Preprocess F32 PCM audio buffer
     /// </summary>
     /// <param name="data">Data.</param>
     /// <param name="channels">Channels.</param>
-    public void PreprocessAudioSamples(float[] data, int channels)
+    public void PreprocessAudioSamples(float[] data)
     {
         // Increase the gain of the input
         for (int Index = 0; Index < data.Length; ++Index)
@@ -80,24 +69,6 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
             data[Index] = data[Index] * gain;
         }
     }
-
-    /// <summary>
-    /// Postprocess F32 PCM audio buffer
-    /// </summary>
-    /// <param name="data">Data.</param>
-    /// <param name="channels">Channels.</param>
-    public void PostprocessAudioSamples(float[] data, int channels)
-    {
-        // Turn off output (so that we don't get feedback from mics too close to speakers)
-        if (!audioLoopback)
-        {
-            for (int Index = 0; Index < data.Length; ++Index)
-            {
-                data[Index] = data[Index] * 0.0f;
-            }
-        }
-    }
-
     /// <summary>
     /// Pass F32 PCM audio buffer to the lip sync module
     /// </summary>
@@ -116,27 +87,6 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
             OVRLipSync.ProcessFrame(Context, data, frame, channels == 2);
         }
     }
-
-    /// <summary>
-    /// Pass S16 PCM audio buffer to the lip sync module
-    /// </summary>
-    /// <param name="data">Data.</param>
-    /// <param name="channels">Channels.</param>
-    public void ProcessAudioSamplesRaw(short[] data, int channels)
-    {
-        // Send data into Phoneme context for processing (if context is not 0)
-        lock (this)
-        {
-            if (Context == 0 || OVRLipSync.IsInitialized() != OVRLipSync.Result.Success)
-            {
-                return;
-            }
-            var frame = this.Frame;
-            OVRLipSync.ProcessFrame(Context, data, frame, channels == 2);
-        }
-    }
-
-
     /// <summary>
     /// Process F32 audio sample and pass it to the lip sync module for computation
     /// </summary>
@@ -145,13 +95,11 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
     public void ProcessAudioSamples(float[] data, int channels)
     {
         // Do not process if we are not initialized, or if there is no
-        // audio source attached to game object
-        if ((OVRLipSync.IsInitialized() != OVRLipSync.Result.Success) || audioSource == null)
+        if ((OVRLipSync.IsInitialized() != OVRLipSync.Result.Success))
         {
             return;
         }
-        PreprocessAudioSamples(data, channels);
+        PreprocessAudioSamples(data);
         ProcessAudioSamplesRaw(data, channels);
-        PostprocessAudioSamples(data, channels);
     }
 }

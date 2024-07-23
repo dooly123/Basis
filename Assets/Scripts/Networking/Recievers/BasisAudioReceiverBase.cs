@@ -46,6 +46,10 @@ public partial class BasisAudioReceiverBase
         {
             PlayEntireBuffer();
         }
+        if (visemeDriver != null)
+        {
+            visemeDriver.EventLateUpdate();
+        }
     }
 
     private void PlayEntireBuffer()
@@ -65,5 +69,9 @@ public partial class BasisAudioReceiverBase
         }
         audioSource.clip.SetData(entireBuffer, 0);
         audioSource.Play();
+        if (visemeDriver != null)
+        {
+            visemeDriver.ProcessAudioSamples(entireBuffer, numChannels);
+        }
     }
 }

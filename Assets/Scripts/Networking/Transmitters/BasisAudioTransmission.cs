@@ -35,13 +35,13 @@ public class BasisAudioTransmission
                 Signal = settings.OpusSignal
             };
             Local = (BasisLocalPlayer)networkedPlayer.Player;
-            Recorder = Local.AvatarDriver.MicrophoneRecorder;
+            Recorder = Local.MicrophoneRecorder;
             if (HasEvents == false)
             {
                 if (Recorder != null)
                 {
-                    Recorder.OnHasAudio += OnAudioReady;
-                    Recorder.OnHasSilence += SendSilenceOverNetwork;
+                    MicrophoneRecorder.OnHasAudio += OnAudioReady;
+                    MicrophoneRecorder.OnHasSilence += SendSilenceOverNetwork;
                     OnEncoded += SendVoiceOverNetwork;
                     HasEvents = true;
                 }
@@ -53,8 +53,8 @@ public class BasisAudioTransmission
     {
         if (HasEvents)
         {
-            Recorder.OnHasAudio -= OnAudioReady;
-            Recorder.OnHasSilence -= SendSilenceOverNetwork;
+            MicrophoneRecorder.OnHasAudio -= OnAudioReady;
+            MicrophoneRecorder.OnHasSilence -= SendSilenceOverNetwork;
             OnEncoded -= SendVoiceOverNetwork;
             HasEvents = false;
         }

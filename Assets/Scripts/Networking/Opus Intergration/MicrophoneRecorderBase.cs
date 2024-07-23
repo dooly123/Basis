@@ -2,8 +2,8 @@ using UnityEngine;
 using System;
 public abstract class MicrophoneRecorderBase : MonoBehaviour
 {
-    public Action OnHasAudio;
-    public Action OnHasSilence; // Event triggered when silence is detected
+    public static Action OnHasAudio;
+    public static Action OnHasSilence; // Event triggered when silence is detected
     public AudioClip clip;
     public BasisOpusSettings BasisOpusSettings;
     public bool IsInitialize = false;

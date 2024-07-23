@@ -14,7 +14,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     private int remain;
     public bool HasEvents = false;
     public int PacketSize;
-
+    public int Channels = 1;
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -119,7 +119,10 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             MicrophoneDevice = null;
         }
     }
+    public void ProcessAudioSamples()
+    {
 
+    }
     void Update()
     {
         if (Microphone.IsRecording(MicrophoneDevice))

@@ -267,7 +267,7 @@ public class OVRLipSyncContext : OVRLipSyncContextBase
     {
         // Do not process if we are not initialized, or if there is no
         // audio source attached to game object
-        if ((OVRLipSync.IsInitialized() != OVRLipSync.Result.Success) || audioSource == null)
+        if ((OVRLipSync.IsInitialized() != OVRLipSync.Result.Success) )
         {
             return;
         }

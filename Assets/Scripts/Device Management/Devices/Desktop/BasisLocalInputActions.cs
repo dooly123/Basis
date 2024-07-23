@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public PlayerInput Input;
     public static string InputActions = "InputActions";
     public bool HasEvents = false;
+    public static Action LateUpdateEvent;
     public void OnEnable()
     {
         DesktopSwitch.action.Enable();
@@ -44,11 +46,11 @@ public class BasisLocalInputActions : MonoBehaviour
             HasEvents = true;
         }
     }
-    public void LateUpdate()
+    public void Update()
     {
         InputSystem.Update();
         BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
-
+        LateUpdateEvent?.Invoke();
     }
     public static async Task CreateInputAction(BasisLocalPlayer Local)
     {
