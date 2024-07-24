@@ -75,8 +75,10 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage();
-            ClientAvatarChangeMessage.avatarID = NetworkedPlayer.Player.AvatarUrl;
+            ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
+            {
+                avatarID = NetworkedPlayer.Player.AvatarUrl
+            };
             writer.Write(ClientAvatarChangeMessage);
             using (var msg = Message.Create(BasisTags.AvatarChangeMessage, writer))
             {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using static SerializableDarkRift;
 
 public static class BasisPlayerFactory
 {
@@ -12,11 +13,11 @@ public static class BasisPlayerFactory
         await CreatedLocalPlayer.LocalInitialize();
         return CreatedLocalPlayer;
     }
-    public static async Task<BasisRemotePlayer> CreateRemotePlayer(InstantiationParameters InstantiationParameters, string AvatarURL, string LocalPlayerId = "RemotePlayer")
+    public static async Task<BasisRemotePlayer> CreateRemotePlayer(InstantiationParameters InstantiationParameters, string AvatarURL, PlayerMetaDataMessage PlayerMetaDataMessage, string LocalPlayerId = "RemotePlayer")
     {
         BasisPlayer Player = await CreatePlayer(LocalPlayerId, InstantiationParameters);
         BasisRemotePlayer CreatedRemotePlayer = (BasisRemotePlayer)Player;
-        CreatedRemotePlayer.RemoteInitialize(AvatarURL);
+        CreatedRemotePlayer.RemoteInitialize(AvatarURL, PlayerMetaDataMessage);
         return CreatedRemotePlayer;
     }
     public static async Task<BasisPlayer> CreatePlayer(string PlayerAddressableID, InstantiationParameters InstantiationParameters)

@@ -145,7 +145,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
                     Array.Copy(microphoneBufferArray, head, processBufferArray, 0, ProcessBufferLength);
                 }
 
-                ApplyNoiseGate(); // Apply noise gate before processing the audio
+                ApplyDeNoise(); // Apply noise gate before processing the audio
 
                 AdjustVolume(); // Adjust the volume of the audio data
 

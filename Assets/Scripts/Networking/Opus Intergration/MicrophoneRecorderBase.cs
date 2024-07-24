@@ -22,6 +22,7 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public int rmsIndex = 0;
     public int rmsWindowSize = 10; // Size of the moving average window
     public float averageRms;
+    public RNNoise.NET.Denoiser Denoiser = new RNNoise.NET.Denoiser();
     public void AdjustVolume()
     {
         if (ProcessedLogVolume == 1)
@@ -67,9 +68,9 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
         float Scaled = 1 + 9 * Volume;
         ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
     }
-    public void ApplyNoiseGate()
+    public void ApplyDeNoise()
     {
-
+        Denoiser.Denoise(processBufferArray);
     }
     public void RollingRMS()
     {
@@ -81,5 +82,9 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public bool IsTransmitWorthy()
     {
         return averageRms > silenceThreshold;
+    }
+    public void OnDestroy()
+    {
+        Denoiser.Dispose();
     }
 }

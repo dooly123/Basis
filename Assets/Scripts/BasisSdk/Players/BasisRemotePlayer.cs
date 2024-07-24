@@ -1,4 +1,5 @@
 using UnityEngine;
+using static SerializableDarkRift;
 
 public class BasisRemotePlayer : BasisPlayer
 {
@@ -7,8 +8,10 @@ public class BasisRemotePlayer : BasisPlayer
     public GameObject AudioSourceGameobject;
     public BasisBoneControl MouthControl;
     public bool HasEvents = false;
-    public async void RemoteInitialize(string AvatarURL)
+    public async void RemoteInitialize(string AvatarURL, PlayerMetaDataMessage PlayerMetaDataMessage)
     {
+        DisplayName = PlayerMetaDataMessage.playerDisplayName;
+        UUID = PlayerMetaDataMessage.playerUUID;
         IsLocal = false;
         RemoteBoneDriver.CreateInitialArrays(RemoteBoneDriver.transform);
         RemoteBoneDriver.Initialize();
