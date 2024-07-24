@@ -11,6 +11,7 @@ public class BasisLocalInputActions : MonoBehaviour
     public InputActionReference CrouchAction;
     public InputActionReference RunButton;
     public InputActionReference Escape;
+    public InputActionReference MuteKey;
 
     public InputActionReference DesktopSwitch;
     public InputActionReference XRSwitch;
@@ -111,6 +112,8 @@ public class BasisLocalInputActions : MonoBehaviour
         Escape.action.performed += ctx => EscapePerformed();
         Escape.action.canceled += ctx => EscapeCancelled();
 
+        MuteKey.action.performed += ctx => MuteToggle();
+
         DesktopSwitch.action.performed += ctx => SwitchDesktop();
         XRSwitch.action.performed += ctx => SwitchOpenXR();
 
@@ -119,6 +122,10 @@ public class BasisLocalInputActions : MonoBehaviour
 
         LeftMousePressed.action.canceled += ctx => LeftMouse(ctx.ReadValue<float>());
         RightMousePressed.action.canceled += ctx => RightMouse(ctx.ReadValue<float>());
+    }
+    public void MuteToggle()
+    {
+        basisLocalPlayer.MicrophoneRecorder.ToggleIsPaused();
     }
     public void RemoveCallback()
     {
@@ -141,6 +148,7 @@ public class BasisLocalInputActions : MonoBehaviour
         Escape.action.performed -= ctx => EscapePerformed();
         Escape.action.canceled -= ctx => EscapeCancelled();
 
+        MuteKey.action.performed -= ctx => MuteToggle();
 
         DesktopSwitch.action.performed -= ctx => SwitchDesktop();
         XRSwitch.action.performed -= ctx => SwitchOpenXR();

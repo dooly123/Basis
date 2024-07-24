@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-
 public partial class BasisAudioReceiverBase
 {
     [SerializeField]
@@ -13,7 +12,6 @@ public partial class BasisAudioReceiverBase
     public BasisOpusSettings settings;
     [SerializeField]
     public BasisFloatCircularBuffer Buffer;
-
     public int samplingFrequency;
     public int numChannels;
     public int SampleLength;

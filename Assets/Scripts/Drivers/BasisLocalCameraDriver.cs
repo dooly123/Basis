@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 public class BasisLocalCameraDriver : MonoBehaviour
 {
     public static BasisLocalCameraDriver Instance;
@@ -15,6 +16,14 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public static event System.Action InstanceExists;
     public BasisLockToInput BasisLockToInput;
     public bool HasEvents = false;
+    public Camera UIOverlayCamera;
+
+    public Canvas MicrophoneCanvas;
+    public RawImage MicrophoneMutedIcon;
+    public RawImage MicrophoneUnMutedIcon;
+
+    public Vector3 offset = new Vector3(0.1f, 0.1f, 0.5f); // Adjust as needed for canvas position and depth
+
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -24,21 +33,41 @@ public class BasisLocalCameraDriver : MonoBehaviour
         LocalPlayer = BasisLocalPlayer.Instance;
         Camera.nearClipPlane = 0.01f;
         Camera.farClipPlane = 1500;
+        UIOverlayCamera.nearClipPlane = 0.01f;
+        UIOverlayCamera.farClipPlane = 1500;
         QualitySettings.maxQueuedFrames = -1;
         CameraInstanceID = Camera.GetInstanceID();
         //fire static event that says the instance exists
         OnHeightChanged();
         if (HasEvents == false)
         {
+            MicrophoneRecorder.OnPausedAction += OnPausedEvent;
             RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
             BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
             BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
             InstanceExists?.Invoke();
             HasEvents = true;
         }
+        OnPausedEvent(MicrophoneRecorder.isPaused);
     }
+
+    private void OnPausedEvent(bool IsMuted)
+    {
+        if(IsMuted)
+        {
+            MicrophoneMutedIcon.gameObject.SetActive(true);
+            MicrophoneUnMutedIcon.gameObject.SetActive(false);
+        }
+        else
+        {
+            MicrophoneMutedIcon.gameObject.SetActive(false);
+            MicrophoneUnMutedIcon.gameObject.SetActive(true);
+        }
+    }
+
     public void OnDestroy()
     {
+        MicrophoneRecorder.OnPausedAction -= OnPausedEvent;
         RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
         BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
         BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnHeightChanged;
@@ -49,6 +78,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
         if (mode == BasisBootedMode.Desktop)
         {
             Camera.fieldOfView = DefaultCameraFov;
+            UIOverlayCamera.fieldOfView = DefaultCameraFov;
         }
         OnHeightChanged();
     }
@@ -79,6 +109,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
                 {
                     LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScaledDown;
                 }
+                MicrophoneCanvas.transform.localPosition = Camera.ViewportToScreenPoint(offset);
             }
             else
             {
