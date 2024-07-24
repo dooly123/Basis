@@ -50,16 +50,19 @@ public partial class BasisAudioReceiverBase
             CurrentCount = IsFull() ? SegmentCount : CurrentCount + 1;
         }
 
-        public float[] GetNextSegment()
+        public bool GetNextSegment(out float[] Data)
         {
             if (IsEmpty())
-                return null;
+            {
+                Data = null;
+                return false;
+            }
 
-            float[] segment = new float[SegmentSize];
-            Array.Copy(Buffer, Head, segment, 0, SegmentSize);
+            Data = new float[SegmentSize];
+            Array.Copy(Buffer, Head, Data, 0, SegmentSize);
             Head = (Head + SegmentSize) % BufferSize;
             CurrentCount--;
-            return segment;
+            return true;
         }
 
         public bool IsFull()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Linq;
 public abstract class MicrophoneRecorderBase : MonoBehaviour
 {
     public static Action OnHasAudio;
@@ -15,7 +16,12 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public float[] microphoneBufferArray;
     public float[] processBufferArray;
     public float noiseGateThreshold = 0.01f; // Threshold for the noise gate
+    public int Channels = 1;
     public float ProcessedLogVolume;
+    public float[] rmsValues;
+    public int rmsIndex = 0;
+    public int rmsWindowSize = 10; // Size of the moving average window
+    public float averageRms;
     public void AdjustVolume()
     {
         if (ProcessedLogVolume == 1)
@@ -56,20 +62,24 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public void ChangeAudio(float volume)
     {
         Volume = volume;
-       // ProcessedLogVolume = volume;
+        // ProcessedLogVolume = volume;
         // Convert the volume to a logarithmic scale
-          float Scaled = 1 + 9 * Volume;
-          ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
+        float Scaled = 1 + 9 * Volume;
+        ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
     }
     public void ApplyNoiseGate()
     {
-        for (int Index = 0; Index < ProcessBufferLength; Index++)
-        {
-            if (Mathf.Abs(processBufferArray[Index]) < noiseGateThreshold)
-            {
-                processBufferArray[Index] = 0;
 
-            }
-        }
+    }
+    public void RollingRMS()
+    {
+        float rms = GetRMS();
+        rmsValues[rmsIndex] = rms;
+        rmsIndex = (rmsIndex + 1) % rmsWindowSize;
+        averageRms = rmsValues.Average();
+    }
+    public bool IsTransmitWorthy()
+    {
+        return averageRms > silenceThreshold;
     }
 }

@@ -60,8 +60,7 @@ public partial class BasisAudioReceiverBase
 
         while (!Buffer.IsEmpty())
         {
-            float[] segment = Buffer.GetNextSegment();
-            if (segment != null)
+            if (Buffer.GetNextSegment(out float[] segment))
             {
                 Array.Copy(segment, 0, entireBuffer, position, segment.Length);
                 position += segment.Length;
@@ -69,9 +68,5 @@ public partial class BasisAudioReceiverBase
         }
         audioSource.clip.SetData(entireBuffer, 0);
         audioSource.Play();
-        if (visemeDriver != null)
-        {
-            visemeDriver.ProcessAudioSamples(entireBuffer);
-        }
     }
 }

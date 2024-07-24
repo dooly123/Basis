@@ -3,6 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class BasisAudioReceiver : BasisAudioReceiverBase
 {
+    public BasisRemoteVisemeAudioDriver BasisRemoteVisemeAudioDriver;
     public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
     {
         // Initialize settings and audio source
@@ -78,5 +79,10 @@ public class BasisAudioReceiver : BasisAudioReceiverBase
             visemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(audioSource.gameObject);
         }
         visemeDriver.Initialize(networkedPlayer.Player.Avatar);
+        if(BasisRemoteVisemeAudioDriver == null)
+        {
+            BasisRemoteVisemeAudioDriver = BasisHelpers.GetOrAddComponent<BasisRemoteVisemeAudioDriver>(audioSource.gameObject);
+        }
+        BasisRemoteVisemeAudioDriver.Initalize(visemeDriver);
     }
 }

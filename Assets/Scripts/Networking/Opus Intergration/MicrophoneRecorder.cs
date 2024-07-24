@@ -5,16 +5,12 @@ using System.Linq;
 public class MicrophoneRecorder : MicrophoneRecorderBase
 {
     public int head = 0;
-    public float[] rmsValues;
-    public int rmsIndex = 0;
-    public int rmsWindowSize = 10; // Size of the moving average window
     private int bufferLength;
     private int dataLength;
     private int position;
     private int remain;
     public bool HasEvents = false;
     public int PacketSize;
-    public int Channels = 1;
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -117,11 +113,8 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             Microphone.End(MicrophoneDevice);
             Debug.Log("Stopped Microphone " + MicrophoneDevice);
             MicrophoneDevice = null;
-        }
-    }
-    public void ProcessAudioSamples()
-    {
 
+        }
     }
     void Update()
     {
@@ -156,12 +149,8 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
 
                 AdjustVolume(); // Adjust the volume of the audio data
 
-                float rms = GetRMS();
-                rmsValues[rmsIndex] = rms;
-                rmsIndex = (rmsIndex + 1) % rmsWindowSize;
-                float averageRms = rmsValues.Average();
 
-                if (averageRms < silenceThreshold)
+                if (IsTransmitWorthy())
                 {
                     OnHasSilence?.Invoke();
                 }
