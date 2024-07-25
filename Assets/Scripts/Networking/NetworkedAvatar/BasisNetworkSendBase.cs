@@ -27,7 +27,7 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
     {
         LASM = new LocalAvatarSyncMessage()
         {
-            array = new byte[0],
+            array = new byte[224],
         };
         if (Target.Muscles.IsCreated == false)
         {

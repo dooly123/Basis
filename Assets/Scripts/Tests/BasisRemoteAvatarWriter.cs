@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using static SerializableDarkRift;
 
 public class BasisRemoteAvatarWriter : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class BasisRemoteAvatarWriter : MonoBehaviour
     public BasisLocalAvatarReader LocalAvatarReader;
     public BasisRangedUshortFloatData PositionRanged;
     public BasisRangedUshortFloatData ScaleRanged;
+    public LocalAvatarSyncMessage LocalAvatarSyncMessage;
     public void OnEnable()
     {
         SenderPoseHandler = new HumanPoseHandler(Sender.avatar, Sender.transform);
@@ -21,6 +23,7 @@ public class BasisRemoteAvatarWriter : MonoBehaviour
         }
         PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
         ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
+        LocalAvatarSyncMessage.array = new byte[224];
     }
     private void LateUpdate()
     {
@@ -33,11 +36,10 @@ public class BasisRemoteAvatarWriter : MonoBehaviour
     }
     private void UpdateAvatarData()
     {
-        BasisNetworkAvatarCompressor.CompressAvatar(ref Target, Pose, SenderPoseHandler, Sender, out byte[] AvatarData,PositionRanged,ScaleRanged);
+        BasisNetworkAvatarCompressor.CompressAvatar(ref Target, Pose, SenderPoseHandler, Sender, ref LocalAvatarSyncMessage, PositionRanged, ScaleRanged);
         if (LocalAvatarReader != null)
         {
-            LocalAvatarReader.ReceiveAvatarUpdate(AvatarData);
+            LocalAvatarReader.ReceiveAvatarUpdate(LocalAvatarSyncMessage.array);
         }
     }
 }
-

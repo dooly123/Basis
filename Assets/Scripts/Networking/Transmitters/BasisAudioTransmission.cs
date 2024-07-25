@@ -13,7 +13,6 @@ public class BasisAudioTransmission
     public BasisNetworkSendBase Base;
     public BasisOpusSettings settings;
     public byte[] outputBuffer;
-    public byte[] encodedData;
     public int encodedLength;
     public BasisLocalPlayer Local;
     public MicrophoneRecorder Recorder;
@@ -72,9 +71,6 @@ public class BasisAudioTransmission
             outputBuffer = new byte[Recorder.PacketSize];
         }
         encodedLength = encoder.Encode(Recorder.processBufferArray, outputBuffer);
-
-        encodedData = new byte[encodedLength];
-        Array.Copy(outputBuffer, 0, encodedData, 0, encodedLength);
         OnEncoded?.Invoke();
     }
     private void SendVoiceOverNetwork()
@@ -88,7 +84,6 @@ public class BasisAudioTransmission
 
         using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
         {
-            AudioSegmentData.buffer = encodedData;
             writer.Write(AudioSegmentData);
             BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
             using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))

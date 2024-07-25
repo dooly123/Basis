@@ -33,7 +33,7 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
     public void ReInitialize(BasisPlayer player, ushort PlayerID)
     {
         LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage();
-        Stub.array = new byte[] { };
+        Stub.array = new byte[224];
         ReInitialize(player, PlayerID, Stub);
     }
     public void ReInitialize(BasisPlayer player, ushort PlayerID, LocalAvatarSyncMessage sspm)

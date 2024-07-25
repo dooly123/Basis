@@ -22,8 +22,8 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public RawImage MicrophoneMutedIcon;
     public RawImage MicrophoneUnMutedIcon;
 
-    public Vector3 DesktopMicrophoneOffset = new Vector3(-0.1f, 0.1f, 2f); // Adjust as needed for canvas position and depth
-    public Vector3 VRMicrophoneOffset = new Vector3(-0.0004f, 0.1f, 2f);
+    public Vector3 DesktopMicrophoneOffset = new Vector3(-0.001f, -0.0015f, 2f); // Adjust as needed for canvas position and depth
+    public Vector3 VRMicrophoneOffset = new Vector3(-0.0004f, -0.0015f, 2f);
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
