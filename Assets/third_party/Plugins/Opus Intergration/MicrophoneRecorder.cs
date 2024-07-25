@@ -10,6 +10,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     private int remain;
     public bool HasEvents = false;
     public int PacketSize;
+    public bool UseDenoiser = false;
     public static Action<bool> OnPausedAction;
     public bool TryInitialize()
     {
@@ -35,11 +36,19 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         {
             SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
             SMDMicrophone.OnMicrophoneVolumeChanged += ChangeAudio;
+            SMDMicrophone.OnMicrophoneUseDenoiserChanged += ConfigureDenioser;
             BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
             HasEvents = true;
         }
         ChangeAudio(SMDMicrophone.SelectedVolumeMicrophone);
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
+        ConfigureDenioser(SMDMicrophone.SelectedDenoiserMicrophone);
+    }
+
+    private void ConfigureDenioser(bool useDenoiser)
+    {
+        UseDenoiser = useDenoiser;
+        Debug.Log("Setting Denoiser To " + UseDenoiser);
     }
     public new void OnDestroy()
     {
@@ -47,7 +56,9 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         {
             SMDMicrophone.OnMicrophoneChanged -= ResetMicrophones;
             SMDMicrophone.OnMicrophoneVolumeChanged -= ChangeAudio;
+            SMDMicrophone.OnMicrophoneUseDenoiserChanged -= ConfigureDenioser;
             BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
+
             HasEvents = false;
         }
         base.OnDestroy();
@@ -163,7 +174,10 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
                     Array.Copy(microphoneBufferArray, head, processBufferArray, 0, ProcessBufferLength);
                 }
                 AdjustVolume(); // Adjust the volume of the audio data
-                ApplyDeNoise(); // Apply noise gate before processing the audio
+                if (UseDenoiser)
+                {
+                    ApplyDeNoise(); // Apply noise gate before processing the audio
+                }
                 if (IsTransmitWorthy())
                 {
                     OnHasAudio?.Invoke();

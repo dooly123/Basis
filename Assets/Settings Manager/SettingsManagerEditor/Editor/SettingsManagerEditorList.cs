@@ -254,7 +254,10 @@ namespace BattlePhaze.SettingsManager
                             else
                             {
                                 Index = EditorGUILayout.Popup(Index, option.RealValues.ToArray(), SettingsmanagerStyle.EnumStyling);
-                                option.ValueDefault = option.RealValues[Index];
+                                if (Index >= 0)
+                                {
+                                    option.ValueDefault = option.RealValues[Index];
+                                }
                             }
                         }
                         else

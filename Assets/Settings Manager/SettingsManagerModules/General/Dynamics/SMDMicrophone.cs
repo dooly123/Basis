@@ -43,6 +43,24 @@ public class SMDMicrophone : SettingsManagerOption
             OnMicrophoneVolumeChanged?.Invoke(selectedVolumeMicrophone);
         }
     }
+    public delegate void MicrophoneUseDenoiserChangedHandler(bool useDenoiser);
+
+    // Create an event of the delegate type
+    public static event MicrophoneUseDenoiserChangedHandler OnMicrophoneUseDenoiserChanged;
+    // Backing field for the SelectedMicrophone property
+    private static bool selectedDenoiserMicrophone;
+
+    // Property with a callback in the set accessor
+    public static bool SelectedDenoiserMicrophone
+    {
+        get => selectedDenoiserMicrophone;
+        private set
+        {
+            selectedDenoiserMicrophone = value;
+            // Invoke the callback event
+            OnMicrophoneUseDenoiserChanged?.Invoke(selectedDenoiserMicrophone);
+        }
+    }
 
     public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager = null)
     {
@@ -87,6 +105,17 @@ public class SMDMicrophone : SettingsManagerOption
             if (SliderReadOption(Option, Manager, out float Value))
             {
                 SelectedVolumeMicrophone = Value;
+            }
+        }
+        if (NameReturn(2, Option))
+        {
+            if (CheckIsOn(Option.SelectedValue))
+            {
+                selectedDenoiserMicrophone = true;
+            }
+            else
+            {
+                selectedDenoiserMicrophone = false;
             }
         }
     }
