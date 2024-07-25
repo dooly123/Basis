@@ -75,11 +75,10 @@ public class BasisAudioTransmission
     }
     private void SendVoiceOverNetwork()
     {
-        using (DarkRiftWriter writer = DarkRiftWriter.Create())
-            if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
-            {
-                AudioSegmentData.buffer = new byte[encodedLength];
-            }
+        if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
+        {
+            AudioSegmentData.buffer = new byte[encodedLength];
+        }
         Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer, 0, encodedLength);
 
         using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
