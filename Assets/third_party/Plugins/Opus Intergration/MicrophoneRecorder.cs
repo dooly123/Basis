@@ -84,7 +84,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             Debug.LogError("Microphone " + newMicrophone);
             return;
         }
-        bool isRecording = Microphone.IsRecording(MicrophoneDevice);
+        bool isRecording = Microphone.IsRecording(newMicrophone);
         Debug.Log(isRecording ? $"Is Recording {MicrophoneDevice}" : $"Is not Recording {MicrophoneDevice}");
         bool MicrophoneNotMatchCheck = MicrophoneDevice != newMicrophone;
         if (MicrophoneNotMatchCheck)
@@ -92,7 +92,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             StopMicrophone();
         }
         //if we are not recording or the current microphone does not match the new one.
-        if (!isRecording || MicrophoneNotMatchCheck)
+        if (isRecording == false)
         {
             if (IsPaused == false)
             {

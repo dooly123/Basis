@@ -739,7 +739,7 @@ MonoBehaviour:
     SelectedValueDefault: on
     ValueDefault: on
     Explanation: Vertical Sync
-    selectedValue: on
+    selectedValue: half
     Type: 1
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -979,7 +979,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: 640x480
     Explanation: 
-    selectedValue: 2560x1440
+    selectedValue: 1920x1080
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1323,7 +1323,7 @@ MonoBehaviour:
     SelectedValueDefault: 1
     ValueDefault: 1
     Explanation: 
-    selectedValue: 1
+    selectedValue: 0.9991138
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1353,7 +1353,7 @@ MonoBehaviour:
     SelectedValueDefault: 1
     ValueDefault: 1
     Explanation: 
-    selectedValue: 0.9795281
+    selectedValue: 1.5
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1421,9 +1421,9 @@ MonoBehaviour:
     Name: Microphone Denoiser
     ValueDescriptor: Microphone Denoiser
     SelectedValueDefault: 
-    ValueDefault: off
+    ValueDefault: false
     Explanation: 
-    selectedValue: 
+    selectedValue: true
     Type: 1
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1467,7 +1467,416 @@ MonoBehaviour:
     SaveType: JSON
   - Platform: 13
     SaveType: JSON
-  WorkArounds: []
+  WorkArounds:
+  - Name: Antialiasing
+    DefaultValue: smaa
+    SelectedValue: smaa
+    Index: 0
+    SelectableValueList:
+    - realValue: taa
+      UserValue: TAA
+    - realValue: fxaa
+      UserValue: FXAA
+    - realValue: smaa
+      UserValue: SMAA
+    - realValue: noaa
+      UserValue: NOAA
+    Min: 0
+    Max: 0
+  - Name: Master Quality
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 1
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Ambient Occlusion
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 2
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Contact Shadows
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 3
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Quality Level
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 4
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Shadow Quality
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 5
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Shadow Distance
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 6
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Texture Quality
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 7
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Vertical Sync
+    DefaultValue: on
+    SelectedValue: half
+    Index: 8
+    SelectableValueList:
+    - realValue: on
+      UserValue: On
+    - realValue: half
+      UserValue: Half
+    - realValue: off
+      UserValue: Off
+    Min: 0
+    Max: 0
+  - Name: Volumetric Quality
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 9
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Memory Allocation
+    DefaultValue: dynamic
+    SelectedValue: dynamic
+    Index: 10
+    SelectableValueList:
+    - realValue: 256
+      UserValue: 256
+    - realValue: 512
+      UserValue: 512
+    - realValue: 1024
+      UserValue: 1024
+    - realValue: 2048
+      UserValue: 2048
+    - realValue: 4096
+      UserValue: 4096
+    - realValue: 8192
+      UserValue: 8192
+    - realValue: dynamic
+      UserValue: Dynamic
+    Min: 0
+    Max: 0
+  - Name: Close Point Shadows
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 11
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: HDR Support
+    DefaultValue: true
+    SelectedValue: true
+    Index: 12
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+    Min: 0
+    Max: 0
+  - Name: Terrain Quality
+    DefaultValue: ultra
+    SelectedValue: ultra
+    Index: 13
+    SelectableValueList:
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
+    Min: 0
+    Max: 0
+  - Name: Resolution
+    DefaultValue: 
+    SelectedValue: 2560x1440
+    Index: 14
+    SelectableValueList:
+    - realValue: 640x480
+      UserValue: 640x480
+    - realValue: 720x480
+      UserValue: 720x480
+    - realValue: 720x576
+      UserValue: 720x576
+    - realValue: 800x600
+      UserValue: 800x600
+    - realValue: 1024x768
+      UserValue: 1024x768
+    - realValue: 1152x864
+      UserValue: 1152x864
+    - realValue: 1176x664
+      UserValue: 1176x664
+    - realValue: 1280x720
+      UserValue: 1280x720
+    - realValue: 1280x768
+      UserValue: 1280x768
+    - realValue: 1280x800
+      UserValue: 1280x800
+    - realValue: 1280x960
+      UserValue: 1280x960
+    - realValue: 1280x1024
+      UserValue: 1280x1024
+    - realValue: 1360x768
+      UserValue: 1360x768
+    - realValue: 1366x768
+      UserValue: 1366x768
+    - realValue: 1400x1050
+      UserValue: 1400x1050
+    - realValue: 1440x900
+      UserValue: 1440x900
+    - realValue: 1440x1080
+      UserValue: 1440x1080
+    - realValue: 1600x900
+      UserValue: 1600x900
+    - realValue: 1600x1024
+      UserValue: 1600x1024
+    - realValue: 1600x1200
+      UserValue: 1600x1200
+    - realValue: 1680x1050
+      UserValue: 1680x1050
+    - realValue: 1920x1080
+      UserValue: 1920x1080
+    - realValue: 1920x1200
+      UserValue: 1920x1200
+    - realValue: 1920x1440
+      UserValue: 1920x1440
+    - realValue: 2560x1440
+      UserValue: 2560x1440
+    Min: 0
+    Max: 0
+  - Name: ScreenMode
+    DefaultValue: 
+    SelectedValue: windowed
+    Index: 15
+    SelectableValueList:
+    - realValue: exclusive fullscreen
+      UserValue: Exclusive FullScreen
+    - realValue: fullscreen
+      UserValue: Fullscreen
+    - realValue: maximized window
+      UserValue: Maximized Window
+    - realValue: windowed
+      UserValue: Windowed
+    Min: 0
+    Max: 0
+  - Name: Monitor
+    DefaultValue: 
+    SelectedValue: 0
+    Index: 16
+    SelectableValueList:
+    - realValue: 0
+      UserValue: 0
+    Min: 0
+    Max: 0
+  - Name: Main Audio
+    DefaultValue: 1
+    SelectedValue: 1
+    Index: 17
+    SelectableValueList: []
+    Min: 0
+    Max: 1
+  - Name: SFX Audio
+    DefaultValue: 50
+    SelectedValue: 80
+    Index: 18
+    SelectableValueList: []
+    Min: 0
+    Max: 80
+  - Name: Music Audio
+    DefaultValue: 50
+    SelectedValue: 80
+    Index: 19
+    SelectableValueList: []
+    Min: 0
+    Max: 80
+  - Name: Player Audio
+    DefaultValue: 50
+    SelectedValue: 80
+    Index: 20
+    SelectableValueList: []
+    Min: 0
+    Max: 80
+  - Name: Microphone Volume
+    DefaultValue: 1
+    SelectedValue: 1
+    Index: 21
+    SelectableValueList: []
+    Min: 0
+    Max: 1
+  - Name: Selected Microphone
+    DefaultValue: 
+    SelectedValue: microphone (nvidia broadcast)
+    Index: 22
+    SelectableValueList:
+    - realValue: microphone (nvidia broadcast)
+      UserValue: Microphone (NVIDIA Broadcast)
+    - realValue: microphone (logitech streamcam)
+      UserValue: Microphone (Logitech StreamCam)
+    - realValue: headset microphone (oculus virtual audio device)
+      UserValue: Headset Microphone (Oculus Virtual Audio Device)
+    - realValue: microphone (2- antlion wireless microphone)
+      UserValue: Microphone (2- Antlion Wireless Microphone)
+    - realValue: microphone (steam streaming microphone)
+      UserValue: Microphone (Steam Streaming Microphone)
+    - realValue: microphone (2- rode nt-usb)
+      UserValue: Microphone (2- RODE NT-USB)
+    - realValue: digital audio interface (valve vr radio & hmd mic)
+      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
+    Min: 0
+    Max: 0
+  - Name: Mcrophone Volume
+    DefaultValue: 1
+    SelectedValue: 0.9991138
+    Index: 23
+    SelectableValueList: []
+    Min: 0
+    Max: 1.5
+  - Name: Render Resolution
+    DefaultValue: 1
+    SelectedValue: 1.5
+    Index: 24
+    SelectableValueList: []
+    Min: 0.45
+    Max: 1.5
+  - Name: UpScaler
+    DefaultValue: False
+    SelectedValue: linear upscaling
+    Index: 25
+    SelectableValueList:
+    - realValue: auto
+      UserValue: Auto
+    - realValue: linear upscaling
+      UserValue: Linear Upscaling
+    - realValue: point upscaling
+      UserValue: Point Upscaling
+    - realValue: fsr upscaling
+      UserValue: FSR Upscaling
+    - realValue: spatial temporal upscaling
+      UserValue: Spatial Temporal Upscaling
+    Min: 0
+    Max: 0
+  - Name: Microphone Denoiser
+    DefaultValue: 
+    SelectedValue: true
+    Index: 26
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+    Min: 0
+    Max: 0
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -1754,6 +2163,10 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 3
+  - OptionName: Microphone Denoiser
+    Explanation: 
+    Parse: 1
+    Type: 1
   Manager: {fileID: 0}
   MicrophoneDevice:
   - Microphone (NVIDIA Broadcast)

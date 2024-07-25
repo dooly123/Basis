@@ -4,7 +4,7 @@ using BattlePhaze.SettingsManager.Style;
 using UnityEditor;
 using UnityEngine;
 using static BattlePhaze.SettingsManager.SettingsManagerOption;
-#endif
+
 namespace BattlePhaze.SettingsManager
 {
     [CustomEditor(typeof(SettingsManagerOption), true)]
@@ -14,110 +14,145 @@ namespace BattlePhaze.SettingsManager
         {
             DrawDefaultInspector();
             SettingsmanagerStyle.Style();
-            SettingsManagerOption Target = (SettingsManagerOption)target;
-            DisplaySelection(Target);
+            SettingsManagerOption targetOption = (SettingsManagerOption)target;
+            DisplaySelection(targetOption);
+
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(targetOption);
+                Undo.RecordObject(targetOption, "Modify SettingsManagerOption");
+            }
         }
+
         public static SettingsManager Instance;
-        public static void DisplaySelection(SettingsManagerOption ModuleOption)
+
+        public static void DisplaySelection(SettingsManagerOption moduleOption)
         {
             EditorGUILayout.BeginVertical(SettingsmanagerStyle.BackGroundStyling);
             Instance = SettingsManager.Instance;
             if (Instance == null)
             {
-                Instance = MonoBehaviour.FindObjectOfType<SettingsManager>();
+                Instance = MonoBehaviour.FindFirstObjectByType<SettingsManager>();
             }
-#if UNITY_EDITOR
+
             if (Instance == null)
             {
-                GUILayout.Label("Settings Manager could not be found please assign one (please make sure your setting settings manager up in a scene)");
+                GUILayout.Label("Settings Manager could not be found, please assign one (make sure your settings manager is set up in a scene)");
                 Instance = (SettingsManager)EditorGUILayout.ObjectField(Instance, typeof(SettingsManager), true);
             }
+
             if (Instance == null)
             {
+                EditorGUILayout.EndVertical();
                 return;
             }
+
             EditorGUI.BeginChangeCheck();
             if (GUILayout.Button("Add Option", SettingsmanagerStyle.ButtonStyling))
             {
-                ModuleOption.ManagerModuleOptions.Add(new SettingsManagerOptionValues());
+                Undo.RecordObject(moduleOption, "Add Option");
+                moduleOption.ManagerModuleOptions.Add(new SettingsManagerOptionValues());
+                EditorUtility.SetDirty(moduleOption);
             }
-            if (Instance.Options.Count != 0 && ModuleOption != null && ModuleOption.ManagerModuleOptions.Count != 0)
+
+            if (Instance.Options.Count != 0 && moduleOption != null && moduleOption.ManagerModuleOptions.Count != 0)
             {
-                for (int OptionValuesIndex = 0; OptionValuesIndex < ModuleOption.ManagerModuleOptions.Count; OptionValuesIndex++)
+                for (int optionValuesIndex = 0; optionValuesIndex < moduleOption.ManagerModuleOptions.Count; optionValuesIndex++)
                 {
                     GUILayout.BeginHorizontal();
-                    GUILayout.Label("Option Index " + FriendlyInteger(OptionValuesIndex + 1), SettingsmanagerStyle.DescriptorStyling);
-                    int Value = GetIndex(ModuleOption.ManagerModuleOptions[OptionValuesIndex].OptionName);
-                    SettingsManagerOptionValues Output = ModuleOption.ManagerModuleOptions[OptionValuesIndex];
-                    int Current = EditorGUILayout.Popup(Value, GetArrayOfOptions());
-                    SettingsMenuInput Input = Instance.Options[Current];
-                    if (Input != null)
+                    GUILayout.Label("Option Index " + FriendlyInteger(optionValuesIndex + 1), SettingsmanagerStyle.DescriptorStyling);
+                    int value = GetIndex(moduleOption.ManagerModuleOptions[optionValuesIndex].OptionName);
+                    SettingsManagerOptionValues output = moduleOption.ManagerModuleOptions[optionValuesIndex];
+                    int current = EditorGUILayout.Popup(value, GetArrayOfOptions());
+                    SettingsMenuInput input = Instance.Options[current];
+
+                    if (input != null)
                     {
-                        Output.Parse = Input.ParseController;
-                        Output.Type = Input.Type;
-                        Output.OptionName = Input.Name;
-                        Output.Explanation = Input.Explanation;
-                        if (GUILayout.Button("Remove Option",SettingsmanagerStyle.ButtonStyling))
+                        Undo.RecordObject(moduleOption, "Modify Option");
+                        output.Parse = input.ParseController;
+                        output.Type = input.Type;
+                        output.OptionName = input.Name;
+                        output.Explanation = input.Explanation;
+
+                        if (GUILayout.Button("Remove Option", SettingsmanagerStyle.ButtonStyling))
                         {
-                            ModuleOption.ManagerModuleOptions.RemoveAt(OptionValuesIndex);
-                            SettingsManagerDebug.Log("Removing Option " + OptionValuesIndex);
+                            Undo.RecordObject(moduleOption, "Remove Option");
+                            moduleOption.ManagerModuleOptions.RemoveAt(optionValuesIndex);
+                            SettingsManagerDebug.Log("Removing Option " + optionValuesIndex);
+                            EditorUtility.SetDirty(moduleOption);
+                            continue;
                         }
-                        GUILayout.EndHorizontal();
-                        ModuleOption.ManagerModuleOptions[OptionValuesIndex] = Output;
+
+                        moduleOption.ManagerModuleOptions[optionValuesIndex] = output;
+                        EditorUtility.SetDirty(moduleOption);
                     }
+
+                    GUILayout.EndHorizontal();
                 }
             }
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(moduleOption);
+            }
+
             EditorGUILayout.EndVertical();
-#endif
         }
-        public static void DisplaySelection(ref string OptionName, ref string OptionExplanation, ref SettingsManagerEnums.ItemParse ItemParse, ref SettingsManagerEnums.IsType IsType, string Name)
+
+        public static void DisplaySelection(ref string optionName, ref string optionExplanation, ref SettingsManagerEnums.ItemParse itemParse, ref SettingsManagerEnums.IsType isType, string name)
         {
             if (Instance == null)
             {
-                Instance = MonoBehaviour.FindObjectOfType<SettingsManager>();
+                Instance = MonoBehaviour.FindFirstObjectByType<SettingsManager>();
             }
+
             if (Instance == null)
             {
                 return;
             }
+
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Option " + Name);
-#if UNITY_EDITOR
+            GUILayout.Label("Option " + name);
+
             if (Instance.Options.Count != 0)
             {
-                int Value = GetIndex(OptionName);
-                SettingsMenuInput Input = Instance.Options[EditorGUILayout.Popup(Value, GetArrayOfOptions())];
-                ItemParse = Input.ParseController;
-                IsType = Input.Type;
-                OptionName = Input.Name;
-                OptionExplanation = Input.Explanation;
+                int value = GetIndex(optionName);
+                SettingsMenuInput input = Instance.Options[EditorGUILayout.Popup(value, GetArrayOfOptions())];
+                itemParse = input.ParseController;
+                isType = input.Type;
+                optionName = input.Name;
+                optionExplanation = input.Explanation;
             }
-#endif
+
             GUILayout.EndHorizontal();
         }
-        public static int GetIndex(string OptionName)
+
+        public static int GetIndex(string optionName)
         {
-            for (int OptionsIndex = 0; OptionsIndex < Instance.Options.Count; OptionsIndex++)
+            for (int optionsIndex = 0; optionsIndex < Instance.Options.Count; optionsIndex++)
             {
-                if (OptionName == Instance.Options[OptionsIndex].Name)
+                if (optionName == Instance.Options[optionsIndex].Name)
                 {
-                    return OptionsIndex;
+                    return optionsIndex;
                 }
             }
             return 0;
         }
+
         public static string[] GetArrayOfOptions()
         {
-            string[] OptionsArray = new string[Instance.Options.Count];
-            for (int OptionsIndex = 0; OptionsIndex < Instance.Options.Count; OptionsIndex++)
+            string[] optionsArray = new string[Instance.Options.Count];
+            for (int optionsIndex = 0; optionsIndex < Instance.Options.Count; optionsIndex++)
             {
-                OptionsArray[OptionsIndex] = Instance.Options[OptionsIndex].Name;
+                optionsArray[optionsIndex] = Instance.Options[optionsIndex].Name;
             }
-            return OptionsArray;
+            return optionsArray;
         }
+
         static string[] ones = new string[] { string.Empty, "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
         static string[] teens = new string[] { "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
         static string[] tens = new string[] { "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+
         private static string FriendlyInteger(int n)
         {
             if (n == 0)
@@ -164,3 +199,4 @@ namespace BattlePhaze.SettingsManager
         }
     }
 }
+#endif

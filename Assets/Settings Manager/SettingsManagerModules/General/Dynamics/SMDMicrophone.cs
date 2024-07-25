@@ -109,14 +109,7 @@ public class SMDMicrophone : SettingsManagerOption
         }
         if (NameReturn(2, Option))
         {
-            if (CheckIsOn(Option.SelectedValue))
-            {
-                selectedDenoiserMicrophone = true;
-            }
-            else
-            {
-                selectedDenoiserMicrophone = false;
-            }
+            SelectedDenoiserMicrophone = CheckIsOn(Option.SelectedValue);
         }
     }
 }
