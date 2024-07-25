@@ -4,6 +4,7 @@ using UnityEngine;
 using static SerializableDarkRift;
 public static class BasisNetworkAvatarCompressor
 {
+    public static BasisRangedUshortFloatData CF = new BasisRangedUshortFloatData(-180, 180, BasisNetworkConstants.MusclePrecision);
     public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim)
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
@@ -38,7 +39,7 @@ public static class BasisNetworkAvatarCompressor
             CompressScaleAndPosition(Packer, NewPosition, BodyPosition, Scale, PositionRanged, ScaleRanged);//3 ushorts atm needs to be uints (3*4)*3
 
             BasisCompressionOfRotation.CompressQuaternion(Packer, Rotation);//uint
-            BasisCompressionOfMuscles.CompressMuscles(Packer, muscles);//95 ushorts 95*4
+            BasisCompressionOfMuscles.CompressMuscles(Packer, muscles, CF);//95 ushorts 95*4
             Packer.CopyTo(syncmessage.array, 0);
         }
     }

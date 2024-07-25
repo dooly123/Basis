@@ -4,6 +4,7 @@ using UnityEngine;
 using static SerializableDarkRift;
 public static class BasisNetworkAvatarDecompressor
 {
+    public static BasisRangedUshortFloatData CF = new BasisRangedUshortFloatData(-180, 180, BasisNetworkConstants.MusclePrecision);
     public static void DeCompress(BasisNetworkSendBase Base, ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage)
     {
         Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
@@ -30,7 +31,7 @@ public static class BasisNetworkAvatarDecompressor
             {
                 DecompressScaleAndPosition(bitPacker, out NewPosition, out BodyPosition, out Scale, PositionRanged, ScaleRanged);
                 BasisCompressionOfRotation.DecompressQuaternion(bitPacker, out Rotation);
-                BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref muscles);
+                BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref muscles, CF);
             }
         }
         else
