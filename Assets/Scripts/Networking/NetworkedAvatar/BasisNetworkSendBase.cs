@@ -32,9 +32,11 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
         if (Target.Muscles.IsCreated == false)
         {
             Target.Muscles.ResizeArray(95);
+            Target.floatArray = new float[95];
         }
         if (Output.Muscles.IsCreated == false)
         {
+            Output.floatArray = new float[95];
             Output.Muscles.ResizeArray(95);
         }
         PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);

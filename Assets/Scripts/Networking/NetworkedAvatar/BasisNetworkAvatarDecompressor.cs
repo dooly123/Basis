@@ -17,13 +17,13 @@ public static class BasisNetworkAvatarDecompressor
     }
     public static void DecompressAvatar(ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
-        DecompressAvatarUpdate(AvatarUpdate, out Vector3 PlayerPosition, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref AvatarData.Muscles, PositionRanged, ScaleRanged);
+        DecompressAvatarUpdate(AvatarUpdate, out Vector3 PlayerPosition, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref AvatarData, PositionRanged, ScaleRanged);
         AvatarData.Vectors[1] = BodyPosition;
         AvatarData.Vectors[0] = PlayerPosition;
         AvatarData.Vectors[2] = Scale;
         AvatarData.Quaternions[0] = Rotation;
     }
-    public static void DecompressAvatarUpdate(byte[] compressedData, out Vector3 NewPosition, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref NativeArray<float> muscles, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
+    public static void DecompressAvatarUpdate(byte[] compressedData, out Vector3 NewPosition, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation,ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
         if (compressedData != null && compressedData.Length != 0)
         {
@@ -31,7 +31,7 @@ public static class BasisNetworkAvatarDecompressor
             {
                 DecompressScaleAndPosition(bitPacker, out NewPosition, out BodyPosition, out Scale, PositionRanged, ScaleRanged);
                 BasisCompressionOfRotation.DecompressQuaternion(bitPacker, out Rotation);
-                BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref muscles, CF);
+                BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref BasisAvatarData, CF);
             }
         }
         else
@@ -45,8 +45,8 @@ public static class BasisNetworkAvatarDecompressor
     }
     public static void DecompressScaleAndPosition(DarkRiftReader Packer, out Vector3 Position, out Vector3 BodyPosition, out Vector3 Scale, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
-        Position = BasisCompressionOfPosition.DecompressVector3(Packer, PositionRanged);
-        BodyPosition = BasisCompressionOfPosition.DecompressVector3(Packer, PositionRanged);
+        Position = BasisCompressionOfPosition.DecompressVector3(Packer);
+        BodyPosition = BasisCompressionOfPosition.DecompressVector3(Packer);
 
         Scale = BasisCompressionOfPosition.DecompressUShortVector3(Packer, ScaleRanged);
     }

@@ -177,25 +177,24 @@ namespace DarkRift.Client.Unity
         }
 
         /// <summary>
-        ///     Invoked when DarkRift receives a message from the server.
+        /// Invoked when DarkRift receives a message from the server.
         /// </summary>
-        /// <param name="sender">THe client that received the message.</param>
+        /// <param name="sender">The client that received the message.</param>
         /// <param name="e">The arguments for the event.</param>
         public void Client_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            //If we're handling multithreading then pass the event to the dispatcher
+            // If we're handling multithreading then pass the event to the dispatcher
             if (invokeFromDispatcher)
             {
-                Dispatcher.InvokeAsync(
-                    () =>
+                // Capture the handler outside the lambda to avoid repeated allocations
+                EventHandler<MessageReceivedEventArgs> handler = MessageReceived;
+                if (handler != null)
+                {
+                    Dispatcher.InvokeAsync(new Action(() =>
                     {
-                        EventHandler<MessageReceivedEventArgs> handler = MessageReceived;
-                        if (handler != null)
-                        {
-                            handler.Invoke(sender, e);
-                        }
-                    }
-                );
+                        handler.Invoke(sender, e);
+                    }));
+                }
             }
             else
             {
@@ -206,25 +205,27 @@ namespace DarkRift.Client.Unity
                 }
             }
         }
-
+        /// <summary>
+        /// Invoked when the client is disconnected from the server.
+        /// </summary>
+        /// <param name="sender">The client that got disconnected.</param>
+        /// <param name="e">The arguments for the event.</param>
         public void Client_Disconnected(object sender, DisconnectedEventArgs e)
         {
-            //If we're handling multithreading then pass the event to the dispatcher
+            // If we're handling multithreading then pass the event to the dispatcher
             if (invokeFromDispatcher)
             {
                 if (!e.LocalDisconnect)
                     Debug.Log("Disconnected from server, error: " + e.Error);
 
-                Dispatcher.InvokeAsync(
-                    () =>
+                EventHandler<DisconnectedEventArgs> handler = Disconnected;
+                if (handler != null)
+                {
+                    Dispatcher.InvokeAsync(new Action(() =>
                     {
-                        EventHandler<DisconnectedEventArgs> handler = Disconnected;
-                        if (handler != null)
-                        {
-                            handler.Invoke(sender, e);
-                        }
-                    }
-                );
+                        handler.Invoke(sender, e);
+                    }));
+                }
             }
             else
             {

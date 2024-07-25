@@ -34,6 +34,10 @@ public static class BasisNetworkAvatarCompressor
     }
     public static void CompressAvatarUpdate(ref LocalAvatarSyncMessage syncmessage, Vector3 NewPosition, Vector3 Scale, Vector3 BodyPosition, Quaternion Rotation, float[] muscles, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
+        if (syncmessage.array == null)
+        {
+            syncmessage.array = new byte[224];
+        }
         using (var Packer = DarkRiftWriter.Create(216))
         {
             CompressScaleAndPosition(Packer, NewPosition, BodyPosition, Scale, PositionRanged, ScaleRanged);//3 ushorts atm needs to be uints (3*4)*3
@@ -45,8 +49,8 @@ public static class BasisNetworkAvatarCompressor
     }
     public static void CompressScaleAndPosition(DarkRiftWriter packer, Vector3 position, Vector3 bodyPosition, Vector3 scale, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
-        BasisCompressionOfPosition.CompressVector3(position, packer, PositionRanged);
-        BasisCompressionOfPosition.CompressVector3(bodyPosition, packer, PositionRanged);
+        BasisCompressionOfPosition.CompressVector3(position, packer);
+        BasisCompressionOfPosition.CompressVector3(bodyPosition, packer);
 
         BasisCompressionOfPosition.CompressUShortVector3(scale, packer, ScaleRanged);
     }

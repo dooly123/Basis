@@ -2,19 +2,12 @@ using DarkRift;
 using Unity.Collections;
 public class BasisCompressionOfMuscles
 {
-    public static BasisRangedUshortFloatData CompressMuscles(DarkRiftWriter Packer, float[] muscles, BasisRangedUshortFloatData CF)
+    public static void CompressMuscles(DarkRiftWriter Packer, float[] muscles, BasisRangedUshortFloatData CF)
     {
-        for (int Index = 0; Index < 95; Index++)
-        {
-            BasisBitPackerExtensions.WriteUshortFloat(Packer, muscles[Index], CF);
-        }
-        return CF;
+        BasisBitPackerExtensions.WriteUshortArrayFloat(Packer, muscles, CF);
     }
-    public static void DecompressMuscles(DarkRiftReader Packer, ref NativeArray<float> Muscles, BasisRangedUshortFloatData CF)
+    public static void DecompressMuscles(DarkRiftReader Packer,  ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData CF)
     {
-        for (int Index = 0; Index < 95; Index++)
-        {
-            Muscles[Index] = BasisBitPackerExtensions.ReadUshortFloat(Packer, CF);
-        }
+        BasisBitPackerExtensions.ReadUshortArrayFloat(Packer, CF, ref BasisAvatarData);
     }
 }

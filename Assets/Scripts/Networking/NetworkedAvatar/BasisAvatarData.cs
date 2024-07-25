@@ -9,6 +9,7 @@ public struct BasisAvatarData
     public NativeArray<Vector3> Vectors;
     public NativeArray<Quaternion> Quaternions;
     public NativeArray<float> Muscles;
+    public float[] floatArray;
 }
 [BurstCompile]
 public struct UpdateAvatarPositionJob : IJob
