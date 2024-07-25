@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
@@ -24,6 +25,10 @@ public class BasisLocalCameraDriver : MonoBehaviour
 
     public Vector3 DesktopMicrophoneOffset = new Vector3(-0.001f, -0.0015f, 2f); // Adjust as needed for canvas position and depth
     public Vector3 VRMicrophoneOffset = new Vector3(-0.0004f, -0.0015f, 2f);
+
+    public AudioClip MuteSound;
+    public AudioClip UnMuteSound;
+    public AudioSource AudioSource;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -57,11 +62,13 @@ public class BasisLocalCameraDriver : MonoBehaviour
         {
             MicrophoneMutedIcon.gameObject.SetActive(true);
             MicrophoneUnMutedIcon.gameObject.SetActive(false);
+            AudioSource.PlayOneShot(MuteSound);
         }
         else
         {
             MicrophoneMutedIcon.gameObject.SetActive(false);
             MicrophoneUnMutedIcon.gameObject.SetActive(true);
+            AudioSource.PlayOneShot(UnMuteSound);
         }
     }
 

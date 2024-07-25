@@ -22,9 +22,6 @@ limitations under the License.
 ************************************************************************************/
 using UnityEngine;
 
-
-[RequireComponent(typeof(AudioSource))]
-
 //-------------------------------------------------------------------------------------
 // ***** OVRLipSyncContextBase
 //
