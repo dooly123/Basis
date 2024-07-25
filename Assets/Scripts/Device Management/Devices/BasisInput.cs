@@ -287,7 +287,11 @@ public abstract class BasisInput : MonoBehaviour
                         BasisDeviceManagement.HideTrackers();
                     }
                 }
-                break;
+                if (InputState.PrimaryButtonGetState == false && LastState.PrimaryButtonGetState)
+                {
+                    BasisLocalPlayer.Instance.MicrophoneRecorder.ToggleIsPaused();
+                }
+                    break;
             case BasisBoneTrackedRole.RightHand:
                 BasisLocalPlayer.Instance.Move.Rotation = InputState.Primary2DAxis;
                 if (InputState.PrimaryButtonGetState)

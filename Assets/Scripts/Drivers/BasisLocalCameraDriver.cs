@@ -22,8 +22,8 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public RawImage MicrophoneMutedIcon;
     public RawImage MicrophoneUnMutedIcon;
 
-    public Vector3 offset = new Vector3(0.1f, 0.1f, 0.5f); // Adjust as needed for canvas position and depth
-
+    public Vector3 DesktopMicrophoneOffset = new Vector3(-0.1f, 0.1f, 2f); // Adjust as needed for canvas position and depth
+    public Vector3 VRMicrophoneOffset = new Vector3(-0.0004f, 0.1f, 2f);
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -53,7 +53,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
 
     private void OnPausedEvent(bool IsMuted)
     {
-        if(IsMuted)
+        if (IsMuted)
         {
             MicrophoneMutedIcon.gameObject.SetActive(true);
             MicrophoneUnMutedIcon.gameObject.SetActive(false);
@@ -109,7 +109,14 @@ public class BasisLocalCameraDriver : MonoBehaviour
                 {
                     LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScaledDown;
                 }
-                MicrophoneCanvas.transform.localPosition = Camera.ViewportToScreenPoint(offset);
+                if (CameraData.allowXRRendering)
+                {
+                    MicrophoneCanvas.transform.localPosition = Camera.ViewportToScreenPoint(VRMicrophoneOffset);
+                }
+                else
+                {
+                    MicrophoneCanvas.transform.localPosition = Camera.ViewportToScreenPoint(DesktopMicrophoneOffset);
+                }
             }
             else
             {

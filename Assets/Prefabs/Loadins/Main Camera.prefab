@@ -196,7 +196,8 @@ MonoBehaviour:
   MicrophoneCanvas: {fileID: 3373432966423603715}
   MicrophoneMutedIcon: {fileID: 7951072778522726859}
   MicrophoneUnMutedIcon: {fileID: 1908197658278707850}
-  offset: {x: -0.001, y: -0.001, z: 2}
+  DesktopMicrophoneOffset: {x: -0.001, y: -0.0015, z: 2}
+  VRMicrophoneOffset: {x: -0.0004, y: -0.0015, z: 2}
 --- !u!114 &5985133177976618905
 MonoBehaviour:
   m_ObjectHideFlags: 0
