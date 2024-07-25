@@ -20,9 +20,9 @@ public static class BasisNetworkAvatarCompressor
     }
     public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim)
     {
-        CompressAvatar(ref NetworkSendBase.Target, NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
+        CompressAvatar(ref NetworkSendBase.Target,ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
     }
-    public static void CompressAvatar(ref BasisAvatarData AvatarData, HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender,ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
+    public static void CompressAvatar(ref BasisAvatarData AvatarData,ref HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender,ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
         SenderPoseHandler.GetHumanPose(ref CachedPose);
         AvatarData.Vectors[1] = CachedPose.bodyPosition;

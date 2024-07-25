@@ -36,7 +36,7 @@ public class BasisRemoteAvatarWriter : MonoBehaviour
     }
     private void UpdateAvatarData()
     {
-        BasisNetworkAvatarCompressor.CompressAvatar(ref Target, Pose, SenderPoseHandler, Sender, ref LocalAvatarSyncMessage, PositionRanged, ScaleRanged);
+        BasisNetworkAvatarCompressor.CompressAvatar(ref Target,ref Pose, SenderPoseHandler, Sender, ref LocalAvatarSyncMessage, PositionRanged, ScaleRanged);
         if (LocalAvatarReader != null)
         {
             LocalAvatarReader.ReceiveAvatarUpdate(LocalAvatarSyncMessage.array);
