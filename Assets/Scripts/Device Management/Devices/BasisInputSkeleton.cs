@@ -1,5 +1,5 @@
 using UnityEngine;
-
+[System.Serializable]
 public class BasisInputSkeleton
 {
 
@@ -77,20 +77,42 @@ public class BasisInputSkeleton
 
         InitializeBones(BasisBoneTrackedRole.RightHand, out ActiveHand);
     }
+    public void Simulate()
+    {
+        ApplyMovement(ThumbDistal, thumbCurl);
+        ApplyMovement(IndexDistal, indexCurl);
+        ApplyMovement(MiddleDistal, middleCurl);
+        ApplyMovement(RingDistal, ringCurl);
+        ApplyMovement(LittleDistal, pinkyCurl);
+    }
     private void InitializeBones(BasisBoneTrackedRole boneRole, out BasisBoneControl boneControl)
     {
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out boneControl, boneRole);
-        //  boneControl.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-        //  boneControl.HasTracked = BasisHasTracked.HasTracker;
     }
-    public void ApplyMovement()
+    public void ApplyMovement(BasisBoneControl Control, float Curl)
     {
-        SetASTracked(IndexDistal);
-        Vector3 LocalStartPosition = IndexDistal.TposeLocal.position;
+        // Set the Control as tracked
+        SetASTracked(Control);
+
+        // Get the local start position of the Control in T-pose
+        Vector3 LocalStartPosition = Control.TposeLocal.position;
+
+        // Get the local end position of the active hand in T-pose
         Vector3 LocalEndPosition = ActiveHand.TposeLocal.position;
+
+        // Calculate the difference between the start and end positions
         Vector3 DifferenceBetweenStartAndEnd = LocalStartPosition - LocalEndPosition;
-        Vector3 DifferenceRotated = ActiveHand.BoneTransform.rotation * DifferenceBetweenStartAndEnd;
-        IndexDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + DifferenceRotated, ActiveHand.CurrentWorldData.position, skeletonAction.indexCurl);
+
+        // Rotate the difference using the inverse of the Control's tracker rotation
+        Vector3 DifferenceRotated = Quaternion.Inverse(Control.TrackerData.rotation) * DifferenceBetweenStartAndEnd;
+
+        // Apply the calculated offset to the Control's tracker position
+        // Use a linear interpolation (Lerp) between the rotated difference and the active hand's current position
+        Control.TrackerData.position = Vector3.Lerp(
+            ActiveHand.CurrentWorldData.position + DifferenceRotated,
+            ActiveHand.CurrentWorldData.position,
+            Curl
+        );
     }
     public void SetASTracked(BasisBoneControl Input)
     {
