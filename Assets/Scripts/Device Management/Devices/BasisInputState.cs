@@ -21,7 +21,8 @@ public class BasisInputState
     [SerializeField] private float trigger;
     [SerializeField] private Vector2 primary2DAxis;
     [SerializeField] private Vector2 secondary2DAxis;
-
+  //  [SerializeField] public float PrimaryDeadZone = 0.01f;
+  //  [SerializeField] public float SecondaryDeadZone = 0.01f;
     public bool GripButton
     {
         get => gripButton;
@@ -112,14 +113,12 @@ public class BasisInputState
             }
         }
     }
-    public float PrimaryDeadZone = 0.01f;
-    public float SecondaryDeadZone = 0.01f;
     public Vector2 Primary2DAxis
     {
         get => primary2DAxis;
         set
         {
-            Vector2 Convert = ApplyDeadzone(value, PrimaryDeadZone);
+            Vector2 Convert = ApplyDeadzone(value, SMModuleControllerSettings.JoyStickDeadZone);
             if (primary2DAxis != Convert)
             {
                 primary2DAxis = Convert;
@@ -133,7 +132,7 @@ public class BasisInputState
         get => secondary2DAxis;
         set
         {
-            Vector2 Convert = ApplyDeadzone(value, SecondaryDeadZone);
+            Vector2 Convert = ApplyDeadzone(value, SMModuleControllerSettings.JoyStickDeadZone);
             if (secondary2DAxis != Convert)
             {
                 secondary2DAxis = Convert;

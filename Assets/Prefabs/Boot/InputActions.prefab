@@ -368,6 +368,7 @@ MonoBehaviour:
     CurrentlySelectedSaveModule: {fileID: 256212325347645450}
     CurrentlySelectedSaveModuleName: JSON
   SettingsManagerOptions:
+  - {fileID: 2467030893667730727}
   - {fileID: 1027479742639559022}
   - {fileID: 1776921867475573335}
   - {fileID: 6183288642828014269}
@@ -1292,14 +1293,14 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 0
     SelectableValueList:
-    - realValue: microphone (nvidia broadcast)
-      UserValue: Microphone (NVIDIA Broadcast)
+    - realValue: microphone (2- antlion wireless microphone)
+      UserValue: Microphone (2- Antlion Wireless Microphone)
     - realValue: microphone (logitech streamcam)
       UserValue: Microphone (Logitech StreamCam)
     - realValue: headset microphone (oculus virtual audio device)
       UserValue: Headset Microphone (Oculus Virtual Audio Device)
-    - realValue: microphone (2- antlion wireless microphone)
-      UserValue: Microphone (2- Antlion Wireless Microphone)
+    - realValue: microphone (nvidia broadcast)
+      UserValue: Microphone (NVIDIA Broadcast)
     - realValue: microphone (steam streaming microphone)
       UserValue: Microphone (Steam Streaming Microphone)
     - realValue: microphone (2- rode nt-usb)
@@ -1411,7 +1412,7 @@ MonoBehaviour:
       DefaultPlatform: 1
       ExcludePlatform: 0
       ValueToggle: 1
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 2
@@ -1424,7 +1425,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: false
     Explanation: 
-    selectedValue: true
+    selectedValue: false
     Type: 1
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1440,6 +1441,36 @@ MonoBehaviour:
       UserValue: true
     - realValue: false
       UserValue: false
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 0.5
+    SliderMinValue: 0
+    Name: Controller DeadZone
+    ValueDescriptor: Controller DeadZone
+    SelectedValueDefault: 0.05
+    ValueDefault: 0.1
+    Explanation: 
+    selectedValue: 0.05
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 1
+    SelectableValueList: []
   SaveModules:
   - {fileID: 6482417607131076391}
   - {fileID: 256212325347645450}
@@ -1701,7 +1732,7 @@ MonoBehaviour:
     Max: 0
   - Name: Resolution
     DefaultValue: 
-    SelectedValue: 2560x1440
+    SelectedValue: 21
     Index: 14
     SelectableValueList:
     - realValue: 640x480
@@ -1758,7 +1789,7 @@ MonoBehaviour:
     Max: 0
   - Name: ScreenMode
     DefaultValue: 
-    SelectedValue: windowed
+    SelectedValue: 3
     Index: 15
     SelectableValueList:
     - realValue: exclusive fullscreen
@@ -1817,7 +1848,7 @@ MonoBehaviour:
     Max: 1
   - Name: Selected Microphone
     DefaultValue: 
-    SelectedValue: microphone (nvidia broadcast)
+    SelectedValue: 3
     Index: 22
     SelectableValueList:
     - realValue: microphone (nvidia broadcast)
@@ -1869,7 +1900,7 @@ MonoBehaviour:
     Max: 0
   - Name: Microphone Denoiser
     DefaultValue: 
-    SelectedValue: true
+    SelectedValue: false
     Index: 26
     SelectableValueList:
     - realValue: true
@@ -1878,6 +1909,13 @@ MonoBehaviour:
       UserValue: false
     Min: 0
     Max: 0
+  - Name: Controller DeadZone
+    DefaultValue: 
+    SelectedValue: 0.05
+    Index: 27
+    SelectableValueList: []
+    Min: 0
+    Max: 0.5
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -1912,6 +1950,7 @@ GameObject:
   - component: {fileID: 6183288642828014269}
   - component: {fileID: 1776921867475573335}
   - component: {fileID: 1027479742639559022}
+  - component: {fileID: 2467030893667730727}
   m_Layer: 0
   m_Name: Modules
   m_TagString: Untagged
@@ -2170,10 +2209,10 @@ MonoBehaviour:
     Type: 1
   Manager: {fileID: 0}
   MicrophoneDevice:
-  - Microphone (NVIDIA Broadcast)
+  - Microphone (2- Antlion Wireless Microphone)
   - Microphone (Logitech StreamCam)
   - Headset Microphone (Oculus Virtual Audio Device)
-  - Microphone (2- Antlion Wireless Microphone)
+  - Microphone (NVIDIA Broadcast)
   - Microphone (Steam Streaming Microphone)
   - Microphone (2- RODE NT-USB)
   - Digital Audio Interface (Valve VR Radio & HMD Mic)
@@ -2297,3 +2336,20 @@ MonoBehaviour:
   ultraShadowQualityAdditional: 2048
   ultraShadowQuality: 4096
   UltraShadowDistance: 1000
+--- !u!114 &2467030893667730727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08b2118cf8f6694cbe0db24a14690cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Controller DeadZone
+    Explanation: 
+    Parse: 1
+    Type: 3
