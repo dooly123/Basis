@@ -289,7 +289,10 @@ public abstract class BasisInput : MonoBehaviour
                 }
                 if (InputState.PrimaryButtonGetState == false && LastState.PrimaryButtonGetState)
                 {
-                    BasisLocalPlayer.Instance.MicrophoneRecorder.ToggleIsPaused();
+                    if (BasisInputModuleHandler.Instance.HasHoverONInput == false)
+                    {
+                        BasisLocalPlayer.Instance.MicrophoneRecorder.ToggleIsPaused();
+                    }
                 }
                     break;
             case BasisBoneTrackedRole.RightHand:
@@ -300,6 +303,13 @@ public abstract class BasisInput : MonoBehaviour
                 }
                 break;
             case BasisBoneTrackedRole.CenterEye:
+                if (InputState.PrimaryButtonGetState == false && LastState.PrimaryButtonGetState)
+                {
+                    if (BasisInputModuleHandler.Instance.HasHoverONInput == false)
+                    {
+                        BasisLocalPlayer.Instance.MicrophoneRecorder.ToggleIsPaused();
+                    }
+                }
                 break;
             case BasisBoneTrackedRole.Head:
                 break;

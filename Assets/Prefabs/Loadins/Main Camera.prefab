@@ -197,7 +197,7 @@ MonoBehaviour:
   MicrophoneCanvas: {fileID: 3373432966423603715}
   MicrophoneMutedIcon: {fileID: 7951072778522726859}
   MicrophoneUnMutedIcon: {fileID: 1908197658278707850}
-  DesktopMicrophoneOffset: {x: -0.001, y: -0.0015, z: 2}
+  DesktopMicrophoneOffset: {x: -0.001, y: -0.001, z: 2}
   VRMicrophoneOffset: {x: -0.0004, y: -0.0015, z: 2}
   MuteSound: {fileID: 8300000, guid: 5b9ed5013ea1941499840ac97ad2b8e9, type: 3}
   UnMuteSound: {fileID: 8300000, guid: fbd61add38ba2d04baedb52b69c6e1b3, type: 3}
@@ -411,12 +411,12 @@ PrefabInstance:
     - target: {fileID: 6075581540910113138, guid: 110fb659e9c087a44a5511c1654cbd1d,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6075581540910113138, guid: 110fb659e9c087a44a5511c1654cbd1d,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6075581540910113138, guid: 110fb659e9c087a44a5511c1654cbd1d,
         type: 3}

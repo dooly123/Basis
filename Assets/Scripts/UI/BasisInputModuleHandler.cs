@@ -13,7 +13,7 @@ public class BasisInputModuleHandler : BaseInputModule
 
     public TMP_InputField CurrentSelectedTMP_InputField;
     public InputField CurrentSelectedInputField;
-    public bool HasEvent = false;
+    public bool HasHoverONInput = false;
     public bool ForceKeyboard = false;
     public BasisUIRaycastProcess basisUIRaycastProcess = new BasisUIRaycastProcess();
     public static BasisInputModuleHandler Instance;
@@ -111,11 +111,11 @@ public class BasisInputModuleHandler : BaseInputModule
             //  ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
             if (EventSystem.currentSelectedGameObject.TryGetComponent(out CurrentSelectedTMP_InputField))
             {
-                if (HasEvent == false)
+                if (HasHoverONInput == false)
                 {
                     // Subscribe to the device change event
                     //  Keyboard.current.onTextInput += OnTextInput;
-                    HasEvent = true;
+                    HasHoverONInput = true;
                     if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
                     {
                         BasisLocalPlayer.Instance.Move.BlockMovement = true;
@@ -123,9 +123,8 @@ public class BasisInputModuleHandler : BaseInputModule
                     if (BasisAvatarEyeInput.Instance != null)
                     {
                         BasisAvatarEyeInput.Instance.BlockCrouching = true;
-
                     }
-                    if(BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenVRLoader || BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenXRLoader || ForceKeyboard)
+                    if (BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenVRLoader || BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenXRLoader || ForceKeyboard)
                     {
                         BasisVirtualKeyboard.CreateMenu(CurrentSelectedInputField, CurrentSelectedTMP_InputField);
                     }
@@ -135,11 +134,11 @@ public class BasisInputModuleHandler : BaseInputModule
             {
                 if (EventSystem.currentSelectedGameObject.TryGetComponent(out CurrentSelectedInputField))
                 {
-                    if (HasEvent == false)
+                    if (HasHoverONInput == false)
                     {
                         // Subscribe to the device change event
                         //  Keyboard.current.onTextInput += OnTextInput;
-                        HasEvent = true;
+                        HasHoverONInput = true;
                         if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)
                         {
                             BasisLocalPlayer.Instance.Move.BlockMovement = true;
@@ -159,11 +158,11 @@ public class BasisInputModuleHandler : BaseInputModule
         }
         else
         {
-            if (HasEvent)
+            if (HasHoverONInput)
             {
                 // Unsubscribe from the key press event
                 // Keyboard.current.onTextInput -= OnTextInput;
-                HasEvent = false;
+                HasHoverONInput = false;
                 CurrentSelectedTMP_InputField = null;
                 CurrentSelectedInputField = null;
                 if (BasisLocalPlayer.Instance != null && BasisLocalPlayer.Instance.Move != null)

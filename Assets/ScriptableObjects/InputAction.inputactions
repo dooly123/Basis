@@ -105,7 +105,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Mute Key",
+                    "name": "Primary Controller A",
                     "type": "Button",
                     "id": "61146b21-16a5-498f-a271-6b4db9a88a07",
                     "expectedControlType": "",
@@ -408,7 +408,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";All",
-                    "action": "Mute Key",
+                    "action": "Primary Controller A",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

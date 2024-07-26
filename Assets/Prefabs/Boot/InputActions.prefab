@@ -216,7 +216,8 @@ MonoBehaviour:
   RunButton: {fileID: 4166653571123788975, guid: 5e4c3601c6a155f43af19da3bdd35a64,
     type: 3}
   Escape: {fileID: -8104914591799447859, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
-  MuteKey: {fileID: 647096541409930546, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  PrimaryButtonGetState: {fileID: 647096541409930546, guid: 5e4c3601c6a155f43af19da3bdd35a64,
+    type: 3}
   DesktopSwitch: {fileID: -1278911692722073990, guid: 5e4c3601c6a155f43af19da3bdd35a64,
     type: 3}
   XRSwitch: {fileID: 3096343990557684458, guid: 5e4c3601c6a155f43af19da3bdd35a64,
@@ -260,7 +261,7 @@ MonoBehaviour:
   EventSystem: {fileID: 2682791463296768347}
   CurrentSelectedTMP_InputField: {fileID: 0}
   CurrentSelectedInputField: {fileID: 0}
-  HasEvent: 0
+  HasHoverONInput: 0
   ForceKeyboard: 0
 --- !u!114 &4506459589283058818
 MonoBehaviour:
