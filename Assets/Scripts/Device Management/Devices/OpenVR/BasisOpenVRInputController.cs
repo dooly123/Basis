@@ -29,6 +29,7 @@ public class BasisOpenVRInputController : BasisInput
         if (inputSource == SteamVR_Input_Sources.LeftHand || inputSource == SteamVR_Input_Sources.RightHand)
         {
             SkeletonHandInput = new BasisOpenVRInputSkeleton();
+            SkeletonHandInput.Initalize(this);
         }
         Debug.Log("set Controller to inputSource " + inputSource + " bone role " + basisBoneTrackedRole);
     }

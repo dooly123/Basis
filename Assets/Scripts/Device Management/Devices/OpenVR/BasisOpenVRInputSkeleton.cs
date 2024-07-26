@@ -1,36 +1,13 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 [System.Serializable]
-public class BasisOpenVRInputSkeleton
+public class BasisOpenVRInputSkeleton : BasisInputSkeleton
 {
     public OpenVRDevice Device;
     public SteamVR_Action_Skeleton skeletonAction;
 
     public BasisOpenVRInputController BasisOpenVRInputController;
-
-    public BasisBoneControl ThumbProximal;
-    public BasisBoneControl ThumbIntermediate;
-    public BasisBoneControl ThumbDistal;
-
-    public BasisBoneControl IndexProximal;
-    public BasisBoneControl IndexIntermediate;
-    public BasisBoneControl IndexDistal;
-
-    public BasisBoneControl MiddleProximal;
-    public BasisBoneControl MiddleIntermediate;
-    public BasisBoneControl MiddleDistal;
-
-    public BasisBoneControl RingProximal;
-    public BasisBoneControl RingIntermediate;
-    public BasisBoneControl RingDistal;
-
-    public BasisBoneControl LittleProximal;
-    public BasisBoneControl LittleIntermediate;
-    public BasisBoneControl LittleDistal;
-
-    public BasisBoneControl ActiveHand;
     public List<string> Ids = new List<string>();
     public void Initalize(BasisOpenVRInputController basisOpenVRInputController)
     {
@@ -41,53 +18,12 @@ public class BasisOpenVRInputSkeleton
         {
             if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.LeftHand)
             {
-                InitializeBones(BasisBoneTrackedRole.LeftThumbProximal, out ThumbProximal);
-                InitializeBones(BasisBoneTrackedRole.LeftThumbIntermediate, out ThumbIntermediate);
-                InitializeBones(BasisBoneTrackedRole.LeftThumbDistal, out ThumbDistal);
-
-                InitializeBones(BasisBoneTrackedRole.LeftIndexProximal, out IndexProximal);
-                InitializeBones(BasisBoneTrackedRole.LeftIndexIntermediate, out IndexIntermediate);
-                InitializeBones(BasisBoneTrackedRole.LeftIndexDistal, out IndexDistal);
-
-                InitializeBones(BasisBoneTrackedRole.LeftMiddleProximal, out MiddleProximal);
-                InitializeBones(BasisBoneTrackedRole.LeftMiddleIntermediate, out MiddleIntermediate);
-                InitializeBones(BasisBoneTrackedRole.LeftMiddleDistal, out MiddleDistal);
-
-                InitializeBones(BasisBoneTrackedRole.LeftRingProximal, out RingProximal);
-                InitializeBones(BasisBoneTrackedRole.LeftRingIntermediate, out RingIntermediate);
-                InitializeBones(BasisBoneTrackedRole.LeftRingDistal, out RingDistal);
-
-                InitializeBones(BasisBoneTrackedRole.LeftLittleProximal, out LittleProximal);
-                InitializeBones(BasisBoneTrackedRole.LeftLittleIntermediate, out LittleIntermediate);
-                InitializeBones(BasisBoneTrackedRole.LeftLittleDistal, out LittleDistal);
-
-                InitializeBones(BasisBoneTrackedRole.LeftHand, out ActiveHand);
+                AssignAsLeft();
             }
             else if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.RightHand)
             {
-                InitializeBones(BasisBoneTrackedRole.RightThumbProximal, out ThumbProximal);
-                InitializeBones(BasisBoneTrackedRole.RightThumbIntermediate, out ThumbIntermediate);
-                InitializeBones(BasisBoneTrackedRole.RightThumbDistal, out ThumbDistal);
-
-                InitializeBones(BasisBoneTrackedRole.RightIndexProximal, out IndexProximal);
-                InitializeBones(BasisBoneTrackedRole.RightIndexIntermediate, out IndexIntermediate);
-                InitializeBones(BasisBoneTrackedRole.RightIndexDistal, out IndexDistal);
-
-                InitializeBones(BasisBoneTrackedRole.RightMiddleProximal, out MiddleProximal);
-                InitializeBones(BasisBoneTrackedRole.RightMiddleIntermediate, out MiddleIntermediate);
-                InitializeBones(BasisBoneTrackedRole.RightMiddleDistal, out MiddleDistal);
-
-                InitializeBones(BasisBoneTrackedRole.RightRingProximal, out RingProximal);
-                InitializeBones(BasisBoneTrackedRole.RightRingIntermediate, out RingIntermediate);
-                InitializeBones(BasisBoneTrackedRole.RightRingDistal, out RingDistal);
-
-                InitializeBones(BasisBoneTrackedRole.RightLittleProximal, out LittleProximal);
-                InitializeBones(BasisBoneTrackedRole.RightLittleIntermediate, out LittleIntermediate);
-                InitializeBones(BasisBoneTrackedRole.RightLittleDistal, out LittleDistal);
-
-                InitializeBones(BasisBoneTrackedRole.RightHand, out ActiveHand);
+                AssignAsRight();
             }
-            Quaternion[] Rotations = skeletonAction.GetBoneRotations();
             SteamVR_Input.onSkeletonsUpdated += SteamVR_Input_OnSkeletonsUpdated;
         }
         else
@@ -95,23 +31,9 @@ public class BasisOpenVRInputSkeleton
             Debug.LogError("Missing Skeleton Action for " + Action);
         }
     }
-    private void InitializeBones(BasisBoneTrackedRole boneRole, out BasisBoneControl boneControl)
-    {
-        BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out boneControl, boneRole);
-      //  boneControl.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-      //  boneControl.HasTracked = BasisHasTracked.HasTracker;
-    }
     private void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
     {
         onTrackingChanged();
-    }
-    public void SetASTracked(BasisBoneControl Input)
-    {
-        if (Input.HasTracked == BasisHasTracked.HasNoTracker)
-        {
-            Input.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-            Input.HasTracked = BasisHasTracked.HasTracker;
-        }
     }
     private void onTrackingChanged()
     {
@@ -142,9 +64,9 @@ public class BasisOpenVRInputSkeleton
                         break;
                     case 5:
                         // ThumbDistal.TrackerData.rotation = Rotations[Index];
-                        SetASTracked(ThumbDistal);
-                        Vector3 Difference = ThumbDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        ThumbDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.thumbCurl);
+                        SetASTracked(ThumbDistal);///Fix
+                        //      Vector3 Difference = ThumbDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
+                        //  ThumbDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.thumbCurl);
                         //ThumbDistal.ApplyMovement();
                         break;
                     case 6:
@@ -163,9 +85,13 @@ public class BasisOpenVRInputSkeleton
                     case 9:
                         //  IndexDistal.TrackerData.rotation = Rotations[Index];
                         SetASTracked(IndexDistal);
-                        Difference = IndexDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        IndexDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.indexCurl);
-                      //  IndexDistal.ApplyMovement();
+
+                        Vector3 LocalStartPosition = IndexDistal.TposeLocal.position;
+                        Vector3 LocalEndPosition = ActiveHand.TposeLocal.position;
+                        Vector3 DifferenceBetweenStartAndEnd = LocalStartPosition - LocalEndPosition;
+                        Vector3 DifferenceRotated =  ActiveHand.BoneTransform.rotation * DifferenceBetweenStartAndEnd;
+                        IndexDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + DifferenceRotated, ActiveHand.CurrentWorldData.position, skeletonAction.indexCurl);
+                        //  IndexDistal.ApplyMovement();
                         break;
                     case 10:
                         // skip
@@ -181,11 +107,11 @@ public class BasisOpenVRInputSkeleton
                         //  MiddleIntermediate.ApplyMovement();
                         break;
                     case 13:
-                        //  MiddleDistal.TrackerData.rotation = Rotations[Index];
-                        SetASTracked(MiddleDistal);
-                        Difference = MiddleDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        MiddleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.middleCurl);
-                       // MiddleDistal.ApplyMovement();
+                        //here  MiddleDistal.TrackerData.rotation = Rotations[Index];
+                        // SetASTracked(MiddleDistal);
+                        // Difference = MiddleDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
+                        // MiddleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.middleCurl);
+                        // MiddleDistal.ApplyMovement();
                         break;
                     case 14:
                         // skip
@@ -202,10 +128,10 @@ public class BasisOpenVRInputSkeleton
                         break;
                     case 17:
                         //   RingDistal.TrackerData.rotation = Rotations[Index];
-                        SetASTracked(RingDistal);
-                        Difference = RingDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        RingDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.ringCurl);
-                       // RingDistal.ApplyMovement();
+                        //here  SetASTracked(RingDistal);
+                        //  Difference = RingDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
+                        // RingDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.ringCurl);
+                        // RingDistal.ApplyMovement();
                         break;
                     case 18:
                         // skip
@@ -222,10 +148,10 @@ public class BasisOpenVRInputSkeleton
                         break;
                     case 21:
                         //   LittleDistal.TrackerData.rotation = Rotations[Index];
-                        SetASTracked(LittleDistal);
-                        Difference = LittleDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
-                        LittleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.pinkyCurl);
-                     //   LittleDistal.ApplyMovement();
+                        //here SetASTracked(LittleDistal);
+                        // Difference = LittleDistal.TposeLocal.position - ActiveHand.TposeLocal.position;
+                        // LittleDistal.TrackerData.position = Vector3.Lerp(ActiveHand.CurrentWorldData.position + Difference, ActiveHand.CurrentWorldData.position, skeletonAction.pinkyCurl);
+                        //   LittleDistal.ApplyMovement();
                         break;
                     // Add cases for other bones if necessary
                     default:
