@@ -29,6 +29,18 @@ public class BasisInputSkeleton
     public float middleCurl;
     public float ringCurl;
     public float pinkyCurl;
+
+    public Vector3 ThumbPosition;
+    public Vector3 indexPosition;
+    public Vector3 middlePosition;
+    public Vector3 ringPosition;
+    public Vector3 pinkyPosition;
+
+    public Vector3 ThumbPositionPoint = new Vector3(-0.04f, -0.07f, -0.04f);
+    public Vector3 indexPositionPoint = new Vector3(-0.04f, -0.02f, -0.03f);
+    public Vector3 middlePositionPoint = new Vector3(-0.04f, -0.09f, -0f);
+    public Vector3 ringPositionPoint = new Vector3(-0.06f, -0.05f, -0.03f);
+    public Vector3 pinkyPositionPoint = new Vector3(-0.06f, -0.045f, -0.04f);
     public void AssignAsLeft()
     {
         InitializeBones(BasisBoneTrackedRole.LeftThumbProximal, out ThumbProximal);
@@ -79,40 +91,25 @@ public class BasisInputSkeleton
     }
     public void Simulate()
     {
-        ApplyMovement(ThumbDistal, thumbCurl);
-        ApplyMovement(IndexDistal, indexCurl);
-        ApplyMovement(MiddleDistal, middleCurl);
-        ApplyMovement(RingDistal, ringCurl);
-        ApplyMovement(LittleDistal, pinkyCurl);
+        ThumbPosition = ApplyMovement(ThumbDistal, ActiveHand, thumbCurl, ThumbPositionPoint);
+        indexPosition = ApplyMovement(IndexDistal, ActiveHand, indexCurl, indexPositionPoint);
+        middlePosition = ApplyMovement(MiddleDistal, ActiveHand, middleCurl, middlePositionPoint);
+        ringPosition = ApplyMovement(RingDistal, ActiveHand, ringCurl, ringPositionPoint);
+        pinkyPosition = ApplyMovement(LittleDistal, ActiveHand, pinkyCurl, pinkyPositionPoint);
     }
     private void InitializeBones(BasisBoneTrackedRole boneRole, out BasisBoneControl boneControl)
     {
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out boneControl, boneRole);
     }
-    public void ApplyMovement(BasisBoneControl Control, float Curl)
+    public Vector3 ApplyMovement(BasisBoneControl Control, BasisBoneControl Target, float Curl,Vector3 Offset)
     {
-        // Set the Control as tracked
+        Control.PositionWeight = Curl;
+        Control.RotationWeight = 0;
         SetASTracked(Control);
-
-        // Get the local start position of the Control in T-pose
-        Vector3 LocalStartPosition = Control.TposeLocal.position;
-
-        // Get the local end position of the active hand in T-pose
-        Vector3 LocalEndPosition = ActiveHand.TposeLocal.position;
-
-        // Calculate the difference between the start and end positions
-        Vector3 DifferenceBetweenStartAndEnd = LocalStartPosition - LocalEndPosition;
-
-        // Rotate the difference using the inverse of the Control's tracker rotation
-        Vector3 DifferenceRotated = Quaternion.Inverse(Control.TrackerData.rotation) * DifferenceBetweenStartAndEnd;
-
-        // Apply the calculated offset to the Control's tracker position
-        // Use a linear interpolation (Lerp) between the rotated difference and the active hand's current position
-        Control.TrackerData.position = Vector3.Lerp(
-            ActiveHand.CurrentWorldData.position + DifferenceRotated,
-            ActiveHand.CurrentWorldData.position,
-            Curl
-        );
+        Control.TrackerData.position = Target.FinalApplied.position + (Target.CurrentWorldData.rotation * Offset);
+        Control.TrackerData.rotation = Quaternion.identity;
+        Debug.DrawLine(Target.CurrentWorldData.position, Control.CurrentWorldData.position);
+        return Control.TrackerData.position;
     }
     public void SetASTracked(BasisBoneControl Input)
     {
@@ -121,5 +118,9 @@ public class BasisInputSkeleton
             Input.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             Input.HasTracked = BasisHasTracked.HasTracker;
         }
+    }
+    public void OnDrawGizmos()
+    {
+       
     }
 }

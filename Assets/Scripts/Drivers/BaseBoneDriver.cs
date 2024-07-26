@@ -85,6 +85,7 @@ public abstract class BaseBoneDriver : MonoBehaviour
         for (int Index = 0; Index < ControlsLength; Index++)
         {
             Controls[Index].OnHasRigChanged.RemoveAllListeners();
+            Controls[Index].WeightsChanged.RemoveAllListeners();
         }
     }
     public void ResetBoneModel()

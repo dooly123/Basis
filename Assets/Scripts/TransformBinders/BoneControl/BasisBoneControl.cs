@@ -39,6 +39,8 @@ public class BasisBoneControl
     }
     // Events for property changes
     public UnityEvent OnHasRigChanged = new UnityEvent();
+
+    public UnityEvent<float, float> WeightsChanged = new UnityEvent<float,float>();
     // Backing fields for the properties
     [SerializeField]
     private BasisHasRigLayer hasRigLayer = BasisHasRigLayer.HasNoRigLayer;
@@ -55,6 +57,35 @@ public class BasisBoneControl
             }
         }
     }
+    [SerializeField]
+    private float positionWeight = 1;
+    [SerializeField]
+    private float rotationWeight = 1;
+    public float PositionWeight
+    {
+        get => positionWeight;
+        set
+        {
+            if (positionWeight != value)
+            {
+                positionWeight = value;
+                WeightsChanged.Invoke(positionWeight, rotationWeight);
+            }
+        }
+    }
+    public float RotationWeight
+    {
+        get => rotationWeight;
+        set
+        {
+            if (rotationWeight != value)
+            {
+                rotationWeight = value;
+                WeightsChanged.Invoke(positionWeight, rotationWeight);
+            }
+        }
+    }
+
     public GeneralLocation GeneralLocation;
     [SerializeField]
     public BasisRotationalControl RotationControl = new BasisRotationalControl();

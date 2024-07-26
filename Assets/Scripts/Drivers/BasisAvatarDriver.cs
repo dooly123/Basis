@@ -386,6 +386,20 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         TwoBoneIKConstraint.data.mid = mid;
         TwoBoneIKConstraint.data.tip = tip;
         GeneratedRequiredTransforms(tip, References.Hips);
+        WriteUpWeights(BoneControl, TwoBoneIKConstraint);
+    }
+    public void WriteUpWeights(BasisBoneControl Control, TwoBoneIKConstraint Constraint)
+    {
+        Control.WeightsChanged.AddListener(delegate (float positionWeight, float rotationWeight)
+        {
+            UpdateIKRig(positionWeight, rotationWeight, Control, Constraint);
+        });
+    }
+
+    void UpdateIKRig(float PositionWeight, float RotationWeight, BasisBoneControl Control, TwoBoneIKConstraint Constraint)
+    {
+        Constraint.data.targetPositionWeight = PositionWeight;
+        Constraint.data.targetRotationWeight = RotationWeight;
     }
     public void GeneratedRequiredTransforms(Transform BaseLevel, Transform TopLevelParent)
     {

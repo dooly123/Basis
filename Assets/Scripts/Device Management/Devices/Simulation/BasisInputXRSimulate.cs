@@ -9,12 +9,12 @@ public class BasisInputXRSimulate : BasisInput
     public BasisInputSkeleton BasisInputSkeleton;
     public void Start()
     {
-        if(BasisInputSkeleton == null)
+        if (BasisInputSkeleton == null)
         {
             BasisInputSkeleton = new BasisInputSkeleton();
-            if(TryGetRole(out BasisBoneTrackedRole Role))
+            if (TryGetRole(out BasisBoneTrackedRole Role))
             {
-                if(Role == BasisBoneTrackedRole.LeftHand)
+                if (Role == BasisBoneTrackedRole.LeftHand)
                 {
                     BasisInputSkeleton.AssignAsLeft();
                 }
@@ -32,7 +32,7 @@ public class BasisInputXRSimulate : BasisInput
     {
         if (AddSomeRandomizedInput)
         {
-            Vector3 randomOffset = new Vector3(Random.Range(-MinMaxOffset, MinMaxOffset),Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset));
+            Vector3 randomOffset = new Vector3(Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset));
 
             Quaternion randomRotation = Random.rotation;
             Quaternion lerpedRotation = Quaternion.Lerp(FollowMovement.localRotation, randomRotation, LerpAmount * Time.deltaTime);
@@ -79,12 +79,19 @@ public class BasisInputXRSimulate : BasisInput
         UpdatePlayerControl();
         BasisInputSkeleton.Simulate();
     }
+    public void OnDrawGizmos()
+    {
+        if (BasisInputSkeleton != null)
+        {
+            BasisInputSkeleton.OnDrawGizmos();
+        }
+    }
     public new void OnDestroy()
     {
-        if(FollowMovement != null)
+        if (FollowMovement != null)
         {
             GameObject.Destroy(FollowMovement.gameObject);
         }
-        base.OnDestroy();   
+        base.OnDestroy();
     }
 }
