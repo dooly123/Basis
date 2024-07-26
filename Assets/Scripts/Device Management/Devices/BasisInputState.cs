@@ -112,15 +112,17 @@ public class BasisInputState
             }
         }
     }
-
+    public float PrimaryDeadZone = 0.01f;
+    public float SecondaryDeadZone = 0.01f;
     public Vector2 Primary2DAxis
     {
         get => primary2DAxis;
         set
         {
-            if (primary2DAxis != value)
+            Vector2 Convert = ApplyDeadzone(value, PrimaryDeadZone);
+            if (primary2DAxis != Convert)
             {
-                primary2DAxis = value;
+                primary2DAxis = Convert;
                 OnPrimary2DAxisChanged?.Invoke();
             }
         }
@@ -131,12 +133,21 @@ public class BasisInputState
         get => secondary2DAxis;
         set
         {
-            if (secondary2DAxis != value)
+            Vector2 Convert = ApplyDeadzone(value, SecondaryDeadZone);
+            if (secondary2DAxis != Convert)
             {
-                secondary2DAxis = value;
+                secondary2DAxis = Convert;
                 OnSecondary2DAxisChanged?.Invoke();
             }
         }
+    }
+    public Vector2 ApplyDeadzone(Vector2 input,float deadzoneThreshold)
+    {
+        if (input.magnitude < deadzoneThreshold)
+        {
+            return Vector2.zero;
+        }
+        return input;
     }
     public void CopyTo(BasisInputState target)
     {
