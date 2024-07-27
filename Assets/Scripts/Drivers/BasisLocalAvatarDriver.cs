@@ -321,19 +321,23 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, LeftFingersLayer);
         }
-        // Create fingers
-       // /*
-     CreateTwoBone(driver, Hands, References.LeftThumbProximal, References.LeftThumbIntermediate, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbIntermediate, false, out TwoBoneIKConstraint A, false, false);
-     CreateTwoBone(driver, Hands, References.LeftIndexProximal, References.LeftIndexIntermediate, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexIntermediate, false, out TwoBoneIKConstraint B, false, false);
-     CreateTwoBone(driver, Hands, References.LeftMiddleProximal, References.LeftMiddleIntermediate, References.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleDistal, BasisBoneTrackedRole.LeftMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
-     CreateTwoBone(driver, Hands, References.LeftRingProximal, References.LeftRingIntermediate, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, BasisBoneTrackedRole.LeftRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
-     CreateTwoBone(driver, Hands, References.LeftLittleProximal, References.LeftLittleIntermediate, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
-     LeftFingers.Add(A);
-     LeftFingers.Add(B);
-     LeftFingers.Add(C);
-     LeftFingers.Add(D);
-     LeftFingers.Add(E);
-        //    */
+        //  Damp(driver, Hands, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, 0, 0);
+        //  Damp(driver, Hands, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, 0, 0);
+        //  Damp(driver, Hands, References.LeftMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 0, 0);
+        //  Damp(driver, Hands, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, 0, 0);
+        //  Damp(driver, Hands, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, 0, 0);
+
+        Damp(driver, Hands, References.LeftThumbIntermediate, BasisBoneTrackedRole.LeftThumbIntermediate, 0, 0);
+        Damp(driver, Hands, References.LeftIndexIntermediate, BasisBoneTrackedRole.LeftIndexIntermediate, 0, 0);
+        Damp(driver, Hands, References.LeftMiddleIntermediate, BasisBoneTrackedRole.LeftMiddleIntermediate, 0, 0);
+        Damp(driver, Hands, References.LeftRingIntermediate, BasisBoneTrackedRole.LeftRingIntermediate, 0, 0);
+        Damp(driver, Hands, References.LeftLittleIntermediate, BasisBoneTrackedRole.LeftLittleIntermediate, 0, 0);
+
+        Damp(driver, Hands, References.LeftThumbProximal, BasisBoneTrackedRole.LeftThumbProximal, 0, 0);
+        Damp(driver, Hands, References.LeftIndexProximal, BasisBoneTrackedRole.LeftIndexProximal, 0, 0);
+        Damp(driver, Hands, References.LeftMiddleProximal, BasisBoneTrackedRole.LeftMiddleProximal, 0, 0);
+        Damp(driver, Hands, References.LeftRingProximal, BasisBoneTrackedRole.LeftRingProximal, 0, 0);
+        Damp(driver, Hands, References.LeftLittleProximal, BasisBoneTrackedRole.LeftLittleProximal, 0, 0);
     }
     public void CreateRightHandFingers(BasisLocalBoneDriver driver)
     {
@@ -342,19 +346,23 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         {
             WriteUpEvents(Control, RightFingersLayer);
         }
-        // Create fingers
-       // /*
-        CreateTwoBone(driver, Hands, References.RightThumbProximal, References.RightThumbIntermediate, References.RightThumbDistal, BasisBoneTrackedRole.RightThumbDistal, BasisBoneTrackedRole.RightThumbIntermediate, false, out TwoBoneIKConstraint A, false, false);
-        CreateTwoBone(driver, Hands, References.RightIndexProximal, References.RightIndexIntermediate, References.RightIndexDistal, BasisBoneTrackedRole.RightIndexDistal, BasisBoneTrackedRole.RightIndexIntermediate, false, out TwoBoneIKConstraint B, false, false);
-        CreateTwoBone(driver, Hands, References.RightMiddleProximal, References.RightMiddleIntermediate, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleIntermediate, false, out TwoBoneIKConstraint C, false, false);
-        CreateTwoBone(driver, Hands, References.RightRingProximal, References.RightRingIntermediate, References.RightRingDistal, BasisBoneTrackedRole.RightRingDistal, BasisBoneTrackedRole.RightRingIntermediate, false, out TwoBoneIKConstraint D, false, false);
-        CreateTwoBone(driver, Hands, References.RightLittleProximal, References.RightLittleIntermediate, References.RightLittleDistal, BasisBoneTrackedRole.RightLittleDistal, BasisBoneTrackedRole.RightLittleIntermediate, false, out TwoBoneIKConstraint E, false, false);
-        RightFingers.Add(A);
-        RightFingers.Add(B);
-        RightFingers.Add(C);
-        RightFingers.Add(D);
-        RightFingers.Add(E);
-       // */
+        //  Damp(driver, Hands, References.RightThumbDistal, BasisBoneTrackedRole.RightThumbDistal, 0, 0);
+        //  Damp(driver, Hands, References.RightIndexDistal, BasisBoneTrackedRole.RightIndexDistal, 0, 0);
+        // Damp(driver, Hands, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 0, 0);
+        //   Damp(driver, Hands, References.RightRingDistal, BasisBoneTrackedRole.RightRingDistal, 0, 0);
+        //  Damp(driver, Hands, References.RightLittleDistal, BasisBoneTrackedRole.RightLittleDistal, 0, 0);
+
+        Damp(driver, Hands, References.RightThumbIntermediate, BasisBoneTrackedRole.RightThumbIntermediate, 0, 0);
+        Damp(driver, Hands, References.RightIndexIntermediate, BasisBoneTrackedRole.RightIndexIntermediate, 0, 0);
+        Damp(driver, Hands, References.RightMiddleIntermediate, BasisBoneTrackedRole.RightMiddleIntermediate, 0, 0);
+        Damp(driver, Hands, References.RightRingIntermediate, BasisBoneTrackedRole.RightRingIntermediate, 0, 0);
+        Damp(driver, Hands, References.RightLittleIntermediate, BasisBoneTrackedRole.RightLittleIntermediate, 0, 0);
+
+        Damp(driver, Hands, References.RightThumbProximal, BasisBoneTrackedRole.RightThumbProximal, 0, 0);
+        Damp(driver, Hands, References.RightIndexProximal, BasisBoneTrackedRole.RightIndexProximal, 0, 0);
+        Damp(driver, Hands, References.RightMiddleProximal, BasisBoneTrackedRole.RightMiddleProximal, 0, 0);
+        Damp(driver, Hands, References.RightRingProximal, BasisBoneTrackedRole.RightRingProximal, 0, 0);
+        Damp(driver, Hands, References.RightLittleProximal, BasisBoneTrackedRole.RightLittleProximal, 0, 0);
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {

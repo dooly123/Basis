@@ -305,6 +305,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         DT.data.dampPosition = positionWeight;
         DT.data.maintainAim = false;
         GeneratedRequiredTransforms(Source, References.Hips);
+        WriteUpWeights(Target, DT);
     }
     public void MultiRotation(GameObject Parent, Transform Source, Transform Target, float rotationWeight = 1)
     {
@@ -386,20 +387,19 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         TwoBoneIKConstraint.data.mid = mid;
         TwoBoneIKConstraint.data.tip = tip;
         GeneratedRequiredTransforms(tip, References.Hips);
-        WriteUpWeights(BoneControl, TwoBoneIKConstraint);
     }
-    public void WriteUpWeights(BasisBoneControl Control, TwoBoneIKConstraint Constraint)
+    public void WriteUpWeights(BasisBoneControl Control, DampedTransform Constraint)
     {
         Control.WeightsChanged.AddListener(delegate (float positionWeight, float rotationWeight)
         {
-            UpdateIKRig(positionWeight, rotationWeight, Control, Constraint);
+            UpdateIKRig(positionWeight, rotationWeight, Constraint);
         });
     }
 
-    void UpdateIKRig(float PositionWeight, float RotationWeight, BasisBoneControl Control, TwoBoneIKConstraint Constraint)
+    void UpdateIKRig(float PositionWeight, float RotationWeight, DampedTransform Constraint)
     {
-        Constraint.data.targetPositionWeight = PositionWeight;
-        Constraint.data.targetRotationWeight = RotationWeight;
+        Constraint.weight = PositionWeight;
+      //  Constraint.data.dampRotation = RotationWeight;
     }
     public void GeneratedRequiredTransforms(Transform BaseLevel, Transform TopLevelParent)
     {

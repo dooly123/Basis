@@ -29,13 +29,6 @@ public class BasisInputSkeleton
     public float middleCurl;
     public float ringCurl;
     public float pinkyCurl;
-
-    public Vector3 ThumbPosition;
-    public Vector3 indexPosition;
-    public Vector3 middlePosition;
-    public Vector3 ringPosition;
-    public Vector3 pinkyPosition;
-
     public Vector3 ThumbPositionPoint = new Vector3(-0.04f, -0.07f, -0.04f);
     public Vector3 indexPositionPoint = new Vector3(-0.04f, -0.02f, -0.03f);
     public Vector3 middlePositionPoint = new Vector3(-0.04f, -0.09f, -0f);
@@ -91,25 +84,36 @@ public class BasisInputSkeleton
     }
     public void Simulate()
     {
-        ThumbPosition = ApplyMovement(ThumbDistal, ActiveHand, thumbCurl, ThumbPositionPoint);
-        indexPosition = ApplyMovement(IndexDistal, ActiveHand, indexCurl, indexPositionPoint);
-        middlePosition = ApplyMovement(MiddleDistal, ActiveHand, middleCurl, middlePositionPoint);
-        ringPosition = ApplyMovement(RingDistal, ActiveHand, ringCurl, ringPositionPoint);
-        pinkyPosition = ApplyMovement(LittleDistal, ActiveHand, pinkyCurl, pinkyPositionPoint);
+        ApplyMovement(ThumbDistal, thumbCurl);
+        ApplyMovement(IndexDistal, indexCurl);
+        ApplyMovement(MiddleDistal, middleCurl);
+        ApplyMovement(RingDistal, ringCurl);
+        ApplyMovement(LittleDistal, pinkyCurl);
+
+        ApplyMovement(ThumbIntermediate, thumbCurl);
+        ApplyMovement(IndexIntermediate, indexCurl);
+        ApplyMovement(MiddleIntermediate, middleCurl);
+        ApplyMovement(RingIntermediate, ringCurl);
+        ApplyMovement(LittleIntermediate, pinkyCurl);
+
+        ApplyMovement(ThumbProximal, thumbCurl);
+        ApplyMovement(IndexProximal, indexCurl);
+        ApplyMovement(MiddleProximal, middleCurl);
+        ApplyMovement(RingProximal, ringCurl);
+        ApplyMovement(LittleProximal, pinkyCurl);
     }
     private void InitializeBones(BasisBoneTrackedRole boneRole, out BasisBoneControl boneControl)
     {
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out boneControl, boneRole);
     }
-    public Vector3 ApplyMovement(BasisBoneControl Control, BasisBoneControl Target, float Curl,Vector3 Offset)
+    public void ApplyMovement(BasisBoneControl Control, float Curl)
     {
         Control.PositionWeight = Curl;
         Control.RotationWeight = 0;
-        SetASTracked(Control);
-        Control.TrackerData.position = Target.FinalApplied.position + (Target.CurrentWorldData.rotation * Offset);
-        Control.TrackerData.rotation = Quaternion.identity;
-        Debug.DrawLine(Target.CurrentWorldData.position, Control.CurrentWorldData.position);
-        return Control.TrackerData.position;
+      //  SetASTracked(Control);
+     //   Control.TrackerData.position = Target.FinalApplied.position + (Target.CurrentWorldData.rotation * Offset);
+    //    Control.TrackerData.rotation = Quaternion.identity;
+      //  Debug.DrawLine(Target.CurrentWorldData.position, Control.CurrentWorldData.position);
     }
     public void SetASTracked(BasisBoneControl Input)
     {
