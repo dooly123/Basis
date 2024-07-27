@@ -36,11 +36,11 @@ public class BasisOpenVRInput : BasisInput
                     {
                         if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                         {
-                            Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
+                            Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
                         }
                         if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                         {
-                            Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
+                            Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
                         }
                     }
                     if (HasInputSource)

@@ -30,7 +30,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         }
 
         // Calculate the velocity of the character controller taking into account the direction occurring to the hips
-        currentVelocity = Quaternion.Inverse(Hips.CurrentWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / Time.deltaTime;
+        currentVelocity = Quaternion.Inverse(Hips.OutgoingWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / Time.deltaTime;
 
         // Apply dampening to the velocity
         dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
@@ -53,7 +53,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = BasisLocalInputActions.Crouching;
 
         // Calculate the angular velocity of the hips
-        deltaRotation = Hips.CurrentWorldData.rotation * Quaternion.Inverse(previousHipsRotation);
+        deltaRotation = Hips.OutgoingWorldData.rotation * Quaternion.Inverse(previousHipsRotation);
         deltaRotation.ToAngleAxis(out float angle, out Vector3 axis);
         angularVelocity = axis * angle / Time.deltaTime;
 
@@ -80,7 +80,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         // Update the previous velocities and rotations for the next frame
         previousRawVelocity = dampenedVelocity;
         previousAngularVelocity = dampenedAngularVelocity;
-        previousHipsRotation = Hips.CurrentWorldData.rotation;
+        previousHipsRotation = Hips.OutgoingWorldData.rotation;
     }
 
     private void JustJumped()

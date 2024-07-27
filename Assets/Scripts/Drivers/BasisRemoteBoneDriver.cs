@@ -38,13 +38,13 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
     {
         if (Head.HasBone && HeadAvatar != null)
         {
-            Head.FinalApplied.position = HeadAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
-            Head.FinalApplied.rotation = HeadAvatar.rotation;
+            Head.OutGoingData.position = HeadAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
+            Head.OutGoingData.rotation = HeadAvatar.rotation;
         }
         if (Hips.HasBone && HipsAvatar != null)
         {
-            Hips.FinalApplied.position = HipsAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
-            Hips.FinalApplied.rotation = HipsAvatar.rotation;
+            Hips.OutGoingData.position = HipsAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
+            Hips.OutGoingData.rotation = HipsAvatar.rotation;
         }
     }
     public void OnCalibration(BasisRemotePlayer remotePlayer)

@@ -32,7 +32,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         Vector3 Angular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity;
         float Square = Angular.sqrMagnitude;
         Vector3 localTposeHips = Hips.TposeLocal.position;
-        Vector3 HipsPosLocal = Hips.FinalApplied.position;
+        Vector3 HipsPosLocal = Hips.OutGoingData.position;
         /*
         if(Square <= LargerThenBeforeRotating)
         {
@@ -114,11 +114,11 @@ public class BasisFootPlacementDriver : MonoBehaviour
             Vector3 localTposeFoot = Foot.TposeLocal.position;
 
             Vector3 Offset = localTposeFoot - localTposeHips;
-            Vector3 RotatedOffset = Driver.transform.rotation * Driver.Hips.CurrentWorldData.rotation * Offset;
+            Vector3 RotatedOffset = Driver.transform.rotation * Driver.Hips.OutgoingWorldData.rotation * Offset;
             Vector3 FootExtendedPositionWorld = HipsPosLocal + RotatedOffset;
 
             // Create a vector for the hip height at the foot's X and Z coordinates
-            Vector3 hipHeightFootVector = new Vector3(FootExtendedPositionWorld.x, Driver.Hips.CurrentWorldData.position.y, FootExtendedPositionWorld.z);
+            Vector3 hipHeightFootVector = new Vector3(FootExtendedPositionWorld.x, Driver.Hips.OutgoingWorldData.position.y, FootExtendedPositionWorld.z);
 
             // Calculate the vertical difference
             float yDifference = FootExtendedPositionWorld.y - hipHeightFootVector.y;
@@ -143,8 +143,8 @@ public class BasisFootPlacementDriver : MonoBehaviour
                 FinalApplied = new Vector3(bottomPointLocal.x, bottomPointLocal.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight, bottomPointLocal.z);
                 lerp += Time.deltaTime * FootStepSpeed;
             }
-            Foot.FinalApplied.position = FinalApplied;
-            Foot.FinalApplied.rotation = Quaternion.Euler(Foot.BoneTransform.localEulerAngles.x, Driver.Hips.BoneTransform.localEulerAngles.y, Foot.BoneTransform.localEulerAngles.z);
+            Foot.OutGoingData.position = FinalApplied;
+            Foot.OutGoingData.rotation = Quaternion.Euler(Foot.BoneTransform.localEulerAngles.x, Driver.Hips.BoneTransform.localEulerAngles.y, Foot.BoneTransform.localEulerAngles.z);
         }
         public void Gizmo()
         {

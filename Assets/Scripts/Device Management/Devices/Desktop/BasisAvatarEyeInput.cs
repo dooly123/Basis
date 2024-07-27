@@ -126,8 +126,8 @@ public class BasisAvatarEyeInput : BasisInput
             CalculateAdjustment();
             adjustedHeadPosition.y -= adjustment;
             LocalRawPosition = adjustedHeadPosition;
-            Control.TrackerData.position = LocalRawPosition;
-            Control.TrackerData.rotation = LocalRawRotation;
+            Control.IncomingData.position = LocalRawPosition;
+            Control.IncomingData.rotation = LocalRawRotation;
         }
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;

@@ -21,7 +21,7 @@ public class BasisOpenXRInput : BasisInput
                 {
                     if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
-                        Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
+                        Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
                     }
                 }
             }
@@ -31,7 +31,7 @@ public class BasisOpenXRInput : BasisInput
                 {
                     if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
-                        Control.TrackerData.position = LocalRawPosition - LocalRawRotation * AvatarPositionOffset;
+                        Control.IncomingData.position = LocalRawPosition - LocalRawRotation * AvatarPositionOffset;
                     }
                 }
             }

@@ -70,7 +70,7 @@ public abstract class BasisInput : MonoBehaviour
         {
             if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(trackedRole))//we dont want to offset these ones
             {
-                Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.CurrentWorldData.position - transform.position);
+                Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.OutgoingWorldData.position - transform.position);
                 Control.InverseOffsetFromBone.rotation = (Quaternion.Inverse(transform.rotation) * Control.BoneTransform.rotation);
                 Control.InverseOffsetFromBone.Use = true;
             }

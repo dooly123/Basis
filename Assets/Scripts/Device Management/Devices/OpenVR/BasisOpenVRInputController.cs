@@ -33,6 +33,10 @@ public class BasisOpenVRInputController : BasisInput
         }
         Debug.Log("set Controller to inputSource " + inputSource + " bone role " + basisBoneTrackedRole);
     }
+    public void LateUpdate()
+    {
+        SkeletonHandInput.LateUpdate();
+    }
     public new void OnDestroy()
     {
         if (poseAction != null)
@@ -72,11 +76,11 @@ public class BasisOpenVRInputController : BasisInput
         {
             if (Control.HasTracked != BasisHasTracked.HasNoTracker)
             {
-                Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
+                Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
             }
             if (Control.HasTracked != BasisHasTracked.HasNoTracker)
             {
-                Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
+                Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
             }
         }
     }

@@ -48,7 +48,7 @@ public class BasisLockToBone : MonoBehaviour
     {
         if (hasCharacterTransformDriver && HasBoneControl)
         {
-            transform.SetPositionAndRotation(BoneControl.CurrentWorldData.position, BoneControl.CurrentWorldData.rotation);
+            transform.SetPositionAndRotation(BoneControl.OutgoingWorldData.position, BoneControl.OutgoingWorldData.rotation);
         }
     }
 }

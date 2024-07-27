@@ -68,7 +68,7 @@ public class BasisCharacterController : MonoBehaviour
 
         // Add the rotation amount to the current y-axis rotation and use modulo to keep it within 0-360 degrees
         float newRotationY = (currentRotation.y + rotationAmount) % 360f;
-        this.transform.RotateAround(Eye.CurrentWorldData.position, Vector3.up, rotationAmount);
+        this.transform.RotateAround(Eye.OutgoingWorldData.position, Vector3.up, rotationAmount);
         ReadyToRead?.Invoke();
     }
     public void OnDrawGizmosSelected()
@@ -110,7 +110,7 @@ public class BasisCharacterController : MonoBehaviour
         }
 
         // Cache current rotation and zero out x and z components
-        currentRotation = Head.CurrentWorldData.rotation;
+        currentRotation = Head.OutgoingWorldData.rotation;
         Vector3 rotationEulerAngles = currentRotation.eulerAngles;
         rotationEulerAngles.x = 0;
         rotationEulerAngles.z = 0;
@@ -149,7 +149,7 @@ public class BasisCharacterController : MonoBehaviour
     }
     public void CalculateCharacterSize()
     {
-        eyeHeight = HasEye ? Eye.FinalApplied.position.y : 1.73f;
+        eyeHeight = HasEye ? Eye.OutGoingData.position.y : 1.73f;
         float adjustedHeight = eyeHeight;
         adjustedHeight = Mathf.Max(adjustedHeight, MinimumColliderSize);
         SetCharacterHeight(adjustedHeight);
@@ -159,6 +159,6 @@ public class BasisCharacterController : MonoBehaviour
         characterController.height = height;
         float SkinModifiedHeight = height / 2;
 
-        characterController.center = HasEye ? new Vector3(Eye.FinalApplied.position.x, SkinModifiedHeight, Eye.FinalApplied.position.z) : new Vector3(0, SkinModifiedHeight, 0);
+        characterController.center = HasEye ? new Vector3(Eye.OutGoingData.position.x, SkinModifiedHeight, Eye.OutGoingData.position.z) : new Vector3(0, SkinModifiedHeight, 0);
     }
 }

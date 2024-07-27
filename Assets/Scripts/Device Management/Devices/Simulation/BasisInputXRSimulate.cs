@@ -59,7 +59,7 @@ public class BasisInputXRSimulate : BasisInput
                 {
                     AvatarPositionOffset = Vector3.zero;
                 }
-                Control.TrackerData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
+                Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
             }
             if (Control.HasTracked != BasisHasTracked.HasNoTracker)
             {
@@ -71,7 +71,7 @@ public class BasisInputXRSimulate : BasisInput
                 {
                     AvatarRotationOffset = Quaternion.identity;
                 }
-                Control.TrackerData.rotation = FinalRotation * AvatarRotationOffset;
+                Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
             }
 
 

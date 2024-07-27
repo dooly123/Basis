@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 using Valve.VR;
 [System.Serializable]
 public class BasisOpenVRInputSkeleton : BasisInputSkeleton
@@ -10,8 +9,6 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
     public SteamVR_Action_Skeleton skeletonAction;
     [SerializeField]
     public BasisOpenVRInputController BasisOpenVRInputController;
-    public Vector3[] Positions;
-    public Quaternion[] Rotations;
     public void Initalize(BasisOpenVRInputController basisOpenVRInputController)
     {
         BasisOpenVRInputController = basisOpenVRInputController;
@@ -34,6 +31,10 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
             Debug.LogError("Missing Skeleton Action for " + Action);
         }
     }
+    public void LateUpdate()
+    {
+        SimulateLateUpdate();
+    }
     private void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
     {
         onTrackingChanged();
@@ -44,11 +45,6 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
         {
             Positions = skeletonAction.GetBonePositions();
             Rotations = skeletonAction.GetBoneRotations();
-            indexCurl = 1 - skeletonAction.indexCurl;
-            middleCurl = 1 - skeletonAction.middleCurl;
-            pinkyCurl = 1 - skeletonAction.pinkyCurl;
-            ringCurl = 1 - skeletonAction.ringCurl;
-            thumbCurl = 1 - skeletonAction.thumbCurl;
             Simulate();
         }
     }

@@ -92,7 +92,7 @@ public class BasisBoneControl
     [SerializeField]
     public BasisPositionControl PositionControl = new BasisPositionControl();
     [SerializeField]
-    public BasisCalibratedOffsetData FinalApplied = new BasisCalibratedOffsetData();
+    public BasisCalibratedOffsetData OutGoingData = new BasisCalibratedOffsetData();
     [SerializeField]
     public BasisCalibratedOffsetData LastRunData = new BasisCalibratedOffsetData();
     [SerializeField]
@@ -102,9 +102,9 @@ public class BasisBoneControl
     [SerializeField]
     public BasisCalibratedOffsetData InverseOffsetFromBone = new BasisCalibratedOffsetData();
     [SerializeField]
-    public BasisCalibratedOffsetData TrackerData = new BasisCalibratedOffsetData();
+    public BasisCalibratedOffsetData IncomingData = new BasisCalibratedOffsetData();
     [SerializeField]
-    public BasisCalibratedOffsetData CurrentWorldData = new BasisCalibratedOffsetData();
+    public BasisCalibratedOffsetData OutgoingWorldData = new BasisCalibratedOffsetData();
     [SerializeField]
     public BasisCalibratedOffsetData LastWorldData = new BasisCalibratedOffsetData();
     public Color Color { get => gizmoColor; set => gizmoColor = value; }
@@ -131,16 +131,16 @@ public class BasisBoneControl
         if (HasTracked == BasisHasTracked.HasNoTracker)
         {
             //if angle is larger then 4 then lets then lets begin checking to see if we can snap it back
-            if (RotationControl.UseAngle && AngleCheck(FinalApplied.rotation, FinalApplied.rotation, RotationControl.AngleBeforeMove))
+            if (RotationControl.UseAngle && AngleCheck(OutGoingData.rotation, OutGoingData.rotation, RotationControl.AngleBeforeMove))
             {
                 if (RotationControl.HasActiveTimer)
                 {
                     if (time > RotationControl.NextReset)
                     {
-                        ApplyTargetRotation(ref FinalApplied.rotation, RotationControl);
-                        QuaternionClamp(ref FinalApplied.rotation, RotationControl);
-                        ApplyLerpToQuaternion(ref FinalApplied.rotation, RotationControl, (RotationControl.LerpAmountNormal / 2) * DeltaTime);
-                        if (AngleCheck(FinalApplied.rotation, RotationControl.Target.FinalApplied.rotation))
+                        ApplyTargetRotation(ref OutGoingData.rotation, RotationControl);
+                        QuaternionClamp(ref OutGoingData.rotation, RotationControl);
+                        ApplyLerpToQuaternion(ref OutGoingData.rotation, RotationControl, (RotationControl.LerpAmountNormal / 2) * DeltaTime);
+                        if (AngleCheck(OutGoingData.rotation, RotationControl.Target.OutGoingData.rotation))
                         {
                             RotationControl.NextReset = double.MaxValue;
                             RotationControl.HasActiveTimer = false;
@@ -162,8 +162,8 @@ public class BasisBoneControl
                 //normal
                 RunRotationChange(DeltaTime);
             }
-            ApplyTargetPosition(ref FinalApplied.position, PositionControl);
-            ApplyLerpToVector(ref FinalApplied.position, PositionControl, PositionControl.LerpAmount * DeltaTime);
+            ApplyTargetPosition(ref OutGoingData.position, PositionControl);
+            ApplyLerpToVector(ref OutGoingData.position, PositionControl, PositionControl.LerpAmount * DeltaTime);
         }
         else
         {
@@ -172,15 +172,15 @@ public class BasisBoneControl
                 if (InverseOffsetFromBone.Use)
                 {
                     // Update the position of the secondary transform to maintain the initial offset
-                    FinalApplied.position = TrackerData.position + TrackerData.rotation * InverseOffsetFromBone.position;
+                    OutGoingData.position = IncomingData.position + IncomingData.rotation * InverseOffsetFromBone.position;
 
                     // Update the rotation of the secondary transform to maintain the initial offset
-                    FinalApplied.rotation =  TrackerData.rotation * InverseOffsetFromBone.rotation;
+                    OutGoingData.rotation =  IncomingData.rotation * InverseOffsetFromBone.rotation;
                 }
                 else
                 {
-                    FinalApplied.rotation = TrackerData.rotation;
-                    FinalApplied.position = TrackerData.position;
+                    OutGoingData.rotation = IncomingData.rotation;
+                    OutGoingData.position = IncomingData.position;
                 }
             }
         }
@@ -191,9 +191,9 @@ public class BasisBoneControl
     }
     public void RunRotationChange(float DeltaTime)
     {
-        ApplyTargetRotation(ref FinalApplied.rotation, RotationControl);
-        QuaternionClamp(ref FinalApplied.rotation, RotationControl);
-        ApplyLerpToQuaternion(ref FinalApplied.rotation, RotationControl, DeltaTime);
+        ApplyTargetRotation(ref OutGoingData.rotation, RotationControl);
+        QuaternionClamp(ref OutGoingData.rotation, RotationControl);
+        ApplyLerpToQuaternion(ref OutGoingData.rotation, RotationControl, DeltaTime);
     }
     public bool AngleCheck(Quaternion AngleA, Quaternion AngleB, float MaximumTolerance = 0.005f)
     {
@@ -208,12 +208,12 @@ public class BasisBoneControl
         {
             return;
         }
-        LastRunData.position = FinalApplied.position;
-        LastRunData.rotation = FinalApplied.rotation;
-        LastWorldData.position = CurrentWorldData.position;
-        LastWorldData.rotation = CurrentWorldData.rotation;
-        BoneTransform.SetLocalPositionAndRotation(FinalApplied.position, FinalApplied.rotation);
-        BoneTransform.GetPositionAndRotation(out CurrentWorldData.position, out CurrentWorldData.rotation);
+        LastRunData.position = OutGoingData.position;
+        LastRunData.rotation = OutGoingData.rotation;
+        LastWorldData.position = OutgoingWorldData.position;
+        LastWorldData.rotation = OutgoingWorldData.rotation;
+        BoneTransform.SetLocalPositionAndRotation(OutGoingData.position, OutGoingData.rotation);
+        BoneTransform.GetPositionAndRotation(out OutgoingWorldData.position, out OutgoingWorldData.rotation);
     }
     public void QuaternionClamp(ref Quaternion rotation, BasisRotationalControl AxisLock)
     {
@@ -246,12 +246,12 @@ public class BasisBoneControl
         switch (positionLock.TaretInterpreter)
         {
             case BasisTargetController.Target:
-                position = positionLock.Target.FinalApplied.position + positionLock.Offset;
+                position = positionLock.Target.OutGoingData.position + positionLock.Offset;
                 break;
 
             case BasisTargetController.TargetDirectional:
-                Vector3 customDirection = positionLock.Target.FinalApplied.rotation * positionLock.Offset;
-                position = positionLock.Target.FinalApplied.position + customDirection;
+                Vector3 customDirection = positionLock.Target.OutGoingData.rotation * positionLock.Offset;
+                position = positionLock.Target.OutGoingData.position + customDirection;
                 break;
         }
     }
@@ -260,11 +260,11 @@ public class BasisBoneControl
         switch (AxisLock.TaretInterpreter)
         {
             case BasisTargetController.Target:
-                rotation = AxisLock.Target.FinalApplied.rotation;
+                rotation = AxisLock.Target.OutGoingData.rotation;
                 break;
 
             case BasisTargetController.TargetDirectional:
-                rotation = AxisLock.Target.FinalApplied.rotation * AxisLock.Offset;
+                rotation = AxisLock.Target.OutGoingData.rotation * AxisLock.Offset;
                 break;
         }
     }
@@ -276,10 +276,10 @@ public class BasisBoneControl
         if (HasBone)
         {
             Gizmos.color = Color;
-            Vector3 BonePosition = CurrentWorldData.position;
+            Vector3 BonePosition = OutgoingWorldData.position;
             if (PositionControl.TaretInterpreter != BasisTargetController.None)
             {
-                Gizmos.DrawLine(BonePosition, PositionControl.Target.CurrentWorldData.position);
+                Gizmos.DrawLine(BonePosition, PositionControl.Target.OutgoingWorldData.position);
             }
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(this, out BasisBoneTrackedRole Frole))
             {

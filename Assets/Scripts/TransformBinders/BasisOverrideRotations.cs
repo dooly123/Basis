@@ -22,23 +22,23 @@ public class BasisOverrideRotations : MonoBehaviour
     {
         float DeltaTime = Time.deltaTime;
 
-        roty = Head.FinalApplied.rotation.eulerAngles.y;
+        roty = Head.OutGoingData.rotation.eulerAngles.y;
         Quaternion coreRotation = Quaternion.Euler(0, roty, 0);
 
-        if (AngleCheck(coreRotation, Hips.FinalApplied.rotation, RangeOfMotionBeforeTurn))
+        if (AngleCheck(coreRotation, Hips.OutGoingData.rotation, RangeOfMotionBeforeTurn))
         {
             // Slerp rotation for hips and upper body
             if (Hips.HasTracked == BasisHasTracked.HasNoTracker)
             {
-                Hips.FinalApplied.rotation = SlerpYRotation(Hips.FinalApplied.rotation, coreRotation, DelayedHips * DeltaTime);
+                Hips.OutGoingData.rotation = SlerpYRotation(Hips.OutGoingData.rotation, coreRotation, DelayedHips * DeltaTime);
             }
             if (Chest.HasTracked == BasisHasTracked.HasNoTracker)
             {
-                Chest.FinalApplied.rotation = SlerpYRotation(Chest.FinalApplied.rotation, coreRotation, DelayedChest * DeltaTime);
+                Chest.OutGoingData.rotation = SlerpYRotation(Chest.OutGoingData.rotation, coreRotation, DelayedChest * DeltaTime);
             }
             if (Spine.HasTracked == BasisHasTracked.HasNoTracker)
             {
-                Spine.FinalApplied.rotation = SlerpYRotation(Spine.FinalApplied.rotation, coreRotation, DelayedSpine * DeltaTime);
+                Spine.OutGoingData.rotation = SlerpYRotation(Spine.OutGoingData.rotation, coreRotation, DelayedSpine * DeltaTime);
             }
         }
     }

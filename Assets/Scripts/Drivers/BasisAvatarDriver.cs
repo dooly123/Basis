@@ -231,13 +231,13 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     }
     public void SetInitialData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
     {
-        bone.FinalApplied.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.TposeWorld.position, 0.1f * animator.transform.localScale.y);//out Vector3 WorldSpaceFloor
-        bone.TposeLocal.position = bone.FinalApplied.position;
-        bone.TposeLocal.rotation = bone.FinalApplied.rotation;
+        bone.OutGoingData.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.TposeWorld.position, 0.1f * animator.transform.localScale.y);//out Vector3 WorldSpaceFloor
+        bone.TposeLocal.position = bone.OutGoingData.position;
+        bone.TposeLocal.rotation = bone.OutGoingData.rotation;
         if (IsApartOfSpineVertical(Role))
         {
-            bone.FinalApplied.position = new Vector3(0, bone.FinalApplied.position.y, bone.FinalApplied.position.z);
-            bone.TposeLocal.position = bone.FinalApplied.position;
+            bone.OutGoingData.position = new Vector3(0, bone.OutGoingData.position.y, bone.OutGoingData.position.z);
+            bone.TposeLocal.position = bone.OutGoingData.position;
         }
     }
     public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisTargetController PositionTargetController, float PositionLerpAmount, BasisClampData clampData, int positionalLockValue, int rotationalLockValue, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis clampAxis = BasisClampAxis.x, bool CreateRotationalLock = true)
@@ -398,7 +398,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
 
     void UpdateIKRig(float PositionWeight, float RotationWeight, DampedTransform Constraint)
     {
-        Constraint.weight = PositionWeight;
+      //  Constraint.weight = PositionWeight;
       //  Constraint.data.dampRotation = RotationWeight;
     }
     public void GeneratedRequiredTransforms(Transform BaseLevel, Transform TopLevelParent)

@@ -38,7 +38,7 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
         PoseHandler.SetHumanPose(ref HumanPose);
 
         RemotePlayer.RemoteBoneDriver.SimulateAndApply();
-        RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.CurrentWorldData.position, RemotePlayer.MouthControl.CurrentWorldData.rotation);
+        RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
     }
 
     public void LateUpdate()

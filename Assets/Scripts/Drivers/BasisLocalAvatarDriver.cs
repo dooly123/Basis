@@ -316,53 +316,57 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     }
     public void CreateLeftHandFingers(BasisLocalBoneDriver driver)
     {
-        GameObject Hands = CreateRig("Left Hand Fingers", false, out LeftFingersRig, out LeftFingersLayer);
-        if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftHand))
-        {
-            WriteUpEvents(Control, LeftFingersLayer);
-        }
-        //  Damp(driver, Hands, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, 0, 0);
-        //  Damp(driver, Hands, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, 0, 0);
-        //  Damp(driver, Hands, References.LeftMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 0, 0);
-        //  Damp(driver, Hands, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, 0, 0);
-        //  Damp(driver, Hands, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, 0, 0);
+       // GameObject Hands = CreateRig("Left Hand Fingers", false, out LeftFingersRig, out LeftFingersLayer);
+       // if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftHand))
+       // {
+       //     WriteUpEvents(Control, LeftFingersLayer);
+       // }
+        /*
+        OverrideTransform(driver, Hands, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, 1, 1, OverrideTransformData.Space.Local);
 
-        Damp(driver, Hands, References.LeftThumbIntermediate, BasisBoneTrackedRole.LeftThumbIntermediate, 0, 0);
-        Damp(driver, Hands, References.LeftIndexIntermediate, BasisBoneTrackedRole.LeftIndexIntermediate, 0, 0);
-        Damp(driver, Hands, References.LeftMiddleIntermediate, BasisBoneTrackedRole.LeftMiddleIntermediate, 0, 0);
-        Damp(driver, Hands, References.LeftRingIntermediate, BasisBoneTrackedRole.LeftRingIntermediate, 0, 0);
-        Damp(driver, Hands, References.LeftLittleIntermediate, BasisBoneTrackedRole.LeftLittleIntermediate, 0, 0);
+        OverrideTransform(driver, Hands, References.LeftThumbIntermediate, BasisBoneTrackedRole.LeftThumbIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftIndexIntermediate, BasisBoneTrackedRole.LeftIndexIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftMiddleIntermediate, BasisBoneTrackedRole.LeftMiddleIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftRingIntermediate, BasisBoneTrackedRole.LeftRingIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftLittleIntermediate, BasisBoneTrackedRole.LeftLittleIntermediate, 1, 1, OverrideTransformData.Space.Local);
 
-        Damp(driver, Hands, References.LeftThumbProximal, BasisBoneTrackedRole.LeftThumbProximal, 0, 0);
-        Damp(driver, Hands, References.LeftIndexProximal, BasisBoneTrackedRole.LeftIndexProximal, 0, 0);
-        Damp(driver, Hands, References.LeftMiddleProximal, BasisBoneTrackedRole.LeftMiddleProximal, 0, 0);
-        Damp(driver, Hands, References.LeftRingProximal, BasisBoneTrackedRole.LeftRingProximal, 0, 0);
-        Damp(driver, Hands, References.LeftLittleProximal, BasisBoneTrackedRole.LeftLittleProximal, 0, 0);
+        OverrideTransform(driver, Hands, References.LeftThumbProximal, BasisBoneTrackedRole.LeftThumbProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftIndexProximal, BasisBoneTrackedRole.LeftIndexProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftMiddleProximal, BasisBoneTrackedRole.LeftMiddleProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftRingProximal, BasisBoneTrackedRole.LeftRingProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.LeftLittleProximal, BasisBoneTrackedRole.LeftLittleProximal, 1, 1, OverrideTransformData.Space.Local);
+        */
     }
     public void CreateRightHandFingers(BasisLocalBoneDriver driver)
     {
-        GameObject Hands = CreateRig("Right Hand Fingers", false, out RightFingersRig, out RightFingersLayer);
-        if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightHand))
-        {
-            WriteUpEvents(Control, RightFingersLayer);
-        }
-        //  Damp(driver, Hands, References.RightThumbDistal, BasisBoneTrackedRole.RightThumbDistal, 0, 0);
-        //  Damp(driver, Hands, References.RightIndexDistal, BasisBoneTrackedRole.RightIndexDistal, 0, 0);
-        // Damp(driver, Hands, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 0, 0);
-        //   Damp(driver, Hands, References.RightRingDistal, BasisBoneTrackedRole.RightRingDistal, 0, 0);
-        //  Damp(driver, Hands, References.RightLittleDistal, BasisBoneTrackedRole.RightLittleDistal, 0, 0);
+       // GameObject Hands = CreateRig("Right Hand Fingers", false, out RightFingersRig, out RightFingersLayer);
+      //  if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightHand))
+      //  {
+      //      WriteUpEvents(Control, RightFingersLayer);
+     //   }
+        /*
+        OverrideTransform(driver, Hands, References.RightThumbDistal, BasisBoneTrackedRole.RightThumbDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightIndexDistal, BasisBoneTrackedRole.RightIndexDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightRingDistal, BasisBoneTrackedRole.RightRingDistal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightLittleDistal, BasisBoneTrackedRole.RightLittleDistal, 1, 1, OverrideTransformData.Space.Local);
 
-        Damp(driver, Hands, References.RightThumbIntermediate, BasisBoneTrackedRole.RightThumbIntermediate, 0, 0);
-        Damp(driver, Hands, References.RightIndexIntermediate, BasisBoneTrackedRole.RightIndexIntermediate, 0, 0);
-        Damp(driver, Hands, References.RightMiddleIntermediate, BasisBoneTrackedRole.RightMiddleIntermediate, 0, 0);
-        Damp(driver, Hands, References.RightRingIntermediate, BasisBoneTrackedRole.RightRingIntermediate, 0, 0);
-        Damp(driver, Hands, References.RightLittleIntermediate, BasisBoneTrackedRole.RightLittleIntermediate, 0, 0);
+        OverrideTransform(driver, Hands, References.RightThumbIntermediate, BasisBoneTrackedRole.RightThumbIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightIndexIntermediate, BasisBoneTrackedRole.RightIndexIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightMiddleIntermediate, BasisBoneTrackedRole.RightMiddleIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightRingIntermediate, BasisBoneTrackedRole.RightRingIntermediate, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightLittleIntermediate, BasisBoneTrackedRole.RightLittleIntermediate, 1, 1, OverrideTransformData.Space.Local);
 
-        Damp(driver, Hands, References.RightThumbProximal, BasisBoneTrackedRole.RightThumbProximal, 0, 0);
-        Damp(driver, Hands, References.RightIndexProximal, BasisBoneTrackedRole.RightIndexProximal, 0, 0);
-        Damp(driver, Hands, References.RightMiddleProximal, BasisBoneTrackedRole.RightMiddleProximal, 0, 0);
-        Damp(driver, Hands, References.RightRingProximal, BasisBoneTrackedRole.RightRingProximal, 0, 0);
-        Damp(driver, Hands, References.RightLittleProximal, BasisBoneTrackedRole.RightLittleProximal, 0, 0);
+        OverrideTransform(driver, Hands, References.RightThumbProximal, BasisBoneTrackedRole.RightThumbProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightIndexProximal, BasisBoneTrackedRole.RightIndexProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightMiddleProximal, BasisBoneTrackedRole.RightMiddleProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightRingProximal, BasisBoneTrackedRole.RightRingProximal, 1, 1, OverrideTransformData.Space.Local);
+        OverrideTransform(driver, Hands, References.RightLittleProximal, BasisBoneTrackedRole.RightLittleProximal, 1, 1, OverrideTransformData.Space.Local);
+        */
     }
     public void LeftFoot(BasisLocalBoneDriver driver)
     {

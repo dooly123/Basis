@@ -131,11 +131,11 @@ public class BasisLocalPlayer : BasisPlayer
             if (Avatar != null && Avatar.Animator != null)
             {
                 // Get the current rotation of the hips bone
-                Quaternion currentRotation = Hips.CurrentWorldData.rotation;
+                Quaternion currentRotation = Hips.OutgoingWorldData.rotation;
 
                 // Calculate the rotated T-pose position using the current rotation
                 Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
-                Vector3 positionDifference = Hips.CurrentWorldData.position - rotatedTposePosition;
+                Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
 
                 // Calculate the difference between the current rotation and the T-pose rotation
                 Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeWorld.rotation);

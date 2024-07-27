@@ -43,10 +43,10 @@ public abstract class BaseBoneDriver : MonoBehaviour
         DeltaTime = Time.deltaTime;
         for (int Index = 0; Index < ControlsLength; Index++)
         {
-            Controls[Index].LastRunData.position = Controls[Index].FinalApplied.position;
-            Controls[Index].LastRunData.rotation = Controls[Index].FinalApplied.rotation;
-            Controls[Index].LastWorldData.position = Controls[Index].CurrentWorldData.position;
-            Controls[Index].LastWorldData.rotation = Controls[Index].CurrentWorldData.rotation;
+            Controls[Index].LastRunData.position = Controls[Index].OutGoingData.position;
+            Controls[Index].LastRunData.rotation = Controls[Index].OutGoingData.rotation;
+            Controls[Index].LastWorldData.position = Controls[Index].OutgoingWorldData.position;
+            Controls[Index].LastWorldData.rotation = Controls[Index].OutgoingWorldData.rotation;
             Controls[Index].ComputeMovement(ProvidedTime, DeltaTime);
         }
         OnPostSimulate?.Invoke();
