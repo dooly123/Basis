@@ -689,7 +689,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &1307651583072996997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -720,6 +720,7 @@ MonoBehaviour:
   LocalPlayer: {fileID: 0}
   CameraDriver: {fileID: 0}
   WorldOffset: {x: 0, y: 0, z: 0.5}
+  hasLocalCreationEvent: 0
 --- !u!114 &3978596320646700803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,5 +763,6 @@ MonoBehaviour:
   - Vowgan
   - Lanowen
   - Dooly Smol
+  - Castle
   ParentedAvatarButtons: {fileID: 673662174573543822}
   ButtonPrefab: {fileID: 617829828588750553}

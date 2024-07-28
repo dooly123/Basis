@@ -70,6 +70,7 @@ public partial class BasisPointRaycaster : BaseRaycaster
             LineRenderer.positionCount = 2;
             HasLineRenderer = true;
             LineRenderer.enabled = HasLineRenderer;
+            LineRenderer.gameObject.layer = LayerMask.NameToLayer("UI");
         }
         if (BasisDeviceMatchableNames.HasRayCastRedical)
         {
