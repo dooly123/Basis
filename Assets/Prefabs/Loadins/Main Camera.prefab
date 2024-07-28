@@ -186,6 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 7589553554247068229}
   CameraInstanceID: 0
+  CameraOverlayInstanceID: 0
   Listener: {fileID: 4150865382649993091}
   CameraData: {fileID: 8350818596157214651}
   SteamAudioListener: {fileID: 3211173287841905640}

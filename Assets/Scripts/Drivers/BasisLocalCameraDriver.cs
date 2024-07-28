@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
@@ -8,6 +7,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public static BasisLocalCameraDriver Instance;
     public Camera Camera;
     public int CameraInstanceID;
+    public int CameraOverlayInstanceID;
     public AudioListener Listener;
     public UniversalAdditionalCameraData CameraData;
     public SteamAudio.SteamAudioListener SteamAudioListener;
@@ -42,6 +42,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
         UIOverlayCamera.farClipPlane = 1500;
         QualitySettings.maxQueuedFrames = -1;
         CameraInstanceID = Camera.GetInstanceID();
+        CameraOverlayInstanceID = UIOverlayCamera.GetInstanceID();
         //fire static event that says the instance exists
         OnHeightChanged();
         if (HasEvents == false)
@@ -110,7 +111,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     {
         if (LocalPlayer.HasAvatarDriver && LocalPlayer.AvatarDriver.References.Hashead)
         {
-            if (Camera.GetInstanceID() == CameraInstanceID)
+            if (Camera.GetInstanceID() == CameraInstanceID || Camera.GetInstanceID() == CameraOverlayInstanceID)
             {
                 if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScaledDown)
                 {
