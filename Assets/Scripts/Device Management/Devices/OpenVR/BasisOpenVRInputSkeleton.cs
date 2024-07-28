@@ -9,7 +9,6 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
     public SteamVR_Action_Skeleton skeletonAction;
     [SerializeField]
     public BasisOpenVRInputController BasisOpenVRInputController;
-    public SteamVR_Behaviour_Skeleton SteamVR_Behaviour_Skeleton;
     public void Initalize(BasisOpenVRInputController basisOpenVRInputController)
     {
         BasisOpenVRInputController = basisOpenVRInputController;
@@ -31,10 +30,6 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
         {
             Debug.LogError("Missing Skeleton Action for " + Action);
         }
-        SteamVR_Behaviour_Skeleton = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour_Skeleton>(BasisOpenVRInputController.gameObject);
-        SteamVR_Behaviour_Skeleton.skeletonAction = skeletonAction;
-        SteamVR_Behaviour_Skeleton.inputSource = BasisOpenVRInputController.inputSource;
-        SteamVR_Behaviour_Skeleton.rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
 
     }
     public void LateUpdate()
@@ -47,11 +42,13 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
     }
     private void onTrackingChanged()
     {
-        if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.LeftHand || BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.RightHand)
+        if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.LeftHand)
         {
-            Positions = skeletonAction.GetBonePositions();
-            Rotations = skeletonAction.GetBoneRotations();
-            Simulate();
+            BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.ApplyLeftHandAnims(skeletonAction.fingerCurls);
+        }
+        if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.RightHand)
+        {
+            BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.ApplyRightHandAnims(skeletonAction.fingerCurls);
         }
     }
     public void DeInitalize()

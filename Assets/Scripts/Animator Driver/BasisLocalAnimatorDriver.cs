@@ -76,13 +76,19 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         {
             basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
         }
-
         // Update the previous velocities and rotations for the next frame
         previousRawVelocity = dampenedVelocity;
         previousAngularVelocity = dampenedAngularVelocity;
         previousHipsRotation = Hips.OutgoingWorldData.rotation;
     }
-
+    public void ApplyLeftHandAnims(float[] Curls)
+    {
+        basisAnimatorVariableApply.LeftHandCurls(Curls);
+    }
+    public void ApplyRightHandAnims(float[] Curls)
+    {
+        basisAnimatorVariableApply.RightHandCurls(Curls);
+    }
     private void JustJumped()
     {
         basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = true;

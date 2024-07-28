@@ -24,11 +24,48 @@ public class BasisInputSkeleton
     public BasisBoneControl LittleDistal;
 
     public BasisBoneControl ActiveHand;
+    public void Simulate()
+    {
+    }
+    /*
+    public void ApplyMovement(BasisBoneControl Control, int Index)
+    {
+        // Get local positions
+        Vector3 AHandposeLocal = ActiveHand.TposeLocal.position;
+        Vector3 CTposeLocal = Control.TposeLocal.position;
+        // Calculate the position offset
+        Vector3 Pos = AHandposeLocal - CTposeLocal;
+        // Apply rotation to position offset
+        Vector3 rotatedPos = ActiveHand.IncomingData.rotation * Quaternion.Euler(RotationOffset) * (Pos + Positions[Index]);
+        // Calculate the new position
+        Vector3 newPos = ActiveHand.IncomingData.position - rotatedPos;
+        // Apply the new position
+        Control.IncomingData.position = newPos;
+        // Calculate the new rotation
+        Quaternion newRot = ActiveHand.IncomingData.rotation * Rotations[Index];
+        // Apply the new rotation
+        Control.IncomingData.rotation = newRot;
+    }
+    */
+    public void SetASTracked(BasisBoneControl Input)
+    {
+        /*
+        if (Input.HasTracked == BasisHasTracked.HasNoTracker)
+        {
+            Input.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+            Input.HasTracked = BasisHasTracked.HasTracker;
+        }
+        */
+    }
+    public void OnDrawGizmos()
+    {
 
-    public Vector3[] Positions;
-    public Quaternion[] Rotations;
-    public Vector3 RotationOffset;
-    public bool MIrrored = false;
+    }
+    private void InitializeBones(BasisBoneTrackedRole boneRole, out BasisBoneControl boneControl)
+    {
+        BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out boneControl, boneRole);
+        SetASTracked(boneControl);
+    }
     protected static readonly Quaternion rightFlipAngle = Quaternion.AngleAxis(180, Vector3.right);
     public static class Indexes
     {
@@ -112,95 +149,5 @@ public class BasisInputSkeleton
         InitializeBones(BasisBoneTrackedRole.RightLittleDistal, out LittleDistal);
 
         InitializeBones(BasisBoneTrackedRole.RightHand, out ActiveHand);
-    }
-    public void Simulate()
-    {
-        if (MIrrored)
-        {
-            for (int boneIndex = 0; boneIndex < Rotations.Length; boneIndex++)
-            {
-                Rotations[boneIndex] = MirrorRotation(boneIndex, Rotations[boneIndex]);
-            }
-            for (int Index = 0; Index < Positions.Length; Index++)
-            {
-                Positions[Index] = MirrorPosition(Index, Positions[Index]);
-            }
-        }
-    }
-    private void ApplyMovement(ref Vector3 position, ref Quaternion rotation, int index)
-    {
-        position = Positions[index];
-        rotation = Rotations[index];
-    }
-    public static Vector3 MirrorPosition(int boneIndex, Vector3 rawPosition)
-    {
-        if (boneIndex == Indexes.wrist || IsMetacarpal(boneIndex))
-        {
-            rawPosition.Scale(new Vector3(-1, 1, 1));
-        }
-        else if (boneIndex != Indexes.root)
-        {
-            rawPosition *= -1;
-        }
-
-        return rawPosition;
-    }
-    public static Quaternion MirrorRotation(int boneIndex, Quaternion rawRotation)
-    {
-        if (boneIndex == Indexes.wrist)
-        {
-            rawRotation.y = rawRotation.y * -1;
-            rawRotation.z = rawRotation.z * -1;
-        }
-
-        if (IsMetacarpal(boneIndex))
-        {
-            rawRotation = rightFlipAngle * rawRotation;
-        }
-
-        return rawRotation;
-    }
-    protected static bool IsMetacarpal(int boneIndex)
-    {
-        return (boneIndex == Indexes.indexMetacarpal ||
-            boneIndex == Indexes.middleMetacarpal ||
-            boneIndex == Indexes.ringMetacarpal ||
-            boneIndex == Indexes.pinkyMetacarpal ||
-            boneIndex == Indexes.thumbMetacarpal);
-    }
-    private void InitializeBones(BasisBoneTrackedRole boneRole, out BasisBoneControl boneControl)
-    {
-        BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out boneControl, boneRole);
-    }
-    public void ApplyMovement(BasisBoneControl Control, int Index)
-    {
-        SetASTracked(Control);
-        // Get local positions
-        Vector3 AHandposeLocal = ActiveHand.TposeLocal.position;
-        Vector3 CTposeLocal = Control.TposeLocal.position;
-        // Calculate the position offset
-        Vector3 Pos = AHandposeLocal - CTposeLocal;
-        // Apply rotation to position offset
-        Vector3 rotatedPos = ActiveHand.IncomingData.rotation * Quaternion.Euler(RotationOffset) * (Pos + Positions[Index]);
-        // Calculate the new position
-        Vector3 newPos = ActiveHand.IncomingData.position - rotatedPos;
-        // Apply the new position
-        Control.IncomingData.position = newPos;
-        // Calculate the new rotation
-        Quaternion newRot = ActiveHand.IncomingData.rotation * Rotations[Index];
-        // Apply the new rotation
-        Control.IncomingData.rotation = newRot;
-    }
-    public void SetASTracked(BasisBoneControl Input)
-    {
-        if (Input.HasTracked == BasisHasTracked.HasNoTracker)
-        {
-            Input.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-            Input.HasTracked = BasisHasTracked.HasTracker;
-        }
-    }
-    public void OnDrawGizmos()
-    {
-       
     }
 }
