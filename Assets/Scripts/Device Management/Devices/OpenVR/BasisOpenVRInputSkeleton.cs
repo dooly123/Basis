@@ -9,6 +9,7 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
     public SteamVR_Action_Skeleton skeletonAction;
     [SerializeField]
     public BasisOpenVRInputController BasisOpenVRInputController;
+    public SteamVR_Behaviour_Skeleton SteamVR_Behaviour_Skeleton;
     public void Initalize(BasisOpenVRInputController basisOpenVRInputController)
     {
         BasisOpenVRInputController = basisOpenVRInputController;
@@ -30,10 +31,15 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
         {
             Debug.LogError("Missing Skeleton Action for " + Action);
         }
+        SteamVR_Behaviour_Skeleton = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour_Skeleton>(BasisOpenVRInputController.gameObject);
+        SteamVR_Behaviour_Skeleton.skeletonAction = skeletonAction;
+        SteamVR_Behaviour_Skeleton.inputSource = BasisOpenVRInputController.inputSource;
+        SteamVR_Behaviour_Skeleton.rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
+
     }
     public void LateUpdate()
     {
-        SimulateLateUpdate();
+    //    SimulateLateUpdate();
     }
     private void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
     {
