@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Threading.Tasks;
 
 public class BasisSetUserName : MonoBehaviour
 {
     public TMP_InputField UserNameTMP_InputField;
     public Button Ready;
+    public static string LoadFileName = "CachedUserName.BAS";
 
     public void Start()
     {
+        UserNameTMP_InputField.text = BasisDataStore.LoadString(LoadFileName, string.Empty);
         Ready.onClick.AddListener(hasUserName);
     }
 
@@ -21,7 +22,7 @@ public class BasisSetUserName : MonoBehaviour
         if (!string.IsNullOrEmpty(UserNameTMP_InputField.text))
         {
             BasisLocalPlayer.Instance.DisplayName = UserNameTMP_InputField.text;
-
+            BasisDataStore.SaveString(BasisLocalPlayer.Instance.DisplayName, LoadFileName);
             if (BasisNetworkConnector.Instance != null)
             {
                 BasisNetworkConnector.Instance.Connect();

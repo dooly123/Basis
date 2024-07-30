@@ -371,7 +371,7 @@ MonoBehaviour:
   - {fileID: 2467030893667730727}
   - {fileID: 1027479742639559022}
   - {fileID: 1776921867475573335}
-  - {fileID: 6183288642828014269}
+  - {fileID: 0}
   - {fileID: 7074081770173294057}
   - {fileID: 734679581483801923}
   - {fileID: 1962641699494196431}
@@ -1947,7 +1947,6 @@ GameObject:
   - component: {fileID: 1962641699494196431}
   - component: {fileID: 734679581483801923}
   - component: {fileID: 7074081770173294057}
-  - component: {fileID: 6183288642828014269}
   - component: {fileID: 1776921867475573335}
   - component: {fileID: 1027479742639559022}
   - component: {fileID: 2467030893667730727}
@@ -2259,28 +2258,6 @@ MonoBehaviour:
   LowmsaaSampleCount: 2
   MediumLowmsaaSampleCount: 4
   HighmsaaSampleCount: 8
---- !u!114 &6183288642828014269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7884915406730103288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8998dd8911f2d564681606559676bd44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ManagerModuleOptions:
-  - OptionName: Render Resolution
-    Explanation: 
-    Parse: 1
-    Type: 3
-  - OptionName: Render Resolution
-    Explanation: 
-    Parse: 1
-    Type: 3
-  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
 --- !u!114 &1776921867475573335
 MonoBehaviour:
   m_ObjectHideFlags: 0
