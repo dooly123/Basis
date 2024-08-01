@@ -216,17 +216,15 @@ public partial class BasisPointRaycaster : BaseRaycaster
     {
         SortedGraphics.Clear();
         SortedRays.Clear();
+        this.transform.localRotation = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
+        // Calculate the starting position
+        Vector3 startingPosition = transform.position + (transform.rotation * BasisDeviceMatchableNames.RayCastOffset);
+
         // Calculate the rotation offset
         Quaternion rotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
 
-        // Apply the transform's rotation to the offset
-        Vector3 directionAdjustedOffset = transform.rotation * BasisDeviceMatchableNames.RayCastOffset;
-
-        // Calculate the starting position
-        Vector3 startingPosition = transform.position + directionAdjustedOffset;
-
         // Create the ray with the adjusted starting position and direction
-         ray = new Ray(startingPosition, (rotationOffset * transform.forward));
+        ray = new Ray(startingPosition, transform.forward);
         if (Physics.Raycast(ray, out PhysicHit, MaxDistance, Mask, TriggerInteraction))
         {
            PhysicHit.transform.gameObject.GetComponentsInChildren<Canvas>(false, Results);
