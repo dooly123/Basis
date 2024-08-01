@@ -54,9 +54,6 @@ public partial class BasisDeviceManagement : MonoBehaviour
         InstantiationParameters parameters = new InstantiationParameters();
         await BasisPlayerFactory.CreateLocalPlayer(parameters);
 
-        BasisOverrideRotations basisXRHeadToBodyOverride = BasisHelpers.GetOrAddComponent<BasisOverrideRotations>(this.gameObject);
-        basisXRHeadToBodyOverride.Initialize();
-
         SwitchMode(DefaultMode);
         if (HasEvents == false)
         {

@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: UI
-    Event: 600
+    Event: 1000
     filterSettings:
       RenderQueueType: 1
       LayerMask:

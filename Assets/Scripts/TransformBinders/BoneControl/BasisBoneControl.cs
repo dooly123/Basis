@@ -7,6 +7,7 @@ using static BasisAvatarIKStageCalibration;
 [System.Serializable]
 public class BasisBoneControl
 {
+    public bool Cullable = false;
     [SerializeField]
     public string Name;
     [SerializeField]
@@ -31,7 +32,7 @@ public class BasisBoneControl
         {
             if (hasTrackerDriver != value)
             {
-               // Debug.Log("Setting Tracker To has Tracker Position Driver " + value);
+                // Debug.Log("Setting Tracker To has Tracker Position Driver " + value);
                 hasTrackerDriver = value;
                 OnHasTrackerDriverChanged?.Invoke(value);
             }
@@ -40,7 +41,7 @@ public class BasisBoneControl
     // Events for property changes
     public UnityEvent OnHasRigChanged = new UnityEvent();
 
-    public UnityEvent<float, float> WeightsChanged = new UnityEvent<float,float>();
+    public UnityEvent<float, float> WeightsChanged = new UnityEvent<float, float>();
     // Backing fields for the properties
     [SerializeField]
     private BasisHasRigLayer hasRigLayer = BasisHasRigLayer.HasNoRigLayer;
@@ -127,6 +128,10 @@ public class BasisBoneControl
         {
             return;
         }
+        if(Cullable)
+        {
+            return;
+        }
 
         if (HasTracked == BasisHasTracked.HasNoTracker)
         {
@@ -137,9 +142,9 @@ public class BasisBoneControl
                 {
                     if (time > RotationControl.NextReset)
                     {
-                        ApplyTargetRotation(ref OutGoingData.rotation, RotationControl);
-                        QuaternionClamp(ref OutGoingData.rotation, RotationControl);
-                        ApplyLerpToQuaternion(ref OutGoingData.rotation, RotationControl, (RotationControl.LerpAmountNormal / 2) * DeltaTime);
+                        ApplyTargetRotation();
+                        QuaternionClamp();
+                        ApplyLerpToQuaternion((RotationControl.LerpAmountNormal / 2) * DeltaTime);
                         if (AngleCheck(OutGoingData.rotation, RotationControl.Target.OutGoingData.rotation))
                         {
                             RotationControl.NextReset = double.MaxValue;
@@ -162,8 +167,8 @@ public class BasisBoneControl
                 //normal
                 RunRotationChange(DeltaTime);
             }
-            ApplyTargetPosition(ref OutGoingData.position, PositionControl);
-            ApplyLerpToVector(ref OutGoingData.position, PositionControl, PositionControl.LerpAmount * DeltaTime);
+            ApplyTargetPosition();
+            ApplyLerpToVector(PositionControl.LerpAmount * DeltaTime);
         }
         else
         {
@@ -175,7 +180,7 @@ public class BasisBoneControl
                     OutGoingData.position = IncomingData.position + IncomingData.rotation * InverseOffsetFromBone.position;
 
                     // Update the rotation of the secondary transform to maintain the initial offset
-                    OutGoingData.rotation =  IncomingData.rotation * InverseOffsetFromBone.rotation;
+                    OutGoingData.rotation = IncomingData.rotation * InverseOffsetFromBone.rotation;
                 }
                 else
                 {
@@ -187,13 +192,13 @@ public class BasisBoneControl
     }
     public void SetOffset()
     {
-        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero,TposeWorld.rotation);
+        BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, TposeWorld.rotation);
     }
     public void RunRotationChange(float DeltaTime)
     {
-        ApplyTargetRotation(ref OutGoingData.rotation, RotationControl);
-        QuaternionClamp(ref OutGoingData.rotation, RotationControl);
-        ApplyLerpToQuaternion(ref OutGoingData.rotation, RotationControl, DeltaTime);
+        ApplyTargetRotation();
+        QuaternionClamp();
+        ApplyLerpToQuaternion(DeltaTime);
     }
     public bool AngleCheck(Quaternion AngleA, Quaternion AngleB, float MaximumTolerance = 0.005f)
     {
@@ -203,8 +208,11 @@ public class BasisBoneControl
     }
     public void ApplyMovement()
     {
-
         if (!HasBone)
+        {
+            return;
+        }
+        if (Cullable)
         {
             return;
         }
@@ -215,64 +223,121 @@ public class BasisBoneControl
         BoneTransform.SetLocalPositionAndRotation(OutGoingData.position, OutGoingData.rotation);
         BoneTransform.GetPositionAndRotation(out OutgoingWorldData.position, out OutgoingWorldData.rotation);
     }
-    public void QuaternionClamp(ref Quaternion rotation, BasisRotationalControl AxisLock)
+    public void QuaternionClamp()
     {
-        if (AxisLock.ClampStats != BasisClampData.Clamp)
+        if (RotationControl.ClampStats != BasisClampData.Clamp)
         {
             return;
         }
-        Vector3 clampedEulerAngles = rotation.eulerAngles;
-        if (AxisLock.ClampableAxis == BasisClampAxis.x)
+        Vector3 clampedEulerAngles = OutGoingData.rotation.eulerAngles;
+        if (RotationControl.ClampableAxis == BasisClampAxis.x)
         {
-            clampedEulerAngles.x = Mathf.Clamp(clampedEulerAngles.x, clampedEulerAngles.x - AxisLock.ClampSize, AxisLock.ClampSize);
+            clampedEulerAngles.x = Mathf.Clamp(clampedEulerAngles.x, clampedEulerAngles.x - RotationControl.ClampSize, RotationControl.ClampSize);
         }
-        else if (AxisLock.ClampableAxis == BasisClampAxis.y)
+        else if (RotationControl.ClampableAxis == BasisClampAxis.y)
         {
-            clampedEulerAngles.y = Mathf.Clamp(clampedEulerAngles.y, clampedEulerAngles.y - AxisLock.ClampSize, AxisLock.ClampSize);
+            clampedEulerAngles.y = Mathf.Clamp(clampedEulerAngles.y, clampedEulerAngles.y - RotationControl.ClampSize, RotationControl.ClampSize);
         }
-        else if (AxisLock.ClampableAxis == BasisClampAxis.z)
+        else if (RotationControl.ClampableAxis == BasisClampAxis.z)
         {
-            clampedEulerAngles.z = Mathf.Clamp(clampedEulerAngles.z, clampedEulerAngles.z - AxisLock.ClampSize, AxisLock.ClampSize);
+            clampedEulerAngles.z = Mathf.Clamp(clampedEulerAngles.z, clampedEulerAngles.z - RotationControl.ClampSize, RotationControl.ClampSize);
         }
-        else if (AxisLock.ClampableAxis == BasisClampAxis.xz)
+        else if (RotationControl.ClampableAxis == BasisClampAxis.xz)
         {
-            clampedEulerAngles.z = Mathf.Clamp(clampedEulerAngles.z, clampedEulerAngles.z - AxisLock.ClampSize, AxisLock.ClampSize);
-            clampedEulerAngles.x = Mathf.Clamp(clampedEulerAngles.x, clampedEulerAngles.x - AxisLock.ClampSize, AxisLock.ClampSize);
+            clampedEulerAngles.z = Mathf.Clamp(clampedEulerAngles.z, clampedEulerAngles.z - RotationControl.ClampSize, RotationControl.ClampSize);
+            clampedEulerAngles.x = Mathf.Clamp(clampedEulerAngles.x, clampedEulerAngles.x - RotationControl.ClampSize, RotationControl.ClampSize);
         }
-        rotation = Quaternion.Euler(clampedEulerAngles);
+        OutGoingData.rotation = Quaternion.Euler(clampedEulerAngles);
     }
-    public void ApplyTargetPosition(ref Vector3 position, BasisPositionControl positionLock)
+    public void ApplyTargetPosition()
     {
-        switch (positionLock.TaretInterpreter)
+        switch (PositionControl.TaretInterpreter)
         {
             case BasisTargetController.Target:
-                position = positionLock.Target.OutGoingData.position + positionLock.Offset;
+                OutGoingData.position = PositionControl.Target.OutGoingData.position + PositionControl.Offset;
                 break;
 
             case BasisTargetController.TargetDirectional:
-                Vector3 customDirection = positionLock.Target.OutGoingData.rotation * positionLock.Offset;
-                position = positionLock.Target.OutGoingData.position + customDirection;
+                Vector3 customDirection = PositionControl.Target.OutGoingData.rotation * PositionControl.Offset;
+                OutGoingData.position = PositionControl.Target.OutGoingData.position + customDirection;
                 break;
         }
     }
-    public void ApplyTargetRotation(ref Quaternion rotation, BasisRotationalControl AxisLock)
+    public void ApplyTargetRotation()
     {
-        switch (AxisLock.TaretInterpreter)
+        switch (RotationControl.TaretInterpreter)
         {
             case BasisTargetController.Target:
-                rotation = AxisLock.Target.OutGoingData.rotation;
+                OutGoingData.rotation = RotationControl.Target.OutGoingData.rotation;
                 break;
 
             case BasisTargetController.TargetDirectional:
-                rotation = AxisLock.Target.OutGoingData.rotation * AxisLock.Offset;
+                OutGoingData.rotation = RotationControl.Target.OutGoingData.rotation * RotationControl.Offset;
                 break;
         }
     }
+    private void ApplyLerpToQuaternion(float deltaTime)
+    {
+        if (RotationControl.Lerp == BasisAxisLerp.None)
+        {
+            return;
+        }
+
+        float angleDifference = Quaternion.Angle(LastRunData.rotation, OutGoingData.rotation);
+        float timing = Mathf.Clamp01(angleDifference / RotationControl.AngleBeforeSpeedup);
+        float lerpAmount = Mathf.Lerp(RotationControl.LerpAmountNormal, RotationControl.LerpAmountFastMovement, timing);
+
+        float lerpFactor = lerpAmount * deltaTime;
+
+        Quaternion lastRotation = LastRunData.rotation;
+        Quaternion outgoingRotation = OutGoingData.rotation;
+
+        switch (RotationControl.Lerp)
+        {
+            case BasisAxisLerp.Lerp:
+                OutGoingData.rotation = Quaternion.Lerp(lastRotation, outgoingRotation, lerpFactor);
+                break;
+            case BasisAxisLerp.SphericalLerp:
+                OutGoingData.rotation = Quaternion.Slerp(lastRotation, outgoingRotation, lerpFactor);
+                break;
+            case BasisAxisLerp.LerpUnclamped:
+                OutGoingData.rotation = Quaternion.LerpUnclamped(lastRotation, outgoingRotation, lerpFactor);
+                break;
+            case BasisAxisLerp.SphericalLerpUnclamped:
+                OutGoingData.rotation = Quaternion.SlerpUnclamped(lastRotation, outgoingRotation, lerpFactor);
+                break;
+        }
+    }
+    private void ApplyLerpToVector(float DeltaTime)
+    {
+        switch (PositionControl.Lerp)
+        {
+            case BasisVectorLerp.None:
+                break;
+            case BasisVectorLerp.Lerp:
+                OutGoingData.position = Vector3.Lerp(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
+                break;
+            case BasisVectorLerp.SphericalLerp:
+                OutGoingData.position = Vector3.Slerp(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
+                break;
+            case BasisVectorLerp.LerpUnclamped:
+                OutGoingData.position = Vector3.LerpUnclamped(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
+                break;
+            case BasisVectorLerp.SphericalLerpUnclamped:
+                OutGoingData.position = Vector3.SlerpUnclamped(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
+                break;
+        }
+    }
+
 #if UNITY_EDITOR
     public static float DefaultGizmoSize = 0.05f;
     public static float HandGizmoSize = 0.015f;
     public void DrawGizmos()
     {
+        if (Cullable)
+        {
+            return;
+        }
         if (HasBone)
         {
             Gizmos.color = Color;
@@ -292,67 +357,16 @@ public class BasisBoneControl
                     Gizmos.DrawWireSphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
                 }
             }
-         //   Gizmos.DrawWireSphere(TposeLocal.position, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+            //   Gizmos.DrawWireSphere(TposeLocal.position, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
             Handles.Label(BonePosition, Name);
             if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
             {
                 if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(this, out BasisBoneTrackedRole role))
                 {
-                    Gizmos.DrawWireSphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) /2) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
+                    Gizmos.DrawWireSphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
                 }
             }
         }
     }
 #endif
-    private void ApplyLerpToQuaternion(ref Quaternion quaternionRotation, BasisRotationalControl Rotation,float DeltaTime)
-    {
-        if (Rotation.Lerp != BasisAxisLerp.None)
-        {
-            float angleDifference = Quaternion.Angle(LastRunData.rotation, quaternionRotation);
-            float Timing = Mathf.Clamp01(angleDifference / Rotation.AngleBeforeSpeedup);
-            float lerpAmount = Mathf.Lerp(Rotation.LerpAmountNormal, Rotation.LerpAmountFastMovement, Timing);
-
-            float lerpFactor = lerpAmount * DeltaTime;
-            ApplyActualLerpToQuaternion(ref quaternionRotation, Rotation, lerpFactor);
-        }
-    }
-    private void ApplyActualLerpToQuaternion(ref Quaternion NewQuaternionRotation, BasisRotationalControl Rotation, float lerpFactor)
-    {
-
-        switch (Rotation.Lerp)
-        {
-            case BasisAxisLerp.Lerp:
-                NewQuaternionRotation = Quaternion.Lerp(LastRunData.rotation, NewQuaternionRotation, lerpFactor);
-                break;
-            case BasisAxisLerp.SphericalLerp:
-                NewQuaternionRotation = Quaternion.Slerp(LastRunData.rotation, NewQuaternionRotation, lerpFactor);
-                break;
-            case BasisAxisLerp.LerpUnclamped:
-                NewQuaternionRotation = Quaternion.LerpUnclamped(LastRunData.rotation, NewQuaternionRotation, lerpFactor);
-                break;
-            case BasisAxisLerp.SphericalLerpUnclamped:
-                NewQuaternionRotation = Quaternion.SlerpUnclamped(LastRunData.rotation, NewQuaternionRotation, lerpFactor);
-                break;
-        }
-    }
-    private void ApplyLerpToVector(ref Vector3 position, BasisPositionControl axis,float DeltaTime)
-    {
-        switch (axis.Lerp)
-        {
-            case BasisVectorLerp.None:
-                break;
-            case BasisVectorLerp.Lerp:
-                position = Vector3.Lerp(LastRunData.position, position, axis.LerpAmount * DeltaTime);
-                break;
-            case BasisVectorLerp.SphericalLerp:
-                position = Vector3.Slerp(LastRunData.position, position, axis.LerpAmount * DeltaTime);
-                break;
-            case BasisVectorLerp.LerpUnclamped:
-                position = Vector3.LerpUnclamped(LastRunData.position, position, axis.LerpAmount * DeltaTime);
-                break;
-            case BasisVectorLerp.SphericalLerpUnclamped:
-                position = Vector3.SlerpUnclamped(LastRunData.position, position, axis.LerpAmount * DeltaTime);
-                break;
-        }
-    }
 }

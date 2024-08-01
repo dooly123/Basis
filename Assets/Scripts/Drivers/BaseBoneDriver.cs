@@ -203,7 +203,8 @@ public abstract class BaseBoneDriver : MonoBehaviour
             UseAngle = useAngle,
             AngleBeforeSame = 1f,
             AngleBeforeSpeedup = 25f,
-            ResetAfterTime = 1
+            ResetAfterTime = 1,
+             HasActiveTimer = false,
         };
         addToBone.RotationControl = rotation;
     }
