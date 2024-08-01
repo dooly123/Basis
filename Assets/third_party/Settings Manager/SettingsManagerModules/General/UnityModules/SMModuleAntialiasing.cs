@@ -23,7 +23,7 @@ namespace BattlePhaze.SettingsManager.Integrations
         {
             if (Cam == null)
             {
-                Cam = FindObjectOfType<Camera>();
+                Cam = FindFirstObjectByType<Camera>();
             }
 #if SETTINGS_MANAGER_HD
             if (Cam != null && Cam.TryGetComponent(out HDAdditionalCameraData HDAdditionalCameraData))

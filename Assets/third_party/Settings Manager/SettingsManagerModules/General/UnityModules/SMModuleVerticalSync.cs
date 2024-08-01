@@ -20,15 +20,12 @@ namespace BattlePhaze.SettingsManager.Integrations
             {
                 case "on":
                     QualitySettings.vSyncCount = 1;
-                    Application.targetFrameRate = Screen.currentResolution.refreshRate;
                     break;
                 case "half":
                     QualitySettings.vSyncCount = 2;
-                    Application.targetFrameRate = Screen.currentResolution.refreshRate / 2;
                     break;
                 case "off":
                     QualitySettings.vSyncCount = 0;
-                    Application.targetFrameRate = targetFrameRateWhenOff;
                     break;
             }
         }

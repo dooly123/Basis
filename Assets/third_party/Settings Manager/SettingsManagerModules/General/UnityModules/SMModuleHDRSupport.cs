@@ -13,7 +13,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                     Camera = Camera.main;
                     if (Camera == null)
                     {
-                        Camera = FindObjectOfType<Camera>();
+                        Camera = FindFirstObjectByType<Camera>();
                         if (Camera == null)
                         {
                             return;

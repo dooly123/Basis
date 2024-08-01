@@ -11,7 +11,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 if (terrain == null)
                 {
-                    terrain = FindObjectOfType<Terrain>();
+                    terrain = FindFirstObjectByType<Terrain>();
                     if (terrain == null)
                     {
                         return;
