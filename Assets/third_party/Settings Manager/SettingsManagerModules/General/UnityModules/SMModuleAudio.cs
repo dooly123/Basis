@@ -1,14 +1,13 @@
-﻿namespace BattlePhaze.SettingsManager.Intergrations
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Audio;
+
+namespace BattlePhaze.SettingsManager.Intergrations
 {
-    using UnityEngine;
-    using UnityEngine.Audio;
     public class SMModuleAudio : SettingsManagerOption
     {
         public bool UseAudioListener = true;
         public AudioMixer Mixer;
-        public string AudioMixerGroupTwo = "SFX Audio";
-        public string AudioMixerGroupThree = "Music Audio";
-        public string AudioMixerGroupFour= "Player Audio";
         public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager)
         {
             if (NameReturn(0, Option))
@@ -22,35 +21,27 @@
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
-                    ChangeSFXAudio(Value - 80);
+                    ChangeVolume(Value - 80, Option.Name);
                 }
             }
             if (NameReturn(2, Option))
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
-                    ChangeMusicAudio(Value - 80);
+                    ChangeVolume(Value - 80, Option.Name);
                 }
             }
             if (NameReturn(3, Option))
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
-                    ChangePlayerAudio(Value - 80);
+                    ChangeVolume(Value - 80, Option.Name);
                 }
             }
         }
-        public void ChangeSFXAudio(float Volume)
+        public void ChangeVolume(float Value, string Name)
         {
-            Mixer.SetFloat(AudioMixerGroupTwo, Volume);
-        }
-        public void ChangeMusicAudio(float Volume)
-        {
-            Mixer.SetFloat(AudioMixerGroupThree, Volume);
-        }
-        public void ChangePlayerAudio(float Volume)
-        {
-            Mixer.SetFloat(AudioMixerGroupFour, Volume);
+            Mixer.SetFloat(Name, Value);
         }
     }
 }

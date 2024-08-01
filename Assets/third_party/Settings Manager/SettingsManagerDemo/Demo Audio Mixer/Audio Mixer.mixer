@@ -34,7 +34,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player Audio
+  m_Name: Player Volume
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 5fdcc0663b143ed4abe0b86208b4e4af
   m_Children: []
@@ -53,7 +53,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SFX Audio
+  m_Name: Menus Volume
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: c8b56d2753dcf5740a652bb8b95c6d59
   m_Children: []
@@ -84,12 +84,12 @@ AudioMixerController:
   m_ExposedParameters:
   - guid: 71336f37361a6054bad0885306768c1d
     name: Master
-  - guid: d92bab2223ae60e4d99258109ca65066
-    name: Music Audio
-  - guid: 499306eacfb4bb242a8770701ad5edc6
-    name: MyExposedParam
   - guid: d35056bce0399914f923365e458689ee
-    name: SFX Audio
+    name: Menus Volume
+  - guid: 499306eacfb4bb242a8770701ad5edc6
+    name: Player Volume
+  - guid: d92bab2223ae60e4d99258109ca65066
+    name: World Volume
   m_AudioMixerGroupViews:
   - guids:
     - 94a5c6402210b714dbd0cbfdeb5eb914
@@ -144,7 +144,8 @@ AudioMixerSnapshotController:
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 904b98b010923b048a5905dbb43f686c
-  m_FloatValues: {}
+  m_FloatValues:
+    71336f37361a6054bad0885306768c1d: 1.1400865
   m_TransitionOverrides: {}
 --- !u!244 &3137855806801736997
 AudioMixerEffectController:
@@ -166,7 +167,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Music Audio
+  m_Name: World Volume
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 734dbabc7146b7444b5613cbc675e106
   m_Children: []

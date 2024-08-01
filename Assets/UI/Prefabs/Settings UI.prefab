@@ -7822,7 +7822,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Player Audio
+  m_text: Player Volume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -20205,10 +20205,10 @@ MonoBehaviour:
   - Option: Main Audio
     TextDescription: {fileID: 7564286812007145967}
     ObjectInput: {fileID: 2173608287541347480}
-  - Option: SFX Audio
+  - Option: Menus Volume
     TextDescription: {fileID: 9109470459795044185}
     ObjectInput: {fileID: 6349449527791009837}
-  - Option: Music Audio
+  - Option: World Volume
     TextDescription: {fileID: 7576079078345667195}
     ObjectInput: {fileID: 6456252447783153961}
   - Option: Selected Microphone
@@ -20217,7 +20217,7 @@ MonoBehaviour:
   - Option: Microphone Volume
     TextDescription: {fileID: 3822820520313238818}
     ObjectInput: {fileID: 2464735960802439827}
-  - Option: Player Audio
+  - Option: Player Volume
     TextDescription: {fileID: 7576079078345667195}
     ObjectInput: {fileID: 8785067193957305054}
   - Option: Mcrophone Volume
@@ -22357,8 +22357,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -41.10002, y: -25.600016}
-  m_SizeDelta: {x: 160, y: 20}
+  m_AnchoredPosition: {x: -21.3, y: -25.600016}
+  m_SizeDelta: {x: 200, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2173608287541347480
 MonoBehaviour:
@@ -22490,7 +22490,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SFX Audio
+  m_text: Menus Volume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -24565,7 +24565,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Music Audio
+  m_text: World Volume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -28464,7 +28464,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 105.100006, y: 0.4000187}
+  m_AnchoredPosition: {x: 121.8, y: 0.4000187}
   m_SizeDelta: {x: 40, y: 16.48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3434449129696446663
@@ -28574,7 +28574,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0.4430256, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

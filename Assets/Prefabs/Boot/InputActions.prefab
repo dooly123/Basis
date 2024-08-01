@@ -1156,11 +1156,11 @@ MonoBehaviour:
     MinPercentage: 0
     SliderMaxValue: 80
     SliderMinValue: 0
-    Name: SFX Audio
+    Name: Menus Volume
     ValueDescriptor: 62%
     SelectedValueDefault: 50
     ValueDefault: 70
-    Explanation: SFX Audio
+    Explanation: UI Sounds
     selectedValue: 80
     Type: 3
     TextDescription: {fileID: 0}
@@ -1186,11 +1186,11 @@ MonoBehaviour:
     MinPercentage: 0
     SliderMaxValue: 80
     SliderMinValue: 0
-    Name: Music Audio
+    Name: World Volume
     ValueDescriptor: 62%
     SelectedValueDefault: 50
     ValueDefault: 70
-    Explanation: Music Audio
+    Explanation: Player Volume
     selectedValue: 80
     Type: 3
     TextDescription: {fileID: 0}
@@ -1216,7 +1216,7 @@ MonoBehaviour:
     MinPercentage: 0
     SliderMaxValue: 80
     SliderMinValue: 0
-    Name: Player Audio
+    Name: Player Volume
     ValueDescriptor: 
     SelectedValueDefault: 50
     ValueDefault: 70
@@ -1356,7 +1356,7 @@ MonoBehaviour:
     ValueDefault: 1
     Explanation: 
     selectedValue: 1.5
-    Type: 3
+    Type: 4
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
     ApplyInput: {fileID: 0}
@@ -1446,7 +1446,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 2
@@ -1989,23 +1989,23 @@ MonoBehaviour:
     Explanation: Main Audio
     Parse: 1
     Type: 3
-  - OptionName: SFX Audio
-    Explanation: SFX Audio
+  - OptionName: Menus Volume
+    Explanation: UI Sounds
     Parse: 0
     Type: 3
-  - OptionName: Music Audio
-    Explanation: Music Audio
+  - OptionName: World Volume
+    Explanation: Player Volume
     Parse: 0
     Type: 3
-  - OptionName: Player Audio
+  - OptionName: Player Volume
     Explanation: 
     Parse: 0
     Type: 3
   UseAudioListener: 1
   Mixer: {fileID: 24100000, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
-  AudioMixerGroupTwo: SFX Audio
-  AudioMixerGroupThree: Music Audio
-  AudioMixerGroupFour: Player Audio
+  AudioMixerGroupTwo: Menus Volume
+  AudioMixerGroupThree: World Volume
+  AudioMixerGroupFour: Player Volume
 --- !u!114 &4907001347912712639
 MonoBehaviour:
   m_ObjectHideFlags: 0
