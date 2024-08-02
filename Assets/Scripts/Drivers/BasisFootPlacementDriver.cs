@@ -27,26 +27,20 @@ public class BasisFootPlacementDriver : MonoBehaviour
             HasEvents = true;
         }
     }
+    public float SquareAngular;
+    public float SquareVel;
+    public float MaxBeforeDisableIK = 0.01f;
     public void Simulate()
     {
-        Vector3 Angular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity;
-        float Square = Angular.sqrMagnitude;
+        SquareAngular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity.sqrMagnitude;
+        SquareVel = Localplayer.AvatarDriver.AnimatorDriver.currentVelocity.sqrMagnitude;
         Vector3 localTposeHips = Hips.TposeLocal.position;
         Vector3 HipsPosLocal = Hips.OutGoingData.position;
-        /*
-        if(Square <= LargerThenBeforeRotating)
-        {
-            Localplayer.AvatarDriver.LeftFootLayer.active = false;
-            Localplayer.AvatarDriver.RightFootLayer.active = false;
-        }
-        else
-        {
-            Localplayer.AvatarDriver.LeftFootLayer.active = true;
-            Localplayer.AvatarDriver.RightFootLayer.active = true;
-        }
-        */
-        RightFootSolver.Simulate(Square, localTposeHips, HipsPosLocal);
-        LeftFootSolver.Simulate(Square, localTposeHips, HipsPosLocal);
+        bool LargerthenRotation = SquareAngular <= LargerThenBeforeRotating;
+        bool LargerThenMaxBeforeDisableIK = SquareVel >= MaxBeforeDisableIK;
+        bool state = LargerthenRotation || LargerThenMaxBeforeDisableIK;
+        RightFootSolver.Simulate(SquareAngular, SquareVel, state, localTposeHips, HipsPosLocal);
+        LeftFootSolver.Simulate(SquareAngular, SquareVel, state, localTposeHips, HipsPosLocal);
     }
     public void OnCalibration()
     {
@@ -95,7 +89,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         [SerializeField] public float FootStepSpeed = 3;
         [SerializeField] public float stepHeight;
         public float LargerThenThisMoveFeet = 500;
-
+        public float SmallerThenThisAllowVelocity = 0.01f;
         public float lerp = 0;
         private RaycastHit _hitInfo;
 
@@ -108,8 +102,20 @@ public class BasisFootPlacementDriver : MonoBehaviour
         {
             return lerp < 1;
         }
-        public void Simulate(float RotationMagnitude, Vector3 localTposeHips, Vector3 HipsPosLocal)
+        public void Simulate(float RotationMagnitude,float VelocityMagnitude,bool HasLayer, Vector3 localTposeHips, Vector3 HipsPosLocal)
         {
+            if(Foot.HasTracked == BasisHasTracked.HasTracker)
+            {
+                return;
+            }
+            if (HasLayer)
+            {
+                Foot.HasRigLayer = BasisHasRigLayer.HasNoRigLayer;
+            }
+            else
+            {
+                Foot.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+            }
             // Get the local position of the foot in T-pose
             Vector3 localTposeFoot = Foot.TposeLocal.position;
 
@@ -131,7 +137,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
             WorldBottomPoint = bottomPointLocal + BasisLocalPlayer.Instance.LocalBoneDriver.transform.position;
 
             Vector3 FinalApplied = bottomPointLocal;
-            if (RotationMagnitude > LargerThenThisMoveFeet && OtherFoot.IsMoving() == false && lerp >= 1)//only can move one up at at a time
+            if (VelocityMagnitude < SmallerThenThisAllowVelocity && RotationMagnitude > LargerThenThisMoveFeet && OtherFoot.IsMoving() == false && lerp >= 1)//only can move one up at at a time
             {
               //disabled as world top and world bottom is wrong  if (Physics.Linecast(WorldTopPoint, WorldBottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
                 {
@@ -152,49 +158,3 @@ public class BasisFootPlacementDriver : MonoBehaviour
         }
     }
 }
-[System.Serializable]
-public class SpringLerp
-{
-    public float damping = 0.5f;  // Damping factor, controls how quickly the spring settles
-    public float stiffness = 0.5f; // Stiffness factor, controls the springiness
-    public float velocity;  // Current velocity of the spring
-
-    // Method to update the spring interpolation
-    public float Update(float currentValue, float targetValue, float deltaTime)
-    {
-        float force = stiffness * (targetValue - currentValue);
-        float dampingForce = -damping * velocity;
-        float acceleration = force + dampingForce;
-
-        velocity += acceleration * deltaTime;
-        currentValue += velocity * deltaTime;
-
-        return currentValue;
-    }
-
-    // Method to reset the velocity (useful if the spring is to be reused)
-    public void Reset()
-    {
-        velocity = 0f;
-    }
-
-}
-//            springLerp = new SpringLerp();
-// float timedelta = Time.deltaTime;
-//float TimeDeltaMulti = timedelta * TimeMultiplier;
-//   Foot.FinalApplied.rotation = Driver.Hips.
-/*
-if (Physics.Linecast(_topPoint, _bottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
-{
-    Vector3 footPosition = _hitInfo.point;
-    Foot.FinalApplied.position = footPosition;
-    // Calculate the rotation to align the foot with the normal and up direction
-    Foot.FinalApplied.rotation = Quaternion.LookRotation(Driver.Hips.BoneTransform.forward, _hitInfo.normal);
-}            //   Vector3 BodyPose = BasisLocalPlayer.Instance.Avatar.Animator.transform.position + LocalTposeFoot;
-        private RaycastHit _hitInfo;
-            // Interpolate position using SpringLerp
-    //    Vector3 SpringAppliedPosition = new Vector3(springLerp.Update(LastPosition.x, FinalPosition.x, TimeDeltaMulti), springLerp.Update(LastPosition.y, FinalPosition.y, TimeDeltaMulti), springLerp.Update(LastPosition.z, FinalPosition.z, TimeDeltaMulti) );
-
-        // Apply the final local position and rotation to the foot
-*/
-//  
