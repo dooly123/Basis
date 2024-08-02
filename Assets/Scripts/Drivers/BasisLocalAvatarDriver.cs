@@ -106,6 +106,23 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
         AnimatorDriver.Initialize(Player.Avatar.Animator);
         ResetAvatarAnimator();
+
+        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head))
+        {
+            Head.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+        }
+        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Hips, BasisBoneTrackedRole.Hips))
+        {
+            Hips.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+        }
+        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Chest))
+        {
+            Chest.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+        }
+        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Spine, BasisBoneTrackedRole.Spine))
+        {
+            Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+        }
     }
     public void CleanupBeforeContinue()
     {
@@ -481,7 +498,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     // Define a method to update the active state of the Layer
     void UpdateLayerActiveState(BasisBoneControl Control, RigLayer Layer)
     {
-        //    Debug.Log("setting Layer State to " + Control.HasRigLayer == BasisHasRigLayer.HasRigLayer + " for " + Control.Name);
+        // Debug.Log("setting Layer State to " + Control.HasRigLayer == BasisHasRigLayer.HasRigLayer + " for " + Control.Name);
         Layer.active = Control.HasRigLayer == BasisHasRigLayer.HasRigLayer;
     }
     public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
