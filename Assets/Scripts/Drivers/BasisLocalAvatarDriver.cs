@@ -53,6 +53,7 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
     public List<Rig> Rigs = new List<Rig>();
     public RigBuilder Builder;
     public List<RigTransform> AdditionalTransforms = new List<RigTransform>();
+    public bool HasTposeEvent = false;
     public void LocalCalibration()
     {
         InitialLocalCalibration(BasisLocalPlayer.Instance);
@@ -74,14 +75,11 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         AdditionalTransforms.Clear();
         Rigs.Clear();
         PutAvatarIntoTPose();
-        if (Builder == null)
+        if (Builder != null)
         {
-            Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
+            GameObject.Destroy(Builder);
         }
-        else
-        {
-            Builder.Clear();
-        }
+        Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
         Calibration(Player.Avatar);
         BasisLocalPlayer.Instance.LocalBoneDriver.RemoveAllListeners();
         BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
@@ -122,6 +120,17 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Spine, BasisBoneTrackedRole.Spine))
         {
             Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
+        }
+        if (HasTposeEvent)
+        {
+            EnteredTpose += OnTpose;
+        }
+    }
+    public void OnTpose()
+    {
+        if (Builder != null)
+        {
+            Debug.Log("build exists stil");
         }
     }
     public void CleanupBeforeContinue()

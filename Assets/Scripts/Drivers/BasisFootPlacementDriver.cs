@@ -10,15 +10,25 @@ public class BasisFootPlacementDriver : MonoBehaviour
     [SerializeField]
     public BasisIKFootSolver RightFootSolver = new BasisIKFootSolver();
     public bool HasEvents = false;
-    public float DefaultFootOffset = 0.5f;
+    public float DefaultFootOffset = 0.35f;
     public float LargerThenBeforeRotating = 400;
+    public float SquareAngular;
+    public float SquareVel;
+    public float MaxBeforeDisableIK = 0.01f;
+    public float FootDistanceBetweeneachOther;
+    public float FootDistanceMulti = 8;
+    public float stepHeight;
     public void Initialize()
     {
         Localplayer = BasisLocalPlayer.Instance;
         Localplayer.LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
 
-        Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.Foot, BasisBoneTrackedRole.LeftFoot);
-        Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.Foot, BasisBoneTrackedRole.RightFoot);
+        Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.foot, BasisBoneTrackedRole.LeftFoot);
+        Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.foot, BasisBoneTrackedRole.RightFoot);
+
+        Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.lowerLeg, BasisBoneTrackedRole.LeftLowerLeg);
+        Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.lowerLeg, BasisBoneTrackedRole.RightLowerLeg);
+
         OnCalibration();
         if (HasEvents == false)
         {
@@ -27,38 +37,38 @@ public class BasisFootPlacementDriver : MonoBehaviour
             HasEvents = true;
         }
     }
-    public float SquareAngular;
-    public float SquareVel;
-    public float MaxBeforeDisableIK = 0.01f;
     public void Simulate()
     {
         SquareAngular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity.sqrMagnitude;
         SquareVel = Localplayer.AvatarDriver.AnimatorDriver.currentVelocity.sqrMagnitude;
         Vector3 localTposeHips = Hips.TposeLocal.position;
         Vector3 HipsPosLocal = Hips.OutGoingData.position;
-        bool LargerthenRotation = SquareAngular <= LargerThenBeforeRotating;
-        bool LargerThenMaxBeforeDisableIK = SquareVel >= MaxBeforeDisableIK;
-        bool state = LargerthenRotation || LargerThenMaxBeforeDisableIK;
-        RightFootSolver.Simulate(SquareAngular, SquareVel, state, localTposeHips, HipsPosLocal);
-        LeftFootSolver.Simulate(SquareAngular, SquareVel, state, localTposeHips, HipsPosLocal);
+
+        //  bool LargerthenRotation = SquareAngular <= LargerThenBeforeRotating;
+        bool LargerThenMaxBeforeDisableIK = SquareVel <= MaxBeforeDisableIK;
+
+        bool HasLayer = LargerThenMaxBeforeDisableIK;
+
+        RightFootSolver.Simulate(SquareAngular, SquareVel, HasLayer, localTposeHips, HipsPosLocal);
+        LeftFootSolver.Simulate(SquareAngular, SquareVel, HasLayer, localTposeHips, HipsPosLocal);
     }
     public void OnCalibration()
     {
-        LeftFootSolver.Driver = this;
-        RightFootSolver.Driver = this;
+        LeftFootSolver.driver = this;
+        RightFootSolver.driver = this;
 
-        LeftFootSolver.Foot.HasTracked = BasisHasTracked.HasNoTracker;
-        RightFootSolver.Foot.HasTracked = BasisHasTracked.HasNoTracker;
+        LeftFootSolver.foot.HasTracked = BasisHasTracked.HasNoTracker;
+        RightFootSolver.foot.HasTracked = BasisHasTracked.HasNoTracker;
 
-        LeftFootSolver.MyIkConstraint = Localplayer.AvatarDriver.LeftFootTwoBoneIK;
-        RightFootSolver.MyIkConstraint = Localplayer.AvatarDriver.RightFootTwoBoneIK;
+        LeftFootSolver.ikConstraint = Localplayer.AvatarDriver.LeftFootTwoBoneIK;
+        RightFootSolver.ikConstraint = Localplayer.AvatarDriver.RightFootTwoBoneIK;
         Localplayer.AvatarDriver.LeftFootLayer.active = true;
         Localplayer.AvatarDriver.RightFootLayer.active = true;
 
         LeftFootSolver.Initialize(RightFootSolver);
         RightFootSolver.Initialize(LeftFootSolver);
-        LeftFootSolver.stepHeight = DefaultFootOffset * Localplayer.RatioAvatarToAvatarEyeDefaultScale;
-        RightFootSolver.stepHeight = DefaultFootOffset * Localplayer.RatioAvatarToAvatarEyeDefaultScale;
+        stepHeight = DefaultFootOffset * Localplayer.RatioPlayerToAvatarScale;
+        FootDistanceBetweeneachOther = Vector3.Distance(LeftFootSolver.foot.TposeLocal.position, RightFootSolver.foot.TposeLocal.position) * (FootDistanceMulti / Localplayer.PlayerEyeHeight);
     }
     public void OnDestroy()
     {
@@ -76,85 +86,115 @@ public class BasisFootPlacementDriver : MonoBehaviour
     [System.Serializable]
     public class BasisIKFootSolver
     {
-        public BasisBoneControl Foot;
-        public BasisFootPlacementDriver Driver;
-        public TwoBoneIKConstraint MyIkConstraint;
-        public BasisIKFootSolver OtherFoot;
-        public float percentage = 0.5f;
-        public float PercentagePastFoot = 4;
-        private Vector3 topPointLocal;
-        private Vector3 bottomPointLocal;
-        public Vector3 WorldTopPoint;
-        public Vector3 WorldBottomPoint;
-        [SerializeField] public float FootStepSpeed = 3;
-        [SerializeField] public float stepHeight;
-        public float LargerThenThisMoveFeet = 500;
-        public float SmallerThenThisAllowVelocity = 0.01f;
-        public float lerp = 0;
-        private RaycastHit _hitInfo;
+        [SerializeField] public BasisBoneControl lowerLeg;
+        [SerializeField] public BasisBoneControl foot;
+        [SerializeField] public BasisFootPlacementDriver driver;
+        [SerializeField] public TwoBoneIKConstraint ikConstraint;
+        [SerializeField] public BasisIKFootSolver otherFoot;
 
-        public void Initialize(BasisIKFootSolver otherFoot)
+        [SerializeField] public float percentage = 0.25f;
+        [SerializeField] public float percentagePastFoot = 4.0f;
+        [SerializeField] public float footStepSpeed = 2.5f;
+        [SerializeField] public float largerThenThisMoveFeet = 500.0f;
+        [SerializeField] public float smallerThenThisAllowVelocity = 0.01f;
+        [SerializeField] public float slerpMultiplier = 10.0f;
+
+        public Vector3 topPointLocal;
+        public Vector3 bottomPointLocal;
+        public Vector3 worldTopPoint;
+        public Vector3 worldBottomPoint;
+        public float lerp = 0;
+        public RaycastHit hitInfo;
+        public Quaternion rotation;
+        public Vector3 position;
+
+        public Vector3 offset;
+        public Vector3 rotatedOffset;
+        public Vector3 footExtendedPositionWorld;
+        public Vector3 hipHeightFootVector;
+
+        public Vector3 LastFootPosition;
+        public Quaternion LastFoorRotation;
+        public bool IsFeetFarApart = false;
+        public bool HasMotionForMovement = false;
+        public bool HasraycastHit = false;
+        public void Initialize(BasisIKFootSolver otherFootSolver)
         {
-            OtherFoot = otherFoot;
+            otherFoot = otherFootSolver;
             lerp = 1;
+            OnFootFinishedMoving();
         }
-        public bool IsMoving()
+
+        public bool IsMoving() => lerp < 1;
+
+        public void Simulate(float rotationMagnitude, float velocityMagnitude, bool HasLayerActive, Vector3 localTposeHips, Vector3 hipsPosLocal)
         {
-            return lerp < 1;
-        }
-        public void Simulate(float RotationMagnitude,float VelocityMagnitude,bool HasLayer, Vector3 localTposeHips, Vector3 HipsPosLocal)
-        {
-            if(Foot.HasTracked == BasisHasTracked.HasTracker)
+            if (foot.HasTracked == BasisHasTracked.HasTracker)
             {
                 return;
             }
-            if (HasLayer)
+            foot.HasRigLayer = HasLayerActive ? BasisHasRigLayer.HasRigLayer : BasisHasRigLayer.HasNoRigLayer;
+
+            CalculateFootPositions(localTposeHips, hipsPosLocal);
+
+            IsFeetFarApart = Vector3.Distance(foot.OutGoingData.position, LastFootPosition) > driver.FootDistanceBetweeneachOther;
+            HasMotionForMovement = ShouldStartMoving(rotationMagnitude, velocityMagnitude);
+            if (HasMotionForMovement || IsFeetFarApart)
             {
-                Foot.HasRigLayer = BasisHasRigLayer.HasNoRigLayer;
-            }
-            else
-            {
-                Foot.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-            }
-            // Get the local position of the foot in T-pose
-            Vector3 localTposeFoot = Foot.TposeLocal.position;
-
-            Vector3 Offset = localTposeFoot - localTposeHips;
-            Vector3 RotatedOffset = Driver.transform.rotation * Driver.Hips.OutgoingWorldData.rotation * Offset;
-            Vector3 FootExtendedPositionWorld = HipsPosLocal + RotatedOffset;
-
-            // Create a vector for the hip height at the foot's X and Z coordinates
-            Vector3 hipHeightFootVector = new Vector3(FootExtendedPositionWorld.x, Driver.Hips.OutgoingWorldData.position.y, FootExtendedPositionWorld.z);
-
-            // Calculate the vertical difference
-            float yDifference = FootExtendedPositionWorld.y - hipHeightFootVector.y;
-
-            // Interpolate between the hip height vector and the T-pose foot position
-            topPointLocal = Vector3.Lerp(hipHeightFootVector, FootExtendedPositionWorld, percentage);
-            WorldTopPoint = topPointLocal + BasisLocalPlayer.Instance.LocalBoneDriver.transform.position;
-            // Determine the bottom point with the vertical difference adjusted
-            bottomPointLocal = FootExtendedPositionWorld + new Vector3(0, (yDifference / PercentagePastFoot), 0);
-            WorldBottomPoint = bottomPointLocal + BasisLocalPlayer.Instance.LocalBoneDriver.transform.position;
-
-            Vector3 FinalApplied = bottomPointLocal;
-            if (VelocityMagnitude < SmallerThenThisAllowVelocity && RotationMagnitude > LargerThenThisMoveFeet && OtherFoot.IsMoving() == false && lerp >= 1)//only can move one up at at a time
-            {
-              //disabled as world top and world bottom is wrong  if (Physics.Linecast(WorldTopPoint, WorldBottomPoint, out _hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal))
+                HasraycastHit = Physics.Linecast(lowerLeg.OutgoingWorldData.position, worldBottomPoint, out hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal);
+                if (HasraycastHit)
                 {
                     lerp = 0;
                 }
             }
+
             if (lerp <= 1)
             {
-                FinalApplied = new Vector3(bottomPointLocal.x, bottomPointLocal.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight, bottomPointLocal.z);
-                lerp += Time.deltaTime * FootStepSpeed;
+                MoveFoot();
             }
-            Foot.OutGoingData.position = FinalApplied;
-            Foot.OutGoingData.rotation = Quaternion.Euler(Foot.BoneTransform.localEulerAngles.x, Driver.Hips.BoneTransform.localEulerAngles.y, Foot.BoneTransform.localEulerAngles.z);
+
+            UpdateFootData();
+        }
+        private void CalculateFootPositions(Vector3 localTposeHips, Vector3 hipsPosLocal)
+        {
+            offset = foot.TposeLocal.position - localTposeHips;
+            rotatedOffset = driver.transform.rotation * driver.Hips.OutgoingWorldData.rotation * offset;
+            footExtendedPositionWorld = hipsPosLocal + rotatedOffset;
+
+            hipHeightFootVector = new Vector3(footExtendedPositionWorld.x, driver.Hips.OutgoingWorldData.position.y, footExtendedPositionWorld.z);
+            float yDifference = footExtendedPositionWorld.y - hipHeightFootVector.y;
+
+            topPointLocal = Vector3.Lerp(hipHeightFootVector, footExtendedPositionWorld, percentage);
+            worldTopPoint = topPointLocal + BasisLocalPlayer.Instance.LocalBoneDriver.transform.position;
+
+            bottomPointLocal = footExtendedPositionWorld + new Vector3(0, yDifference / percentagePastFoot, 0);
+            worldBottomPoint = lowerLeg.OutgoingWorldData.position + offset;
+        }
+        private bool ShouldStartMoving(float rotationMagnitude, float velocityMagnitude)
+        {
+            return velocityMagnitude < smallerThenThisAllowVelocity && rotationMagnitude > largerThenThisMoveFeet && !otherFoot.IsMoving() && lerp >= 1;
+        }
+        private void MoveFoot()
+        {
+            bottomPointLocal.y += Mathf.Sin(lerp * Mathf.PI) * driver.stepHeight;
+            lerp += Time.deltaTime * footStepSpeed;
+            OnFootFinishedMoving();
+        }
+        private void UpdateFootData()
+        {
+            foot.OutGoingData.position = position;
+            foot.OutGoingData.rotation = rotation;
+            LastFootPosition = position;
+            LastFoorRotation = rotation;
+        }
+        private void OnFootFinishedMoving()
+        {
+            rotation = Quaternion.Euler(foot.BoneTransform.localEulerAngles.x, driver.Hips.BoneTransform.localEulerAngles.y, foot.BoneTransform.localEulerAngles.z);
+            position = bottomPointLocal;
         }
         public void Gizmo()
         {
-            Gizmos.DrawLine(WorldTopPoint, WorldBottomPoint);
+            Gizmos.DrawLine(lowerLeg.OutgoingWorldData.position, worldBottomPoint);
         }
     }
 }

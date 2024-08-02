@@ -78,6 +78,7 @@ MonoBehaviour:
   RemoteAvatarDriver: {fileID: 4496089132972522230}
   AudioSourceGameobject: {fileID: 5669630751523980901}
   MouthControl:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
@@ -88,7 +89,12 @@ MonoBehaviour:
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -112,7 +118,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -132,11 +138,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -185,6 +191,7 @@ MonoBehaviour:
   HeadAvatar: {fileID: 0}
   HipsAvatar: {fileID: 0}
   Head:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
@@ -195,7 +202,12 @@ MonoBehaviour:
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -219,7 +231,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -239,11 +251,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -252,6 +264,7 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
   Hips:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
@@ -262,7 +275,12 @@ MonoBehaviour:
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -286,7 +304,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -306,11 +324,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -375,7 +393,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 0
   MinDistance: 1
-  MaxDistance: 15
+  MaxDistance: 20
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -394,13 +412,13 @@ AudioSource:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.33333334
-      value: 0.25
-      inSlope: -0.9985193
-      outSlope: -0.9985193
+      time: 0.48395285
+      value: 0.5004883
+      inSlope: -1.3427557
+      outSlope: -1.3427557
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.3036212
+      inWeight: 0.1683712
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
