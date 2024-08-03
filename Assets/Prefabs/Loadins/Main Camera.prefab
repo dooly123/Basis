@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6}
+  m_Color: {r: 0.9528302, g: 0.3343779, b: 0.30113026, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -414,7 +414,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 7589553554247068229}
   CameraInstanceID: 0
-  CameraOverlayInstanceID: 0
   Listener: {fileID: 4150865382649993091}
   CameraData: {fileID: 8350818596157214651}
   SteamAudioListener: {fileID: 3211173287841905640}
@@ -422,7 +421,6 @@ MonoBehaviour:
   DefaultCameraFov: 90
   BasisLockToInput: {fileID: 5985133177976618905}
   HasEvents: 0
-  UIOverlayCamera: {fileID: 0}
   MicrophoneCanvas: {fileID: 3373432966423603715}
   MicrophoneMutedIcon: {fileID: 7951072778522726859}
   MicrophoneUnMutedIcon: {fileID: 1908197658278707850}
