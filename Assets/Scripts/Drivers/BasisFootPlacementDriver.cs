@@ -118,6 +118,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         public bool IsFeetFarApart = false;
         public bool HasMotionForMovement = false;
         public bool HasraycastHit = false;
+        public float newFootPositionLerpSpeed = 20;
         public void Initialize(BasisIKFootSolver otherFootSolver)
         {
             otherFoot = otherFootSolver;
@@ -190,7 +191,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         private void OnFootFinishedMoving()
         {
             rotation = Quaternion.Euler(foot.BoneTransform.localEulerAngles.x, driver.Hips.BoneTransform.localEulerAngles.y, foot.BoneTransform.localEulerAngles.z);
-            position = bottomPointLocal;
+            position = Vector3.Lerp(position,bottomPointLocal, newFootPositionLerpSpeed * Time.deltaTime);
         }
         public void Gizmo()
         {

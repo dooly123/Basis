@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6303433917581043709}
   - component: {fileID: 2997356888555999241}
   - component: {fileID: 1896627236807073300}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: NamePlate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,6 +79,7 @@ MonoBehaviour:
   LocalCameraDriver: {fileID: 0}
   directionToCamera: {x: 0, y: 0, z: 0}
   HipTarget:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
@@ -89,7 +90,12 @@ MonoBehaviour:
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -113,7 +119,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -133,11 +139,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -146,6 +152,7 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
   MouthTarget:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
@@ -156,7 +163,12 @@ MonoBehaviour:
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -180,7 +192,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -200,11 +212,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -212,7 +224,6 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-  FloatOffset: -0.5
   Text: {fileID: 5913064765185686731}
 --- !u!114 &2997356888555999241
 MonoBehaviour:
@@ -254,7 +265,7 @@ GameObject:
   - component: {fileID: 7527943652107300493}
   - component: {fileID: 3515079843213119928}
   - component: {fileID: 5659242795811902284}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: NamePlate Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +385,7 @@ GameObject:
   - component: {fileID: 8797189551791246772}
   - component: {fileID: 6296563450686865163}
   - component: {fileID: 5913064765185686731}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: NamePlate Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
