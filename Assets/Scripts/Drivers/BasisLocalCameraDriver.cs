@@ -26,6 +26,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public AudioClip MuteSound;
     public AudioClip UnMuteSound;
     public AudioSource AudioSource;
+    public float NearClip = 0.001f;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -33,7 +34,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
             Instance = this;
         }
         LocalPlayer = BasisLocalPlayer.Instance;
-        Camera.nearClipPlane = 0.01f;
+        Camera.nearClipPlane = NearClip;
         Camera.farClipPlane = 1500;
         QualitySettings.maxQueuedFrames = -1;
         CameraInstanceID = Camera.GetInstanceID();

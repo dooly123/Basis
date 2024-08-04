@@ -39,6 +39,10 @@ public class BasisFootPlacementDriver : MonoBehaviour
     }
     public void Simulate()
     {
+        if(BasisDeviceManagement.Instance.CurrentMode != BasisBootedMode.Desktop)
+        {
+            return;
+        }
         SquareAngular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity.sqrMagnitude;
         SquareVel = Localplayer.AvatarDriver.AnimatorDriver.currentVelocity.sqrMagnitude;
         Vector3 localTposeHips = Hips.TposeLocal.position;
@@ -142,8 +146,8 @@ public class BasisFootPlacementDriver : MonoBehaviour
             HasMotionForMovement = ShouldStartMoving(rotationMagnitude, velocityMagnitude);
             if (HasMotionForMovement || IsFeetFarApart)
             {
-                HasraycastHit = Physics.Linecast(lowerLeg.OutgoingWorldData.position, worldBottomPoint, out hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal);
-                if (HasraycastHit)
+//HasraycastHit = Physics.Linecast(lowerLeg.OutgoingWorldData.position, worldBottomPoint, out hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal);
+               // if (HasraycastHit)
                 {
                     lerp = 0;
                 }
