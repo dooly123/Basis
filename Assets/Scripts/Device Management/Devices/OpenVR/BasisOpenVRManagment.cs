@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Basis;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,6 +149,10 @@ public class BasisOpenVRManagement
             spatial.ClassName = nameof(BasisOpenVRInputSpatial);
             bool foundRole = TryAssignRole(device.deviceClass, device.deviceIndex, out BasisBoneTrackedRole role, out SteamVR_Input_Sources source);
             spatial.Initialize(UnityEngine.SpatialTracking.TrackedPoseDriver.TrackedPose.Center, uniqueID, notUniqueID, nameof(BasisOpenVRManagement), foundRole, role, source);
+
+            var eye = gameObject.AddComponent<BasisOpenVRInputEye>();
+            eye.Initalize();
+
             BasisDeviceManagement.Instance.TryAdd(spatial);
             TypicalDevices.TryAdd(uniqueID, device);
         }

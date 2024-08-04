@@ -1,3 +1,4 @@
+using Basis;
 using UnityEngine;
 public class BasisAvatarEyeInput : BasisInput
 {
@@ -132,6 +133,9 @@ public class BasisAvatarEyeInput : BasisInput
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;
         UpdatePlayerControl();
+
+        BasisInputEye.LeftPosition = this.transform.position;
+        BasisInputEye.RightPosition = this.transform.position;
     }
     public void CalculateAdjustment()
     {
