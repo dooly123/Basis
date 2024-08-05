@@ -18,7 +18,7 @@ MonoBehaviour:
   inputUpdateMode: 2
   poseUpdateMode: 8
   activateFirstActionSetOnStart: 1
-  editorAppKey: application.generated.unity.basis.exe
+  editorAppKey: application.generated.unity.basisunity.exe
   mixedRealityCameraPose:
     actionPath: /actions//in/ExternalCamera
     needsReinit: 1

@@ -8,12 +8,12 @@ QualitySettings:
   m_QualitySettings:
   - serializedVersion: 4
     name: Default
-    pixelLightCount: 2
+    pixelLightCount: 4
     shadows: 2
-    shadowResolution: 3
+    shadowResolution: 2
     shadowProjection: 1
     shadowCascades: 4
-    shadowDistance: 30
+    shadowDistance: 150
     shadowNearPlaneOffset: 3
     shadowCascade2Split: 0.33333334
     shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
@@ -21,16 +21,16 @@ QualitySettings:
     skinWeights: 255
     globalTextureMipmapLimit: 0
     textureMipmapLimitSettings: []
-    anisotropicTextures: 1
+    anisotropicTextures: 2
     antiAliasing: 4
-    softParticles: 0
+    softParticles: 1
     softVegetation: 1
     realtimeReflectionProbes: 1
     billboardsFaceCameraPosition: 1
-    useLegacyDetailDistribution: 1
+    useLegacyDetailDistribution: 0
     adaptiveVsync: 0
-    vSyncCount: 2
-    realtimeGICPUUsage: 25
+    vSyncCount: 1
+    realtimeGICPUUsage: 100
     adaptiveVsyncExtraA: 0
     adaptiveVsyncExtraB: 0
     lodBias: 2
@@ -38,17 +38,16 @@ QualitySettings:
     enableLODCrossFade: 1
     streamingMipmapsActive: 1
     streamingMipmapsAddAllCameras: 1
-    streamingMipmapsMemoryBudget: 24142
+    streamingMipmapsMemoryBudget: 512
     streamingMipmapsRenderersPerFrame: 512
-    streamingMipmapsMaxLevelReduction: 4
-    streamingMipmapsMaxFileIORequests: 512
-    particleRaycastBudget: 2048
+    streamingMipmapsMaxLevelReduction: 2
+    streamingMipmapsMaxFileIORequests: 1024
+    particleRaycastBudget: 4096
     asyncUploadTimeSlice: 2
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd,
-      type: 2}
+    customRenderPipeline: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
     terrainQualityOverrides: 0
     terrainPixelError: 1
     terrainDetailDensityScale: 1
@@ -62,16 +61,18 @@ QualitySettings:
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
     Android: 0
-    CloudRendering: 0
+    EmbeddedLinux: 0
     GameCoreScarlett: 0
     GameCoreXboxOne: 0
-    Lumin: 0
+    LinuxHeadlessSimulation: 0
     Nintendo Switch: 0
     PS4: 0
     PS5: 0
+    QNX: 0
+    ReservedCFE: 0
     Server: 0
-    Stadia: 0
     Standalone: 0
+    VisionOS: 0
     WebGL: 0
     Windows Store Apps: 0
     XboxOne: 0
