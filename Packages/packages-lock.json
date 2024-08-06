@@ -156,7 +156,7 @@
       }
     },
     "com.unity.render-pipelines.universal": {
-      "version": "17.0.3",
+      "version": "17.0.2",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
