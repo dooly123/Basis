@@ -39,10 +39,6 @@ public class BasisFootPlacementDriver : MonoBehaviour
     }
     public void Simulate()
     {
-        if(BasisDeviceManagement.Instance.CurrentMode != BasisBootedMode.Desktop)
-        {
-            return;
-        }
         SquareAngular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity.sqrMagnitude;
         SquareVel = Localplayer.AvatarDriver.AnimatorDriver.currentVelocity.sqrMagnitude;
         Vector3 localTposeHips = Hips.TposeLocal.position;
@@ -53,8 +49,8 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
         bool HasLayer = LargerThenMaxBeforeDisableIK;
 
-        RightFootSolver.Simulate(SquareAngular, SquareVel, HasLayer, localTposeHips, HipsPosLocal);
-        LeftFootSolver.Simulate(SquareAngular, SquareVel, HasLayer, localTposeHips, HipsPosLocal);
+        RightFootSolver.Simulate(HasLayer, localTposeHips, HipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
+        LeftFootSolver.Simulate(HasLayer, localTposeHips, HipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
     }
     public void OnCalibration()
     {
@@ -123,6 +119,8 @@ public class BasisFootPlacementDriver : MonoBehaviour
         public bool HasMotionForMovement = false;
         public bool HasraycastHit = false;
         public float newFootPositionLerpSpeed = 20;
+        public float RotationBeforeMove = 15;
+        public float RotationDifference;
         public void Initialize(BasisIKFootSolver otherFootSolver)
         {
             otherFoot = otherFootSolver;
@@ -132,7 +130,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
         public bool IsMoving() => lerp < 1;
 
-        public void Simulate(float rotationMagnitude, float velocityMagnitude, bool HasLayerActive, Vector3 localTposeHips, Vector3 hipsPosLocal)
+        public void Simulate(bool HasLayerActive, Vector3 localTposeHips, Vector3 hipsPosLocal, Vector3 HipsRotation)
         {
             if (foot.HasTracked == BasisHasTracked.HasTracker)
             {
@@ -143,11 +141,11 @@ public class BasisFootPlacementDriver : MonoBehaviour
             CalculateFootPositions(localTposeHips, hipsPosLocal);
 
             IsFeetFarApart = Vector3.Distance(foot.OutGoingData.position, LastFootPosition) > driver.FootDistanceBetweeneachOther;
-            HasMotionForMovement = ShouldStartMoving(rotationMagnitude, velocityMagnitude);
-            if (HasMotionForMovement || IsFeetFarApart)
+            RotationDifference = Mathf.Abs(HipsRotation.y - foot.OutGoingData.rotation.eulerAngles.y);
+            if ((IsFeetFarApart || RotationDifference > RotationBeforeMove) && !otherFoot.IsMoving() && lerp >= 1)
             {
-//HasraycastHit = Physics.Linecast(lowerLeg.OutgoingWorldData.position, worldBottomPoint, out hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal);
-               // if (HasraycastHit)
+                //HasraycastHit = Physics.Linecast(lowerLeg.OutgoingWorldData.position, worldBottomPoint, out hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal);
+                // if (HasraycastHit)
                 {
                     lerp = 0;
                 }
@@ -174,10 +172,6 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
             bottomPointLocal = footExtendedPositionWorld + new Vector3(0, yDifference / percentagePastFoot, 0);
             worldBottomPoint = lowerLeg.OutgoingWorldData.position + offset;
-        }
-        private bool ShouldStartMoving(float rotationMagnitude, float velocityMagnitude)
-        {
-            return velocityMagnitude < smallerThenThisAllowVelocity && rotationMagnitude > largerThenThisMoveFeet && !otherFoot.IsMoving() && lerp >= 1;
         }
         private void MoveFoot()
         {
