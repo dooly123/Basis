@@ -1,8 +1,8 @@
-using Assets.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public class BasisFacialBlinkDriver : MonoBehaviour
 {

@@ -1,8 +1,8 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
-namespace Assets.Scripts.Device_Management.Devices.OpenXR
+namespace Basis.Scripts.Device_Management.Devices.OpenXR
 {
 [DefaultExecutionOrder(15101)]
 public class BasisOpenXRInput : BasisInput

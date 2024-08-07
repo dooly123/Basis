@@ -27,7 +27,7 @@ using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using System.Threading;
 
-namespace Assets.Scripts.LipSync.Scripts
+namespace Basis.Scripts.LipSync.Scripts
 {
 [RequireComponent(typeof(AudioSource))]
 

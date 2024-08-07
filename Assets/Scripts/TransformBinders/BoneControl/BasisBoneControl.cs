@@ -1,15 +1,15 @@
 ﻿#if UNITY_EDITOR
-using Assets.Scripts.Avatar;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Common;
-using Assets.Scripts.Common.Enums;
+using Basis.Scripts.Avatar;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
+using Basis.Scripts.Common.Enums;
 using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.Events;
-using static Assets.Scripts.Avatar.BasisAvatarIKStageCalibration;
+using static Basis.Scripts.Avatar.BasisAvatarIKStageCalibration;
 
-namespace Assets.Scripts.TransformBinders.BoneControl
+namespace Basis.Scripts.TransformBinders.BoneControl
 {
 [System.Serializable]
 public class BasisBoneControl

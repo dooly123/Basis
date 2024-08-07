@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.TransformBinders.BoneControl
+namespace Basis.Scripts.TransformBinders.BoneControl
 {
 [System.Serializable]
 public class BasisFallBone

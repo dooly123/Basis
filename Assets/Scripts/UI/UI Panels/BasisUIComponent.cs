@@ -1,8 +1,8 @@
-using Assets.Scripts.Drivers;
+using Basis.Scripts.Drivers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI.UI_Panels
+namespace Basis.Scripts.UI.UI_Panels
 {
 public class BasisUIComponent : MonoBehaviour
 {

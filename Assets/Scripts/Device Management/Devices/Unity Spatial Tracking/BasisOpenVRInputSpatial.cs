@@ -1,10 +1,10 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using Valve.VR;
 
-namespace Assets.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
+namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
 {
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInputSpatial : BasisInput

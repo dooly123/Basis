@@ -1,4 +1,4 @@
-namespace Assets.Scripts.Networking.Compression
+namespace Basis.Scripts.Networking.Compression
 {
 public static class BasisNetworkConstants
 {

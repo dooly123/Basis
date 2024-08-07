@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Animator_Driver
+﻿namespace Basis.Scripts.Animator_Driver
 {
 [System.Serializable]
 public struct BasisAvatarAnimatorHash

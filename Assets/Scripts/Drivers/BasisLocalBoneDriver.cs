@@ -1,7 +1,7 @@
-using Assets.Scripts.Device_Management;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.TransformBinders.BoneControl;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public class BasisLocalBoneDriver : BaseBoneDriver
 {

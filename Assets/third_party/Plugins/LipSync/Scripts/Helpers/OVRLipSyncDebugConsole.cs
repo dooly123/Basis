@@ -24,7 +24,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-namespace Assets.Scripts.LipSync.Scripts.Helpers
+namespace Basis.Scripts.LipSync.Scripts.Helpers
 {
 public class OVRLipSyncDebugConsole : MonoBehaviour
 {

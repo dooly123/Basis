@@ -1,15 +1,15 @@
-using Assets.Scripts.Addressable_Driver;
-using Assets.Scripts.Addressable_Driver.Enums;
-using Assets.Scripts.Avatar;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management;
-using Assets.Scripts.Device_Management.Devices;
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Addressable_Driver.Enums;
+using Basis.Scripts.Avatar;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI.UI_Panels
+namespace Basis.Scripts.UI.UI_Panels
 {
     public class BasisHamburgerMenu : BasisUIBase
 {

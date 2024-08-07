@@ -1,12 +1,12 @@
-using Assets.Scripts.Networking.Compression;
-using Assets.Scripts.Networking.NetworkedAvatar;
-using Assets.Scripts.Networking.Smoothing;
+using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.Smoothing;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Assets.Scripts.Tests
+namespace Basis.Scripts.Tests
 {
 public class BasisLocalAvatarReader : MonoBehaviour
 {

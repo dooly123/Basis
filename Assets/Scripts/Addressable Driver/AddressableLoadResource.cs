@@ -1,5 +1,5 @@
-using Assets.Scripts.Addressable_Driver.Debug;
-using Assets.Scripts.Addressable_Driver.Enums;
+using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.Enums;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
@@ -8,7 +8,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.Addressable_Driver
+namespace Basis.Scripts.Addressable_Driver
 {
 [System.Serializable]
 public class AddressableLoadResourceBase

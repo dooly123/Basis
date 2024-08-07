@@ -1,11 +1,11 @@
-using Assets.Scripts.BasisSdk;
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Helpers.Editor;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Helpers.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Scripts.Editor
+namespace Basis.Scripts.Editor
 {
 public class BasisAvatarGizmoEditor : MonoBehaviour
 {

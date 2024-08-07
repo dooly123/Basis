@@ -3,7 +3,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using Unity.Profiling.Editor;
 
-namespace Assets.Scripts.Profiler
+namespace Basis.Scripts.Profiler
 {
 [System.Serializable]
 [ProfilerModuleMetadata("Byte Array Count")]

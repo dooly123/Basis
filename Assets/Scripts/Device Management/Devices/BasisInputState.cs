@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Device_Management.Devices
+namespace Basis.Scripts.Device_Management.Devices
 {
 [System.Serializable]
 public class BasisInputState

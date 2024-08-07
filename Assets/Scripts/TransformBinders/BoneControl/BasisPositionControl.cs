@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Common.Enums;
+﻿using Basis.Scripts.Common.Enums;
 using System;
 using UnityEngine;
 
-namespace Assets.Scripts.TransformBinders.BoneControl
+namespace Basis.Scripts.TransformBinders.BoneControl
 {
 [System.Serializable]
 public struct BasisPositionControl

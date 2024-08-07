@@ -1,10 +1,10 @@
-using Assets.Scripts.BasisSdk;
-using Assets.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Assets.Scripts.Editor
+namespace Basis.Scripts.Editor
 {
 public static class BasisAutomaticSetupAvatarEditor
 {

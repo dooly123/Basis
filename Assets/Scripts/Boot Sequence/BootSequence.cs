@@ -1,11 +1,11 @@
-using Assets.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.Addressable_Driver.Resource;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Assets.Scripts.Boot_Sequence
+namespace Basis.Scripts.Boot_Sequence
 {
 public static class BootSequence
 {

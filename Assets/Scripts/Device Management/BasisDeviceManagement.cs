@@ -1,17 +1,17 @@
-using Assets.Scripts.Addressable_Driver.Resource;
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Command_Line_Args;
-using Assets.Scripts.Common;
-using Assets.Scripts.Device_Management.Devices;
-using Assets.Scripts.Device_Management.Devices.Desktop;
-using Assets.Scripts.Device_Management.Devices.OpenVR;
-using Assets.Scripts.Device_Management.Devices.OpenXR;
-using Assets.Scripts.Device_Management.Devices.Simulation;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.Player;
-using Assets.Scripts.TransformBinders;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Command_Line_Args;
+using Basis.Scripts.Common;
+using Basis.Scripts.Device_Management.Devices;
+using Basis.Scripts.Device_Management.Devices.Desktop;
+using Basis.Scripts.Device_Management.Devices.OpenVR;
+using Basis.Scripts.Device_Management.Devices.OpenXR;
+using Basis.Scripts.Device_Management.Devices.Simulation;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.Player;
+using Basis.Scripts.TransformBinders;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Assets.Scripts.Device_Management
+namespace Basis.Scripts.Device_Management
 {
 public partial class BasisDeviceManagement : MonoBehaviour
 {

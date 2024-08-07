@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Management;
 
-namespace Assets.Scripts.Device_Management.Devices
+namespace Basis.Scripts.Device_Management.Devices
 {
 [System.Serializable]
 public class BasisXRManagement

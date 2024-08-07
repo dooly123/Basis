@@ -1,7 +1,7 @@
-using Assets.Scripts.Drivers;
+using Basis.Scripts.Drivers;
 using UnityEngine;
 
-namespace Assets.Scripts.Eye_Follow
+namespace Basis.Scripts.Eye_Follow
 {
 public abstract class BasisEyeFollowBase : MonoBehaviour
 {

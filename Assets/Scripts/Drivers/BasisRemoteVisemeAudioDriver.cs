@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public class BasisRemoteVisemeAudioDriver : MonoBehaviour
 {

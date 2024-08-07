@@ -1,8 +1,8 @@
-using Assets.Scripts.BasisSdk.Players;
+using Basis.Scripts.BasisSdk.Players;
 using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Device_Management.Devices.Desktop
+namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
 [Serializable]
 public class BasisDesktopManagement

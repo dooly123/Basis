@@ -1,8 +1,8 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Drivers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Drivers;
 using UnityEngine;
 
-namespace Assets.Scripts.Eye_Follow
+namespace Basis.Scripts.Eye_Follow
 {
 public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
 {

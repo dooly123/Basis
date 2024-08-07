@@ -1,6 +1,6 @@
-using Assets.Scripts.BasisSdk;
-using Assets.Scripts.BasisSdk.Helpers.Editor;
-using Assets.Scripts.Editor;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers.Editor;
+using Basis.Scripts.Editor;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;

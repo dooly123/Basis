@@ -1,8 +1,8 @@
-using Assets.Scripts.BasisSdk;
-using Assets.Scripts.LipSync.Scripts;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.LipSync.Scripts;
 using UnityEngine;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public class BasisVisemeDriver : OVRLipSyncContextBase
 {

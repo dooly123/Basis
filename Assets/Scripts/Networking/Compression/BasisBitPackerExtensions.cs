@@ -1,9 +1,9 @@
-﻿using Assets.Scripts.Networking.NetworkedAvatar;
+﻿using Basis.Scripts.Networking.NetworkedAvatar;
 using DarkRift;
 using Unity.Collections;
 using UnityEngine;
 
-namespace Assets.Scripts.Networking.Compression
+namespace Basis.Scripts.Networking.Compression
 {
 public static class BasisBitPackerExtensions
 {

@@ -1,9 +1,9 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management.Devices.OpenVR.Structs;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
 using UnityEngine;
 using Valve.VR;
 
-namespace Assets.Scripts.Device_Management.Devices.OpenVR
+namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
 [System.Serializable]
 public class BasisOpenVRInputSkeleton : BasisInputSkeleton

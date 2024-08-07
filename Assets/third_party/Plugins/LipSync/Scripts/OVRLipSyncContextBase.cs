@@ -22,7 +22,7 @@ limitations under the License.
 ************************************************************************************/
 using UnityEngine;
 
-namespace Assets.Scripts.LipSync.Scripts
+namespace Basis.Scripts.LipSync.Scripts
 {
 //-------------------------------------------------------------------------------------
 // ***** OVRLipSyncContextBase

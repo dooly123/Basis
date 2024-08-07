@@ -1,15 +1,15 @@
-using Assets.Scripts.BasisSdk;
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Common;
-using Assets.Scripts.Common.Enums;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
+using Basis.Scripts.Common.Enums;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public abstract class BasisAvatarDriver : MonoBehaviour
 {

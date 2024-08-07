@@ -1,10 +1,10 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management;
-using Assets.Scripts.Device_Management.Devices;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
-namespace Assets.Scripts.TransformBinders
+namespace Basis.Scripts.TransformBinders
 {
 public class BasisLockToInput : MonoBehaviour
 {

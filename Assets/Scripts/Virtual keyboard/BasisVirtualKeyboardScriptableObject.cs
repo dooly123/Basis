@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Virtual_keyboard
+namespace Basis.Scripts.Virtual_keyboard
 {
 [Serializable]
 [CreateAssetMenu(fileName = "Data", menuName = "Basis/KeyboardLayoutData", order = 1)]

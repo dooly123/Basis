@@ -1,7 +1,7 @@
 using DarkRift;
 using UnityEngine;
 
-namespace Assets.Scripts.Networking.Compression
+namespace Basis.Scripts.Networking.Compression
 {
 public static class BasisCompressionOfRotation
 {

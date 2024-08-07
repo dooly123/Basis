@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.Addressable_Driver.Debug
+namespace Basis.Scripts.Addressable_Driver.Debug
 {
     public static class AddressableDebug
     {

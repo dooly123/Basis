@@ -1,8 +1,8 @@
-using Assets.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.NetworkedAvatar;
 using DarkRift;
 using Unity.Collections;
 
-namespace Assets.Scripts.Networking.Compression
+namespace Basis.Scripts.Networking.Compression
 {
 public class BasisCompressionOfMuscles
 {

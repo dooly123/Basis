@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Common.Enums
+﻿namespace Basis.Scripts.Common.Enums
 {
 public enum BasisVectorLerp
 {

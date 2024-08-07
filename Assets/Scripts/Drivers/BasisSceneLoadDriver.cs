@@ -1,10 +1,10 @@
-using Assets.Scripts.Addressable_Driver;
-using Assets.Scripts.Addressable_Driver.Factory;
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Addressable_Driver.Factory;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public static class BasisSceneLoadDriver
 {

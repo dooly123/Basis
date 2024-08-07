@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Assets.Scripts.Networking.Compression
+namespace Basis.Scripts.Networking.Compression
 {
 /// <summary>Functions to Compress Quaternions and Floats</summary>
 public static class BasisCompression

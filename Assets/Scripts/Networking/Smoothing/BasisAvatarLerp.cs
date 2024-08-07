@@ -1,9 +1,9 @@
-using Assets.Scripts.Networking.NetworkedAvatar;
-using Assets.Scripts.Tests;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Tests;
 using Unity.Jobs;
 using UnityEngine.Animations;
 
-namespace Assets.Scripts.Networking.Smoothing
+namespace Basis.Scripts.Networking.Smoothing
 {
 public static class BasisAvatarLerp
 {

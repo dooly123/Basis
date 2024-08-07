@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static Assets.Scripts.Virtual_keyboard.KeyboardLayoutData;
-namespace Assets.Scripts.Virtual_keyboard
+using static Basis.Scripts.Virtual_keyboard.KeyboardLayoutData;
+namespace Basis.Scripts.Virtual_keyboard
 {
 public class BasisVirtualRow
 {

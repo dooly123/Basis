@@ -1,10 +1,10 @@
-using Assets.Scripts.BasisSdk.Players;
+using Basis.Scripts.BasisSdk.Players;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI.UI_Panels
+namespace Basis.Scripts.UI.UI_Panels
 {
 public class BasisUIAvatarSelection : BasisUIBase
 {

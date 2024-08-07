@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Scripts.Common
+namespace Basis.Scripts.Common
 {
 /// <summary>
 /// Hungarian Algorithm.

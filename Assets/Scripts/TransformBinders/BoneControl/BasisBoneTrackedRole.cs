@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.TransformBinders.BoneControl
+﻿namespace Basis.Scripts.TransformBinders.BoneControl
 {
 public enum BasisBoneTrackedRole
 {

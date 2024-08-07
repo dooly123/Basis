@@ -22,7 +22,7 @@ limitations under the License.
 ************************************************************************************/
 using UnityEngine;
 
-namespace Assets.Scripts.LipSync.Scripts.Helpers
+namespace Basis.Scripts.LipSync.Scripts.Helpers
 {
 // Adds support for a named array attribute in the editor
 public class OVRNamedArrayAttribute : PropertyAttribute {

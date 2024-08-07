@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine;
-using Assets.Scripts.TransformBinders.BoneControl;
-using Assets.Scripts.Avatar;
-using Assets.Scripts.Common.Enums;
-using Assets.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Avatar;
+using Basis.Scripts.Common.Enums;
+using Basis.Scripts.BasisSdk.Helpers;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public abstract class BaseBoneDriver : MonoBehaviour
 {

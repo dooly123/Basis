@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management.Devices.OpenVR.Structs;
-using Assets.Scripts.Device_Management.Devices.Unity_Spatial_Tracking;
-using Assets.Scripts.TransformBinders.BoneControl;
+﻿using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
+using Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Text;
 using UnityEngine;
 using Valve.VR;
 
-namespace Assets.Scripts.Device_Management.Devices.OpenVR
+namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
     [Serializable]
     public class BasisOpenVRManagement

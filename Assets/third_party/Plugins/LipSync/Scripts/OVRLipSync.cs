@@ -23,9 +23,9 @@ limitations under the License.
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
-using Assets.Scripts.LipSync.Scripts.Helpers;
+using Basis.Scripts.LipSync.Scripts.Helpers;
 
-namespace Assets.Scripts.LipSync.Scripts
+namespace Basis.Scripts.LipSync.Scripts
 {
 //-------------------------------------------------------------------------------------
 // ***** OVRLipSync

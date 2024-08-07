@@ -1,12 +1,12 @@
-using Assets.Scripts.Networking.Compression;
-using Assets.Scripts.Networking.NetworkedPlayer;
-using Assets.Scripts.Tests;
+using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Tests;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static SerializableDarkRift;
 
-namespace Assets.Scripts.Networking.NetworkedAvatar
+namespace Basis.Scripts.Networking.NetworkedAvatar
 {
 /// <summary>
 /// the goal of this script is to be the glue of consistent data between remote and local

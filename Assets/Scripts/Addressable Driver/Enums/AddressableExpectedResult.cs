@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Addressable_Driver.Enums
+﻿namespace Basis.Scripts.Addressable_Driver.Enums
 {
 public enum AddressableExpectedResult
 {

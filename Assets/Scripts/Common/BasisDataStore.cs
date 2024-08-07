@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace Assets.Scripts.Common
+namespace Basis.Scripts.Common
 {
 public static class BasisDataStore
 {

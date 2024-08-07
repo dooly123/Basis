@@ -1,6 +1,6 @@
 using Valve.VR;
 
-namespace Assets.Scripts.Device_Management.Devices.OpenVR
+namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
     public class BasisOpenVRInputEye : BasisInputEye
     {

@@ -1,9 +1,9 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management.Devices;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Assets.Scripts.Device_Management
+namespace Basis.Scripts.Device_Management
 {
 public class BasisVisualTracker : MonoBehaviour
 {

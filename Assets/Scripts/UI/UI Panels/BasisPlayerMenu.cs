@@ -1,10 +1,10 @@
-using Assets.Scripts.Addressable_Driver;
-using Assets.Scripts.Addressable_Driver.Enums;
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Addressable_Driver.Enums;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI.UI_Panels
+namespace Basis.Scripts.UI.UI_Panels
 {
 public class BasisPlayerMenu : BasisUIBase
 {

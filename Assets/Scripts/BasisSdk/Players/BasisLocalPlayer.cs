@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using System;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.Device_Management.Devices.Desktop;
-using Assets.Scripts.Device_Management;
-using Assets.Scripts.TransformBinders.BoneControl;
-using Assets.Scripts.Common;
-using Assets.Scripts.Avatar;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.Device_Management.Devices.Desktop;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Common;
+using Basis.Scripts.Avatar;
 
 
 
@@ -21,7 +21,7 @@ using Assets.Scripts.Avatar;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-namespace Assets.Scripts.BasisSdk.Players
+namespace Basis.Scripts.BasisSdk.Players
 {
 public class BasisLocalPlayer : BasisPlayer
 {
@@ -35,7 +35,7 @@ public class BasisLocalPlayer : BasisPlayer
     public static BasisLocalPlayer Instance;
     public static Action OnLocalPlayerCreatedAndReady;
     public static Action OnLocalPlayerCreated;
-        public Assets.Scripts.BasisCharacterController.BasisCharacterController Move;
+        public Basis.Scripts.BasisCharacterController.BasisCharacterController Move;
     public event Action OnLocalAvatarChanged;
     public event Action OnSpawnedEvent;
     public event Action OnPlayersHeightChanged;
@@ -84,7 +84,7 @@ public class BasisLocalPlayer : BasisPlayer
     public void RecalculateMyHeight()
     {
         Debug.Log("Attempting RecalculateMyHeight");
-            Assets.Scripts.TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
+            Basis.Scripts.TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
         if (BasisLockToInput != null)
         {
             if (BasisLockToInput.AttachedInput != null)

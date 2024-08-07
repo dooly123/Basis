@@ -1,11 +1,11 @@
-﻿using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management.Devices;
-using Assets.Scripts.TransformBinders.BoneControl;
+﻿using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Avatar
+namespace Basis.Scripts.Avatar
 {
 public static partial class BasisAvatarIKStageCalibration
 {

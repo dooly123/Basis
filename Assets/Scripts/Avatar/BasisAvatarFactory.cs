@@ -1,15 +1,15 @@
-using Assets.Scripts.Addressable_Driver;
-using Assets.Scripts.Addressable_Driver.Factory;
-using Assets.Scripts.Addressable_Driver.Resource;
-using Assets.Scripts.BasisSdk;
-using Assets.Scripts.BasisSdk.Players;
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Addressable_Driver.Factory;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Players;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Assets.Scripts.Avatar
+namespace Basis.Scripts.Avatar
 {
 public static class BasisAvatarFactory
 {

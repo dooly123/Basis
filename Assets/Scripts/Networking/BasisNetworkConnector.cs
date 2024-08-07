@@ -1,11 +1,11 @@
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Networking.Factorys;
-using Assets.Scripts.Networking.NetworkedAvatar;
-using Assets.Scripts.Networking.NetworkedPlayer;
-using Assets.Scripts.Networking.Recievers;
-using Assets.Scripts.Networking.Transmitters;
-using Assets.Scripts.Player;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.Factorys;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Networking.Recievers;
+using Basis.Scripts.Networking.Transmitters;
+using Basis.Scripts.Player;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
@@ -23,7 +23,7 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using static SerializableDarkRift;
 
-namespace Assets.Scripts.Networking
+namespace Basis.Scripts.Networking
 {
 public class BasisNetworkConnector : MonoBehaviour
 {

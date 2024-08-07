@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Scripts.Networking.Recievers
+namespace Basis.Scripts.Networking.Recievers
 {
 public partial class BasisAudioReceiverBase
 {

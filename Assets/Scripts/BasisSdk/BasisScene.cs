@@ -1,9 +1,9 @@
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
 using System.Collections;
 using UnityEngine;
 
-namespace Assets.Scripts.BasisSdk
+namespace Basis.Scripts.BasisSdk
 {
 public class BasisScene : MonoBehaviour
 {

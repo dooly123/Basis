@@ -1,8 +1,8 @@
-using Assets.Scripts.Device_Management;
+using Basis.Scripts.Device_Management;
 using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Command_Line_Args
+namespace Basis.Scripts.Command_Line_Args
 {
 public static class CommandLineArgs
 {

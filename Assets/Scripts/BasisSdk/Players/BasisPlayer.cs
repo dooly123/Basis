@@ -1,9 +1,9 @@
-using Assets.Scripts.Addressable_Driver;
-using Assets.Scripts.Drivers;
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Drivers;
 using System;
 using UnityEngine;
 
-namespace Assets.Scripts.BasisSdk.Players
+namespace Basis.Scripts.BasisSdk.Players
 {
 public abstract class BasisPlayer : MonoBehaviour
 {

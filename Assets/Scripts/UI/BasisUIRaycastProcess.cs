@@ -1,12 +1,12 @@
-using Assets.Scripts.Device_Management;
-using Assets.Scripts.Device_Management.Devices;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Assets.Scripts.UI.BasisPointRaycaster;
+using static Basis.Scripts.UI.BasisPointRaycaster;
 
-namespace Assets.Scripts.UI
+namespace Basis.Scripts.UI
 {
 public class BasisUIRaycastProcess 
 {

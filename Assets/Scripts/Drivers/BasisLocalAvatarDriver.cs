@@ -1,14 +1,14 @@
-using Assets.Scripts.Animator_Driver;
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Common.Enums;
-using Assets.Scripts.Eye_Follow;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Animator_Driver;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common.Enums;
+using Basis.Scripts.Eye_Follow;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public class BasisLocalAvatarDriver : BasisAvatarDriver
 {

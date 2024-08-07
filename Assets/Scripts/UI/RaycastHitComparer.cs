@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Assets.Scripts.UI
+namespace Basis.Scripts.UI
 {
 public partial class BasisPointRaycaster
 {

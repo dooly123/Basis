@@ -1,11 +1,11 @@
-using Assets.Scripts.Addressable_Driver.Enums;
-using Assets.Scripts.Addressable_Driver.Factory;
+using Basis.Scripts.Addressable_Driver.Enums;
+using Basis.Scripts.Addressable_Driver.Factory;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Assets.Scripts.Addressable_Driver.Resource
+namespace Basis.Scripts.Addressable_Driver.Resource
 {
 public static class AddressableResourceProcess
 {

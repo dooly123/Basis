@@ -1,7 +1,7 @@
 ﻿using System;
 using Valve.VR;
 
-namespace Assets.Scripts.Device_Management.Devices.OpenVR.Structs
+namespace Basis.Scripts.Device_Management.Devices.OpenVR.Structs
 {
 [System.Serializable]
 public struct OpenVRDevice

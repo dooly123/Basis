@@ -1,7 +1,7 @@
-using Assets.Scripts.Device_Management;
+using Basis.Scripts.Device_Management;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.UI_Panels
+namespace Basis.Scripts.UI.UI_Panels
 {
 public class SwitchActiveMode : MonoBehaviour
 {

@@ -1,10 +1,10 @@
-﻿using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management.Devices.OpenVR.Structs;
-using Assets.Scripts.TransformBinders.BoneControl;
+﻿using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using Valve.VR;
 
-namespace Assets.Scripts.Device_Management.Devices.OpenVR
+namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
 [DefaultExecutionOrder(15101)]
 ///only used for trackers!

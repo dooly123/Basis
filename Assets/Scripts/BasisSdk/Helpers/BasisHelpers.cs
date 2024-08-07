@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.BasisSdk.Helpers
+namespace Basis.Scripts.BasisSdk.Helpers
 {
 public static class BasisHelpers
 {

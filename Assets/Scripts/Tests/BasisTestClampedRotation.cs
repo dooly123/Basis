@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.Tests
+namespace Basis.Scripts.Tests
 {
 public class BasisTestClampedRotation : MonoBehaviour
 {

@@ -1,8 +1,8 @@
-using Assets.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI
+namespace Basis.Scripts.UI
 {
 public class BasisGraphicUIRayCaster : MonoBehaviour
 {

@@ -5,7 +5,7 @@ using UnityEngine.XR;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using RenderPipeline = UnityEngine.Rendering.RenderPipelineManager;
-using Assets.Scripts.Device_Management.Devices;
+using Basis.Scripts.Device_Management.Devices;
 
 [ExecuteInEditMode]
 public class Mirror : MonoBehaviour

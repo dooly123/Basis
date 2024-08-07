@@ -1,9 +1,9 @@
-using Assets.Scripts.Addressable_Driver.Debug;
-using Assets.Scripts.Addressable_Driver.Enums;
+using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.Enums;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.Addressable_Driver.Scene
+namespace Basis.Scripts.Addressable_Driver.Scene
 {
 public static class AddressableSceneSetActive
 {

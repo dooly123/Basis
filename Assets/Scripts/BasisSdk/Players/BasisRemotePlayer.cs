@@ -1,10 +1,10 @@
-using Assets.Scripts.Avatar;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.TransformBinders.BoneControl;
-using Assets.Scripts.UI.NamePlate;
+using Basis.Scripts.Avatar;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.UI.NamePlate;
 using UnityEngine;
 using static SerializableDarkRift;
-namespace Assets.Scripts.BasisSdk.Players
+namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisRemotePlayer : BasisPlayer
     {

@@ -1,17 +1,17 @@
-using Assets.Scripts.Avatar;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management.Devices.Desktop;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Avatar;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices.Desktop;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
-using static Assets.Scripts.Device_Management.BasisDeviceManagement;
+using static Basis.Scripts.Device_Management.BasisDeviceManagement;
 using Random = UnityEngine.Random;
 
-namespace Assets.Scripts.Device_Management.Devices.Simulation
+namespace Basis.Scripts.Device_Management.Devices.Simulation
 {
 public class BasisSimulateXR
 {

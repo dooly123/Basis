@@ -1,11 +1,11 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.TransformBinders.BoneControl;
-using Assets.Scripts.UI.UI_Panels;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.UI.UI_Panels;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.NamePlate
+namespace Basis.Scripts.UI.NamePlate
 {
 public abstract class BasisNamePlate : MonoBehaviour
 {

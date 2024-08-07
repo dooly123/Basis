@@ -1,11 +1,11 @@
-using Assets.Scripts.BasisSdk;
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
 using JigglePhysics;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public class BasisAvatarStrainJiggleDriver : MonoBehaviour
 {

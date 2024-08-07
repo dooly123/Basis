@@ -1,12 +1,12 @@
-using Assets.Scripts.Addressable_Driver.Resource;
-using Assets.Scripts.BasisSdk.Players;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk.Players;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using static SerializableDarkRift;
 
-namespace Assets.Scripts.Player
+namespace Basis.Scripts.Player
 {
 public static class BasisPlayerFactory
 {

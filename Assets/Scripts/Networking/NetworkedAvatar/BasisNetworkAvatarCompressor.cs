@@ -1,11 +1,11 @@
-using Assets.Scripts.Networking.Compression;
-using Assets.Scripts.Profiler;
+using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Profiler;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
 using static SerializableDarkRift;
 
-namespace Assets.Scripts.Networking.NetworkedAvatar
+namespace Basis.Scripts.Networking.NetworkedAvatar
 {
 public static class BasisNetworkAvatarCompressor
 {

@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.TransformBinders.BoneControl;
+﻿using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Device_Management
+namespace Basis.Scripts.Device_Management
 {
 [System.Serializable]
 public class BasisDeviceMatchableNames

@@ -23,7 +23,7 @@ limitations under the License.
 using UnityEngine;
 using System.Linq;
 
-namespace Assets.Scripts.LipSync.Scripts
+namespace Basis.Scripts.LipSync.Scripts
 {
 public class OVRLipSyncContextMorphTarget : MonoBehaviour
 {

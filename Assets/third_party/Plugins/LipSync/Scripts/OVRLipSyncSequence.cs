@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace Assets.Scripts.LipSync.Scripts
+namespace Basis.Scripts.LipSync.Scripts
 {
 // Sequence - holds ordered entries for playback
 [System.Serializable]

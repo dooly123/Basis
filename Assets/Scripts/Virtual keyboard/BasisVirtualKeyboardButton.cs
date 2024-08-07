@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Virtual_keyboard
+namespace Basis.Scripts.Virtual_keyboard
 {
 public struct BasisVirtualKeyboardButton
 {

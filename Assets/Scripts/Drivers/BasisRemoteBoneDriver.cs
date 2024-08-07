@@ -1,8 +1,8 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
-namespace Assets.Scripts.Drivers
+namespace Basis.Scripts.Drivers
 {
 public class BasisRemoteBoneDriver : BaseBoneDriver
 {

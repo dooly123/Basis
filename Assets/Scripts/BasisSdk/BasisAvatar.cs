@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.BasisSdk
+namespace Basis.Scripts.BasisSdk
 {
 public class BasisAvatar : MonoBehaviour
 {

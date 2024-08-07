@@ -1,5 +1,5 @@
-using Assets.Scripts.Drivers;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEditor;
 using UnityEngine;

@@ -1,11 +1,11 @@
-using Assets.Scripts.Addressable_Driver.Resource;
-using Assets.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.Networking.NetworkedPlayer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Assets.Scripts.Networking.Factorys
+namespace Basis.Scripts.Networking.Factorys
 {
 public static class BasisPlayerFactoryNetworked
 {

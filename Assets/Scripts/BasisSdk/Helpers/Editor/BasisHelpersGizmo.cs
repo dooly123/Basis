@@ -3,7 +3,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Scripts.BasisSdk.Helpers.Editor
+namespace Basis.Scripts.BasisSdk.Helpers.Editor
 {
 public static class BasisHelpersGizmo
 {

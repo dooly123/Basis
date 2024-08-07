@@ -1,13 +1,13 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Networking.NetworkedAvatar;
-using Assets.Scripts.Networking.NetworkedPlayer;
-using Assets.Scripts.Networking.Smoothing;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Networking.Smoothing;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
 
-namespace Assets.Scripts.Networking.Recievers
+namespace Basis.Scripts.Networking.Recievers
 {
 [DefaultExecutionOrder(15002)]
 [System.Serializable]

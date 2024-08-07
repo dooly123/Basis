@@ -1,11 +1,11 @@
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.Networking.NetworkedPlayer;
 using UnityEngine;
 
-namespace Assets.Scripts.Networking.Recievers
+namespace Basis.Scripts.Networking.Recievers
 {
 [System.Serializable]
 public class BasisAudioReceiver : BasisAudioReceiverBase

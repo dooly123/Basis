@@ -1,14 +1,14 @@
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Device_Management;
-using Assets.Scripts.Device_Management.Devices.Desktop;
-using Assets.Scripts.Virtual_keyboard;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices.Desktop;
+using Basis.Scripts.Virtual_keyboard;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI
+namespace Basis.Scripts.UI
 {
 public class BasisInputModuleHandler : BaseInputModule
 {

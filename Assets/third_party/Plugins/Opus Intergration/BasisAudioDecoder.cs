@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using UnityOpus;
-using Assets.Scripts.Device_Management;
+using Basis.Scripts.Device_Management;
 
 public class BasisAudioDecoder : MonoBehaviour
 {

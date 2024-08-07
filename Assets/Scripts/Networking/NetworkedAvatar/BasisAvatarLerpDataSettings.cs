@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.Networking.NetworkedAvatar
+namespace Basis.Scripts.Networking.NetworkedAvatar
 {
 [CreateAssetMenu(fileName = "NewAvatarLerpData", menuName = "Avatar Lerp Data")]
 public class BasisAvatarLerpDataSettings : ScriptableObject

@@ -1,10 +1,10 @@
-using Assets.Scripts.Networking.Compression;
-using Assets.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Networking.NetworkedAvatar;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static SerializableDarkRift;
 
-namespace Assets.Scripts.Tests
+namespace Basis.Scripts.Tests
 {
 public class BasisRemoteAvatarWriter : MonoBehaviour
 {

@@ -1,8 +1,8 @@
-using Assets.Scripts.Addressable_Driver.Debug;
-using Assets.Scripts.Addressable_Driver.Enums;
+using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.Enums;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Assets.Scripts.Addressable_Driver.Validation
+namespace Basis.Scripts.Addressable_Driver.Validation
 {
 public static class AddressableValidation
 {

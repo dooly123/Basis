@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Common;
-using Assets.Scripts.Networking;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
+using Basis.Scripts.Networking;
 
-namespace Assets.Scripts.UI.UI_Panels
+namespace Basis.Scripts.UI.UI_Panels
 {
 public class BasisSetUserName : MonoBehaviour
 {

@@ -1,11 +1,11 @@
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.TransformBinders;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.TransformBinders;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
-namespace Assets.Scripts.Device_Management.Devices.Desktop
+namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
     public class BasisAvatarEyeInput : BasisInput
 {

@@ -1,15 +1,15 @@
-using Assets.Scripts.Addressable_Driver.Resource;
-using Assets.Scripts.BasisSdk.Helpers;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.Drivers;
-using Assets.Scripts.UI.UI_Panels;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.UI.UI_Panels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Assets.Scripts.Device_Management.Devices.Desktop
+namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
 public class BasisLocalInputActions : MonoBehaviour
 {

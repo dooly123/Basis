@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using static Assets.Scripts.Virtual_keyboard.KeyboardLayoutData;
-using Assets.Scripts.Virtual_keyboard;
-using static Assets.Scripts.Virtual_keyboard.Editor.KeyboardLayoutDataEditor;
+using static Basis.Scripts.Virtual_keyboard.KeyboardLayoutData;
+using Basis.Scripts.Virtual_keyboard;
+using static Basis.Scripts.Virtual_keyboard.Editor.KeyboardLayoutDataEditor;
 
 [CustomEditor(typeof(KeyboardLayoutData))]
 public partial class KeyboardLayoutDataEditor : Editor

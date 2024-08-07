@@ -16,7 +16,7 @@ using UnityEngine.InputSystem;
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Assets.Scripts.UI.UI_Panels
+namespace Basis.Scripts.UI.UI_Panels
 {
 #endif
 

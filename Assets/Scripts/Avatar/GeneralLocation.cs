@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Avatar
+﻿namespace Basis.Scripts.Avatar
 {
 #if UNITY_EDITOR
 #endif

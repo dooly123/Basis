@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Assets.Scripts.UI
+namespace Basis.Scripts.UI
 {
 public class BasisPointerEventData : PointerEventData
 {

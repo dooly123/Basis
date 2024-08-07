@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using System.Collections.Specialized;
 using System.Threading;
 
-namespace Assets.Scripts.Networking
+namespace Basis.Scripts.Networking
 {
     [AddComponentMenu("DarkRift/Server")]
     public class NetworkServer : MonoBehaviour

@@ -1,5 +1,5 @@
-using Assets.Scripts.Addressable_Driver.Debug;
-using Assets.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.Resource;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Assets.Scripts.Addressable_Driver.Loading
+namespace Basis.Scripts.Addressable_Driver.Loading
 {
     public class AddressableLoadingCalculation : MonoBehaviour
 {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Common
+namespace Basis.Scripts.Common
 {
 [System.Serializable]
 public struct BasisCalibratedOffsetData

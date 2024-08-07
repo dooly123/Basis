@@ -1,11 +1,11 @@
-using Assets.Scripts.Addressable_Driver.Resource;
-using Assets.Scripts.BasisSdk.Players;
-using Assets.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.UI.NamePlate
+namespace Basis.Scripts.UI.NamePlate
 {
 public class BasisRemoteNamePlate : BasisNamePlate
 {

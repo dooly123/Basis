@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace Assets.Scripts.Device_Management.Editor
+namespace Basis.Scripts.Device_Management.Editor
 {
 public static class DeviceManagementEditor
 {

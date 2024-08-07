@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.Device_Management
+﻿namespace Basis.Scripts.Device_Management
 {
 public enum BasisBootedMode
 {

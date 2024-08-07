@@ -1,8 +1,8 @@
-using Assets.Scripts.Drivers;
+using Basis.Scripts.Drivers;
 using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Networking.Recievers
+namespace Basis.Scripts.Networking.Recievers
 {
 public partial class BasisAudioReceiverBase
 {

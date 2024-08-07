@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
-namespace Assets.Scripts.Networking.NetworkedAvatar
+namespace Basis.Scripts.Networking.NetworkedAvatar
 {
 [System.Serializable]
 public struct BasisAvatarData

@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Networking.NetworkedAvatar;
+﻿using Basis.Scripts.Networking.NetworkedAvatar;
 using Unity.Jobs;
 
-namespace Assets.Scripts.Tests
+namespace Basis.Scripts.Tests
 {
 public struct DataJobs
 {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.UI
+namespace Basis.Scripts.UI
 {
 public partial class BasisPointRaycaster
 {

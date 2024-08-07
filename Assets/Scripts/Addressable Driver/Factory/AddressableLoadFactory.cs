@@ -1,11 +1,11 @@
-using Assets.Scripts.Addressable_Driver.Debug;
-using Assets.Scripts.Addressable_Driver.Resource;
-using Assets.Scripts.Addressable_Driver.Validation;
+using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.Addressable_Driver.Validation;
 using System;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 
-namespace Assets.Scripts.Addressable_Driver.Factory
+namespace Basis.Scripts.Addressable_Driver.Factory
 {
 /// <summary>
 /// Factory class for loading addressable assets asynchronously.

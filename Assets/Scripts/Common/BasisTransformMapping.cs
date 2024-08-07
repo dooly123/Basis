@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Common
+namespace Basis.Scripts.Common
 {
 public class BasisTransformMapping
 {

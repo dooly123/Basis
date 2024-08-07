@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Scripts.Networking.Compression
+namespace Basis.Scripts.Networking.Compression
 {
 [System.Serializable]
 public class BasisRangedUshortFloatData
