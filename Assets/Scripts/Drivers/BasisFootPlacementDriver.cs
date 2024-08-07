@@ -5,72 +5,111 @@ public class BasisFootPlacementDriver : MonoBehaviour
 {
     public BasisLocalPlayer Localplayer;
     public BasisBoneControl Hips;
-    [SerializeField]
-    public BasisIKFootSolver LeftFootSolver = new BasisIKFootSolver();
-    [SerializeField]
-    public BasisIKFootSolver RightFootSolver = new BasisIKFootSolver();
-    public bool HasEvents = false;
+
+    [SerializeField] public BasisIKFootSolver leftFootSolver = new BasisIKFootSolver();
+    [SerializeField] public BasisIKFootSolver rightFootSolver = new BasisIKFootSolver();
+
+    public bool HasEvents { get; private set; } = false;
     public float DefaultFootOffset = 0.35f;
-    public float LargerThenBeforeRotating = 400;
-    public float SquareAngular;
-    public float SquareVel;
+    public float LargerThenBeforeRotating = 400f;
+    public float SquareAngular { get; private set; }
+    public float SquareVel { get; private set; }
     public float MaxBeforeDisableIK = 0.01f;
-    public float FootDistanceBetweeneachOther;
-    public float FootDistanceMulti = 8;
-    public float stepHeight;
-    public void Initialize()
+    public float FootDistanceBetweeneachOther { get; private set; }
+    public float FootDistanceMulti = 8f;
+    public float StepHeight { get; private set; }
+
+    private void Initialize()
     {
         Localplayer = BasisLocalPlayer.Instance;
         Localplayer.LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
 
-        Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.foot, BasisBoneTrackedRole.LeftFoot);
-        Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.foot, BasisBoneTrackedRole.RightFoot);
-
-        Localplayer.LocalBoneDriver.FindBone(out LeftFootSolver.lowerLeg, BasisBoneTrackedRole.LeftLowerLeg);
-        Localplayer.LocalBoneDriver.FindBone(out RightFootSolver.lowerLeg, BasisBoneTrackedRole.RightLowerLeg);
+        InitializeFootSolvers();
 
         OnCalibration();
-        if (HasEvents == false)
+
+        if (!HasEvents)
         {
-            Localplayer.AvatarDriver.CalibrationComplete += OnCalibration;
-            Localplayer.LocalBoneDriver.OnPostSimulate += Simulate;
+            SubscribeEvents();
             HasEvents = true;
         }
     }
-    public void Simulate()
+
+    private void InitializeFootSolvers()
+    {
+        Localplayer.LocalBoneDriver.FindBone(out leftFootSolver.foot, BasisBoneTrackedRole.LeftFoot);
+        Localplayer.LocalBoneDriver.FindBone(out rightFootSolver.foot, BasisBoneTrackedRole.RightFoot);
+
+        Localplayer.LocalBoneDriver.FindBone(out leftFootSolver.lowerLeg, BasisBoneTrackedRole.LeftLowerLeg);
+        Localplayer.LocalBoneDriver.FindBone(out rightFootSolver.lowerLeg, BasisBoneTrackedRole.RightLowerLeg);
+    }
+
+    private void SubscribeEvents()
+    {
+        Localplayer.AvatarDriver.CalibrationComplete += OnCalibration;
+        Localplayer.LocalBoneDriver.OnPostSimulate += Simulate;
+    }
+
+    private void Simulate()
+    {
+        UpdateMovementData();
+
+        Vector3 localTposeHips = Hips.TposeLocal.position;
+        Vector3 hipsPosLocal = Hips.OutGoingData.position;
+
+        bool hasLayerActive = SquareVel <= MaxBeforeDisableIK;
+
+        leftFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
+        rightFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
+    }
+
+    private void UpdateMovementData()
     {
         SquareAngular = Localplayer.AvatarDriver.AnimatorDriver.angularVelocity.sqrMagnitude;
         SquareVel = Localplayer.AvatarDriver.AnimatorDriver.currentVelocity.sqrMagnitude;
-        Vector3 localTposeHips = Hips.TposeLocal.position;
-        Vector3 HipsPosLocal = Hips.OutGoingData.position;
-
-        //  bool LargerthenRotation = SquareAngular <= LargerThenBeforeRotating;
-        bool LargerThenMaxBeforeDisableIK = SquareVel <= MaxBeforeDisableIK;
-
-        bool HasLayer = LargerThenMaxBeforeDisableIK;
-
-        RightFootSolver.Simulate(HasLayer, localTposeHips, HipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
-        LeftFootSolver.Simulate(HasLayer, localTposeHips, HipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
     }
-    public void OnCalibration()
+
+    private void OnCalibration()
     {
-        LeftFootSolver.driver = this;
-        RightFootSolver.driver = this;
+        SetupFootSolvers();
+        CalculateStepHeight();
+        CalculateFootDistance();
+    }
 
-        LeftFootSolver.foot.HasTracked = BasisHasTracked.HasNoTracker;
-        RightFootSolver.foot.HasTracked = BasisHasTracked.HasNoTracker;
+    private void SetupFootSolvers()
+    {
+        leftFootSolver.driver = this;
+        rightFootSolver.driver = this;
 
-        LeftFootSolver.ikConstraint = Localplayer.AvatarDriver.LeftFootTwoBoneIK;
-        RightFootSolver.ikConstraint = Localplayer.AvatarDriver.RightFootTwoBoneIK;
+        leftFootSolver.foot.HasTracked = BasisHasTracked.HasNoTracker;
+        rightFootSolver.foot.HasTracked = BasisHasTracked.HasNoTracker;
+
+        leftFootSolver.ikConstraint = Localplayer.AvatarDriver.LeftFootTwoBoneIK;
+        rightFootSolver.ikConstraint = Localplayer.AvatarDriver.RightFootTwoBoneIK;
+
+        ActivateFootLayers();
+
+        leftFootSolver.Initialize(rightFootSolver);
+        rightFootSolver.Initialize(leftFootSolver);
+    }
+
+    private void ActivateFootLayers()
+    {
         Localplayer.AvatarDriver.LeftFootLayer.active = true;
         Localplayer.AvatarDriver.RightFootLayer.active = true;
-
-        LeftFootSolver.Initialize(RightFootSolver);
-        RightFootSolver.Initialize(LeftFootSolver);
-        stepHeight = DefaultFootOffset * Localplayer.RatioPlayerToAvatarScale;
-        FootDistanceBetweeneachOther = Vector3.Distance(LeftFootSolver.foot.TposeLocal.position, RightFootSolver.foot.TposeLocal.position) * (FootDistanceMulti / Localplayer.PlayerEyeHeight);
     }
-    public void OnDestroy()
+
+    private void CalculateStepHeight()
+    {
+        StepHeight = DefaultFootOffset * Localplayer.RatioPlayerToAvatarScale;
+    }
+
+    private void CalculateFootDistance()
+    {
+        FootDistanceBetweeneachOther = Vector3.Distance(leftFootSolver.foot.TposeLocal.position, rightFootSolver.foot.TposeLocal.position) * (FootDistanceMulti / Localplayer.PlayerEyeHeight);
+    }
+
+    private void OnDestroy()
     {
         if (HasEvents)
         {
@@ -78,11 +117,13 @@ public class BasisFootPlacementDriver : MonoBehaviour
             HasEvents = false;
         }
     }
-    public void OnDrawGizmos()
+
+    private void OnDrawGizmos()
     {
-        LeftFootSolver.Gizmo();
-        RightFootSolver.Gizmo();
+        leftFootSolver.DrawGizmos();
+        rightFootSolver.DrawGizmos();
     }
+
     [System.Serializable]
     public class BasisIKFootSolver
     {
@@ -103,7 +144,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
         public Vector3 bottomPointLocal;
         public Vector3 worldTopPoint;
         public Vector3 worldBottomPoint;
-        public float lerp = 0;
+        public float lerp = 1;
         public RaycastHit hitInfo;
         public Quaternion rotation;
         public Vector3 position;
@@ -114,13 +155,14 @@ public class BasisFootPlacementDriver : MonoBehaviour
         public Vector3 hipHeightFootVector;
 
         public Vector3 LastFootPosition;
-        public Quaternion LastFoorRotation;
+        public Quaternion LastFootRotation;
         public bool IsFeetFarApart = false;
         public bool HasMotionForMovement = false;
-        public bool HasraycastHit = false;
+        public bool HasRaycastHit = false;
         public float newFootPositionLerpSpeed = 20;
         public float RotationBeforeMove = 15;
         public float RotationDifference;
+
         public void Initialize(BasisIKFootSolver otherFootSolver)
         {
             otherFoot = otherFootSolver;
@@ -130,25 +172,20 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
         public bool IsMoving() => lerp < 1;
 
-        public void Simulate(bool HasLayerActive, Vector3 localTposeHips, Vector3 hipsPosLocal, Vector3 HipsRotation)
+        public void Simulate(bool hasLayerActive, Vector3 localTposeHips, Vector3 hipsPosLocal, Vector3 hipsRotation)
         {
-            if (foot.HasTracked == BasisHasTracked.HasTracker)
-            {
-                return;
-            }
-            foot.HasRigLayer = HasLayerActive ? BasisHasRigLayer.HasRigLayer : BasisHasRigLayer.HasNoRigLayer;
+            if (foot.HasTracked == BasisHasTracked.HasTracker) return;
+
+            foot.HasRigLayer = hasLayerActive ? BasisHasRigLayer.HasRigLayer : BasisHasRigLayer.HasNoRigLayer;
 
             CalculateFootPositions(localTposeHips, hipsPosLocal);
 
             IsFeetFarApart = Vector3.Distance(foot.OutGoingData.position, LastFootPosition) > driver.FootDistanceBetweeneachOther;
-            RotationDifference = Mathf.Abs(HipsRotation.y - foot.OutGoingData.rotation.eulerAngles.y);
-            if ((IsFeetFarApart || RotationDifference > RotationBeforeMove) && !otherFoot.IsMoving() && lerp >= 1)
+            RotationDifference = Mathf.Abs(hipsRotation.y - foot.OutGoingData.rotation.eulerAngles.y);
+
+            if (ShouldMoveFoot())
             {
-                //HasraycastHit = Physics.Linecast(lowerLeg.OutgoingWorldData.position, worldBottomPoint, out hitInfo, BasisLocalPlayer.Instance.GroundMask, QueryTriggerInteraction.UseGlobal);
-                // if (HasraycastHit)
-                {
-                    lerp = 0;
-                }
+                lerp = 0;
             }
 
             if (lerp <= 1)
@@ -158,6 +195,12 @@ public class BasisFootPlacementDriver : MonoBehaviour
 
             UpdateFootData();
         }
+
+        private bool ShouldMoveFoot()
+        {
+            return (IsFeetFarApart || RotationDifference > RotationBeforeMove) && !otherFoot.IsMoving() && lerp >= 1;
+        }
+
         private void CalculateFootPositions(Vector3 localTposeHips, Vector3 hipsPosLocal)
         {
             offset = foot.TposeLocal.position - localTposeHips;
@@ -173,25 +216,29 @@ public class BasisFootPlacementDriver : MonoBehaviour
             bottomPointLocal = footExtendedPositionWorld + new Vector3(0, yDifference / percentagePastFoot, 0);
             worldBottomPoint = lowerLeg.OutgoingWorldData.position + offset;
         }
+
         private void MoveFoot()
         {
-            bottomPointLocal.y += Mathf.Sin(lerp * Mathf.PI) * driver.stepHeight;
+            bottomPointLocal.y += Mathf.Sin(lerp * Mathf.PI) * driver.StepHeight;
             lerp += Time.deltaTime * footStepSpeed;
             OnFootFinishedMoving();
         }
+
         private void UpdateFootData()
         {
             foot.OutGoingData.position = position;
             foot.OutGoingData.rotation = rotation;
             LastFootPosition = position;
-            LastFoorRotation = rotation;
+            LastFootRotation = rotation;
         }
+
         private void OnFootFinishedMoving()
         {
             rotation = Quaternion.Euler(foot.BoneTransform.localEulerAngles.x, driver.Hips.BoneTransform.localEulerAngles.y, foot.BoneTransform.localEulerAngles.z);
-            position = Vector3.Lerp(position,bottomPointLocal, newFootPositionLerpSpeed * Time.deltaTime);
+            position = Vector3.Lerp(position, bottomPointLocal, newFootPositionLerpSpeed * Time.deltaTime);
         }
-        public void Gizmo()
+
+        public void DrawGizmos()
         {
             Gizmos.DrawLine(lowerLeg.OutgoingWorldData.position, worldBottomPoint);
         }
