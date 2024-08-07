@@ -121,3 +121,29 @@ MonoBehaviour:
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
     TrackedRole: 0
+  - DeviceID: Index Controller OpenXR
+    MatchableDeviceIds:
+    - desktop eye
+    HasRayCastSupport: 1
+    CanDisplayPhysicalTracker: 1
+    HasRayCastVisual: 1
+    HasRayCastRedical: 1
+    RayCastOffset: {x: 0, y: 0, z: 0}
+    RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
+    HasTrackedRole: 1
+    TrackedRole: 18
+  - DeviceID: Index Controller OpenXR
+    MatchableDeviceIds:
+    - desktop eye
+    HasRayCastSupport: 1
+    CanDisplayPhysicalTracker: 1
+    HasRayCastVisual: 1
+    HasRayCastRedical: 1
+    RayCastOffset: {x: 0, y: 0, z: 0}
+    RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
+    HasTrackedRole: 1
+    TrackedRole: 19

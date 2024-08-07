@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Basis.Scripts.Device_Management
 {
 [System.Serializable]
-public class BasisDeviceMatchableNames
+public class BasisDeviceMatchSettings
 {
     public string DeviceID = string.Empty;
     [Header("Match with Ids")]

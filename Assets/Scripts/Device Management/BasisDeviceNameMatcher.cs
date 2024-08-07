@@ -1,24 +1,59 @@
 using System.Collections.Generic;
+
+//using UnityEditor;
+
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management
 {
-[CreateAssetMenu(fileName = "BasisDeviceNameMatcher", menuName = "Basis/BasisDeviceNameMatcher", order = 1)]
-public class BasisDeviceNameMatcher : ScriptableObject
-{
-    public List<BasisDeviceMatchableNames> BasisDevice = new List<BasisDeviceMatchableNames>();
-    public bool GetAssociatedDeviceMatchableNames(string nameToMatch, out BasisDeviceMatchableNames BasisDeviceMatchableNames)
+    [CreateAssetMenu(fileName = "BasisDeviceNameMatcher", menuName = "Basis/BasisDeviceNameMatcher", order = 1)]
+    public class BasisDeviceNameMatcher : ScriptableObject
     {
-        foreach (BasisDeviceMatchableNames DeviceEntry in BasisDevice)
+        [SerializeField]
+        public List<BasisDeviceMatchSettings> BasisDevice = new List<BasisDeviceMatchSettings>();
+        public bool GetAssociatedDeviceMatchableNames(string nameToMatch, out BasisDeviceMatchSettings BasisDeviceMatchableNames)
         {
-            if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
+            foreach (BasisDeviceMatchSettings DeviceEntry in BasisDevice)
             {
-                BasisDeviceMatchableNames = DeviceEntry;
-                return true;
+                if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
+                {
+                    BasisDeviceMatchableNames = DeviceEntry;
+                    return true;
+                }
+            }
+            BasisDeviceMatchableNames = null;
+            return false;
+        }
+    }
+    /*
+    [CustomEditor(typeof(BasisDeviceNameMatcher))]
+    public class BasisDeviceNameMatcherEditor : Editor
+    {
+        public override async void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            BasisDeviceNameMatcher script = (BasisDeviceNameMatcher)target;
+
+            if (GUILayout.Button("Save Devices"))
+            {
+                string directoryPath = EditorUtility.OpenFolderPanel("Select Directory to Save Devices", "", "");
+                if (!string.IsNullOrEmpty(directoryPath))
+                {
+                    Debug.Log("directoryPath " + directoryPath);
+                    await BasisDeviceLoaderAndSaver.SaveDevices(directoryPath, script.BasisDevice);
+                }
+            }
+            if (GUILayout.Button("Load Devices"))
+            {
+                string directoryPath = EditorUtility.OpenFolderPanel("Select Directory to Save Devices", "", "");
+                if (!string.IsNullOrEmpty(directoryPath))
+                {
+                    Debug.Log("directoryPath " + directoryPath);
+                    script.BasisDevice = await BasisDeviceLoaderAndSaver.LoadDeviceAsync(directoryPath);
+                }
             }
         }
-        BasisDeviceMatchableNames = null;
-        return false;
     }
-}
+    */
 }

@@ -31,7 +31,7 @@ public partial class BasisPointRaycaster : BaseRaycaster
     public bool HasRedicalRenderer = false;
     public static string LoadMaterialAddress = "Assets/UI/Material/RayCastMaterial.mat";
     public static string LoadUIRedicalAddress = "Assets/UI/Prefabs/highlightQuad.prefab";
-    public BasisDeviceMatchableNames BasisDeviceMatchableNames;
+    public BasisDeviceMatchSettings BasisDeviceMatchableNames;
     public GameObject highlightQuadInstance;
     public Canvas FoundCanvas;
     public RaycastResult RaycastResult = new RaycastResult();

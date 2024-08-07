@@ -41,7 +41,7 @@ public abstract class BasisInput : MonoBehaviour
     public AddressableGenericResource LoadedDeviceRequest;
     public event SimulationHandler AfterControlApply;
     public GameObject BasisPointRaycasterRef;
-    public BasisDeviceMatchableNames BasisDeviceMatchableNames;
+    public BasisDeviceMatchSettings BasisDeviceMatchableNames;
     [SerializeField]
     public BasisInputState InputState = new BasisInputState();
     [SerializeField]
@@ -374,7 +374,7 @@ public abstract class BasisInput : MonoBehaviour
     {
         if (BasisVisualTracker == null && LoadedDeviceRequest == null)
         {
-            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, out BasisDeviceMatchableNames Match))
+            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, out BasisDeviceMatchSettings Match))
             {
                 if (Match.CanDisplayPhysicalTracker)
                 {

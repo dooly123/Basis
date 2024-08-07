@@ -4,7 +4,7 @@
     "cacheServerPort": 8126,
     "threadedArchiving": true,
     "logCacheMiss": false,
-    "slimWriteResults": true,
+    "slimWriteResults": false,
     "maximumCacheSize": 20,
     "useDetailedBuildLog": false,
     "useV2Hasher": true,
