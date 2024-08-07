@@ -1,8 +1,8 @@
-﻿#if UNITY_EDITOR
-using Basis.Scripts.Avatar;
+﻿using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Common;
 using Basis.Scripts.Common.Enums;
+#if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
