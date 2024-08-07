@@ -1,0 +1,17 @@
+{
+    "name": "BasisEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8c9aa0e006f5b5347af5c5470971dfae",
+        "GUID:dde09067b7f7a054ca208a3c17c8f7c5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

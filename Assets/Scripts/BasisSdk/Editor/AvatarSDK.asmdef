@@ -1,0 +1,16 @@
+{
+    "name": "BasisSDKEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b4ae365a73764ee478adc74cb89832fe"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

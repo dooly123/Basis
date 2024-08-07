@@ -24,6 +24,7 @@ public class BasisAudioTransmission
     public int encodedLength;
     public BasisLocalPlayer Local;
     public MicrophoneRecorder Recorder;
+
     public bool IsInitalized = false;
     public AudioSegmentDataMessage AudioSegmentData = new AudioSegmentDataMessage();
     public AudioSilentSegmentDataMessage audioSilentSegmentData = new AudioSilentSegmentDataMessage();
