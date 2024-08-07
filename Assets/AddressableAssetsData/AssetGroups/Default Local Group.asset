@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 37c75a6cf72db324eb01200602299fc8
   m_SerializeEntries:
+  - m_GUID: 011b73d0a4f83ec4784bbf5c653e94e7
+    m_Address: Dooly Clothed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 015b3d7344ee29b41acd36bac09baf03
     m_Address: BasisUIAvatarSelection
     m_ReadOnly: 0
@@ -178,6 +183,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c92fd7b20eb8eaf4eb4a6e236e4ac620
     m_Address: Assets/Prefabs/Loadins/Virtual Keyboard.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cbc2cd4eafc84ed43a85e1f6c6121bac
+    m_Address: Peechiu Clothed
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

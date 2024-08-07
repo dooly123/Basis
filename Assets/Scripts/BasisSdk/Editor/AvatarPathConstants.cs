@@ -1,8 +1,6 @@
-using UnityEngine;
-
 public class AvatarPathConstants
 {
-    public static readonly string uxmlPath = "Assets/UI/Editor/AvatarSDK.uxml";
+    public static readonly string uxmlPath = "Assets/Scripts/BasisSdk/Editor/AvatarSDK.uxml";
 
     public static readonly string avatarEyePositionButton = "AvatarEyePositionButton";
     public static readonly string avatarMouthPositionButton = "AvatarMouthPositionButton";
