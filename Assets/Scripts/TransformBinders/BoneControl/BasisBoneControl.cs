@@ -1,17 +1,12 @@
-﻿using Basis.Scripts.Avatar;
-using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Common;
+﻿using Basis.Scripts.Common;
 using Basis.Scripts.Common.Enums;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 using UnityEngine.Events;
 using static Basis.Scripts.Avatar.BasisAvatarIKStageCalibration;
 
 namespace Basis.Scripts.TransformBinders.BoneControl
 {
-[System.Serializable]
+    [System.Serializable]
 public class BasisBoneControl
 {
     public bool Cullable = false;
@@ -335,46 +330,5 @@ public class BasisBoneControl
                 break;
         }
     }
-
-#if UNITY_EDITOR
-    public static float DefaultGizmoSize = 0.05f;
-    public static float HandGizmoSize = 0.015f;
-    public void DrawGizmos()
-    {
-        if (Cullable)
-        {
-            return;
-        }
-        if (HasBone)
-        {
-            Gizmos.color = Color;
-            Vector3 BonePosition = OutgoingWorldData.position;
-            if (PositionControl.TaretInterpreter != BasisTargetController.None)
-            {
-                Gizmos.DrawLine(BonePosition, PositionControl.Target.OutgoingWorldData.position);
-            }
-            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(this, out BasisBoneTrackedRole Frole))
-            {
-                if (BasisBoneTrackedRoleCommonCheck.CheckIfRightHand(Frole) || BasisBoneTrackedRoleCommonCheck.CheckIfLeftHand(Frole))
-                {
-                    Gizmos.DrawWireSphere(BonePosition, HandGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
-                }
-                else
-                {
-                    Gizmos.DrawWireSphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
-                }
-            }
-            //   Gizmos.DrawWireSphere(TposeLocal.position, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
-            Handles.Label(BonePosition, Name);
-            if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
-            {
-                if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(this, out BasisBoneTrackedRole role))
-                {
-                    Gizmos.DrawWireSphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale);
-                }
-            }
-        }
-    }
-#endif
 }
 }

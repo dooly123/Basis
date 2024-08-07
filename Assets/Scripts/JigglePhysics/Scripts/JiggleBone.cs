@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {
 
@@ -300,10 +300,10 @@ namespace JigglePhysics
     public void OnDrawGizmos(JiggleSettingsBase jiggleSettings) {
         Vector3 pos = particleSignal.SamplePosition(Time.timeAsDouble);
         if (child != null) {
-            Gizmos.DrawLine(pos, child.particleSignal.SamplePosition(Time.timeAsDouble));
+            Gizmos.Line(pos, child.particleSignal.SamplePosition(Time.timeAsDouble));
         }
         if (jiggleSettings != null) {
-            Gizmos.DrawWireSphere(pos, jiggleSettings.GetRadius(normalizedIndex));
+            Gizmos.Sphere(pos, jiggleSettings.GetRadius(normalizedIndex));
         }
     }
 

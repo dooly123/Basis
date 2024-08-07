@@ -3,6 +3,7 @@ using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using static Basis.Scripts.Drivers.BaseBoneDriver;
+using Gizmos = Popcron.Gizmos;
 namespace Basis.Scripts.BasisCharacterController
 {
     public class BasisCharacterController : MonoBehaviour
@@ -76,10 +77,9 @@ namespace Basis.Scripts.BasisCharacterController
             this.transform.RotateAround(Eye.OutgoingWorldData.position, Vector3.up, rotationAmount);
             ReadyToRead?.Invoke();
         }
-        public void OnDrawGizmosSelected()
+        public void OnRenderObject()
         {
-            Gizmos.color = groundedPlayer ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(bottomPoint, characterController.radius);
+            Gizmos.Sphere(bottomPoint, characterController.radius, groundedPlayer ? Color.green : Color.red);
         }
         public void HandleJump()
         {
