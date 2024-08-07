@@ -1,8 +1,15 @@
+using Assets.Scripts.Addressable_Driver;
+using Assets.Scripts.Addressable_Driver.Enums;
+using Assets.Scripts.UI;
+using Assets.Scripts.UI.UI_Panels;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static KeyboardLayoutData;
+using static Assets.Scripts.Virtual_keyboard.KeyboardLayoutData;
+
+namespace Assets.Scripts.Virtual_keyboard
+{
 public class BasisVirtualKeyboard : BasisUIBase
 {
     public List<BasisVirtualRow> rows = new List<BasisVirtualRow>();
@@ -235,4 +242,5 @@ public class BasisVirtualKeyboard : BasisUIBase
             return new BasisVirtualKeyboardButton();
         }
     }
+}
 }

@@ -2,6 +2,9 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+namespace Assets.Scripts.BasisSdk.Helpers.Editor
+{
 public static class BasisHelpersGizmo
 {
     public static void PositionHandler(ref Vector3 Position, Quaternion Rotation)
@@ -96,4 +99,5 @@ public static class BasisHelpersGizmo
     private static void OnObjectFieldValueChanged(ChangeEvent<UnityEngine.Object> evt)
     {
     }
+}
 }

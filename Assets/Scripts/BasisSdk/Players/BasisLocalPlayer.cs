@@ -3,10 +3,26 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using System;
+using Assets.Scripts.Drivers;
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.Device_Management.Devices.Desktop;
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.TransformBinders.BoneControl;
+using Assets.Scripts.Common;
+using Assets.Scripts.Avatar;
+
+
+
+
+
+
+
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+namespace Assets.Scripts.BasisSdk.Players
+{
 public class BasisLocalPlayer : BasisPlayer
 {
     public static float DefaultPlayerEyeHeight = 1.64f;
@@ -19,7 +35,7 @@ public class BasisLocalPlayer : BasisPlayer
     public static BasisLocalPlayer Instance;
     public static Action OnLocalPlayerCreatedAndReady;
     public static Action OnLocalPlayerCreated;
-    public BasisCharacterController Move;
+        public Assets.Scripts.BasisCharacterController.BasisCharacterController Move;
     public event Action OnLocalAvatarChanged;
     public event Action OnSpawnedEvent;
     public event Action OnPlayersHeightChanged;
@@ -68,7 +84,7 @@ public class BasisLocalPlayer : BasisPlayer
     public void RecalculateMyHeight()
     {
         Debug.Log("Attempting RecalculateMyHeight");
-        BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
+            Assets.Scripts.TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
         if (BasisLockToInput != null)
         {
             if (BasisLockToInput.AttachedInput != null)
@@ -193,4 +209,5 @@ public class BasisLocalPlayer : BasisPlayer
     {
         VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray);
     }
+}
 }

@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Assets.Scripts.Common.Enums;
+using System;
 using UnityEngine;
+
+namespace Assets.Scripts.TransformBinders.BoneControl
+{
 [System.Serializable]
 public struct BasisRotationalControl
 {
@@ -22,4 +26,5 @@ public struct BasisRotationalControl
     public bool RotationOverride;
     [NonSerialized]
     public BasisBoneControl Target;
+}
 }

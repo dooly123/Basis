@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.XR;
 
-namespace Basis
+namespace Assets.Scripts.Device_Management.Devices.OpenXR
 {
     public class BasisOpenXRInputEye : BasisInputEye
     {

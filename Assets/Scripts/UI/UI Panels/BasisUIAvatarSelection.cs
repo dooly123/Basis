@@ -1,8 +1,11 @@
+using Assets.Scripts.BasisSdk.Players;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Assets.Scripts.UI.UI_Panels
+{
 public class BasisUIAvatarSelection : BasisUIBase
 {
     public List<string> AvatarUrls = new List<string>();
@@ -45,4 +48,5 @@ public class BasisUIAvatarSelection : BasisUIBase
             await BasisLocalPlayer.Instance.CreateAvatar(Url);
         }
     }
+}
 }

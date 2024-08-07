@@ -1,4 +1,6 @@
-﻿public enum BasisBootedMode
+﻿namespace Assets.Scripts.Device_Management
+{
+public enum BasisBootedMode
 {
     OpenVRLoader,
     OpenXRLoader,
@@ -6,4 +8,5 @@
     SuccessButUnknown,
     Exiting,
     None
+}
 }

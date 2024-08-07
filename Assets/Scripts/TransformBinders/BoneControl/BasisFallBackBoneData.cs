@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Assets.Scripts.TransformBinders.BoneControl
+{
 [System.Serializable]
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FallBackBoneData", order = 1)]
 public class BasisFallBackBoneData : ScriptableObject
@@ -20,4 +22,5 @@ public class BasisFallBackBoneData : ScriptableObject
         control = null;
         return false;
     }
+}
 }

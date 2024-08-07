@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Basis
+namespace Assets.Scripts.Device_Management.Devices
 {
     public abstract class BasisInputEye : MonoBehaviour
     {

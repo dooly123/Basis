@@ -1,4 +1,6 @@
-﻿[System.Serializable]
+﻿namespace Assets.Scripts.Animator_Driver
+{
+[System.Serializable]
 public struct BasisAvatarAnimatorHash
 {
     public int HashCurrentHorizontalMovement;
@@ -10,4 +12,5 @@ public struct BasisAvatarAnimatorHash
     public int HashIsJumping;
     public int HashIsFalling;
     public int HashIsLanding;
+}
 }

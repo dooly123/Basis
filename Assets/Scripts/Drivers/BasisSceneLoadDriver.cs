@@ -1,14 +1,19 @@
+using Assets.Scripts.Addressable_Driver;
+using Assets.Scripts.Addressable_Driver.Factory;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
+namespace Assets.Scripts.Drivers
+{
 public static class BasisSceneLoadDriver
 {
     public static async Task LoadScene(string SceneToLoad)
     {
         Debug.Log("Loading Scene " + SceneToLoad);
-        AddressableSceneResource Process = new AddressableSceneResource(SceneToLoad, true, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        Addressable_Driver.AddressableSceneResource Process = new AddressableSceneResource(SceneToLoad, true, UnityEngine.SceneManagement.LoadSceneMode.Additive);
         await AddressableLoadFactory.LoadAddressableResourceAsync<SceneInstance>(Process);
         Debug.Log("Loaded Scene " + SceneToLoad);
     }
+}
 }

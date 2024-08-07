@@ -1,9 +1,13 @@
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.Device_Management.Devices;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static BasisPointRaycaster;
+using static Assets.Scripts.UI.BasisPointRaycaster;
 
+namespace Assets.Scripts.UI
+{
 public class BasisUIRaycastProcess 
 {
     public float ClickSpeed = 0.3f;
@@ -435,4 +439,5 @@ public class BasisUIRaycastProcess
             }
         }
     }
+}
 }

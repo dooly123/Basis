@@ -1,5 +1,9 @@
+using Assets.Scripts.BasisSdk;
+using Assets.Scripts.LipSync.Scripts;
 using UnityEngine;
 
+namespace Assets.Scripts.Drivers
+{
 public class BasisVisemeDriver : OVRLipSyncContextBase
 {
     public int laughterBlendTarget = -1;
@@ -73,4 +77,5 @@ public class BasisVisemeDriver : OVRLipSyncContextBase
             OVRLipSync.ProcessFrame(Context, data, frame, false);
         }
     }
+}
 }

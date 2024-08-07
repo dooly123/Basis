@@ -1,5 +1,8 @@
+using Assets.Scripts.Networking;
 using UnityEngine;
 
+namespace Assets.Scripts.Tests
+{
 public class BasisConnectorGUI : MonoBehaviour
 {
     public BasisNetworkConnector NetworkConnector;
@@ -10,4 +13,5 @@ public class BasisConnectorGUI : MonoBehaviour
         //  NetworkConnector.Host(25565);
         NetworkConnector.Connect(Port, IP);
     }
+}
 }

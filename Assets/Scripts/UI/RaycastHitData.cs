@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+
+namespace Assets.Scripts.UI
+{
 public partial class BasisPointRaycaster
 {
     [System.Serializable]
@@ -24,4 +27,5 @@ public partial class BasisPointRaycaster
         [SerializeField]
         public int displayIndex;
     }
+}
 }

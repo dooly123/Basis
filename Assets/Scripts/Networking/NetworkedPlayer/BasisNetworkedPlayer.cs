@@ -1,5 +1,13 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Networking.NetworkedAvatar;
+using Assets.Scripts.Networking.Recievers;
+using Assets.Scripts.Networking.Transmitters;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using static SerializableDarkRift;
+
+namespace Assets.Scripts.Networking.NetworkedPlayer
+{
 [DefaultExecutionOrder(15002)]
 public partial class BasisNetworkedPlayer : MonoBehaviour
 {
@@ -143,4 +151,5 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
         NetworkSend = gameObject.AddComponent<T>();
         return NetworkSend as T;
     }
+}
 }

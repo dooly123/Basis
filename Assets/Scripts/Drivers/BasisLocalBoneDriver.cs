@@ -1,3 +1,8 @@
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.TransformBinders.BoneControl;
+
+namespace Assets.Scripts.Drivers
+{
 public class BasisLocalBoneDriver : BaseBoneDriver
 {
     public void Start()
@@ -27,4 +32,5 @@ public class BasisLocalBoneDriver : BaseBoneDriver
     {
         BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
     }
+}
 }

@@ -1,5 +1,8 @@
+using Assets.Scripts.Device_Management;
 using UnityEngine;
 
+namespace Assets.Scripts.UI.UI_Panels
+{
 public class SwitchActiveMode : MonoBehaviour
 {
     public UnityEngine.UI.Button VRButton;
@@ -17,4 +20,5 @@ public class SwitchActiveMode : MonoBehaviour
     {
         BasisDeviceManagement.Instance.SwitchMode(BasisBootedMode.OpenVRLoader);
     }
+}
 }

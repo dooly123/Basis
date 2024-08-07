@@ -1,6 +1,11 @@
+using Assets.Scripts.Addressable_Driver;
+using Assets.Scripts.Addressable_Driver.Enums;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+
+namespace Assets.Scripts.UI.UI_Panels
+{
 public class BasisPlayerMenu : BasisUIBase
 {
     public static string AddressableID = "BasisPlayerMenu";
@@ -38,4 +43,5 @@ public class BasisPlayerMenu : BasisUIBase
         SettingsPanel.SetActive(false);
         panel.SetActive(true);
     }
+}
 }

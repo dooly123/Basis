@@ -1,8 +1,19 @@
+using Assets.Scripts.Addressable_Driver;
+using Assets.Scripts.Addressable_Driver.Factory;
+using Assets.Scripts.Addressable_Driver.Resource;
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.TransformBinders.BoneControl;
+using Assets.Scripts.UI;
+using Assets.Scripts.UI.UI_Panels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using static BaseBoneDriver;
-using static BasisAvatarIKStageCalibration;
+using static Assets.Scripts.Avatar.BasisAvatarIKStageCalibration;
+using static Assets.Scripts.Drivers.BaseBoneDriver;
+
+namespace Assets.Scripts.Device_Management.Devices
+{
 public abstract class BasisInput : MonoBehaviour
 {
     public bool HasEvents = false;
@@ -416,4 +427,5 @@ public abstract class BasisInput : MonoBehaviour
         BasisPointRaycaster = BasisHelpers.GetOrAddComponent<BasisPointRaycaster>(BasisPointRaycasterRef);
         await BasisPointRaycaster.Initialize(BaseInput);
     }
+}
 }

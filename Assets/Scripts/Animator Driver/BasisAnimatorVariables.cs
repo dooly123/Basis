@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace Assets.Scripts.Animator_Driver
+{
 [System.Serializable]
 public struct BasisAnimatorVariables
 {
@@ -17,4 +19,5 @@ public struct BasisAnimatorVariables
     public bool isMoving;
     public Vector3 AngularVelocity;
     public Vector3 Velocity;
+}
 }

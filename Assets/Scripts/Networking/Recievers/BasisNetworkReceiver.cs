@@ -1,8 +1,14 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Networking.NetworkedAvatar;
+using Assets.Scripts.Networking.NetworkedPlayer;
+using Assets.Scripts.Networking.Smoothing;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
 
+namespace Assets.Scripts.Networking.Recievers
+{
 [DefaultExecutionOrder(15002)]
 [System.Serializable]
 public partial class BasisNetworkReceiver : BasisNetworkSendBase
@@ -161,4 +167,5 @@ public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         AudioReceiverModule.OnDisable();
     }
+}
 }

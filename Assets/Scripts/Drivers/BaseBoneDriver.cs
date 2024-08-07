@@ -2,7 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine;
+using Assets.Scripts.TransformBinders.BoneControl;
+using Assets.Scripts.Avatar;
+using Assets.Scripts.Common.Enums;
+using Assets.Scripts.BasisSdk.Helpers;
 
+namespace Assets.Scripts.Drivers
+{
 public abstract class BaseBoneDriver : MonoBehaviour
 {
     //figures out how to get the mouth bone and eye position
@@ -238,4 +244,5 @@ public abstract class BaseBoneDriver : MonoBehaviour
     {
         return BasisHelpers.ConvertFromLocalSpace(LocalSpace, WorldSpace);
     }
+}
 }

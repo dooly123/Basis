@@ -1,5 +1,11 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.Device_Management.Devices;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
+namespace Assets.Scripts.TransformBinders
+{
 public class BasisLockToInput : MonoBehaviour
 {
     public BasisBoneTrackedRole TrackedRole;
@@ -63,4 +69,5 @@ public class BasisLockToInput : MonoBehaviour
             }
         }
     }
+}
 }

@@ -1,7 +1,8 @@
-
 using DarkRift;
 using UnityEngine;
 
+namespace Assets.Scripts.Networking.Compression
+{
 public static class BasisCompressionOfRotation
 {
     public static void CompressQuaternion(DarkRiftWriter Packer, Quaternion Rotation)
@@ -14,4 +15,5 @@ public static class BasisCompressionOfRotation
         bitPacker.Read(out uint data);
         Quaternion = BasisCompression.DecompressQuaternion(data);
     }
+}
 }

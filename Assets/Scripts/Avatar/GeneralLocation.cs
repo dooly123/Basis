@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿namespace Assets.Scripts.Avatar
+{
+#if UNITY_EDITOR
 #endif
 public static partial class BasisAvatarIKStageCalibration
 {
@@ -6,4 +8,5 @@ public static partial class BasisAvatarIKStageCalibration
     {
         Center, Left, Right
     }
+}
 }

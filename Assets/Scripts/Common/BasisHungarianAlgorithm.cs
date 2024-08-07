@@ -1,4 +1,7 @@
 ﻿using System;
+
+namespace Assets.Scripts.Common
+{
 /// <summary>
 /// Hungarian Algorithm.
 /// </summary>
@@ -395,4 +398,5 @@ public static class BasisHungarianAlgorithm
             this.column = col;
         }
     }
+}
 }

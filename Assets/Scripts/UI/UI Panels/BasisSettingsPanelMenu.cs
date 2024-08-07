@@ -1,7 +1,10 @@
+using Assets.Scripts.Networking;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Assets.Scripts.UI.UI_Panels
+{
 public class BasisSettingsPanelMenu : BasisUIBase
 {
     public static string SettingsPanel = "SettingsPanel";
@@ -50,4 +53,5 @@ public class BasisSettingsPanelMenu : BasisUIBase
             NetworkConnector.Connect(SelectedPort, IP.text);
         }
     }
+}
 }

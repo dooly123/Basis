@@ -1,4 +1,10 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Drivers;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
+
+namespace Assets.Scripts.TransformBinders
+{
 public class BasisLockToBone : MonoBehaviour
 {
     public BasisLocalBoneDriver CharacterTransformDriver;
@@ -51,4 +57,5 @@ public class BasisLockToBone : MonoBehaviour
             transform.SetPositionAndRotation(BoneControl.OutgoingWorldData.position, BoneControl.OutgoingWorldData.rotation);
         }
     }
+}
 }

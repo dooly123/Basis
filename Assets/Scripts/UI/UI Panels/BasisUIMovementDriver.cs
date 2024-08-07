@@ -1,6 +1,10 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Drivers;
 using System.Collections;
 using UnityEngine;
 
+namespace Assets.Scripts.UI.UI_Panels
+{
 public class BasisUIMovementDriver : MonoBehaviour
 {
     public BasisLocalPlayer LocalPlayer;
@@ -69,4 +73,5 @@ public class BasisUIMovementDriver : MonoBehaviour
             transform.SetPositionAndRotation(cameraPosition + CameraDriver.Camera.transform.rotation * WorldOffset, Rot);
         }
     }
+}
 }

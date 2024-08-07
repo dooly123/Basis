@@ -3,6 +3,8 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
+namespace Assets.Scripts.Networking.NetworkedAvatar
+{
 [System.Serializable]
 public struct BasisAvatarData
 {
@@ -62,4 +64,5 @@ public struct UpdateAvatarMusclesJob : IJobParallelFor
     {
         muscles[index] = Mathf.Lerp(muscles[index], targetMuscles[index], LerpTime);
     }
+}
 }

@@ -1,7 +1,12 @@
+using Assets.Scripts.Addressable_Driver.Enums;
+using Assets.Scripts.Addressable_Driver.Factory;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
+
+namespace Assets.Scripts.Addressable_Driver.Resource
+{
 public static class AddressableResourceProcess
 {
     public static List<SceneInstance> LoadAsSceneInstances(AddressableLoadResourceBase LoadRequest)
@@ -30,7 +35,7 @@ public static class AddressableResourceProcess
             }
             else
             {
-                Debug.LogError("Unexpected result type: " + result.GetType());
+             UnityEngine.Debug.LogError("Unexpected result type: " + result.GetType());
             }
         }
         return instantiated;
@@ -46,7 +51,7 @@ public static class AddressableResourceProcess
         }
         else
         {
-            Debug.LogError("Missing " + key);
+                UnityEngine.Debug.LogError("Missing " + key);
             return (null, loadRequest);
         }
     }
@@ -86,4 +91,5 @@ public static class AddressableResourceProcess
         }
         return instantiated;
     }
+}
 }

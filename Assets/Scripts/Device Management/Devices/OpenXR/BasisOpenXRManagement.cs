@@ -1,3 +1,5 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +7,8 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Management;
 
+namespace Assets.Scripts.Device_Management.Devices.OpenXR
+{
 [Serializable]
 public class BasisOpenXRManagement
 {
@@ -167,4 +171,5 @@ public class BasisOpenXRManagement
         /// </summary>
         public static InputDeviceCharacteristics rightTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Right;
     }
+}
 }

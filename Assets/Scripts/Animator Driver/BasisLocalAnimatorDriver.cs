@@ -1,6 +1,12 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.Device_Management.Devices;
+using Assets.Scripts.Device_Management.Devices.Desktop;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
-
-public class BasisLocalAnimatorDriver : MonoBehaviour
+namespace Assets.Scripts.Animator_Driver
+{
+    public class BasisLocalAnimatorDriver : MonoBehaviour
 {
     [SerializeField]
     private BasisAnimatorVariableApply basisAnimatorVariableApply = new BasisAnimatorVariableApply();
@@ -14,7 +20,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     private Vector3 previousRawVelocity = Vector3.zero;
     private Vector3 previousAngularVelocity = Vector3.zero; // New field for previous angular velocity
     private Quaternion previousHipsRotation;
-    public BasisCharacterController Controller;
+    public BasisCharacterController.BasisCharacterController Controller;
     public BasisBoneControl Hips;
     public Vector3 currentVelocity;
     public Vector3 dampenedVelocity;
@@ -155,4 +161,5 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
             BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= AssignHipsFBTracker;
         }
     }
+}
 }

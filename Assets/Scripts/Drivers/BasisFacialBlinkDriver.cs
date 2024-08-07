@@ -1,6 +1,9 @@
+using Assets.Scripts.BasisSdk;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Assets.Scripts.Drivers
+{
 public class BasisFacialBlinkDriver : MonoBehaviour
 {
     public SkinnedMeshRenderer meshRenderer;
@@ -109,4 +112,5 @@ public class BasisFacialBlinkDriver : MonoBehaviour
         isBlinking = false;
         SetNextBlinkTime(); // Set next blink time after eyes open
     }
+}
 }

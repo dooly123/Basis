@@ -1,6 +1,11 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using Valve.VR;
+
+namespace Assets.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
+{
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInputSpatial : BasisInput
 {
@@ -37,4 +42,5 @@ public class BasisOpenVRInputSpatial : BasisInput
         }
         UpdatePlayerControl();
     }
+}
 }

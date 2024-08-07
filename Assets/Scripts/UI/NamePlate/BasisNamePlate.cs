@@ -1,6 +1,12 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Drivers;
+using Assets.Scripts.TransformBinders.BoneControl;
+using Assets.Scripts.UI.UI_Panels;
 using TMPro;
 using UnityEngine;
 
+namespace Assets.Scripts.UI.NamePlate
+{
 public abstract class BasisNamePlate : MonoBehaviour
 {
     public BasisUIComponent BasisUIComponent;
@@ -29,4 +35,5 @@ public abstract class BasisNamePlate : MonoBehaviour
     {
         return HipTarget.OutgoingWorldData.position + new Vector3(0, MouthTarget.TposeLocal.position.y / 1.25f, 0);
     }
+}
 }

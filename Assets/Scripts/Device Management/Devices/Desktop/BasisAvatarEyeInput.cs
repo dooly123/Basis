@@ -1,6 +1,13 @@
-using Basis;
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Drivers;
+using Assets.Scripts.TransformBinders;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
-public class BasisAvatarEyeInput : BasisInput
+
+namespace Assets.Scripts.Device_Management.Devices.Desktop
+{
+    public class BasisAvatarEyeInput : BasisInput
 {
     public Camera Camera;
     public BasisLocalAvatarDriver AvatarDriver;
@@ -150,4 +157,5 @@ public class BasisAvatarEyeInput : BasisInput
             adjustment = Mathf.Abs(rotationY) * ((headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight) / Control.TposeLocal.position.y);
         }
     }
+}
 }

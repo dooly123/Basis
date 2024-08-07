@@ -1,6 +1,8 @@
-
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace Assets.Scripts.BasisSdk
+{
 public class BasisAvatar : MonoBehaviour
 {
     public Animator Animator;
@@ -15,4 +17,5 @@ public class BasisAvatar : MonoBehaviour
     public List<Renderer> Renders = new List<Renderer>();
     [SerializeField]
     public List<BasisJiggleStrain> JiggleStrains;
+}
 }

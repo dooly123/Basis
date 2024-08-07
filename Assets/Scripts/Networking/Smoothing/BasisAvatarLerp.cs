@@ -1,5 +1,10 @@
+using Assets.Scripts.Networking.NetworkedAvatar;
+using Assets.Scripts.Tests;
 using Unity.Jobs;
 using UnityEngine.Animations;
+
+namespace Assets.Scripts.Networking.Smoothing
+{
 public static class BasisAvatarLerp
 {
     public static string Settings = "Assets/ScriptableObjects/Avatar Lerp Data.asset";
@@ -25,4 +30,5 @@ public static class BasisAvatarLerp
 
         DataJobs.muscleHandle.Complete();
     }
+}
 }

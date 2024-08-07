@@ -23,7 +23,10 @@ limitations under the License.
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using Assets.Scripts.LipSync.Scripts.Helpers;
 
+namespace Assets.Scripts.LipSync.Scripts
+{
 //-------------------------------------------------------------------------------------
 // ***** OVRLipSync
 //
@@ -438,4 +441,5 @@ public class OVRLipSync : MonoBehaviour
         return (Result)rc;
     }
 
+}
 }

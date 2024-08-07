@@ -1,8 +1,13 @@
+using Assets.Scripts.Addressable_Driver;
+using Assets.Scripts.Addressable_Driver.Factory;
+using Assets.Scripts.BasisSdk.Helpers;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 
+namespace Assets.Scripts.UI.UI_Panels
+{
 public abstract class BasisUIBase : MonoBehaviour
 {
     public AddressableGenericResource LoadedMenu;
@@ -30,4 +35,5 @@ public abstract class BasisUIBase : MonoBehaviour
         BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
         BasisUIBase.OnCreatedMenu?.Invoke();
     }
+}
 }

@@ -1,7 +1,13 @@
+using Assets.Scripts.Networking.Compression;
+using Assets.Scripts.Networking.NetworkedPlayer;
+using Assets.Scripts.Tests;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static SerializableDarkRift;
+
+namespace Assets.Scripts.Networking.NetworkedAvatar
+{
 /// <summary>
 /// the goal of this script is to be the glue of consistent data between remote and local
 /// </summary>
@@ -65,4 +71,5 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
             PoseHandler = new HumanPoseHandler(NetworkedPlayer.Player.Avatar.Animator.avatar, NetworkedPlayer.Player.Avatar.transform.transform);
         }
     }
+}
 }

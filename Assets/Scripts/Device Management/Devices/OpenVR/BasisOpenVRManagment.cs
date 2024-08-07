@@ -1,4 +1,8 @@
-﻿using Basis;
+﻿using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management.Devices.OpenVR.Structs;
+using Assets.Scripts.Device_Management.Devices.Unity_Spatial_Tracking;
+using Assets.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +11,9 @@ using System.Text;
 using UnityEngine;
 using Valve.VR;
 
-[Serializable]
+namespace Assets.Scripts.Device_Management.Devices.OpenVR
+{
+    [Serializable]
 public class BasisOpenVRManagement
 {
     public GameObject SteamVR_BehaviourGameobject;
@@ -275,4 +281,5 @@ public class BasisOpenVRManagement
             }
         }
     }
+}
 }

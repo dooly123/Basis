@@ -1,4 +1,7 @@
 using UnityEditor;
+
+namespace Assets.Scripts.Device_Management.Editor
+{
 public static class DeviceManagementEditor
 {
     [MenuItem("Basis/ForceLoadXR")]
@@ -11,4 +14,5 @@ public static class DeviceManagementEditor
     {
         BasisDeviceManagement.ForceSetDesktop();
     }
+}
 }

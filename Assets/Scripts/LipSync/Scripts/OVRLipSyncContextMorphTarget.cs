@@ -23,6 +23,8 @@ limitations under the License.
 using UnityEngine;
 using System.Linq;
 
+namespace Assets.Scripts.LipSync.Scripts
+{
 public class OVRLipSyncContextMorphTarget : MonoBehaviour
 {
     // PUBLIC
@@ -224,4 +226,5 @@ public class OVRLipSyncContextMorphTarget : MonoBehaviour
             lipsyncContext.SetLaughterBlend(0);
         }
     }
+}
 }

@@ -1,9 +1,12 @@
- using System.Collections.Generic;
+using Assets.Scripts.Addressable_Driver.Resource;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
+namespace Assets.Scripts.Boot_Sequence
+{
 public static class BootSequence
 {
     public static GameObject LoadedBootManager;
@@ -32,4 +35,5 @@ public static class BootSequence
             Debug.LogError("Missing " + BootManager);
         }
     }
+}
 }

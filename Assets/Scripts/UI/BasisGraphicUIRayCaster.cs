@@ -1,6 +1,9 @@
+using Assets.Scripts.BasisSdk.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Assets.Scripts.UI
+{
 public class BasisGraphicUIRayCaster : MonoBehaviour
 {
     public Canvas Canvas;
@@ -67,4 +70,5 @@ public class BasisGraphicUIRayCaster : MonoBehaviour
             Debug.LogWarning("No RectTransform found on the Canvas.");
         }
     }
+}
 }

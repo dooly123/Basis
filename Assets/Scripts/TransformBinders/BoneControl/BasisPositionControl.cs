@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Assets.Scripts.Common.Enums;
+using System;
 using UnityEngine;
 
+namespace Assets.Scripts.TransformBinders.BoneControl
+{
 [System.Serializable]
 public struct BasisPositionControl
 {
@@ -10,4 +13,5 @@ public struct BasisPositionControl
     public BasisTargetController TaretInterpreter;
     [NonSerialized]
     public BasisBoneControl Target;
+}
 }

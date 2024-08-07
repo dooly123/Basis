@@ -1,4 +1,9 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
+
+namespace Assets.Scripts.Device_Management.Devices
+{
 [System.Serializable]
 public class BasisInputSkeleton
 {
@@ -150,4 +155,5 @@ public class BasisInputSkeleton
 
         InitializeBones(BasisBoneTrackedRole.RightHand, out ActiveHand);
     }
+}
 }

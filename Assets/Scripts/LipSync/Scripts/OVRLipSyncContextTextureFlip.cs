@@ -20,8 +20,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************************/
+using Assets.Scripts.LipSync.Scripts.Helpers;
 using UnityEngine;
 
+namespace Assets.Scripts.LipSync.Scripts
+{
 public class OVRLipSyncContextTextureFlip : MonoBehaviour
 {
     // PUBLIC
@@ -147,4 +150,5 @@ public class OVRLipSyncContextTextureFlip : MonoBehaviour
             }
         }
     }
+}
 }

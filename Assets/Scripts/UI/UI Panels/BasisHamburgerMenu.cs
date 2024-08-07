@@ -1,10 +1,17 @@
+using Assets.Scripts.Addressable_Driver;
+using Assets.Scripts.Addressable_Driver.Enums;
+using Assets.Scripts.Avatar;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.Device_Management.Devices;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEditor;
-using UnityEngine;
 using UnityEngine.UI;
-public class BasisHamburgerMenu : BasisUIBase
+
+namespace Assets.Scripts.UI.UI_Panels
+{
+    public class BasisHamburgerMenu : BasisUIBase
 {
     public Button Settings;
     public Button AvatarButton;
@@ -74,4 +81,5 @@ public class BasisHamburgerMenu : BasisUIBase
         AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
         OpenMenuNow(resource);
     }
+}
 }

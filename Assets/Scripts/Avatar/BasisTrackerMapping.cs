@@ -1,7 +1,12 @@
-﻿using System;
+﻿using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management.Devices;
+using Assets.Scripts.TransformBinders.BoneControl;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Assets.Scripts.Avatar
+{
 public static partial class BasisAvatarIKStageCalibration
 {
     [System.Serializable]
@@ -162,4 +167,5 @@ public static partial class BasisAvatarIKStageCalibration
         BasisBoneTrackedRole.LeftShoulder,
         BasisBoneTrackedRole.RightShoulder,
     };
+}
 }

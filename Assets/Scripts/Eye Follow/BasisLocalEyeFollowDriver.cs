@@ -1,5 +1,9 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Drivers;
 using UnityEngine;
 
+namespace Assets.Scripts.Eye_Follow
+{
 public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
 {
     // Adjustable parameters
@@ -115,4 +119,5 @@ public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
         Gizmos.DrawWireSphere(RandomizedPosition, 0.1f);
         DrawGizmo();
     }
+}
 }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace Assets.Scripts.Device_Management
+{
 [System.Serializable]
 public class BasisObservableList<T> : IList<T>
 {
@@ -82,4 +85,5 @@ public class BasisObservableList<T> : IList<T>
     }
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _list.GetEnumerator();
+}
 }

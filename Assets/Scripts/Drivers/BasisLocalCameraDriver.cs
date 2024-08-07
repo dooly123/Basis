@@ -1,7 +1,14 @@
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.TransformBinders;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+
+namespace Assets.Scripts.Drivers
+{
 public class BasisLocalCameraDriver : MonoBehaviour
 {
     public static BasisLocalCameraDriver Instance;
@@ -129,4 +136,5 @@ public class BasisLocalCameraDriver : MonoBehaviour
             }
         }
     }
+}
 }

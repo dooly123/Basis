@@ -1,6 +1,10 @@
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.BasisSdk.Players;
 using System.Collections;
 using UnityEngine;
 
+namespace Assets.Scripts.BasisSdk
+{
 public class BasisScene : MonoBehaviour
 {
     public static BasisScene Instance;
@@ -72,4 +76,5 @@ public class BasisScene : MonoBehaviour
             SpawnPoint.GetPositionAndRotation(out Position, out Rotation);
         }
     }
+}
 }

@@ -1,6 +1,10 @@
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
+namespace Assets.Scripts.Drivers
+{
 public class BasisFootPlacementDriver : MonoBehaviour
 {
     public BasisLocalPlayer Localplayer;
@@ -19,7 +23,7 @@ public class BasisFootPlacementDriver : MonoBehaviour
     public float FootDistanceMulti = 8f;
     public float StepHeight { get; private set; }
 
-    private void Initialize()
+     public void Initialize()
     {
         Localplayer = BasisLocalPlayer.Instance;
         Localplayer.LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
@@ -243,4 +247,5 @@ public class BasisFootPlacementDriver : MonoBehaviour
             Gizmos.DrawLine(lowerLeg.OutgoingWorldData.position, worldBottomPoint);
         }
     }
+}
 }

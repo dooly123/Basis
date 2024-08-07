@@ -24,6 +24,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+namespace Assets.Scripts.LipSync.Scripts.Helpers
+{
 public class OVRLipSyncDebugConsole : MonoBehaviour
 {
     public ArrayList messages = new ArrayList();
@@ -221,4 +223,5 @@ public class OVRLipSyncDebugConsole : MonoBehaviour
             }
         }
     }
+}
 }

@@ -1,9 +1,13 @@
+using Assets.Scripts.Addressable_Driver.Resource;
+using Assets.Scripts.BasisSdk.Players;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using static SerializableDarkRift;
 
+namespace Assets.Scripts.Player
+{
 public static class BasisPlayerFactory
 {
     public static async Task<BasisLocalPlayer> CreateLocalPlayer(InstantiationParameters InstantiationParameters, string RemotePlayerId = "LocalPlayer")
@@ -41,4 +45,5 @@ public static class BasisPlayerFactory
         Debug.LogError("Error Missing Player!");
         return null;
     }
+}
 }

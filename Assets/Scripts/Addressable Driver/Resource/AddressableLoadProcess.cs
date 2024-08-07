@@ -1,9 +1,17 @@
+using Assets.Scripts.Addressable_Driver.Debug;
+using Assets.Scripts.Addressable_Driver.Enums;
+using Assets.Scripts.Addressable_Driver.Loading;
+using Assets.Scripts.Addressable_Driver.Scene;
+using Assets.Scripts.Addressable_Driver.Validation;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
+
+namespace Assets.Scripts.Addressable_Driver.Resource
+{
 public static class AddressableLoadProcess
 {
     /// <summary>
@@ -81,4 +89,5 @@ public static class AddressableLoadProcess
         LoadRequest.LoadPercentage = totalProgress;
         AddressableDebug.Log("progress at " + LoadRequest.LoadPercentage);
     }
+}
 }

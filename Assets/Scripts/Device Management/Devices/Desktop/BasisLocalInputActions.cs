@@ -1,8 +1,16 @@
+using Assets.Scripts.Addressable_Driver.Resource;
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Drivers;
+using Assets.Scripts.UI.UI_Panels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+namespace Assets.Scripts.Device_Management.Devices.Desktop
+{
 public class BasisLocalInputActions : MonoBehaviour
 {
     public InputActionReference MoveAction;
@@ -269,4 +277,5 @@ public class BasisLocalInputActions : MonoBehaviour
     {
         basisLocalPlayer.Move.RunningToggle();
     }
+}
 }

@@ -1,5 +1,9 @@
+using Assets.Scripts.Drivers;
 using UnityEngine;
 using UnityEngine.UI;
+
+namespace Assets.Scripts.UI.UI_Panels
+{
 public class BasisUIComponent : MonoBehaviour
 {
     public Canvas Canvas;
@@ -21,4 +25,5 @@ public class BasisUIComponent : MonoBehaviour
             Canvas.worldCamera = BasisLocalCameraDriver.Instance.Camera;
         }
     }
+}
 }

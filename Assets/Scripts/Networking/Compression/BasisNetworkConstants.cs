@@ -1,3 +1,5 @@
+namespace Assets.Scripts.Networking.Compression
+{
 public static class BasisNetworkConstants
 {
     public static float MusclePrecision = 0.005f;
@@ -9,4 +11,5 @@ public static class BasisNetworkConstants
     public static float ScalePrecision = 0.02f;
     public static float MinimumScale = 0;
     public static float MaximumScale = 1200;
+}
 }

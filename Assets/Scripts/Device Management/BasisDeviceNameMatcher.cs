@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Assets.Scripts.Device_Management
+{
 [CreateAssetMenu(fileName = "BasisDeviceNameMatcher", menuName = "Basis/BasisDeviceNameMatcher", order = 1)]
 public class BasisDeviceNameMatcher : ScriptableObject
 {
@@ -18,4 +20,5 @@ public class BasisDeviceNameMatcher : ScriptableObject
         BasisDeviceMatchableNames = null;
         return false;
     }
+}
 }

@@ -1,5 +1,8 @@
-﻿public enum BasisClampData
+﻿namespace Assets.Scripts.TransformBinders.BoneControl
+{
+public enum BasisClampData
 {
     None,
     Clamp,
+}
 }

@@ -1,5 +1,9 @@
+using Assets.Scripts.Drivers;
 using System;
 using UnityEngine;
+
+namespace Assets.Scripts.Networking.Recievers
+{
 public partial class BasisAudioReceiverBase
 {
     [SerializeField]
@@ -67,4 +71,5 @@ public partial class BasisAudioReceiverBase
         audioSource.clip.SetData(entireBuffer, 0);
         audioSource.Play();
     }
+}
 }

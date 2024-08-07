@@ -4,6 +4,14 @@ using UnityOpus;
 using DarkRift;
 using static SerializableDarkRift;
 using DarkRift.Server.Plugins.Commands;
+using Assets.Scripts.Networking.NetworkedPlayer;
+using Assets.Scripts.Networking.NetworkedAvatar;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.Profiler;
+
+namespace Assets.Scripts.Networking.Transmitters
+{
 [System.Serializable]
 public class BasisAudioTransmission
 {
@@ -103,4 +111,5 @@ public class BasisAudioTransmission
             }
         }
     }
+}
 }

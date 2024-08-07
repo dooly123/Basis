@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+namespace Assets.Scripts.Common
+{
 public class BasisTransformMapping
 {
     public Transform AnimatorRoot;
@@ -340,4 +342,5 @@ public class BasisTransformMapping
 
         return transforms;
     }
+}
 }

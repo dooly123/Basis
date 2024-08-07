@@ -22,6 +22,8 @@ limitations under the License.
 ************************************************************************************/
 using UnityEngine;
 
+namespace Assets.Scripts.LipSync.Scripts
+{
 //-------------------------------------------------------------------------------------
 // ***** OVRLipSyncContextBase
 //
@@ -193,4 +195,5 @@ public class OVRLipSyncContextBase : MonoBehaviour
 
         return OVRLipSync.ResetContext(context);
     }
+}
 }

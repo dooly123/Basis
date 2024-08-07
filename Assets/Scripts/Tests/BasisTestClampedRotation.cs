@@ -1,5 +1,7 @@
 using UnityEngine;
 
+namespace Assets.Scripts.Tests
+{
 public class BasisTestClampedRotation : MonoBehaviour
 {
     public Transform lookTarget;
@@ -29,4 +31,5 @@ public class BasisTestClampedRotation : MonoBehaviour
 
         transform.rotation = finalRotation;
     }
+}
 }

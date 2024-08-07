@@ -25,6 +25,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+namespace Assets.Scripts.LipSync.Scripts
+{
 // Sequence - holds ordered entries for playback
 [System.Serializable]
 public class OVRLipSyncSequence : ScriptableObject
@@ -160,3 +162,4 @@ public class OVRLipSyncSequence : ScriptableObject
     }
 #endif
 };
+}

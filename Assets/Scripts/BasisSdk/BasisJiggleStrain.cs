@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace Assets.Scripts.BasisSdk
+{
 [System.Serializable]
 public class BasisJiggleStrain
 {
@@ -32,4 +35,5 @@ public class BasisJiggleStrain
     public List<Transform> IgnoredTransforms = new List<Transform>();
     [SerializeField]
     public List<Collider> Colliders = new List<Collider>();
+}
 }

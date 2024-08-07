@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using static KeyboardLayoutData;
+
+namespace Assets.Scripts.Virtual_keyboard.Editor
+{
 public partial class KeyboardLayoutDataEditor
 {
     public class BasisVirtualKeyboardDefaultLanguagesAndStyles
@@ -151,4 +154,5 @@ public partial class KeyboardLayoutDataEditor
             };
         }
     }
+}
 }

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace Assets.Scripts.TransformBinders.BoneControl
+{
 [System.Serializable]
 public class BasisFallBone
 {
@@ -11,4 +13,5 @@ public class BasisFallBone
     public HumanBodyBones HumanBone;
     [SerializeField]
     public BasisBoneTrackedRole Role;
+}
 }

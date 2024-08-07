@@ -23,6 +23,8 @@ limitations under the License.
 using UnityEngine;
 using System;
 
+namespace Assets.Scripts.LipSync.Scripts.Helpers
+{
 //-------------------------------------------------------------------------------------
 // ***** OVRTouchpad
 //
@@ -198,4 +200,4 @@ public sealed class OVRTouchpadHelper : MonoBehaviour
     }
 
 }
-
+}

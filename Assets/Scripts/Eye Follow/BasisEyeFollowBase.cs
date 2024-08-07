@@ -1,5 +1,8 @@
+using Assets.Scripts.Drivers;
 using UnityEngine;
 
+namespace Assets.Scripts.Eye_Follow
+{
 public abstract class BasisEyeFollowBase : MonoBehaviour
 {
     public Vector3 EyeFowards = new Vector3(0, 0, 1);
@@ -62,4 +65,5 @@ public abstract class BasisEyeFollowBase : MonoBehaviour
             Gizmos.DrawWireSphere(GeneralEyeTarget.position, 0.1f);
         }
     }
+}
 }

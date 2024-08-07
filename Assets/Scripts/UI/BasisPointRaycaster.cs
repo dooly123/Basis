@@ -1,8 +1,19 @@
+using Assets.Scripts.Addressable_Driver;
+using Assets.Scripts.Addressable_Driver.Enums;
+using Assets.Scripts.Addressable_Driver.Factory;
+using Assets.Scripts.Addressable_Driver.Resource;
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.Device_Management;
+using Assets.Scripts.Device_Management.Devices;
+using Assets.Scripts.Drivers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+namespace Assets.Scripts.UI
+{
 public partial class BasisPointRaycaster : BaseRaycaster
 {
     public Vector3 Direction = Vector3.forward;
@@ -450,4 +461,5 @@ public partial class BasisPointRaycaster : BaseRaycaster
     public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
     {
     }
+}
 }

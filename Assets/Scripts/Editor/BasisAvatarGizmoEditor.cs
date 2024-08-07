@@ -1,6 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+namespace Assets.Scripts.Editor
+{
 public class BasisAvatarGizmoEditor : MonoBehaviour
 {
     public static void UpdateGizmos(BasisAvatarSDKInspector inspector, BasisAvatar avatar)
@@ -45,4 +48,5 @@ public class BasisAvatarGizmoEditor : MonoBehaviour
             EditorUtility.SetDirty(avatar);
         }
     }
+}
 }

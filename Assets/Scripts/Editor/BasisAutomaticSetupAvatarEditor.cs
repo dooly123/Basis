@@ -1,6 +1,9 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+
+namespace Assets.Scripts.Editor
+{
 public static class BasisAutomaticSetupAvatarEditor
 {
     // Offset to estimate the mouth position relative to the head
@@ -139,4 +142,5 @@ public static class BasisAutomaticSetupAvatarEditor
     {
         avatar.Renders = avatar.GetComponentsInChildren<Renderer>(true).ToList();
     }
+}
 }

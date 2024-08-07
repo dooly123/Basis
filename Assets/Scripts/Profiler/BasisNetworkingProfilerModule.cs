@@ -2,6 +2,9 @@ using Unity.Profiling;
 using UnityEngine;
 #if UNITY_EDITOR
 using Unity.Profiling.Editor;
+
+namespace Assets.Scripts.Profiler
+{
 [System.Serializable]
 [ProfilerModuleMetadata("Byte Array Count")]
 public class BasisNetworkingProfilerModule : ProfilerModule
@@ -47,4 +50,5 @@ public class BasisNetworkProfiler : MonoBehaviour
         AvatarUpdatePacket.Sample(0);
         AudioUpdatePacket.Sample(0);
     }
+}
 }

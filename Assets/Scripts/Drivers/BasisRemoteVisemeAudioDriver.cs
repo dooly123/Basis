@@ -1,5 +1,7 @@
 using UnityEngine;
 
+namespace Assets.Scripts.Drivers
+{
 public class BasisRemoteVisemeAudioDriver : MonoBehaviour
 {
     public BasisVisemeDriver BasisVisemeDriver;
@@ -18,4 +20,5 @@ public class BasisRemoteVisemeAudioDriver : MonoBehaviour
             this.enabled = false;
         }
     }
+}
 }

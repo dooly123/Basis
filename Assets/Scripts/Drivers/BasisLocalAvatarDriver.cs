@@ -1,6 +1,15 @@
+using Assets.Scripts.Animator_Driver;
+using Assets.Scripts.BasisSdk.Helpers;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Common.Enums;
+using Assets.Scripts.Eye_Follow;
+using Assets.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+
+namespace Assets.Scripts.Drivers
+{
 public class BasisLocalAvatarDriver : BasisAvatarDriver
 {
     public Vector3 HeadScale;
@@ -519,4 +528,5 @@ public class BasisLocalAvatarDriver : BasisAvatarDriver
         Builder.layers.Add(RigLayer);
         return RigGameobject;
     }
+}
 }

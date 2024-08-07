@@ -1,4 +1,6 @@
-﻿public enum BasisBoneTrackedRole
+﻿namespace Assets.Scripts.TransformBinders.BoneControl
+{
+public enum BasisBoneTrackedRole
 {
     CenterEye,
     Head,
@@ -118,4 +120,5 @@ public static class BasisBoneTrackedRoleCommonCheck
                 return false;
         }
     }
+}
 }

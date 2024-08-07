@@ -1,5 +1,9 @@
+using Assets.Scripts.BasisSdk.Players;
 using System;
 using UnityEngine;
+
+namespace Assets.Scripts.Device_Management.Devices.Desktop
+{
 [Serializable]
 public class BasisDesktopManagement
 {
@@ -25,4 +29,5 @@ public class BasisDesktopManagement
         BasisDeviceManagement.Instance.BasisSimulateXR.StopXR();
         BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisDesktopManagement), "Desktop Eye");
     }
+}
 }

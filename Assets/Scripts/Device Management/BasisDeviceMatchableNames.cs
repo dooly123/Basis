@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.TransformBinders.BoneControl;
+using System.Collections.Generic;
 using UnityEngine;
 
+namespace Assets.Scripts.Device_Management
+{
 [System.Serializable]
 public class BasisDeviceMatchableNames
 {
@@ -25,4 +28,5 @@ public class BasisDeviceMatchableNames
     [Header("Tracked Role Override")]
     public bool HasTrackedRole = false;
     public BasisBoneTrackedRole TrackedRole;
+}
 }

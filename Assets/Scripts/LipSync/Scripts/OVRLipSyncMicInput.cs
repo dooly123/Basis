@@ -27,6 +27,8 @@ using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using System.Threading;
 
+namespace Assets.Scripts.LipSync.Scripts
+{
 [RequireComponent(typeof(AudioSource))]
 
 public class OVRLipSyncMicInput : MonoBehaviour
@@ -369,4 +371,5 @@ public class OVRLipSyncMicInput : MonoBehaviour
         // return OVRSpeechRec.GetAverageVolume();
         return 0.0f;
     }
+}
 }

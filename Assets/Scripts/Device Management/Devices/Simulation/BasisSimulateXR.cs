@@ -1,11 +1,18 @@
+using Assets.Scripts.Avatar;
+using Assets.Scripts.BasisSdk.Players;
+using Assets.Scripts.Device_Management.Devices.Desktop;
+using Assets.Scripts.TransformBinders.BoneControl;
 using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
-using static BasisDeviceManagement;
+using static Assets.Scripts.Device_Management.BasisDeviceManagement;
 using Random = UnityEngine.Random;
+
+namespace Assets.Scripts.Device_Management.Devices.Simulation
+{
 public class BasisSimulateXR
 {
     public List<BasisInputXRSimulate> Inputs = new List<BasisInputXRSimulate>();
@@ -256,4 +263,5 @@ public class BasisSimulateXR
       CreatePuck3Tracker();
     }
 #endif
+}
 }
