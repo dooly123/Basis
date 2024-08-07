@@ -1,9 +1,9 @@
+using Assets.Scripts.Drivers;
+using Assets.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Assets.Scripts.Editor
-{
 [CustomEditor(typeof(BasisFallBackBoneData))]
 public class BasisFallBackBoneDataEditor : Editor
 {
@@ -113,5 +113,4 @@ public class BasisFallBackBoneDataEditor : Editor
         }
         return bounds;
     }
-}
 }

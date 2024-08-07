@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
-using static KeyboardLayoutData;
+using static Assets.Scripts.Virtual_keyboard.KeyboardLayoutData;
+using Assets.Scripts.Virtual_keyboard;
+using static Assets.Scripts.Virtual_keyboard.Editor.KeyboardLayoutDataEditor;
 
-namespace Assets.Scripts.Virtual_keyboard.Editor
-{
 [CustomEditor(typeof(KeyboardLayoutData))]
 public partial class KeyboardLayoutDataEditor : Editor
 {
@@ -64,5 +63,4 @@ public partial class KeyboardLayoutDataEditor : Editor
         keyboardLayoutData.languagesAndStyles.AddRange(BasisVirtualKeyboardDefaultLanguagesAndStyles.DefaultLanguagesAndStyles());
 
     }
-}
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using static KeyboardLayoutData;
-
+using static Assets.Scripts.Virtual_keyboard.KeyboardLayoutData;
 namespace Assets.Scripts.Virtual_keyboard.Editor
 {
 public partial class KeyboardLayoutDataEditor
