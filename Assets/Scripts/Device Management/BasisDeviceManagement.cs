@@ -354,18 +354,5 @@ public partial class BasisDeviceManagement : MonoBehaviour
         StoredPreviousDevice = null;
         return false;
     }
-#if UNITY_EDITOR
-    [MenuItem("Basis/Hide Trackers")]
-    public static void HideTrackersEditor()
-    {
-        HideTrackers();
-    }
-
-    [MenuItem("Basis/Show Trackers")]
-    public static void ShowTrackersEditor()
-    {
-        ShowTrackers();
-    }
-#endif
 }
 }

@@ -10,17 +10,6 @@ using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Common;
 using Basis.Scripts.Avatar;
-
-
-
-
-
-
-
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 namespace Basis.Scripts.BasisSdk.Players
 {
 public class BasisLocalPlayer : BasisPlayer
@@ -161,13 +150,6 @@ public class BasisLocalPlayer : BasisPlayer
             }
         }
     }
-#if UNITY_EDITOR
-    [MenuItem("Basis/ReloadAvatar")]
-    public static async void ReloadAvatar()
-    {
-        await BasisLocalPlayer.Instance.CreateAvatar();
-    }
-#endif
     public async Task CreateAvatar(string AddressableID = BasisAvatarFactory.LoadingAvatar)
     {
         await BasisAvatarFactory.LoadAvatar(this, AddressableID);
