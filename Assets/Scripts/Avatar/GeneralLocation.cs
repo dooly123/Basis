@@ -1,9 +1,10 @@
-﻿#if UNITY_EDITOR
-#endif
+﻿namespace Basis.Scripts.Avatar
+{
 public static partial class BasisAvatarIKStageCalibration
 {
     public enum GeneralLocation
     {
         Center, Left, Right
     }
+}
 }

@@ -1,6 +1,8 @@
 using DarkRift;
 using UnityEngine;
 
+namespace Basis.Scripts.Networking.Compression
+{
 public static class BasisCompressionOfPosition
 {
     public static void CompressUShortVector3(Vector3 Input, DarkRiftWriter packer, BasisRangedUshortFloatData compressor)
@@ -23,4 +25,5 @@ public static class BasisCompressionOfPosition
         BasisBitPackerExtensions.ReadVectorFloat(Packer, out float x, out float y, out float z);
         return new Vector3(x, y, z);
     }
+}
 }

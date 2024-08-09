@@ -1,5 +1,10 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common.Enums;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
+namespace Basis.Scripts.Drivers
+{
 public class BasisRemoteAvatarDriver : BasisAvatarDriver
 {
     public BasisRemotePlayer RemotePlayer;
@@ -131,4 +136,5 @@ public class BasisRemoteAvatarDriver : BasisAvatarDriver
         }
         return true;
     }
+}
 }

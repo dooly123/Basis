@@ -1,5 +1,11 @@
-﻿using UnityEngine;
+﻿using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
+using Basis.Scripts.TransformBinders.BoneControl;
+using UnityEngine;
 using Valve.VR;
+
+namespace Basis.Scripts.Device_Management.Devices.OpenVR
+{
 [DefaultExecutionOrder(15101)]
 ///only used for trackers!
 public class BasisOpenVRInput : BasisInput
@@ -59,4 +65,5 @@ public class BasisOpenVRInput : BasisInput
             }
         }
     }
+}
 }

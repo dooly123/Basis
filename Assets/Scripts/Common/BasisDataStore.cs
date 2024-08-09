@@ -1,6 +1,8 @@
 using System.IO;
 using UnityEngine;
 
+namespace Basis.Scripts.Common
+{
 public static class BasisDataStore
 {
     // Method to save the list of strings to a file using JSON
@@ -56,4 +58,5 @@ public static class BasisDataStore
             return String;
         }
     }
+}
 }

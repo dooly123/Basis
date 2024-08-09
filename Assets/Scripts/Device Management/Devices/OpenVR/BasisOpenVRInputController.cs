@@ -1,5 +1,11 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using Valve.VR;
+
+namespace Basis.Scripts.Device_Management.Devices.OpenVR
+{
 [DefaultExecutionOrder(15101)]
 public class BasisOpenVRInputController : BasisInput
 {
@@ -117,4 +123,5 @@ public class BasisOpenVRInputController : BasisInput
     public bool isValid { get { return poseAction[inputSource].poseIsValid; } }
     public bool isActive { get { return poseAction[inputSource].active; } }
     #endregion
+}
 }

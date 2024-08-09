@@ -1,7 +1,12 @@
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.Networking.NetworkedPlayer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
+
+namespace Basis.Scripts.Networking.Factorys
+{
 public static class BasisPlayerFactoryNetworked
 {
     public static async Task<BasisNetworkedPlayer> CreateNetworkedPlayer(InstantiationParameters InstantiationParameters, string PlayerAddressableID = "NetworkedPlayer")
@@ -22,4 +27,5 @@ var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddress
         Debug.LogError("Error Missing Player!");
         return null;
     }
+}
 }

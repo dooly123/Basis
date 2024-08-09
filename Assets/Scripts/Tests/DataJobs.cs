@@ -1,5 +1,8 @@
-﻿using Unity.Jobs;
+﻿using Basis.Scripts.Networking.NetworkedAvatar;
+using Unity.Jobs;
 
+namespace Basis.Scripts.Tests
+{
 public struct DataJobs
 {
     public JobHandle positionHandle;
@@ -8,4 +11,5 @@ public struct DataJobs
     public UpdateAvatarPositionJob positionJob;
     public UpdateAvatarRotationJob rotationJob;
     public UpdateAvatarMusclesJob muscleJob;
+}
 }

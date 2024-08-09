@@ -1,8 +1,16 @@
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Addressable_Driver.Factory;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Players;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+
+namespace Basis.Scripts.Avatar
+{
 public static class BasisAvatarFactory
 {
     public const string LoadingAvatar = "LoadingAvatar";
@@ -153,4 +161,5 @@ public static class BasisAvatarFactory
         }
         Player.AvatarDriver.InitialLocalCalibration(Player);
     }
+}
 }

@@ -1,7 +1,12 @@
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+namespace Basis.Scripts.UI.NamePlate
+{
 public class BasisRemoteNamePlate : BasisNamePlate
 {
     public static async Task LoadRemoteNamePlate(BasisRemotePlayer Player, string RemoteNamePlate = "Assets/UI/Prefabs/NamePlate.prefab")
@@ -28,4 +33,5 @@ public class BasisRemoteNamePlate : BasisNamePlate
             }
         }
     }
+}
 }

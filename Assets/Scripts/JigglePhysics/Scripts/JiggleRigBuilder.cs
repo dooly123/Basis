@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace JigglePhysics
 {
@@ -156,7 +155,7 @@ namespace JigglePhysics
                 }
             }
 
-            public void OnDrawGizmos()
+            public void OnRenderObject()
             {
                 if (!initialized || simulatedPoints == null)
                 {
@@ -343,7 +342,7 @@ namespace JigglePhysics
             }
             foreach (var rig in jiggleRigs)
             {
-                rig.OnDrawGizmos();
+                rig.OnRenderObject();
             }
         }
 

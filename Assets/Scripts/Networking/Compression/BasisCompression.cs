@@ -1,5 +1,8 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
+
+namespace Basis.Scripts.Networking.Compression
+{
 /// <summary>Functions to Compress Quaternions and Floats</summary>
 public static class BasisCompression
 {
@@ -81,7 +84,7 @@ public static class BasisCompression
         // from here on, we work with the 3 components without largest!
 
         // "You might think you need to send a sign bit for [largest] in
-        // case it is negative, but you don’t, because you can make
+        // case it is negative, but you donï¿½t, because you can make
         // [largest] always positive by negating the entire quaternion if
         // [largest] is negative. in quaternion space (x,y,z,w) and
         // (-x,-y,-z,-w) represent the same rotation."
@@ -150,7 +153,7 @@ public static class BasisCompression
         float b = ScaleUShortToFloat(bScaled, 0, TenBitsMax, QuaternionMinRange, QuaternionMaxRange);
         float c = ScaleUShortToFloat(cScaled, 0, TenBitsMax, QuaternionMinRange, QuaternionMaxRange);
 
-        // calculate the omitted component based on a²+b²+c²+d²=1
+        // calculate the omitted component based on aï¿½+bï¿½+cï¿½+dï¿½=1
         float d = Mathf.Sqrt(1 - a * a - b * b - c * c);
 
         // reconstruct based on largest index
@@ -170,4 +173,5 @@ public static class BasisCompression
         //    in NaN from deserializing invalid values!
         return QuaternionNormalizeSafe(new Quaternion(value.x, value.y, value.z, value.w));
     }
+}
 }

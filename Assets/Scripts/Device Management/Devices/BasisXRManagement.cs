@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Management;
 
+namespace Basis.Scripts.Device_Management.Devices
+{
 [System.Serializable]
 public class BasisXRManagement
 {
@@ -78,4 +80,5 @@ public class BasisXRManagement
             CheckForPass?.Invoke(BasisBootedMode.Desktop);
         }
     }
+}
 }

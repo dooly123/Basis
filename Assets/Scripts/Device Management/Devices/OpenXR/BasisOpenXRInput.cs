@@ -1,4 +1,9 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
+
+namespace Basis.Scripts.Device_Management.Devices.OpenXR
+{
 [DefaultExecutionOrder(15101)]
 public class BasisOpenXRInput : BasisInput
 {
@@ -81,4 +86,5 @@ public class BasisOpenXRInput : BasisInput
             UpdatePlayerControl();
         }
     }
+}
 }

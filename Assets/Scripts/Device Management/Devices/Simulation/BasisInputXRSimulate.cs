@@ -1,5 +1,9 @@
-﻿using UnityEngine;
+﻿using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
+using UnityEngine;
 
+namespace Basis.Scripts.Device_Management.Devices.Simulation
+{
 public class BasisInputXRSimulate : BasisInput
 {
     public Transform FollowMovement;
@@ -94,4 +98,5 @@ public class BasisInputXRSimulate : BasisInput
         }
         base.OnDestroy();
     }
+}
 }

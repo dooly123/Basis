@@ -1,5 +1,12 @@
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.Networking.NetworkedPlayer;
 using UnityEngine;
 
+namespace Basis.Scripts.Networking.Recievers
+{
 [System.Serializable]
 public class BasisAudioReceiver : BasisAudioReceiverBase
 {
@@ -85,4 +92,5 @@ public class BasisAudioReceiver : BasisAudioReceiverBase
         }
         BasisRemoteVisemeAudioDriver.Initalize(visemeDriver);
     }
+}
 }

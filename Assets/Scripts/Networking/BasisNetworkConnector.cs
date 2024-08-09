@@ -1,3 +1,10 @@
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.Factorys;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Networking.Recievers;
+using Basis.Scripts.Player;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
@@ -7,14 +14,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using static SerializableDarkRift;
-public class BasisNetworkConnector : MonoBehaviour
+
+namespace Basis.Scripts.Networking
+{
+    public class BasisNetworkConnector : MonoBehaviour
 {
     public BasisLowLevelClient Client;
     public bool HasAuthenticated = false;
@@ -268,7 +275,7 @@ public class BasisNetworkConnector : MonoBehaviour
             await CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex]);
         }
     }
-    private async Task CreateRemotePlayer(ServerReadyMessage ServerReadyMessage)
+    public async Task CreateRemotePlayer(ServerReadyMessage ServerReadyMessage)
     {
         InstantiationParameters instantiationParameters = new InstantiationParameters(Vector3.zero, Quaternion.identity, transform);
         string avatarID = ServerReadyMessage.LocalReadyMessage.clientAvatarChangeMessage.avatarID;
@@ -293,38 +300,6 @@ public class BasisNetworkConnector : MonoBehaviour
         }
         BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
     }
-#if UNITY_EDITOR
-    [MenuItem("Basis/Spawn Fake Remote")]
-    public static void SpawnFakeRemote()
-    {
-        BasisNetworkConnector NetworkConnector = BasisNetworkConnector.Instance;
-        if (NetworkConnector != null)
-        {
-            ServerReadyMessage serverSideSyncPlayerMessage = new ServerReadyMessage
-            {
-                playerIdMessage = new PlayerIdMessage
-                {
-                    playerID = (ushort)(NetworkConnector.Players.Count + 1)
-                },
-                LocalReadyMessage = new ReadyMessage()
-            };
-            serverSideSyncPlayerMessage.LocalReadyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage();
-            serverSideSyncPlayerMessage.LocalReadyMessage.localAvatarSyncMessage = new LocalAvatarSyncMessage();
-            BasisNetworkTransmitter Transmitter = FindFirstObjectByType<BasisNetworkTransmitter>();
-            if (Transmitter != null)
-            {
-                Debug.Log("Apply SpawnFakeRemote");
-                serverSideSyncPlayerMessage.LocalReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
-            }
-            CreateTestRemotePlayer(serverSideSyncPlayerMessage);
-        }
-    }
-    public async static void CreateTestRemotePlayer(ServerReadyMessage ServerReadyMessage)
-    {
-        BasisNetworkConnector NetworkConnector = BasisNetworkConnector.Instance;
-        await NetworkConnector.CreateRemotePlayer(ServerReadyMessage);
-    }
-#endif
     public void Host(ushort Port)
     {
         //  public NetworkServer Server;
@@ -338,4 +313,5 @@ public class BasisNetworkConnector : MonoBehaviour
         //     Destroy(Server);
         // }
     }
+}
 }

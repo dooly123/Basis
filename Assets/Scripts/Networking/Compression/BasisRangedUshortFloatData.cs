@@ -1,4 +1,7 @@
 ﻿using System;
+
+namespace Basis.Scripts.Networking.Compression
+{
 [System.Serializable]
 public class BasisRangedUshortFloatData
 {
@@ -80,4 +83,5 @@ public class BasisRangedUshortFloatData
 
         return deBruijnLookup[(value * 0x07C4ACDDU) >> 27];
     }
+}
 }

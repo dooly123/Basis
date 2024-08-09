@@ -1,6 +1,9 @@
+using Basis.Scripts.Device_Management;
 using System;
 using UnityEngine;
 
+namespace Basis.Scripts.Command_Line_Args
+{
 public static class CommandLineArgs
 {
     public static void Initialize()
@@ -23,4 +26,5 @@ public static class CommandLineArgs
             }
         }
     }
+}
 }

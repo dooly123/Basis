@@ -205,27 +205,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444863616255f204b93987765ee33de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveAction: {fileID: 4708565538779427141, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  LookAction: {fileID: -4614550756354622855, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  JumpAction: {fileID: -4995091536327712792, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  CrouchAction: {fileID: 4281027790913896788, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  RunButton: {fileID: 4166653571123788975, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
+  MoveAction: {fileID: 4708565538779427141, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  LookAction: {fileID: -4614550756354622855, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  JumpAction: {fileID: -4995091536327712792, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  CrouchAction: {fileID: 4281027790913896788, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  RunButton: {fileID: 4166653571123788975, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
   Escape: {fileID: -8104914591799447859, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
-  PrimaryButtonGetState: {fileID: 647096541409930546, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  DesktopSwitch: {fileID: -1278911692722073990, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  XRSwitch: {fileID: 3096343990557684458, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  LeftMousePressed: {fileID: 8998537766406633762, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
-  RightMousePressed: {fileID: -240064975923332847, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
+  PrimaryButtonGetState: {fileID: 647096541409930546, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  DesktopSwitch: {fileID: -1278911692722073990, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  XRSwitch: {fileID: 3096343990557684458, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  LeftMousePressed: {fileID: 8998537766406633762, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  RightMousePressed: {fileID: -240064975923332847, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
   CharacterEyeInput: {fileID: 0}
   basisLocalPlayer: {fileID: 0}
   Input: {fileID: 4506459589283058818}
@@ -275,8 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 5e4c3601c6a155f43af19da3bdd35a64,
-    type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -363,15 +352,27 @@ MonoBehaviour:
     CurrentPipeline: 4
     MarkAsDontDestroyOnLoad: 1
     ExplanationText: {fileID: 0}
-    SettingsManagerObjectpaths: []
-    SettingsManagerObjects: []
+    SettingsManagerObjectpaths:
+    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
+      Types/Unity/Unity Standard Dropdown.prefab
+    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
+      Types/Unity/Unity Standard Dynamic Dropdown.prefab
+    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
+      Types/Unity/Unity Standard Slider.prefab
+    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
+      Types/Unity/Unity Standard Toggle.prefab
+    SettingsManagerObjects:
+    - {fileID: 7449501133343338555, guid: 91c995af67f8e7c46b15c8cd8184a723, type: 3}
+    - {fileID: 7449501133343338555, guid: c4d7177423c74af4fafb9699c399dafb, type: 3}
+    - {fileID: 4698753801063083922, guid: 19e5030522240f4459ed288c663e390f, type: 3}
+    - {fileID: -892464885040180822, guid: e814fefd40c6ef445bfacef072a362ca, type: 3}
     CurrentlySelectedSaveModule: {fileID: 256212325347645450}
     CurrentlySelectedSaveModuleName: JSON
   SettingsManagerOptions:
+  - {fileID: 6430705635976775670}
   - {fileID: 2467030893667730727}
   - {fileID: 1027479742639559022}
   - {fileID: 1776921867475573335}
-  - {fileID: 0}
   - {fileID: 7074081770173294057}
   - {fileID: 734679581483801923}
   - {fileID: 1962641699494196431}
@@ -741,7 +742,7 @@ MonoBehaviour:
     SelectedValueDefault: on
     ValueDefault: on
     Explanation: Vertical Sync
-    selectedValue: half
+    selectedValue: off
     Type: 1
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -981,7 +982,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: 640x480
     Explanation: 
-    selectedValue: 1920x1080
+    selectedValue: 2560x1440
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1161,7 +1162,7 @@ MonoBehaviour:
     SelectedValueDefault: 50
     ValueDefault: 70
     Explanation: UI Sounds
-    selectedValue: 80
+    selectedValue: 70
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1191,7 +1192,7 @@ MonoBehaviour:
     SelectedValueDefault: 50
     ValueDefault: 70
     Explanation: Player Volume
-    selectedValue: 80
+    selectedValue: 70
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1221,7 +1222,7 @@ MonoBehaviour:
     SelectedValueDefault: 50
     ValueDefault: 70
     Explanation: 
-    selectedValue: 80
+    selectedValue: 70
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1281,7 +1282,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: False
     Explanation: 
-    selectedValue: microphone (nvidia broadcast)
+    selectedValue: digital audio interface (valve vr radio & hmd mic)
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1293,20 +1294,20 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 0
     SelectableValueList:
-    - realValue: microphone (2- antlion wireless microphone)
-      UserValue: Microphone (2- Antlion Wireless Microphone)
-    - realValue: microphone (logitech streamcam)
-      UserValue: Microphone (Logitech StreamCam)
+    - realValue: digital audio interface (valve vr radio & hmd mic)
+      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
     - realValue: headset microphone (oculus virtual audio device)
       UserValue: Headset Microphone (Oculus Virtual Audio Device)
     - realValue: microphone (nvidia broadcast)
       UserValue: Microphone (NVIDIA Broadcast)
     - realValue: microphone (steam streaming microphone)
       UserValue: Microphone (Steam Streaming Microphone)
+    - realValue: microphone (logitech streamcam)
+      UserValue: Microphone (Logitech StreamCam)
     - realValue: microphone (2- rode nt-usb)
       UserValue: Microphone (2- RODE NT-USB)
-    - realValue: digital audio interface (valve vr radio & hmd mic)
-      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
+    - realValue: microphone (2- antlion wireless microphone)
+      UserValue: Microphone (2- Antlion Wireless Microphone)
   - EditorBasedUIToggles:
       SupportedRenderPipelines: 0
       DefaultPlatform: 0
@@ -1325,7 +1326,7 @@ MonoBehaviour:
     SelectedValueDefault: 1
     ValueDefault: 1
     Explanation: 
-    selectedValue: 0.9991138
+    selectedValue: 1
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1355,7 +1356,7 @@ MonoBehaviour:
     SelectedValueDefault: 1
     ValueDefault: 1
     Explanation: 
-    selectedValue: 1.5
+    selectedValue: 1
     Type: 4
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1385,7 +1386,7 @@ MonoBehaviour:
     SelectedValueDefault: False
     ValueDefault: auto
     Explanation: UpScaler
-    selectedValue: linear upscaling
+    selectedValue: auto
     Type: 1
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1459,7 +1460,7 @@ MonoBehaviour:
     SelectedValueDefault: 0.05
     ValueDefault: 0.1
     Explanation: 
-    selectedValue: 0.05
+    selectedValue: 0.1
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1471,6 +1472,40 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 1
     SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Debug Visuals
+    ValueDescriptor: Debug Visuals
+    SelectedValueDefault: 
+    ValueDefault: False
+    Explanation: 
+    selectedValue: false
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
   SaveModules:
   - {fileID: 6482417607131076391}
   - {fileID: 256212325347645450}
@@ -1636,7 +1671,7 @@ MonoBehaviour:
     Max: 0
   - Name: Vertical Sync
     DefaultValue: on
-    SelectedValue: half
+    SelectedValue: off
     Index: 8
     SelectableValueList:
     - realValue: on
@@ -1732,7 +1767,7 @@ MonoBehaviour:
     Max: 0
   - Name: Resolution
     DefaultValue: 
-    SelectedValue: 21
+    SelectedValue: 24
     Index: 14
     SelectableValueList:
     - realValue: 640x480
@@ -1818,23 +1853,23 @@ MonoBehaviour:
     SelectableValueList: []
     Min: 0
     Max: 1
-  - Name: SFX Audio
+  - Name: Menus Volume
     DefaultValue: 50
-    SelectedValue: 80
+    SelectedValue: 70
     Index: 18
     SelectableValueList: []
     Min: 0
     Max: 80
-  - Name: Music Audio
+  - Name: World Volume
     DefaultValue: 50
-    SelectedValue: 80
+    SelectedValue: 70
     Index: 19
     SelectableValueList: []
     Min: 0
     Max: 80
-  - Name: Player Audio
+  - Name: Player Volume
     DefaultValue: 50
-    SelectedValue: 80
+    SelectedValue: 70
     Index: 20
     SelectableValueList: []
     Min: 0
@@ -1848,42 +1883,42 @@ MonoBehaviour:
     Max: 1
   - Name: Selected Microphone
     DefaultValue: 
-    SelectedValue: 3
+    SelectedValue: 0
     Index: 22
     SelectableValueList:
-    - realValue: microphone (nvidia broadcast)
-      UserValue: Microphone (NVIDIA Broadcast)
-    - realValue: microphone (logitech streamcam)
-      UserValue: Microphone (Logitech StreamCam)
-    - realValue: headset microphone (oculus virtual audio device)
-      UserValue: Headset Microphone (Oculus Virtual Audio Device)
-    - realValue: microphone (2- antlion wireless microphone)
-      UserValue: Microphone (2- Antlion Wireless Microphone)
-    - realValue: microphone (steam streaming microphone)
-      UserValue: Microphone (Steam Streaming Microphone)
-    - realValue: microphone (2- rode nt-usb)
-      UserValue: Microphone (2- RODE NT-USB)
     - realValue: digital audio interface (valve vr radio & hmd mic)
       UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
+    - realValue: headset microphone (oculus virtual audio device)
+      UserValue: Headset Microphone (Oculus Virtual Audio Device)
+    - realValue: microphone (nvidia broadcast)
+      UserValue: Microphone (NVIDIA Broadcast)
+    - realValue: microphone (steam streaming microphone)
+      UserValue: Microphone (Steam Streaming Microphone)
+    - realValue: microphone (logitech streamcam)
+      UserValue: Microphone (Logitech StreamCam)
+    - realValue: microphone (2- rode nt-usb)
+      UserValue: Microphone (2- RODE NT-USB)
+    - realValue: microphone (2- antlion wireless microphone)
+      UserValue: Microphone (2- Antlion Wireless Microphone)
     Min: 0
     Max: 0
   - Name: Mcrophone Volume
     DefaultValue: 1
-    SelectedValue: 0.9991138
+    SelectedValue: 1
     Index: 23
     SelectableValueList: []
     Min: 0
     Max: 1.5
   - Name: Render Resolution
     DefaultValue: 1
-    SelectedValue: 1.5
+    SelectedValue: 1
     Index: 24
     SelectableValueList: []
-    Min: 0.45
-    Max: 1.5
+    Min: 0
+    Max: 0
   - Name: UpScaler
     DefaultValue: False
-    SelectedValue: linear upscaling
+    SelectedValue: auto
     Index: 25
     SelectableValueList:
     - realValue: auto
@@ -1910,12 +1945,23 @@ MonoBehaviour:
     Min: 0
     Max: 0
   - Name: Controller DeadZone
-    DefaultValue: 
-    SelectedValue: 0.05
+    DefaultValue: 0.05
+    SelectedValue: 0.1
     Index: 27
     SelectableValueList: []
     Min: 0
     Max: 0.5
+  - Name: Debug Visuals
+    DefaultValue: 
+    SelectedValue: false
+    Index: 28
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+    Min: 0
+    Max: 0
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -1950,6 +1996,7 @@ GameObject:
   - component: {fileID: 1776921867475573335}
   - component: {fileID: 1027479742639559022}
   - component: {fileID: 2467030893667730727}
+  - component: {fileID: 6430705635976775670}
   m_Layer: 0
   m_Name: Modules
   m_TagString: Untagged
@@ -2003,9 +2050,6 @@ MonoBehaviour:
     Type: 3
   UseAudioListener: 1
   Mixer: {fileID: 24100000, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
-  AudioMixerGroupTwo: Menus Volume
-  AudioMixerGroupThree: World Volume
-  AudioMixerGroupFour: Player Volume
 --- !u!114 &4907001347912712639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2208,13 +2252,13 @@ MonoBehaviour:
     Type: 1
   Manager: {fileID: 0}
   MicrophoneDevice:
-  - Microphone (2- Antlion Wireless Microphone)
-  - Microphone (Logitech StreamCam)
+  - Digital Audio Interface (Valve VR Radio & HMD Mic)
   - Headset Microphone (Oculus Virtual Audio Device)
   - Microphone (NVIDIA Broadcast)
   - Microphone (Steam Streaming Microphone)
+  - Microphone (Logitech StreamCam)
   - Microphone (2- RODE NT-USB)
-  - Digital Audio Interface (Valve VR Radio & HMD Mic)
+  - Microphone (2- Antlion Wireless Microphone)
 --- !u!114 &734679581483801923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2232,8 +2276,7 @@ MonoBehaviour:
     Explanation: Ambient Occlusion
     Parse: 1
     Type: 1
-  AmbientOcclusion: {fileID: -1878332245247344467, guid: c40be3174f62c4acf8c1216858c64956,
-    type: 2}
+  AmbientOcclusion: {fileID: -1878332245247344467, guid: c40be3174f62c4acf8c1216858c64956, type: 2}
 --- !u!114 &7074081770173294057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2330,3 +2373,20 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 3
+--- !u!114 &6430705635976775670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633c4e80403923a47861cd2cb534911b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Debug Visuals
+    Explanation: 
+    Parse: 1
+    Type: 1

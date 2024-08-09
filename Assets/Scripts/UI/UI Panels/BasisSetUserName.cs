@@ -1,7 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
+using Basis.Scripts.Networking;
 
+namespace Basis.Scripts.UI.UI_Panels
+{
 public class BasisSetUserName : MonoBehaviour
 {
     public TMP_InputField UserNameTMP_InputField;
@@ -43,4 +49,5 @@ public class BasisSetUserName : MonoBehaviour
             Ready.interactable = true;
         }
     }
+}
 }

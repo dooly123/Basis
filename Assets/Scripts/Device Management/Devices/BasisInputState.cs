@@ -1,5 +1,8 @@
 ﻿using System;
 using UnityEngine;
+
+namespace Basis.Scripts.Device_Management.Devices
+{
 [System.Serializable]
 public class BasisInputState
 {
@@ -160,4 +163,5 @@ public class BasisInputState
         target.Primary2DAxis = this.Primary2DAxis;
         target.Secondary2DAxis = this.Secondary2DAxis;
     }
+}
 }

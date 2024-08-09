@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+
+namespace Basis.Scripts.Animator_Driver
+{
 [System.Serializable]
 public class BasisAnimatorVariableApply
 {
@@ -203,4 +206,5 @@ public class BasisAnimatorVariableApply
             Animator.SetInteger(poseID, 0);
         }
     }
+}
 }

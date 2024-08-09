@@ -10,6 +10,13 @@
         "com.unity.xr.openxr": "1.3.1"
       }
     },
+    "com.popcron.gizmos": {
+      "version": "https://github.com/popcron/gizmos.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b8bc3c994394be817915a6050169373915b811b4"
+    },
     "com.revenantx.litenetlib": {
       "version": "file:LiteNetLib",
       "depth": 0,
@@ -48,7 +55,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.16",
+      "version": "1.8.17",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -156,7 +163,7 @@
       }
     },
     "com.unity.render-pipelines.universal": {
-      "version": "17.0.3",
+      "version": "17.0.2",
       "depth": 0,
       "source": "builtin",
       "dependencies": {

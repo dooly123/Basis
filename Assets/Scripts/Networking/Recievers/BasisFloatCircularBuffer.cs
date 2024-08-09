@@ -1,5 +1,7 @@
 ﻿using System;
 
+namespace Basis.Scripts.Networking.Recievers
+{
 public partial class BasisAudioReceiverBase
 {
     [System.Serializable]
@@ -75,4 +77,5 @@ public partial class BasisAudioReceiverBase
             return CurrentCount == 0;
         }
     }
+}
 }

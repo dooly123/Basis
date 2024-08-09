@@ -1,6 +1,10 @@
-﻿using DarkRift;
+﻿using Basis.Scripts.Networking.NetworkedAvatar;
+using DarkRift;
 using Unity.Collections;
 using UnityEngine;
+
+namespace Basis.Scripts.Networking.Compression
+{
 public static class BasisBitPackerExtensions
 {
     public static void WriteUshortFloat(DarkRiftWriter bitPacker, float value, BasisRangedUshortFloatData compressor)
@@ -53,4 +57,5 @@ public static class BasisBitPackerExtensions
         bitPacker.Write(values.y);
         bitPacker.Write(values.z);
     }
+}
 }

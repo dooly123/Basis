@@ -1,7 +1,11 @@
+using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Networking.NetworkedAvatar;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static SerializableDarkRift;
 
+namespace Basis.Scripts.Tests
+{
 public class BasisRemoteAvatarWriter : MonoBehaviour
 {
     public Animator Sender;
@@ -42,4 +46,5 @@ public class BasisRemoteAvatarWriter : MonoBehaviour
             LocalAvatarReader.ReceiveAvatarUpdate(LocalAvatarSyncMessage.array);
         }
     }
+}
 }

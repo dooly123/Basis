@@ -1,6 +1,12 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices;
+using Basis.Scripts.Device_Management.Devices.Desktop;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
-
-public class BasisLocalAnimatorDriver : MonoBehaviour
+namespace Basis.Scripts.Animator_Driver
+{
+    public class BasisLocalAnimatorDriver : MonoBehaviour
 {
     [SerializeField]
     private BasisAnimatorVariableApply basisAnimatorVariableApply = new BasisAnimatorVariableApply();
@@ -10,11 +16,11 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     public float LargerThenVelocityCheckRotation = 0.03f;
     private BasisLocalPlayer localPlayer;
     public float ScaleMovementBy = 1;
-    public float dampeningFactor = 0.5f; // Adjust this value to control the dampening effect
+    public float dampeningFactor = 30; // Adjust this value to control the dampening effect
     private Vector3 previousRawVelocity = Vector3.zero;
     private Vector3 previousAngularVelocity = Vector3.zero; // New field for previous angular velocity
     private Quaternion previousHipsRotation;
-    public BasisCharacterController Controller;
+    public BasisCharacterController.BasisCharacterController Controller;
     public BasisBoneControl Hips;
     public Vector3 currentVelocity;
     public Vector3 dampenedVelocity;
@@ -22,6 +28,8 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
     public Vector3 dampenedAngularVelocity; // New field for dampened angular velocity
     public Quaternion deltaRotation;
     public bool HasEvents = false;
+    public BasisInput HipsInput;
+    public bool HasHipsInput = false;
     void Simulate()
     {
         if (localPlayer.AvatarDriver.InTPose)
@@ -33,7 +41,7 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         currentVelocity = Quaternion.Inverse(Hips.OutgoingWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / Time.deltaTime;
 
         // Apply dampening to the velocity
-        dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, dampeningFactor);
+        dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, Time.deltaTime * dampeningFactor);
         basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = dampenedVelocity;
         basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > LargerThenVelocityCheck;
         basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 1;
@@ -117,10 +125,6 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
         }
         AssignHipsFBTracker();
     }
-
-    public BasisInput HipsInput;
-    public bool HasHipsInput = false;
-
     public void AssignHipsFBTracker()
     {
         HasHipsInput = BasisDeviceManagement.Instance.FindDevice(out HipsInput, BasisBoneTrackedRole.Hips);
@@ -157,4 +161,5 @@ public class BasisLocalAnimatorDriver : MonoBehaviour
             BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= AssignHipsFBTracker;
         }
     }
+}
 }

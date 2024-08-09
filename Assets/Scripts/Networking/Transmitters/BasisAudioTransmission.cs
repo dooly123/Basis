@@ -4,6 +4,14 @@ using UnityOpus;
 using DarkRift;
 using static SerializableDarkRift;
 using DarkRift.Server.Plugins.Commands;
+using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Profiler;
+
+namespace Basis.Scripts.Networking.Transmitters
+{
 [System.Serializable]
 public class BasisAudioTransmission
 {
@@ -16,6 +24,7 @@ public class BasisAudioTransmission
     public int encodedLength;
     public BasisLocalPlayer Local;
     public MicrophoneRecorder Recorder;
+
     public bool IsInitalized = false;
     public AudioSegmentDataMessage AudioSegmentData = new AudioSegmentDataMessage();
     public AudioSilentSegmentDataMessage audioSilentSegmentData = new AudioSilentSegmentDataMessage();
@@ -103,4 +112,5 @@ public class BasisAudioTransmission
             }
         }
     }
+}
 }

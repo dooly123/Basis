@@ -1,34 +1,34 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {
     [DefaultExecutionOrder(15002)]
     public class JiggleSkin : MonoBehaviour {
-    [Serializable]
-    public class JiggleZone : JiggleRigBuilder.JiggleRig {
-        [Tooltip("How large of a radius the zone should effect, in target-space meters. (Scaling the target will effect the radius.)")]
-        public float radius;
-        public JiggleZone(Transform rootTransform, JiggleSettingsBase jiggleSettings, ICollection<Transform> ignoredTransforms, ICollection<Collider> colliders) : base(rootTransform, jiggleSettings, ignoredTransforms, colliders) { }
-        protected override void CreateSimulatedPoints(ICollection<JiggleBone> outputPoints, ICollection<Transform> ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone) {
-            //base.CreateSimulatedPoints(outputPoints, ignoredTransforms, currentTransform, parentJiggleBone);
-            var parent = new JiggleBone(currentTransform, null);
-            outputPoints.Add(parent);
-            outputPoints.Add(new JiggleBone(null, parent,0f));
-        }
-        public void DebugDraw() {
-            Debug.DrawLine(GetPointSolve(), GetRootTransform().position, Color.cyan, 0, false);
-        }
-        public Vector3 GetPointSolve() => simulatedPoints[1].GetCachedSolvePosition();
-        public void OnDrawGizmosSelected() {
-            if (GetRootTransform() == null) {
-                return;
+        [Serializable]
+        public class JiggleZone : JiggleRigBuilder.JiggleRig {
+            [Tooltip("How large of a radius the zone should effect, in target-space meters. (Scaling the target will effect the radius.)")]
+            public float radius;
+            public JiggleZone(Transform rootTransform, JiggleSettingsBase jiggleSettings, ICollection<Transform> ignoredTransforms, ICollection<Collider> colliders) : base(rootTransform, jiggleSettings, ignoredTransforms, colliders) { }
+            protected override void CreateSimulatedPoints(ICollection<JiggleBone> outputPoints, ICollection<Transform> ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone) {
+                //base.CreateSimulatedPoints(outputPoints, ignoredTransforms, currentTransform, parentJiggleBone);
+                var parent = new JiggleBone(currentTransform, null);
+                outputPoints.Add(parent);
+                outputPoints.Add(new JiggleBone(null, parent, 0f));
             }
-            Gizmos.color = new Color(0.1f,0.1f,0.8f,0.5f);
-            Gizmos.DrawWireSphere(GetRootTransform().position, radius*GetRootTransform().lossyScale.x);
+            public void DebugDraw() {
+                Debug.DrawLine(GetPointSolve(), GetRootTransform().position, Color.cyan, 0, false);
+            }
+            public Vector3 GetPointSolve() => simulatedPoints[1].GetCachedSolvePosition();
+            public new void OnRenderObject()
+            {
+                if (GetRootTransform() == null) {
+                    return;
+                }
+                Gizmos.Sphere(GetRootTransform().position, radius * GetRootTransform().lossyScale.x, new Color(0.1f, 0.1f, 0.8f, 0.5f));
+            }
         }
-    }
     [Tooltip("Enables interpolation for the simulation, this should be enabled unless you *really* need the simulation to only update on FixedUpdate.")]
     public bool interpolate = true;
     public List<JiggleZone> jiggleZones;
@@ -180,13 +180,12 @@ namespace JigglePhysics
             jiggleZones.RemoveAt(i);
         }
     }
-    void OnDrawGizmosSelected() {
+    void OnRenderObject() {
         if (jiggleZones == null) {
             return;
         }
-        Gizmos.color = new Color(0.1f,0.1f,0.8f,0.5f);
         foreach(JiggleZone zone in jiggleZones) {
-            zone.OnDrawGizmosSelected();
+            zone.OnRenderObject();
         }
     }
     // CPU version of the skin transformation, untested, can be useful in reconstructing the deformation on the cpu.

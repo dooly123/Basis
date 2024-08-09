@@ -1,8 +1,13 @@
+using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.Smoothing;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
+namespace Basis.Scripts.Tests
+{
 public class BasisLocalAvatarReader : MonoBehaviour
 {
     public Animator Receiver;
@@ -93,4 +98,5 @@ public class BasisLocalAvatarReader : MonoBehaviour
         PlayerPosition.Scale(ScaleOffset);
         Animator.transform.position = -PlayerPosition + VisualOffset;
     }
+}
 }

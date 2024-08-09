@@ -1,7 +1,12 @@
+using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Profiler;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
 using static SerializableDarkRift;
+
+namespace Basis.Scripts.Networking.NetworkedAvatar
+{
 public static class BasisNetworkAvatarCompressor
 {
     public static BasisRangedUshortFloatData CF = new BasisRangedUshortFloatData(-180, 180, BasisNetworkConstants.MusclePrecision);
@@ -54,4 +59,5 @@ public static class BasisNetworkAvatarCompressor
 
         BasisCompressionOfPosition.CompressUShortVector3(scale, packer, ScaleRanged);
     }
+}
 }

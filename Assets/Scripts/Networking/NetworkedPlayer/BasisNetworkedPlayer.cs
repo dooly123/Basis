@@ -1,5 +1,13 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.Recievers;
+using Basis.Scripts.Networking.Transmitters;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using static SerializableDarkRift;
+
+namespace Basis.Scripts.Networking.NetworkedPlayer
+{
 [DefaultExecutionOrder(15002)]
 public partial class BasisNetworkedPlayer : MonoBehaviour
 {
@@ -32,9 +40,11 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
     }
     public void ReInitialize(BasisPlayer player, ushort PlayerID)
     {
-        LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage();
-        Stub.array = new byte[224];
-        ReInitialize(player, PlayerID, Stub);
+            LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage
+            {
+                array = new byte[224]
+            };
+            ReInitialize(player, PlayerID, Stub);
     }
     public void ReInitialize(BasisPlayer player, ushort PlayerID, LocalAvatarSyncMessage sspm)
     {
@@ -143,4 +153,5 @@ public partial class BasisNetworkedPlayer : MonoBehaviour
         NetworkSend = gameObject.AddComponent<T>();
         return NetworkSend as T;
     }
+}
 }

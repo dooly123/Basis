@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static KeyboardLayoutData;
-
+using static Basis.Scripts.Virtual_keyboard.KeyboardLayoutData;
+namespace Basis.Scripts.Virtual_keyboard
+{
 public class BasisVirtualRow
 {
     public List<BasisVirtualKeyboardButton> RowButtons = new List<BasisVirtualKeyboardButton>();
@@ -28,4 +29,5 @@ public class BasisVirtualRow
     {
         button.ButtonRect.sizeDelta = new Vector2(width, button.ButtonRect.sizeDelta.y); // Adjust the width multiplier as needed
     }
+}
 }

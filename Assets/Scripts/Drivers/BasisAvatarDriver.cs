@@ -1,8 +1,16 @@
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
+using Basis.Scripts.Common.Enums;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
 
+namespace Basis.Scripts.Drivers
+{
 public abstract class BasisAvatarDriver : MonoBehaviour
 {
     public float ActiveEyeHeight = 1.75f;
@@ -10,6 +18,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
     public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
     public Action BeginningCalibration;
     public Action CalibrationComplete;
+    public Action EnteredTpose;
     public BasisTransformMapping References = new BasisTransformMapping();
     public RuntimeAnimatorController runtimeAnimatorController;
     public SkinnedMeshRenderer[] SkinnedMeshRenderer;
@@ -39,6 +48,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
         RuntimeAnimatorController RAC = op.WaitForCompletion();
         Player.Avatar.Animator.runtimeAnimatorController = RAC;
         ForceUpdateAnimator(Player.Avatar.Animator);
+        EnteredTpose?.Invoke();
     }
     public void ResetAvatarAnimator()
     {
@@ -200,7 +210,7 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             Debug.LogError("Missing bottom");
         }
     }
-    private void ForceUpdateAnimator(Animator Anim)
+    public void ForceUpdateAnimator(Animator Anim)
     {
         // Specify the time you want the Animator to update to (in seconds)
         float desiredTime = Time.time;
@@ -428,4 +438,5 @@ public abstract class BasisAvatarDriver : MonoBehaviour
             }
         }
     }
+}
 }

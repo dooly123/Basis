@@ -1,6 +1,12 @@
+using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
 using JigglePhysics;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace Basis.Scripts.Drivers
+{
 public class BasisAvatarStrainJiggleDriver : MonoBehaviour
 {
     public BasisPlayer player;
@@ -72,4 +78,5 @@ public class BasisAvatarStrainJiggleDriver : MonoBehaviour
         JiggleRigBuilder.JiggleRig JiggleRig = new JiggleRigBuilder.JiggleRig(Strain.RootTransform, Base, Strain.IgnoredTransforms, Strain.Colliders);
         return JiggleRig;
     }
+}
 }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 
+namespace Basis.Scripts.Virtual_keyboard
+{
 [Serializable]
 [CreateAssetMenu(fileName = "Data", menuName = "Basis/KeyboardLayoutData", order = 1)]
 public class KeyboardLayoutData : ScriptableObject
@@ -51,4 +53,5 @@ public class KeyboardLayoutData : ScriptableObject
         public ColorBlock ColorBlock;
         public BasisVirtualKeyboardSpecialKey BasisVirtualKeyboardSpecialKey;
     }
+}
 }

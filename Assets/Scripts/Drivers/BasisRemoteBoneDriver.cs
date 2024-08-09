@@ -1,5 +1,9 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
+namespace Basis.Scripts.Drivers
+{
 public class BasisRemoteBoneDriver : BaseBoneDriver
 {
     public BasisRemotePlayer RemotePlayer;
@@ -53,4 +57,5 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
         HipsAvatar = RemotePlayer.Avatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
         this.RemotePlayer = remotePlayer;
     }
+}
 }

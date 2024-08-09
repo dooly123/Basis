@@ -1,8 +1,19 @@
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Addressable_Driver.Factory;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.UI;
+using Basis.Scripts.UI.UI_Panels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using static BaseBoneDriver;
-using static BasisAvatarIKStageCalibration;
+using static Basis.Scripts.Avatar.BasisAvatarIKStageCalibration;
+using static Basis.Scripts.Drivers.BaseBoneDriver;
+
+namespace Basis.Scripts.Device_Management.Devices
+{
 public abstract class BasisInput : MonoBehaviour
 {
     public bool HasEvents = false;
@@ -30,7 +41,7 @@ public abstract class BasisInput : MonoBehaviour
     public AddressableGenericResource LoadedDeviceRequest;
     public event SimulationHandler AfterControlApply;
     public GameObject BasisPointRaycasterRef;
-    public BasisDeviceMatchableNames BasisDeviceMatchableNames;
+    public BasisDeviceMatchSettings BasisDeviceMatchableNames;
     [SerializeField]
     public BasisInputState InputState = new BasisInputState();
     [SerializeField]
@@ -363,7 +374,7 @@ public abstract class BasisInput : MonoBehaviour
     {
         if (BasisVisualTracker == null && LoadedDeviceRequest == null)
         {
-            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, out BasisDeviceMatchableNames Match))
+            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, out BasisDeviceMatchSettings Match))
             {
                 if (Match.CanDisplayPhysicalTracker)
                 {
@@ -416,4 +427,5 @@ public abstract class BasisInput : MonoBehaviour
         BasisPointRaycaster = BasisHelpers.GetOrAddComponent<BasisPointRaycaster>(BasisPointRaycasterRef);
         await BasisPointRaycaster.Initialize(BaseInput);
     }
+}
 }

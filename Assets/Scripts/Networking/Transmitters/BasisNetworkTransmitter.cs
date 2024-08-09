@@ -1,7 +1,12 @@
+using Basis.Scripts.Networking.NetworkedAvatar;
+using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
 using static SerializableDarkRift;
+
+namespace Basis.Scripts.Networking.Transmitters
+{
 [DefaultExecutionOrder(15002)]
 public partial class BasisNetworkTransmitter : BasisNetworkSendBase
 {
@@ -86,4 +91,5 @@ public partial class BasisNetworkTransmitter : BasisNetworkSendBase
             }
         }
     }
+}
 }

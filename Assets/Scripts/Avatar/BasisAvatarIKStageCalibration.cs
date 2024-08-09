@@ -1,6 +1,13 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices;
+using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace Basis.Scripts.Avatar
+{
 public static partial class BasisAvatarIKStageCalibration
 {
     /// <summary>
@@ -228,4 +235,5 @@ public static partial class BasisAvatarIKStageCalibration
             action();
         }
     }
+}
 }

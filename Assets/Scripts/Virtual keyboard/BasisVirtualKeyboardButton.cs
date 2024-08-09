@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Basis.Scripts.Virtual_keyboard
+{
 public struct BasisVirtualKeyboardButton
 {
     public RectTransform ButtonRect;
@@ -12,4 +14,5 @@ public struct BasisVirtualKeyboardButton
 public enum BasisVirtualKeyboardSpecialKey
 {
    NotSpecial, IsDeleteKey, IsCaseSwitchKey,IsEnterKey
+}
 }

@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+namespace Basis.Scripts.Networking.Compression
+{
 public static class BasisAbsLargestValue
 {
     public static int IntAbsLargestValue(float[] Values)
@@ -24,4 +26,5 @@ public static class BasisAbsLargestValue
         }
         return result;
     }
+}
 }

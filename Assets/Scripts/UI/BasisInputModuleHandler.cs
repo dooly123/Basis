@@ -1,9 +1,15 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices.Desktop;
+using Basis.Scripts.Virtual_keyboard;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+namespace Basis.Scripts.UI
+{
 public class BasisInputModuleHandler : BaseInputModule
 {
     public EventSystem EventSystem;
@@ -215,4 +221,5 @@ public class BasisInputModuleHandler : BaseInputModule
         }
         return null;
     }
+}
 }

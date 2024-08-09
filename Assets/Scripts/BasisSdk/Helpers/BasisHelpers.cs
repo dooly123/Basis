@@ -1,5 +1,7 @@
 using UnityEngine;
 
+namespace Basis.Scripts.BasisSdk.Helpers
+{
 public static class BasisHelpers
 {
     public static T GetOrAddComponent<T>(GameObject gameObject) where T : Component
@@ -97,4 +99,5 @@ public static class BasisHelpers
     {
         return new Vector2(input.y, input.z);
     }
+}
 }

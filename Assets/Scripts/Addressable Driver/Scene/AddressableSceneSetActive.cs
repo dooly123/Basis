@@ -1,5 +1,10 @@
+using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.Enums;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
+
+namespace Basis.Scripts.Addressable_Driver.Scene
+{
 public static class AddressableSceneSetActive
 {
     public static void SetSceneActive(AddressableLoadResourceBase LoadRequest)
@@ -13,4 +18,5 @@ public static class AddressableSceneSetActive
             return;
         }
     }
+}
 }

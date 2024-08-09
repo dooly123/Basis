@@ -1,5 +1,10 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
 using UnityEngine;
 using Valve.VR;
+
+namespace Basis.Scripts.Device_Management.Devices.OpenVR
+{
 [System.Serializable]
 public class BasisOpenVRInputSkeleton : BasisInputSkeleton
 {
@@ -55,4 +60,5 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
     {
         SteamVR_Input.onSkeletonsUpdated -= SteamVR_Input_OnSkeletonsUpdated;
     }
+}
 }

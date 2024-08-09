@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace Basis.Scripts.Animator_Driver
+{
 [System.Serializable]
 public struct BasisPreviousAndCurrentAnimatorData
 {
@@ -8,4 +10,5 @@ public struct BasisPreviousAndCurrentAnimatorData
     public Vector2 SmoothedMovement;
     public float LastRotation;
     public float LastAngle;
+}
 }

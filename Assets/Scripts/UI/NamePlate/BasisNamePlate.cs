@@ -1,6 +1,12 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Drivers;
+using Basis.Scripts.TransformBinders.BoneControl;
+using Basis.Scripts.UI.UI_Panels;
 using TMPro;
 using UnityEngine;
 
+namespace Basis.Scripts.UI.NamePlate
+{
 public abstract class BasisNamePlate : MonoBehaviour
 {
     public BasisUIComponent BasisUIComponent;
@@ -8,7 +14,6 @@ public abstract class BasisNamePlate : MonoBehaviour
     public Vector3 directionToCamera;
     public BasisBoneControl HipTarget;
     public BasisBoneControl MouthTarget;
-    public float FloatOffset = -0.5f;
     public TextMeshProUGUI Text;
     public void Initalize(BasisBoneControl hipTarget, BasisRemotePlayer BasisRemotePlayer)
     {
@@ -28,6 +33,7 @@ public abstract class BasisNamePlate : MonoBehaviour
     }
     public Vector3 GeneratePoint()
     {
-        return HipTarget.OutgoingWorldData.position + new Vector3(0, MouthTarget.TposeLocal.position.y + FloatOffset, 0);
+        return HipTarget.OutgoingWorldData.position + new Vector3(0, MouthTarget.TposeLocal.position.y / 1.25f, 0);
     }
+}
 }

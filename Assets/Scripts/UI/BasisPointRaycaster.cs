@@ -1,8 +1,19 @@
+using Basis.Scripts.Addressable_Driver;
+using Basis.Scripts.Addressable_Driver.Enums;
+using Basis.Scripts.Addressable_Driver.Factory;
+using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices;
+using Basis.Scripts.Drivers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+namespace Basis.Scripts.UI
+{
 public partial class BasisPointRaycaster : BaseRaycaster
 {
     public Vector3 Direction = Vector3.forward;
@@ -20,7 +31,7 @@ public partial class BasisPointRaycaster : BaseRaycaster
     public bool HasRedicalRenderer = false;
     public static string LoadMaterialAddress = "Assets/UI/Material/RayCastMaterial.mat";
     public static string LoadUIRedicalAddress = "Assets/UI/Prefabs/highlightQuad.prefab";
-    public BasisDeviceMatchableNames BasisDeviceMatchableNames;
+    public BasisDeviceMatchSettings BasisDeviceMatchableNames;
     public GameObject highlightQuadInstance;
     public Canvas FoundCanvas;
     public RaycastResult RaycastResult = new RaycastResult();
@@ -450,4 +461,5 @@ public partial class BasisPointRaycaster : BaseRaycaster
     public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
     {
     }
+}
 }

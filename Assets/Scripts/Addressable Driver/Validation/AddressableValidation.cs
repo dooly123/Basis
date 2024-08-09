@@ -1,5 +1,9 @@
+using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.Enums;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
+namespace Basis.Scripts.Addressable_Driver.Validation
+{
 public static class AddressableValidation
 {
     public static bool ValidateLoadResource(AddressableLoadResourceBase loadRequest)
@@ -51,4 +55,5 @@ public static class AddressableValidation
             return false;
         }
     }
+}
 }

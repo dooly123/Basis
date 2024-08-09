@@ -1,7 +1,14 @@
+using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.TransformBinders;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+
+namespace Basis.Scripts.Drivers
+{
 public class BasisLocalCameraDriver : MonoBehaviour
 {
     public static BasisLocalCameraDriver Instance;
@@ -26,6 +33,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
     public AudioClip MuteSound;
     public AudioClip UnMuteSound;
     public AudioSource AudioSource;
+    public float NearClip = 0.001f;
     public void OnEnable()
     {
         if (BasisHelpers.CheckInstance(Instance))
@@ -33,7 +41,7 @@ public class BasisLocalCameraDriver : MonoBehaviour
             Instance = this;
         }
         LocalPlayer = BasisLocalPlayer.Instance;
-        Camera.nearClipPlane = 0.01f;
+        Camera.nearClipPlane = NearClip;
         Camera.farClipPlane = 1500;
         QualitySettings.maxQueuedFrames = -1;
         CameraInstanceID = Camera.GetInstanceID();
@@ -128,4 +136,5 @@ public class BasisLocalCameraDriver : MonoBehaviour
             }
         }
     }
+}
 }
