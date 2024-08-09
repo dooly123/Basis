@@ -45,7 +45,7 @@ Please help shape the future of Basis and leave your mark in its foundation.
 
  ## Installation
  
-This project is currently using Unity 6 (6000.0.5f1)
+This project is currently using Unity 6 (6000.0.13f1)
 Other Unity versions may work but will require changes and adaptations.
 Currently, only OPENXR is supported.
 
