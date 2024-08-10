@@ -21,7 +21,17 @@ namespace Basis.Scripts.Device_Management
     public partial class BasisDeviceManagement : MonoBehaviour
     {
         public string CurrentMode = "None";
-        public string DefaultMode = "Desktop";
+        public string DefaultMode()
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                return "OpenXRLoader";
+            }
+            else
+            {
+                return "Desktop";
+            }
+        }
         public static BasisDeviceManagement Instance;
         public BasisOpusSettings BasisOpusSettings;
         public event Action<string> OnBootModeChanged;
@@ -44,6 +54,7 @@ namespace Basis.Scripts.Device_Management
         public BasisDeviceNameMatcher BasisDeviceNameMatcher;
         public const string InvalidConst = "Invalid";
         public string[] BakedInCommandLineArgs = new string[] { };
+        public static string NetworkManagement = "NetworkManagement";
         void Start()
         {
             if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -99,7 +110,7 @@ namespace Basis.Scripts.Device_Management
             InstantiationParameters parameters = new InstantiationParameters();
             await BasisPlayerFactory.CreateLocalPlayer(parameters);
 
-            SwitchMode(DefaultMode);
+            SwitchMode(DefaultMode());
             if (HasEvents == false)
             {
                 BasisXRManagement.CheckForPass += CheckForPass;
@@ -109,7 +120,6 @@ namespace Basis.Scripts.Device_Management
             }
             await OnInitializationCompleted?.Invoke();
         }
-        public static string NetworkManagement = "NetworkManagement";
         public async Task RunAfterInitialized()
         {
             if (FireOffNetwork)
@@ -146,8 +156,6 @@ namespace Basis.Scripts.Device_Management
             switch (CurrentMode)
             {
                 case "OpenVRLoader":
-                    BasisXRManagement.BeginLoad();
-                    break;
                 case "OpenXRLoader":
                     BasisXRManagement.BeginLoad();
                     break;
