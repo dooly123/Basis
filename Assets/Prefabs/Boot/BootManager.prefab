@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -3484738083713026149}
   - component: {fileID: 508802122937325065}
   - component: {fileID: -1434852531052301144}
+  - component: {fileID: -3061024371983229343}
   m_Layer: 0
   m_Name: BootManager
   m_TagString: Untagged
@@ -64,6 +65,7 @@ MonoBehaviour:
   - {fileID: -1434852531052301144}
   - {fileID: 508802122937325065}
   - {fileID: -3484738083713026149}
+  - {fileID: -3061024371983229343}
   BasisLockToInputs: []
   FireOffNetwork: 1
   HasEvents: 0
@@ -138,3 +140,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BasisAvatarEyeInput: {fileID: 0}
+--- !u!114 &-3061024371983229343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135220577826176361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd91b42509b7c540806806d7d931a11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Inputs: []

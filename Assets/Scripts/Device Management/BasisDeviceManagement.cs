@@ -32,8 +32,6 @@ namespace Basis.Scripts.Device_Management
         public BasisXRManagement BasisXRManagement = new BasisXRManagement();
         public List<BasisBaseTypeManagement> BaseTypes = new List<BasisBaseTypeManagement>();
         [SerializeField]
-        public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
-        [SerializeField]
         public List<BasisLockToInput> BasisLockToInputs = new List<BasisLockToInput>();
         public delegate Task InitializationCompletedHandler();
         public event InitializationCompletedHandler OnInitializationCompleted;
@@ -64,7 +62,13 @@ namespace Basis.Scripts.Device_Management
                     m.StopSDK();
                 }
             }
-            BasisSimulateXR.StopXR();
+            if (TryFindBasisBaseTypeManagement("SimulateXR", out Matched))
+            {
+                foreach (var m in Matched)
+                {
+                    m.StopSDK();
+                }
+            }
             if (HasEvents)
             {
                 BasisXRManagement.CheckForPass -= CheckForPass;
@@ -190,8 +194,13 @@ namespace Basis.Scripts.Device_Management
                     m.StopSDK();
                 }
             }
-
-            BasisSimulateXR.StopXR();
+            if (TryFindBasisBaseTypeManagement("SimulateXR", out Matched))
+            {
+                foreach (var m in Matched)
+                {
+                    m.StopSDK();
+                }
+            }
             BasisXRManagement.StopXR(isExiting);
             AllInputDevices.RemoveAll(item => item == null);
 
@@ -272,8 +281,14 @@ namespace Basis.Scripts.Device_Management
         private void CheckForPass(BasisBootedMode type)
         {
             Debug.Log("Loading " + type);
-            BasisSimulateXR.StartSimulation();
-            if (TryFindBasisBaseTypeManagement(type, out List<BasisBaseTypeManagement> Matched))
+            if (TryFindBasisBaseTypeManagement("SimulateXR", out List<BasisBaseTypeManagement> Matched))
+            {
+                foreach (var m in Matched)
+                {
+                    m.StartSDK();
+                }
+            }
+            if (TryFindBasisBaseTypeManagement(type, out Matched))
             {
                 foreach (var m in Matched)
                 {

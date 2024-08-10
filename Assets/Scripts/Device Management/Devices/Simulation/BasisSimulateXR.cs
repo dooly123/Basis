@@ -5,17 +5,9 @@ using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.Simulation
 {
-    public class BasisSimulateXR
+    public class BasisSimulateXR : BasisBaseTypeManagement
     {
         public List<BasisInputXRSimulate> Inputs = new List<BasisInputXRSimulate>();
-        public void StartSimulation()
-        {
-
-        }
-        public void StopXR()
-        {
-
-        }
         public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "BasisSimulateXR")
         {
             GameObject gameObject = new GameObject(UniqueID);
@@ -33,6 +25,23 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
             }
             BasisDeviceManagement.Instance.TryAdd(BasisInput);
             return BasisInput;
+        }
+
+        public override void StopSDK()
+        {
+        }
+
+        public override void BeginLoadSDK()
+        {
+        }
+
+        public override void StartSDK()
+        {
+        }
+
+        public override string Type()
+        {
+            return "SimulateXR";
         }
     }
 }

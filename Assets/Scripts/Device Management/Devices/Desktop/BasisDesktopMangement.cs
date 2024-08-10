@@ -1,5 +1,6 @@
 using Basis.Scripts.BasisSdk.Players;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.Desktop
@@ -30,7 +31,13 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         public override void StopSDK()
         {
-            BasisDeviceManagement.Instance.BasisSimulateXR.StopXR();
+            if (BasisDeviceManagement.Instance.TryFindBasisBaseTypeManagement("SimulateXR", out List<BasisBaseTypeManagement> Matched))
+            {
+                foreach (var m in Matched)
+                {
+                    m.StopSDK();
+                }
+            }
             BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisDesktopManagement), "Desktop Eye");
         }
 
