@@ -24,7 +24,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public static BasisLocalPlayer Instance;
         public static Action OnLocalPlayerCreatedAndReady;
         public static Action OnLocalPlayerCreated;
-        public Basis.Scripts.BasisCharacterController.BasisCharacterController Move;
+        public BasisCharacterController.BasisCharacterController Move;
         public event Action OnLocalAvatarChanged;
         public event Action OnSpawnedEvent;
         public event Action OnPlayersHeightChanged;
