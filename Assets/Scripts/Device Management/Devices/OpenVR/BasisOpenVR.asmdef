@@ -1,15 +1,16 @@
 {
-    "name": "BasisEditor",
+    "name": "BasisOpenVR",
     "rootNamespace": "",
     "references": [
+        "GUID:1fbf338ef6b952a448262a7ff7df5fe4",
+        "GUID:70fc323382d608f4aa528a0c75f27b15",
         "GUID:8c9aa0e006f5b5347af5c5470971dfae",
-        "GUID:dde09067b7f7a054ca208a3c17c8f7c5",
+        "GUID:ba171b3dd2a51234ab864770f99741a5",
         "GUID:1e767a4f07fa50745a4fd591bbbbcddb",
-        "GUID:b4ae365a73764ee478adc74cb89832fe"
+        "GUID:b4ae365a73764ee478adc74cb89832fe",
+        "GUID:35b9c7a103b322f43805bf1744257ac7"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

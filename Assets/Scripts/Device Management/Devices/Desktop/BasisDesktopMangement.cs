@@ -4,30 +4,39 @@ using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
-[Serializable]
-public class BasisDesktopManagement
-{
-    public BasisAvatarEyeInput BasisAvatarEyeInput;
-    public void BeginDesktop()
+    [Serializable]
+    public class BasisDesktopManagement : BasisBaseTypeManagement
     {
-        if (BasisAvatarEyeInput == null)
+        public BasisAvatarEyeInput BasisAvatarEyeInput;
+        public override void BeginLoadSDK()
         {
-            BasisDeviceManagement.Instance.SetCameraRenderState(false);
-            BasisDeviceManagement.Instance.CurrentMode = BasisBootedMode.Desktop;
-            GameObject gameObject = new GameObject("Desktop Eye");
-            if (BasisLocalPlayer.Instance != null)
+            if (BasisAvatarEyeInput == null)
             {
-                gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+                BasisDeviceManagement.Instance.SetCameraRenderState(false);
+                BasisDeviceManagement.Instance.CurrentMode = BasisBootedMode.Desktop;
+                GameObject gameObject = new GameObject("Desktop Eye");
+                if (BasisLocalPlayer.Instance != null)
+                {
+                    gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+                }
+                BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
+                BasisAvatarEyeInput.Initalize("Desktop Eye", nameof(BasisDesktopManagement));
+                BasisDeviceManagement.Instance.TryAdd(BasisAvatarEyeInput);
             }
-            BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
-            BasisAvatarEyeInput.Initalize("Desktop Eye", nameof(BasisDesktopManagement));
-            BasisDeviceManagement.Instance.TryAdd(BasisAvatarEyeInput);
+        }
+
+        public override void StartSDK()
+        {
+        }
+        public override void StopSDK()
+        {
+            BasisDeviceManagement.Instance.BasisSimulateXR.StopXR();
+            BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisDesktopManagement), "Desktop Eye");
+        }
+
+        public override string Type()
+        {
+            return "Desktop";
         }
     }
-    public void StopDesktop()
-    {
-        BasisDeviceManagement.Instance.BasisSimulateXR.StopXR();
-        BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisDesktopManagement), "Desktop Eye");
-    }
-}
 }

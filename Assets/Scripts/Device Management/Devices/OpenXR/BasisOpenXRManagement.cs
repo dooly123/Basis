@@ -5,171 +5,181 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
-using UnityEngine.XR.Management;
 
 namespace Basis.Scripts.Device_Management.Devices.OpenXR
 {
-[Serializable]
-public class BasisOpenXRManagement
-{
-    public List<InputDevice> inputDevices = new List<InputDevice>();
-    public Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
-    public bool HasEvents = false;
-    public void StartXRSDK()
+    [Serializable]
+    public class BasisOpenXRManagement : BasisBaseTypeManagement
     {
-        Debug.Log("Starting BasisOpenXRManagement");
-        if (HasEvents == false)
+        public List<InputDevice> inputDevices = new List<InputDevice>();
+        public Dictionary<string, InputDevice> TypicalDevices = new Dictionary<string, InputDevice>();
+        public bool HasEvents = false;
+        private void OnDeviceConnected(InputDevice device)
         {
-            InputDevices.deviceConnected += OnDeviceConnected;
-            InputDevices.deviceDisconnected += OnDeviceDisconnected;
-            HasEvents = true;
+            UpdateDeviceList();
         }
-        UpdateDeviceList();
-    }
 
-    public void StopXRSDK()
-    {
-        Debug.Log("Stopping BasisOpenXRManagement");
-        List<string> Devices = TypicalDevices.Keys.ToList();
-        foreach (string device in Devices)
+        private void OnDeviceDisconnected(InputDevice device)
         {
-            DestroyPhysicalTrackedDevice(device);
+            UpdateDeviceList();
         }
-        if (HasEvents)
+
+        private void UpdateDeviceList()
         {
-            InputDevices.deviceConnected -= OnDeviceConnected;
-            InputDevices.deviceDisconnected -= OnDeviceDisconnected;
-            HasEvents = false;
-        }
-    }
+            InputDevices.GetDevices(inputDevices);
 
-    private void OnDeviceConnected(InputDevice device)
-    {
-        UpdateDeviceList();
-    }
-
-    private void OnDeviceDisconnected(InputDevice device)
-    {
-        UpdateDeviceList();
-    }
-
-    private void UpdateDeviceList()
-    {
-        InputDevices.GetDevices(inputDevices);
-
-        foreach (var device in inputDevices)
-        {
-            if (device.characteristics.HasFlag(InputDeviceCharacteristics.TrackingReference))
-                continue;
-
-            if (device != null)
+            foreach (var device in inputDevices)
             {
-                string id = GenerateID(device);
-                if (!TypicalDevices.ContainsKey(id))
+                if (device.characteristics.HasFlag(InputDeviceCharacteristics.TrackingReference))
+                    continue;
+
+                if (device != null)
                 {
-                    CreatePhysicalTrackedDevice(device, id, device.name);
-                    TypicalDevices[id] = device;
+                    string id = GenerateID(device);
+                    if (!TypicalDevices.ContainsKey(id))
+                    {
+                        CreatePhysicalTrackedDevice(device, id, device.name);
+                        TypicalDevices[id] = device;
+                    }
                 }
             }
-        }
 
-        var keysToRemove = new List<string>();
-        foreach (var kvp in TypicalDevices)
-        {
-            if (!inputDevices.Contains(kvp.Value))
+            var keysToRemove = new List<string>();
+            foreach (var kvp in TypicalDevices)
             {
-                keysToRemove.Add(kvp.Key);
+                if (!inputDevices.Contains(kvp.Value))
+                {
+                    keysToRemove.Add(kvp.Key);
+                }
+            }
+
+            foreach (var key in keysToRemove)
+            {
+                DestroyPhysicalTrackedDevice(key);
+                TypicalDevices.Remove(key);
             }
         }
 
-        foreach (var key in keysToRemove)
+        private string GenerateID(InputDevice device)
         {
-            DestroyPhysicalTrackedDevice(key);
-            TypicalDevices.Remove(key);
+            return $"{device.name}|{device.serialNumber}|{device.manufacturer}|{(int)device.characteristics}";
         }
-    }
 
-    private string GenerateID(InputDevice device)
-    {
-        return $"{device.name}|{device.serialNumber}|{device.manufacturer}|{(int)device.characteristics}";
-    }
-
-    private void CreatePhysicalTrackedDevice(InputDevice device, string uniqueID, string unUniqueID)
-    {
-        var gameObject = new GameObject(uniqueID)
+        private void CreatePhysicalTrackedDevice(InputDevice device, string uniqueID, string unUniqueID)
         {
-            transform =
+            var gameObject = new GameObject(uniqueID)
+            {
+                transform =
             {
                 parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform
             }
-        };
-        var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
-        bool state = GetControllerOrHMD(device, out BasisBoneTrackedRole BasisBoneTrackedRole);
-        basisXRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenXRManagement", state, BasisBoneTrackedRole);
-        BasisDeviceManagement.Instance.TryAdd(basisXRInput);
-    }
-    private bool GetControllerOrHMD(InputDevice device,out BasisBoneTrackedRole BasisBoneTrackedRole)
-    {
-        BasisBoneTrackedRole = BasisBoneTrackedRole.CenterEye;
-        if (device.characteristics == Characteristics.hmd)
+            };
+            var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
+            bool state = GetControllerOrHMD(device, out BasisBoneTrackedRole BasisBoneTrackedRole);
+            basisXRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenXRManagement", state, BasisBoneTrackedRole);
+            BasisDeviceManagement.Instance.TryAdd(basisXRInput);
+        }
+        private bool GetControllerOrHMD(InputDevice device, out BasisBoneTrackedRole BasisBoneTrackedRole)
         {
             BasisBoneTrackedRole = BasisBoneTrackedRole.CenterEye;
-            return true;
+            if (device.characteristics == Characteristics.hmd)
+            {
+                BasisBoneTrackedRole = BasisBoneTrackedRole.CenterEye;
+                return true;
+            }
+            else if (device.characteristics == Characteristics.leftController || device.characteristics == Characteristics.leftTrackedHand)
+            {
+                BasisBoneTrackedRole = BasisBoneTrackedRole.LeftHand;
+                return true;
+            }
+            else if (device.characteristics == Characteristics.rightController || device.characteristics == Characteristics.rightTrackedHand)
+            {
+                BasisBoneTrackedRole = BasisBoneTrackedRole.RightHand;
+                return true;
+            }
+            return false;
         }
-        else if (device.characteristics == Characteristics.leftController || device.characteristics == Characteristics.leftTrackedHand)
+        public void DestroyPhysicalTrackedDevice(string id)
         {
-            BasisBoneTrackedRole = BasisBoneTrackedRole.LeftHand;
-            return true;
+            TypicalDevices.Remove(id);
+            BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisOpenXRManagement", id);
         }
-        else if (device.characteristics == Characteristics.rightController || device.characteristics == Characteristics.rightTrackedHand)
+
+        public override void StopSDK()
         {
-            BasisBoneTrackedRole = BasisBoneTrackedRole.RightHand;
-            return true;
+            Debug.Log("Stopping BasisOpenXRManagement");
+            List<string> Devices = TypicalDevices.Keys.ToList();
+            foreach (string device in Devices)
+            {
+                DestroyPhysicalTrackedDevice(device);
+            }
+            if (HasEvents)
+            {
+                InputDevices.deviceConnected -= OnDeviceConnected;
+                InputDevices.deviceDisconnected -= OnDeviceDisconnected;
+                HasEvents = false;
+            }
         }
-        return false;
+
+        public override void BeginLoadSDK()
+        {
+        }
+
+        public override void StartSDK()
+        {
+          BasisDeviceManagement.Instance.SetCameraRenderState(true);
+            Debug.Log("Starting BasisOpenXRManagement");
+            if (HasEvents == false)
+            {
+                InputDevices.deviceConnected += OnDeviceConnected;
+                InputDevices.deviceDisconnected += OnDeviceDisconnected;
+                HasEvents = true;
+            }
+            UpdateDeviceList();
+        }
+
+        public override string Type()
+        {
+            return "OpenXRLoader";
+        }
+
+        public static class Characteristics
+        {
+            /// <summary>
+            /// HMD characteristics.
+            /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
+            /// </summary>
+            public static InputDeviceCharacteristics hmd => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.TrackedDevice;
+
+            /// <summary>
+            /// Eye gaze characteristics.
+            /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.EyeTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
+            /// </summary>
+            public static InputDeviceCharacteristics eyeGaze => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.EyeTracking | InputDeviceCharacteristics.TrackedDevice;
+
+            /// <summary>
+            /// Left controller characteristics.
+            /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
+            /// </summary>
+            public static InputDeviceCharacteristics leftController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
+
+            /// <summary>
+            /// Right controller characteristics.
+            /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
+            /// </summary>
+            public static InputDeviceCharacteristics rightController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
+
+            /// <summary>
+            /// Left tracked hand characteristics.
+            /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
+            /// </summary>
+            public static InputDeviceCharacteristics leftTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Left;
+
+            /// <summary>
+            /// Right tracked hand characteristics.
+            /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
+            /// </summary>
+            public static InputDeviceCharacteristics rightTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Right;
+        }
     }
-    public void DestroyPhysicalTrackedDevice(string id)
-    {
-        TypicalDevices.Remove(id);
-        BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisOpenXRManagement", id);
-    }
-    public static class Characteristics
-    {
-        /// <summary>
-        /// HMD characteristics.
-        /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
-        /// </summary>
-        public static InputDeviceCharacteristics hmd => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.TrackedDevice;
-
-        /// <summary>
-        /// Eye gaze characteristics.
-        /// <see cref="InputDeviceCharacteristics.HeadMounted"/> <c>|</c> <see cref="InputDeviceCharacteristics.EyeTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/>
-        /// </summary>
-        public static InputDeviceCharacteristics eyeGaze => InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.EyeTracking | InputDeviceCharacteristics.TrackedDevice;
-
-        /// <summary>
-        /// Left controller characteristics.
-        /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
-        /// </summary>
-        public static InputDeviceCharacteristics leftController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left;
-
-        /// <summary>
-        /// Right controller characteristics.
-        /// <see cref="InputDeviceCharacteristics.HeldInHand"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Controller"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
-        /// </summary>
-        public static InputDeviceCharacteristics rightController => InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
-
-        /// <summary>
-        /// Left tracked hand characteristics.
-        /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Left"/>
-        /// </summary>
-        public static InputDeviceCharacteristics leftTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Left;
-
-        /// <summary>
-        /// Right tracked hand characteristics.
-        /// <see cref="InputDeviceCharacteristics.HandTracking"/> <c>|</c> <see cref="InputDeviceCharacteristics.TrackedDevice"/> <c>|</c> <see cref="InputDeviceCharacteristics.Right"/>
-        /// </summary>
-        public static InputDeviceCharacteristics rightTrackedHand => InputDeviceCharacteristics.HandTracking | InputDeviceCharacteristics.TrackedDevice | InputDeviceCharacteristics.Right;
-    }
-}
 }

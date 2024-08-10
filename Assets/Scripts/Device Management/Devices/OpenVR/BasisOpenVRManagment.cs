@@ -14,7 +14,7 @@ using Valve.VR;
 namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
     [Serializable]
-    public class BasisOpenVRManagement
+    public class BasisOpenVRManagement : BasisBaseTypeManagement
     {
         public GameObject SteamVR_BehaviourGameobject;
         public SteamVR_Behaviour SteamVR_Behaviour;
@@ -23,47 +23,6 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         public Dictionary<string, OpenVRDevice> TypicalDevices = new Dictionary<string, OpenVRDevice>();
         public bool IsInUse = false;
         public static string SteamVRBehaviour = "SteamVR_Behaviour";
-
-        public void StartXRSDK()
-        {
-            if (IsInUse) return;
-
-            Debug.Log("Starting SteamVR Instance...");
-            SteamVR = SteamVR.instance;
-
-            if (SteamVR_BehaviourGameobject == null)
-            {
-                SteamVR_BehaviourGameobject = new GameObject(SteamVRBehaviour);
-            }
-
-            SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
-            SteamVR_Behaviour.Initialize();
-            SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
-
-            SteamVR_Behaviour.initializeSteamVROnAwake = false;
-            SteamVR_Behaviour.doNotDestroy = false;
-
-            SteamVR_Render.StartCoroutine(CheckState());
-            IsInUse = true;
-        }
-
-        public void StopXRSDK()
-        {
-            if (SteamVR_BehaviourGameobject != null)
-            {
-                GameObject.Destroy(SteamVR_BehaviourGameobject);
-            }
-
-            foreach (var device in TypicalDevices.Keys.ToList())
-            {
-                DestroyPhysicalTrackedDevice(device);
-            }
-
-            SteamVR_Behaviour = null;
-            SteamVR_Render = null;
-            IsInUse = false;
-        }
-
         private IEnumerator CheckState()
         {
             while (SteamVR.initializedState == SteamVR.InitializedStates.None)
@@ -280,6 +239,57 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                     }
                 }
             }
+        }
+
+        public override void StopSDK()
+        {
+            if (SteamVR_BehaviourGameobject != null)
+            {
+                GameObject.Destroy(SteamVR_BehaviourGameobject);
+            }
+
+            foreach (var device in TypicalDevices.Keys.ToList())
+            {
+                DestroyPhysicalTrackedDevice(device);
+            }
+
+            SteamVR_Behaviour = null;
+            SteamVR_Render = null;
+            IsInUse = false;
+        }
+
+        public override void BeginLoadSDK()
+        {
+        }
+
+        public override void StartSDK()
+        {
+            if (IsInUse) return;
+
+            BasisDeviceManagement.Instance.SetCameraRenderState(true);
+
+            Debug.Log("Starting SteamVR Instance...");
+            SteamVR = SteamVR.instance;
+
+            if (SteamVR_BehaviourGameobject == null)
+            {
+                SteamVR_BehaviourGameobject = new GameObject(SteamVRBehaviour);
+            }
+
+            SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
+            SteamVR_Behaviour.Initialize();
+            SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
+
+            SteamVR_Behaviour.initializeSteamVROnAwake = false;
+            SteamVR_Behaviour.doNotDestroy = false;
+
+            SteamVR_Render.StartCoroutine(CheckState());
+            IsInUse = true;
+        }
+
+        public override string Type()
+        {
+            return "OpenVRLoader";
         }
     }
 }

@@ -12,6 +12,9 @@ GameObject:
   - component: {fileID: -8771156173352421049}
   - component: {fileID: 6370897756145117596}
   - component: {fileID: 8092540372531724008}
+  - component: {fileID: -3484738083713026149}
+  - component: {fileID: 508802122937325065}
+  - component: {fileID: -1434852531052301144}
   m_Layer: 0
   m_Name: BootManager
   m_TagString: Untagged
@@ -57,15 +60,10 @@ MonoBehaviour:
     initialLoaders:
     - {fileID: 11400000, guid: 3bc3c9a960a936342a72833e45544032, type: 2}
     - {fileID: 11400000, guid: 7892f170cc4e84f4cbde6ca6d077400b, type: 2}
-  BasisOpenVRManagement:
-    SteamVR_BehaviourGameobject: {fileID: 0}
-    SteamVR_Behaviour: {fileID: 0}
-    SteamVR_Render: {fileID: 0}
-    IsInUse: 0
-  BasisOpenXRManagement:
-    HasEvents: 0
-  BasisDesktopManagement:
-    BasisAvatarEyeInput: {fileID: 0}
+  BaseTypes:
+  - {fileID: -1434852531052301144}
+  - {fileID: 508802122937325065}
+  - {fileID: -3484738083713026149}
   BasisLockToInputs: []
   FireOffNetwork: 1
   HasEvents: 0
@@ -98,3 +96,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BasisScene: {fileID: 0}
+--- !u!114 &-3484738083713026149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135220577826176361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e66a79eb227d0d448870a4e95dc14eeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HasEvents: 0
+--- !u!114 &508802122937325065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135220577826176361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6123d863654b2c84d1d6a7c9e1124c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SteamVR_BehaviourGameobject: {fileID: 0}
+  SteamVR_Behaviour: {fileID: 0}
+  SteamVR_Render: {fileID: 0}
+  IsInUse: 0
+--- !u!114 &-1434852531052301144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135220577826176361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5d5e882bba1084e835f4f55f35f83a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BasisAvatarEyeInput: {fileID: 0}

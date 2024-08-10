@@ -3,9 +3,6 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Command_Line_Args;
 using Basis.Scripts.Device_Management.Devices;
-using Basis.Scripts.Device_Management.Devices.Desktop;
-using Basis.Scripts.Device_Management.Devices.OpenVR;
-using Basis.Scripts.Device_Management.Devices.OpenXR;
 using Basis.Scripts.Device_Management.Devices.Simulation;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.Player;
@@ -33,14 +30,7 @@ namespace Basis.Scripts.Device_Management
         public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
         [SerializeField]
         public BasisXRManagement BasisXRManagement = new BasisXRManagement();
-#if BASIS_OPENVR_SUPPORTED
-        [SerializeField]
-        public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
-#endif
-        [SerializeField]
-        public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
-        [SerializeField]
-        public BasisDesktopManagement BasisDesktopManagement = new BasisDesktopManagement();
+        public List<BasisBaseTypeManagement> BaseTypes = new List<BasisBaseTypeManagement>();
         [SerializeField]
         public BasisSimulateXR BasisSimulateXR = new BasisSimulateXR();
         [SerializeField]
@@ -67,7 +57,13 @@ namespace Basis.Scripts.Device_Management
         void OnDestroy()
         {
             ShutDownXR(true);
-            BasisDesktopManagement.StopDesktop();
+            if (TryFindBasisBaseTypeManagement(BasisBootedMode.Desktop, out List<BasisBaseTypeManagement> Matched))
+            {
+                foreach (var m in Matched)
+                {
+                    m.StopSDK();
+                }
+            }
             BasisSimulateXR.StopXR();
             if (HasEvents)
             {
@@ -75,6 +71,26 @@ namespace Basis.Scripts.Device_Management
 
                 OnInitializationCompleted -= RunAfterInitialized;
             }
+        }
+        public bool TryFindBasisBaseTypeManagement(BasisBootedMode Mode, out List<BasisBaseTypeManagement> Match)
+        {
+            return TryFindBasisBaseTypeManagement(Mode.ToString(), out Match);
+        }
+        public bool TryFindBasisBaseTypeManagement(string Name, out List<BasisBaseTypeManagement> Match)
+        {
+            Match = new List<BasisBaseTypeManagement>();
+            foreach (BasisBaseTypeManagement Type in BaseTypes)
+            {
+                if (Type.Type() == Name)
+                {
+                    Match.Add(Type);
+                }
+            }
+            if (Match.Count == 0)
+            {
+                return false;
+            }
+            return true;
         }
         public async void Initialize()
         {
@@ -93,11 +109,12 @@ namespace Basis.Scripts.Device_Management
             }
             await OnInitializationCompleted?.Invoke();
         }
+        public static string NetworkManagement = "NetworkManagement";
         public async Task RunAfterInitialized()
         {
             if (FireOffNetwork)
             {
-                await LoadGameobject("NetworkManagement", new InstantiationParameters());
+                await LoadGameobject(NetworkManagement, new InstantiationParameters());
             }
         }
         public void SwitchMode(BasisBootedMode newMode)
@@ -111,7 +128,13 @@ namespace Basis.Scripts.Device_Management
                 }
                 else
                 {
-                    BasisDesktopManagement.StopDesktop();
+                    foreach (BasisBaseTypeManagement Type in BaseTypes)
+                    {
+                        if (Type.Type() == BasisBootedMode.Desktop.ToString())
+                        {
+                            Type.StopSDK();
+                        }
+                    }
                 }
             }
 
@@ -129,27 +152,46 @@ namespace Basis.Scripts.Device_Management
                     BasisXRManagement.BeginLoad();
                     break;
                 case BasisBootedMode.Desktop:
-                    BasisDesktopManagement.BeginDesktop();
+                    if (TryFindBasisBaseTypeManagement(BasisBootedMode.Desktop, out List<BasisBaseTypeManagement> Matched))
+                    {
+                        foreach (var m in Matched)
+                        {
+                            m.BeginLoadSDK();
+                        }
+                    }
                     break;
                 case BasisBootedMode.Exiting:
                     break;
                 default:
                     Debug.LogError("This should not occur (default)");
-                    BasisDesktopManagement.BeginDesktop();
+                    if (TryFindBasisBaseTypeManagement(BasisBootedMode.Desktop, out Matched))
+                    {
+                        foreach (var m in Matched)
+                        {
+                            m.BeginLoadSDK();
+                        }
+                    }
                     break;
             }
         }
-        public void SetCameraRenderState(bool state)
-        {
-            BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = state;
-        }
         public void ShutDownXR(bool isExiting = false)
         {
+            if (TryFindBasisBaseTypeManagement(BasisBootedMode.OpenVRLoader, out List<BasisBaseTypeManagement> Matched))
+            {
+                foreach (var m in Matched)
+                {
+                    m.StopSDK();
+                }
+            }
+            if (TryFindBasisBaseTypeManagement(BasisBootedMode.OpenXRLoader, out Matched))
+            {
+                foreach (var m in Matched)
+                {
+                    m.StopSDK();
+                }
+            }
+
             BasisSimulateXR.StopXR();
-            BasisOpenXRManagement.StopXRSDK();
-#if BASIS_OPENVR_SUPPORTED
-            BasisOpenVRManagement.StopXRSDK();
-#endif
             BasisXRManagement.StopXR(isExiting);
             AllInputDevices.RemoveAll(item => item == null);
 
@@ -185,6 +227,10 @@ namespace Basis.Scripts.Device_Management
         public static async void ShowTrackers()
         {
             await ShowTrackersAsync();
+        }
+        public void SetCameraRenderState(bool state)
+        {
+            BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = state;
         }
         public static async Task ShowTrackersAsync()
         {
@@ -227,30 +273,12 @@ namespace Basis.Scripts.Device_Management
         {
             Debug.Log("Loading " + type);
             BasisSimulateXR.StartSimulation();
-
-            switch (type)
+            if (TryFindBasisBaseTypeManagement(type, out List<BasisBaseTypeManagement> Matched))
             {
-                case BasisBootedMode.OpenVRLoader:
-#if BASIS_OPENVR_SUPPORTED
-                    BasisOpenVRManagement ??= new BasisOpenVRManagement();
-                    BasisOpenVRManagement.StartXRSDK();
-                    SetCameraRenderState(true);
-                    #endif
-                    break;
-                case BasisBootedMode.OpenXRLoader:
-                    BasisOpenXRManagement ??= new BasisOpenXRManagement();
-                    BasisOpenXRManagement.StartXRSDK();
-                    SetCameraRenderState(true);
-                    break;
-                case BasisBootedMode.Desktop:
-                    BasisDesktopManagement.BeginDesktop();
-                    break;
-                case BasisBootedMode.Exiting:
-                    break;
-                default:
-                    Debug.LogError("This should not occur (default)");
-                    BasisDesktopManagement.BeginDesktop();
-                    break;
+                foreach (var m in Matched)
+                {
+                    m.StartSDK();
+                }
             }
         }
         public bool TryAdd(BasisInput basisXRInput)

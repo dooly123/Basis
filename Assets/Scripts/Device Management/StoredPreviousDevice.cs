@@ -3,9 +3,7 @@ using Basis.Scripts.TransformBinders.BoneControl;
 
 namespace Basis.Scripts.Device_Management
 {
-    public partial class BasisDeviceManagement
-    {
-        [System.Serializable]
+    [System.Serializable]
     public class StoredPreviousDevice
     {
         public BasisCalibratedOffsetData InverseOffsetFromBone;
@@ -14,5 +12,4 @@ namespace Basis.Scripts.Device_Management
         public string SubSystem;
         public string UniqueID;
     }
-}
 }
