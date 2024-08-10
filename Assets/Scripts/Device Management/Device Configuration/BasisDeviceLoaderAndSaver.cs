@@ -50,6 +50,17 @@ public class BasisDeviceLoaderAndSaver
     }
     public static async Task SaveDevices(string directoryPath, List<BasisDeviceMatchSettings> devices)
     {
+        // Safety checks
+        if (string.IsNullOrWhiteSpace(directoryPath))
+        {
+            throw new ArgumentException("Directory path cannot be null or empty", nameof(directoryPath));
+        }
+
+        if (devices == null || devices.Count == 0)
+        {
+            throw new ArgumentException("Devices list cannot be null or empty", nameof(devices));
+        }
+
         if (!Directory.Exists(directoryPath))
         {
             Directory.CreateDirectory(directoryPath);
@@ -57,13 +68,59 @@ public class BasisDeviceLoaderAndSaver
 
         List<Task> tasks = new List<Task>();
 
-        foreach (BasisDeviceMatchSettings device in devices)
+        for (int DeviceIndex = 0; DeviceIndex < devices.Count; DeviceIndex++)
         {
-            string jsonContent = JsonUtility.ToJson(device, true);
-            string filePath = Path.Combine(directoryPath, device.DeviceID + JsonIdentifier); // Assuming DeviceID is a unique identifier
+            BasisDeviceMatchSettings device = devices[DeviceIndex];
+            if (device == null)
+            {
+                continue; // Skip null devices
+            }
 
-            Task writeTask = File.WriteAllTextAsync(filePath, jsonContent);
-            tasks.Add(writeTask);
+            string filePath = Path.Combine(directoryPath, device.DeviceID + JsonIdentifier); // Assuming DeviceID is a unique identifier
+            bool proceed = true;
+
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    string loadedContent = await File.ReadAllTextAsync(filePath);
+                    BasisDeviceMatchSettings loadedDevice = JsonUtility.FromJson<BasisDeviceMatchSettings>(loadedContent);
+
+                    if (loadedDevice != null && loadedDevice.VersionNumber > device.VersionNumber)
+                    {
+                        proceed = false;
+                    }
+                    else
+                    {
+                        File.Delete(filePath); // Delete outdated file
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error reading or deserializing file '{filePath}': {ex.Message} nuking...");
+                    proceed = true; // Skip this device to avoid corrupt data
+                    File.Delete(filePath); // Delete corrupted or incorrect file
+                }
+            }
+
+            if (proceed)
+            {
+                string jsonContent = JsonUtility.ToJson(device, true);
+
+                // Adding task to list only if proceed is true
+                tasks.Add(Task.Run(async () =>
+                {
+                    try
+                    {
+                        await File.WriteAllTextAsync(filePath, jsonContent);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error writing to file '{filePath}': {ex.Message}");
+                        throw; // Rethrow to catch in WhenAll
+                    }
+                }));
+            }
         }
 
         try

@@ -229,7 +229,7 @@ public partial class BasisPointRaycaster : BaseRaycaster
         SortedRays.Clear();
         this.transform.localRotation = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
         // Calculate the starting position
-        Vector3 startingPosition = transform.position + (transform.rotation * BasisDeviceMatchableNames.RayCastOffset);
+        Vector3 startingPosition = transform.position + (transform.rotation * BasisDeviceMatchableNames.PositionRayCastOffset);
 
         // Calculate the rotation offset
         Quaternion rotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);

@@ -14,32 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BasisDevice:
   - DeviceID: vr_tracker_vive_3_0
+    VersionNumber: 1
     MatchableDeviceIds:
     - '{htc}vr_tracker_vive_3_0'
     HasRayCastSupport: 0
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
-    RayCastOffset: {x: 0, y: 0, z: 0}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 0
     TrackedRole: 0
   - DeviceID: vr_tracker_vive_1_0
+    VersionNumber: 1
     MatchableDeviceIds:
     - '{htc}vr_tracker_vive_1_0'
     HasRayCastSupport: 0
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
-    RayCastOffset: {x: 0, y: 0, z: 0}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 0
     TrackedRole: 0
   - DeviceID: valve_controller_knu_left
+    VersionNumber: 1
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_left'
     - '{indexcontroller}valve_controller_knu_2_0_left'
@@ -48,13 +51,14 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    RayCastOffset: {x: -0.03, y: -0.03, z: -0.03}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 63, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: -0.06, z: 0.13}
     AvatarRotationOffset: {x: -18, y: -2, z: 55.6}
     HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: valve_controller_knu_right
+    VersionNumber: 1
     MatchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_right'
     - '{indexcontroller}valve_controller_knu_2_0_right'
@@ -63,87 +67,79 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    RayCastOffset: {x: 0.03, y: -0.03, z: -0.03}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 63, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: -0.06, z: 0.13}
     AvatarRotationOffset: {x: -18, y: -2, z: -55.6}
     HasTrackedRole: 1
     TrackedRole: 19
   - DeviceID: tundra_tracker
+    VersionNumber: 1
     MatchableDeviceIds:
     - tundra_tracker
     HasRayCastSupport: 0
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 0
     HasRayCastRedical: 0
-    RayCastOffset: {x: 0, y: 0, z: 0}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 0
     TrackedRole: 0
   - DeviceID: oculus_controller_left
+    VersionNumber: 1
     MatchableDeviceIds:
     - oculus_quest_pro_controller_left
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 0
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    RayCastOffset: {x: 0, y: 0, z: 0}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_controller_right
+    VersionNumber: 1
     MatchableDeviceIds:
     - oculus_quest_pro_controller_right
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 0
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    RayCastOffset: {x: 0, y: 0, z: 0}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
     TrackedRole: 19
   - DeviceID: Eye
+    VersionNumber: 1
     MatchableDeviceIds:
     - desktop eye
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 0
     HasRayCastVisual: 0
     HasRayCastRedical: 1
-    RayCastOffset: {x: 0, y: 0, z: 0}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
     TrackedRole: 0
   - DeviceID: Index Controller OpenXR
+    VersionNumber: 1
     MatchableDeviceIds:
     - desktop eye
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    RayCastOffset: {x: 0, y: 0, z: 0}
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
     RotationRaycastOffset: {x: 0, y: 0, z: 0}
     AvatarPositionOffset: {x: 0, y: 0, z: 0}
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
     TrackedRole: 18
-  - DeviceID: Index Controller OpenXR
-    MatchableDeviceIds:
-    - desktop eye
-    HasRayCastSupport: 1
-    CanDisplayPhysicalTracker: 1
-    HasRayCastVisual: 1
-    HasRayCastRedical: 1
-    RayCastOffset: {x: 0, y: 0, z: 0}
-    RotationRaycastOffset: {x: 0, y: 0, z: 0}
-    AvatarPositionOffset: {x: 0, y: 0, z: 0}
-    AvatarRotationOffset: {x: 0, y: 0, z: 0}
-    HasTrackedRole: 1
-    TrackedRole: 19
