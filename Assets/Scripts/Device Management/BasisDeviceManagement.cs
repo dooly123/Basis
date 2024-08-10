@@ -14,10 +14,8 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -35,8 +33,10 @@ namespace Basis.Scripts.Device_Management
         public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
         [SerializeField]
         public BasisXRManagement BasisXRManagement = new BasisXRManagement();
+#if BASIS_OPENVR_SUPPORTED
         [SerializeField]
         public BasisOpenVRManagement BasisOpenVRManagement = new BasisOpenVRManagement();
+#endif
         [SerializeField]
         public BasisOpenXRManagement BasisOpenXRManagement = new BasisOpenXRManagement();
         [SerializeField]
@@ -55,6 +55,7 @@ namespace Basis.Scripts.Device_Management
         [SerializeField]
         public BasisDeviceNameMatcher BasisDeviceNameMatcher;
         public const string InvalidConst = "Invalid";
+        public string[] BakedInCommandLineArgs = new string[] { };
         void Start()
         {
             if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -77,7 +78,7 @@ namespace Basis.Scripts.Device_Management
         }
         public async void Initialize()
         {
-            CommandLineArgs.Initialize();
+            CommandLineArgs.Initialize(BakedInCommandLineArgs);
             await LoadAndOrSaveDefaultDeviceConfigs(Application.persistentDataPath + "/Devices");
             InstantiationParameters parameters = new InstantiationParameters();
             await BasisPlayerFactory.CreateLocalPlayer(parameters);
@@ -146,8 +147,9 @@ namespace Basis.Scripts.Device_Management
         {
             BasisSimulateXR.StopXR();
             BasisOpenXRManagement.StopXRSDK();
+#if BASIS_OPENVR_SUPPORTED
             BasisOpenVRManagement.StopXRSDK();
-
+#endif
             BasisXRManagement.StopXR(isExiting);
             AllInputDevices.RemoveAll(item => item == null);
 
@@ -229,10 +231,11 @@ namespace Basis.Scripts.Device_Management
             switch (type)
             {
                 case BasisBootedMode.OpenVRLoader:
+#if BASIS_OPENVR_SUPPORTED
                     BasisOpenVRManagement ??= new BasisOpenVRManagement();
                     BasisOpenVRManagement.StartXRSDK();
                     SetCameraRenderState(true);
-
+                    #endif
                     break;
                 case BasisBootedMode.OpenXRLoader:
                     BasisOpenXRManagement ??= new BasisOpenXRManagement();

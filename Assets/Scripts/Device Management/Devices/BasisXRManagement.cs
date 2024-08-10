@@ -5,80 +5,86 @@ using UnityEngine.XR.Management;
 
 namespace Basis.Scripts.Device_Management.Devices
 {
-[System.Serializable]
-public class BasisXRManagement
-{
-    public XRManagerSettings xRManagerSettings;
-    public XRGeneralSettings xRGeneralSettings;
-    // Define the event
-    public event System.Action<BasisBootedMode> CheckForPass;
+    [System.Serializable]
+    public class BasisXRManagement
+    {
+        public XRManagerSettings xRManagerSettings;
+        public XRGeneralSettings xRGeneralSettings;
+        // Define the event
+        public event System.Action<BasisBootedMode> CheckForPass;
 
-    // Store the initial list of loaders
-    [SerializeField]
-    public List<XRLoader> initialLoaders = new List<XRLoader>();
-    public void BeginLoad()
-    {
-        Debug.Log("Starting LoadXR");
-        // Debug.Log("Begin Load of XR");
-        if (XRGeneralSettings.Instance != null)
+        // Store the initial list of loaders
+        [SerializeField]
+        public List<XRLoader> initialLoaders = new List<XRLoader>();
+        public void ReInitalizeCheck()
         {
-            xRGeneralSettings = XRGeneralSettings.Instance;
-            if (xRGeneralSettings.Manager != null)
+            if (XRGeneralSettings.Instance != null)
             {
-                xRManagerSettings = xRGeneralSettings.Manager;
+                xRGeneralSettings = XRGeneralSettings.Instance;
+                if (xRGeneralSettings.Manager != null)
+                {
+                    xRManagerSettings = xRGeneralSettings.Manager;
+                }
             }
         }
-        BasisDeviceManagement.Instance.StartCoroutine(LoadXR());
-    }
-    public void ForceDisableXRSolution(BasisBootedMode BasisBootedMode)
-    {
-        IReadOnlyList<XRLoader> Loaders = xRManagerSettings.activeLoaders;
-        foreach (XRLoader loader in Loaders)
+        public void BeginLoad()
         {
-            if (loader?.name == BasisBootedMode.ToString())
+            Debug.Log("Starting LoadXR");
+            // Debug.Log("Begin Load of XR");
+            ReInitalizeCheck();
+            BasisDeviceManagement.Instance.StartCoroutine(LoadXR());
+        }
+        public void DisableDeviceManagerSolution(BasisBootedMode BasisBootedMode)
+        {
+            ReInitalizeCheck();
+            IReadOnlyList<XRLoader> Loaders = xRManagerSettings.activeLoaders;
+            foreach (XRLoader loader in Loaders)
             {
-                xRManagerSettings.TryRemoveLoader(loader);
+                if (loader?.name == BasisBootedMode.ToString())
+                {
+                    xRManagerSettings.TryRemoveLoader(loader);
+                    return;
+                }
             }
         }
-    }
-    public IEnumerator LoadXR()
-    {
-        // Initialize the XR loader
-        yield return xRManagerSettings.InitializeLoader();
-        BasisBootedMode result = BasisBootedMode.Desktop;
-        // Check the result
-        if (xRManagerSettings.activeLoader != null)
+        public IEnumerator LoadXR()
         {
-            xRManagerSettings.StartSubsystems();
-            result = GetLoaderType(xRManagerSettings.activeLoader?.name);
+            // Initialize the XR loader
+            yield return xRManagerSettings.InitializeLoader();
+            BasisBootedMode result = BasisBootedMode.Desktop;
+            // Check the result
+            if (xRManagerSettings.activeLoader != null)
+            {
+                xRManagerSettings.StartSubsystems();
+                result = GetLoaderType(xRManagerSettings.activeLoader?.name);
+            }
+            Debug.Log("Found Loader " + result);
+            CheckForPass?.Invoke(result);
         }
-        Debug.Log("Found Loader " + result);
-        CheckForPass?.Invoke(result);
-    }
-    public BasisBootedMode GetLoaderType(string loaderName)
-    {
-        if (loaderName == BasisBootedMode.OpenVRLoader.ToString()) return BasisBootedMode.OpenVRLoader;
-        if (loaderName == BasisBootedMode.OpenXRLoader.ToString()) return BasisBootedMode.OpenXRLoader;
-        return BasisBootedMode.SuccessButUnknown;
-    }
+        public BasisBootedMode GetLoaderType(string loaderName)
+        {
+            if (loaderName == BasisBootedMode.OpenVRLoader.ToString()) return BasisBootedMode.OpenVRLoader;
+            if (loaderName == BasisBootedMode.OpenXRLoader.ToString()) return BasisBootedMode.OpenXRLoader;
+            return BasisBootedMode.SuccessButUnknown;
+        }
 
-    public void StopXR(bool IsExiting)
-    {
-        if (xRManagerSettings != null)
+        public void StopXR(bool IsExiting)
         {
-            if (xRManagerSettings.isInitializationComplete)
+            if (xRManagerSettings != null)
             {
-                xRManagerSettings.DeinitializeLoader();
+                if (xRManagerSettings.isInitializationComplete)
+                {
+                    xRManagerSettings.DeinitializeLoader();
+                }
+            }
+            if (IsExiting)
+            {
+                CheckForPass?.Invoke(BasisBootedMode.Exiting);
+            }
+            else
+            {
+                CheckForPass?.Invoke(BasisBootedMode.Desktop);
             }
         }
-        if (IsExiting)
-        {
-            CheckForPass?.Invoke(BasisBootedMode.Exiting);
-        }
-        else
-        {
-            CheckForPass?.Invoke(BasisBootedMode.Desktop);
-        }
     }
-}
 }

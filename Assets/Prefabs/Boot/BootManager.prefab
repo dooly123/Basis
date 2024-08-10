@@ -66,11 +66,13 @@ MonoBehaviour:
     HasEvents: 0
   BasisDesktopManagement:
     BasisAvatarEyeInput: {fileID: 0}
-  BasisDeviceNameMatcher: {fileID: 11400000, guid: 9b8e3db83cb310c40afaa430d0071a18, type: 2}
   BasisLockToInputs: []
   FireOffNetwork: 1
   HasEvents: 0
   PreviouslyConnectedDevices: []
+  UseAbleDeviceConfigs: []
+  BasisDeviceNameMatcher: {fileID: 11400000, guid: 9b8e3db83cb310c40afaa430d0071a18, type: 2}
+  BakedInCommandLineArgs: []
 --- !u!114 &6370897756145117596
 MonoBehaviour:
   m_ObjectHideFlags: 0
