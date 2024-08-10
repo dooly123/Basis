@@ -83,9 +83,9 @@ public class BasisLocalCameraDriver : MonoBehaviour
         BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnHeightChanged;
         HasEvents = false;
     }
-    private void OnModeSwitch(BasisBootedMode mode)
+    private void OnModeSwitch(string mode)
     {
-        if (mode == BasisBootedMode.Desktop)
+        if (mode == "Desktop")
         {
             Camera.fieldOfView = DefaultCameraFov;
         }

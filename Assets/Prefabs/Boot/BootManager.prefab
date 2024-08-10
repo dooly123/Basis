@@ -50,8 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c8ed7e061aaf144a66f9fcfde75b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentMode: 5
-  DefaultMode: 2
+  CurrentMode: None
+  DefaultMode: Desktop
   BasisOpusSettings: {fileID: 11400000, guid: 5ad599c7b6420494f84e3a3b71efbfa8, type: 2}
   AllInputDevices:
     _list: []

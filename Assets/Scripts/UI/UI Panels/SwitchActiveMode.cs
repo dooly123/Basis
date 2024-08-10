@@ -14,11 +14,11 @@ public class SwitchActiveMode : MonoBehaviour
     }
     public void OnDesktopButton()
     {
-        BasisDeviceManagement.Instance.SwitchMode(BasisBootedMode.Desktop);
+        BasisDeviceManagement.Instance.SwitchMode("Desktop");
     }
     public void OnVRButton()
     {
-        BasisDeviceManagement.Instance.SwitchMode(BasisBootedMode.OpenVRLoader);
+        BasisDeviceManagement.Instance.SwitchMode("OpenVRLoader");
     }
 }
 }

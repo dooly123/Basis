@@ -130,7 +130,7 @@ public class BasisInputModuleHandler : BaseInputModule
                     {
                         BasisAvatarEyeInput.Instance.BlockCrouching = true;
                     }
-                    if (BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenVRLoader || BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenXRLoader || ForceKeyboard)
+                    if (BasisDeviceManagement.Instance.CurrentMode == "OpenVRLoader" || BasisDeviceManagement.Instance.CurrentMode == "OpenXRLoader" || ForceKeyboard)
                     {
                         BasisVirtualKeyboard.CreateMenu(CurrentSelectedInputField, CurrentSelectedTMP_InputField);
                     }
@@ -154,7 +154,7 @@ public class BasisInputModuleHandler : BaseInputModule
                             BasisAvatarEyeInput.Instance.BlockCrouching = true;
 
                         }
-                        if (BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenVRLoader || BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.OpenXRLoader || ForceKeyboard)
+                        if (BasisDeviceManagement.Instance.CurrentMode == "OpenVRLoader" || BasisDeviceManagement.Instance.CurrentMode == "OpenXRLoader" || ForceKeyboard)
                         {
                             BasisVirtualKeyboard.CreateMenu(CurrentSelectedInputField, CurrentSelectedTMP_InputField);
                         }

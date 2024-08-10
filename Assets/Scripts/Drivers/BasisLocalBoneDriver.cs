@@ -11,7 +11,7 @@ public class BasisLocalBoneDriver : BaseBoneDriver
         OnBootModeChanged(BasisDeviceManagement.Instance.CurrentMode);
     }
 
-    private void OnBootModeChanged(BasisBootedMode mode)
+    private void OnBootModeChanged(string mode)
     {
         for (int Index = 0; Index < Controls.Length; Index++)
         {
@@ -19,7 +19,7 @@ public class BasisLocalBoneDriver : BaseBoneDriver
             BasisBoneTrackedRole role = trackedRoles[Index];
             if (BasisBoneTrackedRoleCommonCheck.CheckIfLeftHand(role) || BasisBoneTrackedRoleCommonCheck.CheckIfRightHand(role))
             {
-                Control.Cullable = mode == BasisBootedMode.Desktop;
+                Control.Cullable = mode == "Desktop";
             }
             else
             {

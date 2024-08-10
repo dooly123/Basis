@@ -87,7 +87,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void SetPlayersEyeHeight(float realEyeHeight, float avatarHeight)
         {
-            if (BasisDeviceManagement.Instance.CurrentMode == BasisBootedMode.Desktop)
+            if (BasisDeviceManagement.Instance.CurrentMode == "Desktop")
             {
                 RatioPlayerToAvatarScale = 1;
             }

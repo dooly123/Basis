@@ -11,7 +11,7 @@ namespace Basis.Scripts.Device_Management.Devices
         public XRManagerSettings xRManagerSettings;
         public XRGeneralSettings xRGeneralSettings;
         // Define the event
-        public event System.Action<BasisBootedMode> CheckForPass;
+        public event System.Action<string> CheckForPass;
 
         // Store the initial list of loaders
         [SerializeField]
@@ -34,7 +34,7 @@ namespace Basis.Scripts.Device_Management.Devices
             ReInitalizeCheck();
             BasisDeviceManagement.Instance.StartCoroutine(LoadXR());
         }
-        public void DisableDeviceManagerSolution(BasisBootedMode BasisBootedMode)
+        public void DisableDeviceManagerSolution(string BasisBootedMode)
         {
             ReInitalizeCheck();
             IReadOnlyList<XRLoader> Loaders = xRManagerSettings.activeLoaders;
@@ -51,23 +51,16 @@ namespace Basis.Scripts.Device_Management.Devices
         {
             // Initialize the XR loader
             yield return xRManagerSettings.InitializeLoader();
-            BasisBootedMode result = BasisBootedMode.Desktop;
+            string result = "Desktop";
             // Check the result
             if (xRManagerSettings.activeLoader != null)
             {
                 xRManagerSettings.StartSubsystems();
-                result = GetLoaderType(xRManagerSettings.activeLoader?.name);
+                result = xRManagerSettings.activeLoader?.name;
             }
             Debug.Log("Found Loader " + result);
             CheckForPass?.Invoke(result);
         }
-        public BasisBootedMode GetLoaderType(string loaderName)
-        {
-            if (loaderName == BasisBootedMode.OpenVRLoader.ToString()) return BasisBootedMode.OpenVRLoader;
-            if (loaderName == BasisBootedMode.OpenXRLoader.ToString()) return BasisBootedMode.OpenXRLoader;
-            return BasisBootedMode.SuccessButUnknown;
-        }
-
         public void StopXR(bool IsExiting)
         {
             if (xRManagerSettings != null)
@@ -79,11 +72,11 @@ namespace Basis.Scripts.Device_Management.Devices
             }
             if (IsExiting)
             {
-                CheckForPass?.Invoke(BasisBootedMode.Exiting);
+                CheckForPass?.Invoke("Exiting");
             }
             else
             {
-                CheckForPass?.Invoke(BasisBootedMode.Desktop);
+                CheckForPass?.Invoke("Desktop");
             }
         }
     }

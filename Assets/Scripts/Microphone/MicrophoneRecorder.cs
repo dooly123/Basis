@@ -64,7 +64,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         }
         base.OnDestroy();
     }
-    private void OnBootModeChanged(BasisBootedMode mode)
+    private void OnBootModeChanged(string mode)
     {
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }

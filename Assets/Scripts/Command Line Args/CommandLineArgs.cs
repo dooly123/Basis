@@ -22,16 +22,7 @@ namespace Basis.Scripts.Command_Line_Args
             foreach (string arg in StringArgs.Where(a => a.StartsWith(DisableFlag, StringComparison.InvariantCultureIgnoreCase)))
             {
                 string replacement = arg.Substring(DisableFlag.Length);
-
-                if (Enum.TryParse(typeof(BasisBootedMode), replacement, true, out object mode))
-                {
-                    var basisMode = (BasisBootedMode)mode;
-                    DisableDeviceManagerSolution(basisMode);
-                }
-                else
-                {
-                    Debug.LogWarning($"Invalid argument '{replacement}' does not match any BasisBootedMode.");
-                }
+                DisableDeviceManagerSolution(replacement);
             }
         }
 
@@ -39,7 +30,7 @@ namespace Basis.Scripts.Command_Line_Args
         /// Disables the device manager solution for the specified booted mode.
         /// </summary>
         /// <param name="mode">The BasisBootedMode to disable.</param>
-        private static void DisableDeviceManagerSolution(BasisBootedMode mode)
+        private static void DisableDeviceManagerSolution(string mode)
         {
             try
             {

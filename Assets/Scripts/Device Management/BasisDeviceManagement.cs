@@ -20,12 +20,12 @@ namespace Basis.Scripts.Device_Management
 {
     public partial class BasisDeviceManagement : MonoBehaviour
     {
-        public BasisBootedMode CurrentMode = BasisBootedMode.None;
-        public BasisBootedMode DefaultMode = BasisBootedMode.Desktop;
+        public string CurrentMode = "None";
+        public string DefaultMode = "Desktop";
         public static BasisDeviceManagement Instance;
         public BasisOpusSettings BasisOpusSettings;
-        public event Action<BasisBootedMode> OnBootModeChanged;
-        public event Action<BasisBootedMode> OnBootModeStopped;
+        public event Action<string> OnBootModeChanged;
+        public event Action<string> OnBootModeStopped;
         [SerializeField]
         public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
         [SerializeField]
@@ -55,7 +55,7 @@ namespace Basis.Scripts.Device_Management
         void OnDestroy()
         {
             ShutDownXR(true);
-            if (TryFindBasisBaseTypeManagement(BasisBootedMode.Desktop, out List<BasisBaseTypeManagement> Matched))
+            if (TryFindBasisBaseTypeManagement("Desktop", out List<BasisBaseTypeManagement> Matched))
             {
                 foreach (var m in Matched)
                 {
@@ -75,10 +75,6 @@ namespace Basis.Scripts.Device_Management
 
                 OnInitializationCompleted -= RunAfterInitialized;
             }
-        }
-        public bool TryFindBasisBaseTypeManagement(BasisBootedMode Mode, out List<BasisBaseTypeManagement> Match)
-        {
-            return TryFindBasisBaseTypeManagement(Mode.ToString(), out Match);
         }
         public bool TryFindBasisBaseTypeManagement(string Name, out List<BasisBaseTypeManagement> Match)
         {
@@ -121,12 +117,12 @@ namespace Basis.Scripts.Device_Management
                 await LoadGameobject(NetworkManagement, new InstantiationParameters());
             }
         }
-        public void SwitchMode(BasisBootedMode newMode)
+        public void SwitchMode(string newMode)
         {
-            if (CurrentMode != BasisBootedMode.None)
+            if (CurrentMode != "None")
             {
                 Debug.Log("killing off " + CurrentMode);
-                if (newMode == BasisBootedMode.Desktop)
+                if (newMode == "Desktop")
                 {
                     ShutDownXR();
                 }
@@ -134,7 +130,7 @@ namespace Basis.Scripts.Device_Management
                 {
                     foreach (BasisBaseTypeManagement Type in BaseTypes)
                     {
-                        if (Type.Type() == BasisBootedMode.Desktop.ToString())
+                        if (Type.Type() == "Desktop")
                         {
                             Type.StopSDK();
                         }
@@ -149,14 +145,14 @@ namespace Basis.Scripts.Device_Management
 
             switch (CurrentMode)
             {
-                case BasisBootedMode.OpenVRLoader:
+                case "OpenVRLoader":
                     BasisXRManagement.BeginLoad();
                     break;
-                case BasisBootedMode.OpenXRLoader:
+                case "OpenXRLoader":
                     BasisXRManagement.BeginLoad();
                     break;
-                case BasisBootedMode.Desktop:
-                    if (TryFindBasisBaseTypeManagement(BasisBootedMode.Desktop, out List<BasisBaseTypeManagement> Matched))
+                case "Desktop":
+                    if (TryFindBasisBaseTypeManagement("Desktop", out List<BasisBaseTypeManagement> Matched))
                     {
                         foreach (var m in Matched)
                         {
@@ -164,11 +160,11 @@ namespace Basis.Scripts.Device_Management
                         }
                     }
                     break;
-                case BasisBootedMode.Exiting:
+                case "Exiting":
                     break;
                 default:
                     Debug.LogError("This should not occur (default)");
-                    if (TryFindBasisBaseTypeManagement(BasisBootedMode.Desktop, out Matched))
+                    if (TryFindBasisBaseTypeManagement("Desktop", out Matched))
                     {
                         foreach (var m in Matched)
                         {
@@ -180,14 +176,14 @@ namespace Basis.Scripts.Device_Management
         }
         public void ShutDownXR(bool isExiting = false)
         {
-            if (TryFindBasisBaseTypeManagement(BasisBootedMode.OpenVRLoader, out List<BasisBaseTypeManagement> Matched))
+            if (TryFindBasisBaseTypeManagement("OpenVRLoader", out List<BasisBaseTypeManagement> Matched))
             {
                 foreach (var m in Matched)
                 {
                     m.StopSDK();
                 }
             }
-            if (TryFindBasisBaseTypeManagement(BasisBootedMode.OpenXRLoader, out Matched))
+            if (TryFindBasisBaseTypeManagement("OpenXRLoader", out Matched))
             {
                 foreach (var m in Matched)
                 {
@@ -220,13 +216,13 @@ namespace Basis.Scripts.Device_Management
         }
         public static void ForceLoadXR()
         {
-            SwitchSetMode(BasisBootedMode.OpenVRLoader);
+            SwitchSetMode("OpenVRLoader");
         }
         public static void ForceSetDesktop()
         {
-            SwitchSetMode(BasisBootedMode.Desktop);
+            SwitchSetMode("Desktop");
         }
-        public static void SwitchSetMode(BasisBootedMode Mode)
+        public static void SwitchSetMode(string Mode)
         {
             if (Instance != null && Mode != Instance.CurrentMode)
             {
@@ -278,7 +274,7 @@ namespace Basis.Scripts.Device_Management
 
             AllInputDevices.RemoveAll(item => item == null);
         }
-        private void CheckForPass(BasisBootedMode type)
+        private void CheckForPass(string type)
         {
             Debug.Log("Loading " + type);
             if (TryFindBasisBaseTypeManagement("SimulateXR", out List<BasisBaseTypeManagement> Matched))
