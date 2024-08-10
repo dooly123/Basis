@@ -50,9 +50,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c8ed7e061aaf144a66f9fcfde75b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FireOffNetwork: 1
+  HasEvents: 0
+  BakedInCommandLineArgs:
+  - --disable-OpenVRLoader
   CurrentMode: None
-  DefaultMode: Desktop
   BasisOpusSettings: {fileID: 11400000, guid: 5ad599c7b6420494f84e3a3b71efbfa8, type: 2}
+  BasisDeviceNameMatcher: {fileID: 11400000, guid: 9b8e3db83cb310c40afaa430d0071a18, type: 2}
   AllInputDevices:
     _list: []
   BasisXRManagement:
@@ -67,12 +71,8 @@ MonoBehaviour:
   - {fileID: -3484738083713026149}
   - {fileID: -3061024371983229343}
   BasisLockToInputs: []
-  FireOffNetwork: 1
-  HasEvents: 0
   PreviouslyConnectedDevices: []
   UseAbleDeviceConfigs: []
-  BasisDeviceNameMatcher: {fileID: 11400000, guid: 9b8e3db83cb310c40afaa430d0071a18, type: 2}
-  BakedInCommandLineArgs: []
 --- !u!114 &6370897756145117596
 MonoBehaviour:
   m_ObjectHideFlags: 0

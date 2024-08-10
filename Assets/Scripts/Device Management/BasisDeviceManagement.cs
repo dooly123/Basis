@@ -20,6 +20,11 @@ namespace Basis.Scripts.Device_Management
 {
     public partial class BasisDeviceManagement : MonoBehaviour
     {
+        public bool FireOffNetwork = true;
+        public bool HasEvents = false;
+        public const string InvalidConst = "Invalid";
+        public string[] BakedInCommandLineArgs = new string[] { };
+        public static string NetworkManagement = "NetworkManagement";
         public string CurrentMode = "None";
         public string DefaultMode()
         {
@@ -36,25 +41,22 @@ namespace Basis.Scripts.Device_Management
         public BasisOpusSettings BasisOpusSettings;
         public event Action<string> OnBootModeChanged;
         public event Action<string> OnBootModeStopped;
+        public delegate Task InitializationCompletedHandler();
+        public event InitializationCompletedHandler OnInitializationCompleted;
+        public BasisDeviceNameMatcher BasisDeviceNameMatcher;
         [SerializeField]
         public BasisObservableList<BasisInput> AllInputDevices = new BasisObservableList<BasisInput>();
         [SerializeField]
         public BasisXRManagement BasisXRManagement = new BasisXRManagement();
+        [SerializeField]
         public List<BasisBaseTypeManagement> BaseTypes = new List<BasisBaseTypeManagement>();
         [SerializeField]
         public List<BasisLockToInput> BasisLockToInputs = new List<BasisLockToInput>();
-        public delegate Task InitializationCompletedHandler();
-        public event InitializationCompletedHandler OnInitializationCompleted;
-        public bool FireOffNetwork = true;
-        public bool HasEvents = false;
         [SerializeField]
         public List<StoredPreviousDevice> PreviouslyConnectedDevices = new List<StoredPreviousDevice>();
+        [SerializeField]
         public List<BasisDeviceMatchSettings> UseAbleDeviceConfigs = new List<BasisDeviceMatchSettings>();
         [SerializeField]
-        public BasisDeviceNameMatcher BasisDeviceNameMatcher;
-        public const string InvalidConst = "Invalid";
-        public string[] BakedInCommandLineArgs = new string[] { };
-        public static string NetworkManagement = "NetworkManagement";
         void Start()
         {
             if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))

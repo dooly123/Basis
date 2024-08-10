@@ -38,7 +38,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
                     string id = GenerateID(device);
                     if (!TypicalDevices.ContainsKey(id))
                     {
-                        CreatePhysicalTrackedDevice(device, id, device.name);
+                        CreatePhysicalTrackedDevice(device, id);
                         TypicalDevices[id] = device;
                     }
                 }
@@ -65,7 +65,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
             return $"{device.name}|{device.serialNumber}|{device.manufacturer}|{(int)device.characteristics}";
         }
 
-        private void CreatePhysicalTrackedDevice(InputDevice device, string uniqueID, string unUniqueID)
+        private void CreatePhysicalTrackedDevice(InputDevice device, string uniqueID)
         {
             var gameObject = new GameObject(uniqueID)
             {
@@ -75,8 +75,9 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
             }
             };
             var basisXRInput = gameObject.AddComponent<BasisOpenXRInput>();
+            basisXRInput.ClassName = nameof(BasisOpenXRInput);
             bool state = GetControllerOrHMD(device, out BasisBoneTrackedRole BasisBoneTrackedRole);
-            basisXRInput.Initialize(device, uniqueID, unUniqueID, "BasisOpenXRManagement", state, BasisBoneTrackedRole);
+            basisXRInput.Initialize(device, uniqueID, device.name + BasisBoneTrackedRole.ToString(), nameof(BasisOpenXRManagement), state, BasisBoneTrackedRole);
             BasisDeviceManagement.Instance.TryAdd(basisXRInput);
         }
         private bool GetControllerOrHMD(InputDevice device, out BasisBoneTrackedRole BasisBoneTrackedRole)
