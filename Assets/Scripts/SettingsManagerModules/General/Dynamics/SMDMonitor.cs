@@ -18,7 +18,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                 for (int displayIndex = 0; displayIndex < Display.displays.Length; displayIndex++)
                 {
                     string displayId = displayIndex.ToString(manager.ManagerSettings.CInfo);
-                    SMSelectableValues.AddSelection(ref option.SelectableValueList, displayId, displayId);
+                    SMSelectableValues.AddSelection( option.SelectableValueList, displayId, displayId);
                     SettingsManagerDropDown.AddDropDownOption(manager, option.OptionIndex, displayId);
                 }
 

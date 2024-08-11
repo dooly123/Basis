@@ -1,8 +1,10 @@
 using Basis.Scripts.Device_Management;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -69,20 +71,27 @@ public class BasisDeviceLoaderAndSaver
     {
         // Safety checks
         if (string.IsNullOrWhiteSpace(directoryPath))
+        {
             throw new ArgumentException("Directory path cannot be null or empty", nameof(directoryPath));
-
+        }
         if (devices == null || devices.Count == 0)
+        {
             throw new ArgumentException("Devices list cannot be null or empty", nameof(devices));
-
+        }
         if (!Directory.Exists(directoryPath))
+        {
             Directory.CreateDirectory(directoryPath);
-
+        }
         // Use a fixed-size array instead of a List to avoid resizing overhead
-        Task[] tasks = new Task[devices.Count];
-        for (int i = 0; i < devices.Count; i++)
+        int Count = devices.Count;
+        Task[] tasks = new Task[Count];
+        for (int i = 0; i < Count; i++)
         {
             var device = devices[i];
-            if (device == null) continue;
+            if (device == null)
+            {
+                continue;
+            }
 
             string filePath = Path.Combine(directoryPath, device.DeviceID + JsonIdentifier);
             tasks[i] = Task.Run(() => SaveDeviceAsync(filePath, device));
@@ -98,10 +107,18 @@ public class BasisDeviceLoaderAndSaver
         }
     }
 
-    private static async Task SaveDeviceAsync(string filePath, BasisDeviceMatchSettings device)
+    public static async Task SaveDeviceAsync(string filePath, BasisDeviceMatchSettings device)
     {
         try
         {
+            string jsonContent = JsonUtility.ToJson(device, false); // Use compact JSON format to reduce file size
+            byte[] newContentHash;
+
+            using (var sha256 = SHA256.Create())
+            {
+                newContentHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(jsonContent));
+            }
+
             if (File.Exists(filePath))
             {
                 string loadedContent;
@@ -113,19 +130,33 @@ public class BasisDeviceLoaderAndSaver
 
                 var existingDevice = JsonUtility.FromJson<BasisDeviceMatchSettings>(loadedContent);
 
+                // Compare versions if necessary
                 if (existingDevice != null && existingDevice.VersionNumber > device.VersionNumber)
                 {
                     Debug.Log("Newer version exists; using that instead");
                     return;
                 }
+
+                // Compute the hash of the existing file content
+                byte[] existingContentHash;
+                using (var sha256 = SHA256.Create())
+                {
+                    existingContentHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(loadedContent));
+                }
+
+                // If the hashes match, no need to write the file again
+                if (StructuralComparisons.StructuralEqualityComparer.Equals(existingContentHash, newContentHash))
+                {
+                    Debug.Log("File content is identical; no need to write.");
+                    return;
+                }
                 else
                 {
-                    Debug.Log("Old file detected");
-                    File.Delete(filePath); // Delete outdated file
+                    Debug.Log("File content differs; updating file.");
                 }
             }
 
-            var jsonContent = JsonUtility.ToJson(device, false); // Use compact JSON format to reduce file size
+            // Write the new content to the file
             using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
             using (var writer = new StreamWriter(stream, Encoding.UTF8))
             {
@@ -135,10 +166,6 @@ public class BasisDeviceLoaderAndSaver
         catch (Exception ex)
         {
             Debug.LogError($"Error processing file '{filePath}': {ex.Message}");
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath); // Delete corrupted or incorrect file
-            }
             throw; // Rethrow to catch in WhenAll
         }
     }

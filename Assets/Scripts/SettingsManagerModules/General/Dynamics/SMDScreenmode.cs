@@ -15,13 +15,13 @@ namespace BattlePhaze.SettingsManager.Intergrations
                 SettingsManagerDropDown.Clear(Manager, Option.OptionIndex);
                 Option.SelectableValueList.Clear();
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Exclusive FullScreen");
-                SMSelectableValues.AddSelection(ref Option.SelectableValueList, "Exclusive FullScreen", "Exclusive FullScreen");
+                SMSelectableValues.AddSelection( Option.SelectableValueList, "Exclusive FullScreen", "Exclusive FullScreen");
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Fullscreen");
-                SMSelectableValues.AddSelection(ref Option.SelectableValueList, "Fullscreen", "Fullscreen");
+                SMSelectableValues.AddSelection( Option.SelectableValueList, "Fullscreen", "Fullscreen");
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Maximized Window");
-                SMSelectableValues.AddSelection(ref Option.SelectableValueList, "Maximized Window", "Maximized Window");
+                SMSelectableValues.AddSelection( Option.SelectableValueList, "Maximized Window", "Maximized Window");
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Windowed");
-                SMSelectableValues.AddSelection(ref Option.SelectableValueList, "Windowed", "Windowed");
+                SMSelectableValues.AddSelection( Option.SelectableValueList, "Windowed", "Windowed");
                 if (string.IsNullOrEmpty(Option.SelectedValue))
                 {
                     SettingsManagerDropDown.SetOptionsValue(Manager, 0, 0, true);

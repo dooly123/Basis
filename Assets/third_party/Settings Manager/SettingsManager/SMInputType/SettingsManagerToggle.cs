@@ -18,8 +18,8 @@
             Manager.Options[OptionIndex].SelectedValue = NewValue.ToString(Manager.ManagerSettings.CInfo);
             if (Manager.Options[OptionIndex].SelectableValueList.Count == 0)
             {
-               SMSelectableValues.AddSelection(ref Manager.Options[OptionIndex].SelectableValueList, On.ToString(Manager.ManagerSettings.CInfo), On.ToString(Manager.ManagerSettings.CInfo));
-               SMSelectableValues.AddSelection(ref Manager.Options[OptionIndex].SelectableValueList, Off.ToString(Manager.ManagerSettings.CInfo), Off.ToString(Manager.ManagerSettings.CInfo));
+               SMSelectableValues.AddSelection(Manager.Options[OptionIndex].SelectableValueList, On.ToString(Manager.ManagerSettings.CInfo), On.ToString(Manager.ManagerSettings.CInfo));
+               SMSelectableValues.AddSelection(Manager.Options[OptionIndex].SelectableValueList, Off.ToString(Manager.ManagerSettings.CInfo), Off.ToString(Manager.ManagerSettings.CInfo));
             }
             SettingsManagerDescriptionSystem.TxtDescriptionSetText(Manager, OptionIndex);
             if (Save)

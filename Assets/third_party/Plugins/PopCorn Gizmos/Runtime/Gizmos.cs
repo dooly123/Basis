@@ -70,11 +70,6 @@ namespace Popcron
         {
             get
             {
-                if (_enabled == null)
-                {
-                    _enabled = PlayerPrefs.GetInt($"{PrefsKey}.Enabled", 1) == 1;
-                }
-
                 return _enabled.Value;
             }
             set
@@ -82,7 +77,6 @@ namespace Popcron
                 if (_enabled != value)
                 {
                     _enabled = value;
-                    PlayerPrefs.SetInt($"{PrefsKey}.Enabled", value ? 1 : 0);
                 }
             }
         }

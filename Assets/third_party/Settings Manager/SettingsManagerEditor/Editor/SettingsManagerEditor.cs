@@ -182,7 +182,7 @@
 
             if (GUILayout.Button("Add new value", SettingsmanagerStyle.ButtonStyling))
             {
-                SMSelectableValues.AddSelection(ref manager.Options[optionIndex].SelectableValueList, string.Empty, string.Empty);
+                SMSelectableValues.AddSelection( manager.Options[optionIndex].SelectableValueList, string.Empty, string.Empty);
             }
 
             if (GUILayout.Button("Remove value", SettingsmanagerStyle.ButtonStyling))
@@ -199,11 +199,11 @@
             {
                 var selectableValueList = manager.Options[optionIndex].SelectableValueList;
 
-                SMSelectableValues.AddSelection(ref selectableValueList, "Very Low", "Very Low");
-                SMSelectableValues.AddSelection(ref selectableValueList, "Low", "Low");
-                SMSelectableValues.AddSelection(ref selectableValueList, "Medium", "Medium");
-                SMSelectableValues.AddSelection(ref selectableValueList, "High", "High");
-                SMSelectableValues.AddSelection(ref selectableValueList, "Ultra", "Ultra");
+                SMSelectableValues.AddSelection( selectableValueList, "Very Low", "Very Low");
+                SMSelectableValues.AddSelection( selectableValueList, "Low", "Low");
+                SMSelectableValues.AddSelection( selectableValueList, "Medium", "Medium");
+                SMSelectableValues.AddSelection( selectableValueList, "High", "High");
+                SMSelectableValues.AddSelection( selectableValueList, "Ultra", "Ultra");
             }
 
             EditorGUILayout.EndHorizontal();

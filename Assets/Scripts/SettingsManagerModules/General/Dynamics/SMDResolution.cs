@@ -25,7 +25,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                 string resolutionString = resolution.width + "x" + resolution.height;
                 if (!SMSelectableValues.GetRealValueArray(option.SelectableValueList).Contains(resolutionString))
                 {
-                    SMSelectableValues.AddSelection(ref option.SelectableValueList, resolutionString, resolutionString);
+                    SMSelectableValues.AddSelection( option.SelectableValueList, resolutionString, resolutionString);
                     SettingsManagerDropDown.AddDropDownOption(manager, option.OptionIndex, resolutionString);
                     SortedResolution.Add(resolution);
                 }

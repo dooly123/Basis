@@ -78,7 +78,7 @@ public class SMDMicrophone : SettingsManagerOption
             foreach (string device in MicrophoneDevice)
             {
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, device);
-                SMSelectableValues.AddSelection(ref Option.SelectableValueList, device, device);
+                SMSelectableValues.AddSelection( Option.SelectableValueList, device, device);
             }
 
             if (string.IsNullOrEmpty(Option.SelectedValue))

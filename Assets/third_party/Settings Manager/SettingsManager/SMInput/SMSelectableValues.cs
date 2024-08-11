@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using UnityEngine;
+
     [System.Serializable]
     public class SMSelectableValues
     {
@@ -9,43 +10,52 @@
         private string realValue;
         [SerializeField]
         public string UserValue;
+
         public string RealValue
         {
-            get
+            get => realValue.ToLower(); // Use expression-bodied members for brevity and performance
+            set => realValue = value.ToLower();
+        }
+
+        // Use List<T>.Capacity to preallocate memory, avoiding multiple resizes during Add
+        public static List<string> GetRealValueArray(List<SMSelectableValues> selectableValues)
+        {
+            int count = selectableValues.Count;
+            var listOfRealValues = new List<string>(count);
+            for (int i = 0; i < count; i++)
             {
-                return realValue.ToLower();
+                listOfRealValues.Add(selectableValues[i].RealValue);
+            }
+            return listOfRealValues;
+        }
+
+        public static List<string> GetUserValueArray(List<SMSelectableValues> selectableValues)
+        {
+            int count = selectableValues.Count;
+            var listOfUserValues = new List<string>(count);
+            for (int i = 0; i < count; i++)
+            {
+                listOfUserValues.Add(selectableValues[i].UserValue);
+            }
+            return listOfUserValues;
+        }
+
+        // Replace ref with a return value to simplify method usage and improve performance
+        public static List<SMSelectableValues> AddSelection(List<SMSelectableValues> selectableValues, string realValue, string userValue)
+        {
+            if (selectableValues == null)
+            {
+                selectableValues = new List<SMSelectableValues>();
             }
 
-            set
+            // Use constructor initialization for clarity and performance
+            selectableValues.Add(new SMSelectableValues
             {
-                realValue = value.ToLower();
-            }
-        }
-        public static List<string> GetRealValueArray(List<SMSelectableValues> SelectableValues)
-        {
-            List<string> ListOfRealValueValues = new List<string>();
-            for (int SelectableValuesIndex = 0; SelectableValuesIndex < SelectableValues.Count; SelectableValuesIndex++)
-            {
-                ListOfRealValueValues.Add(SelectableValues[SelectableValuesIndex].RealValue);
-            }
-            return ListOfRealValueValues;
-        }
-        public static List<string> GetUserValueArray(List<SMSelectableValues> SelectableValues)
-        {
-            List<string> ListOfUserValues = new List<string>();
-            for (int SelectableValuesIndex = 0; SelectableValuesIndex < SelectableValues.Count; SelectableValuesIndex++)
-            {
-                ListOfUserValues.Add(SelectableValues[SelectableValuesIndex].UserValue);
-            }
-            return ListOfUserValues;
-        }
-        public static void AddSelection(ref List<SMSelectableValues> SelectableValues, string RealValue, string UserValue)
-        {
-            SMSelectableValues Selectable = new SMSelectableValues();
-            Selectable.RealValue = RealValue;
-            Selectable.UserValue = UserValue;
-            SelectableValues.Add(Selectable);
+                RealValue = realValue,
+                UserValue = userValue
+            });
 
+            return selectableValues;
         }
     }
 }
