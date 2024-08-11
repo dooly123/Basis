@@ -1,11 +1,12 @@
 ﻿using Basis.Scripts.TransformBinders.BoneControl;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management
 {
-    [System.Serializable]
+    [Serializable]
     public class BasisDeviceMatchSettings
     {
         [Header("Identification")]
@@ -14,15 +15,22 @@ namespace Basis.Scripts.Device_Management
 
         [Header("Match with Ids")]
         [SerializeField]
-        public List<string> MatchableDeviceIds = new List<string>();
-        public List<string> MatchableDeviceIdsLowered()
+        private string[] matchableDeviceIds = Array.Empty<string>(); // Use a private backing field
+        public ReadOnlySpan<string> MatchableDeviceIds => matchableDeviceIds; // Expose as ReadOnlySpan
+
+        public IEnumerable<string> MatchableDeviceIdsLowered()
         {
-            return MatchableDeviceIds.Select(id => id.ToLower()).ToList();
+            // Use yield to avoid allocation of a new list
+            foreach (var id in matchableDeviceIds)
+            {
+                yield return id.ToLower();
+            }
         }
+
         [Header("Raycast Support")]
         public bool HasRayCastSupport = false;
 
-        [Header("Phsyical Device")]
+        [Header("Physical Device")]
         public bool CanDisplayPhysicalTracker = false;
 
         [Header("Raycast Visuals")]
@@ -30,12 +38,12 @@ namespace Basis.Scripts.Device_Management
         public bool HasRayCastRedical = false;
 
         [Header("Raycast Offsets")]
-        public Vector3 PositionRayCastOffset;
-        public Vector3 RotationRaycastOffset;
+        public Vector3 PositionRayCastOffset = Vector3.zero;
+        public Vector3 RotationRaycastOffset = Vector3.zero;
 
         [Header("Avatar Offsets")]
-        public Vector3 AvatarPositionOffset;
-        public Vector3 AvatarRotationOffset;
+        public Vector3 AvatarPositionOffset = Vector3.zero;
+        public Vector3 AvatarRotationOffset = Vector3.zero;
 
         [Header("Tracked Role Override")]
         public bool HasTrackedRole = false;

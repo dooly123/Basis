@@ -15,7 +15,7 @@ MonoBehaviour:
   BasisDevice:
   - DeviceID: vr_tracker_vive_3_0
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - '{htc}vr_tracker_vive_3_0'
     HasRayCastSupport: 0
     CanDisplayPhysicalTracker: 1
@@ -29,7 +29,7 @@ MonoBehaviour:
     TrackedRole: 0
   - DeviceID: vr_tracker_vive_1_0
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - '{htc}vr_tracker_vive_1_0'
     HasRayCastSupport: 0
     CanDisplayPhysicalTracker: 1
@@ -43,7 +43,7 @@ MonoBehaviour:
     TrackedRole: 0
   - DeviceID: valve_controller_knu_left
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_left'
     - '{indexcontroller}valve_controller_knu_2_0_left'
     - '{indexcontroller}valve_controller_knu_3_0_left'
@@ -59,7 +59,7 @@ MonoBehaviour:
     TrackedRole: 18
   - DeviceID: valve_controller_knu_right
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - '{indexcontroller}valve_controller_knu_1_0_right'
     - '{indexcontroller}valve_controller_knu_2_0_right'
     - '{indexcontroller}valve_controller_knu_3_0_right'
@@ -75,7 +75,7 @@ MonoBehaviour:
     TrackedRole: 19
   - DeviceID: tundra_tracker
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - tundra_tracker
     HasRayCastSupport: 0
     CanDisplayPhysicalTracker: 1
@@ -89,7 +89,7 @@ MonoBehaviour:
     TrackedRole: 0
   - DeviceID: oculus_controller_left
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - oculus_quest_pro_controller_left
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
     TrackedRole: 18
   - DeviceID: oculus_controller_right
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - oculus_quest_pro_controller_right
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 0
@@ -117,8 +117,8 @@ MonoBehaviour:
     TrackedRole: 19
   - DeviceID: Eye
     VersionNumber: 1
-    MatchableDeviceIds:
-    - desktop eye
+    matchableDeviceIds:
+    - Desktop Eye
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 0
     HasRayCastVisual: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
     TrackedRole: 0
   - DeviceID: Index Controller OpenXRLeftHand
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - Index Controller OpenXRLeftHand
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 1
@@ -145,7 +145,7 @@ MonoBehaviour:
     TrackedRole: 18
   - DeviceID: Index Controller OpenXRRightHand
     VersionNumber: 1
-    MatchableDeviceIds:
+    matchableDeviceIds:
     - Index Controller OpenXRRightHand
     HasRayCastSupport: 1
     CanDisplayPhysicalTracker: 1

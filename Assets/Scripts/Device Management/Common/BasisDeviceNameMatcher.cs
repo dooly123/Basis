@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+
 
 //using UnityEditor;
 
@@ -15,7 +17,8 @@ namespace Basis.Scripts.Device_Management
         {
             foreach (BasisDeviceMatchSettings DeviceEntry in BasisDevice)
             {
-                if (DeviceEntry.MatchableDeviceIdsLowered().Contains(nameToMatch.ToLower()))
+                string[] Matched = DeviceEntry.MatchableDeviceIdsLowered().ToArray();
+                if (Matched.Contains(nameToMatch.ToLower()))
                 {
                     BasisDeviceMatchableNames = DeviceEntry;
                     return true;
