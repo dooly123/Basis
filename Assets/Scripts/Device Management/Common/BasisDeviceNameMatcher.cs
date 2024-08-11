@@ -15,12 +15,13 @@ namespace Basis.Scripts.Device_Management
         {
             foreach (BasisDeviceMatchSettings DeviceEntry in BasisDevice)
             {
-                if (DeviceEntry.MatchableDeviceIds.Contains(nameToMatch.ToLower()))
+                if (DeviceEntry.MatchableDeviceIdsLowered().Contains(nameToMatch.ToLower()))
                 {
                     BasisDeviceMatchableNames = DeviceEntry;
                     return true;
                 }
             }
+            Debug.LogError("Unable to find Configuration for device " + nameToMatch);
             BasisDeviceMatchableNames = null;
             return false;
         }

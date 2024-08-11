@@ -1,5 +1,6 @@
 ﻿using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management
@@ -14,7 +15,10 @@ namespace Basis.Scripts.Device_Management
         [Header("Match with Ids")]
         [SerializeField]
         public List<string> MatchableDeviceIds = new List<string>();
-
+        public List<string> MatchableDeviceIdsLowered()
+        {
+            return MatchableDeviceIds.Select(id => id.ToLower()).ToList();
+        }
         [Header("Raycast Support")]
         public bool HasRayCastSupport = false;
 
