@@ -52,8 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FireOffNetwork: 1
   HasEvents: 0
-  BakedInCommandLineArgs:
-  - --disable-OpenVRLoader
+  BakedInCommandLineArgs: []
   CurrentMode: None
   BasisOpusSettings: {fileID: 11400000, guid: 5ad599c7b6420494f84e3a3b71efbfa8, type: 2}
   BasisDeviceNameMatcher: {fileID: 11400000, guid: 9b8e3db83cb310c40afaa430d0071a18, type: 2}

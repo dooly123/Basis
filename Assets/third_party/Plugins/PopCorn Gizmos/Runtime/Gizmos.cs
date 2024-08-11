@@ -70,6 +70,11 @@ namespace Popcron
         {
             get
             {
+                if(_enabled == null)
+                {
+                    _enabled = new bool();
+                    _enabled = false;
+                }
                 return _enabled.Value;
             }
             set

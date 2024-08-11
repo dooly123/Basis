@@ -1,17 +1,23 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace UnityOpus
 {
     public class Encoder : IDisposable
     {
         int bitrate;
+
         public int Bitrate
         {
             get { return bitrate; }
             set
             {
-                Library.OpusEncoderSetBitrate(encoder, value);
-                bitrate = value;
+                lock (encoderLock)
+                {
+                    Library.OpusEncoderSetBitrate(encoder, value);
+                    bitrate = value;
+                }
             }
         }
 
@@ -24,8 +30,11 @@ namespace UnityOpus
             }
             set
             {
-                Library.OpusEncoderSetComplexity(encoder, value);
-                complexity = value;
+                lock (encoderLock)
+                {
+                    Library.OpusEncoderSetComplexity(encoder, value);
+                    complexity = value;
+                }
             }
         }
 
@@ -35,22 +44,27 @@ namespace UnityOpus
             get { return signal; }
             set
             {
-                Library.OpusEncoderSetSignal(encoder, value);
-                signal = value;
+                lock (encoderLock)
+                {
+                    Library.OpusEncoderSetSignal(encoder, value);
+                    signal = value;
+                }
             }
         }
 
         IntPtr encoder;
         NumChannels channels;
+        public readonly object encoderLock = new object(); // For thread safety
+        private ConcurrentQueue<string> errorQueue = new ConcurrentQueue<string>(); // Thread-safe error queue
 
-        public Encoder(SamplingFrequency samplingFrequency,NumChannels channels, OpusApplication application)
+        public Encoder(SamplingFrequency samplingFrequency, NumChannels channels, OpusApplication application)
         {
             this.channels = channels;
             ErrorCode error;
-            encoder = Library.OpusEncoderCreate(samplingFrequency,channels,application,out error);
+            encoder = Library.OpusEncoderCreate(samplingFrequency, channels, application, out error);
             if (error != ErrorCode.OK)
             {
-                UnityEngine.Debug.LogError("[UnityOpus] Failed to init encoder. Error code: " + error.ToString());
+                errorQueue.Enqueue("[UnityOpus] Failed to init encoder. Error code: " + error.ToString());
                 encoder = IntPtr.Zero;
             }
         }
@@ -61,17 +75,29 @@ namespace UnityOpus
             {
                 return 0;
             }
-            return Library.OpusEncodeFloat(
-                encoder,
-                pcm,
-                pcm.Length / (int)channels,
-                output,
-                output.Length
+
+            lock (encoderLock)
+            {
+                return Library.OpusEncodeFloat(
+                    encoder,
+                    pcm,
+                    pcm.Length / (int)channels,
+                    output,
+                    output.Length
                 );
+            }
+        }
+
+        public void ReportErrorsToMainThread()
+        {
+            while (errorQueue.TryDequeue(out var error))
+            {
+                UnityEngine.Debug.LogError(error);
+            }
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // 重複する呼び出しを検出するには
+        private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
         {
@@ -81,8 +107,12 @@ namespace UnityOpus
                 {
                     return;
                 }
-                Library.OpusEncoderDestroy(encoder);
-                encoder = IntPtr.Zero;
+
+                lock (encoderLock)
+                {
+                    Library.OpusEncoderDestroy(encoder);
+                    encoder = IntPtr.Zero;
+                }
 
                 disposedValue = true;
             }
