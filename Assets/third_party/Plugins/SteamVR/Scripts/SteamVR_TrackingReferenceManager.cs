@@ -36,9 +36,6 @@ namespace Valve.VR
                         trackingReference.gameObject = new GameObject("Tracking Reference " + deviceIndex.ToString());
                         trackingReference.gameObject.transform.parent = this.transform;
                         trackingReference.trackedObject = trackingReference.gameObject.AddComponent<SteamVR_TrackedObject>();
-                        trackingReference.renderModel = trackingReference.gameObject.AddComponent<SteamVR_RenderModel>();
-                        trackingReference.renderModel.createComponents = false;
-                        trackingReference.renderModel.updateDynamically = false;
 
                         trackingReferences.Add(deviceIndex, trackingReference);
 
@@ -56,7 +53,6 @@ namespace Valve.VR
         {
             public ETrackedDeviceClass trackedDeviceClass;
             public GameObject gameObject;
-            public SteamVR_RenderModel renderModel;
             public SteamVR_TrackedObject trackedObject;
         }
     }

@@ -102,8 +102,9 @@ namespace Valve.VR
                 vecMouseScale.v0 = mouseScale.x;
                 vecMouseScale.v1 = mouseScale.y;
                 overlay.SetOverlayMouseScale(handle, ref vecMouseScale);
-
-                var vrcam = SteamVR_Render.Top();
+                //here dooly
+                /*
+                var vrcam = Camera.main;
                 if (vrcam != null && vrcam.origin != null)
                 {
                     var offset = new SteamVR_Utils.RigidTransform(vrcam.origin, transform);
@@ -118,6 +119,7 @@ namespace Valve.VR
                 }
 
                 overlay.SetOverlayInputMethod(handle, inputMethod);
+                */
             }
             else
             {

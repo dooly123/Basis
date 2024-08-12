@@ -185,9 +185,6 @@ namespace Valve.VR
         public static Event<bool> OutOfRange = new Event<bool>();
         public static Action OutOfRangeAction(UnityAction<bool> action) { return new Action<bool>(OutOfRange, action); }
 
-        public static Event<SteamVR_RenderModel, bool> RenderModelLoaded = new Event<SteamVR_RenderModel, bool>();
-        public static Action RenderModelLoadedAction(UnityAction<SteamVR_RenderModel, bool> action) { return new Action<SteamVR_RenderModel, bool>(RenderModelLoaded, action); }
-
         static System.Collections.Generic.Dictionary<EVREventType, Event<VREvent_t>> systemEvents = new System.Collections.Generic.Dictionary<EVREventType, Event<VREvent_t>>();
         public static Event<VREvent_t> System(EVREventType eventType)
         {
