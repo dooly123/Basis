@@ -54,7 +54,7 @@ namespace Valve.VR
 
                 if (_enabled)
                 {
-                    Initialize();
+                    Debug.LogError("Missing the enable method use the initalization instead");
                 }
                 else
                 {
@@ -98,11 +98,11 @@ namespace Valve.VR
 
         public static InitializedStates initializedState = InitializedStates.None;
 
-        public static void Initialize(bool forceUnityVRMode = false)
+        public static void Initialize(SteamVR_Render renderInstance, SteamVR_Behaviour behaviourInstance, bool forceUnityVRMode = false)
         {
             if (forceUnityVRMode)
             {
-                SteamVR_Behaviour.instance.InitializeSteamVR(true);
+                SteamVR_Behaviour.Initialize(renderInstance,behaviourInstance, forceUnityVRMode);
                 return;
             }
             else
@@ -116,7 +116,9 @@ namespace Valve.VR
             }
 
             if (_enabled)
-                SteamVR_Behaviour.Initialize(forceUnityVRMode);
+            {
+                SteamVR_Behaviour.Initialize(renderInstance, behaviourInstance, forceUnityVRMode);
+            }
         }
 
         public static bool usingNativeSupport

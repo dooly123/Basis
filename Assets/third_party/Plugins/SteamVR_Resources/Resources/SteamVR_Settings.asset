@@ -16,7 +16,7 @@ MonoBehaviour:
   actionsFilePath: actions.json
   steamVRInputPath: SteamVR_Input
   inputUpdateMode: 16
-  poseUpdateMode: 8
+  poseUpdateMode: 16
   activateFirstActionSetOnStart: 1
   editorAppKey: application.generated.unity.basisunity.exe
   mixedRealityCameraPose:

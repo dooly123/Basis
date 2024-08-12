@@ -319,8 +319,6 @@ namespace Valve.VR
 
         protected virtual void Awake()
         {
-            SteamVR.Initialize();
-
             AssignBonesArray();
 
             proximals = new Transform[] { thumbProximal, indexProximal, middleProximal, ringProximal, pinkyProximal };

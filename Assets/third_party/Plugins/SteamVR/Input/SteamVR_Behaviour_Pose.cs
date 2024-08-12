@@ -85,8 +85,6 @@ namespace Valve.VR
 
         protected virtual void OnEnable()
         {
-            SteamVR.Initialize();
-
             if (poseAction != null)
             {
                 poseAction[inputSource].onUpdate += SteamVR_Behaviour_Pose_OnUpdate;

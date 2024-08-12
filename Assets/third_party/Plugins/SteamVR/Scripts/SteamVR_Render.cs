@@ -9,7 +9,7 @@ namespace Valve.VR
 {
     public class SteamVR_Render : MonoBehaviour
     {
-        public static SteamVR_Render instance { get { return SteamVR_Behaviour.instance.steamvr_render; } }
+        public SteamVR_Render instance;
         void OnApplicationQuit()
         {
             SteamVR.SafeDispose();

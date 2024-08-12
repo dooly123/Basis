@@ -277,13 +277,9 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             }
 
             SteamVR_Behaviour = BasisHelpers.GetOrAddComponent<SteamVR_Behaviour>(SteamVR_BehaviourGameobject);
-            SteamVR_Behaviour.Initialize();
             SteamVR_Render = BasisHelpers.GetOrAddComponent<SteamVR_Render>(SteamVR_BehaviourGameobject);
-
-            SteamVR_Behaviour.initializeSteamVROnAwake = false;
-            SteamVR_Behaviour.doNotDestroy = false;
-
-            SteamVR_Render.StartCoroutine(CheckState());
+            SteamVR_Behaviour.Initialize(SteamVR_Render, SteamVR_Behaviour);
+            StartCoroutine(CheckState());
             IsInUse = true;
         }
 
