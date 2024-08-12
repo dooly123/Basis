@@ -129,27 +129,8 @@ namespace Valve.VR
         private static void ReportGeneralErrors()
         {
             string errorLog = "<b>[SteamVR]</b> Initialization failed. ";
-
-#if OPENVR_XR_API
             errorLog += "Please verify that you have SteamVR installed, your hmd is functioning, and OpenVR Loader is checked in the XR Plugin Management section of Project Settings.";
-#else
 
-            if (XRSettings.enabled == false)
-                errorLog += "VR may be disabled in player settings. Go to player settings in the editor and check the 'Virtual Reality Supported' checkbox'. ";
-            if (XRSettings.supportedDevices != null && XRSettings.supportedDevices.Length > 0)
-            {
-                if (XRSettings.supportedDevices.Contains("OpenVR") == false)
-                    errorLog += "OpenVR is not in your list of supported virtual reality SDKs. Add it to the list in player settings. ";
-                else if (XRSettings.supportedDevices.First().Contains("OpenVR") == false)
-                    errorLog += "OpenVR is not first in your list of supported virtual reality SDKs. <b>This is okay, but if you have an Oculus device plugged in, and Oculus above OpenVR in this list, it will try and use the Oculus SDK instead of OpenVR.</b> ";
-            }
-            else
-            {
-                errorLog += "You have no SDKs in your Player Settings list of supported virtual reality SDKs. Add OpenVR to it. ";
-            }
-
-            errorLog += "To attempt to force OpenVR initialization call SteamVR.Initialize(true). ";
-#endif
 
             Debug.LogWarning(errorLog);
         }
@@ -161,16 +142,6 @@ namespace Valve.VR
             try
             {
                 var error = EVRInitError.None;
-
-#if !OPENVR_XR_API
-                if (!SteamVR.usingNativeSupport)
-                {
-                    ReportGeneralErrors();
-                    initializedState = InitializedStates.InitializeFailure;
-                    SteamVR_Events.Initialized.Send(false);
-                    return null;
-                }
-#endif
 
                 // Verify common interfaces are valid.
 
@@ -203,13 +174,6 @@ namespace Valve.VR
                 }
 
                 settings = SteamVR_Settings.instance;
-
-#if !OPENVR_XR_API
-                if (Application.isEditor)
-                    IdentifyEditorApplication();
-
-                SteamVR_Input.IdentifyActionsFile();
-#endif
 
                 if (SteamVR_Settings.instance.inputUpdateMode != SteamVR_UpdateModes.Nothing || SteamVR_Settings.instance.poseUpdateMode != SteamVR_UpdateModes.Nothing)
                 {
