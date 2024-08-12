@@ -10,11 +10,7 @@
 //          Each Action Source has an inputSource that it is associated with.
 
 using UnityEngine;
-using System.Collections;
 using System;
-using Valve.VR;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
 
 namespace Valve.VR
 {
