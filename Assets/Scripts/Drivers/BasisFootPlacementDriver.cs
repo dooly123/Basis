@@ -52,19 +52,30 @@ namespace Basis.Scripts.Drivers
         {
             Localplayer.AvatarDriver.CalibrationComplete += OnCalibration;
             Localplayer.LocalBoneDriver.OnPostSimulate += Simulate;
+            Localplayer.AvatarDriver.TposeStateChange += OnTpose;
         }
+        public void OnTpose()
+        {
 
+        }
         private void Simulate()
         {
-            UpdateMovementData();
+            if (Localplayer.AvatarDriver.InTPose == false)
+            {
+                UpdateMovementData();
 
-            Vector3 localTposeHips = Hips.TposeLocal.position;
-            Vector3 hipsPosLocal = Hips.OutGoingData.position;
+                Vector3 localTposeHips = Hips.TposeLocal.position;
+                Vector3 hipsPosLocal = Hips.OutGoingData.position;
 
-            bool hasLayerActive = SquareVel <= MaxBeforeDisableIK;
+                bool hasLayerActive = SquareVel <= MaxBeforeDisableIK;
 
-            leftFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
-            rightFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
+                leftFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
+                rightFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
+            }
+            else
+            {
+
+            }
         }
 
         private void UpdateMovementData()
@@ -118,6 +129,8 @@ namespace Basis.Scripts.Drivers
             if (HasEvents)
             {
                 Localplayer.AvatarDriver.CalibrationComplete -= OnCalibration;
+                Localplayer.LocalBoneDriver.OnPostSimulate -= Simulate;
+                Localplayer.AvatarDriver.TposeStateChange -= OnTpose;
                 HasEvents = false;
             }
         }
