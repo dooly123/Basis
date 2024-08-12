@@ -110,14 +110,14 @@ MonoBehaviour:
   m_PrefilterWriteRenderingLayers: 1
   m_PrefilterHDROutput: 0
   m_PrefilterAlphaOutput: 1
-  m_PrefilterSSAODepthNormals: 1
+  m_PrefilterSSAODepthNormals: 0
   m_PrefilterSSAOSourceDepthLow: 1
   m_PrefilterSSAOSourceDepthMedium: 1
   m_PrefilterSSAOSourceDepthHigh: 1
-  m_PrefilterSSAOInterleaved: 1
+  m_PrefilterSSAOInterleaved: 0
   m_PrefilterSSAOBlueNoise: 1
   m_PrefilterSSAOSampleCountLow: 1
-  m_PrefilterSSAOSampleCountMedium: 1
+  m_PrefilterSSAOSampleCountMedium: 0
   m_PrefilterSSAOSampleCountHigh: 1
   m_PrefilterDBufferMRT1: 1
   m_PrefilterDBufferMRT2: 1
