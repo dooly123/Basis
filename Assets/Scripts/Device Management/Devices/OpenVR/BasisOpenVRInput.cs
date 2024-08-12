@@ -6,7 +6,6 @@ using Valve.VR;
 
 namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
-[DefaultExecutionOrder(15101)]
 ///only used for trackers!
 public class BasisOpenVRInput : BasisInput
 {

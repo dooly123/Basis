@@ -8,150 +8,149 @@ using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.NetworkedPlayer
 {
-[DefaultExecutionOrder(15002)]
-public partial class BasisNetworkedPlayer : MonoBehaviour
-{
-    public BasisNetworkSendBase NetworkSend;
-    public BasisBoneControl MouthBone;
-    public BasisPlayer Player;
-    public ushort NetId => NetworkSend.NetworkNetID.playerID;
-    public void OnDestroy()
+    public partial class BasisNetworkedPlayer : MonoBehaviour
     {
-        if (Player != null)
+        public BasisNetworkSendBase NetworkSend;
+        public BasisBoneControl MouthBone;
+        public BasisPlayer Player;
+        public ushort NetId => NetworkSend.NetworkNetID.playerID;
+        public void OnDestroy()
         {
-            Destroy(Player.gameObject);
-
-            if (Player.Avatar != null)
+            if (Player != null)
             {
-                Destroy(Player.Avatar.gameObject);
+                Destroy(Player.gameObject);
+
+                if (Player.Avatar != null)
+                {
+                    Destroy(Player.Avatar.gameObject);
+                }
             }
         }
-    }
-    /// <summary>
-    /// only use this method if NetworkSend.NetId is assigned
-    /// and only use this method if Player is assigned
-    /// </summary>
-    public void CalibrationComplete()
-    {
-        if (NetworkSend != null)
+        /// <summary>
+        /// only use this method if NetworkSend.NetId is assigned
+        /// and only use this method if Player is assigned
+        /// </summary>
+        public void CalibrationComplete()
         {
-            NetworkSend.OnAvatarCalibration();
+            if (NetworkSend != null)
+            {
+                NetworkSend.OnAvatarCalibration();
+            }
         }
-    }
-    public void ReInitialize(BasisPlayer player, ushort PlayerID)
-    {
+        public void ReInitialize(BasisPlayer player, ushort PlayerID)
+        {
             LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage
             {
                 array = new byte[224]
             };
             ReInitialize(player, PlayerID, Stub);
-    }
-    public void ReInitialize(BasisPlayer player, ushort PlayerID, LocalAvatarSyncMessage sspm)
-    {
-        if (Player != null && Player != player)
+        }
+        public void ReInitialize(BasisPlayer player, ushort PlayerID, LocalAvatarSyncMessage sspm)
         {
-            if (player.IsLocal)
+            if (Player != null && Player != player)
             {
-                BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
-                if (LocalPlayer.AvatarDriver != null)
+                if (player.IsLocal)
                 {
-                    if (LocalPlayer.AvatarDriver.HasEvents == false)
+                    BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
+                    if (LocalPlayer.AvatarDriver != null)
                     {
-                        LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
-                        LocalPlayer.AvatarDriver.HasEvents = true;
+                        if (LocalPlayer.AvatarDriver.HasEvents == false)
+                        {
+                            LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
+                            LocalPlayer.AvatarDriver.HasEvents = true;
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Missing CharacterIKCalibration");
                     }
                 }
                 else
                 {
-                    Debug.LogError("Missing CharacterIKCalibration");
-                }
-            }
-            else
-            {
-                BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
-                if (RemotePlayer.RemoteAvatarDriver != null)
-                {
-                    if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
+                    BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
+                    if (RemotePlayer.RemoteAvatarDriver != null)
                     {
-                        RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
-                        RemotePlayer.RemoteAvatarDriver.HasEvents = true;
+                        if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
+                        {
+                            RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
+                            RemotePlayer.RemoteAvatarDriver.HasEvents = true;
+                        }
                     }
-                }
-                else
-                {
-                    Debug.LogError("Missing CharacterIKCalibration");
-                }
+                    else
+                    {
+                        Debug.LogError("Missing CharacterIKCalibration");
+                    }
 
+                }
             }
-        }
-        if (Player != player && player != null)
-        {
-            Player = player;
-            if (player.IsLocal)
+            if (Player != player && player != null)
             {
-                BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
-                if (LocalPlayer.AvatarDriver != null)
+                Player = player;
+                if (player.IsLocal)
                 {
-                    if (LocalPlayer.AvatarDriver.HasEvents == false)
+                    BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
+                    if (LocalPlayer.AvatarDriver != null)
                     {
-                        LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
-                        LocalPlayer.AvatarDriver.HasEvents = true;
+                        if (LocalPlayer.AvatarDriver.HasEvents == false)
+                        {
+                            LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
+                            LocalPlayer.AvatarDriver.HasEvents = true;
+                        }
+                        LocalPlayer.LocalBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
                     }
-                    LocalPlayer.LocalBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
+                    else
+                    {
+                        Debug.LogError("Missing CharacterIKCalibration");
+                    }
                 }
                 else
                 {
-                    Debug.LogError("Missing CharacterIKCalibration");
+                    BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
+                    if (RemotePlayer.RemoteAvatarDriver != null)
+                    {
+                        if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
+                        {
+                            RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
+                            RemotePlayer.RemoteAvatarDriver.HasEvents = true;
+                        }
+                        RemotePlayer.RemoteBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
+                    }
+                    else
+                    {
+                        Debug.LogError("Missing CharacterIKCalibration");
+                    }
                 }
+                this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            }
+            if (player.IsLocal)
+            {
+                NetworkSend = GetOrCreateNetworkComponent<BasisNetworkTransmitter>();
             }
             else
             {
-                BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
-                if (RemotePlayer.RemoteAvatarDriver != null)
+                NetworkSend = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
+                if (sspm.array != null && sspm.array.Length != 0)
                 {
-                    if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
-                    {
-                        RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
-                        RemotePlayer.RemoteAvatarDriver.HasEvents = true;
-                    }
-                    RemotePlayer.RemoteBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
-                }
-                else
-                {
-                    Debug.LogError("Missing CharacterIKCalibration");
+                    NetworkSend.LASM = sspm;
                 }
             }
-            this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            NetworkSend.NetworkNetID.playerID = PlayerID;
+            NetworkSend.Initialize(this);
+            CalibrationComplete();
         }
-        if (player.IsLocal)
+        private T GetOrCreateNetworkComponent<T>() where T : BasisNetworkSendBase
         {
-            NetworkSend = GetOrCreateNetworkComponent<BasisNetworkTransmitter>();
-        }
-        else
-        {
-            NetworkSend = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
-            if (sspm.array != null && sspm.array.Length != 0)
+            if (NetworkSend != null && NetworkSend.GetType() == typeof(T))
+                return NetworkSend as T;
+
+            if (NetworkSend != null)
             {
-                NetworkSend.LASM = sspm;
+                NetworkSend.DeInitialize();
+                Destroy(NetworkSend.gameObject);
             }
-        }
-        NetworkSend.NetworkNetID.playerID = PlayerID;
-        NetworkSend.Initialize(this);
-        CalibrationComplete();
-    }
-    private T GetOrCreateNetworkComponent<T>() where T : BasisNetworkSendBase
-    {
-        if (NetworkSend != null && NetworkSend.GetType() == typeof(T))
+
+            NetworkSend = gameObject.AddComponent<T>();
             return NetworkSend as T;
-
-        if (NetworkSend != null)
-        {
-            NetworkSend.DeInitialize();
-            Destroy(NetworkSend.gameObject);
         }
-
-        NetworkSend = gameObject.AddComponent<T>();
-        return NetworkSend as T;
     }
-}
 }

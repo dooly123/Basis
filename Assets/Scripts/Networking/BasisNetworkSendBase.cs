@@ -11,7 +11,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 /// <summary>
 /// the goal of this script is to be the glue of consistent data between remote and local
 /// </summary>
-[DefaultExecutionOrder(15002)]
 public abstract class BasisNetworkSendBase : MonoBehaviour
 {
     public bool Ready;
