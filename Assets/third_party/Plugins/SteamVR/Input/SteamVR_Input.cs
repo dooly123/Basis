@@ -50,7 +50,8 @@ namespace Valve.VR
         {
             get
             {
-                return Time.frameCount >= (startupFrame - 1) && Time.frameCount <= (startupFrame + 1);
+                float Framecount = Time.frameCount;
+                return Framecount >= (startupFrame - 1) && Framecount <= (startupFrame + 1);
             }
         }
 
@@ -236,21 +237,8 @@ namespace Valve.VR
             if (initialized == false || isStartupFrame)
                 return;
 
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnLateUpdate))
-            {
-                UpdateNonVisualActions();
-            }
-
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnLateUpdate))
-            {
-                //update poses and skeleton
-                UpdateVisualActions();
-            }
-            else
-            {
-                //force skeleton update so animation blending sticks
-                UpdateSkeletonActions(true);
-            }
+            UpdateNonVisualActions();
+            UpdateVisualActions();
         }
         /// <summary>
         /// Updates the states of all the visual actions (pose / skeleton)

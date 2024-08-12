@@ -41,9 +41,6 @@ namespace Valve.VR
         [Tooltip("Path local to the directory the SteamVR folder as in")]
         public string steamVRInputPath = "SteamVR_Input";
 
-        public SteamVR_UpdateModes inputUpdateMode = SteamVR_UpdateModes.OnUpdate;
-        public SteamVR_UpdateModes poseUpdateMode = SteamVR_UpdateModes.OnPreCull;
-
         public bool activateFirstActionSetOnStart = true;
 
         [Tooltip("This is the app key the unity editor will use to identify your application. (can be \"steam.app.[appid]\" to persist bindings between editor steam)")]
@@ -67,17 +64,6 @@ namespace Valve.VR
 
         private const string previewLeftDefaultAssetName = "vr_glove_left_model_slim";
         private const string previewRightDefaultAssetName = "vr_glove_right_model_slim";
-
-
-        public bool IsInputUpdateMode(SteamVR_UpdateModes tocheck)
-        {
-            return (inputUpdateMode & tocheck) == tocheck;
-        }
-        public bool IsPoseUpdateMode(SteamVR_UpdateModes tocheck)
-        {
-            return (poseUpdateMode & tocheck) == tocheck;
-        }
-
         public static void VerifyScriptableObject()
         {
             LoadInstance();

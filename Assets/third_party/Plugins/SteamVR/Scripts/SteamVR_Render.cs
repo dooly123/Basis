@@ -52,9 +52,6 @@ namespace Valve.VR
             StartCoroutine(RenderLoop());
             SteamVR_Events.InputFocus.Listen(OnInputFocus);
             SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Listen(OnRequestScreenshot);
-
-            Application.onBeforeRender += OnBeforeRender;
-
             if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess)
                 OpenVR.Screenshots.HookScreenshot(screenshotTypes);
             else
@@ -72,9 +69,6 @@ namespace Valve.VR
             StopAllCoroutines();
             SteamVR_Events.InputFocus.Remove(OnInputFocus);
             SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Remove(OnRequestScreenshot);
-
-            Application.onBeforeRender -= OnBeforeRender;
-
             if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
                 SteamVR_Events.Initialized.RemoveListener(OnSteamVRInitialized);
         }
@@ -90,18 +84,7 @@ namespace Valve.VR
             }
         }
 
-        void OnBeforeRender()
-        {
-            if (SteamVR.active == false)
-                return;
-
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
-            {
-                UpdatePoses();
-            }
-        }
-
-        void Update()
+        void LateUpdate()
         {
             if (SteamVR.active == false)
                 return;

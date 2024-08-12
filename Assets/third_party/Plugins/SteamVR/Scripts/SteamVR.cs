@@ -176,16 +176,12 @@ namespace Valve.VR
                 }
 
                 settings = SteamVR_Settings.instance;
-
-                if (SteamVR_Settings.instance.inputUpdateMode != SteamVR_UpdateModes.Nothing || SteamVR_Settings.instance.poseUpdateMode != SteamVR_UpdateModes.Nothing)
-                {
-                    SteamVR_Input.Initialize();
+                SteamVR_Input.Initialize();
 
 #if UNITY_EDITOR
-                    if (SteamVR_Input.IsOpeningSetup())
-                        return null;
+                if (SteamVR_Input.IsOpeningSetup())
+                    return null;
 #endif
-                }
             }
             catch (System.Exception e)
             {
