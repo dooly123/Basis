@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.OpenXR
 {
-    [DefaultExecutionOrder(15101)]
+    [DefaultExecutionOrder(15001)]
     public class BasisOpenXRInput : BasisInput
     {
         public UnityEngine.XR.InputDevice Device;

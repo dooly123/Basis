@@ -79,7 +79,10 @@ namespace Basis.Scripts.BasisCharacterController
         }
         public void OnRenderObject()
         {
-            Gizmos.Sphere(bottomPoint, characterController.radius, groundedPlayer ? Color.green : Color.red);
+            if (Gizmos.Enabled)
+            {
+                Gizmos.Sphere(bottomPoint, characterController.radius, groundedPlayer ? Color.green : Color.red);
+            }
         }
         public void HandleJump()
         {

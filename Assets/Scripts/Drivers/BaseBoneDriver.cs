@@ -237,7 +237,7 @@ namespace Basis.Scripts.Drivers
         public static float HandGizmoSize = 0.015f;
         public void OnRenderObject()
         {
-            if (HasControls)
+            if (HasControls && Gizmos.Enabled)
             {
                 for (int Index = 0; Index < ControlsLength; Index++)
                 {

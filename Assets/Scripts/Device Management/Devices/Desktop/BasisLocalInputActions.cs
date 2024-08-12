@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 
 namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
-    [DefaultExecutionOrder(15101)]
+    [DefaultExecutionOrder(15003)]
     public class BasisLocalInputActions : MonoBehaviour
     {
         public InputActionReference MoveAction;

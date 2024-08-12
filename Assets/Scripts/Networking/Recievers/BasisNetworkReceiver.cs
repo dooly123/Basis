@@ -9,7 +9,7 @@ using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.Recievers
 {
-    [DefaultExecutionOrder(15002)]
+    [DefaultExecutionOrder(15001)]
     [System.Serializable]
     public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {

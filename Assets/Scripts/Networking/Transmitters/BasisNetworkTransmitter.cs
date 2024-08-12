@@ -7,8 +7,8 @@ using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.Transmitters
 {
-[DefaultExecutionOrder(15002)]
-public partial class BasisNetworkTransmitter : BasisNetworkSendBase
+    [DefaultExecutionOrder(15001)]
+    public partial class BasisNetworkTransmitter : BasisNetworkSendBase
 {
     public float timer = 0f;
     public float interval = 0.05f;

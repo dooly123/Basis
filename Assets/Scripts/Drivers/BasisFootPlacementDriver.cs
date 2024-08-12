@@ -124,8 +124,11 @@ namespace Basis.Scripts.Drivers
 
         private void OnRenderObject()
         {
-            leftFootSolver.DrawGizmos();
-            rightFootSolver.DrawGizmos();
+            if (Gizmos.Enabled)
+            {
+                leftFootSolver.DrawGizmos();
+                rightFootSolver.DrawGizmos();
+            }
         }
 
         [System.Serializable]

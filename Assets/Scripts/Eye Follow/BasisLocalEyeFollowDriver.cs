@@ -115,8 +115,11 @@ namespace Basis.Scripts.Eye_Follow
         }
         public new void OnRenderObject()
         {
-            Gizmos.Sphere(RandomizedPosition, 0.1f, Color.yellow);
-            base.OnRenderObject();
+            if (Gizmos.Enabled)
+            {
+                Gizmos.Sphere(RandomizedPosition, 0.1f, Color.yellow);
+                base.OnRenderObject();
+            }
         }
     }
 }

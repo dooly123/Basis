@@ -4,7 +4,7 @@ using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {
-    [DefaultExecutionOrder(15002)]
+    [DefaultExecutionOrder(15001)]
     public class JiggleSkin : MonoBehaviour {
         [Serializable]
         public class JiggleZone : JiggleRigBuilder.JiggleRig {

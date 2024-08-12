@@ -6,8 +6,8 @@ using Valve.VR;
 
 namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
-[DefaultExecutionOrder(15101)]
-public class BasisOpenVRInputController : BasisInput
+    [DefaultExecutionOrder(15001)]
+    public class BasisOpenVRInputController : BasisInput
 {
     public OpenVRDevice Device;
     public SteamVR_Input_Sources inputSource;

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace JigglePhysics
 {
 
-    [DefaultExecutionOrder(15003)]
+    [DefaultExecutionOrder(15001)]
     public class JiggleRigBuilder : MonoBehaviour
     {
         public static float maxCatchupTime => Time.fixedDeltaTime * 4;

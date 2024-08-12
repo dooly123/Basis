@@ -60,9 +60,12 @@ namespace Basis.Scripts.Eye_Follow
 
         public void OnRenderObject()
         {
-            if (GeneralEyeTarget != null)
+            if (Gizmos.Enabled)
             {
-                Gizmos.Sphere(GeneralEyeTarget.position, 0.1f, Color.green);
+                if (GeneralEyeTarget != null)
+                {
+                    Gizmos.Sphere(GeneralEyeTarget.position, 0.1f, Color.green);
+                }
             }
         }
     }

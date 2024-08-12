@@ -6,8 +6,8 @@ using Valve.VR;
 
 namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
 {
-[DefaultExecutionOrder(15101)]
-public class BasisOpenVRInputSpatial : BasisInput
+    [DefaultExecutionOrder(15001)]
+    public class BasisOpenVRInputSpatial : BasisInput
 {
     public TrackedPoseDriver.TrackedPose TrackedPose = TrackedPoseDriver.TrackedPose.Center;
     public void Initialize(TrackedPoseDriver.TrackedPose trackedPose, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
