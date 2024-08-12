@@ -212,9 +212,7 @@ namespace Valve.VR
             {
                 updatingSources.Add(sourceIndex);
                 sources[sourceIndex].isUpdating = true;
-
-                if (SteamVR_Input.isStartupFrame == false)
-                    sources[sourceIndex].UpdateValue();
+                sources[sourceIndex].UpdateValue();
             }
         }
 

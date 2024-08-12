@@ -227,23 +227,6 @@ namespace Valve.VR
                 actionsByPathLowered.Add(action.fullPath.ToLower(), action);
             }
         }
-
-        /// <summary>Gets called by SteamVR_Behaviour every Update and updates actions if the steamvr settings are configured to update then.</summary>
-        public static void Update()
-        {
-            if (initialized == false || isStartupFrame)
-                return;
-
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnUpdate))
-            {
-                UpdateNonVisualActions();
-            }
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnUpdate))
-            {
-                UpdateVisualActions();
-            }
-        }
-
         /// <summary>
         /// Gets called by SteamVR_Behaviour every LateUpdate and updates actions if the steamvr settings are configured to update then.
         /// Also updates skeletons regardless of settings are configured to so we can account for animations on the skeletons.
@@ -269,40 +252,6 @@ namespace Valve.VR
                 UpdateSkeletonActions(true);
             }
         }
-
-        /// <summary>Gets called by SteamVR_Behaviour every FixedUpdate and updates actions if the steamvr settings are configured to update then.</summary>
-        public static void FixedUpdate()
-        {
-            if (initialized == false || isStartupFrame)
-                return;
-
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnFixedUpdate))
-            {
-                UpdateNonVisualActions();
-            }
-
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnFixedUpdate))
-            {
-                UpdateVisualActions();
-            }
-        }
-
-        /// <summary>Gets called by SteamVR_Behaviour every OnPreCull and updates actions if the steamvr settings are configured to update then.</summary>
-        public static void OnPreCull()
-        {
-            if (initialized == false || isStartupFrame)
-                return;
-
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnPreCull))
-            {
-                UpdateNonVisualActions();
-            }
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
-            {
-                UpdateVisualActions();
-            }
-        }
-
         /// <summary>
         /// Updates the states of all the visual actions (pose / skeleton)
         /// </summary>

@@ -18,20 +18,6 @@ namespace Valve.VR
         public TrackedDevicePose_t[] poses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
         public TrackedDevicePose_t[] gamePoses = new TrackedDevicePose_t[0];
 
-        static private bool _pauseRendering;
-        static public bool pauseRendering
-        {
-            get { return _pauseRendering; }
-            set
-            {
-                _pauseRendering = value;
-
-                var compositor = OpenVR.Compositor;
-                if (compositor != null)
-                    compositor.SuspendRendering(value);
-            }
-        }
-
         private WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
 
         private IEnumerator RenderLoop()
@@ -39,9 +25,6 @@ namespace Valve.VR
             while (Application.isPlaying)
             {
                 yield return waitForEndOfFrame;
-
-                if (pauseRendering)
-                    continue;
 
                 var compositor = OpenVR.Compositor;
                 if (compositor != null)
@@ -51,10 +34,6 @@ namespace Valve.VR
 
                     compositor.SetTrackingSpace(SteamVR.settings.trackingSpace);
                 }
-
-                var overlay = SteamVR_Overlay.instance;
-                if (overlay != null)
-                    overlay.UpdateOverlay();
             }
         }
         private void OnInputFocus(bool hasFocus)
