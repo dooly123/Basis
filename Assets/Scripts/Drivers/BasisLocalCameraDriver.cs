@@ -123,7 +123,6 @@ namespace Basis.Scripts.Drivers
                     {
                         Vector2 EyeTextureSize = new Vector2(XRSettings.eyeTextureWidth, XRSettings.eyeTextureHeight);
                         MicrophoneCanvas.transform.localPosition = CalculatePosition(EyeTextureSize, VRMicrophoneOffset);
-                       // MicrophoneCanvas.transform.localPosition = Camera.ViewportToScreenPoint(VRMicrophoneOffset);
                     }
                     else
                     {

@@ -5,11 +5,11 @@
 //=============================================================================
 using UnityEngine;
 using System.Collections;
+using UnityEngine.XR;
 namespace Valve.VR
 {
     public class SteamVR_Render : MonoBehaviour
     {
-        public SteamVR_Render instance;
         void OnApplicationQuit()
         {
             SteamVR.SafeDispose();
@@ -40,6 +40,16 @@ namespace Valve.VR
         {
             if (SteamVR.active == false)
                 return;
+
+            if (hasFocus)
+            {
+
+                XRSettings.eyeTextureResolutionScale = 1;
+            }
+            else
+            {
+                XRSettings.eyeTextureResolutionScale = 0.5f;
+            }
         }
         private void OnRequestScreenshot(VREvent_t vrEvent)
         {
