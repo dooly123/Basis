@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 1600683472464500465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 309437807573434354}
@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: dcd160d4672c98e499e856ca0e45d858, type: 2}
   m_Color: {r: 0.9528302, g: 0.3343779, b: 0.30113026, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -184,7 +184,7 @@ RectTransform:
   m_GameObject: {fileID: 4180789650971801243}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 309437807573434354}
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: dcd160d4672c98e499e856ca0e45d858, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0.6}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -424,8 +424,8 @@ MonoBehaviour:
   MicrophoneCanvas: {fileID: 3373432966423603715}
   MicrophoneMutedIcon: {fileID: 7951072778522726859}
   MicrophoneUnMutedIcon: {fileID: 1908197658278707850}
-  DesktopMicrophoneOffset: {x: -0.00005, y: -0.00005, z: 0.1}
-  VRMicrophoneOffset: {x: -0.00005, y: -0.00005, z: 0.15}
+  DesktopMicrophoneOffset: {x: -0.0005, y: -0.0005, z: 1}
+  VRMicrophoneOffset: {x: -0.0001, y: -0.00025, z: 1}
   MuteSound: {fileID: 8300000, guid: 5b9ed5013ea1941499840ac97ad2b8e9, type: 3}
   UnMuteSound: {fileID: 8300000, guid: fbd61add38ba2d04baedb52b69c6e1b3, type: 3}
   AudioSource: {fileID: 5904128505799627640}
@@ -454,8 +454,7 @@ AudioSource:
   m_GameObject: {fileID: 5812972426740207491}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -2806993401203009225, guid: 471a0209081144d4da2426822e8a0b47,
-    type: 2}
+  OutputAudioMixerGroup: {fileID: -2806993401203009225, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
