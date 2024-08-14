@@ -39,7 +39,7 @@ public class BasisOpenVRInputSkeleton : BasisInputSkeleton
     }
     public void LateUpdate()
     {
-    //    SimulateLateUpdate();
+        Simulate();
     }
     private void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
     {

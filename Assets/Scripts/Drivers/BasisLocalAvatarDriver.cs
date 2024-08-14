@@ -41,12 +41,6 @@ namespace Basis.Scripts.Drivers
         public Rig LeftShoulderRig;
         public Rig RightShoulderRig;
 
-        public Rig LeftFingersRig;
-        public Rig RightFingersRig;
-
-        public RigLayer LeftFingersLayer;
-        public RigLayer RightFingersLayer;
-
         public RigLayer LeftHandLayer;
         public RigLayer RightHandLayer;
         public RigLayer LeftFootLayer;
@@ -63,6 +57,8 @@ namespace Basis.Scripts.Drivers
         public RigBuilder Builder;
         public List<RigTransform> AdditionalTransforms = new List<RigTransform>();
         public bool HasTposeEvent = false;
+
+        public BasisMuscleDriver BasisMuscleDriver;
         public void LocalCalibration()
         {
             InitialLocalCalibration(BasisLocalPlayer.Instance);
@@ -110,8 +106,13 @@ namespace Basis.Scripts.Drivers
             ComputeOffsets(LocalDriver);
             Builder.Build();
             CalibrationComplete?.Invoke();
+
+            BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.Avatar.Animator.gameObject);
+            BasisMuscleDriver.Initialize(this,Player.Avatar.Animator);
+
             AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
             AnimatorDriver.Initialize(Player.Avatar.Animator);
+
             ResetAvatarAnimator();
 
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head))
@@ -135,6 +136,7 @@ namespace Basis.Scripts.Drivers
                 TposeStateChange += OnTpose;
                 HasTposeEvent = true;
             }
+
             if (Builder.enabled == false)
             {
                 Builder.enabled = true;
@@ -340,8 +342,6 @@ namespace Basis.Scripts.Drivers
             RightFoot(driver);
             LeftToe(driver);
             RightToe(driver);
-            CreateLeftHandFingers(driver);
-            CreateRightHandFingers(driver);
         }
         public void LeftHand(BasisLocalBoneDriver driver)
         {
@@ -361,60 +361,6 @@ namespace Basis.Scripts.Drivers
             }
             CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLowerArm, true, out RightHandTwoBoneIK, false, false);
         }
-        public void CreateLeftHandFingers(BasisLocalBoneDriver driver)
-        {
-            // GameObject Hands = CreateRig("Left Hand Fingers", false, out LeftFingersRig, out LeftFingersLayer);
-            // if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftHand))
-            // {
-            //     WriteUpEvents(Control, LeftFingersLayer);
-            // }
-            /*
-            OverrideTransform(driver, Hands, References.LeftThumbDistal, BasisBoneTrackedRole.LeftThumbDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftIndexDistal, BasisBoneTrackedRole.LeftIndexDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftRingDistal, BasisBoneTrackedRole.LeftRingDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftLittleDistal, BasisBoneTrackedRole.LeftLittleDistal, 1, 1, OverrideTransformData.Space.Local);
-
-            OverrideTransform(driver, Hands, References.LeftThumbIntermediate, BasisBoneTrackedRole.LeftThumbIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftIndexIntermediate, BasisBoneTrackedRole.LeftIndexIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftMiddleIntermediate, BasisBoneTrackedRole.LeftMiddleIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftRingIntermediate, BasisBoneTrackedRole.LeftRingIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftLittleIntermediate, BasisBoneTrackedRole.LeftLittleIntermediate, 1, 1, OverrideTransformData.Space.Local);
-
-            OverrideTransform(driver, Hands, References.LeftThumbProximal, BasisBoneTrackedRole.LeftThumbProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftIndexProximal, BasisBoneTrackedRole.LeftIndexProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftMiddleProximal, BasisBoneTrackedRole.LeftMiddleProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftRingProximal, BasisBoneTrackedRole.LeftRingProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.LeftLittleProximal, BasisBoneTrackedRole.LeftLittleProximal, 1, 1, OverrideTransformData.Space.Local);
-            */
-        }
-        public void CreateRightHandFingers(BasisLocalBoneDriver driver)
-        {
-            // GameObject Hands = CreateRig("Right Hand Fingers", false, out RightFingersRig, out RightFingersLayer);
-            //  if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightHand))
-            //  {
-            //      WriteUpEvents(Control, RightFingersLayer);
-            //   }
-            /*
-            OverrideTransform(driver, Hands, References.RightThumbDistal, BasisBoneTrackedRole.RightThumbDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightIndexDistal, BasisBoneTrackedRole.RightIndexDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightMiddleDistal, BasisBoneTrackedRole.RightMiddleDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightRingDistal, BasisBoneTrackedRole.RightRingDistal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightLittleDistal, BasisBoneTrackedRole.RightLittleDistal, 1, 1, OverrideTransformData.Space.Local);
-
-            OverrideTransform(driver, Hands, References.RightThumbIntermediate, BasisBoneTrackedRole.RightThumbIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightIndexIntermediate, BasisBoneTrackedRole.RightIndexIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightMiddleIntermediate, BasisBoneTrackedRole.RightMiddleIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightRingIntermediate, BasisBoneTrackedRole.RightRingIntermediate, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightLittleIntermediate, BasisBoneTrackedRole.RightLittleIntermediate, 1, 1, OverrideTransformData.Space.Local);
-
-            OverrideTransform(driver, Hands, References.RightThumbProximal, BasisBoneTrackedRole.RightThumbProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightIndexProximal, BasisBoneTrackedRole.RightIndexProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightMiddleProximal, BasisBoneTrackedRole.RightMiddleProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightRingProximal, BasisBoneTrackedRole.RightRingProximal, 1, 1, OverrideTransformData.Space.Local);
-            OverrideTransform(driver, Hands, References.RightLittleProximal, BasisBoneTrackedRole.RightLittleProximal, 1, 1, OverrideTransformData.Space.Local);
-            */
-        }
         public void LeftFoot(BasisLocalBoneDriver driver)
         {
             GameObject feet = CreateRig("LeftUpperLeg, LeftLowerLeg, leftFoot", false, out LeftFootRig, out LeftFootLayer);
@@ -433,7 +379,6 @@ namespace Basis.Scripts.Drivers
             }
             CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, false);
         }
-
         public void LeftToe(BasisLocalBoneDriver driver)
         {
             GameObject LeftToe = CreateRig("LeftToe", false, out LeftToeRig, out LeftToeLayer);
