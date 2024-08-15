@@ -1,5 +1,6 @@
 using Basis.Scripts.Drivers;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 [DefaultExecutionOrder(15001)]
 public partial class BasisMuscleDriver : BasisBaseMuscleDriver
@@ -18,7 +19,6 @@ public partial class BasisMuscleDriver : BasisBaseMuscleDriver
         pose = new HumanPose();
 
         SetMusclesAndRecordPoses();
-        MuscleNames = HumanTrait.MuscleName;
 
     }
     public float increment = 0.2f;
@@ -99,6 +99,23 @@ public partial class BasisMuscleDriver : BasisBaseMuscleDriver
         // Cache dictionary keys for faster access
         coordKeys = new Vector2[CoordToPose.Count];
         CoordToPose.Keys.CopyTo(coordKeys, 0);
+
+        // Initialize and set up arrays
+        coordKeysArray = new NativeArray<Vector2>(coordKeys, Allocator.Persistent);
+        distancesArray = new NativeArray<float>(coordKeys.Length, Allocator.Persistent);
+        closestIndexArray = new NativeArray<int>(1, Allocator.Persistent);
+
+        // Copy data into coordKeysArray
+        for (int i = 0; i < coordKeys.Length; i++)
+        {
+            coordKeysArray[i] = coordKeys[i];
+        }
+    }
+    void OnDestroy()
+    {
+        if (coordKeysArray.IsCreated) coordKeysArray.Dispose();
+        if (distancesArray.IsCreated) distancesArray.Dispose();
+        if (closestIndexArray.IsCreated) closestIndexArray.Dispose();
     }
     public void SetMusclesAndRecordPoses()
     {
