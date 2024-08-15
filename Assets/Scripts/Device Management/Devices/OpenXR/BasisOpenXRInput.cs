@@ -1,6 +1,7 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
+using static BasisBaseMuscleDriver;
 
 namespace Basis.Scripts.Device_Management.Devices.OpenXR
 {
@@ -8,12 +9,11 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
     public class BasisOpenXRInput : BasisInput
     {
         public UnityEngine.XR.InputDevice Device;
-        public float[] FingerCurls;
+        public FingerPose FingerCurls;
         public void Initialize(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
         {
             Device = device;
             InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
-            FingerCurls = new float[5]; // 0: thumb, 1: index, 2: middle, 3: ring, 4: pinky
         }
         public override void PollData()
         {
@@ -86,10 +86,10 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
                     switch (BBTR)
                     {
                         case BasisBoneTrackedRole.LeftHand:
-                            BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.ApplyLeftHandAnims(FingerCurls);
+                            BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.LeftFinger = FingerCurls;
                             break;
                         case BasisBoneTrackedRole.RightHand:
-                            BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.ApplyRightHandAnims(FingerCurls);
+                            BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.RightFinger = FingerCurls;
                             break;
                     }
                 }
@@ -100,11 +100,11 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
 
         private void CalculateFingerCurls()
         {
-            FingerCurls[0] = InputState.GripButton ? 1.0f : 0.0f;
-            FingerCurls[1] = InputState.Trigger; // Index finger curl
-            FingerCurls[2] = InputState.PrimaryButtonGetState ? 1.0f : 0.0f; // Middle finger curl
-            FingerCurls[3] = InputState.SecondaryButtonGetState ? 1.0f : 0.0f; // Ring finger curl
-            FingerCurls[4] = InputState.MenuButton ? 1.0f : 0.0f; // Pinky finger curl
+            FingerCurls.ThumbPercentage = new Vector2( InputState.GripButton ? -1f : 0.7f, 0);//thumb
+            FingerCurls.IndexPercentage = new Vector2(BasisBaseMuscleDriver.MapValue(InputState.Trigger,0,1,-1f, 0.7f),0);// Index finger curl
+            FingerCurls.MiddlePercentage = new Vector2(InputState.PrimaryButtonGetState ? -1f : 0.7f, 0);// Middle finger curl
+            FingerCurls.RingPercentage = new Vector2(InputState.SecondaryButtonGetState ? -1f : 0.7f, 0); // Ring finger curl
+            FingerCurls.LittlePercentage = new Vector2(InputState.MenuButton ? 1 - 1f : 0.7f, 0); // Pinky finger curl
         }
     }
 }

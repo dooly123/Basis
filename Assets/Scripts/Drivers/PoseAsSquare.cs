@@ -1,11 +1,8 @@
-﻿public partial class BasisMuscleDriver
+﻿public struct PoseAsSquare
 {
-    public struct PoseAsSquare
-    {
-        public MuscleLocalPose[] TopLeft;
-        public MuscleLocalPose[] TopRight;
+    public MuscleLocalPose[] TopLeft;
+    public MuscleLocalPose[] TopRight;
 
-        public MuscleLocalPose[] BottomLeft;
-        public MuscleLocalPose[] BottomRight;
-    }
+    public MuscleLocalPose[] BottomLeft;
+    public MuscleLocalPose[] BottomRight;
 }

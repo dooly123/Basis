@@ -1,7 +1,6 @@
 using Basis.Scripts.Drivers;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -25,17 +24,23 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     public float[] RightMiddle;
     public float[] RightRing;
     public float[] RightLittle;
-    public Vector2 LeftThumbPercentage;
-    public Vector2 LeftIndexPercentage;
-    public Vector2 LeftMiddlePercentage;
-    public Vector2 LeftRingPercentage;
-    public Vector2 LeftLittlePercentage;
-
-    public Vector2 RightThumbPercentage;
-    public Vector2 RightIndexPercentage;
-    public Vector2 RightMiddlePercentage;
-    public Vector2 RightRingPercentage;
-    public Vector2 RightLittlePercentage;
+    [SerializeField]
+    public FingerPose LeftFinger;
+    [SerializeField]
+    public FingerPose RightFinger;
+    /// <summary>
+    /// 0.7 = straight fingers
+    /// -1 is fully closed
+    /// </summary>
+    [System.Serializable]
+    public struct FingerPose
+    {
+        public Vector2 ThumbPercentage;
+        public Vector2 IndexPercentage;
+        public Vector2 MiddlePercentage;
+        public Vector2 RingPercentage;
+        public Vector2 LittlePercentage;
+    }
 
     public Vector2 LastLeftThumbPercentage = new Vector2(-1.1f, -1.1f);
     public Vector2 LastLeftIndexPercentage = new Vector2(-1.1f, -1.1f);
@@ -49,11 +54,11 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     public Vector2 LastRightRingPercentage = new Vector2(-1.1f, -1.1f);
     public Vector2 LastRightLittlePercentage = new Vector2(-1.1f, -1.1f);
     // Dictionary to store the mapping
-    public Dictionary<Vector2, PoseData> pointMap;
-
-    [SerializeField]
-    public SquarePoseData BoxedPoseData;
-
+    public Dictionary<Vector2, PoseData> pointMap = new Dictionary<Vector2, PoseData>();
+    public static float MapValue(float value, float minSource, float maxSource, float minTarget, float maxTarget)
+    {
+        return minTarget + (maxTarget - minTarget) * ((value - minSource) / (maxSource - minSource));
+    }
     public void RecordCurrentPose(ref PoseData poseData)
     {
         Basis.Scripts.Common.BasisTransformMapping Mapping = BasisLocalAvatarDriver.References;
@@ -80,7 +85,7 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     }
     public MuscleLocalPose[] RecordFingerPoses(Transform proximal, Transform intermediate, Transform distal, bool hasProximal, bool hasIntermediate, bool hasDistal)
     {
-        BasisMuscleDriver.MuscleLocalPose[] fingerPoses = new BasisMuscleDriver.MuscleLocalPose[3];
+        MuscleLocalPose[] fingerPoses = new MuscleLocalPose[3];
         fingerPoses[0] = ConvertToPose(proximal, hasProximal);
         fingerPoses[1] = ConvertToPose(intermediate, hasIntermediate);
         fingerPoses[2] = ConvertToPose(distal, hasDistal);
@@ -88,7 +93,7 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     }
     public MuscleLocalPose ConvertToPose(Transform Trans, bool HasTrans)
     {
-        BasisMuscleDriver.MuscleLocalPose pose = new BasisMuscleDriver.MuscleLocalPose();
+        MuscleLocalPose pose = new MuscleLocalPose();
         if (HasTrans)
         {
             Trans.GetLocalPositionAndRotation(out pose.position, out pose.rotation);
@@ -157,82 +162,82 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
         float Rotation = LerpSpeed * Time.deltaTime;
 
         // Update Thumb
-        if (LeftThumbPercentage != LastLeftThumbPercentage)
+        if (LeftFinger.ThumbPercentage != LastLeftThumbPercentage)
         {
-            GetClosestValue(LeftThumbPercentage, out LeftThumbAdditional);
-            LastLeftThumbPercentage = LeftThumbPercentage;
+            GetClosestValue(LeftFinger.ThumbPercentage, out LeftThumbAdditional);
+            LastLeftThumbPercentage = LeftFinger.ThumbPercentage;
         }
         UpdateFingerPoses(Map.LeftThumbProximal, Map.LeftThumbIntermediate, Map.LeftThumbDistal, LeftThumbAdditional.PoseData.LeftThumb, ref Current.LeftThumb, Map.HasLeftThumbProximal, Map.HasLeftThumbIntermediate, Map.HasLeftThumbDistal, Rotation);
 
         // Update Index
-        if (LeftIndexPercentage != LastLeftIndexPercentage)
+        if (LeftFinger.IndexPercentage != LastLeftIndexPercentage)
         {
-            GetClosestValue(LeftIndexPercentage, out LeftIndexAdditional);
-            LastLeftIndexPercentage = LeftIndexPercentage;
+            GetClosestValue(LeftFinger.IndexPercentage, out LeftIndexAdditional);
+            LastLeftIndexPercentage = LeftFinger.IndexPercentage;
         }
         UpdateFingerPoses(Map.LeftIndexProximal, Map.LeftIndexIntermediate, Map.LeftIndexDistal, LeftIndexAdditional.PoseData.LeftIndex, ref Current.LeftIndex, Map.HasLeftIndexProximal, Map.HasLeftIndexIntermediate, Map.HasLeftIndexDistal, Rotation);
 
         // Update Middle
-        if (LeftMiddlePercentage != LastLeftMiddlePercentage)
+        if (LeftFinger.MiddlePercentage != LastLeftMiddlePercentage)
         {
-            GetClosestValue(LeftMiddlePercentage, out LeftMiddleAdditional);
-            LastLeftMiddlePercentage = LeftMiddlePercentage;
+            GetClosestValue(LeftFinger.MiddlePercentage, out LeftMiddleAdditional);
+            LastLeftMiddlePercentage = LeftFinger.MiddlePercentage;
         }
         UpdateFingerPoses(Map.LeftMiddleProximal, Map.LeftMiddleIntermediate, Map.LeftMiddleDistal, LeftMiddleAdditional.PoseData.LeftMiddle, ref Current.LeftMiddle, Map.HasLeftMiddleProximal, Map.HasLeftMiddleIntermediate, Map.HasLeftMiddleDistal, Rotation);
 
         // Update Ring
-        if (LeftRingPercentage != LastLeftRingPercentage)
+        if (LeftFinger.RingPercentage != LastLeftRingPercentage)
         {
-            GetClosestValue(LeftRingPercentage, out LeftRingAdditional);
-            LastLeftRingPercentage = LeftRingPercentage;
+            GetClosestValue(LeftFinger.RingPercentage, out LeftRingAdditional);
+            LastLeftRingPercentage = LeftFinger.RingPercentage;
         }
         UpdateFingerPoses(Map.LeftRingProximal, Map.LeftRingIntermediate, Map.LeftRingDistal, LeftRingAdditional.PoseData.LeftRing, ref Current.LeftRing, Map.HasLeftRingProximal, Map.HasLeftRingIntermediate, Map.HasLeftRingDistal, Rotation);
 
         // Update Little
-        if (LeftLittlePercentage != LastLeftLittlePercentage)
+        if (LeftFinger.LittlePercentage != LastLeftLittlePercentage)
         {
-            GetClosestValue(LeftLittlePercentage, out LeftLittleAdditional);
-            LastLeftLittlePercentage = LeftLittlePercentage;
+            GetClosestValue(LeftFinger.LittlePercentage, out LeftLittleAdditional);
+            LastLeftLittlePercentage = LeftFinger.LittlePercentage;
         }
         UpdateFingerPoses(Map.LeftLittleProximal, Map.LeftLittleIntermediate, Map.LeftLittleDistal, LeftLittleAdditional.PoseData.LeftLittle, ref Current.LeftLittle, Map.HasLeftLittleProximal, Map.HasLeftLittleIntermediate, Map.HasLeftLittleDistal, Rotation);
 
         // Update Right Thumb
-        if (RightThumbPercentage != LastRightThumbPercentage)
+        if (RightFinger.ThumbPercentage != LastRightThumbPercentage)
         {
-            GetClosestValue(RightThumbPercentage, out RightThumbAdditional);
-            LastRightThumbPercentage = RightThumbPercentage;
+            GetClosestValue(RightFinger.ThumbPercentage, out RightThumbAdditional);
+            LastRightThumbPercentage = RightFinger.ThumbPercentage;
         }
         UpdateFingerPoses(Map.RightThumbProximal, Map.RightThumbIntermediate, Map.RightThumbDistal, RightThumbAdditional.PoseData.RightThumb, ref Current.RightThumb, Map.HasRightThumbProximal, Map.HasRightThumbIntermediate, Map.HasRightThumbDistal, Rotation);
 
         // Update Right Index
-        if (RightIndexPercentage != LastRightIndexPercentage)
+        if (RightFinger.IndexPercentage != LastRightIndexPercentage)
         {
-            GetClosestValue(RightIndexPercentage, out RightIndexAdditional);
-            LastRightIndexPercentage = RightIndexPercentage;
+            GetClosestValue(RightFinger.IndexPercentage, out RightIndexAdditional);
+            LastRightIndexPercentage = RightFinger.IndexPercentage;
         }
         UpdateFingerPoses(Map.RightIndexProximal, Map.RightIndexIntermediate, Map.RightIndexDistal, RightIndexAdditional.PoseData.RightIndex, ref Current.RightIndex, Map.HasRightIndexProximal, Map.HasRightIndexIntermediate, Map.HasRightIndexDistal, Rotation);
 
         // Update Right Middle
-        if (RightMiddlePercentage != LastRightMiddlePercentage)
+        if (RightFinger.MiddlePercentage != LastRightMiddlePercentage)
         {
-            GetClosestValue(RightMiddlePercentage, out RightMiddleAdditional);
-            LastRightMiddlePercentage = RightMiddlePercentage;
+            GetClosestValue(RightFinger.MiddlePercentage, out RightMiddleAdditional);
+            LastRightMiddlePercentage = RightFinger.MiddlePercentage;
         }
         UpdateFingerPoses(Map.RightMiddleProximal, Map.RightMiddleIntermediate, Map.RightMiddleDistal, RightMiddleAdditional.PoseData.RightMiddle, ref Current.RightMiddle, Map.HasRightMiddleProximal, Map.HasRightMiddleIntermediate, Map.HasRightMiddleDistal, Rotation);
 
         // Update Right Ring
-        if (RightRingPercentage != LastRightRingPercentage)
+        if (RightFinger.RingPercentage != LastRightRingPercentage)
         {
-            GetClosestValue(RightRingPercentage, out RightRingAdditional);
-            LastRightRingPercentage = RightRingPercentage;
+            GetClosestValue(RightFinger.RingPercentage, out RightRingAdditional);
+            LastRightRingPercentage = RightFinger.RingPercentage;
         }
         UpdateFingerPoses(Map.RightRingProximal, Map.RightRingIntermediate, Map.RightRingDistal, RightRingAdditional.PoseData.RightRing, ref Current.RightRing, Map.HasRightRingProximal, Map.HasRightRingIntermediate, Map.HasRightRingDistal, Rotation);
 
         // Update Right Little
-        if (RightLittlePercentage != LastRightLittlePercentage)
+        if (RightFinger.LittlePercentage != LastRightLittlePercentage)
         {
-            GetClosestValue(RightLittlePercentage, out RightLittleAdditional);
-            LastRightLittlePercentage = RightLittlePercentage;
+            GetClosestValue(RightFinger.LittlePercentage, out RightLittleAdditional);
+            LastRightLittlePercentage = RightFinger.LittlePercentage;
         }
         UpdateFingerPoses(Map.RightLittleProximal, Map.RightLittleIntermediate, Map.RightLittleDistal, RightLittleAdditional.PoseData.RightLittle, ref Current.RightLittle, Map.HasRightLittleProximal, Map.HasRightLittleIntermediate, Map.HasRightLittleDistal, Rotation);
     }

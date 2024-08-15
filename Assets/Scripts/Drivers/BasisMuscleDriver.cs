@@ -119,7 +119,6 @@ public partial class BasisMuscleDriver : BasisBaseMuscleDriver
     }
     public void SetMusclesAndRecordPoses()
     {
-        BoxedPoseData = new SquarePoseData();
         // Get the current human pose
         poseHandler.GetHumanPose(ref pose);
         LoadMuscleData();

@@ -89,14 +89,6 @@ namespace Basis.Scripts.Animator_Driver
         previousAngularVelocity = dampenedAngularVelocity;
         previousHipsRotation = Hips.OutgoingWorldData.rotation;
     }
-    public void ApplyLeftHandAnims(float[] Curls)
-    {
-        basisAnimatorVariableApply.LeftHandCurls(Curls);
-    }
-    public void ApplyRightHandAnims(float[] Curls)
-    {
-        basisAnimatorVariableApply.RightHandCurls(Curls);
-    }
     private void JustJumped()
     {
         basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = true;
