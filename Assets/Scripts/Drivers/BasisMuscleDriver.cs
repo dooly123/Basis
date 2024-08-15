@@ -279,58 +279,51 @@ public class BasisMuscleDriver : MonoBehaviour
 
     Vector3 InterpolatePosition(Vector2 VerticalAndHorizontal, Pose CenterPose, Pose bottomLeft, Pose bottomRight, Pose topLeft, Pose topRight)
     {
-       return ConvertToPointInSpace(VerticalAndHorizontal, bottomLeft.position,bottomRight.position,topLeft.position,topRight.position);
+       return ConvertToPointInSpace(VerticalAndHorizontal, CenterPose.position, bottomLeft.position,bottomRight.position,topLeft.position,topRight.position);
     }
 
     Quaternion InterpolateRotation(Vector2 VerticalAndHorizontal, Pose CenterPose, Pose bottomLeft, Pose bottomRight, Pose topLeft, Pose topRight)
     {
-       return ConvertToPointInSpace(VerticalAndHorizontal,bottomLeft.rotation, bottomRight.rotation, topLeft.rotation, topRight.rotation);
+       return ConvertToRotationInSpace(VerticalAndHorizontal, CenterPose.rotation, bottomLeft.rotation, bottomRight.rotation, topLeft.rotation, topRight.rotation);
     }
-    /// <summary>
-    /// Converts a 2D percentage into a 3D point within a defined quadrilateral in space.
-    /// </summary>
-    /// <param name="VerticalAndHorizontalPercentage">A 2D vector with values ranging from -1,-1 to 1,1.</param>
-    /// <param name="bottomLeft">The bottom-left corner of the quadrilateral when VerticalAndHorizontalPercentage is -1,-1.</param>
-    /// <param name="bottomRight">The bottom-right corner of the quadrilateral when VerticalAndHorizontalPercentage is -1,1.</param>
-    /// <param name="topLeft">The top-left corner of the quadrilateral when VerticalAndHorizontalPercentage is 1,-1.</param>
-    /// <param name="topRight">The top-right corner of the quadrilateral when VerticalAndHorizontalPercentage is 1,1.</param>
-    /// <returns>The 3D point corresponding to the specified percentage within the quadrilateral.</returns>
     Vector3 ConvertToPointInSpace(Vector2 VerticalAndHorizontalPercentage,Vector3 RestingPosition, Vector3 bottomLeft, Vector3 bottomRight, Vector3 topLeft, Vector3 topRight)
     {
-        //RestingPosition
-        //the resting position is the starting position (VerticalAndHorizontalPercentage == 0,0
-        //it needs to be made so the lerp is going between resting point
-
-
-
-        // Interpolating along the horizontal direction between the left and right edges
-        Vector3 bottomInterpolated = Vector3.Lerp(bottomLeft, bottomRight, (VerticalAndHorizontalPercentage.x + 1) / 2f);
-        Vector3 topInterpolated = Vector3.Lerp(topLeft, topRight, (VerticalAndHorizontalPercentage.x + 1) / 2f);
-
-        // Interpolating along the vertical direction between the bottom and top interpolations
+        Vector3 bottomInterpolated = LerpThreeVectors(bottomLeft, RestingPosition, bottomRight, VerticalAndHorizontalPercentage.x);
+        Vector3 topInterpolated = LerpThreeVectors(topLeft, RestingPosition, topRight, VerticalAndHorizontalPercentage.x);
         Vector3 finalPosition = Vector3.Lerp(bottomInterpolated, topInterpolated, (VerticalAndHorizontalPercentage.y + 1) / 2f);
 
         return finalPosition;
     }
-    /// <summary>
-    /// Converts a 2D percentage into a quaternion representing a rotation within a defined quadrilateral in space.
-    /// </summary>
-    /// <param name="VerticalAndHorizontalPercentage">A 2D vector with values ranging from -1,-1 to 1,1.</param>
-    /// <param name="bottomLeft">The bottom-left corner rotation when VerticalAndHorizontalPercentage is -1,-1.</param>
-    /// <param name="bottomRight">The bottom-right corner rotation when VerticalAndHorizontalPercentage is -1,1.</param>
-    /// <param name="topLeft">The top-left corner rotation when VerticalAndHorizontalPercentage is 1,-1.</param>
-    /// <param name="topRight">The top-right corner rotation when VerticalAndHorizontalPercentage is 1,1.</param>
-    /// <returns>The quaternion corresponding to the specified percentage within the quadrilateral.</returns>
-    Quaternion ConvertToPointInSpace(Vector2 VerticalAndHorizontalPercentage, Quaternion bottomLeft, Quaternion bottomRight, Quaternion topLeft, Quaternion topRight)
+    Vector3 LerpThreeVectors(Vector3 a, Vector3 b, Vector3 c, float t)
     {
-        // Interpolating horizontally between the left and right edges at the bottom and top
-        Quaternion bottomInterpolated = Quaternion.Slerp(bottomLeft, bottomRight, (VerticalAndHorizontalPercentage.x + 1) / 2f);
-        Quaternion topInterpolated = Quaternion.Slerp(topLeft, topRight, (VerticalAndHorizontalPercentage.x + 1) / 2f);
-
-        // Interpolating vertically between the interpolated bottom and top
+        if (t <= 0f)
+        {
+            return Vector3.Lerp(a, b, t + 1f);
+        }
+        else
+        {
+            return Vector3.Lerp(b, c, t);
+        }
+    }
+    Quaternion ConvertToRotationInSpace(Vector2 VerticalAndHorizontalPercentage, Quaternion RestingRotation, Quaternion bottomLeft, Quaternion bottomRight, Quaternion topLeft, Quaternion topRight)
+    {
+        Quaternion bottomInterpolated = SlerpThreeQuaternions(bottomLeft, RestingRotation, bottomRight, VerticalAndHorizontalPercentage.x);
+        Quaternion topInterpolated = SlerpThreeQuaternions(topLeft, RestingRotation, topRight, VerticalAndHorizontalPercentage.x);
         Quaternion finalRotation = Quaternion.Slerp(bottomInterpolated, topInterpolated, (VerticalAndHorizontalPercentage.y + 1) / 2f);
 
         return finalRotation;
+    }
+
+    Quaternion SlerpThreeQuaternions(Quaternion a, Quaternion b, Quaternion c, float t)
+    {
+        if (t <= 0f)
+        {
+            return Quaternion.Slerp(a, b, t + 1f);
+        }
+        else
+        {
+            return Quaternion.Slerp(b, c, t);
+        }
     }
     public Pose ConvertToPose(Transform Trans,bool HasTrans)
     {
