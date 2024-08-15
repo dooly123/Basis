@@ -106,9 +106,9 @@ public partial class BasisMuscleDriver : BasisBaseMuscleDriver
         closestIndexArray = new NativeArray<int>(1, Allocator.Persistent);
 
         // Copy data into coordKeysArray
-        for (int i = 0; i < coordKeys.Length; i++)
+        for (int Index = 0; Index < coordKeys.Length; Index++)
         {
-            coordKeysArray[i] = coordKeys[i];
+            coordKeysArray[Index] = coordKeys[Index];
         }
     }
     void OnDestroy()

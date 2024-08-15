@@ -151,10 +151,10 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     public NativeArray<Vector2> coordKeysArray;
     public NativeArray<float> distancesArray;
     public NativeArray<int> closestIndexArray;
-
+    public float LerpSpeed = 17f;
     public void UpdateAllFingers(Basis.Scripts.Common.BasisTransformMapping Map, ref PoseData Current)
     {
-        float Rotation = 10 * Time.deltaTime;
+        float Rotation = LerpSpeed * Time.deltaTime;
 
         // Update Thumb
         if (LeftThumbPercentage != LastLeftThumbPercentage)
