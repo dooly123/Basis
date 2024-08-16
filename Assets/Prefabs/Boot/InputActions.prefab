@@ -352,23 +352,12 @@ MonoBehaviour:
     CurrentPipeline: 4
     MarkAsDontDestroyOnLoad: 1
     ExplanationText: {fileID: 0}
-    SettingsManagerObjectpaths:
-    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
-      Types/Unity/Unity Standard Dropdown.prefab
-    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
-      Types/Unity/Unity Standard Dynamic Dropdown.prefab
-    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
-      Types/Unity/Unity Standard Slider.prefab
-    - Assets/third_party/Settings Manager/SettingsManagerDemo/Settings Manager Prefab/Demo
-      Types/Unity/Unity Standard Toggle.prefab
-    SettingsManagerObjects:
-    - {fileID: 7449501133343338555, guid: 91c995af67f8e7c46b15c8cd8184a723, type: 3}
-    - {fileID: 7449501133343338555, guid: c4d7177423c74af4fafb9699c399dafb, type: 3}
-    - {fileID: 4698753801063083922, guid: 19e5030522240f4459ed288c663e390f, type: 3}
-    - {fileID: -892464885040180822, guid: e814fefd40c6ef445bfacef072a362ca, type: 3}
+    SettingsManagerObjectpaths: []
+    SettingsManagerObjects: []
     CurrentlySelectedSaveModule: {fileID: 256212325347645450}
     CurrentlySelectedSaveModuleName: JSON
   SettingsManagerOptions:
+  - {fileID: 500068882267357641}
   - {fileID: 6430705635976775670}
   - {fileID: 2467030893667730727}
   - {fileID: 1027479742639559022}
@@ -1343,21 +1332,21 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 1
     MaxPercentage: 100
     MinPercentage: 0
     SliderMaxValue: 1.5
-    SliderMinValue: 0.45
+    SliderMinValue: 0.25
     Name: Render Resolution
     ValueDescriptor: Render Resolution
     SelectedValueDefault: 1
     ValueDefault: 1
     Explanation: 
     selectedValue: 1
-    Type: 4
+    Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
     ApplyInput: {fileID: 0}
@@ -1366,7 +1355,7 @@ MonoBehaviour:
     ExcludeFromThesePlatforms: []
     MasterQualityState: 0
     ParseController: 1
-    ReturnedValueTextType: 0
+    ReturnedValueTextType: 1
     SelectableValueList: []
   - EditorBasedUIToggles:
       SupportedRenderPipelines: 1
@@ -1914,8 +1903,8 @@ MonoBehaviour:
     SelectedValue: 1
     Index: 24
     SelectableValueList: []
-    Min: 0
-    Max: 0
+    Min: 0.25
+    Max: 1.5
   - Name: UpScaler
     DefaultValue: False
     SelectedValue: auto
@@ -1997,6 +1986,7 @@ GameObject:
   - component: {fileID: 1027479742639559022}
   - component: {fileID: 2467030893667730727}
   - component: {fileID: 6430705635976775670}
+  - component: {fileID: 500068882267357641}
   m_Layer: 0
   m_Name: Modules
   m_TagString: Untagged
@@ -2133,7 +2123,7 @@ MonoBehaviour:
     Explanation: Vertical Sync
     Parse: 1
     Type: 1
-  targetFrameRateWhenOff: 500
+  CurrentMode: 
 --- !u!114 &3784412682251115113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2390,3 +2380,26 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 1
+--- !u!114 &500068882267357641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8998dd8911f2d564681606559676bd44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Render Resolution
+    Explanation: 
+    Parse: 1
+    Type: 3
+  - OptionName: UpScaler
+    Explanation: UpScaler
+    Parse: 1
+    Type: 1
+  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
+  RenderScale: 0

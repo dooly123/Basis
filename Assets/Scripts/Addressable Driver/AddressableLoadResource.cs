@@ -5,12 +5,10 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
-using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
-
 namespace Basis.Scripts.Addressable_Driver
 {
-[System.Serializable]
+    [System.Serializable]
 public class AddressableLoadResourceBase
 {
     public string Key;
@@ -35,7 +33,7 @@ public class AddressableGenericResource : AddressableLoadResourceBase
         ResourceType = AddressableLoadResourceType.Generic;
     }
 
-    public AddressableGenericResource(AssetReference assetReference, AddressableExpectedResult expectedResult, InstantiationParameters instantiationParameters) : base(assetReference.RuntimeKeyIsValid() ? assetReference.RuntimeKey.ToString() : "Invalid", expectedResult)
+    public AddressableGenericResource(AssetReference assetReference, AddressableExpectedResult expectedResult) : base(assetReference.RuntimeKeyIsValid() ? assetReference.RuntimeKey.ToString() : "Invalid", expectedResult)
     {
         if (!assetReference.RuntimeKeyIsValid())
         {

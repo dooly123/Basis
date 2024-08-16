@@ -9,7 +9,7 @@
     "com.unity.memoryprofiler": "1.1.0",
     "com.unity.profiling.core": "1.0.2",
     "com.unity.render-pipelines.universal": "17.0.3",
-    "com.unity.xr.management": "4.4.0",
+    "com.unity.xr.management": "4.5.0",
     "com.unity.xr.openxr": "1.11.0",
     "com.valvesoftware.unity.openvr": "file:com.valvesoftware.unity.openvr-1.2.1.tgz",
     "jp.lilxyzw.liltoon": "https://github.com/lilxyzw/lilToon.git?path=Assets/lilToon#master",
