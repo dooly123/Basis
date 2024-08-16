@@ -34,7 +34,7 @@ namespace Basis.Scripts.Device_Management
             }
             else
             {
-                return "Desktop";
+                return Desktop;
             }
         }
         public static BasisDeviceManagement Instance;
@@ -57,6 +57,7 @@ namespace Basis.Scripts.Device_Management
         [SerializeField]
         public List<BasisDeviceMatchSettings> UseAbleDeviceConfigs = new List<BasisDeviceMatchSettings>();
         [SerializeField]
+        public const string Desktop = "Desktop";
         void Start()
         {
             if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -68,7 +69,7 @@ namespace Basis.Scripts.Device_Management
         void OnDestroy()
         {
             ShutDownXR(true);
-            if (TryFindBasisBaseTypeManagement("Desktop", out List<BasisBaseTypeManagement> Matched))
+            if (TryFindBasisBaseTypeManagement(Desktop, out List<BasisBaseTypeManagement> Matched))
             {
                 foreach (var m in Matched)
                 {
@@ -142,7 +143,7 @@ namespace Basis.Scripts.Device_Management
                 {
                     foreach (BasisBaseTypeManagement Type in BaseTypes)
                     {
-                        if (Type.Type() == "Desktop")
+                        if (Type.Type() == Desktop)
                         {
                             Type.StopSDK();
                         }
@@ -162,7 +163,7 @@ namespace Basis.Scripts.Device_Management
                     BasisXRManagement.BeginLoad();
                     break;
                 case "Desktop":
-                    if (TryFindBasisBaseTypeManagement("Desktop", out List<BasisBaseTypeManagement> Matched))
+                    if (TryFindBasisBaseTypeManagement(Desktop, out List<BasisBaseTypeManagement> Matched))
                     {
                         foreach (var m in Matched)
                         {

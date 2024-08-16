@@ -44,7 +44,6 @@ namespace Basis.Scripts.Drivers
             LocalPlayer = BasisLocalPlayer.Instance;
             Camera.nearClipPlane = NearClip;
             Camera.farClipPlane = 1500;
-            QualitySettings.maxQueuedFrames = -1;
             CameraInstanceID = Camera.GetInstanceID();
             //fire static event that says the instance exists
             OnHeightChanged();
