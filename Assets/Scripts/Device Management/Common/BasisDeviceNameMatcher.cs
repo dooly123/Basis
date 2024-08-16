@@ -1,3 +1,4 @@
+using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Basis.Scripts.Device_Management
     {
         [SerializeField]
         public List<BasisDeviceMatchSettings> BasisDevice = new List<BasisDeviceMatchSettings>();
-        public async Task<BasisDeviceMatchSettings> GetAssociatedDeviceMatchableNames(string nameToMatch)
+        public async Task<BasisDeviceMatchSettings> GetAssociatedDeviceMatchableNames(string nameToMatch, BasisBoneTrackedRole FallBackRole = BasisBoneTrackedRole.CenterEye, bool UseFallbackROle = false)
         {
             foreach (BasisDeviceMatchSettings DeviceEntry in BasisDevice)
             {
@@ -34,7 +35,8 @@ namespace Basis.Scripts.Device_Management
                 HasRayCastRedical = true,
                 CanDisplayPhysicalTracker = false,
                 HasRayCastSupport = true,
-                HasTrackedRole = false
+                HasTrackedRole = UseFallbackROle,
+                TrackedRole = FallBackRole,
             };
             BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BasisDevice.Add(Settings);
             Debug.LogError("Unable to find Configuration for device Generating " + nameToMatch);

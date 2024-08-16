@@ -133,7 +133,7 @@ public abstract class BasisInput : MonoBehaviour
             CommonDeviceIdentifier = unUniqueDeviceID;
             UniqueDeviceIdentifier = uniqueID;
             // lets check to see if there is a override from a devices matcher
-            BasisDeviceMatchableNames = await BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier);
+            BasisDeviceMatchableNames = await BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, basisBoneTrackedRole, ForceAssignTrackedRole);
             if (BasisDeviceMatchableNames.HasTrackedRole)
             {
                 Debug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID);
