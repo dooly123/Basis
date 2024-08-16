@@ -57,7 +57,14 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 AddCallback();
                 HasEvents = true;
             }
+            Application.onBeforeRender += OnBeforeRender;
         }
+
+        private void OnBeforeRender()
+        {
+            BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
+        }
+
         public void Update()
         {
             InputSystem.Update();
@@ -65,7 +72,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public void LateUpdate()
         {
             LateUpdateEvent?.Invoke();
-            BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
+          //  BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
         }
         public static async Task CreateInputAction(BasisLocalPlayer Local)
         {
@@ -100,6 +107,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 RemoveCallback();
                 HasEvents = false;
             }
+            Application.onBeforeRender -= OnBeforeRender;
         }
         public void Initialize(BasisLocalPlayer localPlayer)
         {

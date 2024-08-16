@@ -18,6 +18,9 @@ namespace BattlePhaze.SettingsManager.Integrations
             BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
             Application.targetFrameRate = -1;
             QualitySettings.maxQueuedFrames = -1;
+
+            // Set the maximum time step to avoid physics issues
+            Time.maximumDeltaTime = 1.0f / 90;
         }
         public void OnDestroy()
         {
