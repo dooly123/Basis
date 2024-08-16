@@ -39,10 +39,6 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         }
         Debug.Log("set Controller to inputSource " + inputSource + " bone role " + basisBoneTrackedRole);
     }
-    public void LateUpdate()
-    {
-        SkeletonHandInput.LateUpdate();
-    }
     public new void OnDestroy()
     {
         if (poseAction != null)

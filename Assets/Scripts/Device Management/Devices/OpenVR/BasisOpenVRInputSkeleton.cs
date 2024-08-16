@@ -1,12 +1,14 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
+using System;
 using UnityEngine;
 using Valve.VR;
+using static BasisBaseMuscleDriver;
 
 namespace Basis.Scripts.Device_Management.Devices.OpenVR
 {
     [System.Serializable]
-    public class BasisOpenVRInputSkeleton : BasisInputSkeleton
+    public class BasisOpenVRInputSkeleton 
     {
         [SerializeField]
         public OpenVRDevice Device;
@@ -14,6 +16,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         public SteamVR_Action_Skeleton skeletonAction;
         [SerializeField]
         public BasisOpenVRInputController BasisOpenVRInputController;
+        public float[] FingerSplays = new float[5];
         public void Initalize(BasisOpenVRInputController basisOpenVRInputController)
         {
             BasisOpenVRInputController = basisOpenVRInputController;
@@ -21,14 +24,6 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             skeletonAction = SteamVR_Input.GetAction<SteamVR_Action_Skeleton>(Action);
             if (skeletonAction != null)
             {
-                if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.LeftHand)
-                {
-                    AssignAsLeft();
-                }
-                else if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.RightHand)
-                {
-                    AssignAsRight();
-                }
                 SteamVR_Input.onSkeletonsUpdated += SteamVR_Input_OnSkeletonsUpdated;
             }
             else
@@ -36,10 +31,6 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                 Debug.LogError("Missing Skeleton Action for " + Action);
             }
 
-        }
-        public void LateUpdate()
-        {
-            Simulate();
         }
         private void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
         {
@@ -49,29 +40,47 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         {
             if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.LeftHand)
             {
-                Vector2 ThumbPercentage = new Vector2(BasisBaseMuscleDriver.MapValue(skeletonAction.fingerCurls[0], 0, 1, -1f, 0.7f),
-                BasisBaseMuscleDriver.MapValue(skeletonAction.fingerSplays[0], 0, 1, -1f, 0.7f));
-                BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.LeftFinger.ThumbPercentage = ThumbPercentage;
-
-                Vector2 IndexPercentage = new Vector2(BasisBaseMuscleDriver.MapValue(skeletonAction.fingerCurls[1], 0, 1, -1f, 0.7f),
-                BasisBaseMuscleDriver.MapValue(skeletonAction.fingerSplays[1], 0, 1, -1f, 0.7f));
-                BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.LeftFinger.IndexPercentage = IndexPercentage;
-
-                Vector2 MiddlePercentage = new Vector2(BasisBaseMuscleDriver.MapValue(skeletonAction.fingerCurls[2], 0, 1, -1f, 0.7f),
-                BasisBaseMuscleDriver.MapValue(skeletonAction.fingerSplays[2], 0, 1, -1f, 0.7f));
-                BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.LeftFinger.MiddlePercentage = MiddlePercentage;
-
-                Vector2 RingPercentage = new Vector2(BasisBaseMuscleDriver.MapValue(skeletonAction.fingerCurls[3], 0, 1, -1f, 0.7f),
-                BasisBaseMuscleDriver.MapValue(skeletonAction.fingerSplays[3], 0, 1, -1f, 0.7f));
-                BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.LeftFinger.RingPercentage = RingPercentage;
-
-                Vector2 LittlePercentage = new Vector2(BasisBaseMuscleDriver.MapValue(skeletonAction.fingerCurls[4], 0, 1, -1f, 0.7f), 0);
-                // BasisBaseMuscleDriver.MapValue(skeletonAction.fingerSplays[4], 0, 1, -1f, 0.7f));
-                BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.LeftFinger.LittlePercentage = LittlePercentage;
+                UpdateFingerPercentages(ref BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.LeftFinger);
             }
-            if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.RightHand)
+            else if (BasisOpenVRInputController.inputSource == SteamVR_Input_Sources.RightHand)
             {
+                UpdateFingerPercentages(ref BasisLocalPlayer.Instance.AvatarDriver.BasisMuscleDriver.RightFinger);
             }
+        }
+
+        private void UpdateFingerPercentages(ref FingerPose fingerDriver)
+        {
+            ConvertFingerSplays();
+            fingerDriver.ThumbPercentage = GetFingerPercentage(0);
+            fingerDriver.IndexPercentage = GetFingerPercentage(1);
+            fingerDriver.MiddlePercentage = GetFingerPercentage(2);
+            fingerDriver.RingPercentage = GetFingerPercentage(3);
+            fingerDriver.LittlePercentage = GetFingerPercentage(4);
+        }
+        /// <summary>
+        /// this is where it all goes wrong
+        /// valve use splay in a funky way 
+        /// or in a way my dumbass does not understand
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private Vector2 GetFingerPercentage(int index)
+        {
+            float flippedCurl = 1 - skeletonAction.fingerCurls[index];
+            float flippedSplay = 1 - FingerSplays[index];
+
+            return new Vector2(
+                BasisBaseMuscleDriver.MapValue(flippedCurl, 0, 1, -1f, 0.7f),
+                flippedSplay
+            );
+        }
+        public void ConvertFingerSplays()
+        {
+            for (int Index = 0; Index < 4; Index++)
+            {
+                FingerSplays[Index] = BasisBaseMuscleDriver.MapValue(skeletonAction.fingerSplays[Index], 0, 1, -1f, 1f);
+            }
+            FingerSplays[4] = 1;
         }
         public void DeInitalize()
         {

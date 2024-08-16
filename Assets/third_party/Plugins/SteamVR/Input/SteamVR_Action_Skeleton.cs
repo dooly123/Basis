@@ -1333,23 +1333,6 @@ namespace Valve.VR
         float[] lastFingerSplays { get; }
     }
 
-    /// <summary>
-    /// The change in range of the motion of the bones in the skeleton. Options are "With Controller" as if your hand is holding your VR controller.
-    /// Or "Without Controller" as if your hand is empty.
-    /// </summary>
-    public enum SkeletalMotionRangeChange
-    {
-        None = -1,
-
-        /// <summary>Estimation of bones in hand while holding a controller</summary>
-        WithController = 0,
-
-        /// <summary>Estimation of bones in hand while hand is empty (allowing full fist)</summary>
-        WithoutController = 1,
-    }
-
-
-
     /// <summary>The order of the joints that SteamVR Skeleton Input is expecting.</summary>
     public static class SteamVR_Skeleton_JointIndexes
     {

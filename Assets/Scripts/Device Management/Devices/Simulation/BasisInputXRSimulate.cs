@@ -10,28 +10,6 @@ public class BasisInputXRSimulate : BasisInput
     public bool AddSomeRandomizedInput = false;
     public float MinMaxOffset = 0.0001f;
     public float LerpAmount = 0.1f;
-    public BasisInputSkeleton BasisInputSkeleton;
-    public void Start()
-    {
-        if (BasisInputSkeleton == null)
-        {
-            BasisInputSkeleton = new BasisInputSkeleton();
-            if (TryGetRole(out BasisBoneTrackedRole Role))
-            {
-                if (Role == BasisBoneTrackedRole.LeftHand)
-                {
-                    BasisInputSkeleton.AssignAsLeft();
-                }
-                else
-                {
-                    if (Role == BasisBoneTrackedRole.RightHand)
-                    {
-                        BasisInputSkeleton.AssignAsRight();
-                    }
-                }
-            }
-        }
-    }
     public override void PollData()
     {
         if (AddSomeRandomizedInput)
@@ -81,14 +59,6 @@ public class BasisInputXRSimulate : BasisInput
 
         }
         UpdatePlayerControl();
-        BasisInputSkeleton.Simulate();
-    }
-    public void OnDrawGizmos()
-    {
-        if (BasisInputSkeleton != null)
-        {
-            BasisInputSkeleton.OnDrawGizmos();
-        }
     }
     public new void OnDestroy()
     {
