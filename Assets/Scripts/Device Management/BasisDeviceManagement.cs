@@ -109,11 +109,11 @@ namespace Basis.Scripts.Device_Management
         public async void Initialize()
         {
             CommandLineArgs.Initialize(BakedInCommandLineArgs);
-            await LoadAndOrSaveDefaultDeviceConfigs(Application.persistentDataPath + "/Devices");
+            await LoadAndOrSaveDefaultDeviceConfigs();
             InstantiationParameters parameters = new InstantiationParameters();
             await BasisPlayerFactory.CreateLocalPlayer(parameters);
 
-            SwitchMode(DefaultMode());
+            await SwitchMode(DefaultMode());
             if (HasEvents == false)
             {
                 BasisXRManagement.CheckForPass += CheckForPass;
@@ -123,6 +123,10 @@ namespace Basis.Scripts.Device_Management
             }
             await OnInitializationCompleted?.Invoke();
         }
+        public async Task LoadAndOrSaveDefaultDeviceConfigs()
+        {
+            await LoadAndOrSaveDefaultDeviceConfigs(Application.persistentDataPath + "/Devices");
+        }
         public async Task RunAfterInitialized()
         {
             if (FireOffNetwork)
@@ -130,7 +134,7 @@ namespace Basis.Scripts.Device_Management
                 await LoadGameobject(NetworkManagement, new InstantiationParameters());
             }
         }
-        public void SwitchMode(string newMode)
+        public async Task SwitchMode(string newMode)
         {
             if (CurrentMode != "None")
             {
@@ -167,7 +171,7 @@ namespace Basis.Scripts.Device_Management
                     {
                         foreach (var m in Matched)
                         {
-                            m.BeginLoadSDK();
+                          await  m.BeginLoadSDK();
                         }
                     }
                     break;
@@ -179,7 +183,7 @@ namespace Basis.Scripts.Device_Management
                     {
                         foreach (var m in Matched)
                         {
-                            m.BeginLoadSDK();
+                          await  m.BeginLoadSDK();
                         }
                     }
                     break;
@@ -233,11 +237,11 @@ namespace Basis.Scripts.Device_Management
         {
             SwitchSetMode("Desktop");
         }
-        public static void SwitchSetMode(string Mode)
+        public static async void SwitchSetMode(string Mode)
         {
             if (Instance != null && Mode != Instance.CurrentMode)
             {
-                Instance.SwitchMode(Mode);
+               await Instance.SwitchMode(Mode);
             }
         }
         public static async void ShowTrackers()
@@ -285,21 +289,21 @@ namespace Basis.Scripts.Device_Management
 
             AllInputDevices.RemoveAll(item => item == null);
         }
-        private void CheckForPass(string type)
+        private async void CheckForPass(string type)
         {
             Debug.Log("Loading " + type);
             if (TryFindBasisBaseTypeManagement("SimulateXR", out List<BasisBaseTypeManagement> Matched))
             {
                 foreach (var m in Matched)
                 {
-                    m.StartSDK();
+                 await   m.StartSDK();
                 }
             }
             if (TryFindBasisBaseTypeManagement(type, out Matched))
             {
                 foreach (var m in Matched)
                 {
-                    m.StartSDK();
+                  await  m.StartSDK();
                 }
             }
         }

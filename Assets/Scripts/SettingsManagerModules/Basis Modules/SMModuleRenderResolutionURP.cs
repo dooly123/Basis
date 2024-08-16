@@ -1,7 +1,6 @@
 #if SETTINGS_MANAGER_UNIVERSAL
 using Basis.Scripts.Device_Management;
 using BattlePhaze.SettingsManager;
-using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.XR;
@@ -50,13 +49,29 @@ public class SMModuleRenderResolutionURP : SettingsManagerOption
         RenderScale = renderScale;
         if (BasisDeviceManagement.Instance.CurrentMode == BasisDeviceManagement.Desktop)
         {
-            Asset.renderScale = RenderScale;
+            if (Asset.renderScale != RenderScale)
+            {
+                Asset.renderScale = RenderScale;
+            }
         }
         else
         {
-            XRSettings.eyeTextureResolutionScale = RenderScale;
-            XRSettings.useOcclusionMesh = true;
-            Asset.renderScale = 1;
+            if (XRSettings.useOcclusionMesh == false)
+            {
+                XRSettings.useOcclusionMesh = true;
+            }
+            if (Asset.renderScale != 1)
+            {
+                Asset.renderScale = 1;
+            }
+            if (XRSettings.eyeTextureResolutionScale != renderScale)
+            {
+                XRSettings.eyeTextureResolutionScale = RenderScale;
+            }
+            if (XRSettings.renderViewportScale != 1)
+            {
+                XRSettings.renderViewportScale = 1;
+            }
         }
     }
     public void SetUpscaler(string Using)

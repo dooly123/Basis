@@ -38,18 +38,6 @@ namespace Valve.VR
         }
         private void OnInputFocus(bool hasFocus)
         {
-            if (SteamVR.active == false)
-                return;
-
-            if (hasFocus)
-            {
-
-                XRSettings.eyeTextureResolutionScale = 1;
-            }
-            else
-            {
-                XRSettings.eyeTextureResolutionScale = 0.5f;
-            }
         }
         private void OnRequestScreenshot(VREvent_t vrEvent)
         {

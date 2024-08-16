@@ -3,6 +3,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders;
 using Basis.Scripts.TransformBinders.BoneControl;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.Desktop
@@ -30,7 +31,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
     public float InjectedX = 0;
     public float InjectedZ = 0;
     public bool HasEyeEvents = false;
-    public void Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
+    public async Task Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
     {
         Debug.Log("Initalizing Avatar Eye");
         if (BasisLocalPlayer.Instance.AvatarDriver != null)
@@ -45,7 +46,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         FinalPosition = LocalRawPosition;
         FinalRotation = LocalRawRotation;
-        InitalizeTracking(ID, ID, subSystems, true, BasisBoneTrackedRole.CenterEye);
+      await  InitalizeTracking(ID, ID, subSystems, true, BasisBoneTrackedRole.CenterEye);
         if (BasisHelpers.CheckInstance(Instance))
         {
             Instance = this;

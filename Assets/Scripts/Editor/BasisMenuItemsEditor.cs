@@ -47,13 +47,13 @@ public static class BasisMenuItemsEditor
         }
     }
     [MenuItem("Basis/Trackers/Destroy And Restore XR Input")]
-    public static void DestroyAndRebuildXRInput()
+    public static async void DestroyAndRebuildXRInput()
     {
         DestroyXRInput();
         List<StoredPreviousDevice> allDevicesToRemove = new List<StoredPreviousDevice>(BasisDeviceManagement.Instance.PreviouslyConnectedDevices);
         foreach (var device in allDevicesToRemove)
         {
-            FindSimulate().CreatePhysicalTrackedDevice(device.UniqueID, "{htc}vr_tracker_vive_3_0");
+         await   FindSimulate().CreatePhysicalTrackedDevice(device.UniqueID, "{htc}vr_tracker_vive_3_0");
         }
     }
     public static BasisSimulateXR FindSimulate()
@@ -69,28 +69,28 @@ public static class BasisMenuItemsEditor
         return null;
     }
     [MenuItem("Basis/Trackers/Create Puck Tracker")]
-    public static void CreatePuckTracker()
+    public static async void CreatePuckTracker()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
 
-        FindSimulate().CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+       await FindSimulate().CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0" + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
         BasisDeviceManagement.ShowTrackers();
         BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
     }
     [MenuItem("Basis/Trackers/Create Vive Right Controller")]
-    public static void CreateViveRightTracker()
+    public static async void CreateViveRightTracker()
     {
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl RightHand, BasisBoneTrackedRole.RightHand);
-        BasisInputXRSimulate RightTracker = FindSimulate().CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_right", BasisBoneTrackedRole.RightHand, true);
+        BasisInputXRSimulate RightTracker = await FindSimulate().CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_right" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_right", BasisBoneTrackedRole.RightHand, true);
         RightTracker.FollowMovement.position = RightHand.BoneModelTransform.position;
         RightTracker.FollowMovement.rotation = Quaternion.identity;
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Trackers/Create Vive Left Controller")]
-    public static void CreateViveLeftTracker()
+    public static async void CreateViveLeftTracker()
     {
         BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl LeftHand, BasisBoneTrackedRole.LeftHand);
-        BasisInputXRSimulate LeftTracker = FindSimulate().CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_left", BasisBoneTrackedRole.LeftHand, true);
+        BasisInputXRSimulate LeftTracker = await FindSimulate().CreatePhysicalTrackedDevice("{indexcontroller}valve_controller_knu_3_0_left" + Random.Range(-9999999999999, 999999999999), "{indexcontroller}valve_controller_knu_3_0_left", BasisBoneTrackedRole.LeftHand, true);
         LeftTracker.FollowMovement.position = LeftHand.BoneModelTransform.position;
         LeftTracker.FollowMovement.rotation = Quaternion.identity;
         BasisDeviceManagement.ShowTrackers();
@@ -102,13 +102,13 @@ public static class BasisMenuItemsEditor
         CreateViveRightTracker();
     }
     [MenuItem("Basis/Trackers/Create 3Point Tracking")]
-    public static void CreatePuck3Tracker()
+    public static async void CreatePuck3Tracker()
     {
         BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
        BasisSimulateXR XR = FindSimulate();
-        BasisInputXRSimulate BasisHips = XR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisHips | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
-        BasisInputXRSimulate BasisLeftFoot = XR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisLeftFoot | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
-        BasisInputXRSimulate BasisRightFoot = XR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisRightFoot | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisHips = await XR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisHips | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisLeftFoot = await XR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisLeftFoot | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
+        BasisInputXRSimulate BasisRightFoot = await XR.CreatePhysicalTrackedDevice("{htc}vr_tracker_vive_3_0 BasisRightFoot | " + Random.Range(-9999999999999, 999999999999), "{htc}vr_tracker_vive_3_0");
 
         var hips = BasisLocalPlayer.Instance.AvatarDriver.References.Hips;
         var leftFoot = BasisLocalPlayer.Instance.AvatarDriver.References.leftFoot;
@@ -130,7 +130,7 @@ public static class BasisMenuItemsEditor
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Trackers/Create MaxTracker Tracking")]
-    public static void CreateFullMaxTracker()
+    public static async void CreateFullMaxTracker()
     {
         //  BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         // Create an array of the tracker names for simplicity
@@ -154,7 +154,7 @@ public static class BasisMenuItemsEditor
         BasisSimulateXR XR = FindSimulate();
         for (int Index = 0; Index < bodyParts.Length; Index++)
         {
-            XR.CreatePhysicalTrackedDevice(trackerName + " part " + bodyParts[Index].name, trackerName);
+           await XR.CreatePhysicalTrackedDevice(trackerName + " part " + bodyParts[Index].name, trackerName);
             trackers[Index] = XR.Inputs[Index];
         }
 
@@ -173,7 +173,7 @@ public static class BasisMenuItemsEditor
         BasisDeviceManagement.ShowTrackers();
     }
     [MenuItem("Basis/Trackers/Create Mostly MaxTracker Tracking")]
-    public static void CreateSemiMaxTracker()
+    public static async void CreateSemiMaxTracker()
     {
         //  BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
         // Create an array of the tracker names for simplicity
@@ -199,7 +199,7 @@ public static class BasisMenuItemsEditor
         {
             if (bodyParts[Index] != null)
             {
-                XR.CreatePhysicalTrackedDevice(trackerName + " part " + bodyParts[Index].name, trackerName);
+               await XR.CreatePhysicalTrackedDevice(trackerName + " part " + bodyParts[Index].name, trackerName);
                 trackers[Index] = XR.Inputs[Index];
             }
         }

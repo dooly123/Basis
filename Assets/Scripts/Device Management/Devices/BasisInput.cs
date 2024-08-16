@@ -46,7 +46,6 @@ public abstract class BasisInput : MonoBehaviour
     public BasisInputState InputState = new BasisInputState();
     [SerializeField]
     public BasisInputState LastState = new BasisInputState();
-    public bool AssociatedFound;
     public GeneralLocation GeneralLocation;
     public bool TryGetRole(out BasisBoneTrackedRole BasisBoneTrackedRole)
     {
@@ -115,28 +114,26 @@ public abstract class BasisInput : MonoBehaviour
     {
         StopTracking();
     }
-    /// <summary>
-    /// initalize the tracking of this input
-    /// </summary>
-    /// <param name="uniqueID"></param>
-    /// <param name="unUniqueDeviceID"></param>
-    /// <param name="subSystems"></param>
-    /// <param name="ForceAssignTrackedRole"></param>
-    /// <param name="basisBoneTrackedRole"></param>
-    public void InitalizeTracking(string uniqueID, string unUniqueDeviceID, string subSystems, bool ForceAssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
-    {
-        //unassign the old tracker
-        UnAssignTracker();
-        Debug.Log("Finding ID " + unUniqueDeviceID);
-        AvatarRotationOffset = Quaternion.identity;
-        //configure device identifier
-        SubSystemIdentifier = subSystems;
-        CommonDeviceIdentifier = unUniqueDeviceID;
-        UniqueDeviceIdentifier = uniqueID;
-        // lets check to see if there is a override from a devices matcher
-        AssociatedFound = BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, out BasisDeviceMatchableNames);
-        if (AssociatedFound)
+        /// <summary>
+        /// initalize the tracking of this input
+        /// </summary>
+        /// <param name="uniqueID"></param>
+        /// <param name="unUniqueDeviceID"></param>
+        /// <param name="subSystems"></param>
+        /// <param name="ForceAssignTrackedRole"></param>
+        /// <param name="basisBoneTrackedRole"></param>
+        public async Task InitalizeTracking(string uniqueID, string unUniqueDeviceID, string subSystems, bool ForceAssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
         {
+            //unassign the old tracker
+            UnAssignTracker();
+            Debug.Log("Finding ID " + unUniqueDeviceID);
+            AvatarRotationOffset = Quaternion.identity;
+            //configure device identifier
+            SubSystemIdentifier = subSystems;
+            CommonDeviceIdentifier = unUniqueDeviceID;
+            UniqueDeviceIdentifier = uniqueID;
+            // lets check to see if there is a override from a devices matcher
+            BasisDeviceMatchableNames = await BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier);
             if (BasisDeviceMatchableNames.HasTrackedRole)
             {
                 Debug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID);
@@ -161,28 +158,24 @@ public abstract class BasisInput : MonoBehaviour
                     Debug.LogError("Missing Tracked Role " + trackedRole);
                 }
             }
-        }
-        else
-        {
-            //assign a new tracker if requested
-            if (ForceAssignTrackedRole)
+            /*            if (ForceAssignTrackedRole)
+                {
+                    AssignRoleAndTracker(basisBoneTrackedRole);
+                }
+             */
+            //events
+            if (HasEvents == false)
             {
-                AssignRoleAndTracker(basisBoneTrackedRole);
+                BasisLocalPlayer.Instance.LocalBoneDriver.OnSimulate += PollData;
+                BasisLocalPlayer.Instance.OnAvatarSwitched += UnAssignFullBodyTrackers;
+                BasisLocalPlayer.Instance.Move.ReadyToRead += ApplyFinalMovement;
+                HasEvents = true;
+            }
+            else
+            {
+                Debug.Log("has device events assigned already " + UniqueDeviceIdentifier);
             }
         }
-        //events
-        if (HasEvents == false)
-        {
-            BasisLocalPlayer.Instance.LocalBoneDriver.OnSimulate += PollData;
-            BasisLocalPlayer.Instance.OnAvatarSwitched += UnAssignFullBodyTrackers;
-            BasisLocalPlayer.Instance.Move.ReadyToRead += ApplyFinalMovement;
-            HasEvents = true;
-        }
-        else
-        {
-            Debug.Log("has device events assigned already " + UniqueDeviceIdentifier);
-        }
-    }
     public void ApplyFinalMovement()
     {
         transform.SetLocalPositionAndRotation(FinalPosition, FinalRotation);
@@ -370,12 +363,11 @@ public abstract class BasisInput : MonoBehaviour
         InputState.CopyTo(LastState);
         AfterControlApply?.Invoke();
     }
-    public async Task ShowTrackedVisual()
-    {
-        if (BasisVisualTracker == null && LoadedDeviceRequest == null)
+        public async Task ShowTrackedVisual()
         {
-            if (BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, out BasisDeviceMatchSettings Match))
+            if (BasisVisualTracker == null && LoadedDeviceRequest == null)
             {
+                BasisDeviceMatchSettings Match = await BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier);
                 if (Match.CanDisplayPhysicalTracker)
                 {
                     (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(Match.DeviceID, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
@@ -398,12 +390,7 @@ public abstract class BasisInput : MonoBehaviour
                     }
                 }
             }
-            else
-            {
-                Debug.Log("cant find Model for " + CommonDeviceIdentifier);
-            }
         }
-    }
     public void HideTrackedVisual()
     {
         Debug.Log("HideTrackedVisual");

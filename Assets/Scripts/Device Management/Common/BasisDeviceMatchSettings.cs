@@ -15,7 +15,7 @@ namespace Basis.Scripts.Device_Management
 
         [Header("Match with Ids")]
         [SerializeField]
-        private string[] matchableDeviceIds = Array.Empty<string>(); // Use a private backing field
+        public string[] matchableDeviceIds = Array.Empty<string>(); // Use a private backing field
         public ReadOnlySpan<string> MatchableDeviceIds => matchableDeviceIds; // Expose as ReadOnlySpan
 
         public IEnumerable<string> MatchableDeviceIdsLowered()

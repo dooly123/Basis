@@ -1,6 +1,7 @@
 ﻿using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
 using Basis.Scripts.TransformBinders.BoneControl;
+using System.Threading.Tasks;
 using UnityEngine;
 using Valve.VR;
 
@@ -17,10 +18,10 @@ public class BasisOpenVRInput : BasisInput
     public EVRCompositorError result;
     public bool HasInputSource = false;
     public SteamVR_Input_Sources inputSource;
-    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
+    public async Task Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
     {
         Device = device;
-        InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
+        await InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
     }
     public override void PollData()
     {

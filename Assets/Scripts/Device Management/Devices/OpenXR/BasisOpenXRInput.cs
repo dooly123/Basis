@@ -1,5 +1,6 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.TransformBinders.BoneControl;
+using System.Threading.Tasks;
 using UnityEngine;
 using static BasisBaseMuscleDriver;
 
@@ -10,10 +11,10 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
     {
         public UnityEngine.XR.InputDevice Device;
         public FingerPose FingerCurls;
-        public void Initialize(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
+        public async Task Initialize(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
         {
             Device = device;
-            InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
+            await InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
         }
         public override void PollData()
         {
@@ -100,8 +101,8 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
 
         private void CalculateFingerCurls()
         {
-            FingerCurls.ThumbPercentage = new Vector2( InputState.GripButton ? -1f : 0.7f, 0);//thumb
-            FingerCurls.IndexPercentage = new Vector2(BasisBaseMuscleDriver.MapValue(InputState.Trigger,0,1,-1f, 0.7f),0);// Index finger curl
+            FingerCurls.ThumbPercentage = new Vector2(InputState.GripButton ? -1f : 0.7f, 0);//thumb
+            FingerCurls.IndexPercentage = new Vector2(BasisBaseMuscleDriver.MapValue(InputState.Trigger, 0, 1, -1f, 0.7f), 0);// Index finger curl
             FingerCurls.MiddlePercentage = new Vector2(InputState.PrimaryButtonGetState ? -1f : 0.7f, 0);// Middle finger curl
             FingerCurls.RingPercentage = new Vector2(InputState.SecondaryButtonGetState ? -1f : 0.7f, 0); // Ring finger curl
             FingerCurls.LittlePercentage = new Vector2(InputState.MenuButton ? 1 - 1f : 0.7f, 0); // Pinky finger curl

@@ -1,6 +1,7 @@
 using Basis.Scripts.BasisSdk.Players;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.Desktop
@@ -9,7 +10,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
     public class BasisDesktopManagement : BasisBaseTypeManagement
     {
         public BasisAvatarEyeInput BasisAvatarEyeInput;
-        public override void BeginLoadSDK()
+        public override async Task BeginLoadSDK()
         {
             if (BasisAvatarEyeInput == null)
             {
@@ -21,12 +22,12 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                     gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
                 }
                 BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
-                BasisAvatarEyeInput.Initalize("Desktop Eye", nameof(BasisDesktopManagement));
+              await  BasisAvatarEyeInput.Initalize("Desktop Eye", nameof(BasisDesktopManagement));
                 BasisDeviceManagement.Instance.TryAdd(BasisAvatarEyeInput);
             }
         }
 
-        public override void StartSDK()
+        public override async Task StartSDK()
         {
         }
         public override void StopSDK()

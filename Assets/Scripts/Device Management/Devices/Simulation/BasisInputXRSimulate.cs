@@ -4,69 +4,55 @@ using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.Simulation
 {
-public class BasisInputXRSimulate : BasisInput
-{
-    public Transform FollowMovement;
-    public bool AddSomeRandomizedInput = false;
-    public float MinMaxOffset = 0.0001f;
-    public float LerpAmount = 0.1f;
-    public override void PollData()
+    public class BasisInputXRSimulate : BasisInput
     {
-        if (AddSomeRandomizedInput)
+        public Transform FollowMovement;
+        public bool AddSomeRandomizedInput = false;
+        public float MinMaxOffset = 0.0001f;
+        public float LerpAmount = 0.1f;
+        public override void PollData()
         {
-            Vector3 randomOffset = new Vector3(Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset));
-
-            Quaternion randomRotation = Random.rotation;
-            Quaternion lerpedRotation = Quaternion.Lerp(FollowMovement.localRotation, randomRotation, LerpAmount * Time.deltaTime);
-
-            Vector3 originalPosition = FollowMovement.localPosition;
-            Vector3 newPosition = Vector3.Lerp(originalPosition, originalPosition + randomOffset, LerpAmount * Time.deltaTime);
-
-            FollowMovement.SetLocalPositionAndRotation(newPosition, lerpedRotation);
-        }
-        FollowMovement.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
-        LocalRawPosition /= BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
-
-        FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
-        FinalRotation = LocalRawRotation;
-        if (hasRoleAssigned)
-        {
-            if (Control.HasTracked != BasisHasTracked.HasNoTracker)
+            if (AddSomeRandomizedInput)
             {
-                if (AssociatedFound)
-                {
-                    AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;//normally we dont do this but im doing it so we can see direct colliation
-                }
-                else
-                {
-                    AvatarPositionOffset = Vector3.zero;
-                }
-                Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
+                Vector3 randomOffset = new Vector3(Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset));
+
+                Quaternion randomRotation = Random.rotation;
+                Quaternion lerpedRotation = Quaternion.Lerp(FollowMovement.localRotation, randomRotation, LerpAmount * Time.deltaTime);
+
+                Vector3 originalPosition = FollowMovement.localPosition;
+                Vector3 newPosition = Vector3.Lerp(originalPosition, originalPosition + randomOffset, LerpAmount * Time.deltaTime);
+
+                FollowMovement.SetLocalPositionAndRotation(newPosition, lerpedRotation);
             }
-            if (Control.HasTracked != BasisHasTracked.HasNoTracker)
+            FollowMovement.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
+            LocalRawPosition /= BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+
+            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+            FinalRotation = LocalRawRotation;
+            if (hasRoleAssigned)
             {
-                if (AssociatedFound)
+                if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                 {
-                    AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);//normally we dont do this but im doing it so we can see direct colliation
+                    AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
+                    Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
                 }
-                else
+                if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                 {
-                    AvatarRotationOffset = Quaternion.identity;
+                    AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
+                    Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
                 }
-                Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
+
+
             }
-
-
+            UpdatePlayerControl();
         }
-        UpdatePlayerControl();
-    }
-    public new void OnDestroy()
-    {
-        if (FollowMovement != null)
+        public new void OnDestroy()
         {
-            GameObject.Destroy(FollowMovement.gameObject);
+            if (FollowMovement != null)
+            {
+                GameObject.Destroy(FollowMovement.gameObject);
+            }
+            base.OnDestroy();
         }
-        base.OnDestroy();
     }
-}
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 
 
 //using UnityEditor;
@@ -13,20 +15,31 @@ namespace Basis.Scripts.Device_Management
     {
         [SerializeField]
         public List<BasisDeviceMatchSettings> BasisDevice = new List<BasisDeviceMatchSettings>();
-        public bool GetAssociatedDeviceMatchableNames(string nameToMatch, out BasisDeviceMatchSettings BasisDeviceMatchableNames)
+        public async Task<BasisDeviceMatchSettings> GetAssociatedDeviceMatchableNames(string nameToMatch)
         {
             foreach (BasisDeviceMatchSettings DeviceEntry in BasisDevice)
             {
                 string[] Matched = DeviceEntry.MatchableDeviceIdsLowered().ToArray();
                 if (Matched.Contains(nameToMatch.ToLower()))
                 {
-                    BasisDeviceMatchableNames = DeviceEntry;
-                    return true;
+                    return DeviceEntry;
                 }
             }
-            Debug.LogError("Unable to find Configuration for device " + nameToMatch);
-            BasisDeviceMatchableNames = null;
-            return false;
+            BasisDeviceMatchSettings Settings = new BasisDeviceMatchSettings
+            {
+                VersionNumber = 1,
+                DeviceID = nameToMatch,
+                matchableDeviceIds = new string[] { nameToMatch },
+                HasRayCastVisual = true,
+                HasRayCastRedical = true,
+                CanDisplayPhysicalTracker = false,
+                HasRayCastSupport = true,
+                HasTrackedRole = false
+            };
+            BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BasisDevice.Add(Settings);
+            Debug.LogError("Unable to find Configuration for device Generating " + nameToMatch);
+            await BasisDeviceManagement.Instance.LoadAndOrSaveDefaultDeviceConfigs();
+            return Settings;
         }
     }
     /*

@@ -157,3 +157,17 @@ MonoBehaviour:
     AvatarRotationOffset: {x: 0, y: 0, z: 0}
     HasTrackedRole: 1
     TrackedRole: 19
+  - DeviceID: generic_hmd
+    VersionNumber: 1
+    matchableDeviceIds:
+    - generic_hmd
+    HasRayCastSupport: 0
+    CanDisplayPhysicalTracker: 0
+    HasRayCastVisual: 0
+    HasRayCastRedical: 0
+    PositionRayCastOffset: {x: 0, y: 0, z: 0}
+    RotationRaycastOffset: {x: 0, y: 0, z: 0}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0}
+    AvatarRotationOffset: {x: 0, y: 0, z: 0}
+    HasTrackedRole: 1
+    TrackedRole: 0
