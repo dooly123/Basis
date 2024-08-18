@@ -89,7 +89,7 @@ namespace Basis.Scripts.Drivers
             BasisLocalPlayer.Instance.LocalBoneDriver.RemoveAllListeners();
             BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
             BasisLocalEyeFollowDriver EyeFollowBase = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
-            EyeFollowBase.CreateEyeLook(this);
+            EyeFollowBase.Initalize(this);
             HeadScaledDown = Vector3.zero;
             SetAllMatrixRecalculation(true);
             updateWhenOffscreen(true);

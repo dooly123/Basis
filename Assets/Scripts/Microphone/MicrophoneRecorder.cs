@@ -13,6 +13,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     public int PacketSize;
     public bool UseDenoiser = false;
     public static Action<bool> OnPausedAction;
+    public bool MicrophoneIsStarted = false;
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -99,6 +100,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             {
                 Debug.Log("Starting Microphone :" + newMicrophone);
                 clip = Microphone.Start(newMicrophone, true, BasisOpusSettings.RecordingFullLength, samplingFrequency);
+                MicrophoneIsStarted = true;
             }
             else
             {
@@ -116,6 +118,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         Microphone.End(MicrophoneDevice);
         Debug.Log("Stopped Microphone " + MicrophoneDevice);
         MicrophoneDevice = null;
+        MicrophoneIsStarted = false;
     }
     public void ToggleIsPaused()
     {
@@ -150,9 +153,9 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             OnPausedAction?.Invoke(isPaused);
         }
     }
-    void Update()
+    void LateUpdate()
     {
-        if (Microphone.IsRecording(MicrophoneDevice))
+        if (MicrophoneIsStarted)
         {
             position = Microphone.GetPosition(MicrophoneDevice);
             if (position == head)

@@ -37,33 +37,33 @@ public class BasisUIRaycastProcess
     {
         Inputs = BasisDeviceManagement.AllInputDevices.ToList();
     }
-    public void Simulate()
-    {
-       int DevicesCount = Inputs.Count;
-        HasTarget = false;
-
-        for (int Index = 0; Index < DevicesCount; Index++)
+        public void Simulate()
         {
-            BasisInput input = Inputs[Index];
-            if (input.HasUIInputSupport && input.BasisPointRaycaster != null && input.BasisPointRaycaster.WasCorrectLayer)
+            int DevicesCount = Inputs.Count;
+            HasTarget = false;
+
+            for (int Index = 0; Index < DevicesCount; Index++)
             {
-                if (input.BasisPointRaycaster.SortedRays.Count != 0 && input.BasisPointRaycaster.SortedGraphics.Count != 0)
+                BasisInput input = Inputs[Index];
+                if (input.HasUIInputSupport && input.BasisPointRaycaster != null && input.BasisPointRaycaster.WasCorrectLayer)
                 {
-                    List<RaycastHitData> hitData = input.BasisPointRaycaster.SortedGraphics;
-                    List<RaycastResult> RaycastResults = input.BasisPointRaycaster.SortedRays;
-                    hitData.Sort((g1, g2) => g2.graphic.depth.CompareTo(g1.graphic.depth));
-                    RaycastResult hit = RaycastResults[0];
-                    hit.gameObject = hitData[0].graphic.gameObject;
-                    SimulateOnCanvas(hit, hitData[0], input.BasisPointRaycaster.CurrentEventData, input.InputState, input.LastState);
-                    HasTarget = true;
+                    if (input.BasisPointRaycaster.HadRaycastUITarget)
+                    {
+                        List<RaycastHitData> hitData = input.BasisPointRaycaster.SortedGraphics;
+                        List<RaycastResult> RaycastResults = input.BasisPointRaycaster.SortedRays;
+                        hitData.Sort((g1, g2) => g2.graphic.depth.CompareTo(g1.graphic.depth));
+                        RaycastResult hit = RaycastResults[0];
+                        hit.gameObject = hitData[0].graphic.gameObject;
+                        SimulateOnCanvas(hit, hitData[0], input.BasisPointRaycaster.CurrentEventData, input.InputState, input.LastState);
+                        HasTarget = true;
+                    }
                 }
             }
+            if (!HasTarget)
+            {
+                EventSystem.current.SetSelectedGameObject(null, null);
+            }
         }
-        if (!HasTarget)
-        {
-            EventSystem.current.SetSelectedGameObject(null, null);
-        }
-    }
     public void SimulateOnCanvas(RaycastResult raycastResult, RaycastHitData hit, BasisPointerEventData currentEventData, BasisInputState Current, BasisInputState LastCurrent)
     {
         if (hit.graphic != null)

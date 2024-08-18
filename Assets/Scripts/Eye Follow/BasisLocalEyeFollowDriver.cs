@@ -1,47 +1,9 @@
-using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Drivers;
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 namespace Basis.Scripts.Eye_Follow
 {
     public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
     {
-        // Adjustable parameters
-        public float MinlookAroundInterval = 1; // Interval between each look around in seconds
-        public float MaxlookAroundInterval = 6;
-        public float MaximumLookDistance = 0.25f; // Maximum offset from the target position
-        public float minLookSpeed = 0.03f; // Minimum speed of looking
-        public float maxLookSpeed = 0.1f; // Maximum speed of looking
-
-        private float CurrentlookAroundInterval;
-        private float timer; // Timer to track look around interval
-        private Vector3 RandomizedPosition; // Target position to look at
-        private float lookSpeed; // Speed of looking
-        public Vector3 FowardsLookPoint;
-        public Vector3 AppliedOffset;
-        public float DistanceBeforeTeleport = 30;
-        public bool HasEvents = false;
-        public void Start()
-        {
-            // Initialize look speed
-            lookSpeed = Random.Range(minLookSpeed, maxLookSpeed);
-            if (HasEvents)
-            {
-                BasisLocalPlayer.Instance.OnSpawnedEvent += AfterTeleport;
-                HasEvents = false;
-            }
-            //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged += AfterTeleport;
-        }
-        public new void OnDestroy()
-        {
-            base.OnDestroy();
-            if (HasEvents == false)
-            {
-                BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
-                HasEvents = true;
-            }
-            //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged -= AfterTeleport;
-        }
         public void LateUpdate()
         {
             if (IsAble())
@@ -49,50 +11,46 @@ namespace Basis.Scripts.Eye_Follow
                 Simulate();
             }
         }
-        public void Simulate()
+        public override void Simulate()
         {
-            // Update timer
-            timer += Time.deltaTime;
-            Camera Camera = BasisLocalCameraDriver.Instance.Camera;
-            FowardsLookPoint = Camera.transform.position + Camera.transform.rotation * EyeFowards;
-            // Check if it's time to look around
-            if (timer >= CurrentlookAroundInterval)
+            if (Eye.HasBone)
             {
-                CurrentlookAroundInterval = Random.Range(MinlookAroundInterval, MaxlookAroundInterval);
-                AppliedOffset = Random.insideUnitSphere * MaximumLookDistance;
+                // Update timer
+                timer += Time.deltaTime;
+                FowardsLookPoint = Eye.OutgoingWorldData.position + Eye.OutgoingWorldData.rotation * EyeFowards;
+                // Check if it's time to look around
+                if (timer >= CurrentlookAroundInterval)
+                {
+                    CurrentlookAroundInterval = Random.Range(MinlookAroundInterval, MaxlookAroundInterval);
+                    AppliedOffset = Random.insideUnitSphere * MaximumLookDistance;
 
-                // Reset timer
-                timer = 0f;
+                    // Reset timer
+                    timer = 0f;
 
-                // Randomize look speed
-                lookSpeed = Random.Range(minLookSpeed, maxLookSpeed);
-            }
-            // Randomize target position within maxOffset
-            RandomizedPosition = FowardsLookPoint + AppliedOffset;
-            // Smoothly interpolate towards the target position with randomized speed
+                    // Randomize look speed
+                    lookSpeed = Random.Range(minLookSpeed, maxLookSpeed);
+                }
+                // Randomize target position within maxOffset
+                RandomizedPosition = FowardsLookPoint + AppliedOffset;
+                // Smoothly interpolate towards the target position with randomized speed
 
-            if (Vector3.Distance(RandomizedPosition, GeneralEyeTarget.position) > DistanceBeforeTeleport)
-            {
-                GeneralEyeTarget.position = RandomizedPosition;
+                if (Vector3.Distance(RandomizedPosition, GeneralEyeTarget.position) > DistanceBeforeTeleport)
+                {
+                    GeneralEyeTarget.position = RandomizedPosition;
+                }
+                else
+                {
+                    GeneralEyeTarget.position = Vector3.MoveTowards(GeneralEyeTarget.position, RandomizedPosition, lookSpeed);
+                }
+                if (leftEyeTransform != null)
+                {
+                    LookAtTarget(leftEyeTransform, leftEyeInitialRotation);
+                }
+                if (rightEyeTransform != null)
+                {
+                    LookAtTarget(rightEyeTransform, rightEyeInitialRotation);
+                }
             }
-            else
-            {
-                GeneralEyeTarget.position = Vector3.MoveTowards(GeneralEyeTarget.position, RandomizedPosition, lookSpeed);
-            }
-            if (leftEyeTransform != null)
-            {
-                LookAtTarget(leftEyeTransform, leftEyeInitialRotation);
-            }
-            if (rightEyeTransform != null)
-            {
-                LookAtTarget(rightEyeTransform, rightEyeInitialRotation);
-            }
-        }
-        public void AfterTeleport()
-        {
-            Simulate();
-            GeneralEyeTarget.position = RandomizedPosition;//will be caught up
-
         }
         private void LookAtTarget(Transform eyeTransform, Quaternion initialRotation)
         {
@@ -104,12 +62,6 @@ namespace Basis.Scripts.Eye_Follow
 
             // Ensure we are only rotating the eye around the Y and Z axes.
             Vector3 finalEulerAngles = finalRotation.eulerAngles;
-            // finalEulerAngles.x = eyeTransform.localEulerAngles.x;
-            // finalEulerAngles.x = ClampAngle(finalEulerAngles.x, -maxHorizontalAngle, maxHorizontalAngle);
-            // Clamp the horizontal and vertical angles to the specified ranges
-            // finalEulerAngles.y = ClampAngle(finalEulerAngles.y, -maxHorizontalAngle, maxHorizontalAngle);
-            // finalEulerAngles.z = ClampAngle(finalEulerAngles.z, -maxVerticalAngle, maxVerticalAngle);
-
             finalRotation = Quaternion.Euler(finalEulerAngles);
             eyeTransform.localRotation = finalRotation;
         }

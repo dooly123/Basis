@@ -1,9 +1,11 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.LipSync.Scripts;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Basis.Scripts.LipSync.Scripts.OVRLipSync;
 
 namespace Basis.Scripts.Drivers
 {
@@ -15,11 +17,32 @@ namespace Basis.Scripts.Drivers
         public int smoothAmount = 70;
         public BasisAvatar Avatar;
         public float laughterScore = 0.0f;
+        public float[] FinalBlendShapes;
+        public bool[] HasViseme;
+        public int BlendShapeCount;
+        private ConcurrentQueue<float[]> audioQueue = new ConcurrentQueue<float[]>();
+        private CancellationTokenSource cts = new CancellationTokenSource();
+
         public void Initialize(BasisAvatar avatar)
         {
             // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
             Avatar = avatar;
             Smoothing = smoothAmount;
+            BlendShapeCount = Avatar.FaceVisemeMovement.Length;
+            FinalBlendShapes = new float[Enum.GetNames(typeof(Viseme)).Length];
+            Array.Fill(FinalBlendShapes, -1);
+            HasViseme = new bool[BlendShapeCount];
+            for (int Index = 0; Index < BlendShapeCount; Index++)
+            {
+                if (Avatar.FaceVisemeMovement[Index] != -1)
+                {
+                    HasViseme[Index] = true;
+                }
+                else
+                {
+                    HasViseme[Index] = false;
+                }
+            }
         }
         public void EventLateUpdate()
         {
@@ -29,12 +52,17 @@ namespace Basis.Scripts.Drivers
                 OVRLipSync.Frame frame = GetCurrentPhonemeFrame();
                 if (frame != null)
                 {
-                    for (int Index = 0; Index < Avatar.FaceVisemeMovement.Length; Index++)
+                    for (int Index = 0; Index < BlendShapeCount; Index++)
                     {
-                        if (Avatar.FaceVisemeMovement[Index] != -1)
+                        if (HasViseme[Index])
                         {
                             // Viseme blend weights are in range of 0->1.0, we need to make range 100
-                            Avatar.FaceVisemeMesh.SetBlendShapeWeight(Avatar.FaceVisemeMovement[Index], frame.Visemes[Index] * 100.0f);
+                            if (FinalBlendShapes[Index] != frame.Visemes[Index])
+                            {
+                                float VisemeModified = frame.Visemes[Index] * 100.0f;
+                                Avatar.FaceVisemeMesh.SetBlendShapeWeight(Avatar.FaceVisemeMovement[Index], VisemeModified);
+                                FinalBlendShapes[Index] = frame.Visemes[Index];
+                            }
                         }
                     }
                     if (laughterBlendTarget != -1)
@@ -62,9 +90,6 @@ namespace Basis.Scripts.Drivers
                 }
             }
         }
-        private ConcurrentQueue<float[]> audioQueue = new ConcurrentQueue<float[]>();
-        private CancellationTokenSource cts = new CancellationTokenSource();
-
         private void Start()
         {
             // Start the background processing thread

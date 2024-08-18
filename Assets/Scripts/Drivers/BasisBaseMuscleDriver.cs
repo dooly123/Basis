@@ -7,6 +7,7 @@ using Unity.Jobs;
 using UnityEngine;
 using static BasisMuscleDriver;
 [DefaultExecutionOrder(15001)]
+[BurstCompile]
 public abstract class BasisBaseMuscleDriver : MonoBehaviour
 {
     public Animator Animator; // Reference to the Animator component
