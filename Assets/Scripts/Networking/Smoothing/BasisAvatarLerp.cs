@@ -9,7 +9,7 @@ public static class BasisAvatarLerp
 {
     public static string Settings = "Assets/ScriptableObjects/Avatar Lerp Data.asset";
 
-    public static void UpdateAvatar(ref BasisAvatarData Output, BasisAvatarData Target, DataJobs DataJobs, float PositionLerp, float RotationLerp, float MuscleLerp, float teleportThreshold)
+    public static void UpdateAvatar(ref BasisAvatarData Output, BasisAvatarData Target, BasisDataJobs DataJobs, float PositionLerp, float RotationLerp, float MuscleLerp, float teleportThreshold)
     {
         DataJobs.positionJob.targetPositions = Target.Vectors;
         DataJobs.positionJob.positions = Output.Vectors;

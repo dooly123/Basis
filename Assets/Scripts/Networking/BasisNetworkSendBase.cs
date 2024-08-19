@@ -22,7 +22,7 @@ public abstract class BasisNetworkSendBase : MonoBehaviour
     public HumanPose HumanPose = new HumanPose();
     public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
     public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
-    public DataJobs AvatarJobs;
+    public BasisDataJobs AvatarJobs;
     public HumanPoseHandler PoseHandler;
     [SerializeField]
     public BasisRangedUshortFloatData PositionRanged;

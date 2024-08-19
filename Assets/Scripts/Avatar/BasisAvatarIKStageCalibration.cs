@@ -4,6 +4,7 @@ using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 namespace Basis.Scripts.Avatar
@@ -73,9 +74,9 @@ public static partial class BasisAvatarIKStageCalibration
 
             case BasisBoneTrackedRole.Mouth:
                 return 0.6f;
-            default:
-                Console.WriteLine("Unknown role");
-                return 0.8f;
+                default:
+                Console.WriteLine("Unknown role " + role);
+                    return 0.8f;
         }
     }
     private static List<BasisBoneTrackedRole> GetAllRoles()

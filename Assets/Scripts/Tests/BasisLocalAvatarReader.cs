@@ -25,7 +25,7 @@ namespace Basis.Scripts.Tests
         public bool Ready = false;
         public BasisRangedUshortFloatData PositionRanged;
         public BasisRangedUshortFloatData ScaleRanged;
-        public DataJobs AvatarJobs;
+        public BasisDataJobs AvatarJobs;
         public async void OnEnable()
         {
             InitalizeDataJobs();

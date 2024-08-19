@@ -3,7 +3,7 @@ using Unity.Jobs;
 
 namespace Basis.Scripts.Tests
 {
-public struct DataJobs
+public struct BasisDataJobs
 {
     public JobHandle positionHandle;
     public JobHandle rotationHandle;

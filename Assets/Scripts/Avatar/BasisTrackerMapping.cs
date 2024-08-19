@@ -134,7 +134,7 @@ public static partial class BasisAvatarIKStageCalibration
                 return BasisAvatarIKStageCalibration.GeneralLocation.Left;
 
             default:
-                Console.WriteLine("Unknown role");
+                Console.WriteLine("Unknown role " + Role);
                 return BasisAvatarIKStageCalibration.GeneralLocation.Center;
         }
     }

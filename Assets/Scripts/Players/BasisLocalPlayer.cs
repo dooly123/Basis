@@ -17,7 +17,6 @@ namespace Basis.Scripts.BasisSdk.Players
         public static float DefaultPlayerEyeHeight = 1.64f;
         public static float DefaultAvatarEyeHeight = 1.64f;
         public float PlayerEyeHeight = 1.64f;
-
         public float RatioPlayerToAvatarScale = 1f;
         public float RatioPlayerToEyeDefaultScale = 1f;
         public float RatioAvatarToAvatarEyeDefaultScale = 1f;
@@ -73,7 +72,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public void RecalculateMyHeight()
         {
             Debug.Log("Attempting RecalculateMyHeight");
-            Basis.Scripts.TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
+            TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
             if (BasisLockToInput != null)
             {
                 if (BasisLockToInput.AttachedInput != null)
@@ -87,7 +86,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void SetPlayersEyeHeight(float realEyeHeight, float avatarHeight)
         {
-            if (BasisDeviceManagement.Instance.CurrentMode == "Desktop")
+            if (BasisDeviceManagement.Instance.CurrentMode == BasisDeviceManagement.Desktop)
             {
                 RatioPlayerToAvatarScale = 1;
             }
@@ -189,7 +188,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void DriveAudioToViseme()
         {
-            VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray);
+            VisemeDriver.ProcessData(MicrophoneRecorder.processBufferArray);
         }
     }
 }

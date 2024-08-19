@@ -22,7 +22,7 @@ namespace Basis.Scripts.Drivers
         public int BlendShapeCount;
         private ConcurrentQueue<float[]> audioQueue = new ConcurrentQueue<float[]>();
         private CancellationTokenSource cts = new CancellationTokenSource();
-
+        public int TimingInMs = 10;//10ms
         public void Initialize(BasisAvatar avatar)
         {
             // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
@@ -43,6 +43,7 @@ namespace Basis.Scripts.Drivers
                     HasViseme[Index] = false;
                 }
             }
+            Task.Run(() => ProcessQueue(), cts.Token);
         }
         public void EventLateUpdate()
         {
@@ -90,12 +91,6 @@ namespace Basis.Scripts.Drivers
                 }
             }
         }
-        private void Start()
-        {
-            // Start the background processing thread
-            Task.Run(() => ProcessQueue(), cts.Token);
-        }
-
         private void OnDestroy()
         {
             // Cancel the background processing thread when the object is destroyed
@@ -108,7 +103,7 @@ namespace Basis.Scripts.Drivers
             audioQueue.Enqueue(data);
         }
 
-        private void ProcessQueue()
+        public void ProcessQueue()
         {
             while (!cts.Token.IsCancellationRequested)
             {
@@ -119,12 +114,12 @@ namespace Basis.Scripts.Drivers
                 else
                 {
                     // Sleep briefly to avoid busy-waiting
-                    Thread.Sleep(1);
+                    Thread.Sleep(TimingInMs);
                 }
             }
         }
 
-        private void ProcessData(float[] data)
+        public void ProcessData(float[] data)
         {
             // Process data in a thread-safe manner
             lock (this)
@@ -136,6 +131,7 @@ namespace Basis.Scripts.Drivers
                 OVRLipSync.Frame frame = this.Frame;
                 OVRLipSync.ProcessFrame(Context, data, frame, false);
             }
+
         }
     }
 }
