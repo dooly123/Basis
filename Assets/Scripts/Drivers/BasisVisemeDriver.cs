@@ -96,7 +96,12 @@ namespace Basis.Scripts.Drivers
             // Cancel the background processing thread when the object is destroyed
             cts.Cancel();
         }
-
+        /// <summary>
+        /// data is coming from the audio thread
+        /// place that data into a seperate thread.
+        /// this way we dont bog down the audio thread.
+        /// </summary>
+        /// <param name="data"></param>
         public void ProcessAudioSamples(float[] data)
         {
             // Enqueue audio data for processing

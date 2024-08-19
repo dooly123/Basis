@@ -188,7 +188,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void DriveAudioToViseme()
         {
-            VisemeDriver.ProcessData(MicrophoneRecorder.processBufferArray);
+            VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray);
         }
     }
 }

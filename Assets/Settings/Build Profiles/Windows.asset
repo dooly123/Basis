@@ -19,7 +19,7 @@ MonoBehaviour:
     rid: 1368050938497466368
   m_Scenes:
   - m_enabled: 1
-    m_path: Assets/Scenes/Initalization.unity
+    m_path: Assets/Scenes/initialization.unity
   - m_enabled: 1
     m_path: Assets/Scenes/Garden doolys scene name that cant be replicated by u wahhaha/GardenScene.unity
   m_ScriptingDefines: []

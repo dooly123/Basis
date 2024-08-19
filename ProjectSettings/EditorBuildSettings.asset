@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Initalization.unity
+    path: Assets/Scenes/initialization.unity
     guid: dd1db054b177db7459cc81633b86e525
   - enabled: 1
     path: Assets/Scenes/Garden doolys scene name that cant be replicated by u wahhaha/GardenScene.unity
