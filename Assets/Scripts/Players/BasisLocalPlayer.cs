@@ -131,7 +131,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void SimulateHips()
         {
-            if (Hips.HasBone)
+            if (Hips.HasBone && AvatarDriver.InTPose == false)
             {
                 if (Avatar != null && Avatar.Animator != null)
                 {
