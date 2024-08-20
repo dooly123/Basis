@@ -11,15 +11,17 @@ namespace Basis.Scripts.Addressable_Driver
     [System.Serializable]
 public class AddressableLoadResourceBase
 {
+    public string CatalogPath;
     public string Key;
     public AddressableLoadResourceType ResourceType = AddressableLoadResourceType.Generic;
     public AddressableExpectedResult ExpectedResult = AddressableExpectedResult.SingleItem;
-    public AsyncOperationHandle<IList<IResourceLocation>> ResourceLocationHandles = new AsyncOperationHandle<IList<IResourceLocation>>();
+    public IList<IResourceLocation> ResourceLocationHandles;
     public IList<AsyncOperationHandle> Handles = new List<AsyncOperationHandle>();
     public UnityEvent<string> OnLoadFailure = new UnityEvent<string>();
     public UnityEvent<AddressableLoadResourceBase> OnLoaded = new UnityEvent<AddressableLoadResourceBase>();
     public float LoadPercentage = 0;
     public bool IsLoading = false;
+    public bool IsBuiltIn = true;
     public AddressableLoadResourceBase(string key, AddressableExpectedResult expectedResult)
     {
         Key = key;

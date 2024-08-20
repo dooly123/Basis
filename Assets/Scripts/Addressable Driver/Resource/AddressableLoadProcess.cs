@@ -44,7 +44,7 @@ public static class AddressableLoadProcess
     /// <param name="LoadRequest"></param>
     public static void GenerateHandles<T>(AddressableLoadResourceBase LoadRequest)
     {
-        foreach (IResourceLocation Location in LoadRequest.ResourceLocationHandles.Result)
+        foreach (IResourceLocation Location in LoadRequest.ResourceLocationHandles)
         {
             AsyncOperationHandle handle = Addressables.LoadAssetAsync<T>(Location);
             AddReleaseHandle(LoadRequest, handle);
@@ -64,7 +64,7 @@ public static class AddressableLoadProcess
                 LoadRequest.OnLoaded.AddListener(AddressableSceneSetActive.SetSceneActive);
             }
         }
-        foreach (IResourceLocation Location in LoadRequest.ResourceLocationHandles.Result)
+        foreach (IResourceLocation Location in LoadRequest.ResourceLocationHandles)
         {
             AddReleaseHandle(LoadRequest, Addressables.LoadSceneAsync(Location, LoadRequest.LoadSceneMode));
         }

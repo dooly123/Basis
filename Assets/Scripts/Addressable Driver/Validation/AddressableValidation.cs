@@ -25,7 +25,7 @@ public static class AddressableValidation
 
         if (loadRequest.ExpectedResult == AddressableExpectedResult.SingleItem)
         {
-            if (loadRequest.ResourceLocationHandles.Result.Count != 1)
+            if (loadRequest.ResourceLocationHandles.Count != 1)
             {
                 AddressableDebug.Log("Addressable with keys " + loadRequest.Key + " has more than one resource locator");
                 return false;
@@ -33,9 +33,9 @@ public static class AddressableValidation
         }
         else if (loadRequest.ExpectedResult == AddressableExpectedResult.MulitpleItems)
         {
-            if (loadRequest.ResourceLocationHandles.Result.Count <= 1)
+            if (loadRequest.ResourceLocationHandles.Count <= 1)
             {
-                AddressableDebug.Log("Addressable with keys " + loadRequest.Key + " has more than one resource locator but only returned " + loadRequest.ResourceLocationHandles.Result.Count);
+                AddressableDebug.Log("Addressable with keys " + loadRequest.Key + " has more than one resource locator but only returned " + loadRequest.ResourceLocationHandles.Count);
                 return false;
             }
         }
