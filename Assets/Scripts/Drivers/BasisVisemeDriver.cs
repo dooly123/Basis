@@ -17,12 +17,14 @@ namespace Basis.Scripts.Drivers
         public int smoothAmount = 70;
         public BasisAvatar Avatar;
         public float laughterScore = 0.0f;
+        public float LastlaughterScore = 0.0f;
         public float[] FinalBlendShapes;
         public bool[] HasViseme;
+        public bool HasVisemeLaughter;
         public int BlendShapeCount;
         private ConcurrentQueue<float[]> audioQueue = new ConcurrentQueue<float[]>();
         private CancellationTokenSource cts = new CancellationTokenSource();
-        public int TimingInMs = 10;//10ms
+        private ManualResetEventSlim dataAvailable = new ManualResetEventSlim(false);
         public void Initialize(BasisAvatar avatar)
         {
             // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
@@ -43,6 +45,8 @@ namespace Basis.Scripts.Drivers
                     HasViseme[Index] = false;
                 }
             }
+            LastlaughterScore = -1;
+            HasVisemeLaughter = laughterBlendTarget != -1;
             Task.Run(() => ProcessQueue(), cts.Token);
         }
         public void EventLateUpdate()
@@ -66,17 +70,20 @@ namespace Basis.Scripts.Drivers
                             }
                         }
                     }
-                    if (laughterBlendTarget != -1)
+                    if (HasVisemeLaughter)
                     {
                         // Laughter score will be raw classifier output in [0,1]
                         float laughterScore = frame.laughterScore;
-
-                        // Threshold then re-map to [0,1]
-                        laughterScore = laughterScore < laughterThreshold ? 0.0f : laughterScore - laughterThreshold;
-                        laughterScore = Mathf.Min(laughterScore * laughterMultiplier, 1.0f);
-                        laughterScore *= 1.0f / laughterThreshold;
-
-                        Avatar.FaceVisemeMesh.SetBlendShapeWeight(laughterBlendTarget, laughterScore * 100.0f);
+                        if (LastlaughterScore != laughterScore)
+                        {
+                            // Threshold then re-map to [0,1]
+                            laughterScore = laughterScore < laughterThreshold ? 0.0f : laughterScore - laughterThreshold;
+                            laughterScore = Mathf.Min(laughterScore * laughterMultiplier, 1.0f);
+                            laughterScore *= 1.0f / laughterThreshold;
+                            float LaughterScoreModified = laughterScore * 100.0f;
+                            Avatar.FaceVisemeMesh.SetBlendShapeWeight(laughterBlendTarget, LaughterScoreModified);
+                            LastlaughterScore = laughterScore;
+                        }
                     }
                 }
                 else
@@ -100,42 +107,35 @@ namespace Basis.Scripts.Drivers
         /// data is coming from the audio thread
         /// place that data into a seperate thread.
         /// this way we dont bog down the audio thread.
+        /// it comes in every 20ms
         /// </summary>
         /// <param name="data"></param>
         public void ProcessAudioSamples(float[] data)
         {
-            // Enqueue audio data for processing
             audioQueue.Enqueue(data);
+            dataAvailable.Set(); // Signal that data is available
         }
 
         public void ProcessQueue()
         {
             while (!cts.Token.IsCancellationRequested)
             {
+                dataAvailable.Wait(cts.Token); // Wait for data or cancellation
+                dataAvailable.Reset(); // Reset the event
                 if (audioQueue.TryDequeue(out float[] data))
                 {
                     ProcessData(data);
-                }
-                else
-                {
-                    // Sleep briefly to avoid busy-waiting
-                    Thread.Sleep(TimingInMs);
                 }
             }
         }
 
         public void ProcessData(float[] data)
         {
-            // Process data in a thread-safe manner
-            lock (this)
+            if (Context == 0)
             {
-                if (Context == 0 || OVRLipSync.IsInitialized() != OVRLipSync.Result.Success)
-                {
-                    return;
-                }
-                OVRLipSync.Frame frame = this.Frame;
-                OVRLipSync.ProcessFrame(Context, data, frame, false);
+                return;
             }
+            OVRLipSync.ProcessFrame(Context, data, this.Frame, false);
 
         }
     }
