@@ -6,6 +6,7 @@ using RenderPipeline = UnityEngine.Rendering.RenderPipelineManager;
 using static UnityEngine.Camera;
 using Basis.Scripts.Drivers;
 using System;
+using Basis.Scripts.BasisSdk.Players;
 [ExecuteInEditMode]
 public class BasisSDKMirror : MonoBehaviour
 {
@@ -29,10 +30,12 @@ public class BasisSDKMirror : MonoBehaviour
     public Camera RightCamera;
     public Action OnCamerasRenderering;
     public Action OnCamerasFinished;
+    public Vector3 ThisPosition;
     private void OnEnable()
     {
         RenderPipeline.beginCameraRendering += UpdateCamera;
         BasisLocalCameraDriver.InstanceExists += ReInitalizeEvents;
+
         ReInitalizeEvents();
     }
     public void ReInitalizeEvents()
@@ -71,9 +74,23 @@ public class BasisSDKMirror : MonoBehaviour
             OnCamerasFinished -= BasisLocalCameraDriver.Instance.ScaleheadToZero;
         }
     }
+    public Matrix4x4 projectionMatrix;
+    public Vector3 normal;
+    public Vector4 reflectionPlane;
     private void UpdateCamera(ScriptableRenderContext SRC, Camera camera)
     {
-        OnCamerasRenderering?.Invoke();
+        bool IsBasisMainCamera = camera.GetInstanceID() == BasisLocalCameraDriver.Instance.CameraInstanceID;
+        if (IsBasisMainCamera)
+        {
+            OnCamerasRenderering?.Invoke();
+
+            ThisPosition = transform.position;
+            projectionMatrix = camera.projectionMatrix;
+            normal = transform.TransformDirection(projectionDirection).normalized;
+            CalculateReflectionMatrix(ref reflectionMatrix, reflectionPlane);
+            reflectionPlane = new Vector4(normal.x, normal.y, normal.z, -Vector3.Dot(normal, ThisPosition) - m_ClipPlaneOffset);
+        }
+
         if (camera.cameraType == CameraType.Game)
         {
             UpdateCameraState(SRC, camera);
@@ -84,7 +101,10 @@ public class BasisSDKMirror : MonoBehaviour
             UpdateCameraState(SRC, camera);
         }
 #endif
-        OnCamerasFinished?.Invoke();
+        if (IsBasisMainCamera)
+        {
+            OnCamerasFinished?.Invoke();
+        }
     }
 
     private void UpdateCameraState(ScriptableRenderContext SRC, Camera camera)
@@ -169,22 +189,14 @@ public class BasisSDKMirror : MonoBehaviour
     }
     private void SetupReflection(Camera srcCamera, Camera destCamera, StereoscopicEye eye)
     {
-        Vector3 normal = transform.TransformDirection(projectionDirection).normalized;
-        Vector3 ThisPosition = transform.position;
-        Vector4 reflectionPlane = new Vector4(normal.x, normal.y, normal.z, -Vector3.Dot(normal, ThisPosition) - m_ClipPlaneOffset);
-        CalculateReflectionMatrix(ref reflectionMatrix, reflectionPlane);
-
         Vector3 eyeOffset = XRSettings.enabled ? GetEyePosition(eye) : Vector3.zero;
-        Debug.Log("eyeOffset " + eyeOffset);
         eyeOffset.z = 0.0f;
         Vector3 oldEyePos = srcCamera.transform.position + srcCamera.transform.TransformVector(eyeOffset);
         Vector3 newEyePos = reflectionMatrix.MultiplyPoint(oldEyePos);
 
         destCamera.transform.position = newEyePos;
         destCamera.worldToCameraMatrix = srcCamera.worldToCameraMatrix * reflectionMatrix;
-
-        Matrix4x4 projectionMatrix = srcCamera.projectionMatrix;
-        Vector4 clipPlane = CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal, 1.0f);
+        Vector4 clipPlane = CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal);
         MakeProjectionMatrixOblique(ref projectionMatrix, clipPlane);
         destCamera.projectionMatrix = projectionMatrix;
     }
@@ -218,7 +230,7 @@ public class BasisSDKMirror : MonoBehaviour
         }
         return BasisLocalCameraDriver.Instance.transform.position;
     }
-    private Vector4 CameraSpacePlane(Matrix4x4 worldToCameraMatrix, Vector3 pos, Vector3 normal, float sideSign)
+    private Vector4 CameraSpacePlane(Matrix4x4 worldToCameraMatrix, Vector3 pos, Vector3 normal, float sideSign = 1.0f)
     {
         Vector3 offsetPos = pos + normal * m_ClipPlaneOffset;
         Vector3 cpos = worldToCameraMatrix.MultiplyPoint(offsetPos);
