@@ -114,10 +114,7 @@ namespace Basis.Scripts.Drivers
             {
                 if (Camera.GetInstanceID() == CameraInstanceID)
                 {
-                    if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScaledDown)
-                    {
-                        LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScaledDown;
-                    }
+                    ScaleheadToZero();
                     if (CameraData.allowXRRendering)
                     {
                         Vector2 EyeTextureSize = new Vector2(XRSettings.eyeTextureWidth, XRSettings.eyeTextureHeight);
@@ -130,11 +127,22 @@ namespace Basis.Scripts.Drivers
                 }
                 else
                 {
-                    if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScale)
-                    {
-                        LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
-                    }
+                    ScaleHeadToNormal();
                 }
+            }
+        }
+        public void ScaleHeadToNormal()
+        {
+            if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScale)
+            {
+                LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScale;
+            }
+        }
+        public void ScaleheadToZero()
+        {
+            if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScaledDown)
+            {
+                LocalPlayer.AvatarDriver.References.head.localScale = LocalPlayer.AvatarDriver.HeadScaledDown;
             }
         }
         // Function to calculate the position
