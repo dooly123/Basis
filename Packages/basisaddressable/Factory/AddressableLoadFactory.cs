@@ -4,7 +4,6 @@ using Basis.Scripts.Addressable_Driver.Validation;
 using System;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
-using System.Collections.Generic;
 namespace Basis.Scripts.Addressable_Driver.Factory
 {
     /// <summary>
@@ -69,7 +68,7 @@ namespace Basis.Scripts.Addressable_Driver.Factory
         /// <returns>True if the resource was unloaded, false otherwise.</returns>
         public static bool ReleaseResource(AddressableLoadResourceBase loadRequest)
         {
-            if (loadRequest == null || (loadRequest.Handles?.Count == 0 && loadRequest.ResourceLocationHandles.Count != 0))
+            if (loadRequest == null || (loadRequest.Handles?.Count == 0 && loadRequest.ResourceLocationHandles?.Count != 0))
             {
                 return false;
             }

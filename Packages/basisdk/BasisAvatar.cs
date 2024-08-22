@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Basis.Scripts.BasisSdk
 {
-public class BasisAvatar : MonoBehaviour
-{
+public class BasisAvatar : BasisContentBase
+    {
     public Animator Animator;
     public SkinnedMeshRenderer FaceVisemeMesh;
     public SkinnedMeshRenderer FaceBlinkMesh;

@@ -1,5 +1,31 @@
 {
   "dependencies": {
+    "com.basis.basisaddressables": {
+      "version": "file:basisaddressable",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.basis.basisdk": {
+      "version": "file:basisdk",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.basis.basisframework": {
+      "version": "file:Basis Framework",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.cqf.urpvolumetricfog": {
+      "version": "file:Volumetric",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.render-pipelines.universal": ""
+      }
+    },
     "com.htc.upm.vive.openxr": {
       "version": "file:com.htc.upm.vive.openxr",
       "depth": 0,
