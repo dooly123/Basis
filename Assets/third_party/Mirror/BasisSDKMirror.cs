@@ -6,7 +6,6 @@ using RenderPipeline = UnityEngine.Rendering.RenderPipelineManager;
 using static UnityEngine.Camera;
 using Basis.Scripts.Drivers;
 using System;
-using Basis.Scripts.BasisSdk.Players;
 [ExecuteInEditMode]
 public class BasisSDKMirror : MonoBehaviour
 {
@@ -31,6 +30,10 @@ public class BasisSDKMirror : MonoBehaviour
     public Action OnCamerasRenderering;
     public Action OnCamerasFinished;
     public Vector3 ThisPosition;
+
+    public Matrix4x4 projectionMatrix;
+    public Vector3 normal;
+    public Vector4 reflectionPlane;
     private void OnEnable()
     {
         RenderPipeline.beginCameraRendering += UpdateCamera;
@@ -74,12 +77,9 @@ public class BasisSDKMirror : MonoBehaviour
             OnCamerasFinished -= BasisLocalCameraDriver.Instance.ScaleheadToZero;
         }
     }
-    public Matrix4x4 projectionMatrix;
-    public Vector3 normal;
-    public Vector4 reflectionPlane;
     private void UpdateCamera(ScriptableRenderContext SRC, Camera camera)
     {
-        bool IsBasisMainCamera = camera.GetInstanceID() == BasisLocalCameraDriver.Instance.CameraInstanceID;
+        bool IsBasisMainCamera = camera.GetInstanceID() == BasisLocalCameraDriver.CameraInstanceID;
         if (IsBasisMainCamera)
         {
             OnCamerasRenderering?.Invoke();
@@ -143,26 +143,6 @@ public class BasisSDKMirror : MonoBehaviour
             portalCamera = RightCamera;
         }
     }
-
-    private Camera CreateNewCamera(Camera currentCamera, out Camera newCamera)
-    {
-        GameObject go = new GameObject("Mirror Reflection Camera id" + GetInstanceID() + " for " + currentCamera.GetInstanceID(), typeof(Camera));
-        go.transform.SetParent(transform);
-
-        go.TryGetComponent(out newCamera);
-        newCamera.enabled = false;
-        newCamera.clearFlags = currentCamera.clearFlags;
-        newCamera.backgroundColor = currentCamera.backgroundColor;
-        newCamera.farClipPlane = FarClipPlane;
-        newCamera.nearClipPlane = currentCamera.nearClipPlane;
-        newCamera.orthographic = currentCamera.orthographic;
-        newCamera.fieldOfView = currentCamera.fieldOfView;
-        newCamera.aspect = currentCamera.aspect;
-        newCamera.orthographicSize = currentCamera.orthographicSize;
-        newCamera.depth = 2;
-
-        return newCamera;
-    }
     private void RenderCamera(Camera camera, StereoscopicEye eye, ScriptableRenderContext SRC)
     {
         Camera portalCamera;
@@ -199,27 +179,6 @@ public class BasisSDKMirror : MonoBehaviour
         Vector4 clipPlane = CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal);
         MakeProjectionMatrixOblique(ref projectionMatrix, clipPlane);
         destCamera.projectionMatrix = projectionMatrix;
-    }
-    private void CreatePortalCamera(Camera currentCamera, StereoscopicEye eye, out Camera portalCamera, ref RenderTexture portalTexture)
-    {
-        if (portalTexture == null)
-        {
-            Debug.Log("creating Textures");
-            if (portalTexture != null)
-            {
-                DestroyImmediate(portalTexture);
-            }
-            portalTexture = new RenderTexture(m_TextureSize, m_TextureSize, 24)
-            {
-                name = "__MirrorReflection" + eye.ToString() + GetInstanceID(),
-                isPowerOfTwo = true,
-                hideFlags = HideFlags.DontSave,
-                antiAliasing = Antialising
-            };
-            string Property = "_ReflectionTex" + eye.ToString();
-            MirrorsMaterial.SetTexture(Property, portalTexture);
-        }
-        CreateOrGetCamera(currentCamera,out portalCamera, eye == StereoscopicEye.Left);
     }
     private Vector3 GetEyePosition(StereoscopicEye eye)
     {
@@ -285,5 +244,45 @@ public class BasisSDKMirror : MonoBehaviour
         matrix[6] = c.y;
         matrix[10] = c.z + 1.0F;
         matrix[14] = c.w;
+    }
+    private void CreatePortalCamera(Camera currentCamera, StereoscopicEye eye, out Camera portalCamera, ref RenderTexture portalTexture)
+    {
+        if (portalTexture == null)
+        {
+            Debug.Log("creating Textures");
+            if (portalTexture != null)
+            {
+                DestroyImmediate(portalTexture);
+            }
+            portalTexture = new RenderTexture(m_TextureSize, m_TextureSize, 24)
+            {
+                name = "__MirrorReflection" + eye.ToString() + GetInstanceID(),
+                isPowerOfTwo = true,
+                hideFlags = HideFlags.DontSave,
+                antiAliasing = Antialising
+            };
+            string Property = "_ReflectionTex" + eye.ToString();
+            MirrorsMaterial.SetTexture(Property, portalTexture);
+        }
+        CreateOrGetCamera(currentCamera, out portalCamera, eye == StereoscopicEye.Left);
+    }
+    private Camera CreateNewCamera(Camera currentCamera, out Camera newCamera)
+    {
+        GameObject go = new GameObject("Mirror Reflection Camera id" + GetInstanceID() + " for " + currentCamera.GetInstanceID(), typeof(Camera));
+        go.transform.SetParent(transform);
+
+        go.TryGetComponent(out newCamera);
+        newCamera.enabled = false;
+        newCamera.clearFlags = currentCamera.clearFlags;
+        newCamera.backgroundColor = currentCamera.backgroundColor;
+        newCamera.farClipPlane = FarClipPlane;
+        newCamera.nearClipPlane = currentCamera.nearClipPlane;
+        newCamera.orthographic = currentCamera.orthographic;
+        newCamera.fieldOfView = currentCamera.fieldOfView;
+        newCamera.aspect = currentCamera.aspect;
+        newCamera.orthographicSize = currentCamera.orthographicSize;
+        newCamera.depth = 2;
+
+        return newCamera;
     }
 }

@@ -14,7 +14,7 @@ namespace Basis.Scripts.Drivers
     {
         public static BasisLocalCameraDriver Instance;
         public Camera Camera;
-        public int CameraInstanceID;
+        public static int CameraInstanceID;
         public AudioListener Listener;
         public UniversalAdditionalCameraData CameraData;
         public SteamAudio.SteamAudioListener SteamAudioListener;
