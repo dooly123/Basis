@@ -140,6 +140,7 @@ public class BasisAvatarSDKInspector : Editor
         Button avatarMouthPositionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.avatarMouthPositionButton);
         Button AvatarAutomaticVisemeDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticVisemeDetection);
         Button AvatarAutomaticBlinkDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticBlinkDetection);
+        Button AvatarAvatarBuildBundleClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarBuildBundle);
 
         EventCallback<ChangeEvent<Vector2>> eventCallbackAvatarEyePosition = BasisHelpersGizmo.CallBackVector2Field(uiElementsRoot, AvatarPathConstants.avatarEyePositionField, Avatar.AvatarEyePosition);
         EventCallback<ChangeEvent<Vector2>> eventCallbackAvatarMouthPosition = BasisHelpersGizmo.CallBackVector2Field(uiElementsRoot, AvatarPathConstants.avatarMouthPositionField, Avatar.AvatarMouthPosition);
@@ -184,8 +185,16 @@ public class BasisAvatarSDKInspector : Editor
         {
             eventCallbackFaceVisemeMeshField += EventCallbackFaceVisemeMesh;
         }
+        if (AvatarAvatarBuildBundleClick != null)
+        {
+            AvatarAvatarBuildBundleClick.clicked += () => EventCallbackAvatarAvatarBuildBundleClick(AvatarAvatarBuildBundleClick);
+        }
 
         avatarEyePositionClick.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
         avatarMouthPositionClick.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
+    }
+    public void EventCallbackAvatarAvatarBuildBundleClick(Button Button)
+    {
+        BasisAddressableBuildPipeline.CreateAddressableForPrefab(BuildTarget.StandaloneWindows64, Avatar, Avatar.gameObject);
     }
 }

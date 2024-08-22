@@ -15,5 +15,6 @@
         <engine:Vector2Field label="Vec2 Field" name="AvatarMouthPositionField" />
         <engine:Button text="Avatar Automatic Viseme Detection" name="AvatarAutomaticVisemeDetection" />
         <engine:Button text="Avatar Automatic Blink Detection" name="AvatarAutomaticBlinkDetection" />
+        <engine:Button text="Build Avatar Bundle" name="AvatarBuildBundle" />
     </engine:VisualElement>
 </engine:UXML>

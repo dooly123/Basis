@@ -262,7 +262,10 @@ public class BasisSDKMirror : MonoBehaviour
                 antiAliasing = Antialising
             };
             string Property = "_ReflectionTex" + eye.ToString();
-            MirrorsMaterial.SetTexture(Property, portalTexture);
+            if (MirrorsMaterial != null)
+            {
+                MirrorsMaterial.SetTexture(Property, portalTexture);
+            }
         }
         CreateOrGetCamera(currentCamera, out portalCamera, eye == StereoscopicEye.Left);
     }
