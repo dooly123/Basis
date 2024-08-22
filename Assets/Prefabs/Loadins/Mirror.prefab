@@ -96,23 +96,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 2986975056406209698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a5507e69e32f1b40b8c0683a905a4e4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0647cb0d51f50ec4fb370f7326093528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectionDirection: {x: 0, y: 0, z: 1}
-  m_TextureSize: 1024
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 61
+  projectionDirection: {x: -0, y: -0, z: -1}
+  m_TextureSize: 2048
   m_ClipPlaneOffset: 0.001
-  nearClipLimit: 0.2
-  m_DisablePixelLights: 0
-  m_framesNeededToUpdate: 0
-  m_frameCounter: 0
-  m_PortalTextureLeft: {fileID: 0}
-  m_PortalTextureRight: {fileID: 0}
-  m_OldReflectionTextureSize: 1024
-  AssignedTOMaterial: {fileID: 2100000, guid: f0c27493c675a80478e2e11f37f822fd, type: 2}
-  Renderer: {fileID: 4406659787652676331}
-  FarClipPlane: 120
-  Antialasing: 4
+  nearClipLimit: 0.01
+  FarClipPlane: 25
+  DisablePixelLights: 1
+  PortalTextureLeft: {fileID: 0}
+  PortalTextureRight: {fileID: 0}
+  Antialising: 5
+  reflectionMatrix:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  MirrorsMaterial: {fileID: 0}
+  LeftCamera: {fileID: 0}
+  RightCamera: {fileID: 0}
+  ThisPosition: {x: 0, y: 0, z: 0}
+  projectionMatrix:
+    e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  normal: {x: 0, y: 0, z: 0}
+  reflectionPlane: {x: 0, y: 0, z: 0, w: 0}
