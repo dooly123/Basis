@@ -1,6 +1,6 @@
 public class AvatarPathConstants
 {
-    public static readonly string uxmlPath = "Assets/Scripts/BasisSdk/Editor/AvatarSDK.uxml";
+    public static readonly string uxmlPath = "Packages/com.basis.basisdk/Editor/AvatarSDK.uxml";
 
     public static readonly string avatarEyePositionButton = "AvatarEyePositionButton";
     public static readonly string avatarMouthPositionButton = "AvatarMouthPositionButton";

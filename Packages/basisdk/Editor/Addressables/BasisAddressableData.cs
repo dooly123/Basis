@@ -13,7 +13,7 @@ public class BasisAddressableData
     public string UniqueIdentifier;//very unqiue good
     public string RemoteBuildLocation;
     public string RemoteLoadLocation;
-    public string BuildScript;
+    public string BuildScript = "Assets/AddressableAssetsData/DataBuilders/BuildScriptPackedMode.asset";
     public string DefaultProfileName = "Default";
     public string RemoteBuildPath = "RemoteBuildPath";
     public string RemoteLoadPath = "RemoteLoadPath";

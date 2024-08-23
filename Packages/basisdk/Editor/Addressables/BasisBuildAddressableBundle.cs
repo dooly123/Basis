@@ -93,41 +93,41 @@ public static class BasisBuildAddressableBundle
 
     public static void BuildContent(AddressableAssetSettings settings, BasisAddressableData Build)
     {
-        try
+        // try
+        //{
+        Debug.Log($"Starting content build for build: {Build.UniqueIdentifier}");
+
+        IDataBuilder builder = AssetDatabase.LoadAssetAtPath<ScriptableObject>(Build.BuildScript) as IDataBuilder;
+        settings.ActivePlayerDataBuilderIndex = settings.DataBuilders.IndexOf((ScriptableObject)builder);
+        AddressableAssetSettings.BuildPlayerContent(out Build.Result);
+
+        if (string.IsNullOrEmpty(Build.Result.Error))
         {
-            Debug.Log($"Starting content build for build: {Build.UniqueIdentifier}");
+            Debug.Log($"Content build successful for build: {Build.UniqueIdentifier}");
+            List<string> ActiveList = new List<string>(Build.Result.FileRegistry.GetFilePaths());
 
-            IDataBuilder builder = AssetDatabase.LoadAssetAtPath<ScriptableObject>(Build.BuildScript) as IDataBuilder;
-            settings.ActivePlayerDataBuilderIndex = settings.DataBuilders.IndexOf((ScriptableObject)builder);
-            AddressableAssetSettings.BuildPlayerContent(out Build.Result);
-
-            if (string.IsNullOrEmpty(Build.Result.Error))
+            for (int FilesIndex = 0; FilesIndex < ActiveList.Count; FilesIndex++)
             {
-                Debug.Log($"Content build successful for build: {Build.UniqueIdentifier}");
-                List<string> ActiveList = new List<string>(Build.Result.FileRegistry.GetFilePaths());
-
-                for (int FilesIndex = 0; FilesIndex < ActiveList.Count; FilesIndex++)
+                string Extension = Path.GetExtension(ActiveList[FilesIndex]);
+                foreach (string FileName in BasisAddressableRenameExtensions.Renameable)
                 {
-                    string Extension = Path.GetExtension(ActiveList[FilesIndex]);
-                    foreach (string FileName in BasisAddressableRenameExtensions.Renameable)
+                    if (Extension == FileName)
                     {
-                        if (Extension == FileName)
-                        {
-                            Debug.Log($"Renaming file: {ActiveList[FilesIndex]}");
-                            Rename(ActiveList[FilesIndex], Build.UniqueIdentifier + Build.UniqueIdentifier);
-                        }
+                        Debug.Log($"Renaming file: {ActiveList[FilesIndex]}");
+                        Rename(ActiveList[FilesIndex], Build.UniqueIdentifier + Build.UniqueIdentifier);
                     }
                 }
             }
-            else
-            {
-                Debug.LogError($"Build content error: {Build.Result.Error}");
-            }
         }
-        catch (Exception ex)
+        else
         {
-            Debug.LogError($"Error in BuildContent: {ex.Message}");
+            Debug.LogError($"Build content error: {Build.Result.Error}");
         }
+        //  }
+        //  catch (Exception ex)
+        //  {
+        //     Debug.LogError($"Error in BuildContent: {ex.Message}");
+        // }
     }
 
     public static void Rename(string filePath, string newFileName)
