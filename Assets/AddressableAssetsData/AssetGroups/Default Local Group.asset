@@ -121,6 +121,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78f02360f31c1a547b937559d34b03b1
+    m_Address: Locomotion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 81e71078978223e4c8ffbf973484c9c5
     m_Address: GardenScene
     m_ReadOnly: 0

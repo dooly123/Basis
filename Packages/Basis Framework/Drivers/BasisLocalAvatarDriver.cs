@@ -6,6 +6,7 @@ using Basis.Scripts.Eye_Follow;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
 
 namespace Basis.Scripts.Drivers
@@ -57,7 +58,7 @@ namespace Basis.Scripts.Drivers
         public RigBuilder Builder;
         public List<RigTransform> AdditionalTransforms = new List<RigTransform>();
         public bool HasTposeEvent = false;
-
+        public string Locomotion = "Locomotion";
         public BasisMuscleDriver BasisMuscleDriver;
         public void LocalCalibration()
         {
@@ -79,6 +80,12 @@ namespace Basis.Scripts.Drivers
             CleanupBeforeContinue();
             AdditionalTransforms.Clear();
             Rigs.Clear();
+            if(Player.Avatar.Animator.runtimeAnimatorController == null)
+            {
+                UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Locomotion);
+                RuntimeAnimatorController RAC = op.WaitForCompletion();
+                Player.Avatar.Animator.runtimeAnimatorController = RAC;
+            }
             PutAvatarIntoTPose();
             if (Builder != null)
             {
