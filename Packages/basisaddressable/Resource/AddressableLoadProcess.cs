@@ -35,7 +35,7 @@ public static class AddressableLoadProcess
                 GenerateHandles<T>(LoadRequest);
                 break;
         }
-        return await AddressableLoadingCalculation.AwaitLoading(LoadRequest);
+        return await AddressableManagement.AwaitLoading(LoadRequest);
     }
     /// <summary>
     /// Generate 

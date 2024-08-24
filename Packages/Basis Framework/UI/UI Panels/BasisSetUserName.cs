@@ -8,46 +8,54 @@ using Basis.Scripts.Networking;
 
 namespace Basis.Scripts.UI.UI_Panels
 {
-public class BasisSetUserName : MonoBehaviour
-{
-    public TMP_InputField UserNameTMP_InputField;
-    public Button Ready;
-    public static string LoadFileName = "CachedUserName.BAS";
-
-    public void Start()
+    public class BasisSetUserName : MonoBehaviour
     {
-        UserNameTMP_InputField.text = BasisDataStore.LoadString(LoadFileName, string.Empty);
-        Ready.onClick.AddListener(hasUserName);
-    }
-
-    public async void hasUserName()
-    {
-        // Set button to non-interactable immediately after clicking
-        Ready.interactable = false;
-
-        if (!string.IsNullOrEmpty(UserNameTMP_InputField.text))
+        public TMP_InputField UserNameTMP_InputField;
+        public Button Ready;
+        public static string LoadFileName = "CachedUserName.BAS";
+        public string SceneToLoad;
+        public bool UseAddressables;
+        public void Start()
         {
-            BasisLocalPlayer.Instance.DisplayName = UserNameTMP_InputField.text;
-            BasisDataStore.SaveString(BasisLocalPlayer.Instance.DisplayName, LoadFileName);
-            if (BasisNetworkConnector.Instance != null)
-            {
-                BasisNetworkConnector.Instance.Connect();
+            UserNameTMP_InputField.text = BasisDataStore.LoadString(LoadFileName, string.Empty);
+            Ready.onClick.AddListener(hasUserName);
+        }
 
-                BasisUIComponent[] Components = FindObjectsByType<BasisUIComponent>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                foreach (BasisUIComponent Component in Components)
+        public async void hasUserName()
+        {
+            // Set button to non-interactable immediately after clicking
+            Ready.interactable = false;
+
+            if (!string.IsNullOrEmpty(UserNameTMP_InputField.text))
+            {
+                BasisLocalPlayer.Instance.DisplayName = UserNameTMP_InputField.text;
+                BasisDataStore.SaveString(BasisLocalPlayer.Instance.DisplayName, LoadFileName);
+                if (BasisNetworkConnector.Instance != null)
                 {
-                    Destroy(Component.gameObject);
+                    BasisNetworkConnector.Instance.Connect();
+
+                    BasisUIComponent[] Components = FindObjectsByType<BasisUIComponent>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    foreach (BasisUIComponent Component in Components)
+                    {
+                        Destroy(Component.gameObject);
+                    }
+                    Debug.Log("connecting to default");
+                    if (UseAddressables)
+                    {
+                        await BasisSceneLoadDriver.LoadSceneAssetBundle(SceneToLoad);
+                    }
+                    else
+                    {
+                        await BasisSceneLoadDriver.LoadSceneAssetBundle(SceneToLoad);
+                    }
                 }
-                Debug.Log("connecting to default");
-                await BasisSceneLoadDriver.LoadScene("GardenScene");
+            }
+            else
+            {
+                Debug.LogError("Name was empty, bailing");
+                // Re-enable button interaction if username is empty
+                Ready.interactable = true;
             }
         }
-        else
-        {
-            Debug.LogError("Name was empty, bailing");
-            // Re-enable button interaction if username is empty
-            Ready.interactable = true;
-        }
     }
-}
 }

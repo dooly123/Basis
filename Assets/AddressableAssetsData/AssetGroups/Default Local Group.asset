@@ -15,24 +15,8 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 37c75a6cf72db324eb01200602299fc8
   m_SerializeEntries:
-  - m_GUID: 011b73d0a4f83ec4784bbf5c653e94e7
-    m_Address: Dooly Clothed
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 015b3d7344ee29b41acd36bac09baf03
     m_Address: BasisUIAvatarSelection
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0e0b6944e9ffc474e98f52ce606485c7
-    m_Address: Assets/third_party/Avatar/doolys avatars that cant be replicated wahahaha/Lumain
-      V2 Basis/Materials/Atlas+TrebleMask.mat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1599b83511bbe754ab292ae68f39dd6d
-    m_Address: Aurellia
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -46,16 +30,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1fe62cc9f3469084e82acb340fc4b227
-    m_Address: Lumain
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2132f695afb44ed48be36f1727377fb0
-    m_Address: Lanowen
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26ade42e4ff7eb64eb194e1a6453ad85
     m_Address: NetworkManagement
     m_ReadOnly: 0
@@ -63,16 +37,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e35beba17f4766418fe93eb1007b6a5
     m_Address: MainMenu
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2e565ed716176a24d99abbb4c7578939
-    m_Address: Yun
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2fa364a2cf62acf43a2a805cac794937
-    m_Address: Castle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -106,16 +70,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 63569f46b0e1e7142951e22edfd5d956
-    m_Address: Dooly Smol
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 65ce57433cf75924fadf6a624f62f5cb
-    m_Address: Dooly
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 664b0a1856405914186fc25229d9d893
     m_Address: vr_tracker_vive_1_0
     m_ReadOnly: 0
@@ -123,11 +77,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78f02360f31c1a547b937559d34b03b1
     m_Address: Locomotion
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 81e71078978223e4c8ffbf973484c9c5
-    m_Address: GardenScene
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -146,11 +95,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 910b36edb7faecd4897fb239fbf1e6f5
-    m_Address: Vowgan
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 98a748106e6c47748a99038c99c23bb8
     m_Address: LoadingAvatar
     m_ReadOnly: 0
@@ -166,33 +110,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a41099f28ad63ef4b928ce0e605732e1
-    m_Address: Lyuma
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a4de3e9cefcbae649b752fcfb14efd98
-    m_Address: boo
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c48a4804c2b9e8e4ba8c9ea8aab07a1e
     m_Address: valve_controller_knu_left
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c4d884cb6bc7bc542bf6cf227d217191
-    m_Address: Peech
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c92fd7b20eb8eaf4eb4a6e236e4ac620
     m_Address: Assets/Prefabs/Loadins/Virtual Keyboard.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cbc2cd4eafc84ed43a85e1f6c6121bac
-    m_Address: Peechiu Clothed
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

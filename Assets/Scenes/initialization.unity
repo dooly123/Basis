@@ -1566,6 +1566,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UserNameTMP_InputField: {fileID: 1456515306906275615}
   Ready: {fileID: 8331702472187582125}
+  SceneToLoad: https://BasisFramework.b-cdn.net/Worlds/gardenscene.bundle
+  UseAddressables: 0
 --- !u!114 &8917893734313586526
 MonoBehaviour:
   m_ObjectHideFlags: 0

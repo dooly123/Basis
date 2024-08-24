@@ -559,8 +559,8 @@ MonoBehaviour:
   m_fontSize: 24
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 3
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -753,18 +753,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   AvatarUrls:
-  - Aurellia
-  - Yun
-  - Dooly
-  - Peech
-  - boo
-  - Lumain
-  - Lyuma
-  - Vowgan
-  - Lanowen
-  - Dooly Smol
-  - Castle
-  - Peechiu Clothed
-  - Dooly Clothed
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/aurellia.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/boo.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/castle.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/doolyav.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/doolyavwithclothes.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lanowen.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lumain.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lyuma.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/peechav.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/small%20dooly.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/vowgan.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/yun.bundle
   ParentedAvatarButtons: {fileID: 673662174573543822}
   ButtonPrefab: {fileID: 617829828588750553}
