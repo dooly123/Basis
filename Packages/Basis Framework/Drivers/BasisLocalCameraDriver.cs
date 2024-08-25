@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -35,6 +36,12 @@ namespace Basis.Scripts.Drivers
         public AudioClip UnMuteSound;
         public AudioSource AudioSource;
         public float NearClip = 0.001f;
+        private Coroutine scaleCoroutine;
+
+        public Vector3 StartingScale = Vector3.zero;
+        public float duration = 0.35f;
+        public float halfDuration;
+        public Vector3 largerScale;
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -56,25 +63,71 @@ namespace Basis.Scripts.Drivers
                 InstanceExists?.Invoke();
                 HasEvents = true;
             }
+            halfDuration = duration / 2f; // Time to scale up and down
+            StartingScale = MicrophoneMutedIcon.transform.localScale;
+            // Target scale for the "bounce" effect (e.g., 1.2 times larger)
+            largerScale = StartingScale * 1.2f;
             OnPausedEvent(MicrophoneRecorder.isPaused);
         }
-
         private void OnPausedEvent(bool IsMuted)
         {
+            // Cancel the current coroutine if it's running
+            if (scaleCoroutine != null)
+            {
+                StopCoroutine(scaleCoroutine);
+            }
             if (IsMuted)
             {
                 MicrophoneMutedIcon.gameObject.SetActive(true);
                 MicrophoneUnMutedIcon.gameObject.SetActive(false);
                 AudioSource.PlayOneShot(MuteSound);
+                // Start a new coroutine for the scale animation
+                scaleCoroutine = StartCoroutine(ScaleIcons(MicrophoneMutedIcon.gameObject));
             }
             else
             {
                 MicrophoneMutedIcon.gameObject.SetActive(false);
                 MicrophoneUnMutedIcon.gameObject.SetActive(true);
                 AudioSource.PlayOneShot(UnMuteSound);
+                // Start a new coroutine for the scale animation
+                scaleCoroutine = StartCoroutine(ScaleIcons(MicrophoneUnMutedIcon.gameObject));
             }
         }
+        private IEnumerator ScaleIcons(GameObject iconToScale)
+        {
+            float time = 0f;
 
+            // Phase 1: Scale up
+            while (time < halfDuration)
+            {
+                time += Time.deltaTime;
+                float t = time / halfDuration;
+
+                // Scale the icon up
+                iconToScale.transform.localScale = Vector3.Lerp(StartingScale, largerScale, t);
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final scale at the end of phase 1 is set to largerScale
+            iconToScale.transform.localScale = largerScale;
+
+            // Reset time for the second phase
+            time = 0f;
+
+            // Phase 2: Scale down
+            while (time < halfDuration)
+            {
+                time += Time.deltaTime;
+                float t = time / halfDuration;
+
+                // Scale the icon down back to the original scale
+                iconToScale.transform.localScale = Vector3.Lerp(largerScale, StartingScale, t);
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final scale at the end of phase 2 is set to originalScale
+            iconToScale.transform.localScale = StartingScale;
+        }
         public void OnDestroy()
         {
             MicrophoneRecorder.OnPausedAction -= OnPausedEvent;
@@ -85,7 +138,7 @@ namespace Basis.Scripts.Drivers
         }
         private void OnModeSwitch(string mode)
         {
-            if (mode == "Desktop")
+            if (mode == BasisDeviceManagement.Desktop)
             {
                 Camera.fieldOfView = DefaultCameraFov;
             }
