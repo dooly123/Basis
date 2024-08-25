@@ -2,6 +2,7 @@ using Basis.Scripts.Addressable_Driver;
 using Basis.Scripts.Drivers;
 using System;
 using UnityEngine;
+using static GameObjectAssetBundleManager;
 
 namespace Basis.Scripts.BasisSdk.Players
 {
@@ -17,6 +18,7 @@ public abstract class BasisPlayer : MonoBehaviour
     public bool HasAvatarDriver;
     public event Action OnAvatarSwitched;
     public event Action OnAvatarSwitchedFallBack;
+    public ProgressReport ProgressReportAvatarLoad;
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)
     {
         if (LocalAvatarDriver != null)

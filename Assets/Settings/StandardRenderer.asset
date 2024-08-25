@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
   m_Name: SSAO
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   m_Settings:
     AOMethod: 1
     Downsample: 1
@@ -105,8 +105,7 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
   - {fileID: -5124495792165888989}
-  - {fileID: 7891264069566464977}
-  m_RendererFeatureMap: adc0de57c6d2eee523dcf74e3a22e2b8d103508fdc66836d
+  m_RendererFeatureMap: adc0de57c6d2eee523dcf74e3a22e2b8
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -147,3 +146,5 @@ MonoBehaviour:
   m_Active: 1
   downsampleDepthShader: {fileID: 4800000, guid: cffeaeec0396a2c4dad475266cc8dfeb, type: 3}
   volumetricFogShader: {fileID: 4800000, guid: 08f816187f9af0244a95556ee0cab83f, type: 3}
+  downsampleDepthMaterial: {fileID: 0}
+  volumetricFogMaterial: {fileID: 0}

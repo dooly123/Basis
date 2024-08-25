@@ -4,26 +4,26 @@ using UnityEngine.UI;
 
 namespace Basis.Scripts.UI.UI_Panels
 {
-public class BasisUIComponent : MonoBehaviour
-{
-    public Canvas Canvas;
-    public CanvasScaler CanvasScaler;
-    public BasisGraphicUIRayCaster GraphicUIRayCaster;
-    public void OnEnable()
+    public class BasisUIComponent : MonoBehaviour
     {
-        Initalize();
-        BasisLocalCameraDriver.InstanceExists += Initalize;
-    }
-    public void OnDisable()
-    {
-        BasisLocalCameraDriver.InstanceExists -= Initalize;
-    }
-    public void Initalize()
-    {
-        if (BasisLocalCameraDriver.Instance != null)
+        public Canvas Canvas;
+        public CanvasScaler CanvasScaler;
+        public BasisGraphicUIRayCaster GraphicUIRayCaster;
+        public void OnEnable()
         {
-            Canvas.worldCamera = BasisLocalCameraDriver.Instance.Camera;
+            Initalize();
+            BasisLocalCameraDriver.InstanceExists += Initalize;
+        }
+        public void OnDisable()
+        {
+            BasisLocalCameraDriver.InstanceExists -= Initalize;
+        }
+        public void Initalize()
+        {
+            if (BasisLocalCameraDriver.Instance != null)
+            {
+                Canvas.worldCamera = BasisLocalCameraDriver.Instance.Camera;
+            }
         }
     }
-}
 }

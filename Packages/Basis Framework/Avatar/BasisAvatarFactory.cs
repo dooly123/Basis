@@ -33,7 +33,7 @@ namespace Basis.Scripts.Avatar
             try
             {
                 AddressableManagement.Instance.UnloadAssetBundle(AvatarAddress);
-                GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, GetFileNameFromUrl(AvatarAddress), AssetSubDirectory);
+                GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, GetFileNameFromUrl(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
                 Player.AvatarUrl = AvatarAddress;
                 if (Output.TryGetComponent(out BasisAvatar Avatar))
                 {
@@ -80,7 +80,7 @@ namespace Basis.Scripts.Avatar
             Player.AvatarSwitchedFallBack();
             Player.AvatarUrl = AvatarAddress;
             AddressableManagement.Instance.UnloadAssetBundle(AvatarAddress);
-            GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, GetFileNameFromUrl(AvatarAddress), AssetSubDirectory);
+            GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, GetFileNameFromUrl(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
             if (Output.TryGetComponent(out BasisAvatar Avatar))
             {
                 DeleteLastAvatar(Player);

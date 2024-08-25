@@ -18,14 +18,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.cqf.urpvolumetricfog": {
-      "version": "file:Volumetric",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.render-pipelines.universal": ""
-      }
-    },
     "com.htc.upm.vive.openxr": {
       "version": "file:com.htc.upm.vive.openxr",
       "depth": 0,

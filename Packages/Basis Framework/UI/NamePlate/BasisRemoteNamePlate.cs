@@ -7,31 +7,31 @@ using UnityEngine;
 
 namespace Basis.Scripts.UI.NamePlate
 {
-public class BasisRemoteNamePlate : BasisNamePlate
-{
-    public static async Task LoadRemoteNamePlate(BasisRemotePlayer Player, string RemoteNamePlate = "Assets/UI/Prefabs/NamePlate.prefab")
+    public class BasisRemoteNamePlate : BasisNamePlate
     {
-        var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(RemoteNamePlate, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
-        List<GameObject> Gameobjects = data.Item1;
-        if (Gameobjects.Count != 0)
+        public static async Task LoadRemoteNamePlate(BasisRemotePlayer Player, string RemoteNamePlate = "Assets/UI/Prefabs/NamePlate.prefab")
         {
-            foreach (GameObject gameObject in Gameobjects)
+            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(RemoteNamePlate, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+            List<GameObject> Gameobjects = data.Item1;
+            if (Gameobjects.Count != 0)
             {
-                if (gameObject.TryGetComponent(out BasisRemoteNamePlate BasisRemoteNamePlate))
+                foreach (GameObject gameObject in Gameobjects)
                 {
-                    if (Player == null)
+                    if (gameObject.TryGetComponent(out BasisRemoteNamePlate BasisRemoteNamePlate))
                     {
-                        Destroy(gameObject);
-                        return;
-                    }
-                    BasisRemoteNamePlate.transform.SetParent(Player.transform, false);
-                    if (Player.RemoteBoneDriver.FindBone(out BasisBoneControl Hips, BasisBoneTrackedRole.Hips))
-                    {
-                        BasisRemoteNamePlate.Initalize(Hips, Player);
+                        if (Player == null)
+                        {
+                            Destroy(gameObject);
+                            return;
+                        }
+                        BasisRemoteNamePlate.transform.SetParent(Player.transform, false);
+                        if (Player.RemoteBoneDriver.FindBone(out BasisBoneControl Hips, BasisBoneTrackedRole.Hips))
+                        {
+                            BasisRemoteNamePlate.Initalize(Hips, Player);
+                        }
                     }
                 }
             }
         }
     }
-}
 }
