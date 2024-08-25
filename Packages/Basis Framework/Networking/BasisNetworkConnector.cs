@@ -35,8 +35,9 @@ namespace Basis.Scripts.Networking
         public static string LocalHost = "localhost";
         public bool TryToReconnectAutomatically = true;
         public bool HasInitalizedClient = false;
-        public static Action<BasisNetworkedPlayer,BasisLocalPlayer> OnLocalPlayerJoined;
-        public static Action<BasisNetworkedPlayer,BasisRemotePlayer> OnRemotePlayerJoined;
+        public static Action<BasisNetworkedPlayer, BasisLocalPlayer> OnLocalPlayerJoined;
+        public static Action<BasisNetworkedPlayer, BasisRemotePlayer> OnRemotePlayerJoined;
+        public static Action OnExists;
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -48,6 +49,7 @@ namespace Basis.Scripts.Networking
                 Client = GetComponent<BasisLowLevelClient>();
             }
             this.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            OnExists?.Invoke();
             if (ForceConnect)
             {
                 Connect(Port, Ip);

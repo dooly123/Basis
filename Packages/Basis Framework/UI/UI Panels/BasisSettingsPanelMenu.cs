@@ -46,7 +46,7 @@ public class BasisSettingsPanelMenu : BasisUIBase
         }
         if (Password != null)
         {
-            NetworkConnector.Client.LiteNetLibConnnection.authenticationKey = Password.text;
+          //  NetworkConnector.Client.LiteNetLibConnnection. = Password.text;
         }
         if (IP != null)
         {

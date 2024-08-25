@@ -5,7 +5,6 @@ using Basis.Scripts.Drivers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Common;
 using Basis.Scripts.Networking;
-using System;
 
 namespace Basis.Scripts.UI.UI_Panels
 {
@@ -18,14 +17,35 @@ namespace Basis.Scripts.UI.UI_Panels
         public bool UseAddressables;
         public Image Loadingbar;
         public bool HasActiveLoadingbar = false;
+        public Button AdvancedSettings;
+        public GameObject AdvancedSettingsPanel;
+        [Header("Advanced Settings")]
+        public TMP_InputField IPaddress;
+        public TMP_InputField Port;
+        public TMP_InputField Password;
         public void Start()
         {
             UserNameTMP_InputField.text = BasisDataStore.LoadString(LoadFileName, string.Empty);
             Ready.onClick.AddListener(hasUserName);
+            if (AdvancedSettingsPanel != null)
+            {
+                AdvancedSettings.onClick.AddListener(ToggleAdvancedSettings);
+            }
             BasisSceneLoadDriver.progressCallback += ProgresReport;
+            BasisNetworkConnector.OnExists += LoadCurrentSettings;
+        }
+        public void LoadCurrentSettings()
+        {
+            IPaddress.text = BasisNetworkConnector.Instance.Ip;
+            Port.text = BasisNetworkConnector.Instance.Port.ToString();
+            Password.text = "basis18072024"; //BasisNetworkConnector.Instance.Client.LiteNetLibConnnection.authenticationKey;
         }
         public void OnDestroy()
         {
+            if (AdvancedSettingsPanel != null)
+            {
+                AdvancedSettings.onClick.RemoveListener(ToggleAdvancedSettings);
+            }
             BasisSceneLoadDriver.progressCallback -= ProgresReport;
         }
 
@@ -70,6 +90,10 @@ namespace Basis.Scripts.UI.UI_Panels
                 BasisDataStore.SaveString(BasisLocalPlayer.Instance.DisplayName, LoadFileName);
                 if (BasisNetworkConnector.Instance != null)
                 {
+                    BasisNetworkConnector.Instance.Ip = IPaddress.text;
+                    ushort.TryParse(Port.text, out BasisNetworkConnector.Instance.Port);
+                  //  BasisNetworkConnector.Instance.Client.LiteNetLibConnnection.authenticationKey = Password.text;
+
                     BasisNetworkConnector.Instance.Connect();
                     Ready.interactable = false;
                     Debug.Log("connecting to default");
@@ -93,6 +117,13 @@ namespace Basis.Scripts.UI.UI_Panels
                 Debug.LogError("Name was empty, bailing");
                 // Re-enable button interaction if username is empty
                 Ready.interactable = true;
+            }
+        }
+        public void ToggleAdvancedSettings()
+        {
+            if (AdvancedSettingsPanel != null)
+            {
+                AdvancedSettingsPanel.SetActive(!AdvancedSettingsPanel.activeSelf);
             }
         }
     }
