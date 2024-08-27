@@ -208,11 +208,48 @@ namespace Basis.Scripts.Networking
                         case BasisTags.AvatarChangeMessage:
                             HandleAvatarChangeMessage(reader);
                             break;
+
+                        case BasisTags.SceneGenericMessage:
+                            HandleServerSceneDataMessage(reader);
+                            break;
+
+                        case BasisTags.AvatarGenericMessage:
+                            HandleServerAvatarDataMessage(reader);
+                            break;
                         default:
                             Debug.Log("Unknown message at " + message.Tag);
                             break;
                     }
                 }
+            }
+        }
+        private void HandleServerSceneDataMessage(DarkRiftReader reader)
+        {
+            reader.Read(out ServerSceneDataMessage ServerAvatarChangeMessage);
+            ushort PlayerID = ServerAvatarChangeMessage.PlayerIdMessage.playerID;
+            if (Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
+            {
+            }
+            else
+            {
+                Debug.Log("Missing Player For Message " + ServerAvatarChangeMessage.PlayerIdMessage.playerID);
+            }
+        }
+        private void HandleServerAvatarDataMessage(DarkRiftReader reader)
+        {
+            reader.Read(out ServerAvatarDataMessage ServerAvatarDataMessage);
+            ushort PlayerID = ServerAvatarDataMessage.PlayerIdMessage.playerID;
+            if (Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
+            {
+                if (Player.Player.Avatar != null)
+                {
+                    AvatarDataMessage output = ServerAvatarDataMessage.AvatarDataMessage;
+                    Player.Player.Avatar.OnNetworkMessageReceived?.Invoke(output.MessageIndex, output.buffer);
+                }
+            }
+            else
+            {
+                Debug.Log("Missing Player For Message " + ServerAvatarDataMessage.PlayerIdMessage.playerID);
             }
         }
         private void HandleAvatarChangeMessage(DarkRiftReader reader)
