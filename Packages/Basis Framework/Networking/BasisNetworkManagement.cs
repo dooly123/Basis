@@ -8,12 +8,15 @@ using Basis.Scripts.Player;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
+using DarkRift.Server;
 using DarkRift.Server.Plugins.Commands;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+//using UnityEditor;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
@@ -21,11 +24,11 @@ using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking
 {
-    public class BasisNetworkConnector : MonoBehaviour
+    public class BasisNetworkManagement : MonoBehaviour
     {
         public BasisLowLevelClient Client;
         public bool HasAuthenticated = false;
-        public static BasisNetworkConnector Instance;
+        public static BasisNetworkManagement Instance;
         public PlayerIdMessage PlayerID = new PlayerIdMessage();
         public ReadyMessage readyMessage = new ReadyMessage();
         public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
@@ -146,7 +149,7 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-        private async void MessageReceived(object sender, MessageReceivedEventArgs e)
+        private async void MessageReceived(object sender, DarkRift.Client.MessageReceivedEventArgs e)
         {
             using (Message message = e.GetMessage())
             {
@@ -306,18 +309,38 @@ namespace Basis.Scripts.Networking
             BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
             OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
         }
-        public void Host(ushort Port)
+
+        public NetworkServerConnection Server;
+        /*
+        [MenuItem("Host/Host")]
+        public static void Host()
         {
-            //  public NetworkServer Server;
-            //   DarkRift2CommsNetwork.DarkRiftClient = Client;
-            //    Server = Helpers.GetOrAddComponent<NetworkServer>(this.gameObject);
-            //   Server.configuration = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/DarkRift/DarkRift/Plugins/Server/ExampleConfiguration.xml");
-            //   Server.Create();
-            //  if (Server != null)
-            //  {
-            //     Server.Close();
-            //     Destroy(Server);
-            // }
+            ServerSpawnData ServerSpawnData = new ServerSpawnData();
+            ServerSpawnData.Data = new ServerSpawnData.DataSettings();
+            ServerSpawnData.Data.Directory = "Data/";
+
+            ServerSpawnData.Metrics = new ServerSpawnData.MetricsSettings();
+            ServerSpawnData.Metrics.EnablePerMessageMetrics = false;
+            //  ServerSpawnData.Metrics.MetricsWriter = new ServerSpawnData.MetricsSettings.MetricsWriterSettings();
+            //  ServerSpawnData.Metrics.MetricsWriter.
+
+            ServerSpawnData.Listeners = new ServerSpawnData.ListenersSettings();
+
+            ServerSpawnData.Cache = new ServerSpawnData.CacheSettings();
+
+            ServerSpawnData.EventsFromDispatcher = true;
+
+            ServerSpawnData.Server = new ServerSpawnData.ServerSettings();
+
+            DarkRiftServer server = new DarkRiftServer(ServerSpawnData);
+
+            server.StartServer();
+            while (!server.Disposed)
+            {
+                server.DispatcherWaitHandle.WaitOne();
+                server.ExecuteDispatcherTasks();
+            }
         }
+        */
     }
 }

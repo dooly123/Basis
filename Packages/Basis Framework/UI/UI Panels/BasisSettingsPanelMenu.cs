@@ -12,7 +12,7 @@ public class BasisSettingsPanelMenu : BasisUIBase
     public TMP_InputField IP;
     public TMP_InputField Port;
     public TMP_InputField Password;
-    public BasisNetworkConnector NetworkConnector;
+    public BasisNetworkManagement NetworkConnector;
     public string IPDefault = "localhost";
     public ushort PortDefault = 4296;
     public string PassWordDefault = "Default";
@@ -23,7 +23,7 @@ public class BasisSettingsPanelMenu : BasisUIBase
         Port.contentType = TMP_InputField.ContentType.IntegerNumber;
         Password.contentType = TMP_InputField.ContentType.Password;
 
-        NetworkConnector = BasisNetworkConnector.Instance;
+        NetworkConnector = BasisNetworkManagement.Instance;
 
         IP.text = IPDefault;
         Port.text = PortDefault.ToString();

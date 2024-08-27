@@ -82,7 +82,6 @@ GameObject:
   m_Component:
   - component: {fileID: 309437807573434354}
   - component: {fileID: 3373432966423603715}
-  - component: {fileID: 1928268013164622955}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -134,29 +133,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 32767
   m_TargetDisplay: 0
---- !u!114 &1928268013164622955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3912420243437177643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
 --- !u!1 &4180789650971801243
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +389,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 7589553554247068229}
-  CameraInstanceID: 0
   Listener: {fileID: 4150865382649993091}
   CameraData: {fileID: 8350818596157214651}
   SteamAudioListener: {fileID: 3211173287841905640}
@@ -430,6 +405,10 @@ MonoBehaviour:
   UnMuteSound: {fileID: 8300000, guid: fbd61add38ba2d04baedb52b69c6e1b3, type: 3}
   AudioSource: {fileID: 5904128505799627640}
   NearClip: 0.01
+  StartingScale: {x: 0, y: 0, z: 0}
+  duration: 0.35
+  halfDuration: 0
+  largerScale: {x: 0, y: 0, z: 0}
 --- !u!114 &5985133177976618905
 MonoBehaviour:
   m_ObjectHideFlags: 0

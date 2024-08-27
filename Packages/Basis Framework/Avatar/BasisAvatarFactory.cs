@@ -32,8 +32,7 @@ namespace Basis.Scripts.Avatar
             Player.AvatarSwitchedFallBack();
             try
             {
-                AddressableManagement.Instance.UnloadAssetBundle(AvatarAddress);
-                GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, GetFileNameFromUrl(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
+                GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
                 Player.AvatarUrl = AvatarAddress;
                 if (Output.TryGetComponent(out BasisAvatar Avatar))
                 {
@@ -73,28 +72,51 @@ namespace Basis.Scripts.Avatar
             Player.SetPlayersEyeHeight(Player.PlayerEyeHeight, Player.AvatarDriver.ActiveEyeHeight);
             Player.AvatarSwitched();
         }
-        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
+        public static async Task LoadAvatarAfterError(BasisRemotePlayer Player, string AvatarAddress, UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para)
         {
-            DeleteLastAvatar(Player);
-            LoadLoadingAvatar(Player, LoadingAvatar);
-            Player.AvatarSwitchedFallBack();
+
+            (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
+            List<GameObject> Gameobjects = data.Item1;
             Player.AvatarUrl = AvatarAddress;
-            AddressableManagement.Instance.UnloadAssetBundle(AvatarAddress);
-            GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, GetFileNameFromUrl(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
-            if (Output.TryGetComponent(out BasisAvatar Avatar))
+            if (Gameobjects.Count != 0)
             {
-                DeleteLastAvatar(Player);
-                Player.Avatar = Avatar;
-                CreateRemote(Player);
-                Player.InitalizeIKCalibration(Player.RemoteAvatarDriver);
+                foreach (GameObject gameObject in Gameobjects)
+                {
+                    if (gameObject.TryGetComponent(out BasisAvatar Avatar))
+                    {
+                        DeleteLastAvatar(Player);
+                        Player.Avatar = Avatar;
+                        CreateRemote(Player);
+                        Player.InitalizeIKCalibration(Player.RemoteAvatarDriver);
+                    }
+                }
             }
             Player.AvatarSwitched();
         }
-        private static string GetFileNameFromUrl(string url)
+        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
         {
-            Uri uri = new Uri(url);
-            string fileName = Path.GetFileName(uri.LocalPath); // Get the file name with extension
-            return Path.GetFileNameWithoutExtension(fileName); // Remove the extension and return
+            try
+            {
+                DeleteLastAvatar(Player);
+                LoadLoadingAvatar(Player, LoadingAvatar);
+                Player.AvatarSwitchedFallBack();
+                Player.AvatarUrl = AvatarAddress;
+                GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
+                if (Output.TryGetComponent(out BasisAvatar Avatar))
+                {
+                    DeleteLastAvatar(Player);
+                    Player.Avatar = Avatar;
+                    CreateRemote(Player);
+                    Player.InitalizeIKCalibration(Player.RemoteAvatarDriver);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error falling back with error : " + e);
+                UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
+                await LoadAvatarAfterError(Player, AvatarAddress, Para);
+            }
+            Player.AvatarSwitched();
         }
         public static void LoadLoadingAvatar(BasisPlayer Player, string LoadingAvatarToUse)
         {

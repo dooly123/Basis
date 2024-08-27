@@ -5,7 +5,7 @@ namespace Basis.Scripts.Tests
 {
 public class BasisConnectorGUI : MonoBehaviour
 {
-    public BasisNetworkConnector NetworkConnector;
+    public BasisNetworkManagement NetworkConnector;
     public string IP = "192.168.1.7";
     public ushort Port = 4296;
     void Start()

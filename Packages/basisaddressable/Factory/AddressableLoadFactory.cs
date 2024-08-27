@@ -1,4 +1,4 @@
-using Basis.Scripts.Addressable_Driver.Debug;
+using Basis.Scripts.Addressable_Driver.DebugError;
 using Basis.Scripts.Addressable_Driver.Resource;
 using Basis.Scripts.Addressable_Driver.Validation;
 using System;

@@ -36,6 +36,22 @@ namespace Basis.Scripts.Device_Management
                 return Desktop;
             }
         }
+        public static bool IsUserInDesktop()
+        {
+            if (Desktop == BasisDeviceManagement.Instance.CurrentMode)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool IsUserInVr()
+        {
+            if(Desktop != BasisDeviceManagement.Instance.CurrentMode)
+            {
+                return true;
+            }
+            return false;
+        }
         public static BasisDeviceManagement Instance;
         public BasisOpusSettings BasisOpusSettings;
         public event Action<string> OnBootModeChanged;

@@ -87,7 +87,7 @@ namespace Basis.Scripts.Networking.Transmitters
             writer.Write(ClientAvatarChangeMessage);
             using (var msg = Message.Create(BasisTags.AvatarChangeMessage, writer))
             {
-                BasisNetworkConnector.Instance.Client.SendMessage(msg, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
+                BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
             }
         }
     }

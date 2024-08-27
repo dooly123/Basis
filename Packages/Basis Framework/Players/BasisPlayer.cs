@@ -2,8 +2,7 @@ using Basis.Scripts.Addressable_Driver;
 using Basis.Scripts.Drivers;
 using System;
 using UnityEngine;
-using static GameObjectAssetBundleManager;
-
+using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 namespace Basis.Scripts.BasisSdk.Players
 {
 public abstract class BasisPlayer : MonoBehaviour

@@ -19,7 +19,7 @@ public static class BasisNetworkAvatarCompressor
             BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
             using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
             {
-                BasisNetworkConnector.Instance.Client.SendMessage(msg, BasisNetworking.MovementChannel, DeliveryMethod.Unreliable);
+                BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.MovementChannel, DeliveryMethod.Unreliable);
             }
         }
     }

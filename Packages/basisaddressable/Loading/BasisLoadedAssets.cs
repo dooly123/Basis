@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
+using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 
 namespace Basis.Scripts.Addressable_Driver.Loading
 {
-    public struct BasisLoadedAssets
+    [System.Serializable]
+    public class BasisLoadedAssets
     {
-        public AssetBundle LoadedAssetBundle;
+        public AssetBundleCreateRequest bundleRequest;
+        public ProgressReport ProgressReportAvatarLoad;
+        public AssetBundle Bundle;
         public string Url;
+        public string localPath;
+        public string Hash;
+        public bool IsBundleLoaded;
+        public float OverallLoadPercentage;
     }
 }

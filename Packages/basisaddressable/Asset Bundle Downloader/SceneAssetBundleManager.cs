@@ -3,88 +3,46 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using static GameObjectAssetBundleManager;
-
+using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 public static class SceneAssetBundleManager
 {
-    public static async Task DownloadAndLoadSceneAsync(string url, string sceneName, string subfolderName, ProgressReport progressCallback)
+    public static async Task DownloadAndLoadSceneAsync(string url, string subfolderName, ProgressReport progressCallback)
     {
         string folderPath = Path.Combine(Application.persistentDataPath, subfolderName);
         Directory.CreateDirectory(folderPath);
         string localPath = Path.Combine(folderPath, GetFileNameFromUrl(url));
 
-        await CheckAndLoadSceneBundleAsync(url, localPath, sceneName, progressCallback);
+        await CheckAndLoadSceneBundleAsync(url, localPath, progressCallback);
     }
-
-    private static string GetFileNameFromUrl(string url)
-    {
-        Uri uri = new Uri(url);
-        return Path.GetFileName(uri.LocalPath);
-    }
-
-    private static async Task CheckAndLoadSceneBundleAsync(string url, string localPath, string sceneName, ProgressReport progressCallback)
+    private static async Task CheckAndLoadSceneBundleAsync(string url, string localPath, ProgressReport progressCallback)
     {
         if (File.Exists(localPath))
         {
             Debug.Log("Local AssetBundle is up-to-date, loading from disk.");
-            await LoadSceneBundleFromDiskAsync(url, localPath, sceneName, progressCallback);
         }
         else
         {
             Debug.Log("AssetBundle not found locally, downloading.");
             await DownloadAssetBundleAsync(url, localPath, progressCallback);
-            await LoadSceneBundleFromDiskAsync(url, localPath, sceneName, progressCallback);
         }
+        await LoadSceneBundleFromDiskAsync(url, localPath, progressCallback);
     }
-
-    private static async Task DownloadAssetBundleAsync(string url, string localPath, ProgressReport progressCallback)
+    private static async Task LoadSceneBundleFromDiskAsync(string url, string localPath, ProgressReport progressCallback)
     {
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        var asyncOperation = request.SendWebRequest();
-
-        // Track download progress
-        while (!asyncOperation.isDone)
+        BasisLoadedAssets BasisLoadedAssets = new BasisLoadedAssets();
+        try
         {
-            progressCallback?.Invoke(asyncOperation.progress * 50); // Progress from 0 to 50 during download
-            await Task.Yield();
+            BasisLoadedAssets = await LoadBundle(url, localPath, progressCallback);
+        }
+        catch (Exception E)
+        {
+            Debug.LogError("Unable to Loadin asset bundle " + E.Message);
         }
 
-        if (request.result != UnityWebRequest.Result.Success)
+        if (BasisLoadedAssets.Bundle != null)
         {
-            Debug.LogError("Failed to download AssetBundle: " + request.error);
-            return;
-        }
-
-        File.WriteAllBytes(localPath, request.downloadHandler.data);
-        Debug.Log("AssetBundle saved to: " + localPath);
-    }
-
-    private static async Task LoadSceneBundleFromDiskAsync(string url, string localPath, string sceneName, ProgressReport progressCallback)
-    {
-        AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromFileAsync(localPath);
-
-        // Track loading progress
-        while (!bundleRequest.isDone)
-        {
-            progressCallback?.Invoke(50 + bundleRequest.progress * 50); // Progress from 50 to 100 during loading
-            await Task.Yield();
-        }
-
-        AssetBundle bundle = bundleRequest.assetBundle;
-
-        if (bundle != null)
-        {
-            BasisLoadedAssets BasisLoadedAssets = new BasisLoadedAssets
-            {
-                LoadedAssetBundle = bundle,
-                Url = url
-            };
-            AddressableManagement.Instance.LoadedBundles.Add(BasisLoadedAssets);
-            Debug.Log("AssetBundle loaded successfully from disk.");
-
-            await LoadSceneFromAssetBundleAsync(bundle, sceneName, progressCallback);
+            await LoadSceneFromAssetBundleAsync(BasisLoadedAssets.Bundle, progressCallback);
         }
         else
         {
@@ -92,7 +50,7 @@ public static class SceneAssetBundleManager
         }
     }
 
-    private static async Task LoadSceneFromAssetBundleAsync(AssetBundle bundle, string sceneName, ProgressReport progressCallback)
+    private static async Task LoadSceneFromAssetBundleAsync(AssetBundle bundle, ProgressReport progressCallback)
     {
         string[] scenePaths = bundle.GetAllScenePaths();
         if (scenePaths.Length == 0)

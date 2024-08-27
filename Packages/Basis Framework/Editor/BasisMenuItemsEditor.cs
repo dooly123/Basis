@@ -272,7 +272,7 @@ public static class BasisMenuItemsEditor
     [MenuItem("Basis/Player/Spawn Fake Remote")]
     public static void SpawnFakeRemote()
     {
-        BasisNetworkConnector NetworkConnector = BasisNetworkConnector.Instance;
+        BasisNetworkManagement NetworkConnector = BasisNetworkManagement.Instance;
         if (NetworkConnector != null)
         {
             ServerReadyMessage serverSideSyncPlayerMessage = new ServerReadyMessage
@@ -296,7 +296,7 @@ public static class BasisMenuItemsEditor
     }
     public async static void CreateTestRemotePlayer(ServerReadyMessage ServerReadyMessage)
     {
-        BasisNetworkConnector NetworkConnector = BasisNetworkConnector.Instance;
+        BasisNetworkManagement NetworkConnector = BasisNetworkManagement.Instance;
         await NetworkConnector.CreateRemotePlayer(ServerReadyMessage);
     }
     [System.Serializable]

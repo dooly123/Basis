@@ -117,7 +117,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
                 using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
                 {
-                    BasisNetworkConnector.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
+                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
                 }
             }
         }
@@ -129,7 +129,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
                 using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
                 {
-                    BasisNetworkConnector.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
+                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
                 }
             }
         }

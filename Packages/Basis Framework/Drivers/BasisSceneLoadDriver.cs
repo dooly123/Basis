@@ -1,13 +1,9 @@
 using Basis.Scripts.Addressable_Driver;
 using Basis.Scripts.Addressable_Driver.Factory;
-using Basis.Scripts.Addressable_Driver.Loading;
-using System.IO;
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using static GameObjectAssetBundleManager;
-
+using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 namespace Basis.Scripts.Drivers
 {
     public static class BasisSceneLoadDriver
@@ -23,15 +19,9 @@ namespace Basis.Scripts.Drivers
         }
         public static async Task LoadSceneAssetBundle(string SceneToLoad)
         {
-            AddressableManagement.Instance.UnloadAssetBundle(SceneToLoad);
-            await SceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoad, GetFileNameFromUrl(SceneToLoad), World, progressCallback);
             Debug.Log("Loading Scene " + SceneToLoad);
-        }
-
-        private static string GetFileNameFromUrl(string url)
-        {
-            Uri uri = new Uri(url);
-            return Path.GetFileName(uri.LocalPath);
+            await SceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoad, World, progressCallback);
+            Debug.Log("Loaded Scene " + SceneToLoad);
         }
     }
 }
