@@ -60,7 +60,7 @@ namespace Basis.Scripts.Drivers
         }
         private void Simulate()
         {
-            if (Localplayer.AvatarDriver.InTPose == false)
+            if (Localplayer.AvatarDriver.InTPose == false && Localplayer.AvatarDriver.AnimatorDriver != null)
             {
                 UpdateMovementData();
 

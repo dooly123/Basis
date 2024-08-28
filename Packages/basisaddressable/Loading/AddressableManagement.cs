@@ -120,16 +120,19 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         {
             if (string.IsNullOrEmpty(Url))
             {
+                Debug.LogError("Missing Url was null or empty");
                 BasisLoadedAssets = new BasisLoadedAssets();
                 return false;
             }
             if (string.IsNullOrEmpty(localPath))
             {
+                Debug.LogError("Missing localPath was null or empty");
                 BasisLoadedAssets = new BasisLoadedAssets();
                 return false;
             }
             if (string.IsNullOrEmpty(hash))
             {
+                Debug.LogError("Missing Hash was null or empty");
                 BasisLoadedAssets = new BasisLoadedAssets();
                 return false;
             }
@@ -168,7 +171,7 @@ namespace Basis.Scripts.Addressable_Driver.Loading
             else
             {
                 Debug.Log("loading from disc and adding bundle");
-                if (Instance.AddBundle(url, localPath, string.Empty, null, out BasisLoadedAssets LoadedAssets))
+                if (Instance.AddBundle(url, localPath, Hash, null, out BasisLoadedAssets LoadedAssets))
                 {
                     LoadedAssets.bundleRequest = AssetBundle.LoadFromFileAsync(localPath);
                     LoadedAssets.ProgressReportAvatarLoad = progressCallback;
