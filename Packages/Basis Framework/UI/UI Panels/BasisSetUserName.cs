@@ -15,6 +15,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public Button Ready;
         public static string LoadFileName = "CachedUserName.BAS";
         public string SceneToLoad;
+        public string HashUrl = string.Empty;
         public bool UseAddressables;
         public Image Loadingbar;
         public bool HasActiveLoadingbar = false;
@@ -115,7 +116,7 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             else
             {
-                await BasisSceneLoadDriver.LoadSceneAssetBundle(SceneToLoad);
+                await BasisSceneLoadDriver.LoadSceneAssetBundle(SceneToLoad, HashUrl);
             }
             BasisUIComponent[] Components = FindObjectsByType<BasisUIComponent>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             foreach (BasisUIComponent Component in Components)

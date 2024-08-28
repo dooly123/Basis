@@ -6,28 +6,32 @@ using System;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 public static class GameObjectAssetBundleManager
 {
-    public static async Task<GameObject> DownloadAndLoadGameObjectAsync(string url, string assetName, string subfolderName, ProgressReport progressCallback)
+    public static async Task<GameObject> DownloadAndLoadGameObjectAsync(string url, string Hash, string assetName, string subfolderName, ProgressReport progressCallback)
     {
         string folderPath = Path.Combine(Application.persistentDataPath, subfolderName);
         Directory.CreateDirectory(folderPath);
         string localPath = Path.Combine(folderPath, AddressableManagement.GetFileNameFromUrl(url));
 
-        return await CheckAndLoadGameObjectBundleAsync(url, localPath, assetName, progressCallback);
+        return await CheckAndLoadGameObjectBundleAsync(url, Hash,localPath, assetName, progressCallback);
     }
 
-    private static async Task<GameObject> CheckAndLoadGameObjectBundleAsync(string url, string localPath, string assetName, ProgressReport progressCallback)
+    private static async Task<GameObject> CheckAndLoadGameObjectBundleAsync(string url,string Hash, string localPath, string assetName, ProgressReport progressCallback)
     {
         if (File.Exists(localPath) == false)
         {
             Debug.Log("AssetBundle not found locally, downloading.");
             await DownloadAssetBundleAsync(url, localPath, progressCallback);
         }
-        return await LoadGameObjectBundleFromDiskAsync(url, localPath, assetName, progressCallback);
+        return await LoadGameObjectBundleFromDiskAsync(url, Hash, localPath, assetName, progressCallback);
     }
-    private static async Task<GameObject> LoadGameObjectBundleFromDiskAsync(string url, string localPath, string assetName, ProgressReport progressCallback)
+    private static async Task<GameObject> LoadGameObjectBundleFromDiskAsync(string url,string Hash, string localPath, string assetName, ProgressReport progressCallback)
     {
         Debug.Log("Loading Bundle");
-        BasisLoadedAssets BasisLoadedAssets = await LoadBundle(url, localPath, progressCallback);
+        BasisLoadedAssets BasisLoadedAssets = await LoadBundle(url, Hash, localPath, progressCallback);
+        if(BasisLoadedAssets == null)
+        {
+            return null;
+        }
         if (BasisLoadedAssets.Bundle != null)
         {
             Debug.Log("AssetBundle loaded successfully from disk.");

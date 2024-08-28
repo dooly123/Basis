@@ -17,10 +17,10 @@ namespace Basis.Scripts.Drivers
             await AddressableLoadFactory.LoadAddressableResourceAsync<SceneInstance>(Process);
             Debug.Log("Loaded Scene " + SceneToLoad);
         }
-        public static async Task LoadSceneAssetBundle(string SceneToLoad)
+        public static async Task LoadSceneAssetBundle(string SceneToLoad,string HashUrl)
         {
             Debug.Log("Loading Scene " + SceneToLoad);
-            await SceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoad, World, progressCallback);
+            await SceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoad, HashUrl, World, progressCallback);
             Debug.Log("Loaded Scene " + SceneToLoad);
         }
     }

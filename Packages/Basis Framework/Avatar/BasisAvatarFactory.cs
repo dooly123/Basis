@@ -16,166 +16,192 @@ namespace Basis.Scripts.Avatar
     {
         public const string LoadingAvatar = "LoadingAvatar";
         public const string AssetSubDirectory = "Avatars";
-        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress)
+        public const string HashExtension = ".hash";
+
+        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, string hash = "")
         {
-            DeleteLastAvatar(Player);
-            UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
             if (string.IsNullOrEmpty(AvatarAddress))
             {
-                Debug.LogError("Avatar Address was empty or null! falling back");
-
-                await LoadAvatarAfterError(Player, AvatarAddress, Para);
+                Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
+                await LoadAvatarAfterError(Player, AvatarAddress);
                 return;
             }
+
+            hash = await GetHashOrFallback(hash, AvatarAddress);
+
+            DeleteLastAvatar(Player);
             LoadLoadingAvatar(Player, LoadingAvatar);
-            Player.AvatarSwitchedFallBack();
+
             try
             {
-                GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
-                Player.AvatarUrl = AvatarAddress;
-                if (Output.TryGetComponent(out BasisAvatar Avatar))
+                GameObject Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                if (Output != null)
                 {
-                    DeleteLastAvatar(Player);
-                    Player.Avatar = Avatar;
-                    CreateLocal(Player);
-                    Player.InitalizeIKCalibration(Player.AvatarDriver);
-                }
-                Player.SetPlayersEyeHeight(Player.PlayerEyeHeight, Player.AvatarDriver.ActiveEyeHeight);
-                Player.AvatarSwitched();
-            }
-            catch (Exception E)
-            {
-                Debug.LogError("loading avatar failed " + E);
-                await LoadAvatarAfterError(Player, AvatarAddress, Para);
-            }
-        }
-        public static async Task LoadAvatarAfterError(BasisLocalPlayer Player, string AvatarAddress, UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para)
-        {
-
-            (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
-            List<GameObject> Gameobjects = data.Item1;
-            Player.AvatarUrl = AvatarAddress;
-            if (Gameobjects.Count != 0)
-            {
-                foreach (GameObject gameObject in Gameobjects)
-                {
-                    if (gameObject.TryGetComponent(out BasisAvatar Avatar))
-                    {
-                        DeleteLastAvatar(Player);
-                        Player.Avatar = Avatar;
-                        CreateLocal(Player);
-                        Player.InitalizeIKCalibration(Player.AvatarDriver);
-                    }
-                }
-            }
-            Player.SetPlayersEyeHeight(Player.PlayerEyeHeight, Player.AvatarDriver.ActiveEyeHeight);
-            Player.AvatarSwitched();
-        }
-        public static async Task LoadAvatarAfterError(BasisRemotePlayer Player, string AvatarAddress, UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para)
-        {
-
-            (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
-            List<GameObject> Gameobjects = data.Item1;
-            Player.AvatarUrl = AvatarAddress;
-            if (Gameobjects.Count != 0)
-            {
-                foreach (GameObject gameObject in Gameobjects)
-                {
-                    if (gameObject.TryGetComponent(out BasisAvatar Avatar))
-                    {
-                        DeleteLastAvatar(Player);
-                        Player.Avatar = Avatar;
-                        CreateRemote(Player);
-                        Player.InitalizeIKCalibration(Player.RemoteAvatarDriver);
-                    }
-                }
-            }
-            Player.AvatarSwitched();
-        }
-        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress)
-        {
-            try
-            {
-                DeleteLastAvatar(Player);
-                LoadLoadingAvatar(Player, LoadingAvatar);
-                Player.AvatarSwitchedFallBack();
-                Player.AvatarUrl = AvatarAddress;
-                GameObject Output = await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress), AssetSubDirectory, Player.ProgressReportAvatarLoad);
-                if (Output.TryGetComponent(out BasisAvatar Avatar))
-                {
-                    DeleteLastAvatar(Player);
-                    Player.Avatar = Avatar;
-                    CreateRemote(Player);
-                    Player.InitalizeIKCalibration(Player.RemoteAvatarDriver);
+                    InitializePlayerAvatar(Player, Output);
+                    Player.SetPlayersEyeHeight(Player.PlayerEyeHeight, Player.AvatarDriver.ActiveEyeHeight);
+                    Player.AvatarSwitched();
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError("Error falling back with error : " + e);
-                UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                await LoadAvatarAfterError(Player, AvatarAddress, Para);
+                Debug.LogError($"Loading avatar failed: {e}");
+                await LoadAvatarAfterError(Player, AvatarAddress);
             }
-            Player.AvatarSwitched();
         }
+
+        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress, string hash = "")
+        {
+            if (string.IsNullOrEmpty(AvatarAddress))
+            {
+                Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
+                await LoadAvatarAfterError(Player, AvatarAddress);
+                return;
+            }
+
+            hash = await GetHashOrFallback(hash, AvatarAddress);
+
+            DeleteLastAvatar(Player);
+            LoadLoadingAvatar(Player, LoadingAvatar);
+
+            try
+            {
+                GameObject Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                if (Output != null)
+                {
+                    InitializePlayerAvatar(Player, Output);
+                    Player.AvatarSwitched();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Loading avatar failed: {e}");
+                await LoadAvatarAfterError(Player, AvatarAddress);
+            }
+        }
+
+        private static async Task<string> GetHashOrFallback(string hash, string AvatarAddress)
+        {
+            if (string.IsNullOrEmpty(hash))
+            {
+                hash = AddressableManagement.ChangeExtension(AvatarAddress, HashExtension);
+                return await AddressableManagement.LoadTextFromURLAsync(hash);
+            }
+            else if (hash.Contains("https://") || hash.Contains("http://"))
+            {
+                return await AddressableManagement.LoadTextFromURLAsync(hash);
+            }
+
+            return hash;
+        }
+
+        private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, string hash, BasisPlayer Player)
+        {
+            return await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(
+                AvatarAddress,
+                hash,
+                AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress),
+                AssetSubDirectory,
+                Player.ProgressReportAvatarLoad
+            );
+        }
+
+        private static void InitializePlayerAvatar(BasisPlayer Player, GameObject Output)
+        {
+            if (Output.TryGetComponent(out BasisAvatar Avatar))
+            {
+                DeleteLastAvatar(Player);
+                Player.Avatar = Avatar;
+
+                if (Player is BasisLocalPlayer localPlayer)
+                {
+                    CreateLocal(localPlayer);
+                    localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
+                }
+                else if (Player is BasisRemotePlayer remotePlayer)
+                {
+                    CreateRemote(remotePlayer);
+                    remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
+                }
+            }
+        }
+
+        public static async Task LoadAvatarAfterError(BasisPlayer Player, string AvatarAddress)
+        {
+            try
+            {
+                var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
+                (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
+
+                if (GameObjects.Count > 0)
+                {
+                    InitializePlayerAvatar(Player, GameObjects[0]);
+                }
+
+                Player.AvatarSwitched();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Fallback avatar loading failed: {e}");
+            }
+        }
+
         public static void LoadLoadingAvatar(BasisPlayer Player, string LoadingAvatarToUse)
         {
-            UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(LoadingAvatarToUse);
-            GameObject LoadingAvatar = op.WaitForCompletion();
-            GameObject InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar, Player.transform.position, Quaternion.identity);
+            var op = Addressables.LoadAssetAsync<GameObject>(LoadingAvatarToUse);
+            var LoadingAvatar = op.WaitForCompletion();
+            var InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar, Player.transform.position, Quaternion.identity);
+
             if (InSceneLoadingAvatar.TryGetComponent(out BasisAvatar Avatar))
             {
                 Player.Avatar = Avatar;
+
                 if (Player.IsLocal)
                 {
-                    BasisLocalPlayer BasisLocalPlayer = (BasisLocalPlayer)Player;
+                    BasisLocalPlayer BasisLocalPlayer =(BasisLocalPlayer)Player;
                     CreateLocal(BasisLocalPlayer);
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
                 }
                 else
                 {
-                    BasisRemotePlayer BasisRemotePlayer = (BasisRemotePlayer)Player;
+                    BasisRemotePlayer BasisRemotePlayer =(BasisRemotePlayer)Player;
                     CreateRemote(BasisRemotePlayer);
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
                 }
             }
         }
+
         public static void DeleteLastAvatar(BasisPlayer Player)
         {
             if (Player.Avatar != null)
             {
                 GameObject.Destroy(Player.Avatar.gameObject);
             }
+
             if (Player.AvatarAddressableGenericResource != null)
             {
                 AddressableLoadFactory.ReleaseResource(Player.AvatarAddressableGenericResource);
             }
         }
+
         public static void CreateRemote(BasisRemotePlayer Player)
         {
-            if (Player == null)
+            if (Player == null || Player.Avatar == null)
             {
-                Debug.LogError("Missing RemotePlayer");
+                Debug.LogError("Missing RemotePlayer or Avatar");
                 return;
             }
-            if (Player.Avatar == null)
-            {
-                Debug.LogError("Missing Avatar");
-                return;
-            }
+
             Player.RemoteAvatarDriver.RemoteCalibration(Player);
         }
+
         public static void CreateLocal(BasisLocalPlayer Player)
         {
-            if (Player == null)
+            if (Player == null || Player.Avatar == null)
             {
-                Debug.LogError("Missing LocalPlayer");
+                Debug.LogError("Missing LocalPlayer or Avatar");
                 return;
             }
-            if (Player.Avatar == null)
-            {
-                Debug.LogError("Missing Avatar");
-                return;
-            }
+
             Player.AvatarDriver.InitialLocalCalibration(Player);
         }
     }
