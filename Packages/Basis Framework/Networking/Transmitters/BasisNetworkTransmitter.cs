@@ -2,7 +2,6 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
-using System;
 using UnityEngine;
 using static SerializableDarkRift;
 
@@ -71,9 +70,9 @@ namespace Basis.Scripts.Networking.Transmitters
             }
             if (HasEvents)
             {
-                NetworkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
-                NetworkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
-                NetworkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
+                NetworkedPlayer.Player.OnAvatarSwitchedFallBack -= OnAvatarCalibration;
+                NetworkedPlayer.Player.OnAvatarSwitched -= OnAvatarCalibration;
+                NetworkedPlayer.Player.OnAvatarSwitched -= SendOutLatestAvatar;
                 HasEvents = false;
             }
         }
@@ -89,24 +88,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 using (var msg = Message.Create(BasisTags.AvatarChangeMessage, writer))
                 {
                     BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
-                }
-            }
-            NetworkedPlayer.Player.Avatar.OnNetworkMessageSend += OnNetworkMessageSend;
-        }
-
-        private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod)
-        {
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
-            {
-                AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
-                {
-                    MessageIndex = MessageIndex,
-                    buffer = buffer
-                };
-                writer.Write(AvatarDataMessage);
-                using (var msg = Message.Create(BasisTags.AvatarGenericMessage, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.AvatarChannel, DeliveryMethod);
                 }
             }
         }
