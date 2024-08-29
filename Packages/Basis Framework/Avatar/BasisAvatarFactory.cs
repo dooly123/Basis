@@ -16,18 +16,17 @@ namespace Basis.Scripts.Avatar
     {
         public const string LoadingAvatar = "LoadingAvatar";
         public const string AssetSubDirectory = "Avatars";
-        public const string HashExtension = ".hash";
 
         public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, string hash = "")
         {
             if (string.IsNullOrEmpty(AvatarAddress))
-            {
+            { 
                 Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
                 await LoadAvatarAfterError(Player, AvatarAddress);
                 return;
             }
 
-            hash = await GetHashOrFallback(hash, AvatarAddress);
+            hash = await BasisAssetBundleHashLookup.GetHashOrFallback(hash, AvatarAddress);
 
             DeleteLastAvatar(Player);
             LoadLoadingAvatar(Player, LoadingAvatar);
@@ -58,7 +57,7 @@ namespace Basis.Scripts.Avatar
                 return;
             }
 
-            hash = await GetHashOrFallback(hash, AvatarAddress);
+            hash = await BasisAssetBundleHashLookup.GetHashOrFallback(hash, AvatarAddress);
 
             DeleteLastAvatar(Player);
             LoadLoadingAvatar(Player, LoadingAvatar);
@@ -77,21 +76,6 @@ namespace Basis.Scripts.Avatar
                 Debug.LogError($"Loading avatar failed: {e}");
                 await LoadAvatarAfterError(Player, AvatarAddress);
             }
-        }
-
-        private static async Task<string> GetHashOrFallback(string hash, string AvatarAddress)
-        {
-            if (string.IsNullOrEmpty(hash))
-            {
-                hash = AddressableManagement.ChangeExtension(AvatarAddress, HashExtension);
-                return await AddressableManagement.LoadTextFromURLAsync(hash);
-            }
-            else if (hash.Contains("https://") || hash.Contains("http://"))
-            {
-                return await AddressableManagement.LoadTextFromURLAsync(hash);
-            }
-
-            return hash;
         }
 
         private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, string hash, BasisPlayer Player)

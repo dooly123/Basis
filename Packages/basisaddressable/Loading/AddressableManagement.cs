@@ -147,7 +147,6 @@ namespace Basis.Scripts.Addressable_Driver.Loading
                     localPath = localPath,
                     Hash = hash,
                     IsBundleLoaded = false,
-                    OverallLoadPercentage = 0,
                 };
                 LoadedBundles.Add(BasisLoadedAssets);
                 return true;
@@ -157,45 +156,58 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         }
         public static async Task<BasisLoadedAssets> LoadBundle(string url, string Hash, string localPath, ProgressReport progressCallback)
         {
-            Status Output = Instance.LoadedBundlesContains(url, Hash, out BasisLoadedAssets Loaded);
-            if (Output == Status.True)
+            Hash = await BasisAssetBundleHashLookup.GetHashOrFallback(Hash, url);
+            Status output = Instance.LoadedBundlesContains(url, Hash, out BasisLoadedAssets loadedAssets);
+
+            switch (output)
             {
-                Debug.Log("Found Bundle already loaded");
-                while (!Loaded.bundleRequest.isDone)
-                {
-                    progressCallback?.Invoke(50 + Loaded.bundleRequest.progress * 50); // Progress from 50 to 100 during loading
-                    await Task.Yield();
-                }
-                return Loaded;
+                case Status.True:
+                    Debug.Log("Found Bundle already loaded");
+                    return await TrackLoadingProgress(loadedAssets, progressCallback);
+
+                case Status.False:
+                case Status.HasNewHash:
+                    if (output == Status.HasNewHash)
+                    {
+                        Instance.UnloadAssetBundle(url);
+                    }
+
+                    Debug.Log("Loading from disc and adding bundle");
+                    if (Instance.AddBundle(url, localPath, Hash, null, out loadedAssets))
+                    {
+                        loadedAssets.bundleRequest = AssetBundle.LoadFromFileAsync(localPath);
+                        loadedAssets.ProgressReportAvatarLoad = progressCallback;
+                        return await TrackLoadingProgress(loadedAssets, progressCallback);
+                    }
+                    else
+                    {
+                        Debug.LogError("Unable to add bundle!");
+                        return null;
+                    }
             }
-            else
+            Debug.LogError("This should never run, update this api returning null status for bundle!");
+            return null;
+        }
+
+        private static async Task<BasisLoadedAssets> TrackLoadingProgress(BasisLoadedAssets loadedAssets, ProgressReport progressCallback)
+        {
+            while (!loadedAssets.bundleRequest.isDone)
             {
-                Debug.Log("loading from disc and adding bundle");
-                if (Instance.AddBundle(url, localPath, Hash, null, out BasisLoadedAssets LoadedAssets))
-                {
-                    LoadedAssets.bundleRequest = AssetBundle.LoadFromFileAsync(localPath);
-                    LoadedAssets.ProgressReportAvatarLoad = progressCallback;
-                    // Track loading progress
-                    while (!LoadedAssets.bundleRequest.isDone)
-                    {
-                        progressCallback?.Invoke(50 + LoadedAssets.bundleRequest.progress * 50); // Progress from 50 to 100 during loading
-                        await Task.Yield();
-                    }
-                    LoadedAssets.Bundle = LoadedAssets.bundleRequest.assetBundle;
-                    LoadedAssets.IsBundleLoaded = true;
-                    if (LoadedAssets.Bundle == null)
-                    {
-                        Debug.LogError("missing Bundle!");
-                    }
-                    Debug.Log("bundle loaded and ready");
-                    return LoadedAssets;
-                }
-                else
-                {
-                    Debug.LogError("missing was unable to add bundle!");
-                    return null;
-                }
+                progressCallback?.Invoke(50 + loadedAssets.bundleRequest.progress * 50); // Progress from 50 to 100 during loading
+                await Task.Yield();
             }
+
+            loadedAssets.Bundle = loadedAssets.bundleRequest.assetBundle;
+            loadedAssets.IsBundleLoaded = true;
+
+            if (loadedAssets.Bundle == null)
+            {
+                Debug.LogError("Missing Bundle!");
+                return null;
+            }
+
+            Debug.Log("Bundle loaded and ready");
+            return loadedAssets;
         }
         public static async Task DownloadAssetBundleAsync(string url, string localPath, ProgressReport progressCallback)
         {
@@ -243,6 +255,7 @@ namespace Basis.Scripts.Addressable_Driver.Loading
                 if (asset.Url.Equals(url) && asset.Bundle != null)
                 {
                     asset.Bundle.Unload(false);
+                    LoadedBundles.RemoveAt(Index);
                     return;
                 }
             }

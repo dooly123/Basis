@@ -13,6 +13,5 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         public string localPath;
         public string Hash;
         public bool IsBundleLoaded;
-        public float OverallLoadPercentage;
     }
 }
