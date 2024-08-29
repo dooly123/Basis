@@ -997,7 +997,7 @@ GameObject:
   - component: {fileID: 1600284590662190142}
   - component: {fileID: 8917893734727658160}
   - component: {fileID: 1036067617934251197}
-  - component: {fileID: -4260526141799047002}
+  - component: {fileID: 2648026103409099954}
   - component: {fileID: 2645338253211475504}
   m_Layer: 5
   m_Name: HamBurgerMenu
@@ -1072,7 +1072,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8917893734727658160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,7 +1123,7 @@ MonoBehaviour:
   CloseUI: {fileID: 7793664512655881935}
   FullBody: {fileID: 8678589435511341367}
   OverrideForceCalibration: 0
---- !u!114 &-4260526141799047002
+--- !u!114 &2648026103409099954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1132,13 +1132,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7434544960807650688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87e7a2b5ca91e74f93d8eb6d575954e, type: 3}
+  m_Script: {fileID: 11500000, guid: 20d5cedb492bd524a9bbd4ca5144f0c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LocalPlayer: {fileID: 0}
-  CameraDriver: {fileID: 0}
-  WorldOffset: {x: 0, y: -0.12, z: 0.3}
-  hasLocalCreationEvent: 0
+  UIBase: {fileID: 1036067617934251197}
+  menuPosOffset: {x: 0, y: 0, z: 0}
+  menuRotOffset: {x: 0, y: 0, z: 0}
+  menuType: 1
 --- !u!114 &2645338253211475504
 MonoBehaviour:
   m_ObjectHideFlags: 0

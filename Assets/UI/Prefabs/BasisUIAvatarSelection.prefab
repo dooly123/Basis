@@ -559,8 +559,8 @@ MonoBehaviour:
   m_fontSize: 24
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 1
-  m_fontSizeMin: 3
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -612,9 +612,9 @@ GameObject:
   - component: {fileID: 3085000715464220075}
   - component: {fileID: 7224626457331495050}
   - component: {fileID: 1307651583072996997}
-  - component: {fileID: 4544001729886002100}
   - component: {fileID: 3978596320646700803}
   - component: {fileID: 8022511376644819442}
+  - component: {fileID: 5448139558751228006}
   m_Layer: 5
   m_Name: BasisUIAvatarSelection
   m_TagString: Untagged
@@ -689,7 +689,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &1307651583072996997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,22 +705,6 @@ MonoBehaviour:
   Canvas: {fileID: 3085000715464220075}
   CanvasScaler: {fileID: 7224626457331495050}
   GraphicUIRayCaster: {fileID: 3978596320646700803}
---- !u!114 &4544001729886002100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7192731943930770945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87e7a2b5ca91e74f93d8eb6d575954e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LocalPlayer: {fileID: 0}
-  CameraDriver: {fileID: 0}
-  WorldOffset: {x: 0, y: 0, z: 0.5}
-  hasLocalCreationEvent: 0
 --- !u!114 &3978596320646700803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,17 +737,108 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   AvatarUrls:
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/aurellia.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/boo.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/castle.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/doolyav.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/doolyavwithclothes.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lanowen.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lumain.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lyuma.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/peechav.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/small%20dooly.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/vowgan.bundle
-  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/yun.bundle
+  - Aurellia
+  - Yun
+  - Dooly
+  - Peech
+  - boo
+  - Lumain
+  - Lyuma
+  - Vowgan
+  - Lanowen
+  - Dooly Smol
+  - Castle
+  - Peechiu Clothed
+  - Dooly Clothed
   ParentedAvatarButtons: {fileID: 673662174573543822}
   ButtonPrefab: {fileID: 617829828588750553}
+--- !u!114 &5448139558751228006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7192731943930770945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d5cedb492bd524a9bbd4ca5144f0c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIBase: {fileID: 8022511376644819442}
+  menuPosOffset: {x: 0, y: 0, z: 0}
+  menuRotOffset: {x: 0, y: 0, z: 0}
+  FallBackMultiplier: 0.35
+  menuType: 1
+  hand:
+    Cullable: 0
+    Name: 
+    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
+    HasBone: 0
+    BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
+    HasEvents: 0
+    hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
+    GeneralLocation: 0
+    RotationControl:
+      Lerp: 0
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      TaretInterpreter: 0
+      Offset: {x: 0, y: 0, z: 0, w: 0}
+      ClampStats: 0
+      ClampableAxis: 0
+      ClampSize: 0
+      UseAngle: 0
+      AngleBeforeMove: 0
+      AngleBeforeSame: 0
+      ResetAfterTime: 0
+      NextReset: 0
+      HasActiveTimer: 0
+      RotationOverride: 0
+    PositionControl:
+      Offset: {x: 0, y: 0, z: 0}
+      LerpAmount: 0
+      Lerp: 0
+      TaretInterpreter: 0
+    OutGoingData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastRunData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    IncomingData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    OutgoingWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}

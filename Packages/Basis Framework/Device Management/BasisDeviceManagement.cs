@@ -36,17 +36,15 @@ namespace Basis.Scripts.Device_Management
                 return Desktop;
             }
         }
+        /// <summary>
+        /// checks to see if we are in desktop
+        /// this being false does not mean its vr.
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public static bool IsUserInDesktop()
         {
             if (Desktop == BasisDeviceManagement.Instance.CurrentMode)
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool IsUserInVr()
-        {
-            if(Desktop != BasisDeviceManagement.Instance.CurrentMode)
             {
                 return true;
             }

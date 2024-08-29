@@ -20914,7 +20914,7 @@ GameObject:
   - component: {fileID: 6328418170902668384}
   - component: {fileID: 3172262374525251012}
   - component: {fileID: 3495050165005451023}
-  - component: {fileID: 1753101766628400647}
+  - component: {fileID: 3525370383443639903}
   - component: {fileID: 7522235755497681572}
   m_Layer: 5
   m_Name: Settings UI
@@ -20998,7 +20998,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6328418170902668384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21127,7 +21127,7 @@ MonoBehaviour:
   - Option: Debug Visuals
     TextDescription: {fileID: 7048585493488167685}
     ObjectInput: {fileID: 1389687564416609237}
---- !u!114 &1753101766628400647
+--- !u!114 &3525370383443639903
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21136,13 +21136,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5776740318662466287}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87e7a2b5ca91e74f93d8eb6d575954e, type: 3}
+  m_Script: {fileID: 11500000, guid: 20d5cedb492bd524a9bbd4ca5144f0c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LocalPlayer: {fileID: 0}
-  CameraDriver: {fileID: 0}
-  WorldOffset: {x: 0, y: -0.25, z: 0.25}
-  hasLocalCreationEvent: 0
+  UIBase: {fileID: 7522235755497681572}
+  menuPosOffset: {x: 0, y: 0, z: 0}
+  menuRotOffset: {x: 0, y: 0, z: 0}
+  menuType: 1
 --- !u!114 &7522235755497681572
 MonoBehaviour:
   m_ObjectHideFlags: 0
