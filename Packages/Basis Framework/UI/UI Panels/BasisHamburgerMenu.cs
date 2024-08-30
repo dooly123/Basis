@@ -12,74 +12,78 @@ using UnityEngine.UI;
 namespace Basis.Scripts.UI.UI_Panels
 {
     public class BasisHamburgerMenu : BasisUIBase
-{
-    public Button Settings;
-    public Button AvatarButton;
-    public Button CloseUI;
-    public Button FullBody;
-    public static string MainMenuAddressableID = "MainMenu";
-    public static BasisHamburgerMenu Instance;
-    public bool OverrideForceCalibration;
-    public void Initialize()
     {
-        Instance = this;
-        Settings.onClick.AddListener(SettingsPanel);
-        AvatarButton.onClick.AddListener(AvatarButtonPanel);
-        CloseUI.onClick.AddListener(CloseThisMenu);
-        FullBody.onClick.AddListener(PutIntoCalibrationMode);
-    }
-    private Dictionary<BasisInput, Action> TriggerDelegates = new Dictionary<BasisInput, Action>();
-
-    public void PutIntoCalibrationMode()
-    {
-        string BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;
-        if (OverrideForceCalibration || BasisBootedMode == "OpenVRLoader" || BasisBootedMode == "OpenXRLoader")
+        public Button Settings;
+        public Button AvatarButton;
+        public Button CloseUI;
+        public Button FullBody;
+        public static string MainMenuAddressableID = "MainMenu";
+        public static BasisHamburgerMenu Instance;
+        public bool OverrideForceCalibration;
+        public void Initialize()
         {
-            BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
-
-            foreach (BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
+            Instance = this;
+            Settings.onClick.AddListener(SettingsPanel);
+            AvatarButton.onClick.AddListener(AvatarButtonPanel);
+            CloseUI.onClick.AddListener(CloseThisMenu);
+            FullBody.onClick.AddListener(PutIntoCalibrationMode);
+            BasisCursorManagement.UnlockCursor(nameof(BasisHamburgerMenu));
+        }
+        private Dictionary<BasisInput, Action> TriggerDelegates = new Dictionary<BasisInput, Action>();
+        public void OnDestroy()
+        {
+            BasisCursorManagement.LockCursor(nameof(BasisHamburgerMenu));
+        }
+        public void PutIntoCalibrationMode()
+        {
+            string BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;
+            if (OverrideForceCalibration || BasisBootedMode == "OpenVRLoader" || BasisBootedMode == "OpenXRLoader")
             {
-                Action triggerDelegate = () => OnTriggerChanged(BasisInput);
-                TriggerDelegates[BasisInput] = triggerDelegate;
-                BasisInput.InputState.OnTriggerChanged += triggerDelegate;
+                BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
+
+                foreach (BasisInput BasisInput in BasisDeviceManagement.Instance.AllInputDevices)
+                {
+                    Action triggerDelegate = () => OnTriggerChanged(BasisInput);
+                    TriggerDelegates[BasisInput] = triggerDelegate;
+                    BasisInput.InputState.OnTriggerChanged += triggerDelegate;
+                }
             }
         }
-    }
 
-    public void OnTriggerChanged(BasisInput FiredOff)
-    {
-        if (FiredOff.InputState.Trigger >= 0.9f)
+        public void OnTriggerChanged(BasisInput FiredOff)
         {
-            foreach (var entry in TriggerDelegates)
+            if (FiredOff.InputState.Trigger >= 0.9f)
             {
-                entry.Key.InputState.OnTriggerChanged -= entry.Value;
+                foreach (var entry in TriggerDelegates)
+                {
+                    entry.Key.InputState.OnTriggerChanged -= entry.Value;
+                }
+                TriggerDelegates.Clear();
+                BasisAvatarIKStageCalibration.FullBodyCalibration();
             }
-            TriggerDelegates.Clear();
-            BasisAvatarIKStageCalibration.FullBodyCalibration();
+        }
+        private static void AvatarButtonPanel()
+        {
+            BasisHamburgerMenu.Instance.CloseThisMenu();
+            AddressableGenericResource resource = new AddressableGenericResource(BasisUIAvatarSelection.AvatarSelection, AddressableExpectedResult.SingleItem);
+            BasisSettingsPanelMenu.OpenMenuNow(resource);
+        }
+
+        public static void SettingsPanel()
+        {
+            BasisHamburgerMenu.Instance.CloseThisMenu();
+            AddressableGenericResource resource = new AddressableGenericResource(BasisSettingsPanelMenu.SettingsPanel, AddressableExpectedResult.SingleItem);
+            BasisSettingsPanelMenu.OpenMenuNow(resource);
+        }
+        public static async Task OpenHamburgerMenu()
+        {
+            AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
+            await OpenThisMenu(resource);
+        }
+        public static void OpenHamburgerMenuNow()
+        {
+            AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
+            OpenMenuNow(resource);
         }
     }
-    private static void AvatarButtonPanel()
-    {
-        BasisHamburgerMenu.Instance.CloseThisMenu();
-        AddressableGenericResource resource = new AddressableGenericResource(BasisUIAvatarSelection.AvatarSelection, AddressableExpectedResult.SingleItem);
-        BasisSettingsPanelMenu.OpenMenuNow(resource);
-    }
-
-    public static void SettingsPanel()
-    {
-        BasisHamburgerMenu.Instance.CloseThisMenu();
-        AddressableGenericResource resource = new AddressableGenericResource(BasisSettingsPanelMenu.SettingsPanel, AddressableExpectedResult.SingleItem);
-        BasisSettingsPanelMenu.OpenMenuNow(resource);
-    }
-    public static async Task OpenHamburgerMenu()
-    {
-        AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
-        await OpenThisMenu(resource);
-    }
-    public static void OpenHamburgerMenuNow()
-    {
-        AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
-        OpenMenuNow(resource);
-    }
-}
 }

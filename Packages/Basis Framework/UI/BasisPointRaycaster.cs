@@ -47,6 +47,8 @@ namespace Basis.Scripts.UI
         public List<RaycastResult> SortedRays = new List<RaycastResult>();
         public bool IgnoreReversedGraphics;
         public override Camera eventCamera => BasisLocalCameraDriver.Instance.Camera;
+        public static string UILayer = "UI";
+        public static string IgnoreRayCastLayer = "Ignore Raycast";
         public async Task Initialize(BasisInput basisInput)
         {
             CurrentEventData = new BasisPointerEventData(EventSystem.current);
@@ -54,8 +56,8 @@ namespace Basis.Scripts.UI
             BasisDeviceMatchableNames = BasisInput.BasisDeviceMatchableNames;
             ApplyStaticDataToRaycastResult();
             // Get the layer number for "Ignore Raycast" layer
-            int ignoreRaycastLayer = LayerMask.NameToLayer("Ignore Raycast");
-            UIMask = LayerMask.NameToLayer("UI");
+            int ignoreRaycastLayer = LayerMask.NameToLayer(IgnoreRayCastLayer);
+            UIMask = LayerMask.NameToLayer(UILayer);
             // Create a LayerMask that includes all layers
             LayerMask allLayers = ~0;
             // Exclude the "Ignore Raycast" layer using bitwise AND and NOT operations
@@ -83,7 +85,7 @@ namespace Basis.Scripts.UI
                 LineRenderer.positionCount = 2;
                 HasLineRenderer = true;
                 LineRenderer.enabled = HasLineRenderer;
-                LineRenderer.gameObject.layer = LayerMask.NameToLayer("UI");
+                LineRenderer.gameObject.layer = LayerMask.NameToLayer(UILayer);
             }
             if (BasisDeviceMatchableNames.HasRayCastRedical)
             {
@@ -148,11 +150,21 @@ namespace Basis.Scripts.UI
                 ResetRenderers();
             }
         }
+        public Vector2 ScreenPoint;
+        public bool UseWorldPosition = true;
         private void UpdateRayCastResult()
         {
             RaycastResult.gameObject = PhysicHit.transform.gameObject;
             RaycastResult.distance = PhysicHit.distance;
-            RaycastResult.screenPosition = BasisLocalCameraDriver.Instance.Camera.WorldToScreenPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
+            if (UseWorldPosition)
+            {
+                ScreenPoint = BasisLocalCameraDriver.Instance.Camera.WorldToScreenPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
+            }
+            else
+            {
+                // we assign screenpoint manually example in BasisLocalCameraDriver
+            }
+            RaycastResult.screenPosition = ScreenPoint;
             FoundCanvas = PhysicHit.transform.gameObject.GetComponentInParent<Canvas>();
             if (FoundCanvas != null)
             {
@@ -188,8 +200,15 @@ namespace Basis.Scripts.UI
             {
                 if (PhysicHit.transform != null)
                 {
-                    highlightQuadInstance.SetActive(true);
-                    highlightQuadInstance.transform.SetPositionAndRotation(PhysicHit.point, Quaternion.LookRotation(PhysicHit.normal));
+                    if (BasisDeviceManagement.IsUserInDesktop() && BasisCursorManagement.LockState() != CursorLockMode.Locked)
+                    {
+                        highlightQuadInstance.SetActive(false);
+                    }
+                    else
+                    {
+                        highlightQuadInstance.SetActive(true);
+                        highlightQuadInstance.transform.SetPositionAndRotation(PhysicHit.point, Quaternion.LookRotation(PhysicHit.normal));
+                    }
                 }
                 else
                 {
@@ -226,10 +245,17 @@ namespace Basis.Scripts.UI
                 this.transform.localRotation = Quaternion.Euler(BasisDeviceMatchableNames.RotationRaycastOffset);
                 LastRotation = BasisDeviceMatchableNames.RotationRaycastOffset;
             }
-            transform.GetPositionAndRotation(out Vector3 Position, out Quaternion Rotation);
-            // Create the ray with the adjusted starting position and direction
-            ray.origin = Position + (Rotation * BasisDeviceMatchableNames.PositionRayCastOffset);
-            ray.direction = transform.forward;
+            if (UseWorldPosition)
+            {
+                transform.GetPositionAndRotation(out Vector3 Position, out Quaternion Rotation);
+                // Create the ray with the adjusted starting position and direction
+                ray.origin = Position + (Rotation * BasisDeviceMatchableNames.PositionRayCastOffset);
+                ray.direction = transform.forward;
+            }
+            else
+            {
+                ray = BasisLocalCameraDriver.Instance.Camera.ScreenPointToRay(ScreenPoint, Camera.MonoOrStereoscopicEye.Mono);
+            }
             if (Physics.Raycast(ray, out PhysicHit, MaxDistance, Mask, TriggerInteraction))
             {
                 SortedGraphics.Clear();

@@ -13,6 +13,7 @@ namespace Basis.Scripts.Drivers
 {
     public class BasisLocalCameraDriver : MonoBehaviour
     {
+        public static bool HasInstance;
         public static BasisLocalCameraDriver Instance;
         public Camera Camera;
         public static int CameraInstanceID;
@@ -47,6 +48,7 @@ namespace Basis.Scripts.Drivers
             if (BasisHelpers.CheckInstance(Instance))
             {
                 Instance = this;
+                HasInstance = true;
             }
             LocalPlayer = BasisLocalPlayer.Instance;
             Camera.nearClipPlane = NearClip;
@@ -135,6 +137,7 @@ namespace Basis.Scripts.Drivers
             BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
             BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnHeightChanged;
             HasEvents = false;
+            HasInstance = false;
         }
         private void OnModeSwitch(string mode)
         {
@@ -143,6 +146,73 @@ namespace Basis.Scripts.Drivers
                 Camera.fieldOfView = DefaultCameraFov;
             }
             OnHeightChanged();
+        }
+        public static Vector3 Forward()
+        {
+            if (HasInstance)
+            {
+                return Instance.transform.forward;
+            }
+            else
+            {
+                return Vector3.zero;
+            }
+        }
+        public static Vector3 Up()
+        {
+            if (HasInstance)
+            {
+                return Instance.transform.up;
+            }
+            else
+            {
+                return Vector3.zero;
+            }
+        }
+        public static Vector3 Right()
+        {
+            if (HasInstance)
+            {
+                return Instance.transform.right;
+            }
+            else
+            {
+                return Vector3.zero;
+            }
+        }
+        public static Vector3 Position()
+        {
+            if (HasInstance)
+            {
+                return Instance.transform.position;
+            }
+            else
+            {
+                return Vector3.zero;
+            }
+        }
+        public static Quaternion Rotation()
+        {
+            if (HasInstance)
+            {
+                return Instance.transform.rotation;
+            }
+            else
+            {
+                return Quaternion.identity;
+            }
+        }
+        public static void GetPositionAndRotation(out Vector3 Position,out Quaternion Rotation)
+        {
+            if (HasInstance)
+            {
+                 Instance.transform.GetPositionAndRotation(out Position,out Rotation);
+            }
+            else
+            {
+                Position = Vector3.zero;
+                Rotation = Quaternion.identity;
+            }
         }
         public void OnHeightChanged()
         {

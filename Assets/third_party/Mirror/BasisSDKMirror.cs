@@ -187,7 +187,7 @@ public class BasisSDKMirror : MonoBehaviour
         {
             return position;
         }
-        return BasisLocalCameraDriver.Instance.transform.position;
+        return BasisLocalCameraDriver.Position();
     }
     private Vector4 CameraSpacePlane(Matrix4x4 worldToCameraMatrix, Vector3 pos, Vector3 normal, float sideSign = 1.0f)
     {

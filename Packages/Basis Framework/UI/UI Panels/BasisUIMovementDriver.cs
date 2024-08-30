@@ -5,73 +5,62 @@ using UnityEngine;
 
 namespace Basis.Scripts.UI.UI_Panels
 {
-public class BasisUIMovementDriver : MonoBehaviour
-{
-    public BasisLocalPlayer LocalPlayer;
-    public BasisLocalCameraDriver CameraDriver;
-    public Vector3 WorldOffset;
-    public bool hasLocalCreationEvent = false;
-    public void OnEnable()
+    public class BasisUIMovementDriver : MonoBehaviour
     {
-        LocalPlayer = BasisLocalPlayer.Instance;
-        CameraDriver = BasisLocalCameraDriver.Instance;
-        if (BasisLocalPlayer.Instance != null)
+        public BasisLocalPlayer LocalPlayer;
+        public Vector3 WorldOffset = new Vector3(0, 0, 0.5f);
+        public bool hasLocalCreationEvent = false;
+        public void OnEnable()
         {
-            LocalPlayerGenerated();
-            StartCoroutine(WaitAndSetUILocation());
-        }
-        else
-        {
-            if (hasLocalCreationEvent == false)
+            LocalPlayer = BasisLocalPlayer.Instance;
+            if (BasisLocalPlayer.Instance != null)
             {
-                BasisLocalPlayer.OnLocalPlayerCreated += LocalPlayerGenerated;
-                hasLocalCreationEvent = true;
+                LocalPlayerGenerated();
+                StartCoroutine(WaitAndSetUILocation());
+            }
+            else
+            {
+                if (hasLocalCreationEvent == false)
+                {
+                    BasisLocalPlayer.OnLocalPlayerCreated += LocalPlayerGenerated;
+                    hasLocalCreationEvent = true;
+                }
             }
         }
-    }
-    public void LocalPlayerGenerated()
-    {
-        BasisLocalPlayer.Instance.OnLocalAvatarChanged += OnLocalAvatarChanged;
-        BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnPlayersHeightChanged;
-    }
-    public void OnDisable()
-    {
-        BasisLocalPlayer.Instance.OnLocalAvatarChanged -= OnLocalAvatarChanged;
-        BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnPlayersHeightChanged;
-        if(hasLocalCreationEvent)
+        public void LocalPlayerGenerated()
         {
-            BasisLocalPlayer.OnLocalPlayerCreated -= LocalPlayerGenerated;
-            hasLocalCreationEvent = false;
+            BasisLocalPlayer.Instance.OnLocalAvatarChanged += StartWaitAndSetUILocation;
+            BasisLocalPlayer.Instance.OnPlayersHeightChanged += StartWaitAndSetUILocation;
+        }
+        public void OnDisable()
+        {
+            BasisLocalPlayer.Instance.OnLocalAvatarChanged -= StartWaitAndSetUILocation;
+            BasisLocalPlayer.Instance.OnPlayersHeightChanged -= StartWaitAndSetUILocation;
+            if (hasLocalCreationEvent)
+            {
+                BasisLocalPlayer.OnLocalPlayerCreated -= LocalPlayerGenerated;
+                hasLocalCreationEvent = false;
+            }
+        }
+
+        private void StartWaitAndSetUILocation()
+        {
+            StartCoroutine(WaitAndSetUILocation());
+        }
+        private IEnumerator WaitAndSetUILocation()
+        {
+            yield return null;
+            SetUILocation();
+        }
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public void SetUILocation()
+        {
+            BasisLocalCameraDriver.GetPositionAndRotation(out Position, out Rotation);
+            Vector3 VRotation = Rotation.eulerAngles;
+            //  VRotation = new Vector3(VRotation.x, VRotation.y, 0);
+            Quaternion Rot = Quaternion.Euler(VRotation);
+            transform.SetPositionAndRotation(Position + Rot * (WorldOffset * LocalPlayer.RatioPlayerToEyeDefaultScale), Rot);
         }
     }
-
-    private void OnPlayersHeightChanged()
-    {
-        StartCoroutine(WaitAndSetUILocation());
-    }
-
-    private void OnLocalAvatarChanged()
-    {
-        StartCoroutine(WaitAndSetUILocation());
-    }
-
-    private IEnumerator WaitAndSetUILocation()
-    {
-        yield return null;
-        SetUILocation();
-    }
-
-    public void SetUILocation()
-    {
-        // Get the camera's position in world space
-        if (CameraDriver != null && CameraDriver.Camera != null)
-        {
-            Vector3 cameraPosition = CameraDriver.Camera.transform.position;
-            Vector3 Rotation = CameraDriver.Camera.transform.eulerAngles;
-            Rotation = new Vector3(Rotation.x, Rotation.y, 0);
-            Quaternion Rot = Quaternion.Euler(Rotation);
-            transform.SetPositionAndRotation(cameraPosition + CameraDriver.Camera.transform.rotation * WorldOffset, Rot);
-        }
-    }
-}
 }
