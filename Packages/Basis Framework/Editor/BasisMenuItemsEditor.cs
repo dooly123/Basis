@@ -1,5 +1,6 @@
 using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.Device_Management.Devices.Desktop;
@@ -22,7 +23,8 @@ public static class BasisMenuItemsEditor
     [MenuItem("Basis/Avatar/ReloadAvatar")]
     public static async void ReloadAvatar()
     {
-        await BasisLocalPlayer.Instance.CreateAvatar();
+        string LastUsedAvatar = BasisDataStore.LoadString(BasisLocalPlayer.LoadFileName, BasisAvatarFactory.LoadingAvatar);
+        await BasisLocalPlayer.Instance.CreateAvatar(LastUsedAvatar);
     }
     [MenuItem("Basis/Trackers/Hide Trackers")]
     public static void HideTrackersEditor()

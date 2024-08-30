@@ -1,6 +1,5 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
-using System.Collections;
 using UnityEngine;
 
 namespace Basis.Scripts.UI.UI_Panels
@@ -16,7 +15,6 @@ namespace Basis.Scripts.UI.UI_Panels
             if (BasisLocalPlayer.Instance != null)
             {
                 LocalPlayerGenerated();
-                StartCoroutine(WaitAndSetUILocation());
             }
             else
             {
@@ -29,12 +27,11 @@ namespace Basis.Scripts.UI.UI_Panels
         }
         public void LocalPlayerGenerated()
         {
-            BasisLocalPlayer.Instance.OnLocalAvatarChanged += StartWaitAndSetUILocation;
             BasisLocalPlayer.Instance.OnPlayersHeightChanged += StartWaitAndSetUILocation;
+            SetUILocation();
         }
         public void OnDisable()
         {
-            BasisLocalPlayer.Instance.OnLocalAvatarChanged -= StartWaitAndSetUILocation;
             BasisLocalPlayer.Instance.OnPlayersHeightChanged -= StartWaitAndSetUILocation;
             if (hasLocalCreationEvent)
             {
@@ -46,27 +43,16 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             if (Final)
             {
-                StartWaitAndSetUILocation();
+                Debug.Log("StartWaitAndSetUILocation");
+                SetUILocation();
             }
-        }
-        private void StartWaitAndSetUILocation()
-        {
-            StartCoroutine(WaitAndSetUILocation());
-        }
-        private IEnumerator WaitAndSetUILocation()
-        {
-            yield return null;
-            SetUILocation();
         }
         public Vector3 Position;
         public Quaternion Rotation;
         public void SetUILocation()
         {
             BasisLocalCameraDriver.GetPositionAndRotation(out Position, out Rotation);
-            Vector3 VRotation = Rotation.eulerAngles;
-            //  VRotation = new Vector3(VRotation.x, VRotation.y, 0);
-            Quaternion Rot = Quaternion.Euler(VRotation);
-            transform.SetPositionAndRotation(Position + Rot * (WorldOffset * LocalPlayer.RatioPlayerToEyeDefaultScale), Rot);
+            transform.SetPositionAndRotation(Position + (Rotation * (WorldOffset * LocalPlayer.RatioPlayerToEyeDefaultScale)), Rotation);
         }
     }
 }

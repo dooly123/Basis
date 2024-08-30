@@ -90,6 +90,7 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
         }
+        public Coroutine PlayerheightRoutine;
         /// <summary>
         /// please wait 3 frames before calling or using this data,
         /// instead of reading the data of the component i would use OnPlayersHeightChanged
@@ -102,7 +103,11 @@ namespace Basis.Scripts.BasisSdk.Players
             RatioPlayerToEyeDefaultScale = 1f;
             RatioAvatarToAvatarEyeDefaultScale = 1f;
             OnPlayersHeightChanged?.Invoke(false);
-            StartCoroutine(SetPlayerHeightWaitOneFrame(realEyeHeight, avatarHeight));
+            if (PlayerheightRoutine != null)
+            {
+                StopCoroutine(PlayerheightRoutine);
+            }
+            PlayerheightRoutine = StartCoroutine(SetPlayerHeightWaitOneFrame(realEyeHeight, avatarHeight));
         }
         /// <summary>
         /// we wait until the next frame so we can let all devices and systems reset to there native size first.
@@ -113,6 +118,7 @@ namespace Basis.Scripts.BasisSdk.Players
         IEnumerator SetPlayerHeightWaitOneFrame(float realEyeHeight, float avatarHeight)
         {
             // This will wait for 2 frames allowing the devices to provide good final positions
+            yield return null;
             yield return null;
             yield return null;
 
@@ -137,7 +143,9 @@ namespace Basis.Scripts.BasisSdk.Players
             // This will wait for 2 frames allowing the devices to provide good final positions
             yield return null;
             yield return null;
+            yield return null;
             OnPlayersHeightChanged?.Invoke(true);
+            PlayerheightRoutine = null;
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {
@@ -182,7 +190,7 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
         }
-        public async Task CreateAvatar(string AddressableID = BasisAvatarFactory.LoadingAvatar)
+        public async Task CreateAvatar(string AddressableID)
         {
             await BasisAvatarFactory.LoadAvatar(this, AddressableID);
             BasisDataStore.SaveString(AddressableID, LoadFileName);

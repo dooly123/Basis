@@ -10,8 +10,15 @@ public static class BasisAssetBundleHashLookup
     {
         if (string.IsNullOrEmpty(hash))
         {
-            hash = AddressableManagement.ChangeExtension(AvatarAddress, HashExtension);
-            return await AddressableManagement.LoadTextFromURLAsync(hash);
+            if (AvatarAddress.Contains("https://") || AvatarAddress.Contains("http://"))
+            {
+                hash = AddressableManagement.ChangeExtension(AvatarAddress, HashExtension);
+                return await AddressableManagement.LoadTextFromURLAsync(hash);
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
         else if (hash.Contains("https://") || hash.Contains("http://"))
         {
