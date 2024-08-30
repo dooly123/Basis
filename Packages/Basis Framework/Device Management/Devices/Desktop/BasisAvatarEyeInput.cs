@@ -1,7 +1,6 @@
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
-using Basis.Scripts.TransformBinders;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -104,9 +103,11 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             }
             AvatarDriver = BasisLocalPlayer.Instance.AvatarDriver;
             Camera = BasisLocalCameraDriver.Instance.Camera;
-            foreach (BasisLockToInput Input in BasisDeviceManagement.Instance.BasisLockToInputs)
+            BasisDeviceManagement Device = BasisDeviceManagement.Instance;
+            int count = Device.BasisLockToInputs.Count;
+            for (int Index = 0; Index < count; Index++)
             {
-                Input.FindRole();
+                Device.BasisLockToInputs[Index].FindRole();
             }
         }
         public new void OnDisable()

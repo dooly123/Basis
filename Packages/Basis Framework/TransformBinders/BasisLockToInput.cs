@@ -6,68 +6,78 @@ using UnityEngine;
 
 namespace Basis.Scripts.TransformBinders
 {
-public class BasisLockToInput : MonoBehaviour
-{
-    public BasisBoneTrackedRole TrackedRole;
-    public BasisInput AttachedInput = null;
-    public bool HasEvent = false;
-    public void Awake()
+    public class BasisLockToInput : MonoBehaviour
     {
-        Initialize();
-    }
-    public void Initialize()
-    {
-        if (BasisDeviceManagement.Instance.BasisLockToInputs.Contains(this) == false)
+        public BasisBoneTrackedRole TrackedRole;
+        public BasisInput AttachedInput = null;
+        public bool HasEvent = false;
+        public void Awake()
         {
-            BasisDeviceManagement.Instance.BasisLockToInputs.Add(this);
+            Initialize();
         }
-        if (HasEvent == false)
+        public void Initialize()
         {
-            BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += FindRole;
-            BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved += ResetIfNeeded;
-            HasEvent = true;
-        }
-        FindRole();
-    }
-    public void OnDestroy()
-    {
-        if (HasEvent)
-        {
-            BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= FindRole;
-            BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved -= ResetIfNeeded;
-            HasEvent = false;
-        }
-    }
-    private void ResetIfNeeded(BasisInput input)
-    {
-        if(AttachedInput == null || AttachedInput == input)
-        {
-            Debug.Log("ReParenting Camera");
-            this.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
-        }
-    }
-
-    public void FindRole()
-    {
-        this.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
-        for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
-        {
-            BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
-            if (Input != null)
+            if (BasisDeviceManagement.Instance.BasisLockToInputs.Contains(this) == false)
             {
-                if (Input.TryGetRole(out BasisBoneTrackedRole role))
+                BasisDeviceManagement.Instance.BasisLockToInputs.Add(this);
+            }
+            if (HasEvent == false)
+            {
+                BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += FindRole;
+                BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved += ResetIfNeeded;
+                HasEvent = true;
+            }
+            FindRole();
+        }
+        public void OnDestroy()
+        {
+            if (HasEvent)
+            {
+                BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= FindRole;
+                BasisDeviceManagement.Instance.AllInputDevices.OnListItemRemoved -= ResetIfNeeded;
+                HasEvent = false;
+            }
+        }
+        private void ResetIfNeeded(BasisInput input)
+        {
+            if (AttachedInput == null || AttachedInput == input)
+            {
+                Debug.Log("ReParenting Camera");
+                transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+            }
+        }
+
+        public void FindRole()
+        {
+            transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
+            int count = BasisDeviceManagement.Instance.AllInputDevices.Count;
+            Debug.Log("finding Lock " + TrackedRole);
+            for (int Index = 0; Index < count; Index++)
+            {
+                BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
+                if (Input != null)
                 {
-                    if (role == TrackedRole)
+                    if (Input.TryGetRole(out BasisBoneTrackedRole role))
                     {
-                        AttachedInput = Input;
-                        this.transform.parent = AttachedInput.transform;
-                        this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                        this.transform.localScale = Vector3.one;
-                        return;
+                        if (role == TrackedRole)
+                        {
+                            AttachedInput = Input;
+                            transform.parent = AttachedInput.transform;
+                            transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                            transform.localScale = Vector3.one;
+                            return;
+                        }
                     }
+                    else
+                    {
+                        Debug.LogError("Missing Role " + role);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("There was a missing BasisInput at " + Index);
                 }
             }
         }
     }
-}
 }

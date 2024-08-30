@@ -10,8 +10,6 @@ using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Common;
 using Basis.Scripts.Avatar;
-using System.Collections;
-using Basis.Scripts.Device_Management.Devices;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
@@ -37,13 +35,14 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisLocalBoneDriver LocalBoneDriver;
         public BasisBoneControl Hips;
         public BasisLocalAvatarDriver AvatarDriver;
-        public BasisFootPlacementDriver FootPlacementDriver;
+    //    public BasisFootPlacementDriver FootPlacementDriver;
         public BasisVisemeDriver VisemeDriver;
         [SerializeField]
         public LayerMask GroundMask;
         public static string LoadFileName = "LastUsedAvatar.BAS";
         public bool HasEvents = false;
         public MicrophoneRecorder MicrophoneRecorder;
+        public static string MainCamera = "Assets/Prefabs/Loadins/Main Camera.prefab";
         public async Task LocalInitialize()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -55,9 +54,9 @@ namespace Basis.Scripts.BasisSdk.Players
             IsLocal = true;
             LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
             await BasisLocalInputActions.CreateInputAction(this);
-            await BasisDeviceManagement.LoadGameobject("Assets/Prefabs/Loadins/Main Camera.prefab", new InstantiationParameters());
-            FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
-            FootPlacementDriver.Initialize();
+            await BasisDeviceManagement.LoadGameobject(MainCamera, new InstantiationParameters());
+          //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
+          //  FootPlacementDriver.Initialize();
             Move.Initialize();
             LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
             if (HasEvents == false)
@@ -76,52 +75,39 @@ namespace Basis.Scripts.BasisSdk.Players
             MicrophoneRecorder.TryInitialize();
             OnLocalPlayerCreatedAndReady?.Invoke();
         }
-        public void RecalculateMyHeight()
+        /// <summary>
+        /// please wait 3 frames before calling or using this data,
+        /// instead of reading the data of the component i would use OnPlayersHeightChanged
+        ///  we wait until the next frame so we can let all devices and systems reset to there native size first.
+        /// </summary>
+        /// <param name="BasisInput"></param>
+        public async Task SetPlayersEyeHeight()
         {
-            Debug.Log("Attempting RecalculateMyHeight");
+            Debug.Log("recalculating local Height!");
+            RatioPlayerToAvatarScale = 1f;
+            RatioPlayerToEyeDefaultScale = 1f;
+            RatioAvatarToAvatarEyeDefaultScale = 1f;
+            OnPlayersHeightChanged?.Invoke(false);
+
+
+            // This will wait for 3 frames allowing the devices to provide good final positions
+            await Awaitable.NextFrameAsync();
+            await Awaitable.NextFrameAsync();
+            await Awaitable.NextFrameAsync();
+
             TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
             if (BasisLockToInput != null)
             {
                 if (BasisLockToInput.AttachedInput != null)
                 {
+                    PlayerEyeHeight = BasisLockToInput.AttachedInput.LocalRawPosition.y;
                     Debug.Log("recalculating local Height!");
                     Debug.Log("Local Eye Height is " + PlayerEyeHeight);
-                    SetPlayersEyeHeight(BasisLockToInput.AttachedInput);
                 }
             }
-        }
-        public Coroutine PlayerheightRoutine;
-        /// <summary>
-        /// please wait 3 frames before calling or using this data,
-        /// instead of reading the data of the component i would use OnPlayersHeightChanged
-        /// </summary>
-        /// <param name="BasisInput"></param>
-        public void SetPlayersEyeHeight(BasisInput BasisInput)
-        {
-            RatioPlayerToAvatarScale = 1f;
-            RatioPlayerToEyeDefaultScale = 1f;
-            RatioAvatarToAvatarEyeDefaultScale = 1f;
-            OnPlayersHeightChanged?.Invoke(false);
-            if (PlayerheightRoutine != null)
-            {
-                StopCoroutine(PlayerheightRoutine);
-            }
-            PlayerheightRoutine = StartCoroutine(SetPlayerHeightWaitOneFrame(BasisInput));
-        }
-        /// <summary>
-        /// we wait until the next frame so we can let all devices and systems reset to there native size first.
-        /// </summary>
-        /// <param name="BasisInput"></param>
-        /// <param name="avatarHeight"></param>
-        /// <returns></returns>
-        IEnumerator SetPlayerHeightWaitOneFrame(BasisInput BasisInput)
-        {
-            // This will wait for 2 frames allowing the devices to provide good final positions
-            yield return null;
-            yield return null;
-            yield return null;
-            float avatarHeight = AvatarDriver.ActiveEyeHeight();
-            PlayerEyeHeight = BasisInput.LocalRawPosition.y;
+
+        float avatarHeight = AvatarDriver.ActiveEyeHeight();
+            Debug.Log("Reading Player Eye Height "+ PlayerEyeHeight);
             if (BasisDeviceManagement.Instance.CurrentMode == BasisDeviceManagement.Desktop)
             {
                 RatioPlayerToAvatarScale = 1;
@@ -131,6 +117,10 @@ namespace Basis.Scripts.BasisSdk.Players
                 if (PlayerEyeHeight <= 0 || avatarHeight <= 0)
                 {
                     RatioPlayerToAvatarScale = 1;
+                    if(PlayerEyeHeight <= 0)
+                    {
+                        PlayerEyeHeight = 1.64f;
+                    }
                     Debug.LogError("Scale was below zero");
                 }
                 else
@@ -140,13 +130,13 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             RatioAvatarToAvatarEyeDefaultScale = avatarHeight / DefaultAvatarEyeHeight;
             RatioPlayerToEyeDefaultScale = PlayerEyeHeight / DefaultPlayerEyeHeight;
-            // This will wait for 2 frames allowing the devices to provide good final positions
-            yield return null;
-            yield return null;
-            yield return null;
+            // This will wait for 3 frames allowing the devices to provide good final positions
+            await Awaitable.NextFrameAsync();
+            await Awaitable.NextFrameAsync();
+            await Awaitable.NextFrameAsync();
 
+            Debug.Log("Player Height Set" + PlayerEyeHeight);
             OnPlayersHeightChanged?.Invoke(true);
-            PlayerheightRoutine = null;
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {

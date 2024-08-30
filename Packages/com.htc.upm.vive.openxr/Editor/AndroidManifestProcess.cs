@@ -115,7 +115,10 @@ namespace VIVE.OpenXR.Editor
 					return m_sb;
 				}
 			}
-			static void DEBUG(StringBuilder msg) { Debug.Log(msg); }
+			static void DEBUG(StringBuilder msg)
+			{
+				//Debug.Log(msg);
+			}
 
 			internal const string MENU_NAME = "VIVE/Interaction Mode/Enable Simultaneous Interaction";
 

@@ -230,17 +230,15 @@ namespace Basis.Scripts.Device_Management
 
             OnBootModeStopped?.Invoke(CurrentMode);
         }
-        public static async Task<BasisPlayer> LoadGameobject(string playerAddressableID, InstantiationParameters instantiationParameters)
+        public static async Task LoadGameobject(string playerAddressableID, InstantiationParameters instantiationParameters)
         {
-            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(playerAddressableID, instantiationParameters);
-            var gameObjects = data.Item1;
+            (List<GameObject>, Addressable_Driver.AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(playerAddressableID, instantiationParameters);
+            List<GameObject> gameObjects = data.Item1;
 
             if (gameObjects.Count == 0)
             {
                 Debug.LogError("Missing ");
             }
-
-            return null;
         }
         public static void ForceLoadXR()
         {
@@ -309,14 +307,14 @@ namespace Basis.Scripts.Device_Management
             {
                 foreach (var m in Matched)
                 {
-                 await   m.StartSDK();
+                    await m.StartSDK();
                 }
             }
             if (TryFindBasisBaseTypeManagement(type, out Matched))
             {
                 foreach (var m in Matched)
                 {
-                  await  m.StartSDK();
+                    await m.StartSDK();
                 }
             }
         }

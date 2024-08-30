@@ -20,7 +20,7 @@ namespace Basis.Scripts.Avatar
         public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, string hash = "")
         {
             if (string.IsNullOrEmpty(AvatarAddress))
-            { 
+            {
                 Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
                 await LoadAvatarAfterError(Player, AvatarAddress);
                 return;
@@ -37,7 +37,7 @@ namespace Basis.Scripts.Avatar
                 if (Output != null)
                 {
                     InitializePlayerAvatar(Player, Output);
-                    Player.RecalculateMyHeight();
+                    await Player.SetPlayersEyeHeight();
                     Player.AvatarSwitched();
                 }
             }
