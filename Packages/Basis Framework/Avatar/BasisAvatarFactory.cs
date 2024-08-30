@@ -37,7 +37,7 @@ namespace Basis.Scripts.Avatar
                 if (Output != null)
                 {
                     InitializePlayerAvatar(Player, Output);
-                    Player.SetPlayersEyeHeight(Player.PlayerEyeHeight, Player.AvatarDriver.ActiveEyeHeight);
+                    Player.RecalculateMyHeight();
                     Player.AvatarSwitched();
                 }
             }

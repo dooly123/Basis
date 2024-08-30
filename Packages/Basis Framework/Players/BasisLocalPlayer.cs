@@ -11,6 +11,7 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Common;
 using Basis.Scripts.Avatar;
 using System.Collections;
+using Basis.Scripts.Device_Management.Devices;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
@@ -84,9 +85,8 @@ namespace Basis.Scripts.BasisSdk.Players
                 if (BasisLockToInput.AttachedInput != null)
                 {
                     Debug.Log("recalculating local Height!");
-                    PlayerEyeHeight = BasisLockToInput.AttachedInput.LocalRawPosition.y;
                     Debug.Log("Local Eye Height is " + PlayerEyeHeight);
-                    SetPlayersEyeHeight(PlayerEyeHeight, AvatarDriver.ActiveEyeHeight);
+                    SetPlayersEyeHeight(BasisLockToInput.AttachedInput);
                 }
             }
         }
@@ -95,9 +95,8 @@ namespace Basis.Scripts.BasisSdk.Players
         /// please wait 3 frames before calling or using this data,
         /// instead of reading the data of the component i would use OnPlayersHeightChanged
         /// </summary>
-        /// <param name="realEyeHeight"></param>
-        /// <param name="avatarHeight"></param>
-        public void SetPlayersEyeHeight(float realEyeHeight, float avatarHeight)
+        /// <param name="BasisInput"></param>
+        public void SetPlayersEyeHeight(BasisInput BasisInput)
         {
             RatioPlayerToAvatarScale = 1f;
             RatioPlayerToEyeDefaultScale = 1f;
@@ -107,43 +106,45 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 StopCoroutine(PlayerheightRoutine);
             }
-            PlayerheightRoutine = StartCoroutine(SetPlayerHeightWaitOneFrame(realEyeHeight, avatarHeight));
+            PlayerheightRoutine = StartCoroutine(SetPlayerHeightWaitOneFrame(BasisInput));
         }
         /// <summary>
         /// we wait until the next frame so we can let all devices and systems reset to there native size first.
         /// </summary>
-        /// <param name="realEyeHeight"></param>
+        /// <param name="BasisInput"></param>
         /// <param name="avatarHeight"></param>
         /// <returns></returns>
-        IEnumerator SetPlayerHeightWaitOneFrame(float realEyeHeight, float avatarHeight)
+        IEnumerator SetPlayerHeightWaitOneFrame(BasisInput BasisInput)
         {
             // This will wait for 2 frames allowing the devices to provide good final positions
             yield return null;
             yield return null;
             yield return null;
-
+            float avatarHeight = AvatarDriver.ActiveEyeHeight();
+            PlayerEyeHeight = BasisInput.LocalRawPosition.y;
             if (BasisDeviceManagement.Instance.CurrentMode == BasisDeviceManagement.Desktop)
             {
                 RatioPlayerToAvatarScale = 1;
             }
             else
             {
-                if (realEyeHeight <= 0 || avatarHeight <= 0)
+                if (PlayerEyeHeight <= 0 || avatarHeight <= 0)
                 {
                     RatioPlayerToAvatarScale = 1;
                     Debug.LogError("Scale was below zero");
                 }
                 else
                 {
-                    RatioPlayerToAvatarScale = avatarHeight / realEyeHeight;
+                    RatioPlayerToAvatarScale = avatarHeight / PlayerEyeHeight;
                 }
             }
             RatioAvatarToAvatarEyeDefaultScale = avatarHeight / DefaultAvatarEyeHeight;
-            RatioPlayerToEyeDefaultScale = realEyeHeight / DefaultPlayerEyeHeight;
+            RatioPlayerToEyeDefaultScale = PlayerEyeHeight / DefaultPlayerEyeHeight;
             // This will wait for 2 frames allowing the devices to provide good final positions
             yield return null;
             yield return null;
             yield return null;
+
             OnPlayersHeightChanged?.Invoke(true);
             PlayerheightRoutine = null;
         }

@@ -92,7 +92,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
 
         private void BasisLocalPlayer_OnPlayersHeightChanged(bool State)
         {
-            BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight;
+            BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight();
         }
 
         public void PlayerInitialized()
@@ -158,12 +158,12 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             if (rotationY > 0)
             {
                 // Positive rotation
-                adjustment = Mathf.Abs(rotationY) * (headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight / Control.TposeLocal.position.y);
+                adjustment = Mathf.Abs(rotationY) * (headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight() / Control.TposeLocal.position.y);
             }
             else
             {
                 // Negative rotation
-                adjustment = Mathf.Abs(rotationY) * (headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight / Control.TposeLocal.position.y);
+                adjustment = Mathf.Abs(rotationY) * (headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight() / Control.TposeLocal.position.y);
             }
         }
     }

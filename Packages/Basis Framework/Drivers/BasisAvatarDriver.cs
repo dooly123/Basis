@@ -13,7 +13,17 @@ namespace Basis.Scripts.Drivers
 {
     public abstract class BasisAvatarDriver : MonoBehaviour
     {
-        public float ActiveEyeHeight = 1.75f;
+        public float ActiveEyeHeight()
+        {
+            if (BasisLocalPlayer.Instance.Avatar != null)
+            {
+                return BasisLocalPlayer.Instance.Avatar.AvatarEyePosition.x;
+            }
+            else
+            {
+                return 1.64f;
+            }
+        }
         private static string TPose = "Assets/Animator/Animated TPose.controller";
         public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
         public Action BeginningCalibration;
@@ -30,7 +40,6 @@ namespace Basis.Scripts.Drivers
             BeginningCalibration?.Invoke();
             FindSkinnedMeshRenders();
             BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
-            ActiveEyeHeight = Avatar.AvatarEyePosition.x;
             if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
             {
                 BasisFacialBlinkDriver FacialBlinkDriver = BasisHelpers.GetOrAddComponent<BasisFacialBlinkDriver>(Avatar.gameObject);
@@ -165,7 +174,7 @@ namespace Basis.Scripts.Drivers
 
                     }
                     // Position = new Vector3(0, Position.y, 0);
-                    Position += CalculateFallbackOffset(bone, ActiveEyeHeight, heightPercentage);
+                    Position += CalculateFallbackOffset(bone, ActiveEyeHeight(), heightPercentage);
                     //Position = new Vector3(0, Position.y, 0);
                     UsedFallback = true;
                 }
@@ -183,7 +192,7 @@ namespace Basis.Scripts.Drivers
 
                 }
                 Position = new Vector3(0, Position.y, 0);
-                Position += CalculateFallbackOffset(bone, ActiveEyeHeight, heightPercentage);
+                Position += CalculateFallbackOffset(bone, ActiveEyeHeight(), heightPercentage);
                 Position = new Vector3(0, Position.y, 0);
                 UsedFallback = true;
             }

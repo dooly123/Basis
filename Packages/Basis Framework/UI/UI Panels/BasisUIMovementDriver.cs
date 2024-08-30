@@ -9,6 +9,8 @@ namespace Basis.Scripts.UI.UI_Panels
         public BasisLocalPlayer LocalPlayer;
         public Vector3 WorldOffset = new Vector3(0, 0, 0.5f);
         public bool hasLocalCreationEvent = false;
+        public Vector3 Position;
+        public Quaternion Rotation;
         public void OnEnable()
         {
             LocalPlayer = BasisLocalPlayer.Instance;
@@ -47,11 +49,10 @@ namespace Basis.Scripts.UI.UI_Panels
                 SetUILocation();
             }
         }
-        public Vector3 Position;
-        public Quaternion Rotation;
         public void SetUILocation()
         {
             BasisLocalCameraDriver.GetPositionAndRotation(out Position, out Rotation);
+            Debug.Log("Scale was " + LocalPlayer.RatioPlayerToEyeDefaultScale);
             transform.SetPositionAndRotation(Position + (Rotation * (WorldOffset * LocalPlayer.RatioPlayerToEyeDefaultScale)), Rotation);
         }
     }
