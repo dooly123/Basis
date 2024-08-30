@@ -5,41 +5,48 @@ using UnityEngine.Events;
 
 namespace Basis.Scripts.Device_Management
 {
-public class BasisVisualTracker : MonoBehaviour
-{
-    public BasisInput BasisInput;
-    public UnityEvent TrackedSetup = new UnityEvent();
-    public Quaternion ModelRotationOffset = Quaternion.identity;
-    public Vector3 ModelPositionOffset = Vector3.zero;
-    public bool HasEvents = false;
-    public void Initialization(BasisInput basisInput)
+    public class BasisVisualTracker : MonoBehaviour
     {
-        if(basisInput != null)
+        public BasisInput BasisInput;
+        public UnityEvent TrackedSetup = new UnityEvent();
+        public Quaternion ModelRotationOffset = Quaternion.identity;
+        public Vector3 ModelPositionOffset = Vector3.zero;
+        public bool HasEvents = false;
+        public void Initialization(BasisInput basisInput)
         {
-            BasisInput = basisInput;
-            UpdateVisualSizeAndOffset();
-            if (HasEvents == false)
+            if (basisInput != null)
             {
-                BasisLocalPlayer.Instance.OnPlayersHeightChanged += UpdateVisualSizeAndOffset;
-                BasisLocalPlayer.Instance.OnLocalAvatarChanged += UpdateVisualSizeAndOffset;
-                HasEvents = true;
+                BasisInput = basisInput;
+                UpdateVisualSizeAndOffset();
+                if (HasEvents == false)
+                {
+                    BasisLocalPlayer.Instance.OnLocalAvatarChanged += UpdateVisualSizeAndOffset;
+                    BasisLocalPlayer.Instance.OnPlayersHeightChanged += StartWaitAndSetUILocation;
+                    HasEvents = true;
+                }
+                TrackedSetup.Invoke();
             }
-            TrackedSetup.Invoke();
         }
-    }
-    public void OnDestroy()
-    {
-        if (HasEvents)
+        public void OnDestroy()
         {
-            BasisLocalPlayer.Instance.OnLocalAvatarChanged -= UpdateVisualSizeAndOffset;
-            BasisLocalPlayer.Instance.OnPlayersHeightChanged -= UpdateVisualSizeAndOffset;
-            HasEvents = false;
+            if (HasEvents)
+            {
+                BasisLocalPlayer.Instance.OnLocalAvatarChanged -= UpdateVisualSizeAndOffset;
+                BasisLocalPlayer.Instance.OnPlayersHeightChanged -= StartWaitAndSetUILocation;
+                HasEvents = false;
+            }
+        }
+        public void StartWaitAndSetUILocation(bool Final)
+        {
+            if (Final)
+            {
+                UpdateVisualSizeAndOffset();
+            }
+        }
+        public void UpdateVisualSizeAndOffset()
+        {
+            gameObject.transform.localScale = Vector3.one * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+            gameObject.transform.SetLocalPositionAndRotation(ModelPositionOffset * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale, ModelRotationOffset);
         }
     }
-    public void UpdateVisualSizeAndOffset()
-    {
-       gameObject.transform.localScale = Vector3.one * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
-       gameObject.transform.SetLocalPositionAndRotation(ModelPositionOffset * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale, ModelRotationOffset);
-    }
-}
 }

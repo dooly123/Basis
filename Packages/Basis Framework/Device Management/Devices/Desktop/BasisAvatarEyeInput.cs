@@ -90,7 +90,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             base.OnDestroy();
         }
 
-        private void BasisLocalPlayer_OnPlayersHeightChanged()
+        private void BasisLocalPlayer_OnPlayersHeightChanged(bool State)
         {
             BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight;
         }

@@ -42,7 +42,13 @@ namespace Basis.Scripts.UI.UI_Panels
                 hasLocalCreationEvent = false;
             }
         }
-
+        public void StartWaitAndSetUILocation(bool Final)
+        {
+            if (Final)
+            {
+                StartWaitAndSetUILocation();
+            }
+        }
         private void StartWaitAndSetUILocation()
         {
             StartCoroutine(WaitAndSetUILocation());

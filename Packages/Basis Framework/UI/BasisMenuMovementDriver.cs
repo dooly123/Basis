@@ -69,6 +69,13 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             StartCoroutine(DelaySetUI());
         }
+        private void UpdateDelayedSetUI(bool state)
+        {
+            if (state)
+            {
+                StartCoroutine(DelaySetUI());
+            }
+        }
         #endregion
         #region UI Position Updating
         private IEnumerator DelaySetUI() // Waits until end of frame to set position, to ensure all other data has been updated

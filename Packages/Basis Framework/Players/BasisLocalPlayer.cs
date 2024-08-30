@@ -10,6 +10,7 @@ using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Common;
 using Basis.Scripts.Avatar;
+using System.Collections;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
@@ -26,7 +27,12 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisCharacterController.BasisCharacterController Move;
         public event Action OnLocalAvatarChanged;
         public event Action OnSpawnedEvent;
-        public event Action OnPlayersHeightChanged;
+        /// <summary>
+        /// the bool when true is the final size
+        /// the bool when false is not the final size
+        /// use the bool to 
+        /// </summary>
+        public event Action<bool> OnPlayersHeightChanged;
         public BasisLocalBoneDriver LocalBoneDriver;
         public BasisBoneControl Hips;
         public BasisLocalAvatarDriver AvatarDriver;
@@ -84,8 +90,32 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
         }
+        /// <summary>
+        /// please wait 3 frames before calling or using this data,
+        /// instead of reading the data of the component i would use OnPlayersHeightChanged
+        /// </summary>
+        /// <param name="realEyeHeight"></param>
+        /// <param name="avatarHeight"></param>
         public void SetPlayersEyeHeight(float realEyeHeight, float avatarHeight)
         {
+            RatioPlayerToAvatarScale = 1f;
+            RatioPlayerToEyeDefaultScale = 1f;
+            RatioAvatarToAvatarEyeDefaultScale = 1f;
+            OnPlayersHeightChanged?.Invoke(false);
+            StartCoroutine(SetPlayerHeightWaitOneFrame(realEyeHeight, avatarHeight));
+        }
+        /// <summary>
+        /// we wait until the next frame so we can let all devices and systems reset to there native size first.
+        /// </summary>
+        /// <param name="realEyeHeight"></param>
+        /// <param name="avatarHeight"></param>
+        /// <returns></returns>
+        IEnumerator SetPlayerHeightWaitOneFrame(float realEyeHeight, float avatarHeight)
+        {
+            // This will wait for 2 frames allowing the devices to provide good final positions
+            yield return null;
+            yield return null;
+
             if (BasisDeviceManagement.Instance.CurrentMode == BasisDeviceManagement.Desktop)
             {
                 RatioPlayerToAvatarScale = 1;
@@ -104,7 +134,10 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             RatioAvatarToAvatarEyeDefaultScale = avatarHeight / DefaultAvatarEyeHeight;
             RatioPlayerToEyeDefaultScale = realEyeHeight / DefaultPlayerEyeHeight;
-            OnPlayersHeightChanged?.Invoke();
+            // This will wait for 2 frames allowing the devices to provide good final positions
+            yield return null;
+            yield return null;
+            OnPlayersHeightChanged?.Invoke(true);
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {
@@ -162,10 +195,15 @@ namespace Basis.Scripts.BasisSdk.Players
                 VisemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(this.gameObject);
             }
             VisemeDriver.Initialize(Avatar);
-            BasisLocalInputActions.LateUpdateEvent += VisemeDriver.EventLateUpdate;
-            MicrophoneRecorderBase.OnHasAudio += DriveAudioToViseme;
-            MicrophoneRecorderBase.OnHasSilence += DriveAudioToViseme;
+            if (HasCalibrationEvents == false)
+            {
+                BasisLocalInputActions.LateUpdateEvent += VisemeDriver.EventLateUpdate;
+                MicrophoneRecorderBase.OnHasAudio += DriveAudioToViseme;
+                MicrophoneRecorderBase.OnHasSilence += DriveAudioToViseme;
+                HasCalibrationEvents = true;
+            }
         }
+        public bool HasCalibrationEvents = false;
         public void OnDestroy()
         {
             if (HasEvents)
@@ -178,9 +216,13 @@ namespace Basis.Scripts.BasisSdk.Players
                 SceneManager.sceneLoaded -= OnSceneLoadedCallback;
                 HasEvents = false;
             }
-            BasisLocalInputActions.LateUpdateEvent -= VisemeDriver.EventLateUpdate;
-            MicrophoneRecorderBase.OnHasAudio -= DriveAudioToViseme;
-            MicrophoneRecorderBase.OnHasSilence -= DriveAudioToViseme;
+            if (HasCalibrationEvents)
+            {
+                BasisLocalInputActions.LateUpdateEvent -= VisemeDriver.EventLateUpdate;
+                MicrophoneRecorderBase.OnHasAudio -= DriveAudioToViseme;
+                MicrophoneRecorderBase.OnHasSilence -= DriveAudioToViseme;
+                HasCalibrationEvents = false;
+            }
             if (VisemeDriver != null)
             {
                 GameObject.Destroy(VisemeDriver);
