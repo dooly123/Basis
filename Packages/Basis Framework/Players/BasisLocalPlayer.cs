@@ -93,7 +93,6 @@ namespace Basis.Scripts.BasisSdk.Players
             // This will wait for 3 frames allowing the devices to provide good final positions
             await Awaitable.NextFrameAsync();
             await Awaitable.NextFrameAsync();
-            await Awaitable.NextFrameAsync();
 
             TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
             if (BasisLockToInput != null)
@@ -131,7 +130,6 @@ namespace Basis.Scripts.BasisSdk.Players
             RatioAvatarToAvatarEyeDefaultScale = avatarHeight / DefaultAvatarEyeHeight;
             RatioPlayerToEyeDefaultScale = PlayerEyeHeight / DefaultPlayerEyeHeight;
             // This will wait for 3 frames allowing the devices to provide good final positions
-            await Awaitable.NextFrameAsync();
             await Awaitable.NextFrameAsync();
             await Awaitable.NextFrameAsync();
 
