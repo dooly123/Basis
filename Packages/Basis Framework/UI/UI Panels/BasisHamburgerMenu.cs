@@ -20,7 +20,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public static string MainMenuAddressableID = "MainMenu";
         public static BasisHamburgerMenu Instance;
         public bool OverrideForceCalibration;
-        public void Initialize()
+        public override void InitalizeEvent()
         {
             Instance = this;
             Settings.onClick.AddListener(SettingsPanel);
@@ -30,10 +30,6 @@ namespace Basis.Scripts.UI.UI_Panels
             BasisCursorManagement.UnlockCursor(nameof(BasisHamburgerMenu));
         }
         private Dictionary<BasisInput, Action> TriggerDelegates = new Dictionary<BasisInput, Action>();
-        public void OnDestroy()
-        {
-            BasisCursorManagement.LockCursor(nameof(BasisHamburgerMenu));
-        }
         public void PutIntoCalibrationMode()
         {
             string BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;
@@ -84,6 +80,11 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
             OpenMenuNow(resource);
+        }
+
+        public override void DestroyEvent()
+        {
+            BasisCursorManagement.LockCursor(nameof(BasisHamburgerMenu));
         }
     }
 }

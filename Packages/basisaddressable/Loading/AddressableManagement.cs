@@ -51,7 +51,7 @@ namespace Basis.Scripts.Addressable_Driver.Loading
                 // Check for errors
                 if (request.result != UnityWebRequest.Result.Success)
                 {
-                    Debug.LogError($"Error loading text: {request.error}");
+                    Debug.LogError($"Error loading text: {request.error} for url " + url);
                     return string.Empty;
                 }
                 else

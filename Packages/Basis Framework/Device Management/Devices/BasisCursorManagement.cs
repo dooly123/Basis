@@ -12,7 +12,7 @@ public static class BasisCursorManagement
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Debug.Log("Requested a forced Cursor Lock for "+ requestName);
+        Debug.Log("Requested a forced Cursor Lock for " + requestName);
     }
     public static CursorLockMode LockState()
     {
@@ -28,13 +28,10 @@ public static class BasisCursorManagement
     /// </summary>
     public static void LockCursor(string requestName)
     {
-        if (!cursorLockRequests.Contains(requestName))
-        {
-            cursorLockRequests.Add(requestName);
-        }
-
-        UpdateCursorState();
-        Debug.Log("Cursor Lock Requested: " + requestName);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Debug.Log("Cursor Locked");
+        OnCursorStateChange?.Invoke(CursorLockMode.Locked, false);
     }
 
     /// <summary>
@@ -43,13 +40,10 @@ public static class BasisCursorManagement
     /// </summary>
     public static void UnlockCursor(string requestName)
     {
-        if (cursorLockRequests.Contains(requestName))
-        {
-            cursorLockRequests.Remove(requestName);
-        }
-
-        UpdateCursorState();
-        Debug.Log("Cursor Unlock Requested: " + requestName);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Debug.Log("Cursor Unlocked");
+        OnCursorStateChange?.Invoke(CursorLockMode.None, true);
     }
 
     /// <summary>
@@ -58,49 +52,9 @@ public static class BasisCursorManagement
     /// </summary>
     public static void ConfineCursor(string requestName)
     {
-        if (!cursorLockRequests.Contains(requestName))
-        {
-            cursorLockRequests.Add(requestName);
-        }
-
-        UpdateCursorState();
-        Debug.Log("Cursor Confine Requested: " + requestName);
-    }
-
-    /// <summary>
-    /// Updates the cursor state based on the lock requests.
-    /// If there are any lock requests, the cursor is locked or confined.
-    /// If there are no lock requests, the cursor is unlocked.
-    /// </summary>
-    private static void UpdateCursorState()
-    {
-        if (cursorLockRequests.Count > 0)
-        {
-            // Keep the cursor locked or confined based on the most recent request
-            string lastRequest = cursorLockRequests[cursorLockRequests.Count - 1];
-
-            // This is an example logic; you can modify it to handle different types of requests
-            if (lastRequest.Contains("Confine"))
-            {
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
-                Debug.Log("Cursor Confined");
-                OnCursorStateChange?.Invoke(CursorLockMode.Confined, true);
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-                Debug.Log("Cursor Locked");
-                OnCursorStateChange?.Invoke(CursorLockMode.Locked, false);
-            }
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Debug.Log("Cursor Unlocked");
-            OnCursorStateChange?.Invoke(CursorLockMode.None, true);
-        }
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        Debug.Log("Cursor Confined");
+        OnCursorStateChange?.Invoke(CursorLockMode.Confined, true);
     }
 }

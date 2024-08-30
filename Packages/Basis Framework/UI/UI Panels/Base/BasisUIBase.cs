@@ -8,32 +8,32 @@ using UnityEngine.Events;
 
 namespace Basis.Scripts.UI.UI_Panels
 {
-public abstract class BasisUIBase : MonoBehaviour
-{
-    public AddressableGenericResource LoadedMenu;
-    public UnityEvent OnCloseMenu = new UnityEvent();
-    public UnityEvent OnCreatedMenu = new UnityEvent();
-    public void CloseThisMenu()
+    public abstract class BasisUIBase : MonoBehaviour
     {
-        OnCloseMenu.Invoke();
-        AddressableLoadFactory.ReleaseResource(LoadedMenu);
-        Destroy(this.gameObject);
+        public AddressableGenericResource LoadedMenu;
+        public abstract void InitalizeEvent();
+        public abstract void DestroyEvent();
+        public void CloseThisMenu()
+        {
+            AddressableLoadFactory.ReleaseResource(LoadedMenu);
+            DestroyEvent();
+            Destroy(this.gameObject);
+        }
+        public static async Task OpenThisMenu(AddressableGenericResource resource)
+        {
+            await AddressableLoadFactory.LoadAddressableResourceAsync<GameObject>(resource);
+            GameObject Result = (GameObject)resource.Handles[0].Result;
+            Result = GameObject.Instantiate(Result);
+            BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
+            BasisUIBase.InitalizeEvent();
+        }
+        public static void OpenMenuNow(AddressableGenericResource AddressableGenericResource)
+        {
+            UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(AddressableGenericResource.Key);
+            GameObject RAC = op.WaitForCompletion();
+            GameObject Result = GameObject.Instantiate(RAC);
+            BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
+            BasisUIBase.InitalizeEvent();
+        }
     }
-    public static async Task OpenThisMenu(AddressableGenericResource resource)
-    {
-        await AddressableLoadFactory.LoadAddressableResourceAsync<GameObject>(resource);
-        GameObject Result = (GameObject)resource.Handles[0].Result;
-        Result = GameObject.Instantiate(Result);
-        BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
-        BasisUIBase.OnCreatedMenu?.Invoke();
-    }
-    public static void OpenMenuNow(AddressableGenericResource AddressableGenericResource)
-    {
-        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(AddressableGenericResource.Key);
-        GameObject RAC = op.WaitForCompletion();
-        GameObject Result = GameObject.Instantiate(RAC);
-        BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
-        BasisUIBase.OnCreatedMenu?.Invoke();
-    }
-}
 }

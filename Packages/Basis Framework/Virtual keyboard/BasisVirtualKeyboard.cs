@@ -45,8 +45,11 @@ public class BasisVirtualKeyboard : BasisUIBase
         LanguageStyle Language = KeyboardLayoutData.GetLanguageStyle(SelectedLanguage, SelectedStyle);
         SetupKeyboard(Language, false);
     }
-
-    public void ClearOutOldData()
+        public override void InitalizeEvent()
+        {
+            BasisCursorManagement.UnlockCursor(nameof(BasisHamburgerMenu));
+        }
+        public void ClearOutOldData()
     {
         // Clear existing rows and destroy previous keyboard parent
         if (keyboardParent != null)
@@ -242,5 +245,10 @@ public class BasisVirtualKeyboard : BasisUIBase
             return new BasisVirtualKeyboardButton();
         }
     }
-}
+
+        public override void DestroyEvent()
+        {
+            BasisCursorManagement.LockCursor(nameof(BasisHamburgerMenu));
+        }
+    }
 }

@@ -68,7 +68,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
 
         private void OnCursorStateChange(CursorLockMode cursor, bool newCursorVisible)
         {
-            Debug.Log("cursor changed to : " + cursor.ToString() + " Cursor Visible : " + newCursorVisible);
+            Debug.Log("cursor changed to : " + cursor.ToString() + " | Cursor Visible : " + newCursorVisible);
             if (cursor == CursorLockMode.Locked)
             {
                 PauseLook = false;

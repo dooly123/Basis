@@ -18,7 +18,10 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             Initialize();
         }
-
+        public override void InitalizeEvent()
+        {
+            BasisCursorManagement.UnlockCursor(nameof(BasisUIAvatarSelection));
+        }
         public void Initialize()
         {
             for (int Index = 0; Index < AvatarUrls.Count; Index++)
@@ -50,6 +53,11 @@ namespace Basis.Scripts.UI.UI_Panels
             {
                 await BasisLocalPlayer.Instance.CreateAvatar(Url);
             }
+        }
+
+        public override void DestroyEvent()
+        {
+            BasisCursorManagement.LockCursor(nameof(BasisUIAvatarSelection));
         }
     }
 }

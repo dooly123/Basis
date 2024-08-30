@@ -5,53 +5,62 @@ using UnityEngine.UI;
 
 namespace Basis.Scripts.UI.UI_Panels
 {
-public class BasisSettingsPanelMenu : BasisUIBase
-{
-    public static string SettingsPanel = "SettingsPanel";
-    public Button Connect;
-    public TMP_InputField IP;
-    public TMP_InputField Port;
-    public TMP_InputField Password;
-    public BasisNetworkManagement NetworkConnector;
-    public string IPDefault = "localhost";
-    public ushort PortDefault = 4296;
-    public string PassWordDefault = "Default";
-    public ushort SelectedPort = 4296;
-    public void OnEnable()
+    public class BasisSettingsPanelMenu : BasisUIBase
     {
-        IP.contentType = TMP_InputField.ContentType.Standard;
-        Port.contentType = TMP_InputField.ContentType.IntegerNumber;
-        Password.contentType = TMP_InputField.ContentType.Password;
-
-        NetworkConnector = BasisNetworkManagement.Instance;
-
-        IP.text = IPDefault;
-        Port.text = PortDefault.ToString();
-        Password.text = PassWordDefault;
-
-        Connect.onClick.AddListener(ConnectTOServer);
-    }
-    public void ConnectTOServer()
-    {
-        if (Port != null)
+        public static string SettingsPanel = "SettingsPanel";
+        public Button Connect;
+        public TMP_InputField IP;
+        public TMP_InputField Port;
+        public TMP_InputField Password;
+        public BasisNetworkManagement NetworkConnector;
+        public string IPDefault = "localhost";
+        public ushort PortDefault = 4296;
+        public string PassWordDefault = "Default";
+        public ushort SelectedPort = 4296;
+        public void OnEnable()
         {
-            if (ushort.TryParse(Port.text, out SelectedPort))
+            IP.contentType = TMP_InputField.ContentType.Standard;
+            Port.contentType = TMP_InputField.ContentType.IntegerNumber;
+            Password.contentType = TMP_InputField.ContentType.Password;
+
+            NetworkConnector = BasisNetworkManagement.Instance;
+
+            IP.text = IPDefault;
+            Port.text = PortDefault.ToString();
+            Password.text = PassWordDefault;
+
+            Connect.onClick.AddListener(ConnectTOServer);
+        }
+        public void ConnectTOServer()
+        {
+            if (Port != null)
             {
+                if (ushort.TryParse(Port.text, out SelectedPort))
+                {
 
+                }
+                else
+                {
+                    Debug.LogError("Submitted Port was not parsable until type Ushort");
+                }
             }
-            else
+            if (Password != null)
             {
-                Debug.LogError("Submitted Port was not parsable until type Ushort");
+                //  NetworkConnector.Client.LiteNetLibConnnection. = Password.text;
+            }
+            if (IP != null)
+            {
+                NetworkConnector.Connect(SelectedPort, IP.text);
             }
         }
-        if (Password != null)
+
+        public override void InitalizeEvent()
         {
-          //  NetworkConnector.Client.LiteNetLibConnnection. = Password.text;
+            BasisCursorManagement.UnlockCursor(nameof(BasisSettingsPanelMenu));
         }
-        if (IP != null)
+        public override void DestroyEvent()
         {
-            NetworkConnector.Connect(SelectedPort, IP.text);
+            BasisCursorManagement.LockCursor(nameof(BasisSettingsPanelMenu));
         }
     }
-}
 }
