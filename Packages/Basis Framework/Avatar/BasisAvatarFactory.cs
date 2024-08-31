@@ -16,7 +16,7 @@ namespace Basis.Scripts.Avatar
     {
         public const string LoadingAvatar = "LoadingAvatar";
 
-        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, string hash = "")
+        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress,byte Mode, string hash)
         {
             if (string.IsNullOrEmpty(AvatarAddress))
             {
@@ -32,13 +32,28 @@ namespace Basis.Scripts.Avatar
 
             try
             {
-                GameObject Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
-                if (Output != null)
+                GameObject Output = null;
+                switch (Mode)
                 {
-                    InitializePlayerAvatar(Player, Output);
-                    await Player.SetPlayersEyeHeight();
-                    Player.AvatarSwitched();
+                    case 0://download
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        break;
+                    case 1://localload
+                        var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
+
+                        if (GameObjects.Count > 0)
+                        {
+                            Output = GameObjects[0];
+                        }
+                        break;
+                   default:
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        break;
                 }
+                InitializePlayerAvatar(Player, Output);
+                await Player.SetPlayersEyeHeight();
+                Player.AvatarSwitched();
             }
             catch (Exception e)
             {
@@ -47,7 +62,7 @@ namespace Basis.Scripts.Avatar
             }
         }
 
-        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress, string hash = "")
+        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress, byte Mode, string hash = "")
         {
             if (string.IsNullOrEmpty(AvatarAddress))
             {
@@ -63,7 +78,25 @@ namespace Basis.Scripts.Avatar
 
             try
             {
-                GameObject Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                GameObject Output = null;
+                switch (Mode)
+                {
+                    case 0://download
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        break;
+                    case 1://localload
+                        var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
+
+                        if (GameObjects.Count > 0)
+                        {
+                            Output = GameObjects[0];
+                        }
+                        break;
+                    default:
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        break;
+                }
                 if (Output != null)
                 {
                     InitializePlayerAvatar(Player, Output);
@@ -80,11 +113,8 @@ namespace Basis.Scripts.Avatar
         private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, string hash, BasisPlayer Player)
         {
             return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(
-                AvatarAddress,
-                hash,
-                AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress),
-                BasisStorageManagement.AssetSubDirectory,
-                Player.ProgressReportAvatarLoad
+                AvatarAddress, hash, AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress),
+                BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad
             );
         }
 

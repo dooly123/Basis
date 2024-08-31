@@ -5,7 +5,7 @@ using Basis.Scripts.Addressable_Driver.Loading;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 public static class BasisGameObjectAssetBundleManager
 {
-    public static async Task<GameObject> DownloadAndLoadGameObjectAsync(string url, string Hash, string assetName, string subfolderName, ProgressReport progressCallback)
+    public static async Task<GameObject> DownloadAndLoadGameObjectAsync(string url, string Hash, string assetName, string subfolderName, Vector3 Position, Quaternion Rotation, ProgressReport progressCallback)
     {
         string folderPath = Path.Combine(Application.persistentDataPath, subfolderName);
         if (Directory.Exists(folderPath) == false)
@@ -14,19 +14,19 @@ public static class BasisGameObjectAssetBundleManager
         }
         string localPath = Path.Combine(folderPath, AddressableManagement.GetFileNameFromUrl(url));
 
-        return await CheckAndLoadGameObjectBundleAsync(url, Hash,localPath, assetName, progressCallback);
+        return await CheckAndLoadGameObjectBundleAsync(url, Hash,localPath, assetName, Position,Rotation, progressCallback);
     }
 
-    private static async Task<GameObject> CheckAndLoadGameObjectBundleAsync(string url,string Hash, string localPath, string assetName, ProgressReport progressCallback)
+    private static async Task<GameObject> CheckAndLoadGameObjectBundleAsync(string url,string Hash, string localPath, string assetName, Vector3 Position, Quaternion Rotation, ProgressReport progressCallback)
     {
         if (File.Exists(localPath) == false)
         {
             Debug.Log("AssetBundle not found locally, downloading.");
             await DownloadAssetBundleAsync(url, localPath, progressCallback);
         }
-        return await LoadGameObjectBundleFromDiskAsync(url, Hash, localPath, assetName, progressCallback);
+        return await LoadGameObjectBundleFromDiskAsync(url, Hash, localPath, assetName, Position,Rotation, progressCallback);
     }
-    private static async Task<GameObject> LoadGameObjectBundleFromDiskAsync(string url,string Hash, string localPath, string assetName, ProgressReport progressCallback)
+    private static async Task<GameObject> LoadGameObjectBundleFromDiskAsync(string url,string Hash, string localPath, string assetName,Vector3 Position,Quaternion Rotation, ProgressReport progressCallback)
     {
         Debug.Log("Loading Bundle");
         BasisLoadedAssets BasisLoadedAssets = await LoadBundle(url, Hash, localPath, progressCallback);
@@ -42,7 +42,7 @@ public static class BasisGameObjectAssetBundleManager
             if (asset != null)
             {
                 progressCallback?.Invoke(100); // Set progress to 100 when done
-                return UnityEngine.Object.Instantiate(asset);
+                return UnityEngine.Object.Instantiate(asset, Position,Rotation);
             }
             else
             {

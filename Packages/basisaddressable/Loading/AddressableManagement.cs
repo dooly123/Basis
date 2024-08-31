@@ -262,11 +262,13 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         }
         public static string GetFileNameFromUrl(string url)
         {
-            return Path.GetFileName(url);
+            Uri uri = new Uri(url);
+            return Path.GetFileName(uri.LocalPath);
         }
         public static string GetFileNameFromUrlWithoutExtension(string url)
         {
-            string fileName = Path.GetFileName(url); // Get the file name with extension
+            Uri uri = new Uri(url);
+            string fileName = Path.GetFileName(uri.LocalPath); // Get the file name with extension
             return Path.GetFileNameWithoutExtension(fileName); // Remove the extension and return
         }
         private IEnumerator LoopCheckTask()
