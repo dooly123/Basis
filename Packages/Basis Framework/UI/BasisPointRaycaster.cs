@@ -48,6 +48,7 @@ namespace Basis.Scripts.UI
         public bool IgnoreReversedGraphics;
         public override Camera eventCamera => BasisLocalCameraDriver.Instance.Camera;
         public static string UILayer = "UI";
+        public static string Player = "Player";
         public static string IgnoreRayCastLayer = "Ignore Raycast";
         public async Task Initialize(BasisInput basisInput)
         {
@@ -57,11 +58,18 @@ namespace Basis.Scripts.UI
             ApplyStaticDataToRaycastResult();
             // Get the layer number for "Ignore Raycast" layer
             int ignoreRaycastLayer = LayerMask.NameToLayer(IgnoreRayCastLayer);
-            UIMask = LayerMask.NameToLayer(UILayer);
+
+            // Get the layer number for "Player" layer
+            int playerLayer = LayerMask.NameToLayer(Player);
+
+            // Get the layer number for UI Mask
+             UIMask = LayerMask.NameToLayer(UILayer);
+
             // Create a LayerMask that includes all layers
             LayerMask allLayers = ~0;
-            // Exclude the "Ignore Raycast" layer using bitwise AND and NOT operations
-            Mask = allLayers & ~(1 << ignoreRaycastLayer);
+
+            // Exclude the "Ignore Raycast" and "Player" layers using bitwise AND and NOT operations
+             Mask = allLayers & ~(1 << ignoreRaycastLayer) & ~(1 << playerLayer);
             HasLineRenderer = false;
             HasRedicalRenderer = false;
             // Create the ray with the adjusted starting position and direction
