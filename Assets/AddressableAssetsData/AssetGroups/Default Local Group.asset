@@ -120,6 +120,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd842674634250844a1931878791379a
+    m_Address: UserNamePanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f87aebf7b996d4f4a9b9b4a7b8373530
     m_Address: Assets/UI/Prefabs/Connector UI.prefab
     m_ReadOnly: 0

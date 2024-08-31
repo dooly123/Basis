@@ -8,10 +8,9 @@ namespace Basis.Scripts.UI.UI_Panels
 {
     public class BasisMenuMovementDriver : MonoBehaviour
     {
-        [SerializeField] private BasisUIBase UIBase;
         private BasisLocalPlayer LocalPlayer;
-        [SerializeField] private Vector3 menuPosOffset;
-        [SerializeField] private Vector3 menuRotOffset;
+        public Vector3 menuPosOffset;
+        public Vector3 menuRotOffset;
 
         public float FallBackMultiplier = 0.35f;
         private enum MenuType
