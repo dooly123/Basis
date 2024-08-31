@@ -159,24 +159,24 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void SimulateHips()
         {
-            if (Hips.HasBone && AvatarDriver.InTPose == false)
+            //  if (Hips.HasBone && AvatarDriver.InTPose == false)
+            //{
+            if (Avatar != null && Avatar.Animator != null)
             {
-                if (Avatar != null && Avatar.Animator != null)
-                {
-                    // Get the current rotation of the hips bone
-                    Quaternion currentRotation = Hips.OutgoingWorldData.rotation;
+                // Get the current rotation of the hips bone
+                Quaternion currentRotation = Hips.OutgoingWorldData.rotation;
 
-                    // Calculate the rotated T-pose position using the current rotation
-                    Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
-                    Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
+                // Calculate the rotated T-pose position using the current rotation
+                Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
+                Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
 
-                    // Calculate the difference between the current rotation and the T-pose rotation
-                    Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeWorld.rotation);
+                // Calculate the difference between the current rotation and the T-pose rotation
+                Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeWorld.rotation);
 
-                    // Apply the calculated position and rotation to the Avatar's animator transform
-                    Avatar.Animator.transform.SetPositionAndRotation(positionDifference, rotationDifference);
-                }
+                // Apply the calculated position and rotation to the Avatar's animator transform
+                Avatar.Animator.transform.SetPositionAndRotation(positionDifference, rotationDifference);
             }
+            //}
         }
         public async Task CreateAvatar(string AddressableID,byte mode,string hash = "")
         {

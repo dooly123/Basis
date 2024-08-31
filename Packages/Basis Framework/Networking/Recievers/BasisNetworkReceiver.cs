@@ -59,7 +59,6 @@ namespace Basis.Scripts.Networking.Recievers
         {
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
-
         public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
         {
             pose.bodyPosition = output.Vectors[1];
@@ -73,7 +72,6 @@ namespace Basis.Scripts.Networking.Recievers
                 output.Muscles.CopyTo(pose.muscles);
             }
             PlayerPosition = Output.Vectors[0];
-
             animator.transform.localScale = Output.Vectors[2];
 
             //we scale the position 

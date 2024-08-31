@@ -13,8 +13,9 @@ public static class BasisGameObjectAssetBundleManager
             Directory.CreateDirectory(folderPath);
         }
         string localPath = Path.Combine(folderPath, AddressableManagement.GetFileNameFromUrl(url));
-
-        return await CheckAndLoadGameObjectBundleAsync(url, Hash,localPath, assetName, Position,Rotation, progressCallback);
+        GameObject LoadRequest = await CheckAndLoadGameObjectBundleAsync(url, Hash, localPath, assetName, Position, Rotation, progressCallback);
+        progressCallback?.Invoke(100);
+        return LoadRequest;
     }
 
     private static async Task<GameObject> CheckAndLoadGameObjectBundleAsync(string url,string Hash, string localPath, string assetName, Vector3 Position, Quaternion Rotation, ProgressReport progressCallback)
