@@ -39,7 +39,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisVisemeDriver VisemeDriver;
         [SerializeField]
         public LayerMask GroundMask;
-        public static string LoadFileName = "LastUsedAvatar.BAS";
+        public static string LoadFileNameAndExtension = "LastUsedAvatar.BAS";
         public bool HasEvents = false;
         public MicrophoneRecorder MicrophoneRecorder;
         public static string MainCamera = "Assets/Prefabs/Loadins/Main Camera.prefab";
@@ -66,8 +66,8 @@ namespace Basis.Scripts.BasisSdk.Players
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
             }
-            string LastUsedAvatar = BasisDataStore.LoadString(LoadFileName, BasisAvatarFactory.LoadingAvatar);
-            await CreateAvatar(LastUsedAvatar);
+            (string,byte) LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension,BasisAvatarFactory.LoadingAvatar,BasisPlayer.LoadModeLocal);
+            await CreateAvatar(LastUsedAvatar.Item1, LastUsedAvatar.Item2, string.Empty);
             if (MicrophoneRecorder == null)
             {
                 MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
@@ -178,10 +178,10 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
         }
-        public async Task CreateAvatar(string AddressableID)
+        public async Task CreateAvatar(string AddressableID,byte mode,string hash = "")
         {
-            await BasisAvatarFactory.LoadAvatar(this, AddressableID);
-            BasisDataStore.SaveString(AddressableID, LoadFileName);
+            await BasisAvatarFactory.LoadAvatar(this, AddressableID, mode, hash);
+            BasisDataStore.SaveAvatar(AddressableID, mode, LoadFileNameAndExtension);
             OnLocalAvatarChanged?.Invoke();
         }
         public void OnCalibration()

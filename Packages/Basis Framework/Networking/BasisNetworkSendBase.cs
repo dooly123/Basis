@@ -84,7 +84,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             {
                 AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
                 {
-                    MessageIndex = MessageIndex,
+                    messageIndex = MessageIndex,
                     buffer = buffer
                 };
                 writer.Write(AvatarDataMessage);

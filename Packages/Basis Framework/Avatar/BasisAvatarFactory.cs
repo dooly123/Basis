@@ -83,7 +83,7 @@ namespace Basis.Scripts.Avatar
                 AvatarAddress,
                 hash,
                 AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress),
-                BasisStorageManagement.AvatarDirectory,
+                BasisStorageManagement.AssetSubDirectory,
                 Player.ProgressReportAvatarLoad
             );
         }

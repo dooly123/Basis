@@ -50,7 +50,7 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             if (BasisLocalPlayer.Instance != null)
             {
-                await BasisLocalPlayer.Instance.CreateAvatar(Url);
+                await BasisLocalPlayer.Instance.CreateAvatar(Url, BasisLocalPlayer.LoadModeNetworkDownloadable,string.Empty);
             }
         }
 

@@ -14,7 +14,6 @@ using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 //using UnityEditor;
 using UnityEngine;
@@ -177,7 +176,8 @@ namespace Basis.Scripts.Networking
                                 readyMessage.localAvatarSyncMessage = player.NetworkSend.LASM;
                                 readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
                                 {
-                                    avatarID = BasisLocalPlayer.AvatarUrl
+                                    avatarID = BasisLocalPlayer.AvatarUrl,
+                                    loadMode = BasisLocalPlayer.AvatarLoadMode,
                                 };
                                 readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
                                 {
@@ -238,18 +238,18 @@ namespace Basis.Scripts.Networking
         private void HandleServerAvatarDataMessage(DarkRiftReader reader)
         {
             reader.Read(out ServerAvatarDataMessage ServerAvatarDataMessage);
-            ushort PlayerID = ServerAvatarDataMessage.PlayerIdMessage.playerID;
+            ushort PlayerID = ServerAvatarDataMessage.playerIdMessage.playerID;
             if (Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
             {
                 if (Player.Player.Avatar != null)
                 {
-                    AvatarDataMessage output = ServerAvatarDataMessage.AvatarDataMessage;
-                    Player.Player.Avatar.OnNetworkMessageReceived?.Invoke(output.MessageIndex, output.buffer);
+                    AvatarDataMessage output = ServerAvatarDataMessage.avatarDataMessage;
+                    Player.Player.Avatar.OnNetworkMessageReceived?.Invoke(output.messageIndex, output.buffer);
                 }
             }
             else
             {
-                Debug.Log("Missing Player For Message " + ServerAvatarDataMessage.PlayerIdMessage.playerID);
+                Debug.Log("Missing Player For Message " + ServerAvatarDataMessage.playerIdMessage.playerID);
             }
         }
         private void HandleAvatarChangeMessage(DarkRiftReader reader)
@@ -323,7 +323,7 @@ namespace Basis.Scripts.Networking
         public async Task CreateRemotePlayer(ServerReadyMessage ServerReadyMessage)
         {
             InstantiationParameters instantiationParameters = new InstantiationParameters(Vector3.zero, Quaternion.identity, transform);
-            string avatarID = ServerReadyMessage.LocalReadyMessage.clientAvatarChangeMessage.avatarID;
+            string avatarID = ServerReadyMessage.localReadyMessage.clientAvatarChangeMessage.avatarID;
             if (string.IsNullOrEmpty(avatarID))
             {
                 Debug.Log("bad! empty avatar for " + ServerReadyMessage.playerIdMessage.playerID);
@@ -332,9 +332,9 @@ namespace Basis.Scripts.Networking
             {
                 //   Debug.Log("requesting Avatar load " + avatarID);
             }
-            BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.LocalReadyMessage.playerMetaDataMessage);
+            BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.localReadyMessage.playerMetaDataMessage);
             BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
-            networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
+            networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
             if (Players.TryAdd(ServerReadyMessage.playerIdMessage.playerID, networkedPlayer))
             {
                 Debug.Log("added Player " + ServerReadyMessage.playerIdMessage.playerID);
@@ -343,7 +343,7 @@ namespace Basis.Scripts.Networking
             {
                 Debug.LogError("Cant add " + ServerReadyMessage.playerIdMessage.playerID);
             }
-            BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, ServerReadyMessage.LocalReadyMessage.localAvatarSyncMessage);
+            BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
             OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
         }
 

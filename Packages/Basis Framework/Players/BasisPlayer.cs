@@ -14,10 +14,13 @@ public abstract class BasisPlayer : MonoBehaviour
     public AddressableGenericResource AvatarAddressableGenericResource;
     public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
     public string AvatarUrl;
+    public byte AvatarLoadMode;//0 downloading 1 local
     public bool HasAvatarDriver;
     public event Action OnAvatarSwitched;
     public event Action OnAvatarSwitchedFallBack;
     public ProgressReport ProgressReportAvatarLoad;
+    public const byte LoadModeNetworkDownloadable = 0;
+    public const byte LoadModeLocal = 1;
     public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)
     {
         if (LocalAvatarDriver != null)

@@ -23,8 +23,8 @@ public static class BasisMenuItemsEditor
     [MenuItem("Basis/Avatar/ReloadAvatar")]
     public static async void ReloadAvatar()
     {
-        string LastUsedAvatar = BasisDataStore.LoadString(BasisLocalPlayer.LoadFileName, BasisAvatarFactory.LoadingAvatar);
-        await BasisLocalPlayer.Instance.CreateAvatar(LastUsedAvatar);
+        (string, byte) LastUsedAvatar = BasisDataStore.LoadAvatar(BasisLocalPlayer.LoadFileNameAndExtension, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal);
+        await BasisLocalPlayer.Instance.CreateAvatar(LastUsedAvatar.Item1, LastUsedAvatar.Item2);
     }
     [MenuItem("Basis/Trackers/Hide Trackers")]
     public static void HideTrackersEditor()
@@ -283,15 +283,15 @@ public static class BasisMenuItemsEditor
                 {
                     playerID = (ushort)(NetworkConnector.Players.Count + 1)
                 },
-                LocalReadyMessage = new ReadyMessage()
+                localReadyMessage = new ReadyMessage()
             };
-            serverSideSyncPlayerMessage.LocalReadyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage();
-            serverSideSyncPlayerMessage.LocalReadyMessage.localAvatarSyncMessage = new LocalAvatarSyncMessage();
+            serverSideSyncPlayerMessage.localReadyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage();
+            serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = new LocalAvatarSyncMessage();
             BasisNetworkTransmitter Transmitter = GameObject.FindFirstObjectByType<BasisNetworkTransmitter>();
             if (Transmitter != null)
             {
                 Debug.Log("Apply SpawnFakeRemote");
-                serverSideSyncPlayerMessage.LocalReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
+                serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
             }
             CreateTestRemotePlayer(serverSideSyncPlayerMessage);
         }

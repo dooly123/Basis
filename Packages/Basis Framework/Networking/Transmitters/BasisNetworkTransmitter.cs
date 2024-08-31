@@ -82,7 +82,8 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
-                    avatarID = NetworkedPlayer.Player.AvatarUrl
+                    avatarID = NetworkedPlayer.Player.AvatarUrl,
+                    loadMode = NetworkedPlayer.Player.AvatarLoadMode,
                 };
                 writer.Write(ClientAvatarChangeMessage);
                 using (var msg = Message.Create(BasisTags.AvatarChangeMessage, writer))

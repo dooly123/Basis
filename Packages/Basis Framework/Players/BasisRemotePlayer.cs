@@ -52,12 +52,12 @@ namespace Basis.Scripts.BasisSdk.Players
             if (string.IsNullOrEmpty(Loader))
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
-                await BasisAvatarFactory.LoadAvatar(this, BasisAvatarFactory.LoadingAvatar);
+                await BasisAvatarFactory.LoadAvatar(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal, string.Empty);
             }
             else
             {
                 Debug.Log("loading avatar from " + Loader);
-                await BasisAvatarFactory.LoadAvatar(this, Loader);
+                await BasisAvatarFactory.LoadAvatar(this, Loader, BasisPlayer.LoadModeNetworkDownloadable, string.Empty);
             }
         }
         public void RemoteCalibration()
