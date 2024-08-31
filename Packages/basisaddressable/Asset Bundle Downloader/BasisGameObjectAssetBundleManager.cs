@@ -3,12 +3,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Basis.Scripts.Addressable_Driver.Loading;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
-public static class GameObjectAssetBundleManager
+public static class BasisGameObjectAssetBundleManager
 {
     public static async Task<GameObject> DownloadAndLoadGameObjectAsync(string url, string Hash, string assetName, string subfolderName, ProgressReport progressCallback)
     {
         string folderPath = Path.Combine(Application.persistentDataPath, subfolderName);
-        Directory.CreateDirectory(folderPath);
+        if (Directory.Exists(folderPath) == false)
+        {
+            Directory.CreateDirectory(folderPath);
+        }
         string localPath = Path.Combine(folderPath, AddressableManagement.GetFileNameFromUrl(url));
 
         return await CheckAndLoadGameObjectBundleAsync(url, Hash,localPath, assetName, progressCallback);

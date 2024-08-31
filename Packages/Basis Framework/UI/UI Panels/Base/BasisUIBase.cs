@@ -4,7 +4,6 @@ using Basis.Scripts.BasisSdk.Helpers;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Events;
 
 namespace Basis.Scripts.UI.UI_Panels
 {
@@ -15,6 +14,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public abstract void DestroyEvent();
         public void CloseThisMenu()
         {
+            BasisUIManagement.Instance.RemoveUI(this);
             AddressableLoadFactory.ReleaseResource(LoadedMenu);
             DestroyEvent();
             Destroy(this.gameObject);
@@ -25,6 +25,7 @@ namespace Basis.Scripts.UI.UI_Panels
             GameObject Result = (GameObject)resource.Handles[0].Result;
             Result = GameObject.Instantiate(Result);
             BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
+            BasisUIManagement.Instance.AddUI(BasisUIBase);
             BasisUIBase.InitalizeEvent();
         }
         public static void OpenMenuNow(AddressableGenericResource AddressableGenericResource)
@@ -33,6 +34,7 @@ namespace Basis.Scripts.UI.UI_Panels
             GameObject RAC = op.WaitForCompletion();
             GameObject Result = GameObject.Instantiate(RAC);
             BasisUIBase BasisUIBase = BasisHelpers.GetOrAddComponent<BasisUIBase>(Result);
+            BasisUIManagement.Instance.AddUI(BasisUIBase);
             BasisUIBase.InitalizeEvent();
         }
     }

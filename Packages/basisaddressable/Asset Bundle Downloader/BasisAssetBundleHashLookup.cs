@@ -1,7 +1,5 @@
 using Basis.Scripts.Addressable_Driver.Loading;
 using System.Threading.Tasks;
-using UnityEngine;
-
 public static class BasisAssetBundleHashLookup
 {
     public const string HashExtension = ".hash";

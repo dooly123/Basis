@@ -5,7 +5,6 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
     public class BasisAvatarEyeInput : BasisInput
@@ -27,11 +26,9 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public float DelayedResponseForRotation = 0.6f;
         public float FallBackHeight = 1.73f;
         public bool BlockCrouching;
-
         public float InjectedX = 0;
         public float InjectedZ = 0;
         public bool HasEyeEvents = false;
-
         public bool PauseLook = false;
         public async Task Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
         {
@@ -64,7 +61,6 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 HasEyeEvents = true;
             }
         }
-
         private void OnCursorStateChange(CursorLockMode cursor, bool newCursorVisible)
         {
             Debug.Log("cursor changed to : " + cursor.ToString() + " | Cursor Visible : " + newCursorVisible);
@@ -88,12 +84,10 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             }
             base.OnDestroy();
         }
-
         private void BasisLocalPlayer_OnPlayersHeightChanged(bool State)
         {
             BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight();
         }
-
         public void PlayerInitialized()
         {
             characterInputActions = BasisLocalInputActions.Instance;
@@ -117,7 +111,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         public void HandleMouseRotation(Vector2 lookVector)
         {
-           BasisPointRaycaster.ScreenPoint = Mouse.current.position.value;
+            BasisPointRaycaster.ScreenPoint = Mouse.current.position.value;
             if (!isActiveAndEnabled || PauseLook)
             {
                 return;
@@ -150,7 +144,6 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             FinalPosition = LocalRawPosition;
             FinalRotation = LocalRawRotation;
             UpdatePlayerControl();
-
             BasisInputEye.LeftPosition = this.transform.position;
             BasisInputEye.RightPosition = this.transform.position;
         }

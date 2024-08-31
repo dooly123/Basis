@@ -8,7 +8,6 @@ namespace Basis.Scripts.Drivers
 {
     public static class BasisSceneLoadDriver
     {
-        public const string World = "World";
         public static ProgressReport progressCallback;
         public static async Task LoadSceneAddressables(string SceneToLoad)
         {
@@ -20,7 +19,7 @@ namespace Basis.Scripts.Drivers
         public static async Task LoadSceneAssetBundle(string SceneToLoad,string HashUrl)
         {
             Debug.Log("Loading Scene " + SceneToLoad);
-            await SceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoad, HashUrl, World, progressCallback);
+            await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoad, HashUrl, BasisStorageManagement.WorldDirectory, progressCallback);
             Debug.Log("Loaded Scene " + SceneToLoad);
         }
     }

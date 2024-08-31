@@ -73,11 +73,13 @@ namespace Basis.Scripts.UI.UI_Panels
         }
         public static async Task OpenHamburgerMenu()
         {
+            BasisUIManagement.Instance.CloseAllMenus();
             AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
             await OpenThisMenu(resource);
         }
         public static void OpenHamburgerMenuNow()
         {
+            BasisUIManagement.Instance.CloseAllMenus();
             AddressableGenericResource resource = new AddressableGenericResource(MainMenuAddressableID, AddressableExpectedResult.SingleItem);
             OpenMenuNow(resource);
         }

@@ -76,11 +76,10 @@ namespace Basis.Scripts.BasisSdk.Players
             OnLocalPlayerCreatedAndReady?.Invoke();
         }
         /// <summary>
-        /// please wait 3 frames before calling or using this data,
         /// instead of reading the data of the component i would use OnPlayersHeightChanged
-        ///  we wait until the next frame so we can let all devices and systems reset to there native size first.
+        ///  we wait until the next 2 frame so we can let all devices and systems reset to there native size first. 
+        ///  (total of 4 frames)
         /// </summary>
-        /// <param name="BasisInput"></param>
         public async Task SetPlayersEyeHeight()
         {
             Debug.Log("recalculating local Height!");

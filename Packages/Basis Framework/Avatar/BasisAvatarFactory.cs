@@ -15,7 +15,6 @@ namespace Basis.Scripts.Avatar
     public static class BasisAvatarFactory
     {
         public const string LoadingAvatar = "LoadingAvatar";
-        public const string AssetSubDirectory = "Avatars";
 
         public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, string hash = "")
         {
@@ -80,11 +79,11 @@ namespace Basis.Scripts.Avatar
 
         private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, string hash, BasisPlayer Player)
         {
-            return await GameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(
+            return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(
                 AvatarAddress,
                 hash,
                 AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress),
-                AssetSubDirectory,
+                BasisStorageManagement.AvatarDirectory,
                 Player.ProgressReportAvatarLoad
             );
         }

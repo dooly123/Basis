@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
-public static class SceneAssetBundleManager
+public static class BasisSceneAssetBundleManager
 {
     public static async Task DownloadAndLoadSceneAsync(string url,string Hash, string subfolderName, ProgressReport progressCallback)
     {
         string folderPath = Path.Combine(Application.persistentDataPath, subfolderName);
-        Directory.CreateDirectory(folderPath);
+        if (Directory.Exists(folderPath) == false)
+        {
+            Directory.CreateDirectory(folderPath);
+        }
         string localPath = Path.Combine(folderPath, GetFileNameFromUrl(url));
 
         await CheckAndLoadSceneBundleAsync(url, Hash, localPath, progressCallback);
