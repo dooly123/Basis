@@ -223,7 +223,7 @@ namespace Basis.Scripts.Addressable_Driver.Loading
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("Failed to download AssetBundle: " + request.error);
+                Debug.Log("Failed to download AssetBundle: " + request.error + " for url " + url + " with localpath " + localPath);
                 return;
             }
 
@@ -262,13 +262,11 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         }
         public static string GetFileNameFromUrl(string url)
         {
-            Uri uri = new Uri(url);
-            return Path.GetFileName(uri.LocalPath);
+            return Path.GetFileName(url);
         }
         public static string GetFileNameFromUrlWithoutExtension(string url)
         {
-            Uri uri = new Uri(url);
-            string fileName = Path.GetFileName(uri.LocalPath); // Get the file name with extension
+            string fileName = Path.GetFileName(url); // Get the file name with extension
             return Path.GetFileNameWithoutExtension(fileName); // Remove the extension and return
         }
         private IEnumerator LoopCheckTask()

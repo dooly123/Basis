@@ -70,9 +70,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null)
             {
                 PoseHandler = new HumanPoseHandler(NetworkedPlayer.Player.Avatar.Animator.avatar, NetworkedPlayer.Player.Avatar.transform.transform);
-            }
-            if (NetworkedPlayer.Player.Avatar != null)
-            {
                 if (NetworkedPlayer.Player.Avatar.HasSendEvent == false)
                 {
                     NetworkedPlayer.Player.Avatar.OnNetworkMessageSend += OnNetworkMessageSend;
