@@ -51,6 +51,9 @@ namespace Basis.Scripts.Avatar
                         Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
                         break;
                 }
+                Player.AvatarUrl = AvatarAddress;
+                Player.AvatarLoadMode = Mode;
+
                 InitializePlayerAvatar(Player, Output);
                 await Player.SetPlayersEyeHeight();
                 Player.AvatarSwitched();
@@ -97,11 +100,11 @@ namespace Basis.Scripts.Avatar
                         Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
                         break;
                 }
-                if (Output != null)
-                {
-                    InitializePlayerAvatar(Player, Output);
-                    Player.AvatarSwitched();
-                }
+                Player.AvatarUrl = AvatarAddress;
+                Player.AvatarLoadMode = Mode;
+
+                InitializePlayerAvatar(Player, Output);
+                Player.AvatarSwitched();
             }
             catch (Exception e)
             {
@@ -124,7 +127,6 @@ namespace Basis.Scripts.Avatar
             {
                 DeleteLastAvatar(Player);
                 Player.Avatar = Avatar;
-
                 if (Player is BasisLocalPlayer localPlayer)
                 {
                     CreateLocal(localPlayer);
