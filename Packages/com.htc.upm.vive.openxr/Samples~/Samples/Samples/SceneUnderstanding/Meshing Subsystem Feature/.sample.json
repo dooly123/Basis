@@ -1,5 +1,0 @@
-{
-    "displayName": "Meshing Subsystem Extension",
-    "description": "Shows a teapot mesh generated from native mesh subsystem with physics baked in background.",
-    "createSeparatePackage": false
-}

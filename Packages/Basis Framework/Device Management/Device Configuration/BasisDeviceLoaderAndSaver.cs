@@ -147,7 +147,7 @@ public class BasisDeviceLoaderAndSaver
                 // If the hashes match, no need to write the file again
                 if (StructuralComparisons.StructuralEqualityComparer.Equals(existingContentHash, newContentHash))
                 {
-                    Debug.Log("File content is identical; no need to write.");
+                //    Debug.Log("File content is identical; no need to write.");
                     return;
                 }
                 else

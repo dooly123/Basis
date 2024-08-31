@@ -97,9 +97,6 @@ namespace Assets.Scenes.Garden_doolys_scene_name_that_cant_be_replicated_by_u_wa
         Vector3 worldV = Vector3.up;
         Vector4 tilingOffset = new Vector4(1, 1, 0, 0);
 
-        [SerializeField]
-        private bool displayAffectedRenderers = false;
-
         private float intensitySeed = 0f;
         private float presenceSeed = 0f;
 
