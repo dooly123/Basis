@@ -744,6 +744,7 @@ MonoBehaviour:
   - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/castle.bundle
   - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/peechavwithclothes.bundle
   - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/doolyavwithclothes.bundle
+  - https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/hapi%20final.bundle
   ParentedAvatarButtons: {fileID: 673662174573543822}
   ButtonPrefab: {fileID: 617829828588750553}
 --- !u!114 &-3767234770868675314
