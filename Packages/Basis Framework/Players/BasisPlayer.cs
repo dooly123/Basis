@@ -22,12 +22,11 @@ namespace Basis.Scripts.BasisSdk.Players
         public ProgressReport ProgressReportAvatarLoad;
         public const byte LoadModeNetworkDownloadable = 0;
         public const byte LoadModeLocal = 1;
-        public bool HasFaceVisibleEvent;
-        public bool HasFaceVisiblity = false;
+        public bool FaceisVisible;
         public BasisMeshRendererCheck FaceRenderer;
-        public void InitalizeIKCalibration(BasisAvatarDriver LocalAvatarDriver)
+        public void InitalizeIKCalibration(BasisAvatarDriver BasisAvatarDriver)
         {
-            if (LocalAvatarDriver != null)
+            if (BasisAvatarDriver != null)
             {
                 HasAvatarDriver = true;
             }
@@ -40,29 +39,36 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 BasisAvatarStrainJiggleDriver.OnCalibration();
             }
-            if (Avatar != null)
-            {
-                HasFaceVisibleEvent = Avatar.FaceVisemeMesh.isVisible;
-                FaceRenderer = BasisHelpers.GetOrAddComponent<BasisMeshRendererCheck>(Avatar.FaceVisemeMesh.gameObject);
-                if (HasFaceVisibleEvent == false)
-                {
-                    FaceRenderer.Check += UpdateFaceVisibility;
-                    HasFaceVisiblity = true;
-                }
-            }
         }
-
         private void UpdateFaceVisibility(bool State)
         {
-            HasFaceVisibleEvent = State;
+            FaceisVisible = State;
         }
         public void AvatarSwitchedFallBack()
         {
+            UpdateFaceRenderer();
             OnAvatarSwitchedFallBack?.Invoke();
         }
         public void AvatarSwitched()
         {
+            UpdateFaceRenderer();
             OnAvatarSwitched?.Invoke();
+        }
+        public void UpdateFaceRenderer()
+        {
+            if (Avatar != null && Avatar.FaceVisemeMesh != null)
+            {
+                FaceisVisible = Avatar.FaceVisemeMesh.isVisible;
+                if (FaceRenderer == null)
+                {
+                    FaceRenderer = BasisHelpers.GetOrAddComponent<BasisMeshRendererCheck>(Avatar.FaceVisemeMesh.gameObject);
+                    FaceRenderer.Check += UpdateFaceVisibility;
+                }
+            }
+            else
+            {
+                FaceisVisible = false;
+            }
         }
     }
 }

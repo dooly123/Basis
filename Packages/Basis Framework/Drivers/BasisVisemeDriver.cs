@@ -1,4 +1,5 @@
 using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.LipSync.Scripts;
 using System;
 using UnityEngine;
@@ -12,17 +13,19 @@ namespace Basis.Scripts.Drivers
         public float laughterThreshold = 0.5f;
         public float laughterMultiplier = 1.5f;
         public int smoothAmount = 70;
-        public BasisAvatar Avatar;
         public float laughterScore = 0.0f;
         public float LastlaughterScore = 0.0f;
         public float[] FinalBlendShapes;
         public bool[] HasViseme;
         public bool HasVisemeLaughter;
         public int BlendShapeCount;
-        public void Initialize(BasisAvatar avatar)
+        public BasisPlayer Player;
+        public BasisAvatar Avatar;
+        public void Initialize(BasisPlayer BasisPlayer)
         {
             // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
-            Avatar = avatar;
+            Avatar = BasisPlayer.Avatar;
+            Player = BasisPlayer;
             Smoothing = smoothAmount;
             BlendShapeCount = Avatar.FaceVisemeMovement.Length;
             FinalBlendShapes = new float[Enum.GetNames(typeof(Viseme)).Length];
@@ -44,9 +47,9 @@ namespace Basis.Scripts.Drivers
         }
         public void EventLateUpdate()
         {
-            if (Avatar != null) 
+            if (Avatar != null)
             {
-                if (Avatar.FaceVisemeMesh.isVisible)
+                if (Player.FaceisVisible)
                 {
                     // get the current viseme frame
                     OVRLipSync.Frame frame = GetCurrentPhonemeFrame();
@@ -105,7 +108,7 @@ namespace Basis.Scripts.Drivers
         {
             if (Avatar != null)
             {
-                if (Avatar.FaceVisemeMesh.isVisible)
+                if (Player.FaceisVisible)
                 {
                     if (Context == 0)
                     {

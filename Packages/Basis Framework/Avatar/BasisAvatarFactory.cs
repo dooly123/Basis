@@ -21,7 +21,7 @@ namespace Basis.Scripts.Avatar
             if (string.IsNullOrEmpty(AvatarAddress))
             {
                 Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
-                await LoadAvatarAfterError(Player, AvatarAddress);
+                await LoadAvatarAfterError(Player);
                 return;
             }
 
@@ -61,7 +61,7 @@ namespace Basis.Scripts.Avatar
             catch (Exception e)
             {
                 Debug.LogError($"Loading avatar failed: {e}");
-                await LoadAvatarAfterError(Player, AvatarAddress);
+                await LoadAvatarAfterError(Player);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Basis.Scripts.Avatar
             if (string.IsNullOrEmpty(AvatarAddress))
             {
                 Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
-                await LoadAvatarAfterError(Player, AvatarAddress);
+                await LoadAvatarAfterError(Player);
                 return;
             }
 
@@ -109,7 +109,7 @@ namespace Basis.Scripts.Avatar
             catch (Exception e)
             {
                 Debug.LogError($"Loading avatar failed: {e}");
-                await LoadAvatarAfterError(Player, AvatarAddress);
+                await LoadAvatarAfterError(Player);
             }
         }
 
@@ -140,7 +140,7 @@ namespace Basis.Scripts.Avatar
             }
         }
 
-        public static async Task LoadAvatarAfterError(BasisPlayer Player, string AvatarAddress)
+        public static async Task LoadAvatarAfterError(BasisPlayer Player)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace Basis.Scripts.Avatar
                     InitializePlayerAvatar(Player, GameObjects[0]);
                 }
 
-                Player.AvatarSwitched();
+                Player.AvatarSwitchedFallBack();
             }
             catch (Exception e)
             {

@@ -190,7 +190,7 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 VisemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(this.gameObject);
             }
-            VisemeDriver.Initialize(Avatar);
+            VisemeDriver.Initialize(this);
             if (HasCalibrationEvents == false)
             {
                 BasisLocalInputActions.LateUpdateEvent += VisemeDriver.EventLateUpdate;
