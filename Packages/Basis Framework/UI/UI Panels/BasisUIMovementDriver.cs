@@ -51,9 +51,22 @@ namespace Basis.Scripts.UI.UI_Panels
         }
         public void SetUILocation()
         {
+            // Get the current position and rotation from the BasisLocalCameraDriver
             BasisLocalCameraDriver.GetPositionAndRotation(out Position, out Rotation);
+
+            // Log the current scale for debugging purposes
             Debug.Log("Scale was " + LocalPlayer.RatioPlayerToEyeDefaultScale);
-            transform.SetPositionAndRotation(Position + (Rotation * (WorldOffset * LocalPlayer.RatioPlayerToEyeDefaultScale)), Rotation);
+
+            // Extract the yaw (rotation around the vertical axis) and ignore pitch and roll
+            Vector3 eulerRotation = Rotation.eulerAngles;
+         //   eulerRotation.x = 0f; // Remove pitch
+            eulerRotation.z = 0f; // Remove roll
+
+            // Create a new quaternion with the adjusted rotation
+            Quaternion horizontalRotation = Quaternion.Euler(eulerRotation);
+
+            // Set the position and the adjusted horizontal rotation
+            transform.SetPositionAndRotation(Position + (horizontalRotation * (WorldOffset * LocalPlayer.RatioPlayerToEyeDefaultScale)), horizontalRotation);
         }
     }
 }
