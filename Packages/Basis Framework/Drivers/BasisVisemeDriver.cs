@@ -88,7 +88,7 @@ namespace Basis.Scripts.Drivers
                     {
                         Debug.Log("missing frame");
                     }
-                    laughterScore = this.Frame.laughterScore;
+                    laughterScore = Frame.laughterScore;
                     // Update smoothing value
                     if (smoothAmount != Smoothing)
                     {

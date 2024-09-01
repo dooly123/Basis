@@ -1,6 +1,7 @@
 using Basis.Scripts.Addressable_Driver;
 using Basis.Scripts.Addressable_Driver.Factory;
 using Basis.Scripts.Addressable_Driver.Resource;
+using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.TransformBinders.BoneControl;
@@ -46,7 +47,7 @@ public abstract class BasisInput : MonoBehaviour
     public BasisInputState InputState = new BasisInputState();
     [SerializeField]
     public BasisInputState LastState = new BasisInputState();
-    public GeneralLocation GeneralLocation;
+    public BasisGeneralLocation GeneralLocation;
     public bool TryGetRole(out BasisBoneTrackedRole BasisBoneTrackedRole)
     {
         if (hasRoleAssigned)

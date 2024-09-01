@@ -45,7 +45,7 @@ public static partial class BasisAvatarIKStageCalibration
             Candidates.Sort((a, b) => a.Distance.CompareTo(b.Distance));
         }
     }
-    public static GeneralLocation GetLocation(Vector3 Tracker, Vector3 Eye, Transform forward)
+    public static BasisGeneralLocation GetLocation(Vector3 Tracker, Vector3 Eye, Transform forward)
     {
         // Calculate the direction from Eye to Tracker
         Vector3 delta = (Tracker - Eye).normalized;
@@ -60,17 +60,17 @@ public static partial class BasisAvatarIKStageCalibration
         if (Mathf.Abs(dot) < Mathf.Epsilon)
         {
             // Target is straight ahead or directly behind
-            return GeneralLocation.Center;
+            return BasisGeneralLocation.Center;
         }
         else if (dot > 0)
         {
             // Target is to the right
-            return GeneralLocation.Right;
+            return BasisGeneralLocation.Right;
         }
         else
         {
             // Target is to the left
-            return GeneralLocation.Left;
+            return BasisGeneralLocation.Left;
         }
     }
     public class CalibrationConnector
@@ -79,63 +79,63 @@ public static partial class BasisAvatarIKStageCalibration
         public BasisInput BasisInput;
         public float Distance;
     }
-    public static GeneralLocation FindGeneralLocation(BasisBoneTrackedRole Role)
+    public static BasisGeneralLocation FindGeneralLocation(BasisBoneTrackedRole Role)
     {
 
         switch (Role)
         {
             case BasisBoneTrackedRole.CenterEye:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
             case BasisBoneTrackedRole.Head:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
             case BasisBoneTrackedRole.Neck:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
             case BasisBoneTrackedRole.Chest:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
             case BasisBoneTrackedRole.Hips:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
             case BasisBoneTrackedRole.Spine:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
             case BasisBoneTrackedRole.Mouth:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
 
             case BasisBoneTrackedRole.RightUpperLeg:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
             case BasisBoneTrackedRole.RightLowerLeg:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
             case BasisBoneTrackedRole.RightFoot:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
             case BasisBoneTrackedRole.RightShoulder:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
             case BasisBoneTrackedRole.RightUpperArm:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
             case BasisBoneTrackedRole.RightLowerArm:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
             case BasisBoneTrackedRole.RightHand:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
             case BasisBoneTrackedRole.RightToes:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Right;
+                return BasisGeneralLocation.Right;
 
             case BasisBoneTrackedRole.LeftHand:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
             case BasisBoneTrackedRole.LeftShoulder:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
             case BasisBoneTrackedRole.LeftLowerArm:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
             case BasisBoneTrackedRole.LeftFoot:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
             case BasisBoneTrackedRole.LeftUpperLeg:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
             case BasisBoneTrackedRole.LeftLowerLeg:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
             case BasisBoneTrackedRole.LeftUpperArm:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
             case BasisBoneTrackedRole.LeftToes:
-                return BasisAvatarIKStageCalibration.GeneralLocation.Left;
+                return BasisGeneralLocation.Left;
 
             default:
                 Console.WriteLine("Unknown role " + Role);
-                return BasisAvatarIKStageCalibration.GeneralLocation.Center;
+                return BasisGeneralLocation.Center;
         }
     }
     public static BasisBoneTrackedRole[] desiredOrder = new BasisBoneTrackedRole[]

@@ -1,9 +1,9 @@
-﻿using Basis.Scripts.Common;
+﻿using Basis.Scripts.Avatar;
+using Basis.Scripts.Common;
 using Basis.Scripts.Common.Enums;
 using Unity.Burst;
 using UnityEngine;
 using UnityEngine.Events;
-using static Basis.Scripts.Avatar.BasisAvatarIKStageCalibration;
 
 namespace Basis.Scripts.TransformBinders.BoneControl
 {
@@ -91,7 +91,7 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             }
         }
 
-        public GeneralLocation GeneralLocation;
+        public BasisGeneralLocation GeneralLocation;
         [SerializeField]
         public BasisRotationalControl RotationControl = new BasisRotationalControl();
         [SerializeField]
