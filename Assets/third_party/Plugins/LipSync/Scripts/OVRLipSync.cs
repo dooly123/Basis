@@ -226,9 +226,6 @@ public class OVRLipSync : MonoBehaviour
             }
         }
 
-        // Important: Use the touchpad mechanism for input, call Create on the OVRTouchpad helper class
-        OVRTouchpad.Create();
-
     }
 
     /// <summary>

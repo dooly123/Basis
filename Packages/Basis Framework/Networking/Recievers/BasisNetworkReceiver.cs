@@ -71,12 +71,15 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 output.Muscles.CopyTo(pose.muscles);
             }
-            PlayerPosition = Output.Vectors[0];
-            animator.transform.localScale = Output.Vectors[2];
 
-            //we scale the position 
+            PlayerPosition = Output.Vectors[0];//world position
+            animator.transform.localScale = Output.Vectors[2];//scale
+
+            //we scale the position by the scale
             ScaleOffset = Output.Vectors[2] - Vector3.one;
+
             PlayerPosition.Scale(ScaleOffset);
+           // animator.humanScale
             animator.transform.position = -PlayerPosition;
         }
         public void ReceiveNetworkAudio(AudioSegmentMessage audioSegment)

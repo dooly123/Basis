@@ -47,6 +47,7 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
         }
+        public bool LockAvatarFromChanging;
         public async void CreateAvatar(string Loader = BasisAvatarFactory.LoadingAvatar)
         {
             if (string.IsNullOrEmpty(Loader))
@@ -57,7 +58,10 @@ namespace Basis.Scripts.BasisSdk.Players
             else
             {
                 Debug.Log("loading avatar from " + Loader);
-                await BasisAvatarFactory.LoadAvatar(this, Loader, BasisPlayer.LoadModeNetworkDownloadable, string.Empty);
+                if (LockAvatarFromChanging == false)
+                {
+                    await BasisAvatarFactory.LoadAvatar(this, Loader, BasisPlayer.LoadModeNetworkDownloadable, string.Empty);
+                }
             }
         }
         public void RemoteCalibration()

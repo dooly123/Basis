@@ -22,7 +22,6 @@ namespace Basis.Scripts.BasisSdk
         public bool HasSendEvent;
         public AvatarNetworkMessageReceiveEvent OnNetworkMessageReceived;
         public AvatarNetworkMessageSendEvent OnNetworkMessageSend;
-
         /// <summary>
         /// this is used for Receiving Network Messages
         /// </summary>

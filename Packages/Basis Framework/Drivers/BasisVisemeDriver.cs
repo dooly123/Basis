@@ -44,7 +44,7 @@ namespace Basis.Scripts.Drivers
         }
         public void EventLateUpdate()
         {
-            if (Avatar != null)
+            if (Avatar != null) 
             {
                 if (Avatar.FaceVisemeMesh.isVisible)
                 {

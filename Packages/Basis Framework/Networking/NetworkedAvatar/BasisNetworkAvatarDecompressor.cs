@@ -1,7 +1,5 @@
 using Basis.Scripts.Networking.Compression;
 using DarkRift;
-using System;
-using Unity.Collections;
 using UnityEngine;
 using static SerializableDarkRift;
 

@@ -30,11 +30,11 @@ public static class BasisNetworkAvatarCompressor
     public static void CompressAvatar(ref BasisAvatarData AvatarData,ref HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender,ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
     {
         SenderPoseHandler.GetHumanPose(ref CachedPose);
-        AvatarData.Vectors[1] = CachedPose.bodyPosition;
-        AvatarData.Vectors[0] = Sender.transform.position;
-        AvatarData.Vectors[2] = Sender.transform.localScale;
-        AvatarData.Muscles.CopyFrom(CachedPose.muscles);
-        AvatarData.Quaternions[0] = CachedPose.bodyRotation;
+        AvatarData.Vectors[1] = CachedPose.bodyPosition;//hips
+        AvatarData.Vectors[0] = Sender.transform.position;//root
+        AvatarData.Vectors[2] = Sender.transform.localScale;//scale
+        AvatarData.Muscles.CopyFrom(CachedPose.muscles);//muscles
+        AvatarData.Quaternions[0] = CachedPose.bodyRotation;//hips rotation
         CompressAvatarUpdate(ref Bytes, AvatarData.Vectors[0], AvatarData.Vectors[2], AvatarData.Vectors[1], CachedPose.bodyRotation, CachedPose.muscles, PositionRanged, ScaleRanged);
     }
     public static void CompressAvatarUpdate(ref LocalAvatarSyncMessage syncmessage, Vector3 NewPosition, Vector3 Scale, Vector3 BodyPosition, Quaternion Rotation, float[] muscles, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
