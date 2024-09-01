@@ -1,3 +1,4 @@
+using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.Factorys;
@@ -46,6 +47,11 @@ namespace Basis.Scripts.Networking
             {
                 Instance = this;
             }
+            if(BasisScene.Instance != null)
+            {
+                SetupSceneEvents(BasisScene.Instance);
+            }
+            BasisScene.Ready.AddListener(SetupSceneEvents);
             if (Client == null)
             {
                 Client = GetComponent<BasisLowLevelClient>();
@@ -55,6 +61,27 @@ namespace Basis.Scripts.Networking
             if (ForceConnect)
             {
                 Connect(Port, Ip);
+            }
+        }
+        public void SetupSceneEvents(BasisScene BasisScene)
+        {
+            BasisScene.OnNetworkMessageSend += OnNetworkMessageSend;
+        }
+
+        private void OnNetworkMessageSend(ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable)
+        {
+            using (DarkRiftWriter writer = DarkRiftWriter.Create())
+            {
+                SceneDataMessage AvatarDataMessage = new SceneDataMessage
+                {
+                    messageIndex = MessageIndex,
+                    buffer = buffer
+                };
+                writer.Write(AvatarDataMessage);
+                using (var msg = Message.Create(BasisTags.SceneGenericMessage, writer))
+                {
+                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, DeliveryMethod);
+                }
             }
         }
         public void Connect()
@@ -227,13 +254,8 @@ namespace Basis.Scripts.Networking
         {
             reader.Read(out ServerSceneDataMessage ServerAvatarChangeMessage);
             ushort PlayerID = ServerAvatarChangeMessage.PlayerIdMessage.playerID;
-            if (Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
-            {
-            }
-            else
-            {
-                Debug.Log("Missing Player For Message " + ServerAvatarChangeMessage.PlayerIdMessage.playerID);
-            }
+            SceneDataMessage SceneDataMessage = ServerAvatarChangeMessage.SceneDataMessage;
+            BasisScene.Instance.OnNetworkMessageReceived?.Invoke(PlayerID, SceneDataMessage.messageIndex, SceneDataMessage.buffer);
         }
         private void HandleServerAvatarDataMessage(DarkRiftReader reader)
         {
