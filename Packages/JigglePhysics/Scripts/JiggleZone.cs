@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static JigglePhysics.JiggleBone;
 using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {
@@ -13,12 +14,12 @@ namespace JigglePhysics
         // Modified method using arrays instead of ICollection
         protected override void CreateSimulatedPoints(ref JiggleBone[] outputPoints, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
         {
-            var parent = new JiggleBone(currentTransform, null);
+            var parent = JiggleBoneHelper.JiggleBone(currentTransform, null);
             // Ensure the array has enough size before assigning values
             if (outputPoints.Length > 1)
             {
                 outputPoints[0] = parent;
-                outputPoints[1] = new JiggleBone(null, parent, 0f);
+                outputPoints[1] = JiggleBoneHelper.JiggleBone(null, parent, 0f);
             }
             else
             {

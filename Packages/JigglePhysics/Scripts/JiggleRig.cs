@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static JigglePhysics.JiggleBone;
 using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {
@@ -73,15 +74,22 @@ namespace JigglePhysics
             float squaredDeltaTime = fixedDeltaTime * fixedDeltaTime;
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                SPoints[SimulatedIndex].currentFixedAnimatedBonePosition = SPoints[SimulatedIndex].targetAnimatedBoneSignal.SamplePosition(TimeAsDouble);
+                SPoints[SimulatedIndex].currentFixedAnimatedBonePosition = PositionSignalHelper.SamplePosition(SPoints[SimulatedIndex].targetAnimatedBoneSignal, TimeAsDouble);
                 if (SPoints[SimulatedIndex].JiggleParent == null)
                 {
                     SPoints[SimulatedIndex].workingPosition = SPoints[SimulatedIndex].currentFixedAnimatedBonePosition;
-                    SPoints[SimulatedIndex].particleSignal.SetPosition(SPoints[SimulatedIndex].workingPosition, TimeAsDouble);
+                    PositionSignalHelper.SetPosition(ref SPoints[SimulatedIndex].particleSignal, SPoints[SimulatedIndex].workingPosition, TimeAsDouble);
                     continue;
                 }
-                Vector3 localSpaceVelocity = (SPoints[SimulatedIndex].particleSignal.GetCurrent() - SPoints[SimulatedIndex].particleSignal.GetPrevious()) - (SPoints[SimulatedIndex].JiggleParent.particleSignal.GetCurrent() - SPoints[SimulatedIndex].JiggleParent.particleSignal.GetPrevious());
-                SPoints[SimulatedIndex].workingPosition = NextPhysicsPosition(SPoints[SimulatedIndex].particleSignal.GetCurrent(), SPoints[SimulatedIndex].particleSignal.GetPrevious(), localSpaceVelocity, Gravity, squaredDeltaTime, jiggleSettingsdata.gravityMultiplier, jiggleSettingsdata.friction, jiggleSettingsdata.airDrag
+                Vector3 CurrentSignal = PositionSignalHelper.GetCurrent(SPoints[SimulatedIndex].particleSignal);
+                Vector3 PreviousSignal = PositionSignalHelper.GetPrevious(SPoints[SimulatedIndex].particleSignal);
+
+                Vector3 ParentCurrentSignal = PositionSignalHelper.GetCurrent(SPoints[SimulatedIndex].JiggleParent.particleSignal);
+
+                Vector3 ParentPreviousSignal = PositionSignalHelper.GetPrevious(SPoints[SimulatedIndex].JiggleParent.particleSignal);
+
+                Vector3 localSpaceVelocity = (CurrentSignal - PreviousSignal) - (ParentCurrentSignal - ParentPreviousSignal);
+                SPoints[SimulatedIndex].workingPosition = NextPhysicsPosition(CurrentSignal, PreviousSignal, localSpaceVelocity, Gravity, squaredDeltaTime, jiggleSettingsdata.gravityMultiplier, jiggleSettingsdata.friction, jiggleSettingsdata.airDrag
                     );
                 SPoints[SimulatedIndex].workingPosition += wind * (fixedDeltaTime * jiggleSettingsdata.airDrag);
             }
@@ -89,7 +97,7 @@ namespace JigglePhysics
             {
                 if (SPoints[SimulatedIndex].JiggleParent == null)
                 {
-                    SPoints[SimulatedIndex].particleSignal.SetPosition(SPoints[SimulatedIndex].workingPosition, TimeAsDouble);
+                    PositionSignalHelper.SetPosition(ref SPoints[SimulatedIndex].particleSignal, SPoints[SimulatedIndex].workingPosition, TimeAsDouble);
                     continue;
                 }
             }
@@ -136,7 +144,7 @@ namespace JigglePhysics
             }
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                SPoints[SimulatedIndex].particleSignal.SetPosition(SPoints[SimulatedIndex].workingPosition, TimeAsDouble);
+                PositionSignalHelper.SetPosition(ref SPoints[SimulatedIndex].particleSignal, SPoints[SimulatedIndex].workingPosition, TimeAsDouble);
             }
         }
         public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD, double timeAsDouble)
@@ -208,7 +216,7 @@ namespace JigglePhysics
             void CreateSimulatedPointsInternal(List<JiggleBone> list, Transform[] ignored, Transform current, JiggleBone parent)
             {
                 // Create a new JiggleBone and add it to the list
-                JiggleBone newJiggleBone = new JiggleBone(current, parent);
+                JiggleBone newJiggleBone = JiggleBoneHelper.JiggleBone(current, parent);
                 list.Add(newJiggleBone);
                 // Check if the currentTransform has no children
                 if (current.childCount == 0)
@@ -223,12 +231,12 @@ namespace JigglePhysics
                         else
                         {
                             // Add an extra virtual JiggleBone
-                            list.Add(new JiggleBone(null, newJiggleBone));
+                            list.Add(JiggleBoneHelper.JiggleBone(null, newJiggleBone));
                             return;
                         }
                     }
                     // Add another virtual JiggleBone
-                    list.Add(new JiggleBone(null, newJiggleBone));
+                    list.Add(JiggleBoneHelper.JiggleBone(null, newJiggleBone));
                     return;
                 }
                 // Iterate through child transforms
@@ -277,10 +285,10 @@ namespace JigglePhysics
         {
             if (!JiggleBone.hasTransform)
             {
-                JiggleBone.targetAnimatedBoneSignal.SetPosition(GetProjectedPosition(JiggleBone), timeAsDouble);
+                PositionSignalHelper.SetPosition(ref JiggleBone.targetAnimatedBoneSignal, GetProjectedPosition(JiggleBone), timeAsDouble);
                 return;
             }
-            JiggleBone.targetAnimatedBoneSignal.SetPosition(JiggleBone.transform.position, timeAsDouble);
+            PositionSignalHelper.SetPosition(ref JiggleBone.targetAnimatedBoneSignal, JiggleBone.transform.position, timeAsDouble);
             JiggleBone.transform.GetLocalPositionAndRotation(out JiggleBone.lastValidPoseBoneLocalPosition, out JiggleBone.lastValidPoseBoneRotation);
         }
         public static Vector3 ConstrainLengthBackwards(JiggleBone JiggleBone, Vector3 newPosition, float elasticity)
@@ -306,8 +314,8 @@ namespace JigglePhysics
         public static void MatchAnimationInstantly(JiggleBone JiggleBone, double time, float fixedDeltaTime)
         {
             Vector3 position = GetTransformPosition(JiggleBone);
-            JiggleBone.targetAnimatedBoneSignal.FlattenSignal(time, position, fixedDeltaTime);
-            JiggleBone.particleSignal.FlattenSignal(time, position, fixedDeltaTime);
+            PositionSignalHelper.FlattenSignal(ref JiggleBone.targetAnimatedBoneSignal, time, position, fixedDeltaTime);
+            PositionSignalHelper.FlattenSignal(ref JiggleBone.particleSignal, time, position, fixedDeltaTime);
         }
         /// <summary>
         /// Physically accurate teleportation, maintains the existing signals of motion and keeps their trajectories through a teleport. First call PrepareTeleport(), then move the character, then call FinishTeleport().
@@ -324,8 +332,8 @@ namespace JigglePhysics
         {
             Vector3 position = GetTransformPosition(JiggleBone);
             Vector3 diff = position - JiggleBone.preTeleportPosition;
-            JiggleBone.targetAnimatedBoneSignal.FlattenSignal(timeAsDouble, position, FixedDeltaTime);
-            JiggleBone.particleSignal.OffsetSignal(diff);
+            PositionSignalHelper.FlattenSignal(ref JiggleBone.targetAnimatedBoneSignal, timeAsDouble, position, FixedDeltaTime);
+            PositionSignalHelper.OffsetSignal(ref JiggleBone.particleSignal, diff);
             JiggleBone.workingPosition += diff;
         }
         public static Vector3 ConstrainAngle(JiggleBone JiggleBone, Vector3 newPosition, float elasticity, float elasticitySoften)
@@ -363,7 +371,7 @@ namespace JigglePhysics
         }
         public static Vector3 DeriveFinalSolvePosition(JiggleBone JiggleBone, Vector3 offset, double timeAsDouble)
         {
-            JiggleBone.extrapolatedPosition = offset + JiggleBone.particleSignal.SamplePosition(timeAsDouble);
+            JiggleBone.extrapolatedPosition = offset + PositionSignalHelper.SamplePosition(JiggleBone.particleSignal, timeAsDouble);
             return JiggleBone.extrapolatedPosition;
         }
         public static Vector3 GetCachedSolvePosition(JiggleBone JiggleBone)
@@ -386,14 +394,13 @@ namespace JigglePhysics
             }
             CacheAnimationPosition(JiggleBone, currentTime);
         }
-        public static void PoseBone(JiggleBone JiggleBone, float blend, double currentTime)
+        public static void PoseBone(JiggleBone JiggleBone, float blend, double TimeAsDouble)
         {
             if (JiggleBone.child == null) return; // Early exit if there's no child
 
             // Cache frequently accessed values
-            Vector3 targetPosition = JiggleBone.targetAnimatedBoneSignal.SamplePosition(currentTime);
-            Vector3 childTargetPosition = JiggleBone.child.targetAnimatedBoneSignal.SamplePosition(currentTime);
-
+            Vector3 targetPosition = PositionSignalHelper.SamplePosition(JiggleBone.targetAnimatedBoneSignal, TimeAsDouble);
+            Vector3 childTargetPosition = PositionSignalHelper.SamplePosition(JiggleBone.child.targetAnimatedBoneSignal, TimeAsDouble);
             // Blend positions
             Vector3 positionBlend = Vector3.Lerp(targetPosition, JiggleBone.extrapolatedPosition, blend);
             Vector3 childPositionBlend = Vector3.Lerp(childTargetPosition, JiggleBone.child.extrapolatedPosition, blend);
@@ -436,10 +443,10 @@ namespace JigglePhysics
         }
         public static void OnDrawGizmos(JiggleBone JiggleBone, JiggleSettingsBase jiggleSettings, double TimeAsDouble)
         {
-            Vector3 pos = JiggleBone.particleSignal.SamplePosition(TimeAsDouble);
+            Vector3 pos = PositionSignalHelper.SamplePosition(JiggleBone.particleSignal, TimeAsDouble);
             if (JiggleBone.child != null)
             {
-                Gizmos.Line(pos, JiggleBone.child.particleSignal.SamplePosition(TimeAsDouble));
+                Gizmos.Line(pos, PositionSignalHelper.SamplePosition(JiggleBone.child.particleSignal, TimeAsDouble));
             }
             if (jiggleSettings != null)
             {
@@ -452,10 +459,10 @@ namespace JigglePhysics
         public Vector3 position;
         public double time;
     }
-    public class PositionSignal
+    public struct PositionSignal
     {
-        private Frame previousFrame;
-        private Frame currentFrame;
+        public Frame previousFrame;
+        public Frame currentFrame;
 
         public PositionSignal(Vector3 startPosition, double time)
         {
@@ -465,57 +472,60 @@ namespace JigglePhysics
                 time = time,
             };
         }
-
-        public void SetPosition(Vector3 position, double time)
+    }
+    public static class PositionSignalHelper
+    {
+        public static void SetPosition(ref PositionSignal signal, Vector3 position, double time)
         {
-            previousFrame = currentFrame;
-            currentFrame = new Frame
+            signal.previousFrame = signal.currentFrame;
+            signal.currentFrame = new Frame
             {
                 position = position,
                 time = time,
             };
         }
 
-        public void OffsetSignal(Vector3 offset)
+        public static void OffsetSignal(ref PositionSignal signal, Vector3 offset)
         {
-            previousFrame = new Frame
+            signal.previousFrame = new Frame
             {
-                position = previousFrame.position + offset,
-                time = previousFrame.time,
+                position = signal.previousFrame.position + offset,
+                time = signal.previousFrame.time,
             };
-            currentFrame = new Frame
+            signal.currentFrame = new Frame
             {
-                position = currentFrame.position + offset,
-                time = previousFrame.time,
+                position = signal.currentFrame.position + offset,
+                time = signal.currentFrame.time,
             };
         }
 
-        public void FlattenSignal(double time, Vector3 position, float fixedDeltaTime)
+        public static void FlattenSignal(ref PositionSignal signal, double time, Vector3 position, float fixedDeltaTime)
         {
-            previousFrame = new Frame
+            signal.previousFrame = new Frame
             {
                 position = position,
                 time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime) * 2f,
             };
-            currentFrame = new Frame
+            signal.currentFrame = new Frame
             {
                 position = position,
                 time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime),
             };
         }
 
-        public Vector3 GetCurrent() => currentFrame.position;
-        public Vector3 GetPrevious() => previousFrame.position;
+        public static Vector3 GetCurrent(PositionSignal signal) => signal.currentFrame.position;
 
-        public Vector3 SamplePosition(double time)
+        public static Vector3 GetPrevious(PositionSignal signal) => signal.previousFrame.position;
+
+        public static Vector3 SamplePosition(PositionSignal signal, double time)
         {
-            double diff = currentFrame.time - previousFrame.time;
+            double diff = signal.currentFrame.time - signal.previousFrame.time;
             if (diff == 0)
             {
-                return previousFrame.position;
+                return signal.previousFrame.position;
             }
-            double t = ((double)(time) - (double)previousFrame.time) / (double)diff;
-            return Vector3.Lerp(previousFrame.position, currentFrame.position, (float)t);
+            double t = (time - signal.previousFrame.time) / diff;
+            return Vector3.Lerp(signal.previousFrame.position, signal.currentFrame.position, (float)t);
         }
     }
 }
