@@ -29,8 +29,11 @@ namespace JigglePhysics
         {
             Debug.DrawLine(GetPointSolve(), GetRootTransform().position, Color.cyan, 0, false);
         }
-        public Vector3 GetPointSolve() => simulatedPoints[1].GetCachedSolvePosition();
-        public new void OnRenderObject()
+        public Vector3 GetPointSolve()
+        {
+           return GetCachedSolvePosition(SPoints[1]);
+        }
+        public void OnRenderObject()
         {
             if (GetRootTransform() == null)
             {
