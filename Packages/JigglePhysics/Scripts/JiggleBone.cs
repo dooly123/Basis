@@ -4,16 +4,18 @@ namespace JigglePhysics
     // Uses Verlet to resolve constraints easily 
     public class JiggleBone
     {
+        public Transform transform;
+
+        public JiggleBone JiggleParent;
+        public JiggleBone child;
+
         public bool hasTransform;
         public bool HasJiggleParent;
 
         public float projectionAmount;
         public float normalizedIndex;
 
-        public Transform transform;
         public PositionSignal targetAnimatedBoneSignal;
-        public JiggleBone JiggleParent;
-        public JiggleBone child;
         public PositionSignal particleSignal;
 
         public Quaternion boneRotationChangeCheck;

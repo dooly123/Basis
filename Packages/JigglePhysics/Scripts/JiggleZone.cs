@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using static JigglePhysics.JiggleBone;
 using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static JigglePhysics.JiggleBone;
-using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {
     [Serializable]
@@ -89,8 +87,7 @@ namespace JigglePhysics
                 Vector3 ParentPreviousSignal = PositionSignalHelper.GetPrevious(SPoints[SimulatedIndex].JiggleParent.particleSignal);
 
                 Vector3 localSpaceVelocity = (CurrentSignal - PreviousSignal) - (ParentCurrentSignal - ParentPreviousSignal);
-                SPoints[SimulatedIndex].workingPosition = NextPhysicsPosition(CurrentSignal, PreviousSignal, localSpaceVelocity, Gravity, squaredDeltaTime, jiggleSettingsdata.gravityMultiplier, jiggleSettingsdata.friction, jiggleSettingsdata.airDrag
-                    );
+                SPoints[SimulatedIndex].workingPosition = NextPhysicsPosition(CurrentSignal, PreviousSignal, localSpaceVelocity, Gravity, squaredDeltaTime, jiggleSettingsdata.gravityMultiplier, jiggleSettingsdata.friction, jiggleSettingsdata.airDrag);
                 SPoints[SimulatedIndex].workingPosition += wind * (fixedDeltaTime * jiggleSettingsdata.airDrag);
             }
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
@@ -162,24 +159,58 @@ namespace JigglePhysics
         }
         public void DeriveFinalSolve(double timeAsDouble)
         {
-            Vector3 virtualPosition = DeriveFinalSolvePosition(SPoints[0], Zero, timeAsDouble);
+            SPoints[0].extrapolatedPosition = PositionSignalHelper.SamplePosition(SPoints[0].particleSignal, timeAsDouble);
+
+            Vector3 virtualPosition = SPoints[0].extrapolatedPosition;
+
             Vector3 offset = SPoints[0].transform.position - virtualPosition;
             int simulatedPointsLength = SPoints.Length;
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsLength; SimulatedIndex++)
             {
-                DeriveFinalSolvePosition(SPoints[SimulatedIndex], offset, timeAsDouble);
+                SPoints[SimulatedIndex].extrapolatedPosition = offset + PositionSignalHelper.SamplePosition(SPoints[SimulatedIndex].particleSignal, timeAsDouble);
             }
         }
-        public void Pose(bool debugDraw, float deltaTime, double timeAsDouble)
+        public void Pose(bool debugDraw, double timeAsDouble)
         {
             DeriveFinalSolve(timeAsDouble);
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                PoseBone(SPoints[SimulatedIndex], jiggleSettingsdata.blend, deltaTime);
+                if (SPoints[SimulatedIndex].child == null)
+                {
+                    continue; // Early exit if there's no child
+                }
+                // Cache frequently accessed values
+                Vector3 targetPosition = PositionSignalHelper.SamplePosition(SPoints[SimulatedIndex].targetAnimatedBoneSignal, timeAsDouble);
+                Vector3 childTargetPosition = PositionSignalHelper.SamplePosition(SPoints[SimulatedIndex].child.targetAnimatedBoneSignal, timeAsDouble);
+                // Blend positions
+                Vector3 positionBlend = Vector3.Lerp(targetPosition, SPoints[SimulatedIndex].extrapolatedPosition, jiggleSettingsdata.blend);
+                Vector3 childPositionBlend = Vector3.Lerp(childTargetPosition, SPoints[SimulatedIndex].child.extrapolatedPosition, jiggleSettingsdata.blend);
 
+                if (SPoints[SimulatedIndex].JiggleParent != null)
+                {
+                    SPoints[SimulatedIndex].transform.position = positionBlend;
+                }
+
+                // Calculate child position and vector differences
+                Vector3 childPosition = GetTransformPosition(SPoints[SimulatedIndex].child);
+                Vector3 cachedAnimatedVector = childPosition - positionBlend;
+                Vector3 simulatedVector = childPositionBlend - positionBlend;
+
+                // Rotate the transform based on the vector differences
+                if (cachedAnimatedVector != Vector3.zero && simulatedVector != Vector3.zero)
+                {
+                    Quaternion animPoseToPhysicsPose = Quaternion.FromToRotation(cachedAnimatedVector, simulatedVector);
+                    SPoints[SimulatedIndex].transform.rotation = animPoseToPhysicsPose * SPoints[SimulatedIndex].transform.rotation;
+                }
+
+                // Cache transform changes if the bone has a transform
+                if (SPoints[SimulatedIndex].hasTransform)
+                {
+                    SPoints[SimulatedIndex].transform.GetLocalPositionAndRotation(out SPoints[SimulatedIndex].bonePositionChangeCheck, out SPoints[SimulatedIndex].boneRotationChangeCheck);
+                }
                 if (debugDraw)
                 {
-                    DebugDraw(SPoints[SimulatedIndex], Color.red, Color.blue, true);
+                    JiggleRigGizmos.DebugDraw(SPoints[SimulatedIndex], Color.red, Color.blue, true);
                 }
             }
         }
@@ -205,58 +236,8 @@ namespace JigglePhysics
             }
             for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
             {
-                OnDrawGizmos(SPoints[PointsIndex], jiggleSettings, TimeAsDouble);
+                JiggleRigGizmos.OnDrawGizmos(SPoints[PointsIndex], jiggleSettings, TimeAsDouble);
             }
-        }
-        protected virtual void CreateSimulatedPoints(ref JiggleBone[] outputPoints, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
-        {
-            // Use a list to store the JiggleBones
-            List<JiggleBone> jiggleBoneList = new List<JiggleBone>(outputPoints ?? new JiggleBone[0]);
-            // Recursive function to create simulated points using a list
-            void CreateSimulatedPointsInternal(List<JiggleBone> list, Transform[] ignored, Transform current, JiggleBone parent)
-            {
-                // Create a new JiggleBone and add it to the list
-                JiggleBone newJiggleBone = JiggleBoneHelper.JiggleBone(current, parent);
-                list.Add(newJiggleBone);
-                // Check if the currentTransform has no children
-                if (current.childCount == 0)
-                {
-                    // Handle the case where newJiggleBone has no parent
-                    if (newJiggleBone.JiggleParent == null)
-                    {
-                        if (newJiggleBone.transform.parent == null)
-                        {
-                            throw new UnityException("Can't have a singular jiggle bone with no parents. That doesn't even make sense!");
-                        }
-                        else
-                        {
-                            // Add an extra virtual JiggleBone
-                            list.Add(JiggleBoneHelper.JiggleBone(null, newJiggleBone));
-                            return;
-                        }
-                    }
-                    // Add another virtual JiggleBone
-                    list.Add(JiggleBoneHelper.JiggleBone(null, newJiggleBone));
-                    return;
-                }
-                // Iterate through child transforms
-                int childCount = current.childCount;
-                for (int i = 0; i < childCount; i++)
-                {
-                    Transform child = current.GetChild(i);
-                    // Check if the child is in the ignoredTransforms array
-                    if (Array.Exists(ignored, t => t == child))
-                    {
-                        continue;
-                    }
-                    // Recursively create simulated points for child transforms
-                    CreateSimulatedPointsInternal(list, ignored, child, newJiggleBone);
-                }
-            }
-            // Call the internal recursive method
-            CreateSimulatedPointsInternal(jiggleBoneList, ignoredTransforms, currentTransform, parentJiggleBone);
-            // Convert the list back to an array and assign it to outputPoints
-            outputPoints = jiggleBoneList.ToArray();
         }
         public static Vector3 GetProjectedPosition(JiggleBone JiggleBone)
         {
@@ -369,11 +350,6 @@ namespace JigglePhysics
         {
             return newPosition + (newPosition - previousPosition - localSpaceVelocity) * (1f - airFriction) + localSpaceVelocity * (1f - friction) + Gravity * (gravityMultiplier * squaredDeltaTime);
         }
-        public static Vector3 DeriveFinalSolvePosition(JiggleBone JiggleBone, Vector3 offset, double timeAsDouble)
-        {
-            JiggleBone.extrapolatedPosition = offset + PositionSignalHelper.SamplePosition(JiggleBone.particleSignal, timeAsDouble);
-            return JiggleBone.extrapolatedPosition;
-        }
         public static Vector3 GetCachedSolvePosition(JiggleBone JiggleBone)
         {
             return JiggleBone.extrapolatedPosition;
@@ -383,149 +359,67 @@ namespace JigglePhysics
             // If bone is not animated, return to last unadulterated pose
             if (JiggleBone.hasTransform)
             {
-                if (JiggleBone.boneRotationChangeCheck == JiggleBone.transform.localRotation)
+                JiggleBone.transform.GetLocalPositionAndRotation(out Vector3 localPosition, out Quaternion localrotation);
+                if (JiggleBone.boneRotationChangeCheck == localrotation)
                 {
                     JiggleBone.transform.localRotation = JiggleBone.lastValidPoseBoneRotation;
                 }
-                if (JiggleBone.bonePositionChangeCheck == JiggleBone.transform.localPosition)
+                if (JiggleBone.bonePositionChangeCheck == localPosition)
                 {
                     JiggleBone.transform.localPosition = JiggleBone.lastValidPoseBoneLocalPosition;
                 }
             }
             CacheAnimationPosition(JiggleBone, currentTime);
         }
-        public static void PoseBone(JiggleBone JiggleBone, float blend, double TimeAsDouble)
+        protected virtual void CreateSimulatedPoints(ref JiggleBone[] outputPoints, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
         {
-            if (JiggleBone.child == null) return; // Early exit if there's no child
-
-            // Cache frequently accessed values
-            Vector3 targetPosition = PositionSignalHelper.SamplePosition(JiggleBone.targetAnimatedBoneSignal, TimeAsDouble);
-            Vector3 childTargetPosition = PositionSignalHelper.SamplePosition(JiggleBone.child.targetAnimatedBoneSignal, TimeAsDouble);
-            // Blend positions
-            Vector3 positionBlend = Vector3.Lerp(targetPosition, JiggleBone.extrapolatedPosition, blend);
-            Vector3 childPositionBlend = Vector3.Lerp(childTargetPosition, JiggleBone.child.extrapolatedPosition, blend);
-
-            if (JiggleBone.JiggleParent != null)
+            // Use a list to store the JiggleBones
+            List<JiggleBone> jiggleBoneList = new List<JiggleBone>(outputPoints ?? new JiggleBone[0]);
+            // Recursive function to create simulated points using a list
+            void CreateSimulatedPointsInternal(List<JiggleBone> list, Transform[] ignored, Transform current, JiggleBone parent)
             {
-                JiggleBone.transform.position = positionBlend;
+                // Create a new JiggleBone and add it to the list
+                JiggleBone newJiggleBone = JiggleBoneHelper.JiggleBone(current, parent);
+                list.Add(newJiggleBone);
+                // Check if the currentTransform has no children
+                if (current.childCount == 0)
+                {
+                    // Handle the case where newJiggleBone has no parent
+                    if (newJiggleBone.JiggleParent == null)
+                    {
+                        if (newJiggleBone.transform.parent == null)
+                        {
+                            throw new UnityException("Can't have a singular jiggle bone with no parents. That doesn't even make sense!");
+                        }
+                        else
+                        {
+                            // Add an extra virtual JiggleBone
+                            list.Add(JiggleBoneHelper.JiggleBone(null, newJiggleBone));
+                            return;
+                        }
+                    }
+                    // Add another virtual JiggleBone
+                    list.Add(JiggleBoneHelper.JiggleBone(null, newJiggleBone));
+                    return;
+                }
+                // Iterate through child transforms
+                int childCount = current.childCount;
+                for (int i = 0; i < childCount; i++)
+                {
+                    Transform child = current.GetChild(i);
+                    // Check if the child is in the ignoredTransforms array
+                    if (Array.Exists(ignored, t => t == child))
+                    {
+                        continue;
+                    }
+                    // Recursively create simulated points for child transforms
+                    CreateSimulatedPointsInternal(list, ignored, child, newJiggleBone);
+                }
             }
-
-            // Calculate child position and vector differences
-            Vector3 childPosition = GetTransformPosition(JiggleBone.child);
-            Vector3 cachedAnimatedVector = childPosition - positionBlend;
-            Vector3 simulatedVector = childPositionBlend - positionBlend;
-
-            // Rotate the transform based on the vector differences
-            if (cachedAnimatedVector != Vector3.zero && simulatedVector != Vector3.zero)
-            {
-                Quaternion animPoseToPhysicsPose = Quaternion.FromToRotation(cachedAnimatedVector, simulatedVector);
-                JiggleBone.transform.rotation = animPoseToPhysicsPose * JiggleBone.transform.rotation;
-            }
-
-            // Cache transform changes if the bone has a transform
-            if (JiggleBone.hasTransform)
-            {
-                JiggleBone.transform.GetLocalPositionAndRotation(out JiggleBone.bonePositionChangeCheck, out JiggleBone.boneRotationChangeCheck);
-            }
-        }
-        public static void DebugDraw(JiggleBone JiggleBone, Color simulateColor, Color targetColor, bool interpolated)
-        {
-            if (JiggleBone.JiggleParent == null) return;
-            if (interpolated)
-            {
-                Debug.DrawLine(JiggleBone.extrapolatedPosition, JiggleBone.JiggleParent.extrapolatedPosition, simulateColor, 0, false);
-            }
-            else
-            {
-                Debug.DrawLine(JiggleBone.workingPosition, JiggleBone.JiggleParent.workingPosition, simulateColor, 0, false);
-            }
-            Debug.DrawLine(JiggleBone.currentFixedAnimatedBonePosition, JiggleBone.JiggleParent.currentFixedAnimatedBonePosition, targetColor, 0, false);
-        }
-        public static void OnDrawGizmos(JiggleBone JiggleBone, JiggleSettingsBase jiggleSettings, double TimeAsDouble)
-        {
-            Vector3 pos = PositionSignalHelper.SamplePosition(JiggleBone.particleSignal, TimeAsDouble);
-            if (JiggleBone.child != null)
-            {
-                Gizmos.Line(pos, PositionSignalHelper.SamplePosition(JiggleBone.child.particleSignal, TimeAsDouble));
-            }
-            if (jiggleSettings != null)
-            {
-                Gizmos.Sphere(pos, jiggleSettings.GetRadius(JiggleBone.normalizedIndex));
-            }
-        }
-    }
-    public struct Frame
-    {
-        public Vector3 position;
-        public double time;
-    }
-    public struct PositionSignal
-    {
-        public Frame previousFrame;
-        public Frame currentFrame;
-
-        public PositionSignal(Vector3 startPosition, double time)
-        {
-            currentFrame = previousFrame = new Frame
-            {
-                position = startPosition,
-                time = time,
-            };
-        }
-    }
-    public static class PositionSignalHelper
-    {
-        public static void SetPosition(ref PositionSignal signal, Vector3 position, double time)
-        {
-            signal.previousFrame = signal.currentFrame;
-            signal.currentFrame = new Frame
-            {
-                position = position,
-                time = time,
-            };
-        }
-
-        public static void OffsetSignal(ref PositionSignal signal, Vector3 offset)
-        {
-            signal.previousFrame = new Frame
-            {
-                position = signal.previousFrame.position + offset,
-                time = signal.previousFrame.time,
-            };
-            signal.currentFrame = new Frame
-            {
-                position = signal.currentFrame.position + offset,
-                time = signal.currentFrame.time,
-            };
-        }
-
-        public static void FlattenSignal(ref PositionSignal signal, double time, Vector3 position, float fixedDeltaTime)
-        {
-            signal.previousFrame = new Frame
-            {
-                position = position,
-                time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime) * 2f,
-            };
-            signal.currentFrame = new Frame
-            {
-                position = position,
-                time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime),
-            };
-        }
-
-        public static Vector3 GetCurrent(PositionSignal signal) => signal.currentFrame.position;
-
-        public static Vector3 GetPrevious(PositionSignal signal) => signal.previousFrame.position;
-
-        public static Vector3 SamplePosition(PositionSignal signal, double time)
-        {
-            double diff = signal.currentFrame.time - signal.previousFrame.time;
-            if (diff == 0)
-            {
-                return signal.previousFrame.position;
-            }
-            double t = (time - signal.previousFrame.time) / diff;
-            return Vector3.Lerp(signal.previousFrame.position, signal.currentFrame.position, (float)t);
+            // Call the internal recursive method
+            CreateSimulatedPointsInternal(jiggleBoneList, ignoredTransforms, currentTransform, parentJiggleBone);
+            // Convert the list back to an array and assign it to outputPoints
+            outputPoints = jiggleBoneList.ToArray();
         }
     }
 }

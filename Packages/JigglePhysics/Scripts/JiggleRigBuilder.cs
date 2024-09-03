@@ -115,7 +115,7 @@ namespace JigglePhysics
 
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                jiggleRigs[JiggleIndex].Pose(debugDraw, deltaTime, TimeASDouble);
+                jiggleRigs[JiggleIndex].Pose(debugDraw, TimeASDouble);
             }
 
             CachedSphereCollider.FinishedPass();
