@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 namespace JigglePhysics
 {
     [DefaultExecutionOrder(15001)]
     public partial class JiggleSkin : MonoBehaviour
     {
-        public List<JiggleZone> jiggleZones;
+        public JiggleZone[] jiggleZones;
         [SerializeField]
         [Tooltip("The list of skins to send the deformation data too, they should have JiggleSkin-compatible materials!")]
         public List<SkinnedMeshRenderer> targetSkins;
@@ -23,24 +24,28 @@ namespace JigglePhysics
         private List<Vector4> packedVectors;
         private int jiggleInfoNameID;
         private bool dirtyFromEnable;
+        public int jiggleZonesCount;
+        public Vector3 Gravity;
         public void PrepareTeleport()
         {
-            foreach (var zone in jiggleZones)
+            for (int Index = 0; Index < jiggleZonesCount; Index++)
             {
+                JiggleZone zone = jiggleZones[Index];
                 zone.PrepareTeleport();
             }
         }
-        public void FinishTeleport()
+        public void FinishTeleport(double timeAsDouble,float FixedDeltaTime)
         {
-            foreach (var zone in jiggleZones)
+            for (int Index = 0; Index < jiggleZonesCount; Index++)
             {
-                zone.FinishTeleport();
+                jiggleZones[Index].FinishTeleport(timeAsDouble, FixedDeltaTime);
             }
         }
         private void OnEnable()
         {
             Initialize();
             dirtyFromEnable = true;
+            Gravity = Physics.gravity;
             CachedSphereCollider.AddSkin(this);
         }
         private void OnDisable()
@@ -51,16 +56,17 @@ namespace JigglePhysics
         public void Initialize()
         {
             accumulation = 0f;
-            jiggleZones ??= new List<JiggleZone>();
-            foreach (JiggleZone zone in jiggleZones)
+            jiggleZonesCount = jiggleZones.Length;
+            for (int JiggleIndex = 0; JiggleIndex < jiggleZonesCount; JiggleIndex++)
             {
+                JiggleZone zone = jiggleZones[JiggleIndex];
                 zone.Initialize();
             }
             targetMaterials = new List<Material>();
             jiggleInfoNameID = Shader.PropertyToID("_JiggleInfos");
             packedVectors = new List<Vector4>();
         }
-        public void Advance(float deltaTime)
+        public void Advance(float deltaTime,double TimeASDouble, float FixedDeltaTime)
         {
             if (levelOfDetail != null && !levelOfDetail.CheckActive(transform.position))
             {
@@ -70,35 +76,41 @@ namespace JigglePhysics
                 wasLODActive = false;
                 return;
             }
-            if (!wasLODActive) FinishTeleport();
-            CachedSphereCollider.StartPass();
-            foreach (JiggleZone zone in jiggleZones)
+            if (!wasLODActive)
             {
-                zone.PrepareBone(transform.position, levelOfDetail);
+                FinishTeleport(TimeASDouble, FixedDeltaTime);
+            }
+            CachedSphereCollider.StartPass();
+            for (int Index = 0; Index < jiggleZones.Length; Index++)
+            {
+                jiggleZones[Index].PrepareBone(transform.position, levelOfDetail, TimeASDouble);
             }
 
             if (dirtyFromEnable)
             {
-                foreach (var rig in jiggleZones)
+                for (int JiggleIndex = 0; JiggleIndex < jiggleZones.Length; JiggleIndex++)
                 {
-                    rig.FinishTeleport();
+                    JiggleZone rig = jiggleZones[JiggleIndex];
+                    rig.FinishTeleport(TimeASDouble, FixedDeltaTime);
                 }
                 dirtyFromEnable = false;
             }
 
-            accumulation = Math.Min(accumulation + deltaTime, Time.fixedDeltaTime * 4f);
-            while (accumulation > Time.fixedDeltaTime)
+            accumulation = Math.Min(accumulation + deltaTime, FixedDeltaTime * 4f);
+            while (accumulation > FixedDeltaTime)
             {
-                accumulation -= Time.fixedDeltaTime;
-                double time = Time.timeAsDouble - accumulation;
-                foreach (JiggleZone zone in jiggleZones)
+                accumulation -= FixedDeltaTime;
+                double time = TimeASDouble - accumulation;
+                for (int Index = 0; Index < jiggleZonesCount; Index++)
                 {
-                    zone.Update(wind, time);
+                    JiggleZone zone = jiggleZones[Index];
+                    zone.Update(wind, time, FixedDeltaTime, Gravity);
                 }
             }
-            foreach (JiggleZone zone in jiggleZones)
+            for (int Index = 0; Index < jiggleZonesCount; Index++)
             {
-                zone.DeriveFinalSolve();
+                JiggleZone zone = jiggleZones[Index];
+                zone.DeriveFinalSolve(TimeASDouble);
             }
             UpdateMesh();
             CachedSphereCollider.FinishedPass();
@@ -111,16 +123,18 @@ namespace JigglePhysics
         }
         private void LateUpdate()
         {
-            Advance(Time.deltaTime);
+            Advance(Time.deltaTime,Time.timeAsDouble, Time.fixedDeltaTime);
         }
         private void UpdateMesh()
         {
             // Pack the data
             packedVectors.Clear();
-            foreach (var targetSkin in targetSkins)
+            for (int SkinIndex = 0; SkinIndex < targetSkins.Count; SkinIndex++)
             {
-                foreach (var zone in jiggleZones)
+                SkinnedMeshRenderer targetSkin = targetSkins[SkinIndex];
+                for (int JiggleZoneIndex = 0; JiggleZoneIndex < jiggleZonesCount; JiggleZoneIndex++)
                 {
+                    JiggleZone zone = jiggleZones[JiggleZoneIndex];
                     Vector3 targetPointSkinSpace = targetSkin.rootBone.InverseTransformPoint(zone.GetRootTransform().position);
                     Vector3 verletPointSkinSpace = targetSkin.rootBone.InverseTransformPoint(zone.GetPointSolve());
                     packedVectors.Add(new Vector4(targetPointSkinSpace.x, targetPointSkinSpace.y, targetPointSkinSpace.z,
@@ -149,9 +163,9 @@ namespace JigglePhysics
             {
                 return;
             }
-            for (int i = jiggleZones.Count - 1; i > 8; i--)
+            for (int i = jiggleZonesCount - 1; i > 8; i--)
             {
-                jiggleZones.RemoveAt(i);
+                Array.Resize(ref jiggleZones, 8);
             }
         }
         void OnRenderObject()
@@ -160,8 +174,9 @@ namespace JigglePhysics
             {
                 return;
             }
-            foreach (JiggleZone zone in jiggleZones)
+            for (int Index = 0; Index < jiggleZonesCount; Index++)
             {
+                JiggleZone zone = jiggleZones[Index];
                 zone.OnRenderObject();
             }
         }

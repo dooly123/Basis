@@ -45,17 +45,17 @@ namespace JigglePhysics
 			};
 		}
 
-		public void FlattenSignal(double time, Vector3 position)
+		public void FlattenSignal(double time, Vector3 position, float fixedDeltaTime)
 		{
 			previousFrame = new Frame
 			{
 				position = position,
-				time = time - JiggleRigBuilder.maxCatchupTime * 2f,
+				time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime) * 2f,
 			};
 			currentFrame = new Frame
 			{
 				position = position,
-				time = time - JiggleRigBuilder.maxCatchupTime,
+				time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime),
 			};
 		}
 

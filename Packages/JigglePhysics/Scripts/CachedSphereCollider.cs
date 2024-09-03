@@ -6,6 +6,16 @@ namespace JigglePhysics
 {
     public static class CachedSphereCollider
     {
+        // Define constants for the layers you want to include and exclude
+        public const int DefaultLayer = 0;  // Default layer index
+
+        // Layer mask for including just the default and player layers
+        public static readonly int IncludeDefaultPlayer = LayerMask.GetMask("Default");
+
+        // Layer mask for excluding everything but default
+        public static readonly int ExcludeDefaultPlayer = ~LayerMask.GetMask("Default");
+
+        // You can add more layer masks as needed for other layers
         private class DestroyListener : MonoBehaviour
         {
             void OnDestroy()
@@ -38,7 +48,8 @@ namespace JigglePhysics
         {
             if ((remainingBuilders <= -1 || remainingBuilders >= builders.Count) && TryGet(out SphereCollider collider))
             {
-                collider.enabled = true;
+                collider.includeLayers = 0;//include just default player 
+                collider.excludeLayers = -1;//everything but default
                 remainingBuilders = 0;
             }
         }
@@ -47,7 +58,8 @@ namespace JigglePhysics
             remainingBuilders++;
             if (remainingBuilders >= builders.Count && TryGet(out SphereCollider collider))
             {
-                collider.enabled = false;
+                collider.includeLayers = -1;//everything but default
+                collider.excludeLayers = 0;//include just default player
                 remainingBuilders = -1;
             }
         }

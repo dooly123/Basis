@@ -28,14 +28,15 @@ namespace Basis.Scripts.Drivers
                     }
                     SimpleJiggleLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
                     Jiggler.levelOfDetail = SimpleJiggleLOD;
-                    Jiggler.jiggleRigs = new List<JiggleRig>();
+                    List<JiggleRig> Jiggles = new List<JiggleRig>();
                     for (int StrainIndex = 0; StrainIndex < player.Avatar.JiggleStrains.Count; StrainIndex++)
                     {
                         BasisJiggleStrain Strain = player.Avatar.JiggleStrains[StrainIndex];
                         JiggleRig JiggleRig = Conversion(Strain);
-                        Jiggler.jiggleRigs.Add(JiggleRig);
-                        Jiggler.Initialize();
+                        Jiggles.Add(JiggleRig);
                     }
+                    Jiggler.jiggleRigs = Jiggles.ToArray();
+                    Jiggler.Initialize();
                 }
             }
             if (Jiggler != null)

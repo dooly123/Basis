@@ -1,175 +1,159 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace JigglePhysics
 {
-    public partial class JiggleRigBuilder
+    [Serializable]
+    public class JiggleRig
     {
-        [Serializable]
-        public class JiggleRig
+        [SerializeField]
+        [Tooltip("The root bone from which an individual JiggleRig will be constructed. The JiggleRig encompasses all children of the specified root.")]
+        private Transform rootTransform;
+        [Tooltip("The settings that the rig should update with, create them using the Create->JigglePhysics->Settings menu option.")]
+        public JiggleSettingsBase jiggleSettings;
+        [SerializeField]
+        [Tooltip("The list of transforms to ignore during the jiggle. Each bone listed will also ignore all the children of the specified bone.")]
+        private Transform[] ignoredTransforms;
+        public Collider[] colliders;
+        [SerializeField]
+        public JiggleSettingsData data;
+        private bool initialized;
+        public Transform GetRootTransform() => rootTransform;
+        public int simulatedPointsCount;
+        private bool NeedsCollisions => colliders.Length != 0;
+        [HideInInspector]
+        protected JiggleBone[] simulatedPoints;
+        public int collidersCount;
+        public Vector3 Zero;
+        public JiggleRig(Transform rootTransform, JiggleSettingsBase jiggleSettings, Transform[] ignoredTransforms, Collider[] colliders)
         {
-            [SerializeField]
-            [Tooltip("The root bone from which an individual JiggleRig will be constructed. The JiggleRig encompasses all children of the specified root.")]
-            private Transform rootTransform;
-            [Tooltip("The settings that the rig should update with, create them using the Create->JigglePhysics->Settings menu option.")]
-            public JiggleSettingsBase jiggleSettings;
-            [SerializeField]
-            [Tooltip("The list of transforms to ignore during the jiggle. Each bone listed will also ignore all the children of the specified bone.")]
-            private List<Transform> ignoredTransforms;
-            public List<Collider> colliders;
-            [SerializeField]
-            public JiggleSettingsData data;
-
-            private bool initialized;
-
-            public Transform GetRootTransform() => rootTransform;
-            public JiggleRig(Transform rootTransform, JiggleSettingsBase jiggleSettings,ICollection<Transform> ignoredTransforms, ICollection<Collider> colliders)
+            this.rootTransform = rootTransform;
+            this.jiggleSettings = jiggleSettings;
+            this.ignoredTransforms = ignoredTransforms;
+            this.colliders = colliders;
+            this.collidersCount = colliders.Length;
+            Zero = Vector3.zero;
+            Initialize();
+        }
+        public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD, double timeAsDouble)
+        {
+            if (!initialized)
             {
-                this.rootTransform = rootTransform;
-                this.jiggleSettings = jiggleSettings;
-                this.ignoredTransforms = new List<Transform>(ignoredTransforms);
-                this.colliders = new List<Collider>(colliders);
+                throw new UnityException("JiggleRig was never initialized. Please call JiggleRig.Initialize() if you're going to manually timestep.");
+            }
+            for (int PointIndex = 0; PointIndex < simulatedPointsCount; PointIndex++)
+            {
+                simulatedPoints[PointIndex].PrepareBone(timeAsDouble);
+            }
+            data = jiggleSettings.GetData();
+            data = jiggleRigLOD != null ? jiggleRigLOD.AdjustJiggleSettingsData(position, data) : data;
+        }
+        public void Update(Vector3 wind, double time, float fixedDeltaTime,Vector3 Gravity)
+        {
+            float squaredDeltaTime = fixedDeltaTime * fixedDeltaTime;
+            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
+            {
+                simulatedPoints[SimulatedIndex].VerletPass(data, wind, time, fixedDeltaTime, squaredDeltaTime, Gravity);//this one multi
+            }
+            if (NeedsCollisions)
+            {
+                for (int Index = simulatedPointsCount - 1; Index >= 0; Index--)
+                {
+                    simulatedPoints[Index].CollisionPreparePass(data);
+                }
+            }
+            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
+            {
+                simulatedPoints[SimulatedIndex].ConstraintPass(data);//this one multi
+            }
+            if (NeedsCollisions)
+            {
+                for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
+                {
+                    simulatedPoints[SimulatedIndex].CollisionPass(jiggleSettings, colliders, collidersCount);
+                }
+            }
+            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
+            {
+                simulatedPoints[SimulatedIndex].SignalWritePosition(time);//this one multi
+            }
+        }
+        public void Initialize()
+        {
+            if (rootTransform == null)
+            {
+                return;
+            }
+            CreateSimulatedPoints(ref simulatedPoints, ignoredTransforms, rootTransform, null);
+            this.simulatedPointsCount = simulatedPoints.Length;
+            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
+            {
+                simulatedPoints[SimulatedIndex].CalculateNormalizedIndex();
+            }
+            initialized = true;
+        }
+        public void DeriveFinalSolve(double timeAsDouble)
+        {
+            Vector3 virtualPosition = simulatedPoints[0].DeriveFinalSolvePosition(Zero, timeAsDouble);
+            Vector3 offset = simulatedPoints[0].transform.position - virtualPosition;
+            int simulatedPointsLength = simulatedPoints.Length;
+            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsLength; SimulatedIndex++)
+            {
+                simulatedPoints[SimulatedIndex].DeriveFinalSolvePosition(offset, timeAsDouble);
+            }
+        }
+        public void Pose(bool debugDraw, float deltaTime,double timeAsDouble)
+        {
+            DeriveFinalSolve(timeAsDouble);
+            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
+            {
+                simulatedPoints[SimulatedIndex].PoseBone(data.blend, deltaTime);
+
+                if (debugDraw)
+                {
+                    simulatedPoints[SimulatedIndex].DebugDraw(Color.red, Color.blue, true);
+                }
+            }
+        }
+        public void PrepareTeleport()
+        {
+            for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
+            {
+                simulatedPoints[PointsIndex].PrepareTeleport();
+            }
+        }
+        public void FinishTeleport(double timeAsDouble,float FixedDeltaTime)
+        {
+            for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
+            {
+                simulatedPoints[PointsIndex].FinishTeleport(timeAsDouble, FixedDeltaTime);
+            }
+        }
+        public void OnRenderObject(double TimeAsDouble)
+        {
+            if (!initialized || simulatedPoints == null)
+            {
                 Initialize();
             }
-
-            private bool NeedsCollisions => colliders.Count != 0;
-
-            [HideInInspector]
-            protected List<JiggleBone> simulatedPoints;
-
-            public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD)
+            for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
             {
-                if (!initialized)
-                {
-                    throw new UnityException("JiggleRig was never initialized. Please call JiggleRig.Initialize() if you're going to manually timestep.");
-                }
-
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.PrepareBone();
-                }
-
-                data = jiggleSettings.GetData();
-                data = jiggleRigLOD != null ? jiggleRigLOD.AdjustJiggleSettingsData(position, data) : data;
+                simulatedPoints[PointsIndex].OnDrawGizmos(jiggleSettings, TimeAsDouble);
             }
-
-            public void SampleAndReset()
+        }
+        protected virtual void CreateSimulatedPoints(ref JiggleBone[] outputPoints, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
+        {
+            // Use a list to store the JiggleBones
+            List<JiggleBone> jiggleBoneList = new List<JiggleBone>(outputPoints ?? new JiggleBone[0]);
+            // Recursive function to create simulated points using a list
+            void CreateSimulatedPointsInternal(List<JiggleBone> list, Transform[] ignored, Transform current, JiggleBone parent)
             {
-                for (int i = simulatedPoints.Count - 1; i >= 0; i--)
+                // Create a new JiggleBone and add it to the list
+                JiggleBone newJiggleBone = new JiggleBone(current, parent);
+                list.Add(newJiggleBone);
+                // Check if the currentTransform has no children
+                if (current.childCount == 0)
                 {
-                    simulatedPoints[i].SampleAndReset();
-                }
-            }
-
-            public void Update(Vector3 wind, double time)
-            {
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.VerletPass(data, wind, time);
-                }
-
-                if (NeedsCollisions)
-                {
-                    for (int i = simulatedPoints.Count - 1; i >= 0; i--)
-                    {
-                        simulatedPoints[i].CollisionPreparePass(data);
-                    }
-                }
-
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.ConstraintPass(data);
-                }
-
-                if (NeedsCollisions)
-                {
-                    foreach (JiggleBone simulatedPoint in simulatedPoints)
-                    {
-                        simulatedPoint.CollisionPass(jiggleSettings, colliders);
-                    }
-                }
-
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.SignalWritePosition(time);
-                }
-            }
-
-            public void Initialize()
-            {
-                simulatedPoints = new List<JiggleBone>();
-                if (rootTransform == null)
-                {
-                    return;
-                }
-
-                CreateSimulatedPoints(simulatedPoints, ignoredTransforms, rootTransform, null);
-                foreach (var simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.CalculateNormalizedIndex();
-                }
-                initialized = true;
-            }
-
-            public void DeriveFinalSolve()
-            {
-                Vector3 virtualPosition = simulatedPoints[0].DeriveFinalSolvePosition(Vector3.zero);
-                Vector3 offset = simulatedPoints[0].transform.position - virtualPosition;
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.DeriveFinalSolvePosition(offset);
-                }
-            }
-
-            public void Pose(bool debugDraw)
-            {
-                DeriveFinalSolve();
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.PoseBone(data.blend);
-                    if (debugDraw)
-                    {
-                        simulatedPoint.DebugDraw(Color.red, Color.blue, true);
-                    }
-                }
-            }
-
-            public void PrepareTeleport()
-            {
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.PrepareTeleport();
-                }
-            }
-
-            public void FinishTeleport()
-            {
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.FinishTeleport();
-                }
-            }
-
-            public void OnRenderObject()
-            {
-                if (!initialized || simulatedPoints == null)
-                {
-                    Initialize();
-                }
-                foreach (JiggleBone simulatedPoint in simulatedPoints)
-                {
-                    simulatedPoint.OnDrawGizmos(jiggleSettings);
-                }
-            }
-
-            protected virtual void CreateSimulatedPoints(ICollection<JiggleBone> outputPoints, ICollection<Transform> ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
-            {
-                JiggleBone newJiggleBone = new JiggleBone(currentTransform, parentJiggleBone);
-                outputPoints.Add(newJiggleBone);
-                // Create an extra purely virtual point if we have no children.
-                if (currentTransform.childCount == 0)
-                {
+                    // Handle the case where newJiggleBone has no parent
                     if (newJiggleBone.JiggleParent == null)
                     {
                         if (newJiggleBone.transform.parent == null)
@@ -178,22 +162,33 @@ namespace JigglePhysics
                         }
                         else
                         {
-                            outputPoints.Add(new JiggleBone(null, newJiggleBone));
+                            // Add an extra virtual JiggleBone
+                            list.Add(new JiggleBone(null, newJiggleBone));
                             return;
                         }
                     }
-                    outputPoints.Add(new JiggleBone(null, newJiggleBone));
+                    // Add another virtual JiggleBone
+                    list.Add(new JiggleBone(null, newJiggleBone));
                     return;
                 }
-                for (int i = 0; i < currentTransform.childCount; i++)
+                // Iterate through child transforms
+                int childCount = current.childCount;
+                for (int i = 0; i < childCount; i++)
                 {
-                    if (ignoredTransforms.Contains(currentTransform.GetChild(i)))
+                    Transform child = current.GetChild(i);
+                    // Check if the child is in the ignoredTransforms array
+                    if (Array.Exists(ignored, t => t == child))
                     {
                         continue;
                     }
-                    CreateSimulatedPoints(outputPoints, ignoredTransforms, currentTransform.GetChild(i), newJiggleBone);
+                    // Recursively create simulated points for child transforms
+                    CreateSimulatedPointsInternal(list, ignored, child, newJiggleBone);
                 }
             }
+            // Call the internal recursive method
+            CreateSimulatedPointsInternal(jiggleBoneList, ignoredTransforms, currentTransform, parentJiggleBone);
+            // Convert the list back to an array and assign it to outputPoints
+            outputPoints = jiggleBoneList.ToArray();
         }
     }
 }
