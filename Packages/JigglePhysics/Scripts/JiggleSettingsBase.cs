@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace JigglePhysics
 {
     public interface JiggleSettingsBase
@@ -8,7 +6,6 @@ namespace JigglePhysics
         {
             return new JiggleSettingsData();
         }
-
         public virtual float GetRadius(float normalizedIndex)
         {
             return 0f;

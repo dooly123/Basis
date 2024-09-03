@@ -18,6 +18,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.naelstrof.jigglephysics": {
+      "version": "file:JigglePhysics",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.revenantx.litenetlib": {
       "version": "file:LiteNetLib",
       "depth": 0,

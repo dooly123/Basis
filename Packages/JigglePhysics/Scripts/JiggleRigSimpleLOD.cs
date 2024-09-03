@@ -3,7 +3,6 @@ using System;
 using UnityEditor;
 #endif
 using UnityEngine;
-
 namespace JigglePhysics
 {
     [System.Serializable]
@@ -43,14 +42,12 @@ namespace JigglePhysics
             }
             return Vector3.Distance(camera.transform.position, position) < distance;
         }
-
         public override JiggleSettingsData AdjustJiggleSettingsData(Vector3 position, JiggleSettingsData data)
         {
             if (!TryGetCamera(out Camera camera))
             {
                 return data;
             }
-
             var currentBlend = (Vector3.Distance(camera.transform.position, position) - distance + blend) / blend;
             currentBlend = Mathf.Clamp01(1f - currentBlend);
             data.blend = currentBlend;

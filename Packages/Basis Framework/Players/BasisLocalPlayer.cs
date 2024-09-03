@@ -84,8 +84,10 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             Debug.Log("recalculating local Height!");
             RatioPlayerToAvatarScale = 1f;
+
             RatioPlayerToEyeDefaultScale = 1f;
             RatioAvatarToAvatarEyeDefaultScale = 1f;
+
             OnPlayersHeightChanged?.Invoke(false);
 
 
@@ -106,26 +108,20 @@ namespace Basis.Scripts.BasisSdk.Players
 
         float avatarHeight = AvatarDriver.ActiveEyeHeight();
             Debug.Log("Reading Player Eye Height "+ PlayerEyeHeight);
-            if (BasisDeviceManagement.Instance.CurrentMode == BasisDeviceManagement.Desktop)
+            if (PlayerEyeHeight <= 0 || avatarHeight <= 0)
             {
                 RatioPlayerToAvatarScale = 1;
+                if (PlayerEyeHeight <= 0)
+                {
+                    PlayerEyeHeight = 1.64f;
+                }
+                Debug.LogError("Scale was below zero");
             }
             else
             {
-                if (PlayerEyeHeight <= 0 || avatarHeight <= 0)
-                {
-                    RatioPlayerToAvatarScale = 1;
-                    if(PlayerEyeHeight <= 0)
-                    {
-                        PlayerEyeHeight = 1.64f;
-                    }
-                    Debug.LogError("Scale was below zero");
-                }
-                else
-                {
-                    RatioPlayerToAvatarScale = avatarHeight / PlayerEyeHeight;
-                }
+                RatioPlayerToAvatarScale = avatarHeight / PlayerEyeHeight;
             }
+            //lets get the some height / the default for that height
             RatioAvatarToAvatarEyeDefaultScale = avatarHeight / DefaultAvatarEyeHeight;
             RatioPlayerToEyeDefaultScale = PlayerEyeHeight / DefaultPlayerEyeHeight;
             // This will wait for 3 frames allowing the devices to provide good final positions

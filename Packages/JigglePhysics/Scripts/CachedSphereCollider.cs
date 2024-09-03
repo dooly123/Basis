@@ -34,7 +34,6 @@ namespace JigglePhysics
         {
             builders.Remove(builder);
         }
-
         public static void StartPass()
         {
             if ((remainingBuilders <= -1 || remainingBuilders >= builders.Count) && TryGet(out SphereCollider collider))
@@ -43,7 +42,6 @@ namespace JigglePhysics
                 remainingBuilders = 0;
             }
         }
-
         public static void FinishedPass()
         {
             remainingBuilders++;
@@ -53,7 +51,6 @@ namespace JigglePhysics
                 remainingBuilders = -1;
             }
         }
-
         public static bool TryGet(out SphereCollider collider)
         {
             if (_hasSphere)

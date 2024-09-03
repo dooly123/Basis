@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 namespace JigglePhysics
 {
-
     [System.Serializable]
     public struct JiggleSettingsData
     {
@@ -16,7 +12,6 @@ namespace JigglePhysics
         public float lengthElasticity;
         public float elasticitySoften;
         public float radiusMultiplier;
-
         public static JiggleSettingsData Lerp(JiggleSettingsData a, JiggleSettingsData b, float t)
         {
             return new JiggleSettingsData
@@ -32,5 +27,4 @@ namespace JigglePhysics
             };
         }
     }
-
 }

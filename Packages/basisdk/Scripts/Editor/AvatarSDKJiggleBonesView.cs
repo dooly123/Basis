@@ -84,8 +84,8 @@ public class AvatarSDKJiggleBonesView
             newJiggleStrain.ElasticitySoften = 0.2f;
             newJiggleStrain.RadiusMultiplier = 0.01f;
             newJiggleStrain.RootTransform = null; // You may want to set a default value here if applicable
-            newJiggleStrain.IgnoredTransforms.Clear(); // Clear the list
-            newJiggleStrain.Colliders.Clear(); // Clear the list
+            newJiggleStrain.IgnoredTransforms = null; // Clear the list
+            newJiggleStrain.Colliders = null; // Clear the list
 
             Inspector.serializedObject.ApplyModifiedProperties(); // Apply changes
             RefreshListView(); // Refresh the ListView

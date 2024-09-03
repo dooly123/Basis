@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
-
 namespace JigglePhysics
 {
     public class JiggleSettings : JiggleSettingsBase, IJiggleSettings
@@ -46,7 +45,6 @@ namespace JigglePhysics
         [SerializeField]
         [Tooltip("How the radius is expressed as a curve along the bone chain from root to child.")]
         private AnimationCurve radiusCurve = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1f, 0f));
-
         public JiggleSettingsData GetData()
         {
             return new JiggleSettingsData
@@ -81,5 +79,4 @@ namespace JigglePhysics
             radiusCurve = curve;
         }
     }
-
 }
