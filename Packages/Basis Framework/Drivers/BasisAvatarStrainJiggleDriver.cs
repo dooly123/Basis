@@ -4,7 +4,6 @@ using Basis.Scripts.BasisSdk.Players;
 using JigglePhysics;
 using System.Collections.Generic;
 using UnityEngine;
-using static JigglePhysics.JiggleRigBuilder;
 namespace Basis.Scripts.Drivers
 {
     public class BasisAvatarStrainJiggleDriver : MonoBehaviour
@@ -28,6 +27,8 @@ namespace Basis.Scripts.Drivers
                     }
                     SimpleJiggleLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
                     Jiggler.levelOfDetail = SimpleJiggleLOD;
+                   Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
+                    SimpleJiggleLOD.Initalize(Renderer);
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
                     for (int StrainIndex = 0; StrainIndex < player.Avatar.JiggleStrains.Count; StrainIndex++)
                     {

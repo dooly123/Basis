@@ -32,14 +32,6 @@ namespace JigglePhysics
         {
             builders.Add(builder);
         }
-        public static void AddSkin(JiggleSkin skin)
-        {
-            builders.Add(skin);
-        }
-        public static void RemoveSkin(JiggleSkin skin)
-        {
-            builders.Remove(skin);
-        }
         public static void RemoveBuilder(JiggleRigBuilder builder)
         {
             builders.Remove(builder);
