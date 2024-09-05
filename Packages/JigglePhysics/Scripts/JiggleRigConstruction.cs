@@ -68,24 +68,35 @@ public static class JiggleRigConstruction
     }
     public static JiggleBone[] AddToArray(JiggleBone[] originalArray, JiggleBone newItem)
     {
-        // Create a new array with one extra slot
-        JiggleBone[] newArray;
+        // If the original array is null, initialize it with a single element array
         if (originalArray == null)
         {
-            originalArray = new JiggleBone[] { };
+            return new JiggleBone[] { newItem };
         }
-        newArray = new JiggleBone[originalArray.Length + 1];
 
-        // Copy the original array into the new array
-        for (int i = 0; i < originalArray.Length; i++)
+        // Resize the array to have one additional slot
+        Array.Resize(ref originalArray, originalArray.Length + 1);
+
+        // Add the new item to the end of the resized array
+        originalArray[originalArray.Length - 1] = newItem;
+
+        return originalArray;
+    }
+    public static Transform[] AddToArray(Transform[] originalArray, Transform newItem)
+    {
+        // If the original array is null, initialize it with a single element array
+        if (originalArray == null)
         {
-            newArray[i] = originalArray[i];
+            return new Transform[] { newItem };
         }
 
-        // Add the new item to the end of the new array
-        newArray[originalArray.Length] = newItem;
+        // Resize the array to have one additional slot
+        Array.Resize(ref originalArray, originalArray.Length + 1);
 
-        return newArray;
+        // Add the new item to the end of the resized array
+        originalArray[originalArray.Length - 1] = newItem;
+
+        return originalArray;
     }
     public static JiggleBone JiggleBone(JiggleRig JiggleRig, Transform transform, JiggleBone parent)
     {
@@ -98,7 +109,7 @@ public static class JiggleRigConstruction
         int ParentIndex = Array.IndexOf(JiggleRig.JiggleBones, parent);
        // JiggleBone.boneIndex = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
         JiggleBone.JiggleParentIndex = ParentIndex;
-        JiggleRig.ComputedTransforms.Add(transform);
+        JiggleRig.ComputedTransforms = AddToArray(JiggleRig.ComputedTransforms, transform);
         JiggleRig.PreInitalData.boneRotationChangeCheck.Add(Quaternion.identity);
         JiggleRig.PreInitalData.currentFixedAnimatedBonePosition.Add(Vector3.zero);
         JiggleRig.PreInitalData.bonePositionChangeCheck.Add(Vector3.zero);
