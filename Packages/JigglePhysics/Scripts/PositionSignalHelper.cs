@@ -41,10 +41,15 @@ namespace JigglePhysics
             };
         }
 
-        public static Vector3 GetCurrent(PositionSignal signal) => signal.currentFrame.position;
+        public static Vector3 GetCurrent(PositionSignal signal)
+        {
+            return signal.currentFrame.position;
+        }
 
-        public static Vector3 GetPrevious(PositionSignal signal) => signal.previousFrame.position;
-
+        public static Vector3 GetPrevious(PositionSignal signal)
+        {
+            return signal.previousFrame.position;
+        }
         public static Vector3 SamplePosition(PositionSignal signal, double time)
         {
             double diff = signal.currentFrame.time - signal.previousFrame.time;

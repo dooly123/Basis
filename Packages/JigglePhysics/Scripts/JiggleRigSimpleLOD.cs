@@ -54,7 +54,7 @@ namespace JigglePhysics
                         jiggleRigVisibleFlag = renderer.gameObject.AddComponent<JiggleRigVisibleFlag>();
                         jiggleRigVisibleFlag.VisibleFlagIndex = Index;
                         Visible[Index] = renderer.isVisible;
-                        jiggleRigVisibleFlag.VisibilityChange += VisiblityChange;
+                        jiggleRigVisibleFlag.VisibilityChange += VisiblityChange;//there is no -= assuming that if this goes the avatar goes
                     }
                 }
                 else

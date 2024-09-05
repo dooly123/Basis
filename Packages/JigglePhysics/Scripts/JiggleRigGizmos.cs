@@ -1,16 +1,22 @@
+using System;
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 namespace JigglePhysics
 {
-
+    /*
     public static class JiggleRigGizmos
     {
-        public static void DebugDraw(JiggleBone JiggleBone, Color simulateColor, Color targetColor, bool interpolated)
+        public  void DebugDraw(JiggleRig JiggleRig, JiggleBone JiggleBone,int JiggleIndex, Color simulateColor, Color targetColor, bool interpolated)
         {
-            if (JiggleBone.JiggleParent == null) return;
+            if (JiggleBone.JiggleParent == null)
+            {
+                return;
+            }
+            int Index = Array.IndexOf(JiggleRig.SPoints, SPoints[SimulatedIndex].child);
+            int Index = Array.IndexOf(JiggleRig.SPoints, SPoints[SimulatedIndex].child);
             if (interpolated)
             {
-                Debug.DrawLine(JiggleBone.extrapolatedPosition, JiggleBone.JiggleParent.extrapolatedPosition, simulateColor, 0, false);
+                Debug.DrawLine(JiggleRig.extrapolatedPosition[JiggleIndex], JiggleBone.JiggleParent.extrapolatedPosition, simulateColor, 0, false);
             }
             else
             {
@@ -31,4 +37,5 @@ namespace JigglePhysics
             }
         }
     }
+    */
 }

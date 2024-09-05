@@ -17,15 +17,5 @@ namespace JigglePhysics
 
         public PositionSignal targetAnimatedBoneSignal;
         public PositionSignal particleSignal;
-
-        public Quaternion boneRotationChangeCheck;
-        public Quaternion lastValidPoseBoneRotation;
-
-        public Vector3 currentFixedAnimatedBonePosition;
-        public Vector3 bonePositionChangeCheck;
-        public Vector3 lastValidPoseBoneLocalPosition;
-        public Vector3 workingPosition;
-        public Vector3 preTeleportPosition;
-        public Vector3 extrapolatedPosition;
     }
 }
