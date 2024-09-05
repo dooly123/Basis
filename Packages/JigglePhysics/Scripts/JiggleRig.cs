@@ -26,7 +26,7 @@ namespace JigglePhysics
         {
             JiggleRigConstruction.InitalizeLists(this);
             CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
-
+            InitalizeIndexes();
             simulatedPointsCount = JiggleBones.Length;
 
             // Precompute normalized indices in a single pass
@@ -55,6 +55,8 @@ namespace JigglePhysics
             }
 
             InitializeNativeArrays();
+
+            jiggleSettingsdata = jiggleSettings.GetData();
         }
 
         private void InitializeNativeArrays()
@@ -244,7 +246,6 @@ namespace JigglePhysics
                 Runtimedata.lastValidPoseBoneRotation[PointIndex] = Rot;
                 Runtimedata.lastValidPoseBoneLocalPosition[PointIndex] = pos;
             }
-            jiggleSettingsdata = jiggleSettings.GetData();
             jiggleSettingsdata = jiggleRigLOD != null ? jiggleRigLOD.AdjustJiggleSettingsData(position, jiggleSettingsdata) : jiggleSettingsdata;
         }
         public void Pose(double timeAsDouble)

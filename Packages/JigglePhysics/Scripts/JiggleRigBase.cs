@@ -1,7 +1,4 @@
 using JigglePhysics;
-using System;
-using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
 using static JiggleRigConstruction;
 public class JiggleRigBase
@@ -11,6 +8,33 @@ public class JiggleRigBase
     public JiggleBone[] JiggleBones;
     public Transform[] ComputedTransforms;
     public int simulatedPointsCount;
+    public void InitalizeIndexes()
+    {
+        // Precompute normalized indices in a single pass
+        for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
+        {
+            JiggleBone test = JiggleBones[SimulatedIndex];
+            int distanceToRoot = 0, distanceToChild = 0;
+
+            // Calculate distance to root
+            while (test.JiggleParentIndex != -1)
+            {
+                test = JiggleBones[test.JiggleParentIndex];
+                distanceToRoot++;
+            }
+
+            test = JiggleBones[SimulatedIndex];
+            // Calculate distance to child
+            while (test.childIndex != -1)
+            {
+                test = JiggleBones[test.childIndex];
+                distanceToChild++;
+            }
+
+            int max = distanceToRoot + distanceToChild;
+            PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
+        }
+    }
     public void MatchAnimationInstantly(int JiggleBoneIndex, double time)
     {
         Vector3 position = GetTransformPosition(JiggleBoneIndex);
