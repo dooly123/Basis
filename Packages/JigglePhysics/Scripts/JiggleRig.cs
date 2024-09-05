@@ -94,6 +94,7 @@ namespace JigglePhysics
                     Runtimedata.workingPosition[SimulatedIndex] = Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex];
                     var output = Runtimedata.particleSignal[SimulatedIndex];
                     PositionSignalHelper.SetPosition(ref output, Runtimedata.workingPosition[SimulatedIndex], TimeAsDouble);
+                    output = Runtimedata.particleSignal[SimulatedIndex];
                     continue;
                 }
                 Vector3 CurrentSignal = PositionSignalHelper.GetCurrent(Runtimedata.particleSignal[SimulatedIndex]);
@@ -110,6 +111,16 @@ namespace JigglePhysics
 
             if (NeedsCollisions)
             {
+                Vector3 ConstrainLengthBackwards(JiggleBone JiggleBone, Vector3 newPosition, float elasticity)
+                {
+                    if (JiggleBone.childIndex == -1)
+                    {
+                        return newPosition;
+                    }
+                    Vector3 diff = newPosition - Runtimedata.workingPosition[JiggleBone.childIndex];
+                    Vector3 dir = diff.normalized;
+                    return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBone.childIndex] + dir * GetLengthToParent(JiggleBone), elasticity);
+                }
                 for (int Index = simulatedPointsCount - 1; Index >= 0; Index--)
                 {
                     Runtimedata.workingPosition[Index] = ConstrainLengthBackwards(JiggleBoneIndexes[Index], Runtimedata.workingPosition[Index], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity * 0.5f);
@@ -317,16 +328,6 @@ namespace JigglePhysics
             {
                 return ComputedTransforms[JiggleBone.boneIndex].position;
             }
-        }
-        public Vector3 ConstrainLengthBackwards(JiggleBone JiggleBone, Vector3 newPosition, float elasticity)
-        {
-            if (JiggleBone.childIndex == -1)
-            {
-                return newPosition;
-            }
-            Vector3 diff = newPosition - Runtimedata.workingPosition[JiggleBone.childIndex];
-            Vector3 dir = diff.normalized;
-            return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBone.childIndex] + dir * GetLengthToParent(JiggleBone), elasticity);
         }
         public float GetLengthToParent(JiggleBone JiggleBone)
         {
