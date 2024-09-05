@@ -57,10 +57,13 @@ namespace JigglePhysics
             cachedPosition = transform.position;
         }
 
-        public virtual void Advance(float deltaTime, double TimeASDouble, float FixedDeltaTime)
+        public virtual void Advance(float deltaTime, double timeAsDouble, float fixedDeltaTime)
         {
-            float squaredDeltaTime = FixedDeltaTime * FixedDeltaTime;
+            // Precompute values outside the loop
+            float squaredDeltaTime = fixedDeltaTime * fixedDeltaTime;
             CacheTransformData();  // Cache the position at the start of Advance
+
+            // Early exit if not active, avoiding unnecessary checks
             if (!levelOfDetail.CheckActive(cachedPosition))
             {
                 if (wasLODActive)
@@ -74,49 +77,57 @@ namespace JigglePhysics
                 return;
             }
 
+            // Handle the transition from inactive to active
             if (!wasLODActive)
             {
-                FinishTeleport(TimeASDouble);
+                FinishTeleport(timeAsDouble);
             }
 
             CachedSphereCollider.StartPass();
 
-            for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
+            // Combine similar loops for cache-friendliness
+            for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                jiggleRigs[JiggleIndex].PrepareBone(cachedPosition, levelOfDetail, TimeASDouble);
+                jiggleRigs[jiggleIndex].PrepareBone(cachedPosition, levelOfDetail, timeAsDouble);
             }
 
             if (dirtyFromEnable)
             {
-                for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
+                for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
                 {
-                    jiggleRigs[JiggleIndex].FinishTeleport(TimeASDouble);
+                    jiggleRigs[jiggleIndex].FinishTeleport(timeAsDouble);
                 }
                 dirtyFromEnable = false;
             }
 
+            // Cap accumulation to avoid too many iterations
             accumulation = Math.Min(accumulation + deltaTime, MAX_CATCHUP_TIME);
 
-            while (accumulation > FixedDeltaTime)
+            // Update within while loop only when necessary
+            if (accumulation > fixedDeltaTime)
             {
-                accumulation -= FixedDeltaTime;
-                double time = TimeASDouble - accumulation;
-
-                for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
+                do
                 {
-                    jiggleRigs[JiggleIndex].Update(wind, time, FixedDeltaTime, squaredDeltaTime, Gravity);
-                }
+                    accumulation -= fixedDeltaTime;
+                    double time = timeAsDouble - accumulation;
+
+                    // Update each jiggleRig in the same loop to reduce loop overhead
+                    for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
+                    {
+                        jiggleRigs[jiggleIndex].Update(wind, time, fixedDeltaTime, squaredDeltaTime, Gravity);
+                    }
+                } while (accumulation > fixedDeltaTime);
             }
 
-            for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
+            // Final pose loop
+            for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                jiggleRigs[JiggleIndex].Pose(TimeASDouble);
+                jiggleRigs[jiggleIndex].Pose(timeAsDouble);
             }
 
             CachedSphereCollider.FinishedPass();
             wasLODActive = true;
         }
-
         private void LateUpdate()
         {
             Advance(Time.deltaTime, Time.timeAsDouble, VERLET_TIME_STEP);

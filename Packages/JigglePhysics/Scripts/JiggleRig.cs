@@ -241,8 +241,8 @@ namespace JigglePhysics
                         ComputedTransforms[PointIndex].localPosition = Runtimedata.lastValidPoseBoneLocalPosition[PointIndex];
                     }
                 }
-                if (!Runtimedata.hasTransform[PointIndex])
-                {
+                else
+                { 
                     PositionSignal BoneSignalHas = Runtimedata.targetAnimatedBoneSignal[PointIndex];
                     int ParentIndex = JiggleBones[PointIndex].JiggleParentIndex;
                     SetPosition(ref BoneSignalHas, GetProjectedPosition(PointIndex, ParentIndex));
@@ -256,7 +256,7 @@ namespace JigglePhysics
                 Runtimedata.lastValidPoseBoneRotation[PointIndex] = Rot;
                 Runtimedata.lastValidPoseBoneLocalPosition[PointIndex] = pos;
             }
-            jiggleSettingsdata = jiggleRigLOD != null ? jiggleRigLOD.AdjustJiggleSettingsData(position, jiggleSettingsdata) : jiggleSettingsdata;
+            jiggleSettingsdata = jiggleRigLOD.AdjustJiggleSettingsData(position, jiggleSettingsdata);
         }
         public void Pose(double timeAsDouble)
         {
