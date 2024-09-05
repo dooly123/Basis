@@ -6,12 +6,11 @@ namespace JigglePhysics
         public Frame previousFrame;
         public Frame currentFrame;
 
-        public PositionSignal(Vector3 startPosition, double time)
+        public PositionSignal(Vector3 startPosition)
         {
             currentFrame = previousFrame = new Frame
             {
                 position = startPosition,
-                time = time,
             };
         }
     }

@@ -8,6 +8,8 @@ public class JiggleRigBase
     public JiggleBone[] JiggleBones;
     public Transform[] ComputedTransforms;
     public int simulatedPointsCount;
+    public double currentFrame;
+    public double previousFrame;
     public void InitalizeIndexes()
     {
         // Precompute normalized indices in a single pass
@@ -48,16 +50,19 @@ public class JiggleRigBase
     }
     public void FlattenSignal(ref PositionSignal signal, double time, Vector3 position)
     {
+
         signal.previousFrame = new Frame
         {
             position = position,
-            time = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f,
+           // time = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f,
         };
+        previousFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
         signal.currentFrame = new Frame
         {
             position = position,
-            time = time - JiggleRigBuilder.MAX_CATCHUP_TIME,
+           // time = time - JiggleRigBuilder.MAX_CATCHUP_TIME,
         };
+        currentFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME;
     }
     /// <summary>
     /// Computes the projected position of a JiggleBone based on its parent JiggleBone.
@@ -137,12 +142,13 @@ public class JiggleRigBase
         signal.previousFrame = new Frame
         {
             position = signal.previousFrame.position + offset,
-            time = signal.previousFrame.time,
+            //time = signal.previousFrame.time,
         };
         signal.currentFrame = new Frame
         {
             position = signal.currentFrame.position + offset,
-            time = signal.currentFrame.time,
+            //  time = signal.currentFrame.time,
         };
+
     }
 }

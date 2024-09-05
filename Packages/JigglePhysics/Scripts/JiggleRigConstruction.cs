@@ -155,9 +155,8 @@ public static class JiggleRigConstruction
                 position = Vector3.zero;
             }
         }
-        double timeAsDouble = Time.timeAsDouble;
-        JiggleRig.PreInitalData.targetAnimatedBoneSignal.Add(new PositionSignal(position, timeAsDouble));
-        JiggleRig.PreInitalData.particleSignal.Add(new PositionSignal(position, timeAsDouble));
+        JiggleRig.PreInitalData.targetAnimatedBoneSignal.Add(new PositionSignal(position));
+        JiggleRig.PreInitalData.particleSignal.Add(new PositionSignal(position));
         JiggleRig.PreInitalData.hasTransform.Add(transform != null);
         if (parent == null)
         {
