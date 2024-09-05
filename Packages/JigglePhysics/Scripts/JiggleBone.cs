@@ -5,6 +5,6 @@ namespace JigglePhysics
     public class JiggleBone
     {
         public JiggleBone JiggleParent;
-        public JiggleBone child;
+        public int child = -1;
     }
 }
