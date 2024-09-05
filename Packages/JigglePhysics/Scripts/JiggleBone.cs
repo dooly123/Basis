@@ -5,6 +5,5 @@ namespace JigglePhysics
     {
         public int JiggleParentIndex;
         public int childIndex;
-        public int boneIndex;
     }
 }

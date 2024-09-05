@@ -33,7 +33,8 @@ public static class JiggleRigConstruction
                 // Handle the case where newJiggleBone has no parent
                 if (newJiggleBone.JiggleParentIndex == -1)
                 {
-                    if (JiggleRig.ComputedTransforms[newJiggleBone.boneIndex].parent == null)
+                   int Index = Array.IndexOf(JiggleRig.JiggleBones, newJiggleBone);
+                    if (JiggleRig.ComputedTransforms[Index].parent == null)
                     {
                         throw new UnityException("Can't have a singular jiggle bone with no parents. That doesn't even make sense!");
                     }
@@ -95,7 +96,7 @@ public static class JiggleRigConstruction
         };
         JiggleRig.JiggleBones = AddToArray(JiggleRig.JiggleBones, JiggleBone);
         int ParentIndex = Array.IndexOf(JiggleRig.JiggleBones, parent);
-        JiggleBone.boneIndex = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
+       // JiggleBone.boneIndex = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
         JiggleBone.JiggleParentIndex = ParentIndex;
         JiggleRig.ComputedTransforms.Add(transform);
         JiggleRig.PreInitalData.boneRotationChangeCheck.Add(Quaternion.identity);
