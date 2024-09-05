@@ -9,9 +9,6 @@ namespace JigglePhysics
         public JiggleBone JiggleParent;
         public JiggleBone child;
 
-        public bool hasTransform;
-        public bool HasJiggleParent;
-
         public float projectionAmount;
         public float normalizedIndex;
 
