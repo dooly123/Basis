@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Unity.Burst;
 using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
 using static JiggleRigConstruction;
 namespace JigglePhysics
@@ -21,7 +18,6 @@ namespace JigglePhysics
         public Collider[] colliders;
         [SerializeField]
         public JiggleSettingsData jiggleSettingsdata;
-        private bool initialized;
         public Transform GetRootTransform() => rootTransform;
         private bool NeedsCollisions => colliders.Length != 0;
         public int collidersCount;
@@ -30,19 +26,24 @@ namespace JigglePhysics
         {
             JiggleRigConstruction.InitalizeLists(this);
             CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
-            this.simulatedPointsCount = JiggleBones.Length;
+
+            simulatedPointsCount = JiggleBones.Length;
+
+            // Precompute normalized indices in a single pass
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                int distanceToRoot = 0;
                 JiggleBone test = JiggleBones[SimulatedIndex];
+                int distanceToRoot = 0, distanceToChild = 0;
+
+                // Calculate distance to root
                 while (test.JiggleParentIndex != -1)
                 {
                     test = JiggleBones[test.JiggleParentIndex];
                     distanceToRoot++;
                 }
 
-                int distanceToChild = 0;
                 test = JiggleBones[SimulatedIndex];
+                // Calculate distance to child
                 while (test.childIndex != -1)
                 {
                     test = JiggleBones[test.childIndex];
@@ -50,9 +51,15 @@ namespace JigglePhysics
                 }
 
                 int max = distanceToRoot + distanceToChild;
-                float frac = (float)distanceToRoot / max;
-                PreInitalData.normalizedIndex[SimulatedIndex] = frac;
+                PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
             }
+
+            InitializeNativeArrays();
+        }
+
+        private void InitializeNativeArrays()
+        {
+            // Consolidate NativeArray initialization into one method
             Runtimedata.boneRotationChangeCheck = new NativeArray<Quaternion>(PreInitalData.boneRotationChangeCheck.ToArray(), Allocator.Persistent);
             Runtimedata.lastValidPoseBoneRotation = new NativeArray<Quaternion>(PreInitalData.boneRotationChangeCheck.ToArray(), Allocator.Persistent);
             Runtimedata.currentFixedAnimatedBonePosition = new NativeArray<Vector3>(PreInitalData.currentFixedAnimatedBonePosition.ToArray(), Allocator.Persistent);
@@ -65,7 +72,17 @@ namespace JigglePhysics
             Runtimedata.normalizedIndex = new NativeArray<float>(PreInitalData.normalizedIndex.ToArray(), Allocator.Persistent);
             Runtimedata.targetAnimatedBoneSignal = new NativeArray<PositionSignal>(PreInitalData.targetAnimatedBoneSignal.ToArray(), Allocator.Persistent);
             Runtimedata.particleSignal = new NativeArray<PositionSignal>(PreInitalData.particleSignal.ToArray(), Allocator.Persistent);
-            initialized = true;
+        }
+        public Vector3 ConstrainLengthBackwards(int JiggleIndex, Vector3 newPosition, float elasticity)
+        {
+            if (JiggleBones[JiggleIndex].childIndex == -1)
+            {
+                return newPosition;
+            }
+
+            Vector3 diff = newPosition - Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex];
+            Vector3 dir = diff.normalized;
+            return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex] + dir * GetLengthToParent(JiggleIndex), elasticity);
         }
         public void Update(Vector3 wind, double TimeAsDouble, float fixedDeltaTime, float squaredDeltaTime, Vector3 Gravity)
         {
@@ -110,19 +127,8 @@ namespace JigglePhysics
                 workingPosition += wind * airDragDeltaTime;
                 Runtimedata.workingPosition[SimulatedIndex] = workingPosition;
             }
-
             if (NeedsCollisions)
             {
-                Vector3 ConstrainLengthBackwards(int JiggleIndex, Vector3 newPosition, float elasticity)
-                {
-                    if (JiggleBones[JiggleIndex].childIndex == -1)
-                    {
-                        return newPosition;
-                    }
-                    Vector3 diff = newPosition - Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex];
-                    Vector3 dir = diff.normalized;
-                    return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex] + dir * GetLengthToParent(JiggleIndex), elasticity);
-                }
                 for (int Index = simulatedPointsCount - 1; Index >= 0; Index--)
                 {
                     Runtimedata.workingPosition[Index] = ConstrainLengthBackwards(Index, Runtimedata.workingPosition[Index], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity * 0.5f);
@@ -208,10 +214,6 @@ namespace JigglePhysics
         }
         public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD, double timeAsDouble)
         {
-            if (!initialized)
-            {
-                throw new UnityException("JiggleRig was never initialized. Please call JiggleRig.Initialize() if you're going to manually timestep.");
-            }
             for (int PointIndex = 0; PointIndex < simulatedPointsCount; PointIndex++)
             {
                 // If bone is not animated, return to last unadulterated pose
