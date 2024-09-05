@@ -152,7 +152,22 @@ namespace JigglePhysics
                 double TimeAsDouble = Time.timeAsDouble;
                 for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
                 {
-                    jiggleRigs[JiggleIndex].OnRenderObject(TimeAsDouble);
+                    //jiggleRigs[JiggleIndex].OnRenderObject(TimeAsDouble);
+                    /*
+                     * 
+                     *         public void OnRenderObject(double TimeAsDouble)
+        {
+            if (!initialized || JiggleBoneIndexes == null)
+            {
+                Initialize();
+            }
+            for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
+            {
+                //JiggleRigGizmos.OnDrawGizmos(SPoints[PointsIndex], jiggleSettings, TimeAsDouble);
+            }
+        }
+                     * 
+                     */
                 }
             }
         }
