@@ -3,15 +3,12 @@ namespace JigglePhysics
 {
     public struct PositionSignal
     {
-        public Frame previousFrame;
-        public Frame currentFrame;
+        public Vector3 previousFrame;
+        public Vector3 currentFrame;
 
         public PositionSignal(Vector3 startPosition)
         {
-            currentFrame = previousFrame = new Frame
-            {
-                position = startPosition,
-            };
+            currentFrame = previousFrame = startPosition;
         }
     }
 }

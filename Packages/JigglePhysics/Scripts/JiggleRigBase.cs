@@ -42,27 +42,20 @@ public class JiggleRigBase
         Vector3 position = GetTransformPosition(JiggleBoneIndex);
         var outputA = Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndex];
         var outputB = Runtimedata.particleSignal[JiggleBoneIndex];
-        FlattenSignal(ref outputA, time, position);
-        FlattenSignal(ref outputB, time, position);
+
+        previousFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
+        currentFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME;
+
+        FlattenSignal(ref outputA, position);
+        FlattenSignal(ref outputB, position);
 
         Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndex] = outputA;
         Runtimedata.particleSignal[JiggleBoneIndex] = outputB;
     }
-    public void FlattenSignal(ref PositionSignal signal, double time, Vector3 position)
+    public void FlattenSignal(ref PositionSignal signal, Vector3 position)
     {
-
-        signal.previousFrame = new Frame
-        {
-            position = position,
-           // time = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f,
-        };
-        previousFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
-        signal.currentFrame = new Frame
-        {
-            position = position,
-           // time = time - JiggleRigBuilder.MAX_CATCHUP_TIME,
-        };
-        currentFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME;
+        signal.previousFrame = position;
+        signal.currentFrame = position;
     }
     /// <summary>
     /// Computes the projected position of a JiggleBone based on its parent JiggleBone.
@@ -124,13 +117,15 @@ public class JiggleRigBase
     /// </summary>
     public void FinishTeleport(double timeAsDouble)
     {
+        previousFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
+        currentFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME;
         for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
         {
             Vector3 position = GetTransformPosition(PointsIndex);
             Vector3 diff = position - Runtimedata.preTeleportPosition[PointsIndex];
             var outputA = Runtimedata.targetAnimatedBoneSignal[PointsIndex];
             var outputB = Runtimedata.particleSignal[PointsIndex];
-            FlattenSignal(ref outputA, timeAsDouble, position);
+            FlattenSignal(ref outputA, position);
             OffsetSignal(ref outputB, diff);
             Runtimedata.targetAnimatedBoneSignal[PointsIndex] = outputA;
             Runtimedata.particleSignal[PointsIndex] = outputB;
@@ -139,16 +134,7 @@ public class JiggleRigBase
     }
     public void OffsetSignal(ref PositionSignal signal, Vector3 offset)
     {
-        signal.previousFrame = new Frame
-        {
-            position = signal.previousFrame.position + offset,
-            //time = signal.previousFrame.time,
-        };
-        signal.currentFrame = new Frame
-        {
-            position = signal.currentFrame.position + offset,
-            //  time = signal.currentFrame.time,
-        };
-
+        signal.previousFrame = signal.previousFrame + offset;
+        signal.currentFrame = signal.currentFrame + offset;
     }
 }
