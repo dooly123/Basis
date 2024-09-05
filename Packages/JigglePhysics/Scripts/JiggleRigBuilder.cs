@@ -59,6 +59,7 @@ namespace JigglePhysics
 
         public virtual void Advance(float deltaTime, double TimeASDouble, float FixedDeltaTime)
         {
+            float squaredDeltaTime = FixedDeltaTime * FixedDeltaTime;
             CacheTransformData();  // Cache the position at the start of Advance
             if (!levelOfDetail.CheckActive(cachedPosition))
             {
@@ -103,7 +104,7 @@ namespace JigglePhysics
 
                 for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
                 {
-                    jiggleRigs[JiggleIndex].Update(wind, time, FixedDeltaTime, Gravity);
+                    jiggleRigs[JiggleIndex].Update(wind, time, FixedDeltaTime, squaredDeltaTime, Gravity);
                 }
             }
 

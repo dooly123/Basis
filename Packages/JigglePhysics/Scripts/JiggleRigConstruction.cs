@@ -20,6 +20,22 @@ public static class JiggleRigConstruction
         public List<PositionSignal> targetAnimatedBoneSignal;
         public List<PositionSignal> particleSignal;
     }
+    public static void InitalizeLists(JiggleRig JiggleRig)
+    {
+        JiggleRig.ComputedTransforms = new Transform[] { };
+        JiggleRig.PreInitalData.boneRotationChangeCheck = new List<Quaternion>();
+        JiggleRig.PreInitalData.lastValidPoseBoneRotation = new List<Quaternion>();
+        JiggleRig.PreInitalData.currentFixedAnimatedBonePosition = new List<Vector3>();
+        JiggleRig.PreInitalData.bonePositionChangeCheck = new List<Vector3>();
+        JiggleRig.PreInitalData.lastValidPoseBoneLocalPosition = new List<Vector3>();
+        JiggleRig.PreInitalData.workingPosition = new List<Vector3>();
+        JiggleRig.PreInitalData.preTeleportPosition = new List<Vector3>();
+        JiggleRig.PreInitalData.extrapolatedPosition = new List<Vector3>();
+        JiggleRig.PreInitalData.hasTransform = new List<bool>();
+        JiggleRig.PreInitalData.normalizedIndex = new List<float>();
+        JiggleRig.PreInitalData.targetAnimatedBoneSignal = new List<PositionSignal>();
+        JiggleRig.PreInitalData.particleSignal = new List<PositionSignal>();
+    }
     public static void CreateSimulatedPoints(JiggleRig JiggleRig, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
     {
         // Recursive function to create simulated points using a list
