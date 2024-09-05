@@ -142,8 +142,7 @@ namespace JigglePhysics
         }
         public void FinishTeleport()
         {
-            double TimeASDouble = Time.timeAsDouble;
-            FinishTeleport(TimeASDouble);
+            FinishTeleport(Time.timeAsDouble);
         }
 
         private void OnRenderObject()
