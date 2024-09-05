@@ -119,7 +119,8 @@ namespace JigglePhysics
                     }
                     Vector3 diff = newPosition - Runtimedata.workingPosition[JiggleBone.childIndex];
                     Vector3 dir = diff.normalized;
-                    return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBone.childIndex] + dir * GetLengthToParent(JiggleBone), elasticity);
+                    int JiggleIndex = Array.IndexOf(JiggleBones, JiggleBone);
+                    return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBone.childIndex] + dir * GetLengthToParent(JiggleIndex), elasticity);
                 }
                 for (int Index = simulatedPointsCount - 1; Index >= 0; Index--)
                 {
@@ -159,17 +160,18 @@ namespace JigglePhysics
                     Vector3 currentPose = Runtimedata.currentFixedAnimatedBonePosition[Index] - poseParentParent;
                     Vector3 constraintTarget = TargetPoseToPose * currentPose;
                     float error = Vector3.Distance(newPosition, parentParentPosition + constraintTarget);
-                    error /= GetLengthToParent(JiggleBone);
+                    error /= GetLengthToParent(Index);
                     error = Mathf.Clamp01(error);
                     error = Mathf.Pow(error, elasticitySoften * 2f);
                     return Vector3.Lerp(newPosition, parentParentPosition + constraintTarget, elasticity * error);
                 }
                 Vector3 ConstrainLength(JiggleBone JiggleBone, Vector3 newPosition, float elasticity)
                 {
+                   int JiggleIndex = Array.IndexOf(JiggleBones, JiggleBone);
                     int Index = JiggleBone.JiggleParentIndex;
                     Vector3 diff = newPosition - Runtimedata.workingPosition[Index];
                     Vector3 dir = diff.normalized;
-                    return Vector3.Lerp(newPosition, Runtimedata.workingPosition[Index] + dir * GetLengthToParent(JiggleBone), elasticity);
+                    return Vector3.Lerp(newPosition, Runtimedata.workingPosition[Index] + dir * GetLengthToParent(JiggleIndex), elasticity);
                 }
                 Runtimedata.workingPosition[SimulatedIndex] = ConstrainAngle(JiggleBones[SimulatedIndex], Runtimedata.workingPosition[SimulatedIndex], jiggleSettingsdata.angleElasticity * jiggleSettingsdata.angleElasticity, jiggleSettingsdata.elasticitySoften);
                 Runtimedata.workingPosition[SimulatedIndex] = ConstrainLength(JiggleBones[SimulatedIndex], Runtimedata.workingPosition[SimulatedIndex], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity);
@@ -334,10 +336,9 @@ namespace JigglePhysics
                 return ComputedTransforms[BoneIndex].position;
             }
         }
-        public float GetLengthToParent(JiggleBone JiggleBone)
+        public float GetLengthToParent(int BoneIndex)
         {
-            int ParentIndex = JiggleBone.JiggleParentIndex;
-            int BoneIndex = Array.IndexOf(JiggleBones, JiggleBone);
+            int ParentIndex = JiggleBones[BoneIndex].JiggleParentIndex;
             return Vector3.Distance(Runtimedata.currentFixedAnimatedBonePosition[BoneIndex], Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]);
         }
         public void MatchAnimationInstantly(int JiggleBoneIndex, double time)
