@@ -23,7 +23,7 @@ namespace JigglePhysics
         public Transform GetRootTransform() => rootTransform;
         public int simulatedPointsCount;
         private bool NeedsCollisions => colliders.Length != 0;
-        public JiggleBone[] JiggleBoneIndexes;
+        public JiggleBone[] JiggleBones;
         public int collidersCount;
         public Vector3 Zero = Vector3.zero;
         public InitalizationData PreInitalData = new InitalizationData();
@@ -46,22 +46,22 @@ namespace JigglePhysics
             PreInitalData.particleSignal = new List<PositionSignal>();
 
             CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
-            this.simulatedPointsCount = JiggleBoneIndexes.Length;
+            this.simulatedPointsCount = JiggleBones.Length;
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
                 int distanceToRoot = 0;
-                JiggleBone test = JiggleBoneIndexes[SimulatedIndex];
+                JiggleBone test = JiggleBones[SimulatedIndex];
                 while (test.JiggleParentIndex != -1)
                 {
-                    test = JiggleBoneIndexes[test.JiggleParentIndex];
+                    test = JiggleBones[test.JiggleParentIndex];
                     distanceToRoot++;
                 }
 
                 int distanceToChild = 0;
-                test = JiggleBoneIndexes[SimulatedIndex];
+                test = JiggleBones[SimulatedIndex];
                 while (test.childIndex != -1)
                 {
-                    test = JiggleBoneIndexes[test.childIndex];
+                    test = JiggleBones[test.childIndex];
                     distanceToChild++;
                 }
 
@@ -89,7 +89,7 @@ namespace JigglePhysics
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
                 Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex] = PositionSignalHelper.SamplePosition(Runtimedata.targetAnimatedBoneSignal[SimulatedIndex], TimeAsDouble);
-                if (JiggleBoneIndexes[SimulatedIndex].JiggleParentIndex == -1)
+                if (JiggleBones[SimulatedIndex].JiggleParentIndex == -1)
                 {
                     Runtimedata.workingPosition[SimulatedIndex] = Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex];
                     var output = Runtimedata.particleSignal[SimulatedIndex];
@@ -99,7 +99,7 @@ namespace JigglePhysics
                 }
                 Vector3 CurrentSignal = PositionSignalHelper.GetCurrent(Runtimedata.particleSignal[SimulatedIndex]);
                 Vector3 PreviousSignal = PositionSignalHelper.GetPrevious(Runtimedata.particleSignal[SimulatedIndex]);
-                int JiggleParentindex = JiggleBoneIndexes[SimulatedIndex].JiggleParentIndex;
+                int JiggleParentindex = JiggleBones[SimulatedIndex].JiggleParentIndex;
                 Vector3 ParentCurrentSignal = PositionSignalHelper.GetCurrent(Runtimedata.particleSignal[JiggleParentindex]);
 
                 Vector3 ParentPreviousSignal = PositionSignalHelper.GetPrevious(Runtimedata.particleSignal[JiggleParentindex]);
@@ -123,12 +123,12 @@ namespace JigglePhysics
                 }
                 for (int Index = simulatedPointsCount - 1; Index >= 0; Index--)
                 {
-                    Runtimedata.workingPosition[Index] = ConstrainLengthBackwards(JiggleBoneIndexes[Index], Runtimedata.workingPosition[Index], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity * 0.5f);
+                    Runtimedata.workingPosition[Index] = ConstrainLengthBackwards(JiggleBones[Index], Runtimedata.workingPosition[Index], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity * 0.5f);
                 }
             }
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                if (JiggleBoneIndexes[SimulatedIndex].JiggleParentIndex == -1)
+                if (JiggleBones[SimulatedIndex].JiggleParentIndex == -1)
                 {
                     continue;
                 }
@@ -141,7 +141,7 @@ namespace JigglePhysics
                     Vector3 parentParentPosition;
                     Vector3 poseParentParent;
                     int ParentIndex = JiggleBone.JiggleParentIndex;
-                    int ParentsParentIndex = JiggleBoneIndexes[ParentIndex].JiggleParentIndex;
+                    int ParentsParentIndex = this.JiggleBones[ParentIndex].JiggleParentIndex;
                     if (ParentsParentIndex == -1)
                     {
                         poseParentParent = Runtimedata.currentFixedAnimatedBonePosition[ParentIndex] + (Runtimedata.currentFixedAnimatedBonePosition[ParentIndex] - Runtimedata.currentFixedAnimatedBonePosition[JiggleBone.boneIndex]);
@@ -170,8 +170,8 @@ namespace JigglePhysics
                     Vector3 dir = diff.normalized;
                     return Vector3.Lerp(newPosition, Runtimedata.workingPosition[Index] + dir * GetLengthToParent(JiggleBone), elasticity);
                 }
-                Runtimedata.workingPosition[SimulatedIndex] = ConstrainAngle(JiggleBoneIndexes[SimulatedIndex], Runtimedata.workingPosition[SimulatedIndex], jiggleSettingsdata.angleElasticity * jiggleSettingsdata.angleElasticity, jiggleSettingsdata.elasticitySoften);
-                Runtimedata.workingPosition[SimulatedIndex] = ConstrainLength(JiggleBoneIndexes[SimulatedIndex], Runtimedata.workingPosition[SimulatedIndex], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity);
+                Runtimedata.workingPosition[SimulatedIndex] = ConstrainAngle(JiggleBones[SimulatedIndex], Runtimedata.workingPosition[SimulatedIndex], jiggleSettingsdata.angleElasticity * jiggleSettingsdata.angleElasticity, jiggleSettingsdata.elasticitySoften);
+                Runtimedata.workingPosition[SimulatedIndex] = ConstrainLength(JiggleBones[SimulatedIndex], Runtimedata.workingPosition[SimulatedIndex], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity);
             }
             if (NeedsCollisions)
             {
@@ -213,32 +213,32 @@ namespace JigglePhysics
             for (int PointIndex = 0; PointIndex < simulatedPointsCount; PointIndex++)
             {
                 // If bone is not animated, return to last unadulterated pose
-                if (Runtimedata.hasTransform[JiggleBoneIndexes[PointIndex].boneIndex])
+                if (Runtimedata.hasTransform[JiggleBones[PointIndex].boneIndex])
                 {
-                    ComputedTransforms[JiggleBoneIndexes[PointIndex].boneIndex].GetLocalPositionAndRotation(out Vector3 localPosition, out Quaternion localrotation);
-                    if (Runtimedata.boneRotationChangeCheck[JiggleBoneIndexes[PointIndex].boneIndex] == localrotation)
+                    ComputedTransforms[JiggleBones[PointIndex].boneIndex].GetLocalPositionAndRotation(out Vector3 localPosition, out Quaternion localrotation);
+                    if (Runtimedata.boneRotationChangeCheck[JiggleBones[PointIndex].boneIndex] == localrotation)
                     {
-                        ComputedTransforms[JiggleBoneIndexes[PointIndex].boneIndex].localRotation = Runtimedata.lastValidPoseBoneRotation[JiggleBoneIndexes[PointIndex].boneIndex];
+                        ComputedTransforms[JiggleBones[PointIndex].boneIndex].localRotation = Runtimedata.lastValidPoseBoneRotation[JiggleBones[PointIndex].boneIndex];
                     }
-                    if (Runtimedata.bonePositionChangeCheck[JiggleBoneIndexes[PointIndex].boneIndex] == localPosition)
+                    if (Runtimedata.bonePositionChangeCheck[JiggleBones[PointIndex].boneIndex] == localPosition)
                     {
-                        ComputedTransforms[JiggleBoneIndexes[PointIndex].boneIndex].localPosition = Runtimedata.lastValidPoseBoneLocalPosition[JiggleBoneIndexes[PointIndex].boneIndex];
+                        ComputedTransforms[JiggleBones[PointIndex].boneIndex].localPosition = Runtimedata.lastValidPoseBoneLocalPosition[JiggleBones[PointIndex].boneIndex];
                     }
                 }
-                if (!Runtimedata.hasTransform[JiggleBoneIndexes[PointIndex].boneIndex])
+                if (!Runtimedata.hasTransform[JiggleBones[PointIndex].boneIndex])
                 {
-                    PositionSignal BoneSignalHas = Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndexes[PointIndex].boneIndex];
-                    int ParentIndex = JiggleBoneIndexes[PointIndex].JiggleParentIndex;
-                    PositionSignalHelper.SetPosition(ref BoneSignalHas, GetProjectedPosition(JiggleBoneIndexes[PointIndex], ParentIndex), timeAsDouble);
-                    Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndexes[PointIndex].boneIndex] = BoneSignalHas;
+                    PositionSignal BoneSignalHas = Runtimedata.targetAnimatedBoneSignal[JiggleBones[PointIndex].boneIndex];
+                    int ParentIndex = JiggleBones[PointIndex].JiggleParentIndex;
+                    PositionSignalHelper.SetPosition(ref BoneSignalHas, GetProjectedPosition(JiggleBones[PointIndex], ParentIndex), timeAsDouble);
+                    Runtimedata.targetAnimatedBoneSignal[JiggleBones[PointIndex].boneIndex] = BoneSignalHas;
                     continue;
                 }
-                var BoneSignal = Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndexes[PointIndex].boneIndex];
-                PositionSignalHelper.SetPosition(ref BoneSignal, ComputedTransforms[JiggleBoneIndexes[PointIndex].boneIndex].position, timeAsDouble);
-                Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndexes[PointIndex].boneIndex] = BoneSignal;
-                ComputedTransforms[JiggleBoneIndexes[PointIndex].boneIndex].GetLocalPositionAndRotation(out Vector3 pos, out Quaternion Rot);
-                Runtimedata.lastValidPoseBoneRotation[JiggleBoneIndexes[PointIndex].boneIndex] = Rot;
-                Runtimedata.lastValidPoseBoneLocalPosition[JiggleBoneIndexes[PointIndex].boneIndex] = pos;
+                var BoneSignal = Runtimedata.targetAnimatedBoneSignal[JiggleBones[PointIndex].boneIndex];
+                PositionSignalHelper.SetPosition(ref BoneSignal, ComputedTransforms[JiggleBones[PointIndex].boneIndex].position, timeAsDouble);
+                Runtimedata.targetAnimatedBoneSignal[JiggleBones[PointIndex].boneIndex] = BoneSignal;
+                ComputedTransforms[JiggleBones[PointIndex].boneIndex].GetLocalPositionAndRotation(out Vector3 pos, out Quaternion Rot);
+                Runtimedata.lastValidPoseBoneRotation[JiggleBones[PointIndex].boneIndex] = Rot;
+                Runtimedata.lastValidPoseBoneLocalPosition[JiggleBones[PointIndex].boneIndex] = pos;
             }
             jiggleSettingsdata = jiggleSettings.GetData();
             jiggleSettingsdata = jiggleRigLOD != null ? jiggleRigLOD.AdjustJiggleSettingsData(position, jiggleSettingsdata) : jiggleSettingsdata;
@@ -250,7 +250,7 @@ namespace JigglePhysics
             Vector3 virtualPosition = Runtimedata.extrapolatedPosition[0];
 
             Vector3 offset = ComputedTransforms[0].transform.position - virtualPosition;
-            int simulatedPointsLength = JiggleBoneIndexes.Length;
+            int simulatedPointsLength = JiggleBones.Length;
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsLength; SimulatedIndex++)
             {
                 Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + PositionSignalHelper.SamplePosition(Runtimedata.particleSignal[SimulatedIndex], timeAsDouble);
@@ -258,11 +258,11 @@ namespace JigglePhysics
 
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                if (JiggleBoneIndexes[SimulatedIndex].childIndex == -1)
+                if (JiggleBones[SimulatedIndex].childIndex == -1)
                 {
                     continue; // Early exit if there's no child
                 }
-                int ChildIndex = JiggleBoneIndexes[SimulatedIndex].childIndex;
+                int ChildIndex = JiggleBones[SimulatedIndex].childIndex;
                 // Cache frequently accessed values
                 Vector3 targetPosition = PositionSignalHelper.SamplePosition(Runtimedata.targetAnimatedBoneSignal[SimulatedIndex], timeAsDouble);
                 Vector3 childTargetPosition = PositionSignalHelper.SamplePosition(Runtimedata.targetAnimatedBoneSignal[ChildIndex], timeAsDouble);
@@ -271,14 +271,14 @@ namespace JigglePhysics
 
                 Vector3 childPositionBlend = Vector3.Lerp(childTargetPosition, Runtimedata.extrapolatedPosition[ChildIndex], jiggleSettingsdata.blend);
 
-                if (JiggleBoneIndexes[SimulatedIndex].JiggleParentIndex != -1)
+                if (JiggleBones[SimulatedIndex].JiggleParentIndex != -1)
                 {
                     ComputedTransforms[SimulatedIndex].position = positionBlend;
                 }
 
                 // Calculate child position and vector differences
-                int childIndex = JiggleBoneIndexes[SimulatedIndex].childIndex;
-                Vector3 childPosition = GetTransformPosition(JiggleBoneIndexes[childIndex]);
+                int childIndex = JiggleBones[SimulatedIndex].childIndex;
+                Vector3 childPosition = GetTransformPosition(JiggleBones[childIndex]);
                 Vector3 cachedAnimatedVector = childPosition - positionBlend;
                 Vector3 simulatedVector = childPositionBlend - positionBlend;
 
@@ -357,7 +357,7 @@ namespace JigglePhysics
         {
             for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
             {
-                PrepareTeleport(JiggleBoneIndexes[PointsIndex]);
+                PrepareTeleport(JiggleBones[PointsIndex]);
             }
         }
         /// <summary>
@@ -367,15 +367,15 @@ namespace JigglePhysics
         {
             for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
             {
-                Vector3 position = GetTransformPosition(JiggleBoneIndexes[PointsIndex]);
-                Vector3 diff = position - Runtimedata.preTeleportPosition[JiggleBoneIndexes[PointsIndex].boneIndex];
-                var outputA = Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndexes[PointsIndex].boneIndex];
-                var outputB = Runtimedata.particleSignal[JiggleBoneIndexes[PointsIndex].boneIndex];
+                Vector3 position = GetTransformPosition(JiggleBones[PointsIndex]);
+                Vector3 diff = position - Runtimedata.preTeleportPosition[JiggleBones[PointsIndex].boneIndex];
+                var outputA = Runtimedata.targetAnimatedBoneSignal[JiggleBones[PointsIndex].boneIndex];
+                var outputB = Runtimedata.particleSignal[JiggleBones[PointsIndex].boneIndex];
                 PositionSignalHelper.FlattenSignal(ref outputA, timeAsDouble, position);
                 PositionSignalHelper.OffsetSignal(ref outputB, diff);
-                Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndexes[PointsIndex].boneIndex] = outputA;
-                Runtimedata.particleSignal[JiggleBoneIndexes[PointsIndex].boneIndex] = outputB;
-                Runtimedata.workingPosition[JiggleBoneIndexes[PointsIndex].boneIndex] += diff;
+                Runtimedata.targetAnimatedBoneSignal[JiggleBones[PointsIndex].boneIndex] = outputA;
+                Runtimedata.particleSignal[JiggleBones[PointsIndex].boneIndex] = outputB;
+                Runtimedata.workingPosition[JiggleBones[PointsIndex].boneIndex] += diff;
             }
         }
     }

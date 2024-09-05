@@ -93,9 +93,9 @@ public static class JiggleRigConstruction
             JiggleParentIndex = -1,
             childIndex = -1
         };
-        JiggleRig.JiggleBoneIndexes = AddToArray(JiggleRig.JiggleBoneIndexes, JiggleBone);
-        int ParentIndex = Array.IndexOf(JiggleRig.JiggleBoneIndexes, parent);
-        JiggleBone.boneIndex = Array.IndexOf(JiggleRig.JiggleBoneIndexes, JiggleBone);
+        JiggleRig.JiggleBones = AddToArray(JiggleRig.JiggleBones, JiggleBone);
+        int ParentIndex = Array.IndexOf(JiggleRig.JiggleBones, parent);
+        JiggleBone.boneIndex = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
         JiggleBone.JiggleParentIndex = ParentIndex;
         JiggleRig.ComputedTransforms.Add(transform);
         JiggleRig.PreInitalData.boneRotationChangeCheck.Add(Quaternion.identity);
@@ -134,10 +134,10 @@ public static class JiggleRigConstruction
         {
             return JiggleBone;
         }
-        int childIndex = Array.IndexOf(JiggleRig.JiggleBoneIndexes, JiggleBone);
+        int childIndex = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
 
         int SParentIndex = JiggleBone.JiggleParentIndex;
-        JiggleRig.JiggleBoneIndexes[SParentIndex].childIndex = childIndex;
+        JiggleRig.JiggleBones[SParentIndex].childIndex = childIndex;
         return JiggleBone;
     }
 }
