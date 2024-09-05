@@ -245,8 +245,7 @@ namespace JigglePhysics
             Vector3 virtualPosition = Runtimedata.extrapolatedPosition[0];
 
             Vector3 offset = ComputedTransforms[0].transform.position - virtualPosition;
-            int simulatedPointsLength = JiggleBones.Length;
-            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsLength; SimulatedIndex++)
+            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
                 Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + PositionSignalHelper.SamplePosition(Runtimedata.particleSignal[SimulatedIndex], timeAsDouble);
             }
@@ -278,7 +277,7 @@ namespace JigglePhysics
                 Vector3 simulatedVector = childPositionBlend - positionBlend;
 
                 // Rotate the transform based on the vector differences
-                if (cachedAnimatedVector != Vector3.zero && simulatedVector != Vector3.zero)
+                if (cachedAnimatedVector != Zero && simulatedVector != Zero)
                 {
                     Quaternion animPoseToPhysicsPose = Quaternion.FromToRotation(cachedAnimatedVector, simulatedVector);
                     ComputedTransforms[SimulatedIndex].rotation = animPoseToPhysicsPose * ComputedTransforms[SimulatedIndex].rotation;

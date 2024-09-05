@@ -26,7 +26,7 @@ public static class JiggleRigConstruction
         void CreateSimulatedPointsInternal(JiggleRig JiggleRig, Transform[] ignored, Transform current, JiggleBone parent)
         {
             // Create a new JiggleBone and add it to the list
-            JiggleBone newJiggleBone = JiggleRigConstruction.JiggleBone(JiggleRig, current, parent);
+            JiggleBone newJiggleBone = JiggleBone(JiggleRig, current, parent);
             // Check if the currentTransform has no children
             if (current.childCount == 0)
             {
