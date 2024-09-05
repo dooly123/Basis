@@ -120,7 +120,8 @@ public static class JiggleRigConstruction
             JiggleRig.PreInitalData.lastValidPoseBoneLocalPosition.Add(Vector3.zero);
             if (JiggleBone.JiggleParentIndex != -1)
             {
-                position = JiggleRig.GetProjectedPosition(JiggleBone, JiggleBone.JiggleParentIndex);
+                int Index = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
+                position = JiggleRig.GetProjectedPosition(Index, JiggleBone.JiggleParentIndex);
             }
             else
             {

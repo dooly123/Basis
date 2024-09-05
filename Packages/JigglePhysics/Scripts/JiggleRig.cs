@@ -230,7 +230,7 @@ namespace JigglePhysics
                 {
                     PositionSignal BoneSignalHas = Runtimedata.targetAnimatedBoneSignal[PointIndex];
                     int ParentIndex = JiggleBones[PointIndex].JiggleParentIndex;
-                    PositionSignalHelper.SetPosition(ref BoneSignalHas, GetProjectedPosition(JiggleBones[PointIndex], ParentIndex), timeAsDouble);
+                    PositionSignalHelper.SetPosition(ref BoneSignalHas, GetProjectedPosition(PointIndex, ParentIndex), timeAsDouble);
                     Runtimedata.targetAnimatedBoneSignal[PointIndex] = BoneSignalHas;
                     continue;
                 }
@@ -279,7 +279,7 @@ namespace JigglePhysics
 
                 // Calculate child position and vector differences
                 int childIndex = JiggleBones[SimulatedIndex].childIndex;
-                Vector3 childPosition = GetTransformPosition(JiggleBones[childIndex]);
+                Vector3 childPosition = GetTransformPosition(childIndex);
                 Vector3 cachedAnimatedVector = childPosition - positionBlend;
                 Vector3 simulatedVector = childPositionBlend - positionBlend;
 
@@ -300,32 +300,34 @@ namespace JigglePhysics
             }
         }
         /// <summary>
-        /// JiggleParent = JiggleBone.JiggleParent
+        /// Computes the projected position of a JiggleBone based on its parent JiggleBone.
         /// </summary>
-        /// <param name="JiggleBone"></param>
-        /// <param name="JiggleParent"></param>
-        /// <returns></returns>
-        public Vector3 GetProjectedPosition(JiggleBone JiggleBone, int JiggleParent)
+        /// <param name="JiggleBone">Index of the JiggleBone.</param>
+        /// <param name="JiggleParent">Index of the JiggleParent.</param>
+        /// <returns>The projected position as a Vector3.</returns>
+        public Vector3 GetProjectedPosition(int JiggleBone, int JiggleParent)
         {
-            Transform GetParentTransform(JiggleBone JiggleBone)
-            {
-                if (JiggleBone.JiggleParentIndex != -1)
-                {
-                    int ParentIndex = JiggleBone.JiggleParentIndex;
+            Transform parentTransform;
 
-                    return ComputedTransforms[ParentIndex].transform;
-                }
-                int BoneIndex = Array.IndexOf(JiggleBones, JiggleBone);
-                return ComputedTransforms[BoneIndex].parent;
+            // Get the parent transform
+            if (JiggleBones[JiggleBone].JiggleParentIndex != -1)
+            {
+                int ParentIndex = JiggleBones[JiggleBone].JiggleParentIndex;
+                parentTransform = ComputedTransforms[ParentIndex].transform;
             }
-            return ComputedTransforms[JiggleParent].TransformPoint(GetParentTransform(JiggleBone).InverseTransformPoint(ComputedTransforms[JiggleParent].position));
+            else
+            {
+                parentTransform = ComputedTransforms[JiggleBone].parent;
+            }
+
+            // Compute and return the projected position
+            return ComputedTransforms[JiggleParent].TransformPoint(parentTransform.InverseTransformPoint(ComputedTransforms[JiggleParent].position));
         }
-        public Vector3 GetTransformPosition(JiggleBone JiggleBone)
+        public Vector3 GetTransformPosition(int BoneIndex)
         {
-            int BoneIndex = Array.IndexOf(JiggleBones, JiggleBone);
             if (!Runtimedata.hasTransform[BoneIndex])
             {
-                return GetProjectedPosition(JiggleBone, JiggleBone.JiggleParentIndex);
+                return GetProjectedPosition(BoneIndex, JiggleBones[BoneIndex].JiggleParentIndex);
             }
             else
             {
@@ -338,32 +340,30 @@ namespace JigglePhysics
             int BoneIndex = Array.IndexOf(JiggleBones, JiggleBone);
             return Vector3.Distance(Runtimedata.currentFixedAnimatedBonePosition[BoneIndex], Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]);
         }
-        public void MatchAnimationInstantly(JiggleBone JiggleBone, double time)
+        public void MatchAnimationInstantly(int JiggleBoneIndex, double time)
         {
-            Vector3 position = GetTransformPosition(JiggleBone);
-            int BoneIndex = Array.IndexOf(JiggleBones, JiggleBone);
-            var outputA = Runtimedata.targetAnimatedBoneSignal[BoneIndex];
-            var outputB = Runtimedata.particleSignal[BoneIndex];
+            Vector3 position = GetTransformPosition(JiggleBoneIndex);
+            var outputA = Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndex];
+            var outputB = Runtimedata.particleSignal[JiggleBoneIndex];
             PositionSignalHelper.FlattenSignal(ref outputA, time, position);
             PositionSignalHelper.FlattenSignal(ref outputB, time, position);
 
-            Runtimedata.targetAnimatedBoneSignal[BoneIndex] = outputA;
-            Runtimedata.particleSignal[BoneIndex] = outputB;
+            Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndex] = outputA;
+            Runtimedata.particleSignal[JiggleBoneIndex] = outputB;
         }
         /// <summary>
         /// Physically accurate teleportation, maintains the existing signals of motion and keeps their trajectories through a teleport. First call PrepareTeleport(), then move the character, then call FinishTeleport().
         /// Use MatchAnimationInstantly() instead if you don't want jiggles to be maintained through a teleport.
         /// </summary>
-        public void PrepareTeleport(JiggleBone JiggleBone)
+        public void PrepareTeleport(int JiggleBone)
         {
-            int BoneIndex = Array.IndexOf(JiggleBones, JiggleBone);
-            Runtimedata.preTeleportPosition[BoneIndex] = GetTransformPosition(JiggleBone);
+            Runtimedata.preTeleportPosition[JiggleBone] = GetTransformPosition(JiggleBone);
         }
         public void PrepareTeleport()
         {
             for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
             {
-                PrepareTeleport(JiggleBones[PointsIndex]);
+                PrepareTeleport(PointsIndex);
             }
         }
         /// <summary>
@@ -373,7 +373,7 @@ namespace JigglePhysics
         {
             for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
             {
-                Vector3 position = GetTransformPosition(JiggleBones[PointsIndex]);
+                Vector3 position = GetTransformPosition(PointsIndex);
                 Vector3 diff = position - Runtimedata.preTeleportPosition[PointsIndex];
                 var outputA = Runtimedata.targetAnimatedBoneSignal[PointsIndex];
                 var outputB = Runtimedata.particleSignal[PointsIndex];
