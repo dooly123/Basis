@@ -19,10 +19,6 @@ namespace JigglePhysics
         [SerializeField]
         public JiggleRigSimpleLOD levelOfDetail;
 
-        [Tooltip("Draws some simple lines to show what the simulation is doing. Generally this should be disabled.")]
-        [SerializeField]
-        public bool debugDraw;
-
         private double accumulation;
         private bool dirtyFromEnable = false;
         private bool wasLODActive = true;
@@ -113,7 +109,7 @@ namespace JigglePhysics
 
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                jiggleRigs[JiggleIndex].Pose(debugDraw, TimeASDouble);
+                jiggleRigs[JiggleIndex].Pose(TimeASDouble);
             }
 
             CachedSphereCollider.FinishedPass();
@@ -143,33 +139,6 @@ namespace JigglePhysics
         public void FinishTeleport()
         {
             FinishTeleport(Time.timeAsDouble);
-        }
-
-        private void OnRenderObject()
-        {
-            if (debugDraw)
-            {
-                double TimeAsDouble = Time.timeAsDouble;
-                for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
-                {
-                    //jiggleRigs[JiggleIndex].OnRenderObject(TimeAsDouble);
-                    /*
-                     * 
-                     *         public void OnRenderObject(double TimeAsDouble)
-        {
-            if (!initialized || JiggleBoneIndexes == null)
-            {
-                Initialize();
-            }
-            for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
-            {
-                //JiggleRigGizmos.OnDrawGizmos(SPoints[PointsIndex], jiggleSettings, TimeAsDouble);
-            }
-        }
-                     * 
-                     */
-                }
-            }
         }
     }
 }
