@@ -6,10 +6,8 @@ namespace JigglePhysics
     [DefaultExecutionOrder(15001)]
     public class JiggleRigBuilder : MonoBehaviour
     {
-        public static float GetmaxCatchupTime(float fixedDeltaTime)
-        {
-            return fixedDeltaTime * 4;
-        }
+        public const float VERLET_TIME_STEP = 0.02f;
+        public const float MAX_CATCHUP_TIME = VERLET_TIME_STEP * 4f;
 
         public JiggleRig[] jiggleRigs;
 
@@ -81,26 +79,26 @@ namespace JigglePhysics
 
             if (!wasLODActive)
             {
-                FinishTeleport(TimeASDouble, FixedDeltaTime);
+                FinishTeleport(TimeASDouble);
             }
 
             CachedSphereCollider.StartPass();
 
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                jiggleRigs[JiggleIndex].PrepareBone(cachedPosition, levelOfDetail,TimeASDouble);
+                jiggleRigs[JiggleIndex].PrepareBone(cachedPosition, levelOfDetail, TimeASDouble);
             }
 
             if (dirtyFromEnable)
             {
                 for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
                 {
-                    jiggleRigs[JiggleIndex].FinishTeleport(TimeASDouble, FixedDeltaTime);
+                    jiggleRigs[JiggleIndex].FinishTeleport(TimeASDouble);
                 }
                 dirtyFromEnable = false;
             }
 
-            accumulation = Math.Min(accumulation + deltaTime, GetmaxCatchupTime(FixedDeltaTime));
+            accumulation = Math.Min(accumulation + deltaTime, MAX_CATCHUP_TIME);
 
             while (accumulation > FixedDeltaTime)
             {
@@ -124,7 +122,7 @@ namespace JigglePhysics
 
         private void LateUpdate()
         {
-            Advance(Time.deltaTime, Time.timeAsDouble,Time.fixedDeltaTime);
+            Advance(Time.deltaTime, Time.timeAsDouble, VERLET_TIME_STEP);
         }
 
         public void PrepareTeleport()
@@ -135,18 +133,17 @@ namespace JigglePhysics
             }
         }
 
-        public void FinishTeleport(double TimeASDouble, float FixedDeltaTime)
+        public void FinishTeleport(double TimeASDouble)
         {
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                jiggleRigs[JiggleIndex].FinishTeleport(TimeASDouble, FixedDeltaTime);
+                jiggleRigs[JiggleIndex].FinishTeleport(TimeASDouble);
             }
         }
         public void FinishTeleport()
         {
             double TimeASDouble = Time.timeAsDouble;
-            float FixedDeltaTime = Time.fixedDeltaTime;
-            FinishTeleport(TimeASDouble, FixedDeltaTime);
+            FinishTeleport(TimeASDouble);
         }
 
         private void OnRenderObject()
@@ -158,16 +155,6 @@ namespace JigglePhysics
                 {
                     jiggleRigs[JiggleIndex].OnRenderObject(TimeAsDouble);
                 }
-            }
-        }
-
-        private void OnValidate()
-        {
-            if (Application.isPlaying || jiggleRigs == null) return;
-
-            for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
-            {
-                jiggleRigs[JiggleIndex].Initialize();
             }
         }
     }

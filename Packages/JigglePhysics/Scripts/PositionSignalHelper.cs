@@ -27,17 +27,17 @@ namespace JigglePhysics
             };
         }
 
-        public static void FlattenSignal(ref PositionSignal signal, double time, Vector3 position, float fixedDeltaTime)
+        public static void FlattenSignal(ref PositionSignal signal, double time, Vector3 position)
         {
             signal.previousFrame = new Frame
             {
                 position = position,
-                time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime) * 2f,
+                time = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f,
             };
             signal.currentFrame = new Frame
             {
                 position = position,
-                time = time - JiggleRigBuilder.GetmaxCatchupTime(fixedDeltaTime),
+                time = time - JiggleRigBuilder.MAX_CATCHUP_TIME,
             };
         }
 

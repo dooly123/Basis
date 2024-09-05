@@ -27,7 +27,7 @@ namespace Basis.Scripts.Drivers
                     }
                     SimpleJiggleLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
                     Jiggler.levelOfDetail = SimpleJiggleLOD;
-                   Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
+                    Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
                     SimpleJiggleLOD.Initalize(Renderer);
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
                     for (int StrainIndex = 0; StrainIndex < player.Avatar.JiggleStrains.Count; StrainIndex++)
@@ -76,7 +76,18 @@ namespace Basis.Scripts.Drivers
             Data.elasticitySoften = Strain.ElasticitySoften;
             Data.radiusMultiplier = Strain.RadiusMultiplier;
             Base.SetData(Data);
-            JiggleRig JiggleRig = new JiggleRig(Strain.RootTransform, Base, Strain.IgnoredTransforms, Strain.Colliders);
+            JiggleRig JiggleRig = AssignUnComputedData(Strain.RootTransform, Base, Strain.IgnoredTransforms, Strain.Colliders);
+            return JiggleRig;
+        }
+        public JiggleRig AssignUnComputedData(Transform rootTransform, JiggleSettingsBase jiggleSettings, Transform[] ignoredTransforms, Collider[] colliders)
+        {
+            JiggleRig JiggleRig = new JiggleRig();
+            JiggleRig.rootTransform = rootTransform;
+            JiggleRig.jiggleSettings = jiggleSettings;
+            JiggleRig.ignoredTransforms = ignoredTransforms;
+            JiggleRig.colliders = colliders;
+            JiggleRig.collidersCount = colliders.Length;
+            JiggleRig.Zero = Vector3.zero;
             return JiggleRig;
         }
     }
