@@ -4,6 +4,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Jobs;
 namespace JigglePhysics
 {
     [DefaultExecutionOrder(15001)]
