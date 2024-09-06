@@ -68,7 +68,13 @@ namespace JigglePhysics
         {
             cachedPosition = transform.position;
         }
-
+        public void OnDestroy()
+        {
+            for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
+            {
+                jiggleRigs[jiggleIndex].OnDestroy();
+            }
+        }
         public virtual void Advance(float deltaTime, double timeAsDouble, float VelvetTiming)
         {
             CacheTransformData();  // Cache the position at the start of Advance
