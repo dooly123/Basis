@@ -26,6 +26,8 @@ namespace JigglePhysics
         public Vector3 Gravity;
         // Cached variables to avoid repeated Unity API calls
         private Vector3 cachedPosition;
+        public double currentFrame;
+        public double previousFrame;
         void OnDisable()
         {
             CachedSphereCollider.RemoveBuilder(this);
@@ -43,6 +45,9 @@ namespace JigglePhysics
             jiggleRigsCount = jiggleRigs.Length;
             CacheTransformData();
 
+            double CurrentTime = Time.timeAsDouble;
+            currentFrame = CurrentTime;
+            previousFrame = CurrentTime;
             for (int JiggleCount = 0; JiggleCount < jiggleRigsCount; JiggleCount++)
             {
                 jiggleRigs[JiggleCount].Initialize();
@@ -86,43 +91,45 @@ namespace JigglePhysics
             CachedSphereCollider.StartPass();
 
             // Combine similar loops for cache-friendliness
+            currentFrame = timeAsDouble;
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                jiggleRigs[jiggleIndex].PrepareBone(cachedPosition, levelOfDetail, timeAsDouble);
+                jiggleRigs[jiggleIndex].PrepareBone(cachedPosition, levelOfDetail);
             }
 
             if (dirtyFromEnable)
             {
+                LockFrame(timeAsDouble);
                 for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
                 {
-                    jiggleRigs[jiggleIndex].FinishTeleport(timeAsDouble);
+                    jiggleRigs[jiggleIndex].FinishTeleport();
                 }
                 dirtyFromEnable = false;
             }
 
             // Cap accumulation to avoid too many iterations
             accumulation = Math.Min(accumulation + deltaTime, MAX_CATCHUP_TIME);
-
+            double diff;
+            diff = currentFrame - previousFrame;
+            float Percentage = (float)((timeAsDouble - previousFrame) / diff);
             // Update within while loop only when necessary
             if (accumulation > fixedDeltaTime)
             {
                 do
                 {
                     accumulation -= fixedDeltaTime;
-                    double time = timeAsDouble - accumulation;
-
+                    currentFrame = timeAsDouble;
                     // Update each jiggleRig in the same loop to reduce loop overhead
                     for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
                     {
-                        jiggleRigs[jiggleIndex].Update(wind, time, fixedDeltaTime, squaredDeltaTime, Gravity);
+                        jiggleRigs[jiggleIndex].Update(wind, fixedDeltaTime, squaredDeltaTime, Gravity, Percentage);
                     }
                 } while (accumulation > fixedDeltaTime);
             }
-
             // Final pose loop
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                jiggleRigs[jiggleIndex].Pose(timeAsDouble);
+                jiggleRigs[jiggleIndex].Pose(Percentage);
             }
 
             CachedSphereCollider.FinishedPass();
@@ -143,14 +150,20 @@ namespace JigglePhysics
 
         public void FinishTeleport(double TimeASDouble)
         {
+            LockFrame(TimeASDouble);
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                jiggleRigs[JiggleIndex].FinishTeleport(TimeASDouble);
+                jiggleRigs[JiggleIndex].FinishTeleport();
             }
         }
         public void FinishTeleport()
         {
             FinishTeleport(Time.timeAsDouble);
+        }
+        public void LockFrame(double timeAsDouble)
+        {
+            previousFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
+            currentFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME;
         }
     }
 }

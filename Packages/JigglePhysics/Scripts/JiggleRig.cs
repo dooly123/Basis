@@ -28,7 +28,6 @@ namespace JigglePhysics
             CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
             InitalizeIndexes();
             simulatedPointsCount = JiggleBones.Length;
-
             // Precompute normalized indices in a single pass
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
@@ -57,9 +56,6 @@ namespace JigglePhysics
             InitializeNativeArrays();
 
             jiggleSettingsdata = jiggleSettings.GetData();
-            double CurrentTime = Time.timeAsDouble;
-            currentFrame = CurrentTime;
-            previousFrame = CurrentTime;
             NeedsCollisions = colliders.Length != 0;
         }
 
@@ -76,7 +72,6 @@ namespace JigglePhysics
             Runtimedata.extrapolatedPosition = new NativeArray<Vector3>(PreInitalData.extrapolatedPosition.ToArray(), Allocator.Persistent);
             Runtimedata.hasTransform = new NativeArray<bool>(PreInitalData.hasTransform.ToArray(), Allocator.Persistent);
             Runtimedata.normalizedIndex = new NativeArray<float>(PreInitalData.normalizedIndex.ToArray(), Allocator.Persistent);
-            //add 2 more and swap to previous and current, this will allow further multithreading
             Runtimedata.targetAnimatedBoneSignalCurrent = new NativeArray<Vector3>(PreInitalData.targetAnimatedBoneSignalCurrent.ToArray(), Allocator.Persistent);
             Runtimedata.targetAnimatedBoneSignalPrevious = new NativeArray<Vector3>(PreInitalData.targetAnimatedBoneSignalPrevious.ToArray(), Allocator.Persistent);
             Runtimedata.particleSignalCurrent = new NativeArray<Vector3>(PreInitalData.particleSignalCurrent.ToArray(), Allocator.Persistent);
@@ -93,14 +88,12 @@ namespace JigglePhysics
             Vector3 dir = diff.normalized;
             return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex] + dir * GetLengthToParent(JiggleIndex), elasticity);
         }
-        public void Update(Vector3 wind, double TimeAsDouble, float fixedDeltaTime, float squaredDeltaTime, Vector3 Gravity)
+        public void Update(Vector3 wind,float fixedDeltaTime, float squaredDeltaTime, Vector3 Gravity,float Percentage)
         {
             Vector3 gravityEffect = Gravity * (jiggleSettingsdata.gravityMultiplier * squaredDeltaTime);
             float airDragDeltaTime = fixedDeltaTime * jiggleSettingsdata.airDrag;
             float inverseAirDrag = 1f - jiggleSettingsdata.airDrag;
             float inverseFriction = 1f - jiggleSettingsdata.friction;
-            double diff = currentFrame - previousFrame;
-            currentFrame = TimeAsDouble;
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
                 // Cache values for better performance
@@ -108,7 +101,7 @@ namespace JigglePhysics
                 Vector3 AnimatedCurrentSignal = Runtimedata.targetAnimatedBoneSignalCurrent[SimulatedIndex];
                 Vector3 AnimatedPreviousSignal = Runtimedata.targetAnimatedBoneSignalPrevious[SimulatedIndex];
 
-                Vector3 currentFixedAnimatedBonePosition = SamplePosition(AnimatedCurrentSignal, AnimatedPreviousSignal, TimeAsDouble, diff);
+                Vector3 currentFixedAnimatedBonePosition = SamplePosition(AnimatedCurrentSignal, AnimatedPreviousSignal, Percentage);
                 Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex] = currentFixedAnimatedBonePosition;
 
                 if (JiggleBones[SimulatedIndex].JiggleParentIndex == -1)
@@ -168,9 +161,7 @@ namespace JigglePhysics
                     Vector3 poseParentParent;
                     if (ParentsParentIndex == -1)
                     {
-                        poseParentParent = Runtimedata.currentFixedAnimatedBonePosition[ParentIndex] +
-                                           (Runtimedata.currentFixedAnimatedBonePosition[ParentIndex] -
-                                            Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex]);
+                        poseParentParent = Runtimedata.currentFixedAnimatedBonePosition[ParentIndex] + (Runtimedata.currentFixedAnimatedBonePosition[ParentIndex] - Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex]);
                         parentParentPosition = poseParentParent;
                     }
                     else
@@ -238,9 +229,8 @@ namespace JigglePhysics
                 Runtimedata.particleSignalPrevious[SimulatedIndex] = PreviousSignal;
             }
         }
-        public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD, double TimeAsDouble)
+        public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD)
         {
-            currentFrame = TimeAsDouble;
             for (int PointIndex = 0; PointIndex < simulatedPointsCount; PointIndex++)
             {
                 Vector3 CurrentSignal = Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex];
@@ -280,14 +270,12 @@ namespace JigglePhysics
             }
             jiggleSettingsdata = jiggleRigLOD.AdjustJiggleSettingsData(position, jiggleSettingsdata);
         }
-        public void Pose(double timeAsDouble)
+        public void Pose(float Percentage)
         {
-            double diff = currentFrame - previousFrame;
-
             Vector3 CurrentSignal = Runtimedata.particleSignalCurrent[0];
             Vector3 PreviousSignal = Runtimedata.particleSignalPrevious[0];
 
-            Runtimedata.extrapolatedPosition[0] = SamplePosition(CurrentSignal, PreviousSignal, timeAsDouble, diff);
+            Runtimedata.extrapolatedPosition[0] = SamplePosition(CurrentSignal, PreviousSignal, Percentage);
 
             Vector3 virtualPosition = Runtimedata.extrapolatedPosition[0];
 
@@ -296,7 +284,7 @@ namespace JigglePhysics
             {
                 CurrentSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
                 PreviousSignal = Runtimedata.particleSignalPrevious[SimulatedIndex];
-                Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + SamplePosition(CurrentSignal, PreviousSignal, timeAsDouble, diff);
+                Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + SamplePosition(CurrentSignal, PreviousSignal, Percentage);
             }
 
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
@@ -313,8 +301,8 @@ namespace JigglePhysics
                 Vector3 ChildCurrentAnimated = Runtimedata.targetAnimatedBoneSignalCurrent[ChildIndex];
                 Vector3 ChildPreviousAnimated = Runtimedata.targetAnimatedBoneSignalPrevious[ChildIndex];
 
-                Vector3 targetPosition = SamplePosition(CurrentAnimated, PreviousAnimated, timeAsDouble, diff);
-                Vector3 childTargetPosition = SamplePosition(ChildCurrentAnimated, ChildPreviousAnimated, timeAsDouble, diff);
+                Vector3 targetPosition = SamplePosition(CurrentAnimated, PreviousAnimated, Percentage);
+                Vector3 childTargetPosition = SamplePosition(ChildCurrentAnimated, ChildPreviousAnimated, Percentage);
                 // Blend positions
                 Vector3 positionBlend = Vector3.Lerp(targetPosition, Runtimedata.extrapolatedPosition[SimulatedIndex], jiggleSettingsdata.blend);
 
@@ -352,14 +340,13 @@ namespace JigglePhysics
             Previous = Current;
             Current = position;
         }
-        public Vector3 SamplePosition(Vector3 Current, Vector3 Previous, double time, double diff)
+        public Vector3 SamplePosition(Vector3 Current, Vector3 Previous, float Percentage)
         {
-            if (diff == 0)
+            if (Percentage == 0)
             {
                 return Previous;
             }
-            double t = (time - previousFrame) / diff;
-            return Vector3.Lerp(Previous, Current, (float)t);
+            return Vector3.Lerp(Previous, Current, Percentage);
         }
     }
 }

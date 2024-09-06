@@ -8,8 +8,6 @@ public class JiggleRigBase
     public JiggleBone[] JiggleBones;
     public Transform[] ComputedTransforms;
     public int simulatedPointsCount;
-    public double currentFrame;
-    public double previousFrame;
     public void InitalizeIndexes()
     {
         // Precompute normalized indices in a single pass
@@ -37,7 +35,7 @@ public class JiggleRigBase
             PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
         }
     }
-    public void MatchAnimationInstantly(int JiggleBoneIndex, double time)
+    public void MatchAnimationInstantly(JiggleRigBuilder Builder, int JiggleBoneIndex, double time)
     {
         Vector3 position = GetTransformPosition(JiggleBoneIndex);
 
@@ -47,11 +45,10 @@ public class JiggleRigBase
         Vector3 particleCurrent = Runtimedata.particleSignalCurrent[JiggleBoneIndex];
         Vector3 particlePrevious = Runtimedata.particleSignalPrevious[JiggleBoneIndex];
 
-        previousFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
-        currentFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME;
+        Builder.LockFrame(time);
 
-        FlattenSignal(ref AnimatedCurrent,ref AnimatedPrevious, position);
-        FlattenSignal(ref particleCurrent,ref particlePrevious, position);
+        FlattenSignal(ref AnimatedCurrent, ref AnimatedPrevious, position);
+        FlattenSignal(ref particleCurrent, ref particlePrevious, position);
 
         Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex] = AnimatedCurrent;
         Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex] = AnimatedPrevious;
@@ -117,10 +114,8 @@ public class JiggleRigBase
     /// <summary>
     /// The companion function to PrepareTeleport, it discards all the movement that has happened since the call to PrepareTeleport, assuming that they've both been called on the same frame.
     /// </summary>
-    public void FinishTeleport(double timeAsDouble)
+    public void FinishTeleport()
     {
-        previousFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
-        currentFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME;
         for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
         {
             Vector3 position = GetTransformPosition(PointsIndex);
@@ -132,7 +127,7 @@ public class JiggleRigBase
             Vector3 particleCurrent = Runtimedata.particleSignalCurrent[PointsIndex];
             Vector3 particlePrevious = Runtimedata.particleSignalPrevious[PointsIndex];
 
-            FlattenSignal(ref AnimatedCurrent,ref AnimatedPrevious, position);
+            FlattenSignal(ref AnimatedCurrent, ref AnimatedPrevious, position);
             OffsetSignal(ref particleCurrent, ref particlePrevious, diff);
 
             Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex] = AnimatedCurrent;
