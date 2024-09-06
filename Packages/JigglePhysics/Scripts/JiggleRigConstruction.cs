@@ -58,7 +58,7 @@ public static class JiggleRigConstruction
                 if (newJiggleBone.JiggleParentIndex == -1)
                 {
                    int Index = Array.IndexOf(JiggleRig.JiggleBones, newJiggleBone);
-                    if (JiggleRig.TransformAccessArray[Index].parent == null)
+                    if (JiggleRig.RawTransforms[Index].parent == null)
                     {
                         throw new UnityException("Can't have a singular jiggle bone with no parents. That doesn't even make sense!");
                     }
@@ -122,7 +122,7 @@ public static class JiggleRigConstruction
 
         return originalArray;
     }
-    public static JiggleBone JiggleBone(JiggleRig JiggleRig, Transform transform, JiggleBone parent)
+    public static JiggleBone JiggleBone(JiggleRig JiggleRig,Transform transform, JiggleBone parent)
     {
         JiggleBone JiggleBone = new JiggleBone
         {
@@ -134,6 +134,7 @@ public static class JiggleRigConstruction
        // JiggleBone.boneIndex = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
         JiggleBone.JiggleParentIndex = ParentIndex;
         JiggleRig.RawTransforms.Add(transform);
+
         JiggleRig.PreInitalData.boneRotationChangeCheck.Add(Quaternion.identity);
         JiggleRig.PreInitalData.currentFixedAnimatedBonePosition.Add(Vector3.zero);
         JiggleRig.PreInitalData.bonePositionChangeCheck.Add(Vector3.zero);

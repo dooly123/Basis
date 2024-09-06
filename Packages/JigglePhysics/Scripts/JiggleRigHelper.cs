@@ -5,31 +5,31 @@ using UnityEngine;
 using static JiggleRigConstruction;
 public static class JiggleRigHelper
 {
-    public static void InitializeNativeArrays(ref JiggleRig JiggleRigBase)
+    public static void InitializeNativeArrays(ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime)
     {
-        JiggleRigBase.TransformAccessArray = new UnityEngine.Jobs.TransformAccessArray(JiggleRigBase.RawTransforms.ToArray());
-        JiggleRigBase.Runtimedata.boneRotationChangeCheck = CreateNativeArray(JiggleRigBase.PreInitalData.boneRotationChangeCheck);
-        JiggleRigBase.Runtimedata.lastValidPoseBoneRotation = CreateNativeArray(JiggleRigBase.PreInitalData.boneRotationChangeCheck);
-        JiggleRigBase.Runtimedata.currentFixedAnimatedBonePosition = CreateNativeArray(JiggleRigBase.PreInitalData.currentFixedAnimatedBonePosition);
-        JiggleRigBase.Runtimedata.bonePositionChangeCheck = CreateNativeArray(JiggleRigBase.PreInitalData.bonePositionChangeCheck);
-        JiggleRigBase.Runtimedata.lastValidPoseBoneLocalPosition = CreateNativeArray(JiggleRigBase.PreInitalData.lastValidPoseBoneLocalPosition);
-        JiggleRigBase.Runtimedata.workingPosition = CreateNativeArray(JiggleRigBase.PreInitalData.workingPosition);
-        JiggleRigBase.Runtimedata.preTeleportPosition = CreateNativeArray(JiggleRigBase.PreInitalData.preTeleportPosition);
-        JiggleRigBase.Runtimedata.extrapolatedPosition = CreateNativeArray(JiggleRigBase.PreInitalData.extrapolatedPosition);
-        JiggleRigBase.Runtimedata.hasTransform = CreateNativeArray(JiggleRigBase.PreInitalData.hasTransform);
-        JiggleRigBase.Runtimedata.normalizedIndex = CreateNativeArray(JiggleRigBase.PreInitalData.normalizedIndex);
-        JiggleRigBase.Runtimedata.targetAnimatedBoneSignalCurrent = CreateNativeArray(JiggleRigBase.PreInitalData.targetAnimatedBoneSignalCurrent);
-        JiggleRigBase.Runtimedata.targetAnimatedBoneSignalPrevious = CreateNativeArray(JiggleRigBase.PreInitalData.targetAnimatedBoneSignalPrevious);
-        JiggleRigBase.Runtimedata.particleSignalCurrent = CreateNativeArray(JiggleRigBase.PreInitalData.particleSignalCurrent);
-        JiggleRigBase.Runtimedata.particleSignalPrevious = CreateNativeArray(JiggleRigBase.PreInitalData.particleSignalPrevious);
+        JiggleRigRuntime.TransformAccessArray = new UnityEngine.Jobs.TransformAccessArray(JiggleRigBase.RawTransforms.ToArray());
+        JiggleRigRuntime.Runtimedata.boneRotationChangeCheck = CreateNativeArray(JiggleRigBase.PreInitalData.boneRotationChangeCheck);
+        JiggleRigRuntime.Runtimedata.lastValidPoseBoneRotation = CreateNativeArray(JiggleRigBase.PreInitalData.boneRotationChangeCheck);
+        JiggleRigRuntime.Runtimedata.currentFixedAnimatedBonePosition = CreateNativeArray(JiggleRigBase.PreInitalData.currentFixedAnimatedBonePosition);
+        JiggleRigRuntime.Runtimedata.bonePositionChangeCheck = CreateNativeArray(JiggleRigBase.PreInitalData.bonePositionChangeCheck);
+        JiggleRigRuntime.Runtimedata.lastValidPoseBoneLocalPosition = CreateNativeArray(JiggleRigBase.PreInitalData.lastValidPoseBoneLocalPosition);
+        JiggleRigRuntime.Runtimedata.workingPosition = CreateNativeArray(JiggleRigBase.PreInitalData.workingPosition);
+        JiggleRigRuntime.Runtimedata.preTeleportPosition = CreateNativeArray(JiggleRigBase.PreInitalData.preTeleportPosition);
+        JiggleRigRuntime.Runtimedata.extrapolatedPosition = CreateNativeArray(JiggleRigBase.PreInitalData.extrapolatedPosition);
+        JiggleRigRuntime.Runtimedata.hasTransform = CreateNativeArray(JiggleRigBase.PreInitalData.hasTransform);
+        JiggleRigRuntime.Runtimedata.normalizedIndex = CreateNativeArray(JiggleRigBase.PreInitalData.normalizedIndex);
+        JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalCurrent = CreateNativeArray(JiggleRigBase.PreInitalData.targetAnimatedBoneSignalCurrent);
+        JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalPrevious = CreateNativeArray(JiggleRigBase.PreInitalData.targetAnimatedBoneSignalPrevious);
+        JiggleRigRuntime.Runtimedata.particleSignalCurrent = CreateNativeArray(JiggleRigBase.PreInitalData.particleSignalCurrent);
+        JiggleRigRuntime.Runtimedata.particleSignalPrevious = CreateNativeArray(JiggleRigBase.PreInitalData.particleSignalPrevious);
     }
-    public static int Initialize(JiggleRigBuilder JiggleRigBuilder, ref JiggleRig JiggleRigBase, JiggleRigLOD jiggleRigLOD)
+    public static int Initialize(JiggleRigBuilder JiggleRigBuilder, ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime, JiggleRigLOD jiggleRigLOD)
     {
         JiggleRigBase.JiggleRigLOD = jiggleRigLOD;
         JiggleRigBase.PreInitalData = new InitalizationData();
-        JiggleRigBase.Runtimedata = new RuntimeData();
-        JiggleRigConstruction.InitalizeLists(ref JiggleRigBase);
-        JiggleRigConstruction.CreateSimulatedPoints(ref JiggleRigBase, JiggleRigBase.ignoredTransforms, JiggleRigBase.rootTransform, null);
+        JiggleRigRuntime.Runtimedata = new RuntimeData();
+        InitalizeLists(ref JiggleRigBase);
+        CreateSimulatedPoints(ref JiggleRigBase, JiggleRigBase.ignoredTransforms, JiggleRigBase.rootTransform, null);
         int Count = JiggleRigBase.JiggleBones.Length;
 
         JiggleRigHelper.InitalizeIndexes(ref JiggleRigBase, Count);
@@ -57,8 +57,8 @@ public static class JiggleRigHelper
             int max = distanceToRoot + distanceToChild;
             JiggleRigBase.PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
         }
-        JiggleRigHelper.InitializeNativeArrays(ref JiggleRigBase);
-        JiggleRigBase.jiggleSettingsdata = JiggleRigBase.jiggleSettings.GetData();
+        JiggleRigHelper.InitializeNativeArrays(ref JiggleRigBase,ref JiggleRigRuntime);
+        JiggleRigRuntime.jiggleSettingsdata = JiggleRigBase.jiggleSettings.GetData();
         bool NeedsCollision = JiggleRigBase.colliders.Length != 0;
         JiggleRigBuilder.TempNeedsCollisions.Add(NeedsCollision);
         if (NeedsCollision)
@@ -69,17 +69,17 @@ public static class JiggleRigHelper
                 return Count;  // No need to proceed if there's no valid sphereCollider
             }
         }
-        JiggleRigBase.SignalJob = new UpdateParticleSignalsJob
+        JiggleRigRuntime.SignalJob = new UpdateParticleSignalsJob
         {
-            workingPosition = JiggleRigBase.Runtimedata.workingPosition,
-            particleSignalCurrent = JiggleRigBase.Runtimedata.particleSignalCurrent,
-            particleSignalPrevious = JiggleRigBase.Runtimedata.particleSignalPrevious
+            workingPosition = JiggleRigRuntime.Runtimedata.workingPosition,
+            particleSignalCurrent = JiggleRigRuntime.Runtimedata.particleSignalCurrent,
+            particleSignalPrevious = JiggleRigRuntime.Runtimedata.particleSignalPrevious
         };
-        JiggleRigBase.extrapolationJob = new ExtrapolationJob
+        JiggleRigRuntime.extrapolationJob = new ExtrapolationJob
         {
-            ParticleSignalCurrent = JiggleRigBase.Runtimedata.particleSignalCurrent,
-            ParticleSignalPrevious = JiggleRigBase.Runtimedata.particleSignalPrevious,
-            ExtrapolatedPosition = JiggleRigBase.Runtimedata.extrapolatedPosition
+            ParticleSignalCurrent = JiggleRigRuntime.Runtimedata.particleSignalCurrent,
+            ParticleSignalPrevious = JiggleRigRuntime.Runtimedata.particleSignalPrevious,
+            ExtrapolatedPosition = JiggleRigRuntime.Runtimedata.extrapolatedPosition
         };
         return Count;
     }
@@ -87,26 +87,26 @@ public static class JiggleRigHelper
     {
         return new NativeArray<T>(array.ToArray(), Allocator.Persistent);
     }
-    public static void OnDestroy(ref JiggleRig JiggleRigBase)
+    public static void OnDestroy(ref JiggleRig JiggleRigBase, ref JiggleRigRuntime JiggleRigRuntime)
     {
-        DisposeNativeArrays(ref JiggleRigBase);
+        DisposeNativeArrays(ref JiggleRigBase,ref JiggleRigRuntime);
     }
-    public static void DisposeNativeArrays(ref JiggleRig JiggleRigBase)
+    public static void DisposeNativeArrays(ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime)
     {
-        JiggleRigBase.Runtimedata.boneRotationChangeCheck.Dispose();
-        JiggleRigBase.Runtimedata.lastValidPoseBoneRotation.Dispose();
-        JiggleRigBase.Runtimedata.currentFixedAnimatedBonePosition.Dispose();
-        JiggleRigBase.Runtimedata.bonePositionChangeCheck.Dispose();
-        JiggleRigBase.Runtimedata.lastValidPoseBoneLocalPosition.Dispose();
-        JiggleRigBase.Runtimedata.workingPosition.Dispose();
-        JiggleRigBase.Runtimedata.preTeleportPosition.Dispose();
-        JiggleRigBase.Runtimedata.extrapolatedPosition.Dispose();
-        JiggleRigBase.Runtimedata.hasTransform.Dispose();
-        JiggleRigBase.Runtimedata.normalizedIndex.Dispose();
-        JiggleRigBase.Runtimedata.targetAnimatedBoneSignalCurrent.Dispose();
-        JiggleRigBase.Runtimedata.targetAnimatedBoneSignalPrevious.Dispose();
-        JiggleRigBase.Runtimedata.particleSignalCurrent.Dispose();
-        JiggleRigBase.Runtimedata.particleSignalPrevious.Dispose();
+        JiggleRigRuntime.Runtimedata.boneRotationChangeCheck.Dispose();
+        JiggleRigRuntime.Runtimedata.lastValidPoseBoneRotation.Dispose();
+        JiggleRigRuntime.Runtimedata.currentFixedAnimatedBonePosition.Dispose();
+        JiggleRigRuntime.Runtimedata.bonePositionChangeCheck.Dispose();
+        JiggleRigRuntime.Runtimedata.lastValidPoseBoneLocalPosition.Dispose();
+        JiggleRigRuntime.Runtimedata.workingPosition.Dispose();
+        JiggleRigRuntime.Runtimedata.preTeleportPosition.Dispose();
+        JiggleRigRuntime.Runtimedata.extrapolatedPosition.Dispose();
+        JiggleRigRuntime.Runtimedata.hasTransform.Dispose();
+        JiggleRigRuntime.Runtimedata.normalizedIndex.Dispose();
+        JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalCurrent.Dispose();
+        JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalPrevious.Dispose();
+        JiggleRigRuntime.Runtimedata.particleSignalCurrent.Dispose();
+        JiggleRigRuntime.Runtimedata.particleSignalPrevious.Dispose();
     }
     public static void InitalizeIndexes(ref JiggleRig JiggleRigBase,int simulatedPointsCount)
     {
@@ -134,15 +134,15 @@ public static class JiggleRigHelper
             JiggleRigBase.PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
         }
     }
-    public static void MatchAnimationInstantly(JiggleRigBuilder Builder, ref JiggleRig JiggleRigBase, int JiggleBoneIndex, double time)
+    public static void MatchAnimationInstantly(JiggleRigBuilder Builder, ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime, int JiggleBoneIndex, double time)
     {
-        Vector3 position = GetTransformPosition(JiggleBoneIndex, ref JiggleRigBase);
+        Vector3 position = GetTransformPosition(JiggleBoneIndex, ref JiggleRigBase,ref JiggleRigRuntime);
 
-        Vector3 AnimatedCurrent = JiggleRigBase.Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex];
-        Vector3 AnimatedPrevious = JiggleRigBase.Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex];
+        Vector3 AnimatedCurrent = JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex];
+        Vector3 AnimatedPrevious = JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex];
 
-        Vector3 particleCurrent = JiggleRigBase.Runtimedata.particleSignalCurrent[JiggleBoneIndex];
-        Vector3 particlePrevious = JiggleRigBase.Runtimedata.particleSignalPrevious[JiggleBoneIndex];
+        Vector3 particleCurrent = JiggleRigRuntime.Runtimedata.particleSignalCurrent[JiggleBoneIndex];
+        Vector3 particlePrevious = JiggleRigRuntime.Runtimedata.particleSignalPrevious[JiggleBoneIndex];
 
         Builder.RecordFrame(time);
 
@@ -154,11 +154,11 @@ public static class JiggleRigHelper
         particleCurrent += position - AnimatedCurrent;
         particlePrevious += position - AnimatedPrevious;
 
-        JiggleRigBase.Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex] = AnimatedCurrent;
-        JiggleRigBase.Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex] = AnimatedPrevious;
+        JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex] = AnimatedCurrent;
+        JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex] = AnimatedPrevious;
 
-        JiggleRigBase.Runtimedata.particleSignalCurrent[JiggleBoneIndex] = particleCurrent;
-        JiggleRigBase.Runtimedata.particleSignalPrevious[JiggleBoneIndex] = particlePrevious;
+        JiggleRigRuntime.Runtimedata.particleSignalCurrent[JiggleBoneIndex] = particleCurrent;
+        JiggleRigRuntime.Runtimedata.particleSignalPrevious[JiggleBoneIndex] = particlePrevious;
     }
     public static Vector3 GetProjectedPosition(int JiggleBone, int JiggleParent, ref JiggleRig JiggleRigBase)
     {
@@ -179,7 +179,7 @@ public static class JiggleRigHelper
         Vector3 PositionOut = parentTransform.InverseTransformPoint(JiggleRigBase.RawTransforms[JiggleParent].position);
         return JiggleRigBase.RawTransforms[JiggleParent].TransformPoint(PositionOut);
     }
-    public static Vector3 GetProjectedPositionRuntime(int JiggleBone, int JiggleParent, ref JiggleRig JiggleRigBase)
+    public static Vector3 GetProjectedPositionRuntime(int JiggleBone, int JiggleParent, ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime)
     {
         Transform parentTransform;
 
@@ -187,31 +187,31 @@ public static class JiggleRigHelper
         if (JiggleRigBase.JiggleBones[JiggleBone].JiggleParentIndex != -1)
         {
             int ParentIndex = JiggleRigBase.JiggleBones[JiggleBone].JiggleParentIndex;
-            parentTransform = JiggleRigBase.TransformAccessArray[ParentIndex].transform;
+            parentTransform = JiggleRigRuntime.TransformAccessArray[ParentIndex].transform;
         }
         else
         {
-            parentTransform = JiggleRigBase.TransformAccessArray[JiggleBone].parent;
+            parentTransform = JiggleRigRuntime.TransformAccessArray[JiggleBone].parent;
         }
 
         // Compute and return the projected position
-        Vector3 PositionOut = parentTransform.InverseTransformPoint(JiggleRigBase.TransformAccessArray[JiggleParent].position);
-        return JiggleRigBase.TransformAccessArray[JiggleParent].TransformPoint(PositionOut);
+        Vector3 PositionOut = parentTransform.InverseTransformPoint(JiggleRigRuntime.TransformAccessArray[JiggleParent].position);
+        return JiggleRigRuntime.TransformAccessArray[JiggleParent].TransformPoint(PositionOut);
     }
-    public static Vector3 GetTransformPositionRuntime(int BoneIndex, ref JiggleRig JiggleRigBase)
+    public static Vector3 GetTransformPositionRuntime(int BoneIndex, ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime)
     {
-        if (!JiggleRigBase.Runtimedata.hasTransform[BoneIndex])
+        if (!JiggleRigRuntime.Runtimedata.hasTransform[BoneIndex])
         {
             return GetProjectedPosition(BoneIndex, JiggleRigBase.JiggleBones[BoneIndex].JiggleParentIndex, ref JiggleRigBase);
         }
         else
         {
-            return JiggleRigBase.TransformAccessArray[BoneIndex].position;
+            return JiggleRigRuntime.TransformAccessArray[BoneIndex].position;
         }
     }
-    public static Vector3 GetTransformPosition(int BoneIndex, ref JiggleRig JiggleRigBase)
+    public static Vector3 GetTransformPosition(int BoneIndex, ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime)
     {
-        if (!JiggleRigBase.Runtimedata.hasTransform[BoneIndex])
+        if (!JiggleRigRuntime.Runtimedata.hasTransform[BoneIndex])
         {
             return GetProjectedPosition(BoneIndex, JiggleRigBase.JiggleBones[BoneIndex].JiggleParentIndex, ref JiggleRigBase);
         }
@@ -220,52 +220,52 @@ public static class JiggleRigHelper
             return JiggleRigBase.RawTransforms[BoneIndex].position;
         }
     }
-    public static void PrepareTeleport(int JiggleBone, ref JiggleRig JiggleRigBase)
+    public static void PrepareTeleport(int JiggleBone, ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime)
     {
-        JiggleRigBase.Runtimedata.preTeleportPosition[JiggleBone] = GetTransformPosition(JiggleBone, ref JiggleRigBase);
+        JiggleRigRuntime.Runtimedata.preTeleportPosition[JiggleBone] = GetTransformPosition(JiggleBone, ref JiggleRigBase,ref JiggleRigRuntime);
     }
-    public static void PrepareTeleport(ref JiggleRig JiggleRigBase,int simulatedPointsCount)
+    public static void PrepareTeleport(ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime, int simulatedPointsCount)
     {
         for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
         {
-            PrepareTeleport(PointsIndex, ref JiggleRigBase);
+            PrepareTeleport(PointsIndex, ref JiggleRigBase,ref JiggleRigRuntime);
         }
     }
-    public static void FinishTeleport(ref JiggleRig JiggleRigBase, int simulatedPointsCount)
+    public static void FinishTeleport(ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime, int simulatedPointsCount)
     {
         for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
         {
-            Vector3 position = GetTransformPosition(PointsIndex, ref JiggleRigBase);
-            Vector3 diff = position - JiggleRigBase.Runtimedata.preTeleportPosition[PointsIndex];
-            Vector3 particleCurrent = JiggleRigBase.Runtimedata.particleSignalCurrent[PointsIndex];
-            Vector3 particlePrevious = JiggleRigBase.Runtimedata.particleSignalPrevious[PointsIndex];
+            Vector3 position = GetTransformPosition(PointsIndex, ref JiggleRigBase, ref JiggleRigRuntime);
+            Vector3 diff = position - JiggleRigRuntime.Runtimedata.preTeleportPosition[PointsIndex];
+            Vector3 particleCurrent = JiggleRigRuntime.Runtimedata.particleSignalCurrent[PointsIndex];
+            Vector3 particlePrevious = JiggleRigRuntime.Runtimedata.particleSignalPrevious[PointsIndex];
 
             // Inline OffsetSignal
             particleCurrent += diff;
             particlePrevious += diff;
 
-            JiggleRigBase.Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex] = position;
-            JiggleRigBase.Runtimedata.targetAnimatedBoneSignalPrevious[PointsIndex] = position;
+            JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex] = position;
+            JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalPrevious[PointsIndex] = position;
 
-            JiggleRigBase.Runtimedata.particleSignalCurrent[PointsIndex] = particleCurrent;
-            JiggleRigBase.Runtimedata.particleSignalPrevious[PointsIndex] = particlePrevious;
+            JiggleRigRuntime.Runtimedata.particleSignalCurrent[PointsIndex] = particleCurrent;
+            JiggleRigRuntime.Runtimedata.particleSignalPrevious[PointsIndex] = particlePrevious;
 
-            JiggleRigBase.Runtimedata.workingPosition[PointsIndex] += diff;
+            JiggleRigRuntime.Runtimedata.workingPosition[PointsIndex] += diff;
         }
     }
-    public static Vector3 ConstrainLengthBackwards(int JiggleIndex, Vector3 newPosition, float elasticity, ref JiggleRig JiggleRigBase)
+    public static Vector3 ConstrainLengthBackwards(int JiggleIndex, Vector3 newPosition, float elasticity, ref JiggleRig JiggleRigBase,ref JiggleRigRuntime JiggleRigRuntime)
     {
         if (JiggleRigBase.JiggleBones[JiggleIndex].childIndex == -1)
         {
             return newPosition;
         }
 
-        Vector3 diff = newPosition - JiggleRigBase.Runtimedata.workingPosition[JiggleRigBase.JiggleBones[JiggleIndex].childIndex];
+        Vector3 diff = newPosition - JiggleRigRuntime.Runtimedata.workingPosition[JiggleRigBase.JiggleBones[JiggleIndex].childIndex];
         Vector3 dir = diff.normalized;
 
         int ParentIndex = JiggleRigBase.JiggleBones[JiggleIndex].JiggleParentIndex;
-        float lengthToParent = Vector3.Distance(JiggleRigBase.Runtimedata.currentFixedAnimatedBonePosition[JiggleIndex], JiggleRigBase.Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]);
+        float lengthToParent = Vector3.Distance(JiggleRigRuntime.Runtimedata.currentFixedAnimatedBonePosition[JiggleIndex], JiggleRigRuntime.Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]);
 
-        return Vector3.Lerp(newPosition, JiggleRigBase.Runtimedata.workingPosition[JiggleRigBase.JiggleBones[JiggleIndex].childIndex] + dir * lengthToParent, elasticity);
+        return Vector3.Lerp(newPosition, JiggleRigRuntime.Runtimedata.workingPosition[JiggleRigBase.JiggleBones[JiggleIndex].childIndex] + dir * lengthToParent, elasticity);
     }
 }

@@ -22,25 +22,15 @@ namespace JigglePhysics
         public SphereCollider sphereCollider;
         public JiggleRigLOD JiggleRigLOD;
         public List<Transform> RawTransforms;
-
-        [SerializeField]
-        public JiggleSettingsData jiggleSettingsdata;
-        public UpdateParticleSignalsJob SignalJob;
-        public ExtrapolationJob extrapolationJob;
         [SerializeField]
         public InitalizationData PreInitalData;
-        [SerializeField]
-        public RuntimeData Runtimedata;
-        public TransformAccessArray TransformAccessArray;
     }
-    public class JiggleRigRuntime
+    public struct JiggleRigRuntime
     {
         [SerializeField]
         public JiggleSettingsData jiggleSettingsdata;
         public UpdateParticleSignalsJob SignalJob;
         public ExtrapolationJob extrapolationJob;
-        [SerializeField]
-        public InitalizationData PreInitalData;
         [SerializeField]
         public RuntimeData Runtimedata;
         public TransformAccessArray TransformAccessArray;

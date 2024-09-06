@@ -30,13 +30,16 @@ namespace Basis.Scripts.Drivers
                     Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
                     SimpleJiggleLOD.Initalize(Renderer);
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
+                    List<JiggleRigRuntime> JigglesRuntime = new List<JiggleRigRuntime>();
                     for (int StrainIndex = 0; StrainIndex < player.Avatar.JiggleStrains.Count; StrainIndex++)
                     {
                         BasisJiggleStrain Strain = player.Avatar.JiggleStrains[StrainIndex];
                         JiggleRig JiggleRig = Conversion(Strain);
                         Jiggles.Add(JiggleRig);
+                        JigglesRuntime.Add(new JiggleRigRuntime());
                     }
                     Jiggler.jiggleRigs = Jiggles.ToArray();
+                    Jiggler.JiggleRigsRuntime = JigglesRuntime.ToArray();
                     Jiggler.Initialize();
                 }
             }
