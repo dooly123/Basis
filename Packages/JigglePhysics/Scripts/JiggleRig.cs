@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using static JiggleRigConstruction;
@@ -75,49 +72,6 @@ namespace JigglePhysics
             };
 
         }
-        private void InitializeNativeArrays()
-        {
-            Runtimedata.boneRotationChangeCheck = CreateNativeArray(PreInitalData.boneRotationChangeCheck);
-            Runtimedata.lastValidPoseBoneRotation = CreateNativeArray(PreInitalData.boneRotationChangeCheck);
-            Runtimedata.currentFixedAnimatedBonePosition = CreateNativeArray(PreInitalData.currentFixedAnimatedBonePosition);
-            Runtimedata.bonePositionChangeCheck = CreateNativeArray(PreInitalData.bonePositionChangeCheck);
-            Runtimedata.lastValidPoseBoneLocalPosition = CreateNativeArray(PreInitalData.lastValidPoseBoneLocalPosition);
-            Runtimedata.workingPosition = CreateNativeArray(PreInitalData.workingPosition);
-            Runtimedata.preTeleportPosition = CreateNativeArray(PreInitalData.preTeleportPosition);
-            Runtimedata.extrapolatedPosition = CreateNativeArray(PreInitalData.extrapolatedPosition);
-            Runtimedata.hasTransform = CreateNativeArray(PreInitalData.hasTransform);
-            Runtimedata.normalizedIndex = CreateNativeArray(PreInitalData.normalizedIndex);
-            Runtimedata.targetAnimatedBoneSignalCurrent = CreateNativeArray(PreInitalData.targetAnimatedBoneSignalCurrent);
-            Runtimedata.targetAnimatedBoneSignalPrevious = CreateNativeArray(PreInitalData.targetAnimatedBoneSignalPrevious);
-            Runtimedata.particleSignalCurrent = CreateNativeArray(PreInitalData.particleSignalCurrent);
-            Runtimedata.particleSignalPrevious = CreateNativeArray(PreInitalData.particleSignalPrevious);
-        }
-        public void OnDestroy()
-        {
-            DisposeNativeArrays();
-        }
-
-        private void DisposeNativeArrays()
-        {
-            Runtimedata.boneRotationChangeCheck.Dispose();
-            Runtimedata.lastValidPoseBoneRotation.Dispose();
-            Runtimedata.currentFixedAnimatedBonePosition.Dispose();
-            Runtimedata.bonePositionChangeCheck.Dispose();
-            Runtimedata.lastValidPoseBoneLocalPosition.Dispose();
-            Runtimedata.workingPosition.Dispose();
-            Runtimedata.preTeleportPosition.Dispose();
-            Runtimedata.extrapolatedPosition.Dispose();
-            Runtimedata.hasTransform.Dispose();
-            Runtimedata.normalizedIndex.Dispose();
-            Runtimedata.targetAnimatedBoneSignalCurrent.Dispose();
-            Runtimedata.targetAnimatedBoneSignalPrevious.Dispose();
-            Runtimedata.particleSignalCurrent.Dispose();
-            Runtimedata.particleSignalPrevious.Dispose();
-        }
-        private NativeArray<T> CreateNativeArray<T>(List<T> array) where T : struct
-        {
-            return new NativeArray<T>(array.ToArray(), Allocator.Persistent);
-        }
         public Vector3 ConstrainLengthBackwards(int JiggleIndex, Vector3 newPosition, float elasticity)
         {
             if (JiggleBones[JiggleIndex].childIndex == -1)
@@ -127,7 +81,11 @@ namespace JigglePhysics
 
             Vector3 diff = newPosition - Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex];
             Vector3 dir = diff.normalized;
-            return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex] + dir * GetLengthToParent(JiggleIndex), elasticity);
+
+            int ParentIndex = JiggleBones[JiggleIndex].JiggleParentIndex;
+            float lengthToParent = Vector3.Distance(Runtimedata.currentFixedAnimatedBonePosition[JiggleIndex], Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]);
+
+            return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex] + dir * lengthToParent, elasticity);
         }
 
         public void Update(Vector3 wind, float velvetTiming, float squaredDeltaTime, Vector3 gravity, float percentage)
@@ -226,7 +184,9 @@ namespace JigglePhysics
                 Vector3 currentPose = Runtimedata.currentFixedAnimatedBonePosition[PointIndex] - poseParentParent;
                 Vector3 constraintTarget = rotationToTargetPose * currentPose;
 
-                float lengthToParent = GetLengthToParent(PointIndex);
+               int ParentIndex = JiggleBones[PointIndex].JiggleParentIndex;
+                float  lengthToParent = Vector3.Distance(Runtimedata.currentFixedAnimatedBonePosition[PointIndex], Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]);
+
                 float error = Vector3.Distance(Runtimedata.workingPosition[PointIndex], parentParentPosition + constraintTarget) / lengthToParent;
                 error = Mathf.Clamp01(error);
                 error = Mathf.Pow(error, jiggleSettingsdata.elasticitySoften * 2f);

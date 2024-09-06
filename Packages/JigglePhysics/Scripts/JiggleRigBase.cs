@@ -1,6 +1,9 @@
 using JigglePhysics;
+using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using static JiggleRigConstruction;
+
 public class JiggleRigBase
 {
     public InitalizationData PreInitalData = new InitalizationData();
@@ -8,9 +11,55 @@ public class JiggleRigBase
     public JiggleBone[] JiggleBones;
     public Transform[] ComputedTransforms;
     public int simulatedPointsCount;
+
+    public void InitializeNativeArrays()
+    {
+        Runtimedata.boneRotationChangeCheck = CreateNativeArray(PreInitalData.boneRotationChangeCheck);
+        Runtimedata.lastValidPoseBoneRotation = CreateNativeArray(PreInitalData.boneRotationChangeCheck);
+        Runtimedata.currentFixedAnimatedBonePosition = CreateNativeArray(PreInitalData.currentFixedAnimatedBonePosition);
+        Runtimedata.bonePositionChangeCheck = CreateNativeArray(PreInitalData.bonePositionChangeCheck);
+        Runtimedata.lastValidPoseBoneLocalPosition = CreateNativeArray(PreInitalData.lastValidPoseBoneLocalPosition);
+        Runtimedata.workingPosition = CreateNativeArray(PreInitalData.workingPosition);
+        Runtimedata.preTeleportPosition = CreateNativeArray(PreInitalData.preTeleportPosition);
+        Runtimedata.extrapolatedPosition = CreateNativeArray(PreInitalData.extrapolatedPosition);
+        Runtimedata.hasTransform = CreateNativeArray(PreInitalData.hasTransform);
+        Runtimedata.normalizedIndex = CreateNativeArray(PreInitalData.normalizedIndex);
+        Runtimedata.targetAnimatedBoneSignalCurrent = CreateNativeArray(PreInitalData.targetAnimatedBoneSignalCurrent);
+        Runtimedata.targetAnimatedBoneSignalPrevious = CreateNativeArray(PreInitalData.targetAnimatedBoneSignalPrevious);
+        Runtimedata.particleSignalCurrent = CreateNativeArray(PreInitalData.particleSignalCurrent);
+        Runtimedata.particleSignalPrevious = CreateNativeArray(PreInitalData.particleSignalPrevious);
+    }
+
+    public NativeArray<T> CreateNativeArray<T>(List<T> array) where T : struct
+    {
+        return new NativeArray<T>(array.ToArray(), Allocator.Persistent);
+    }
+
+    public void OnDestroy()
+    {
+        DisposeNativeArrays();
+    }
+
+    public void DisposeNativeArrays()
+    {
+        Runtimedata.boneRotationChangeCheck.Dispose();
+        Runtimedata.lastValidPoseBoneRotation.Dispose();
+        Runtimedata.currentFixedAnimatedBonePosition.Dispose();
+        Runtimedata.bonePositionChangeCheck.Dispose();
+        Runtimedata.lastValidPoseBoneLocalPosition.Dispose();
+        Runtimedata.workingPosition.Dispose();
+        Runtimedata.preTeleportPosition.Dispose();
+        Runtimedata.extrapolatedPosition.Dispose();
+        Runtimedata.hasTransform.Dispose();
+        Runtimedata.normalizedIndex.Dispose();
+        Runtimedata.targetAnimatedBoneSignalCurrent.Dispose();
+        Runtimedata.targetAnimatedBoneSignalPrevious.Dispose();
+        Runtimedata.particleSignalCurrent.Dispose();
+        Runtimedata.particleSignalPrevious.Dispose();
+    }
+
     public void InitalizeIndexes()
     {
-        // Precompute normalized indices in a single pass
         for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
         {
             JiggleBone test = JiggleBones[SimulatedIndex];
@@ -35,6 +84,7 @@ public class JiggleRigBase
             PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
         }
     }
+
     public void MatchAnimationInstantly(JiggleRigBuilder Builder, int JiggleBoneIndex, double time)
     {
         Vector3 position = GetTransformPosition(JiggleBoneIndex);
@@ -47,8 +97,13 @@ public class JiggleRigBase
 
         Builder.LockFrame(time);
 
-        FlattenSignal(ref AnimatedCurrent, ref AnimatedPrevious, position);
-        FlattenSignal(ref particleCurrent, ref particlePrevious, position);
+        // Inline FlattenSignal
+        AnimatedCurrent = position;
+        AnimatedPrevious = position;
+
+        // Inline OffsetSignal
+        particleCurrent += position - AnimatedCurrent;
+        particlePrevious += position - AnimatedPrevious;
 
         Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex] = AnimatedCurrent;
         Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex] = AnimatedPrevious;
@@ -56,12 +111,7 @@ public class JiggleRigBase
         Runtimedata.particleSignalCurrent[JiggleBoneIndex] = particleCurrent;
         Runtimedata.particleSignalPrevious[JiggleBoneIndex] = particlePrevious;
     }
-    /// <summary>
-    /// Computes the projected position of a JiggleBone based on its parent JiggleBone.
-    /// </summary>
-    /// <param name="JiggleBone">Index of the JiggleBone.</param>
-    /// <param name="JiggleParent">Index of the JiggleParent.</param>
-    /// <returns>The projected position as a Vector3.</returns>
+
     public Vector3 GetProjectedPosition(int JiggleBone, int JiggleParent)
     {
         Transform parentTransform;
@@ -78,8 +128,10 @@ public class JiggleRigBase
         }
 
         // Compute and return the projected position
-        return ComputedTransforms[JiggleParent].TransformPoint(parentTransform.InverseTransformPoint(ComputedTransforms[JiggleParent].position));
+        Vector3 PositionOut = parentTransform.InverseTransformPoint(ComputedTransforms[JiggleParent].position);
+        return ComputedTransforms[JiggleParent].TransformPoint(PositionOut);
     }
+
     public Vector3 GetTransformPosition(int BoneIndex)
     {
         if (!Runtimedata.hasTransform[BoneIndex])
@@ -91,19 +143,12 @@ public class JiggleRigBase
             return ComputedTransforms[BoneIndex].position;
         }
     }
-    public float GetLengthToParent(int BoneIndex)
-    {
-        int ParentIndex = JiggleBones[BoneIndex].JiggleParentIndex;
-        return Vector3.Distance(Runtimedata.currentFixedAnimatedBonePosition[BoneIndex], Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]);
-    }
-    /// <summary>
-    /// Physically accurate teleportation, maintains the existing signals of motion and keeps their trajectories through a teleport. First call PrepareTeleport(), then move the character, then call FinishTeleport().
-    /// Use MatchAnimationInstantly() instead if you don't want jiggles to be maintained through a teleport.
-    /// </summary>
+
     public void PrepareTeleport(int JiggleBone)
     {
         Runtimedata.preTeleportPosition[JiggleBone] = GetTransformPosition(JiggleBone);
     }
+
     public void PrepareTeleport()
     {
         for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
@@ -111,42 +156,27 @@ public class JiggleRigBase
             PrepareTeleport(PointsIndex);
         }
     }
-    /// <summary>
-    /// The companion function to PrepareTeleport, it discards all the movement that has happened since the call to PrepareTeleport, assuming that they've both been called on the same frame.
-    /// </summary>
+
     public void FinishTeleport()
     {
         for (int PointsIndex = 0; PointsIndex < simulatedPointsCount; PointsIndex++)
         {
             Vector3 position = GetTransformPosition(PointsIndex);
             Vector3 diff = position - Runtimedata.preTeleportPosition[PointsIndex];
-
-            Vector3 AnimatedCurrent = Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex];
-            Vector3 AnimatedPrevious = Runtimedata.targetAnimatedBoneSignalPrevious[PointsIndex];
-
             Vector3 particleCurrent = Runtimedata.particleSignalCurrent[PointsIndex];
             Vector3 particlePrevious = Runtimedata.particleSignalPrevious[PointsIndex];
 
-            FlattenSignal(ref AnimatedCurrent, ref AnimatedPrevious, position);
-            OffsetSignal(ref particleCurrent, ref particlePrevious, diff);
+            // Inline OffsetSignal
+            particleCurrent += diff;
+            particlePrevious += diff;
 
-            Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex] = AnimatedCurrent;
-            Runtimedata.targetAnimatedBoneSignalPrevious[PointsIndex] = AnimatedPrevious;
+            Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex] = position;
+            Runtimedata.targetAnimatedBoneSignalPrevious[PointsIndex] = position;
 
             Runtimedata.particleSignalCurrent[PointsIndex] = particleCurrent;
             Runtimedata.particleSignalPrevious[PointsIndex] = particlePrevious;
 
             Runtimedata.workingPosition[PointsIndex] += diff;
         }
-    }
-    public void FlattenSignal(ref Vector3 previousFrame, ref Vector3 currentFrame, Vector3 position)
-    {
-        previousFrame = position;
-        currentFrame = position;
-    }
-    public void OffsetSignal(ref Vector3 previousFrame, ref Vector3 currentFrame, Vector3 offset)
-    {
-        previousFrame += offset;
-        currentFrame += offset;
     }
 }

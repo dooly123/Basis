@@ -1,4 +1,3 @@
-using UnityEngine;
 namespace JigglePhysics
 {
     [System.Serializable]
