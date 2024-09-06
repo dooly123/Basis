@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Jobs;
 using static JiggleRigConstruction;
 namespace JigglePhysics
 {

@@ -121,6 +121,13 @@ namespace JigglePhysics
             UpdateCameraPosition();
             return Vector3.Distance(camera.transform.position, position) < distance;
         }
+        /// <summary>
+        /// needs to stop computing every frame
+        /// 
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public override JiggleSettingsData AdjustJiggleSettingsData(Vector3 position, JiggleSettingsData data)
         {
             var currentBlend = (Vector3.Distance(CameraPositon, position) - distance + blend) / blend;

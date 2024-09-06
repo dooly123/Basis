@@ -24,7 +24,7 @@ namespace Basis.Scripts.Drivers
         public void Initialize(BasisPlayer BasisPlayer)
         {
             // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
-            Avatar = BasisPlayer.Avatar;
+            Avatar = BasisPlayer.Avatar; 
             Player = BasisPlayer;
             Smoothing = smoothAmount;
             BlendShapeCount = Avatar.FaceVisemeMovement.Length;

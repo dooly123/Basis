@@ -10,7 +10,6 @@ namespace JigglePhysics
     {
         [ReadOnly]
         public NativeArray<Vector3> workingPosition;
-
         public NativeArray<Vector3> particleSignalCurrent;
         public NativeArray<Vector3> particleSignalPrevious;
 

@@ -32,7 +32,7 @@ namespace JigglePhysics
         private Vector3 JigPosition;
         public double currentFrame;
         public double previousFrame;
-        public Vector3 Zero;
+        public Vector3 VectorZero;
         public float squaredDeltaTime;
 
         public bool[] NeedsCollisions;
@@ -44,7 +44,7 @@ namespace JigglePhysics
         public List<int> TempsimulatedPointsCount = new List<int>();
         public void Initialize()
         {
-            Zero = Vector3.zero;
+            VectorZero = Vector3.zero;
             gravity = Physics.gravity;
             accumulation = 0f;
             jiggleRigsCount = jiggleRigs.Length;
@@ -82,7 +82,7 @@ namespace JigglePhysics
             Advance(Time.deltaTime, Time.timeAsDouble, VERLET_TIME_STEP);
         }
         [BurstCompile]
-        public void Advance(float deltaTime, double timeAsDouble, float velvetTiming)
+        public void Advance(float deltaTime, double timeAsDouble, float verletTiming)
         {
             JigPosition = transform.position; // Cache the position at the start of Advance
             // Early exit if not active, avoiding unnecessary checks
@@ -111,29 +111,29 @@ namespace JigglePhysics
             currentFrame = timeAsDouble;
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                for (int PointIndex = 0; PointIndex < simulatedPointsCount[jiggleIndex]; PointIndex++)
+                for (int BoneChainIndex = 0; BoneChainIndex < simulatedPointsCount[jiggleIndex]; BoneChainIndex++)
                 {
-                    Vector3 CurrentSignal = JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex];
+                    Vector3 CurrentSignal = JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[BoneChainIndex];
                     Vector3 PreviousSignal;
 
                     // If bone is not animated, return to last unadulterated pose
-                    if (JiggleRigsRuntime[jiggleIndex].Runtimedata.hasTransform[PointIndex])
+                    if (JiggleRigsRuntime[jiggleIndex].Runtimedata.hasTransform[BoneChainIndex])
                     {
-                        JiggleRigsRuntime[jiggleIndex].TransformAccessArray[PointIndex].GetLocalPositionAndRotation(out Vector3 localPosition, out Quaternion localrotation);
-                        if (JiggleRigsRuntime[jiggleIndex].Runtimedata.boneRotationChangeCheck[PointIndex] == localrotation)
+                        JiggleRigsRuntime[jiggleIndex].TransformAccessArray[BoneChainIndex].GetLocalPositionAndRotation(out Vector3 localPosition, out Quaternion localrotation);
+                        if (JiggleRigsRuntime[jiggleIndex].Runtimedata.boneRotationChangeCheck[BoneChainIndex] == localrotation)
                         {
-                            JiggleRigsRuntime[jiggleIndex].TransformAccessArray[PointIndex].localRotation = JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneRotation[PointIndex];
+                            JiggleRigsRuntime[jiggleIndex].TransformAccessArray[BoneChainIndex].localRotation = JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneRotation[BoneChainIndex];
                         }
-                        if (JiggleRigsRuntime[jiggleIndex].Runtimedata.bonePositionChangeCheck[PointIndex] == localPosition)
+                        if (JiggleRigsRuntime[jiggleIndex].Runtimedata.bonePositionChangeCheck[BoneChainIndex] == localPosition)
                         {
-                            JiggleRigsRuntime[jiggleIndex].TransformAccessArray[PointIndex].localPosition = JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneLocalPosition[PointIndex];
+                            JiggleRigsRuntime[jiggleIndex].TransformAccessArray[BoneChainIndex].localPosition = JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneLocalPosition[BoneChainIndex];
                         }
                     }
                     else
                     {
                         // Inline the logic from GetProjectedPositionRuntime
                         Transform parentTransform;
-                        int ParentIndex = jiggleRigs[jiggleIndex].JiggleBones[PointIndex].JiggleParentIndex;
+                        int ParentIndex = jiggleRigs[jiggleIndex].JiggleBones[BoneChainIndex].JiggleParentIndex;
                         // Get the parent transform
                         if (ParentIndex != -1)
                         {
@@ -141,7 +141,7 @@ namespace JigglePhysics
                         }
                         else
                         {
-                            parentTransform = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[PointIndex].parent;
+                            parentTransform = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[BoneChainIndex].parent;
                         }
 
                         // Compute the projected position
@@ -149,23 +149,24 @@ namespace JigglePhysics
                         CurrentSignal = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[ParentIndex].TransformPoint(PositionOut);
 
                         PreviousSignal = CurrentSignal;
-                        JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
-                        JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
+                        JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[BoneChainIndex] = CurrentSignal;
+                        JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalPrevious[BoneChainIndex] = PreviousSignal;
                         continue;
                     }
 
                     PreviousSignal = CurrentSignal;
-                    CurrentSignal = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[PointIndex].position;
+                    CurrentSignal = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[BoneChainIndex].position;
 
-                    JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
-                    JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
+                    JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[BoneChainIndex] = CurrentSignal;
+                    JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalPrevious[BoneChainIndex] = PreviousSignal;
 
-                    JiggleRigsRuntime[jiggleIndex].TransformAccessArray[PointIndex].GetLocalPositionAndRotation(out Vector3 pos, out Quaternion Rot);
-                    JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneRotation[PointIndex] = Rot;
-                    JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneLocalPosition[PointIndex] = pos;
+                    JiggleRigsRuntime[jiggleIndex].TransformAccessArray[BoneChainIndex].GetLocalPositionAndRotation(out Vector3 pos, out Quaternion Rot);
+                    JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneRotation[BoneChainIndex] = Rot;
+                    JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneLocalPosition[BoneChainIndex] = pos;
                 }
                 JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata = levelOfDetail.AdjustJiggleSettingsData(JigPosition, JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata);
             }
+
             if (dirtyFromEnable)
             {
                 RecordFrame(timeAsDouble);
@@ -182,18 +183,18 @@ namespace JigglePhysics
             diff = currentFrame - previousFrame;
             float percentage = (float)((timeAsDouble - previousFrame) / diff);
             // Update within while loop only when necessary
-            if (accumulation > velvetTiming)
+            if (accumulation > verletTiming)
             {
                 do
                 {
-                    accumulation -= velvetTiming;
+                    accumulation -= verletTiming;
                     currentFrame = timeAsDouble;
                     // Update each jiggleRig in the same loop to reduce loop overhead
                     for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
                     {
                         // Precompute common values
                         Vector3 gravityEffect = gravity * (JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.gravityMultiplier * squaredDeltaTime);
-                        float airDragDeltaTime = velvetTiming * JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.airDrag;
+                        float airDragDeltaTime = VERLET_TIME_STEP * JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.airDrag;
                         float inverseAirDrag = 1f - JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.airDrag;
                         float inverseFriction = 1f - JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.friction;
 
@@ -349,7 +350,7 @@ namespace JigglePhysics
                         JobHandle jobHandle = JiggleRigsRuntime[jiggleIndex].SignalJob.Schedule(simulatedPointsCount[jiggleIndex], 64); // You can adjust the batch size (64 here) if needed
                         jobHandle.Complete();
                     }
-                } while (accumulation > velvetTiming);
+                } while (accumulation > verletTiming);
             }
             // Final pose loop
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
@@ -403,7 +404,7 @@ namespace JigglePhysics
                     Vector3 simulatedVector = childPositionBlend - positionBlend;
 
                     // Rotate the transform based on the vector differences
-                    if (cachedAnimatedVector != Zero && simulatedVector != Zero)
+                    if (cachedAnimatedVector != VectorZero && simulatedVector != VectorZero)
                     {
                         Quaternion animPoseToPhysicsPose = Quaternion.FromToRotation(cachedAnimatedVector, simulatedVector);
                         JiggleRigsRuntime[jiggleIndex].TransformAccessArray[SimulatedIndex].rotation = animPoseToPhysicsPose * JiggleRigsRuntime[jiggleIndex].TransformAccessArray[SimulatedIndex].rotation;

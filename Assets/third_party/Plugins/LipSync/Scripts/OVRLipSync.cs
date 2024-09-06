@@ -23,8 +23,6 @@ limitations under the License.
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
-using Basis.Scripts.LipSync.Scripts.Helpers;
-
 namespace Basis.Scripts.LipSync.Scripts
 {
 //-------------------------------------------------------------------------------------
