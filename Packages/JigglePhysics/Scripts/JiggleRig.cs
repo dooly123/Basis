@@ -4,12 +4,10 @@ using static JiggleRigConstruction;
 namespace JigglePhysics
 {
     [Serializable]
-    public class JiggleRigRuntime
+    public class JiggleRig
     {
-        public bool NeedsCollisions;
-        public int collidersCount;
-        public int simulatedPointsCount;
-
+        [SerializeField]
+        public JiggleBone[] JiggleBones;
         [Tooltip("The settings that the rig should update with, create them using the Create->JigglePhysics->Settings menu option.")]
         public JiggleSettingsBase jiggleSettings;
         [SerializeField]
@@ -30,8 +28,6 @@ namespace JigglePhysics
         public Transform rootTransform;
         public SphereCollider sphereCollider;
         public JiggleRigLOD JiggleRigLOD;
-        public JiggleBone[] JiggleBones;
         public Transform[] ComputedTransforms;
     }
-
 }

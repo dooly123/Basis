@@ -25,7 +25,7 @@ public static class JiggleRigConstruction
         public List<Vector3> targetAnimatedBoneSignalPrevious;
         public List<Vector3> particleSignalPrevious;
     }
-    public static void InitalizeLists(ref JiggleRigRuntime JiggleRig)
+    public static void InitalizeLists(ref JiggleRig JiggleRig)
     {
         JiggleRig.ComputedTransforms = new Transform[] { };
         JiggleRig.PreInitalData.boneRotationChangeCheck = new List<Quaternion>();
@@ -45,13 +45,13 @@ public static class JiggleRigConstruction
         JiggleRig.PreInitalData.targetAnimatedBoneSignalPrevious = new List<Vector3>();
         JiggleRig.PreInitalData.particleSignalPrevious = new List<Vector3>();
     }
-    public static void CreateSimulatedPoints(ref JiggleRigRuntime JiggleRig, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
+    public static void CreateSimulatedPoints(ref JiggleRig JiggleRig, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
     {
         // Recursive function to create simulated points using a list
-        void CreateSimulatedPointsInternal(JiggleRigRuntime JiggleRig, Transform[] ignored, Transform current, JiggleBone parent)
+        void CreateSimulatedPointsInternal(JiggleRig JiggleRig, Transform[] ignored, Transform current, JiggleBone parent)
         {
             // Create a new JiggleBone and add it to the list
-            JiggleBone newJiggleBone = JiggleBone(ref JiggleRig, current, parent);
+            JiggleBone newJiggleBone = JiggleBone( JiggleRig, current, parent);
             // Check if the currentTransform has no children
             if (current.childCount == 0)
             {
@@ -66,12 +66,12 @@ public static class JiggleRigConstruction
                     else
                     {
                         // Add an extra virtual JiggleBone
-                        JiggleBone ExtraBone = JiggleBone(ref JiggleRig, null, newJiggleBone);
+                        JiggleBone ExtraBone = JiggleBone( JiggleRig, null, newJiggleBone);
                         return;
                     }
                 }
                 // Add another virtual JiggleBone
-                JiggleBone virtualBone = JiggleBone(ref JiggleRig, null, newJiggleBone);
+                JiggleBone virtualBone = JiggleBone( JiggleRig, null, newJiggleBone);
                 return;
             }
             // Iterate through child transforms
@@ -123,7 +123,7 @@ public static class JiggleRigConstruction
 
         return originalArray;
     }
-    public static JiggleBone JiggleBone(ref JiggleRigRuntime JiggleRig, Transform transform, JiggleBone parent)
+    public static JiggleBone JiggleBone(JiggleRig JiggleRig, Transform transform, JiggleBone parent)
     {
         JiggleBone JiggleBone = new JiggleBone
         {
