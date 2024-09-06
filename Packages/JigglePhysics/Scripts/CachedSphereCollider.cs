@@ -76,7 +76,7 @@ namespace JigglePhysics
                 if (obj.TryGetComponent<SphereCollider>(out _sphereCollider))
                 {
                     collider = _sphereCollider;
-                    collider.enabled = false;
+                    //collider.enabled = false;
                     _hasSphere = true;
                     return true;
                 }

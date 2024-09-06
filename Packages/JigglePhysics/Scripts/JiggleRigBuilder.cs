@@ -48,6 +48,7 @@ namespace JigglePhysics
             double CurrentTime = Time.timeAsDouble;
             currentFrame = CurrentTime;
             previousFrame = CurrentTime;
+            ComputeSquareVelvetTiming(VERLET_TIME_STEP);
             for (int JiggleCount = 0; JiggleCount < jiggleRigsCount; JiggleCount++)
             {
                 jiggleRigs[JiggleCount].Initialize();
@@ -56,16 +57,20 @@ namespace JigglePhysics
             CachedSphereCollider.AddBuilder(this);
             dirtyFromEnable = true;
         }
+        public float squaredDeltaTime;
+        public void ComputeSquareVelvetTiming(float VelvetTiming)
+        {
+            // Precompute values outside the loop
+            squaredDeltaTime = VelvetTiming * VelvetTiming;
+        }
 
         private void CacheTransformData()
         {
             cachedPosition = transform.position;
         }
 
-        public virtual void Advance(float deltaTime, double timeAsDouble, float fixedDeltaTime)
+        public virtual void Advance(float deltaTime, double timeAsDouble, float VelvetTiming)
         {
-            // Precompute values outside the loop
-            float squaredDeltaTime = fixedDeltaTime * fixedDeltaTime;
             CacheTransformData();  // Cache the position at the start of Advance
 
             // Early exit if not active, avoiding unnecessary checks
@@ -113,18 +118,18 @@ namespace JigglePhysics
             diff = currentFrame - previousFrame;
             float Percentage = (float)((timeAsDouble - previousFrame) / diff);
             // Update within while loop only when necessary
-            if (accumulation > fixedDeltaTime)
+            if (accumulation > VelvetTiming)
             {
                 do
                 {
-                    accumulation -= fixedDeltaTime;
+                    accumulation -= VelvetTiming;
                     currentFrame = timeAsDouble;
                     // Update each jiggleRig in the same loop to reduce loop overhead
                     for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
                     {
-                        jiggleRigs[jiggleIndex].Update(wind, fixedDeltaTime, squaredDeltaTime, Gravity, Percentage);
+                        jiggleRigs[jiggleIndex].Update(wind, VelvetTiming, squaredDeltaTime, Gravity, Percentage);
                     }
-                } while (accumulation > fixedDeltaTime);
+                } while (accumulation > VelvetTiming);
             }
             // Final pose loop
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)

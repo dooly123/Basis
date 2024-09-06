@@ -28,6 +28,7 @@ namespace JigglePhysics
             CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
             InitalizeIndexes();
             simulatedPointsCount = JiggleBones.Length;
+
             // Precompute normalized indices in a single pass
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
@@ -40,7 +41,6 @@ namespace JigglePhysics
                     test = JiggleBones[test.JiggleParentIndex];
                     distanceToRoot++;
                 }
-
                 test = JiggleBones[SimulatedIndex];
                 // Calculate distance to child
                 while (test.childIndex != -1)
@@ -48,17 +48,13 @@ namespace JigglePhysics
                     test = JiggleBones[test.childIndex];
                     distanceToChild++;
                 }
-
                 int max = distanceToRoot + distanceToChild;
                 PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
             }
-
             InitializeNativeArrays();
-
             jiggleSettingsdata = jiggleSettings.GetData();
             NeedsCollisions = colliders.Length != 0;
         }
-
         private void InitializeNativeArrays()
         {
             // Consolidate NativeArray initialization into one method
@@ -88,12 +84,14 @@ namespace JigglePhysics
             Vector3 dir = diff.normalized;
             return Vector3.Lerp(newPosition, Runtimedata.workingPosition[JiggleBones[JiggleIndex].childIndex] + dir * GetLengthToParent(JiggleIndex), elasticity);
         }
-        public void Update(Vector3 wind,float fixedDeltaTime, float squaredDeltaTime, Vector3 Gravity,float Percentage)
+
+        public void Update(Vector3 wind, float VelvetTiming, float squaredDeltaTime, Vector3 Gravity, float Percentage)
         {
             Vector3 gravityEffect = Gravity * (jiggleSettingsdata.gravityMultiplier * squaredDeltaTime);
-            float airDragDeltaTime = fixedDeltaTime * jiggleSettingsdata.airDrag;
+            float airDragDeltaTime = VelvetTiming * jiggleSettingsdata.airDrag;
             float inverseAirDrag = 1f - jiggleSettingsdata.airDrag;
             float inverseFriction = 1f - jiggleSettingsdata.friction;
+
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
                 // Cache values for better performance
@@ -101,7 +99,7 @@ namespace JigglePhysics
                 Vector3 AnimatedCurrentSignal = Runtimedata.targetAnimatedBoneSignalCurrent[SimulatedIndex];
                 Vector3 AnimatedPreviousSignal = Runtimedata.targetAnimatedBoneSignalPrevious[SimulatedIndex];
 
-                Vector3 currentFixedAnimatedBonePosition = SamplePosition(AnimatedCurrentSignal, AnimatedPreviousSignal, Percentage);
+                Vector3 currentFixedAnimatedBonePosition = Vector3.Lerp(AnimatedPreviousSignal, AnimatedCurrentSignal, Percentage);
                 Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex] = currentFixedAnimatedBonePosition;
 
                 if (JiggleBones[SimulatedIndex].JiggleParentIndex == -1)
@@ -109,9 +107,8 @@ namespace JigglePhysics
                     Runtimedata.workingPosition[SimulatedIndex] = currentFixedAnimatedBonePosition;
 
                     Vector3 particleSignalCurrent = Runtimedata.particleSignalCurrent[SimulatedIndex];
-                    Vector3 particleSignalPrevious = Runtimedata.particleSignalPrevious[SimulatedIndex];
-
-                    SetPosition(ref particleSignalCurrent, ref particleSignalPrevious, currentFixedAnimatedBonePosition);
+                    Vector3 particleSignalPrevious = particleSignalCurrent;
+                    particleSignalCurrent = currentFixedAnimatedBonePosition;
 
                     Runtimedata.particleSignalCurrent[SimulatedIndex] = particleSignalCurrent;
                     Runtimedata.particleSignalPrevious[SimulatedIndex] = particleSignalPrevious;
@@ -138,6 +135,7 @@ namespace JigglePhysics
                 workingPosition += wind * airDragDeltaTime;
                 Runtimedata.workingPosition[SimulatedIndex] = workingPosition;
             }
+
             if (NeedsCollisions)
             {
                 for (int Index = simulatedPointsCount - 1; Index >= 0; Index--)
@@ -145,6 +143,7 @@ namespace JigglePhysics
                     Runtimedata.workingPosition[Index] = ConstrainLengthBackwards(Index, Runtimedata.workingPosition[Index], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity * 0.5f);
                 }
             }
+
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
                 if (JiggleBones[SimulatedIndex].JiggleParentIndex == -1)
@@ -169,7 +168,6 @@ namespace JigglePhysics
                         parentParentPosition = Runtimedata.workingPosition[ParentsParentIndex];
                         poseParentParent = Runtimedata.currentFixedAnimatedBonePosition[ParentsParentIndex];
                     }
-
                     Vector3 parentAimTargetPose = Runtimedata.currentFixedAnimatedBonePosition[ParentIndex] - poseParentParent;
                     Vector3 parentAim = Runtimedata.workingPosition[ParentIndex] - parentParentPosition;
                     Quaternion TargetPoseToPose = Quaternion.FromToRotation(parentAimTargetPose, parentAim);
@@ -189,44 +187,66 @@ namespace JigglePhysics
                     int Index = JiggleBones[SimulatedIndex].JiggleParentIndex;
                     Vector3 diffBetweenPoints = Runtimedata.workingPosition[SimulatedIndex] - Runtimedata.workingPosition[Index];
                     diffBetweenPoints = diffBetweenPoints.normalized;
-                    Runtimedata.workingPosition[SimulatedIndex] = Vector3.Lerp(Runtimedata.workingPosition[SimulatedIndex],
-                        Runtimedata.workingPosition[Index] + diffBetweenPoints * GetLengthToParent(SimulatedIndex),
-                        jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity);
+                    Runtimedata.workingPosition[SimulatedIndex] = Vector3.Lerp(Runtimedata.workingPosition[SimulatedIndex], Runtimedata.workingPosition[Index] + diffBetweenPoints * GetLengthToParent(SimulatedIndex), jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity);
                 }
             }
             if (NeedsCollisions)
             {
+                // Cache sphereCollider and jiggleSettings once per outer loop
+                if (!CachedSphereCollider.TryGet(out SphereCollider sphereCollider))
+                {
+                    Debug.LogError("Missing Sphere Collider Bailing!");
+                    return;  // No need to proceed if there's no valid sphereCollider
+                }
+
                 for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
                 {
-                    if (!CachedSphereCollider.TryGet(out SphereCollider sphereCollider))
+                    // Cache radius based on the current simulated index
+                    float radius = jiggleSettings.GetRadius(Runtimedata.normalizedIndex[SimulatedIndex]);
+                    if (radius <= 0)
                     {
                         continue;
                     }
+                    sphereCollider.radius = radius;
+
+                    // Working position of current simulated point
+                    Vector3 currentPosition = Runtimedata.workingPosition[SimulatedIndex];
+
                     for (int ColliderIndex = 0; ColliderIndex < collidersCount; ColliderIndex++)
                     {
-                        sphereCollider.radius = jiggleSettings.GetRadius(Runtimedata.normalizedIndex[SimulatedIndex]);
-                        if (sphereCollider.radius <= 0)
-                        {
-                            continue;
-                        }
                         Collider collider = colliders[ColliderIndex];
                         collider.transform.GetPositionAndRotation(out Vector3 position, out Quaternion rotation);
-                        if (Physics.ComputePenetration(sphereCollider, Runtimedata.workingPosition[SimulatedIndex], Quaternion.identity, collider, position, rotation, out Vector3 dir, out float dist))
+
+                        // Perform Physics.ComputePenetration
+                        if (Physics.ComputePenetration(
+                            sphereCollider,
+                            currentPosition,
+                            Quaternion.identity,
+                            collider,
+                            position,
+                            rotation,
+                            out Vector3 dir,
+                            out float dist))
                         {
-                            Runtimedata.workingPosition[SimulatedIndex] += dir * dist;
+                            // Only update position if there's penetration
+                            currentPosition += dir * dist;
                         }
                     }
+
+                    // Update the working position with the final value after processing all collisions
+                    Runtimedata.workingPosition[SimulatedIndex] = currentPosition;
                 }
             }
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                Vector3 CurrentSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
-                Vector3 PreviousSignal = Runtimedata.particleSignalPrevious[SimulatedIndex];
+                // Store the current signal in a temporary variable
+                Vector3 previousSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
 
-                SetPosition(ref CurrentSignal, ref PreviousSignal, Runtimedata.workingPosition[SimulatedIndex]);
+                // Update the current signal with the working position
+                Runtimedata.particleSignalCurrent[SimulatedIndex] = Runtimedata.workingPosition[SimulatedIndex];
 
-                Runtimedata.particleSignalCurrent[SimulatedIndex] = CurrentSignal;
-                Runtimedata.particleSignalPrevious[SimulatedIndex] = PreviousSignal;
+                // Store the previous signal
+                Runtimedata.particleSignalPrevious[SimulatedIndex] = previousSignal;
             }
         }
         public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD)
@@ -234,7 +254,8 @@ namespace JigglePhysics
             for (int PointIndex = 0; PointIndex < simulatedPointsCount; PointIndex++)
             {
                 Vector3 CurrentSignal = Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex];
-                Vector3 PreviousSignal = Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex];
+                Vector3 PreviousSignal;
+
                 // If bone is not animated, return to last unadulterated pose
                 if (Runtimedata.hasTransform[PointIndex])
                 {
@@ -250,17 +271,18 @@ namespace JigglePhysics
                 }
                 else
                 {
-
-
                     int ParentIndex = JiggleBones[PointIndex].JiggleParentIndex;
-                    SetPosition(ref CurrentSignal, ref PreviousSignal, GetProjectedPosition(PointIndex, ParentIndex));
+                    PreviousSignal = CurrentSignal;
+                    CurrentSignal = GetProjectedPosition(PointIndex, ParentIndex);
 
                     Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
                     Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
                     continue;
                 }
 
-                SetPosition(ref CurrentSignal, ref PreviousSignal, ComputedTransforms[PointIndex].position);
+                PreviousSignal = CurrentSignal;
+                CurrentSignal = ComputedTransforms[PointIndex].position;
+
                 Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
                 Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
 
@@ -275,7 +297,7 @@ namespace JigglePhysics
             Vector3 CurrentSignal = Runtimedata.particleSignalCurrent[0];
             Vector3 PreviousSignal = Runtimedata.particleSignalPrevious[0];
 
-            Runtimedata.extrapolatedPosition[0] = SamplePosition(CurrentSignal, PreviousSignal, Percentage);
+            Runtimedata.extrapolatedPosition[0] = (Percentage == 0) ? PreviousSignal : Vector3.Lerp(PreviousSignal, CurrentSignal, Percentage);
 
             Vector3 virtualPosition = Runtimedata.extrapolatedPosition[0];
 
@@ -284,7 +306,7 @@ namespace JigglePhysics
             {
                 CurrentSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
                 PreviousSignal = Runtimedata.particleSignalPrevious[SimulatedIndex];
-                Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + SamplePosition(CurrentSignal, PreviousSignal, Percentage);
+                Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + ((Percentage == 0) ? PreviousSignal : Vector3.Lerp(PreviousSignal, CurrentSignal, Percentage));
             }
 
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
@@ -301,8 +323,8 @@ namespace JigglePhysics
                 Vector3 ChildCurrentAnimated = Runtimedata.targetAnimatedBoneSignalCurrent[ChildIndex];
                 Vector3 ChildPreviousAnimated = Runtimedata.targetAnimatedBoneSignalPrevious[ChildIndex];
 
-                Vector3 targetPosition = SamplePosition(CurrentAnimated, PreviousAnimated, Percentage);
-                Vector3 childTargetPosition = SamplePosition(ChildCurrentAnimated, ChildPreviousAnimated, Percentage);
+                Vector3 targetPosition = (Percentage == 0) ? PreviousAnimated : Vector3.Lerp(PreviousAnimated, CurrentAnimated, Percentage);
+                Vector3 childTargetPosition = (Percentage == 0) ? ChildPreviousAnimated : Vector3.Lerp(ChildPreviousAnimated, ChildCurrentAnimated, Percentage);
                 // Blend positions
                 Vector3 positionBlend = Vector3.Lerp(targetPosition, Runtimedata.extrapolatedPosition[SimulatedIndex], jiggleSettingsdata.blend);
 
@@ -334,19 +356,6 @@ namespace JigglePhysics
                     Runtimedata.bonePositionChangeCheck[SimulatedIndex] = pos;
                 }
             }
-        }
-        public void SetPosition(ref Vector3 Current, ref Vector3 Previous, Vector3 position)
-        {
-            Previous = Current;
-            Current = position;
-        }
-        public Vector3 SamplePosition(Vector3 Current, Vector3 Previous, float Percentage)
-        {
-            if (Percentage == 0)
-            {
-                return Previous;
-            }
-            return Vector3.Lerp(Previous, Current, Percentage);
         }
     }
 }
