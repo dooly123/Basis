@@ -19,7 +19,7 @@ namespace JigglePhysics
         [SerializeField]
         public JiggleSettingsData jiggleSettingsdata;
         public Transform GetRootTransform() => rootTransform;
-        private bool NeedsCollisions => colliders.Length != 0;
+        public bool NeedsCollisions;
         public int collidersCount;
         public Vector3 Zero = Vector3.zero;
         public void Initialize()
@@ -60,6 +60,7 @@ namespace JigglePhysics
             double CurrentTime = Time.timeAsDouble;
             currentFrame = CurrentTime;
             previousFrame = CurrentTime;
+            NeedsCollisions = colliders.Length != 0;
         }
 
         private void InitializeNativeArrays()
