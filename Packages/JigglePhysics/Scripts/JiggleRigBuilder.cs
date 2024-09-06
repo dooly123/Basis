@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
@@ -79,6 +80,7 @@ namespace JigglePhysics
         {
             Advance(Time.deltaTime, Time.timeAsDouble, VERLET_TIME_STEP);
         }
+        [BurstCompile]
         public void Advance(float deltaTime, double timeAsDouble, float velvetTiming)
         {
             JigPosition = transform.position; // Cache the position at the start of Advance
@@ -129,9 +131,24 @@ namespace JigglePhysics
                     }
                     else
                     {
+                        // Inline the logic from GetProjectedPositionRuntime
+                        Transform parentTransform;
                         int ParentIndex = jiggleRigs[jiggleIndex].JiggleBones[PointIndex].JiggleParentIndex;
+                        // Get the parent transform
+                        if (ParentIndex != -1)
+                        {
+                            parentTransform = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[ParentIndex].transform;
+                        }
+                        else
+                        {
+                            parentTransform = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[PointIndex].parent;
+                        }
+
+                        // Compute the projected position
+                        Vector3 PositionOut = parentTransform.InverseTransformPoint(JiggleRigsRuntime[jiggleIndex].TransformAccessArray[ParentIndex].position);
+                        CurrentSignal = JiggleRigsRuntime[jiggleIndex].TransformAccessArray[ParentIndex].TransformPoint(PositionOut);
+
                         PreviousSignal = CurrentSignal;
-                        CurrentSignal = JiggleRigHelper.GetProjectedPositionRuntime(PointIndex, ParentIndex, ref jiggleRigs[jiggleIndex], ref JiggleRigsRuntime[jiggleIndex]);
                         JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
                         JiggleRigsRuntime[jiggleIndex].Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
                         continue;

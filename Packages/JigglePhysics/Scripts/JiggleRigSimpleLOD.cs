@@ -1,6 +1,5 @@
 #if UNITY_EDITOR
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -44,7 +43,7 @@ namespace JigglePhysics
                 Renderer renderer = Renderer[Index];
                 if (renderer != null)
                 {
-                    if (renderer.TryGetComponent<JiggleRigVisibleFlag>(out jiggleRigVisibleFlag))
+                    if (renderer.TryGetComponent(out jiggleRigVisibleFlag))
                     {
                         jiggleRigVisibleFlag.VisibleFlagIndex = Index;
                         Visible[Index] = renderer.isVisible;

@@ -1,8 +1,10 @@
-﻿using Unity.Collections;
+﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 namespace JigglePhysics
 {
+    [BurstCompile]
     public struct ExtrapolationJob : IJobParallelFor
     {
         public float Percentage;

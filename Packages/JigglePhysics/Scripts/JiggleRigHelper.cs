@@ -138,17 +138,14 @@ public static class JiggleRigHelper
     {
         Vector3 position = GetTransformPosition(JiggleBoneIndex, ref JiggleRigBase,ref JiggleRigRuntime);
 
-        Vector3 AnimatedCurrent = JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex];
-        Vector3 AnimatedPrevious = JiggleRigRuntime.Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex];
-
         Vector3 particleCurrent = JiggleRigRuntime.Runtimedata.particleSignalCurrent[JiggleBoneIndex];
         Vector3 particlePrevious = JiggleRigRuntime.Runtimedata.particleSignalPrevious[JiggleBoneIndex];
 
         Builder.RecordFrame(time);
 
         // Inline FlattenSignal
-        AnimatedCurrent = position;
-        AnimatedPrevious = position;
+        Vector3 AnimatedCurrent = position;
+        Vector3 AnimatedPrevious = position;
 
         // Inline OffsetSignal
         particleCurrent += position - AnimatedCurrent;
