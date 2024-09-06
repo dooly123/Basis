@@ -51,7 +51,7 @@ namespace JigglePhysics
             ComputeSquareVelvetTiming(VERLET_TIME_STEP);
             for (int JiggleCount = 0; JiggleCount < jiggleRigsCount; JiggleCount++)
             {
-                jiggleRigs[JiggleCount].Initialize();
+                jiggleRigs[JiggleCount].Initialize(levelOfDetail);
             }
 
             CachedSphereCollider.AddBuilder(this);
@@ -105,7 +105,7 @@ namespace JigglePhysics
             currentFrame = timeAsDouble;
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                jiggleRigs[jiggleIndex].PrepareBone(cachedPosition, levelOfDetail);
+                jiggleRigs[jiggleIndex].PrepareBone(cachedPosition);
             }
 
             if (dirtyFromEnable)

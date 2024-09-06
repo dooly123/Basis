@@ -7,25 +7,31 @@ namespace JigglePhysics
     [Serializable]
     public class JiggleRig : JiggleRigBase
     {
-        [SerializeField]
-        [Tooltip("The root bone from which an individual JiggleRig will be constructed. The JiggleRig encompasses all children of the specified root.")]
-        public Transform rootTransform;
         [Tooltip("The settings that the rig should update with, create them using the Create->JigglePhysics->Settings menu option.")]
         public JiggleSettingsBase jiggleSettings;
+        [SerializeField]
+        public JiggleSettingsData jiggleSettingsdata;
+
+        public bool NeedsCollisions;
+        public int collidersCount;
+        public Vector3 Zero = Vector3.zero;
+
+        public UpdateParticleSignalsJob SignalJob;
+        public ExtrapolationJob extrapolationJob;
+
         [SerializeField]
         [Tooltip("The list of transforms to ignore during the jiggle. Each bone listed will also ignore all the children of the specified bone.")]
         public Transform[] ignoredTransforms;
         public Collider[] colliders;
         [SerializeField]
-        public JiggleSettingsData jiggleSettingsdata;
-        public Transform GetRootTransform() => rootTransform;
-        public bool NeedsCollisions;
-        public int collidersCount;
-        public Vector3 Zero = Vector3.zero;
+        [Tooltip("The root bone from which an individual JiggleRig will be constructed. The JiggleRig encompasses all children of the specified root.")]
+        public Transform rootTransform;
         public SphereCollider sphereCollider;
-        public UpdateParticleSignalsJob SignalJob;
-        public void Initialize()
+        public JiggleRigLOD JiggleRigLOD;
+
+        public void Initialize(JiggleRigLOD jiggleRigLOD)
         {
+            JiggleRigLOD = jiggleRigLOD;
             InitalizeLists(this);
             CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
             InitalizeIndexes();
@@ -70,7 +76,12 @@ namespace JigglePhysics
                 particleSignalCurrent = Runtimedata.particleSignalCurrent,
                 particleSignalPrevious = Runtimedata.particleSignalPrevious
             };
-
+            extrapolationJob = new ExtrapolationJob
+            {
+                ParticleSignalCurrent = Runtimedata.particleSignalCurrent,
+                ParticleSignalPrevious = Runtimedata.particleSignalPrevious,
+                ExtrapolatedPosition = Runtimedata.extrapolatedPosition
+            };
         }
         public Vector3 ConstrainLengthBackwards(int JiggleIndex, Vector3 newPosition, float elasticity)
         {
@@ -144,10 +155,7 @@ namespace JigglePhysics
             {
                 for (int PointIndex = simulatedPointsCount - 1; PointIndex >= 0; PointIndex--)
                 {
-                    Runtimedata.workingPosition[PointIndex] = ConstrainLengthBackwards(
-                        PointIndex,
-                        Runtimedata.workingPosition[PointIndex],
-                        jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity * 0.5f);
+                    Runtimedata.workingPosition[PointIndex] = ConstrainLengthBackwards( PointIndex, Runtimedata.workingPosition[PointIndex], jiggleSettingsdata.lengthElasticity * jiggleSettingsdata.lengthElasticity * 0.5f);
                 }
             }
 
@@ -167,8 +175,7 @@ namespace JigglePhysics
 
                 if (grandParentIndex == -1)
                 {
-                    poseParentParent = Runtimedata.currentFixedAnimatedBonePosition[parentIndex]
-                        + (Runtimedata.currentFixedAnimatedBonePosition[parentIndex] - Runtimedata.currentFixedAnimatedBonePosition[PointIndex]);
+                    poseParentParent = Runtimedata.currentFixedAnimatedBonePosition[parentIndex] + (Runtimedata.currentFixedAnimatedBonePosition[parentIndex] - Runtimedata.currentFixedAnimatedBonePosition[PointIndex]);
                     parentParentPosition = poseParentParent;
                 }
                 else
@@ -247,7 +254,7 @@ namespace JigglePhysics
             jobHandle.Complete();
         }
 
-        public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD)
+        public void PrepareBone(Vector3 position)
         {
             for (int PointIndex = 0; PointIndex < simulatedPointsCount; PointIndex++)
             {
@@ -288,7 +295,7 @@ namespace JigglePhysics
                 Runtimedata.lastValidPoseBoneRotation[PointIndex] = Rot;
                 Runtimedata.lastValidPoseBoneLocalPosition[PointIndex] = pos;
             }
-            jiggleSettingsdata = jiggleRigLOD.AdjustJiggleSettingsData(position, jiggleSettingsdata);
+            jiggleSettingsdata = JiggleRigLOD.AdjustJiggleSettingsData(position, jiggleSettingsdata);
         }
         public void Pose(float Percentage)
         {
@@ -296,16 +303,17 @@ namespace JigglePhysics
             Vector3 PreviousSignal = Runtimedata.particleSignalPrevious[0];
 
             Runtimedata.extrapolatedPosition[0] = (Percentage == 0) ? PreviousSignal : Vector3.Lerp(PreviousSignal, CurrentSignal, Percentage);
+            Vector3 offset = ComputedTransforms[0].transform.position - Runtimedata.extrapolatedPosition[0];
 
-            Vector3 virtualPosition = Runtimedata.extrapolatedPosition[0];
+            // Update the job
+            extrapolationJob.Percentage = Percentage;
+            extrapolationJob.Offset = offset;
 
-            Vector3 offset = ComputedTransforms[0].transform.position - virtualPosition;
-            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
-            {
-                CurrentSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
-                PreviousSignal = Runtimedata.particleSignalPrevious[SimulatedIndex];
-                Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + ((Percentage == 0) ? PreviousSignal : Vector3.Lerp(PreviousSignal, CurrentSignal, Percentage));
-            }
+            // Schedule the job
+            JobHandle jobHandle = extrapolationJob.Schedule(simulatedPointsCount, 64);
+
+            // Complete the job
+            jobHandle.Complete();
 
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
