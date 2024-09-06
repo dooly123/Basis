@@ -20,6 +20,7 @@ namespace JigglePhysics
         public bool LastVisiblity;
         public bool[] Visible;
         public int VisibleCount;
+        public Vector3 CameraPositon;
         public class JiggleRigVisibleFlag : MonoBehaviour
         {
             public int VisibleFlagIndex;
@@ -65,12 +66,17 @@ namespace JigglePhysics
         }
         public void VisiblityChange(bool Visibility, int Index)
         {
-            if(VisibleCount < Index)
+            // Check if the index is out of bounds
+            if (Index < 0 || Index >= Visible.Length)
             {
-                Debug.LogError("Visible Array " + VisibleCount +"| is smaller then " + Index);
+                Debug.LogError("Index out of bounds: " + Index + ". Valid range is 0 to " + (Visible.Length - 1));
                 return;
             }
+
+            // Update the visibility at the specified index
             Visible[Index] = Visibility;
+
+            // Re-evaluate visibility
             RevalulateVisiblity();
         }
         public void RevalulateVisiblity()
@@ -112,18 +118,19 @@ namespace JigglePhysics
             {
                 return false;
             }
+            UpdateCameraPosition();
             return Vector3.Distance(camera.transform.position, position) < distance;
         }
         public override JiggleSettingsData AdjustJiggleSettingsData(Vector3 position, JiggleSettingsData data)
         {
-            if (!TryGetCamera(out Camera camera))
-            {
-                return data;
-            }
-            var currentBlend = (Vector3.Distance(camera.transform.position, position) - distance + blend) / blend;
+            var currentBlend = (Vector3.Distance(CameraPositon, position) - distance + blend) / blend;
             currentBlend = Mathf.Clamp01(1f - currentBlend);
             data.blend = currentBlend;
             return data;
+        }
+        public override void UpdateCameraPosition()
+        {
+            CameraPositon = currentCamera.transform.position;
         }
     }
 }

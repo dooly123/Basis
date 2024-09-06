@@ -35,9 +35,9 @@ namespace JigglePhysics
         public Vector3 Zero;
         public float squaredDeltaTime;
 
-        public NativeArray<bool> NeedsCollisions;
-        public NativeArray<int> collidersCount;
-        public NativeArray<int> simulatedPointsCount;
+        public bool[] NeedsCollisions;
+        public int[] collidersCount;
+        public int[] simulatedPointsCount;
 
         public List<bool> TempNeedsCollisions = new List<bool>();
         public List<int> TempcollidersCount = new List<int>();
@@ -57,12 +57,12 @@ namespace JigglePhysics
             TempsimulatedPointsCount.Clear();
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                int Count = JiggleRigHelper.Initialize(this, ref jiggleRigs[JiggleIndex],ref JiggleRigsRuntime[JiggleIndex], levelOfDetail);
+                int Count = JiggleRigHelper.Initialize(this, ref jiggleRigs[JiggleIndex],ref JiggleRigsRuntime[JiggleIndex]);
                 TempsimulatedPointsCount.Add(Count);
             }
-            NeedsCollisions = new NativeArray<bool>(TempNeedsCollisions.ToArray(), Allocator.Persistent);
-            collidersCount = new NativeArray<int>(TempcollidersCount.ToArray(), Allocator.Persistent);
-            simulatedPointsCount = new NativeArray<int>(TempsimulatedPointsCount.ToArray(), Allocator.Persistent);
+            NeedsCollisions = TempNeedsCollisions.ToArray();
+            collidersCount = TempcollidersCount.ToArray();
+            simulatedPointsCount = TempsimulatedPointsCount.ToArray();
 
             CachedSphereCollider.AddBuilder(this);
             dirtyFromEnable = true;
@@ -71,11 +71,11 @@ namespace JigglePhysics
         {
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                JiggleRigHelper.OnDestroy(ref jiggleRigs[jiggleIndex],ref JiggleRigsRuntime[jiggleIndex]);
+                JiggleRigHelper.OnDestroy(ref jiggleRigs[jiggleIndex], ref JiggleRigsRuntime[jiggleIndex]);
             }
-            NeedsCollisions.Dispose();
-            collidersCount.Dispose();
-            simulatedPointsCount.Dispose();
+            //    NeedsCollisions.Dispose();
+            //   collidersCount.Dispose();
+            //   simulatedPointsCount.Dispose();
         }
         private void LateUpdate()
         {
@@ -85,7 +85,6 @@ namespace JigglePhysics
         public void Advance(float deltaTime, double timeAsDouble, float velvetTiming)
         {
             JigPosition = transform.position; // Cache the position at the start of Advance
-
             // Early exit if not active, avoiding unnecessary checks
             if (!levelOfDetail.CheckActive(JigPosition))
             {
@@ -165,7 +164,7 @@ namespace JigglePhysics
                     JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneRotation[PointIndex] = Rot;
                     JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneLocalPosition[PointIndex] = pos;
                 }
-                JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata = jiggleRigs[jiggleIndex].JiggleRigLOD.AdjustJiggleSettingsData(JigPosition, JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata);
+                JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata = levelOfDetail.AdjustJiggleSettingsData(JigPosition, JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata);
             }
             if (dirtyFromEnable)
             {

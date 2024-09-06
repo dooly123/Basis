@@ -21,10 +21,11 @@ namespace Basis.Scripts.Drivers
             {
                 if (player.Avatar.JiggleStrains != null && player.Avatar.JiggleStrains.Count != 0)
                 {
-                    if (Jiggler == null)
+                    if (Jiggler != null)
                     {
-                        Jiggler = BasisHelpers.GetOrAddComponent<JiggleRigBuilder>(player.Avatar.Animator.gameObject);
+                        GameObject.Destroy(Jiggler);
                     }
+                    Jiggler = player.Avatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
                     SimpleJiggleLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
                     Jiggler.levelOfDetail = SimpleJiggleLOD;
                     Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
@@ -69,26 +70,30 @@ namespace Basis.Scripts.Drivers
         public JiggleRig Conversion(BasisJiggleStrain Strain)
         {
             JiggleSettings Base = new JiggleSettings();
-            JiggleSettingsData Data = new JiggleSettingsData();
-            Data.gravityMultiplier = Strain.GravityMultiplier;
-            Data.friction = Strain.Friction;
-            Data.angleElasticity = Strain.AngleElasticity;
-            Data.blend = Strain.Blend;
-            Data.airDrag = Strain.AirDrag;
-            Data.lengthElasticity = Strain.LengthElasticity;
-            Data.elasticitySoften = Strain.ElasticitySoften;
-            Data.radiusMultiplier = Strain.RadiusMultiplier;
+            JiggleSettingsData Data = new JiggleSettingsData
+            {
+                gravityMultiplier = Strain.GravityMultiplier,
+                friction = Strain.Friction,
+                angleElasticity = Strain.AngleElasticity,
+                blend = Strain.Blend,
+                airDrag = Strain.AirDrag,
+                lengthElasticity = Strain.LengthElasticity,
+                elasticitySoften = Strain.ElasticitySoften,
+                radiusMultiplier = Strain.RadiusMultiplier
+            };
             Base.SetData(Data);
             JiggleRig JiggleRig = AssignUnComputedData(Strain.RootTransform, Base, Strain.IgnoredTransforms, Strain.Colliders);
             return JiggleRig;
         }
         public JiggleRig AssignUnComputedData(Transform rootTransform, JiggleSettingsBase jiggleSettings, Transform[] ignoredTransforms, Collider[] colliders)
         {
-            JiggleRig JiggleRig = new JiggleRig();
-            JiggleRig.rootTransform = rootTransform;
-            JiggleRig.jiggleSettings = jiggleSettings;
-            JiggleRig.ignoredTransforms = ignoredTransforms;
-            JiggleRig.colliders = colliders;
+            JiggleRig JiggleRig = new JiggleRig
+            {
+                rootTransform = rootTransform,
+                jiggleSettings = jiggleSettings,
+                ignoredTransforms = ignoredTransforms,
+                colliders = colliders
+            };
             return JiggleRig;
         }
     }

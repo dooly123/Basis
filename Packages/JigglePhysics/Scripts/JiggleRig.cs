@@ -20,7 +20,6 @@ namespace JigglePhysics
 
         //what is still used in the update
         public SphereCollider sphereCollider;
-        public JiggleRigLOD JiggleRigLOD;
         public Collider[] colliders;
         [SerializeField]
         public JiggleBone[] JiggleBones;
@@ -35,6 +34,6 @@ namespace JigglePhysics
         public ExtrapolationJob extrapolationJob;
         [SerializeField]
         public RuntimeData Runtimedata;
-        public TransformAccessArray TransformAccessArray;
+        public Transform[] TransformAccessArray;
     }
 }

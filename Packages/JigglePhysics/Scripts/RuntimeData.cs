@@ -4,21 +4,23 @@ namespace JigglePhysics
 {
     public struct RuntimeData
     {
-        public NativeArray<Quaternion> boneRotationChangeCheck;
-        public NativeArray<Quaternion> lastValidPoseBoneRotation;
-        public NativeArray<Vector3> currentFixedAnimatedBonePosition;
-        public NativeArray<Vector3> bonePositionChangeCheck;
-        public NativeArray<Vector3> lastValidPoseBoneLocalPosition;
+        public Quaternion[] boneRotationChangeCheck;
+        public Quaternion[] lastValidPoseBoneRotation;
+        public Vector3[] currentFixedAnimatedBonePosition;
+        public Vector3[] bonePositionChangeCheck;
+        public Vector3[] lastValidPoseBoneLocalPosition;
+        public Vector3[] preTeleportPosition;
+        public bool[] hasTransform;
+        public float[] normalizedIndex;
+
+        public Vector3[] targetAnimatedBoneSignalCurrent;
+
+        public Vector3[] targetAnimatedBoneSignalPrevious;
+
+
         public NativeArray<Vector3> workingPosition;
-        public NativeArray<Vector3> preTeleportPosition;
-        public NativeArray<Vector3> extrapolatedPosition;
-        public NativeArray<bool> hasTransform;
-        public NativeArray<float> normalizedIndex;
-
-        public NativeArray<Vector3> targetAnimatedBoneSignalCurrent;
-        public NativeArray<Vector3> particleSignalCurrent;
-
-        public NativeArray<Vector3> targetAnimatedBoneSignalPrevious;
         public NativeArray<Vector3> particleSignalPrevious;
+        public NativeArray<Vector3> extrapolatedPosition;
+        public NativeArray<Vector3> particleSignalCurrent;
     }
 }
