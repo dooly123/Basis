@@ -95,7 +95,7 @@ public class JiggleRigBase
         Vector3 particleCurrent = Runtimedata.particleSignalCurrent[JiggleBoneIndex];
         Vector3 particlePrevious = Runtimedata.particleSignalPrevious[JiggleBoneIndex];
 
-        Builder.LockFrame(time);
+        Builder.RecordFrame(time);
 
         // Inline FlattenSignal
         AnimatedCurrent = position;

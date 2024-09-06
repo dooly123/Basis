@@ -25,7 +25,7 @@ namespace JigglePhysics
         public int jiggleRigsCount;
         public Vector3 Gravity;
         // Cached variables to avoid repeated Unity API calls
-        private Vector3 cachedPosition;
+        private Vector3 JigPosition;
         public double currentFrame;
         public double previousFrame;
         void OnDisable()
@@ -66,7 +66,7 @@ namespace JigglePhysics
 
         private void CacheTransformData()
         {
-            cachedPosition = transform.position;
+            JigPosition = transform.position;
         }
         public void OnDestroy()
         {
@@ -75,12 +75,12 @@ namespace JigglePhysics
                 jiggleRigs[jiggleIndex].OnDestroy();
             }
         }
-        public virtual void Advance(float deltaTime, double timeAsDouble, float VelvetTiming)
+        public void Advance(float deltaTime, double timeAsDouble, float VelvetTiming)
         {
             CacheTransformData();  // Cache the position at the start of Advance
 
             // Early exit if not active, avoiding unnecessary checks
-            if (!levelOfDetail.CheckActive(cachedPosition))
+            if (!levelOfDetail.CheckActive(JigPosition))
             {
                 if (wasLODActive)
                 {
@@ -105,12 +105,12 @@ namespace JigglePhysics
             currentFrame = timeAsDouble;
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                jiggleRigs[jiggleIndex].PrepareBone(cachedPosition);
+                jiggleRigs[jiggleIndex].PrepareBone(JigPosition);
             }
 
             if (dirtyFromEnable)
             {
-                LockFrame(timeAsDouble);
+                RecordFrame(timeAsDouble);
                 for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
                 {
                     jiggleRigs[jiggleIndex].FinishTeleport();
@@ -161,7 +161,7 @@ namespace JigglePhysics
 
         public void FinishTeleport(double TimeASDouble)
         {
-            LockFrame(TimeASDouble);
+            RecordFrame(TimeASDouble);
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
                 jiggleRigs[JiggleIndex].FinishTeleport();
@@ -171,7 +171,7 @@ namespace JigglePhysics
         {
             FinishTeleport(Time.timeAsDouble);
         }
-        public void LockFrame(double timeAsDouble)
+        public void RecordFrame(double timeAsDouble)
         {
             previousFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
             currentFrame = timeAsDouble - JiggleRigBuilder.MAX_CATCHUP_TIME;

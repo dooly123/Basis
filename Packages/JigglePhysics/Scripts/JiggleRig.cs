@@ -11,14 +11,11 @@ namespace JigglePhysics
         public JiggleSettingsBase jiggleSettings;
         [SerializeField]
         public JiggleSettingsData jiggleSettingsdata;
-
         public bool NeedsCollisions;
         public int collidersCount;
         public Vector3 Zero = Vector3.zero;
-
         public UpdateParticleSignalsJob SignalJob;
         public ExtrapolationJob extrapolationJob;
-
         [SerializeField]
         [Tooltip("The list of transforms to ignore during the jiggle. Each bone listed will also ignore all the children of the specified bone.")]
         public Transform[] ignoredTransforms;
@@ -28,7 +25,6 @@ namespace JigglePhysics
         public Transform rootTransform;
         public SphereCollider sphereCollider;
         public JiggleRigLOD JiggleRigLOD;
-
         public void Initialize(JiggleRigLOD jiggleRigLOD)
         {
             JiggleRigLOD = jiggleRigLOD;
@@ -141,13 +137,7 @@ namespace JigglePhysics
                 Vector3 localSpaceVelocity = deltaSignal - parentDeltaSignal;
 
                 // Update working position
-                Vector3 workingPos = currentSignal
-                    + (deltaSignal - localSpaceVelocity) * inverseAirDrag
-                    + localSpaceVelocity * inverseFriction
-                    + gravityEffect
-                    + wind * airDragDeltaTime;
-
-                Runtimedata.workingPosition[PointIndex] = workingPos;
+                Runtimedata.workingPosition[PointIndex] = currentSignal + (deltaSignal - localSpaceVelocity) * inverseAirDrag+ localSpaceVelocity * inverseFriction+ gravityEffect + wind * airDragDeltaTime;
             }
 
             // Constrain length if needed
@@ -244,12 +234,6 @@ namespace JigglePhysics
                     Runtimedata.workingPosition[PointIndex] = position;
                 }
             }
-            UpdateParticleSignals();
-        }
-
-        // Method to schedule and execute the job
-        public void UpdateParticleSignals()
-        {
             JobHandle jobHandle = SignalJob.Schedule(simulatedPointsCount, 64); // You can adjust the batch size (64 here) if needed
             jobHandle.Complete();
         }
@@ -299,11 +283,10 @@ namespace JigglePhysics
         }
         public void Pose(float Percentage)
         {
-            Vector3 CurrentSignal = Runtimedata.particleSignalCurrent[0];
             Vector3 PreviousSignal = Runtimedata.particleSignalPrevious[0];
 
-            Runtimedata.extrapolatedPosition[0] = (Percentage == 0) ? PreviousSignal : Vector3.Lerp(PreviousSignal, CurrentSignal, Percentage);
-            Vector3 offset = ComputedTransforms[0].transform.position - Runtimedata.extrapolatedPosition[0];
+            Runtimedata.extrapolatedPosition[0] = (Percentage == 0) ? PreviousSignal : Vector3.Lerp(PreviousSignal, Runtimedata.particleSignalCurrent[0], Percentage);
+            Vector3 offset = ComputedTransforms[0].position - Runtimedata.extrapolatedPosition[0];
 
             // Update the job
             extrapolationJob.Percentage = Percentage;
