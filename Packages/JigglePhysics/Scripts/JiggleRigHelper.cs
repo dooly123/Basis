@@ -7,6 +7,7 @@ public static class JiggleRigHelper
 {
     public static void InitializeNativeArrays(ref JiggleRig JiggleRigBase)
     {
+        JiggleRigBase.TransformAccessArray = new UnityEngine.Jobs.TransformAccessArray(JiggleRigBase.RawTransforms.ToArray());
         JiggleRigBase.Runtimedata.boneRotationChangeCheck = CreateNativeArray(JiggleRigBase.PreInitalData.boneRotationChangeCheck);
         JiggleRigBase.Runtimedata.lastValidPoseBoneRotation = CreateNativeArray(JiggleRigBase.PreInitalData.boneRotationChangeCheck);
         JiggleRigBase.Runtimedata.currentFixedAnimatedBonePosition = CreateNativeArray(JiggleRigBase.PreInitalData.currentFixedAnimatedBonePosition);
@@ -167,16 +168,46 @@ public static class JiggleRigHelper
         if (JiggleRigBase.JiggleBones[JiggleBone].JiggleParentIndex != -1)
         {
             int ParentIndex = JiggleRigBase.JiggleBones[JiggleBone].JiggleParentIndex;
-            parentTransform = JiggleRigBase.ComputedTransforms[ParentIndex].transform;
+            parentTransform = JiggleRigBase.RawTransforms[ParentIndex].transform;
         }
         else
         {
-            parentTransform = JiggleRigBase.ComputedTransforms[JiggleBone].parent;
+            parentTransform = JiggleRigBase.RawTransforms[JiggleBone].parent;
         }
 
         // Compute and return the projected position
-        Vector3 PositionOut = parentTransform.InverseTransformPoint(JiggleRigBase.ComputedTransforms[JiggleParent].position);
-        return JiggleRigBase.ComputedTransforms[JiggleParent].TransformPoint(PositionOut);
+        Vector3 PositionOut = parentTransform.InverseTransformPoint(JiggleRigBase.RawTransforms[JiggleParent].position);
+        return JiggleRigBase.RawTransforms[JiggleParent].TransformPoint(PositionOut);
+    }
+    public static Vector3 GetProjectedPositionRuntime(int JiggleBone, int JiggleParent, ref JiggleRig JiggleRigBase)
+    {
+        Transform parentTransform;
+
+        // Get the parent transform
+        if (JiggleRigBase.JiggleBones[JiggleBone].JiggleParentIndex != -1)
+        {
+            int ParentIndex = JiggleRigBase.JiggleBones[JiggleBone].JiggleParentIndex;
+            parentTransform = JiggleRigBase.TransformAccessArray[ParentIndex].transform;
+        }
+        else
+        {
+            parentTransform = JiggleRigBase.TransformAccessArray[JiggleBone].parent;
+        }
+
+        // Compute and return the projected position
+        Vector3 PositionOut = parentTransform.InverseTransformPoint(JiggleRigBase.TransformAccessArray[JiggleParent].position);
+        return JiggleRigBase.TransformAccessArray[JiggleParent].TransformPoint(PositionOut);
+    }
+    public static Vector3 GetTransformPositionRuntime(int BoneIndex, ref JiggleRig JiggleRigBase)
+    {
+        if (!JiggleRigBase.Runtimedata.hasTransform[BoneIndex])
+        {
+            return GetProjectedPosition(BoneIndex, JiggleRigBase.JiggleBones[BoneIndex].JiggleParentIndex, ref JiggleRigBase);
+        }
+        else
+        {
+            return JiggleRigBase.TransformAccessArray[BoneIndex].position;
+        }
     }
     public static Vector3 GetTransformPosition(int BoneIndex, ref JiggleRig JiggleRigBase)
     {
@@ -186,7 +217,7 @@ public static class JiggleRigHelper
         }
         else
         {
-            return JiggleRigBase.ComputedTransforms[BoneIndex].position;
+            return JiggleRigBase.RawTransforms[BoneIndex].position;
         }
     }
     public static void PrepareTeleport(int JiggleBone, ref JiggleRig JiggleRigBase)

@@ -1,24 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Jobs;
 using static JiggleRigConstruction;
 namespace JigglePhysics
 {
     [Serializable]
     public class JiggleRig
     {
-        [SerializeField]
-        public JiggleBone[] JiggleBones;
         [Tooltip("The settings that the rig should update with, create them using the Create->JigglePhysics->Settings menu option.")]
         public JiggleSettingsBase jiggleSettings;
         [SerializeField]
-        public JiggleSettingsData jiggleSettingsdata;
-        public UpdateParticleSignalsJob SignalJob;
-        public ExtrapolationJob extrapolationJob;
-        [SerializeField]
-        public InitalizationData PreInitalData;
-        [SerializeField]
-        public RuntimeData Runtimedata;
-
+        public JiggleBone[] JiggleBones;
         [SerializeField]
         [Tooltip("The list of transforms to ignore during the jiggle. Each bone listed will also ignore all the children of the specified bone.")]
         public Transform[] ignoredTransforms;
@@ -28,6 +21,28 @@ namespace JigglePhysics
         public Transform rootTransform;
         public SphereCollider sphereCollider;
         public JiggleRigLOD JiggleRigLOD;
-        public Transform[] ComputedTransforms;
+        public List<Transform> RawTransforms;
+
+        [SerializeField]
+        public JiggleSettingsData jiggleSettingsdata;
+        public UpdateParticleSignalsJob SignalJob;
+        public ExtrapolationJob extrapolationJob;
+        [SerializeField]
+        public InitalizationData PreInitalData;
+        [SerializeField]
+        public RuntimeData Runtimedata;
+        public TransformAccessArray TransformAccessArray;
+    }
+    public class JiggleRigRuntime
+    {
+        [SerializeField]
+        public JiggleSettingsData jiggleSettingsdata;
+        public UpdateParticleSignalsJob SignalJob;
+        public ExtrapolationJob extrapolationJob;
+        [SerializeField]
+        public InitalizationData PreInitalData;
+        [SerializeField]
+        public RuntimeData Runtimedata;
+        public TransformAccessArray TransformAccessArray;
     }
 }
