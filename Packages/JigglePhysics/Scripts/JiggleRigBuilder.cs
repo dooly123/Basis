@@ -54,7 +54,7 @@ namespace JigglePhysics
             ComputeSquareVelvetTiming(VERLET_TIME_STEP);
             for (int JiggleCount = 0; JiggleCount < jiggleRigsCount; JiggleCount++)
             {
-                jiggleRigs[JiggleCount].Initialize(levelOfDetail);
+                JiggleRigHelper.Initialize(jiggleRigs[JiggleCount],levelOfDetail);
             }
 
             CachedSphereCollider.AddBuilder(this);

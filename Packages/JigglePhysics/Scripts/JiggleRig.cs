@@ -30,59 +30,5 @@ namespace JigglePhysics
         public JiggleBone[] JiggleBones;
         public Transform[] ComputedTransforms;
         public int simulatedPointsCount;
-        public void Initialize(JiggleRigLOD jiggleRigLOD)
-        {
-            JiggleRigLOD = jiggleRigLOD;
-            InitalizeLists(this);
-            CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
-            JiggleRigHelper.InitalizeIndexes(this);
-            simulatedPointsCount = JiggleBones.Length;
-
-            // Precompute normalized indices in a single pass
-            for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
-            {
-                JiggleBone test = JiggleBones[SimulatedIndex];
-                int distanceToRoot = 0, distanceToChild = 0;
-
-                // Calculate distance to root
-                while (test.JiggleParentIndex != -1)
-                {
-                    test = JiggleBones[test.JiggleParentIndex];
-                    distanceToRoot++;
-                }
-                test = JiggleBones[SimulatedIndex];
-                // Calculate distance to child
-                while (test.childIndex != -1)
-                {
-                    test = JiggleBones[test.childIndex];
-                    distanceToChild++;
-                }
-                int max = distanceToRoot + distanceToChild;
-                PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
-            }
-            JiggleRigHelper.InitializeNativeArrays(this);
-            jiggleSettingsdata = jiggleSettings.GetData();
-            NeedsCollisions = colliders.Length != 0;
-            if (NeedsCollisions)
-            {
-                if (!CachedSphereCollider.TryGet(out sphereCollider))
-                {
-                    Debug.LogError("Missing Sphere Collider Bailing!");
-                    return;  // No need to proceed if there's no valid sphereCollider
-                }
-            }
-            SignalJob = new UpdateParticleSignalsJob
-            {
-                workingPosition = Runtimedata.workingPosition,
-                particleSignalCurrent = Runtimedata.particleSignalCurrent,
-                particleSignalPrevious = Runtimedata.particleSignalPrevious
-            };
-            extrapolationJob = new ExtrapolationJob
-            {
-                ParticleSignalCurrent = Runtimedata.particleSignalCurrent,
-                ParticleSignalPrevious = Runtimedata.particleSignalPrevious,
-                ExtrapolatedPosition = Runtimedata.extrapolatedPosition
-            };
-        }
     }
 }

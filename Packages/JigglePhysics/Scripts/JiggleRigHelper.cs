@@ -23,7 +23,60 @@ public static class JiggleRigHelper
         JiggleRigBase.Runtimedata.particleSignalCurrent = CreateNativeArray(JiggleRigBase.PreInitalData.particleSignalCurrent);
         JiggleRigBase.Runtimedata.particleSignalPrevious = CreateNativeArray(JiggleRigBase.PreInitalData.particleSignalPrevious);
     }
+    public static void Initialize(JiggleRig JiggleRigBase,JiggleRigLOD jiggleRigLOD)
+    {
+        JiggleRigBase.JiggleRigLOD = jiggleRigLOD;
+        JiggleRigConstruction.InitalizeLists(JiggleRigBase);
+        JiggleRigConstruction.CreateSimulatedPoints(JiggleRigBase, JiggleRigBase.ignoredTransforms, JiggleRigBase.rootTransform, null);
+        JiggleRigHelper.InitalizeIndexes(JiggleRigBase);
+        JiggleRigBase.simulatedPointsCount = JiggleRigBase.JiggleBones.Length;
 
+        // Precompute normalized indices in a single pass
+        for (int SimulatedIndex = 0; SimulatedIndex < JiggleRigBase.simulatedPointsCount; SimulatedIndex++)
+        {
+            JiggleBone test = JiggleRigBase.JiggleBones[SimulatedIndex];
+            int distanceToRoot = 0, distanceToChild = 0;
+
+            // Calculate distance to root
+            while (test.JiggleParentIndex != -1)
+            {
+                test = JiggleRigBase.JiggleBones[test.JiggleParentIndex];
+                distanceToRoot++;
+            }
+            test = JiggleRigBase.JiggleBones[SimulatedIndex];
+            // Calculate distance to child
+            while (test.childIndex != -1)
+            {
+                test = JiggleRigBase.JiggleBones[test.childIndex];
+                distanceToChild++;
+            }
+            int max = distanceToRoot + distanceToChild;
+            JiggleRigBase.PreInitalData.normalizedIndex[SimulatedIndex] = (float)distanceToRoot / max;
+        }
+        JiggleRigHelper.InitializeNativeArrays(JiggleRigBase);
+        JiggleRigBase.jiggleSettingsdata = JiggleRigBase.jiggleSettings.GetData();
+        JiggleRigBase.NeedsCollisions = JiggleRigBase.colliders.Length != 0;
+        if (JiggleRigBase.NeedsCollisions)
+        {
+            if (!CachedSphereCollider.TryGet(out JiggleRigBase.sphereCollider))
+            {
+                Debug.LogError("Missing Sphere Collider Bailing!");
+                return;  // No need to proceed if there's no valid sphereCollider
+            }
+        }
+        JiggleRigBase.SignalJob = new UpdateParticleSignalsJob
+        {
+            workingPosition = JiggleRigBase.Runtimedata.workingPosition,
+            particleSignalCurrent = JiggleRigBase.Runtimedata.particleSignalCurrent,
+            particleSignalPrevious = JiggleRigBase.Runtimedata.particleSignalPrevious
+        };
+        JiggleRigBase.extrapolationJob = new ExtrapolationJob
+        {
+            ParticleSignalCurrent = JiggleRigBase.Runtimedata.particleSignalCurrent,
+            ParticleSignalPrevious = JiggleRigBase.Runtimedata.particleSignalPrevious,
+            ExtrapolatedPosition = JiggleRigBase.Runtimedata.extrapolatedPosition
+        };
+    }
     public static NativeArray<T> CreateNativeArray<T>(List<T> array) where T : struct
     {
         return new NativeArray<T>(array.ToArray(), Allocator.Persistent);
