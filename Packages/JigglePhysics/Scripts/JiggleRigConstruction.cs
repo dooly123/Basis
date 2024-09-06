@@ -157,7 +157,7 @@ public static class JiggleRigConstruction
             if (JiggleBone.JiggleParentIndex != -1)
             {
                 int Index = Array.IndexOf(JiggleRig.JiggleBones, JiggleBone);
-                position = JiggleRig.GetProjectedPosition(Index, JiggleBone.JiggleParentIndex);
+                position = JiggleRigHelper.GetProjectedPosition(Index, JiggleBone.JiggleParentIndex, JiggleRig);
             }
             else
             {
