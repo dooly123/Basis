@@ -71,6 +71,9 @@ namespace JigglePhysics
             {
                 JiggleRigHelper.OnDestroy(ref jiggleRigs[jiggleIndex],ref JiggleRigsRuntime[jiggleIndex]);
             }
+            NeedsCollisions.Dispose();
+            collidersCount.Dispose();
+            simulatedPointsCount.Dispose();
         }
         private void LateUpdate()
         {

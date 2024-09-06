@@ -8,22 +8,24 @@ namespace JigglePhysics
     [Serializable]
     public class JiggleRig
     {
-        [Tooltip("The settings that the rig should update with, create them using the Create->JigglePhysics->Settings menu option.")]
-        public JiggleSettingsBase jiggleSettings;
-        [SerializeField]
-        public JiggleBone[] JiggleBones;
         [SerializeField]
         [Tooltip("The list of transforms to ignore during the jiggle. Each bone listed will also ignore all the children of the specified bone.")]
         public Transform[] ignoredTransforms;
-        public Collider[] colliders;
         [SerializeField]
         [Tooltip("The root bone from which an individual JiggleRig will be constructed. The JiggleRig encompasses all children of the specified root.")]
         public Transform rootTransform;
-        public SphereCollider sphereCollider;
-        public JiggleRigLOD JiggleRigLOD;
         public List<Transform> RawTransforms;
         [SerializeField]
         public InitalizationData PreInitalData;
+
+        //what is still used in the update
+        public SphereCollider sphereCollider;
+        public JiggleRigLOD JiggleRigLOD;
+        public Collider[] colliders;
+        [SerializeField]
+        public JiggleBone[] JiggleBones;
+        [Tooltip("The settings that the rig should update with, create them using the Create->JigglePhysics->Settings menu option.")]
+        public JiggleSettingsBase jiggleSettings;
     }
     public struct JiggleRigRuntime
     {
