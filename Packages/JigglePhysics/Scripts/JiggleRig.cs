@@ -76,8 +76,10 @@ namespace JigglePhysics
             Runtimedata.hasTransform = new NativeArray<bool>(PreInitalData.hasTransform.ToArray(), Allocator.Persistent);
             Runtimedata.normalizedIndex = new NativeArray<float>(PreInitalData.normalizedIndex.ToArray(), Allocator.Persistent);
             //add 2 more and swap to previous and current, this will allow further multithreading
-            Runtimedata.targetAnimatedBoneSignal = new NativeArray<PositionSignal>(PreInitalData.targetAnimatedBoneSignal.ToArray(), Allocator.Persistent);
-            Runtimedata.particleSignal = new NativeArray<PositionSignal>(PreInitalData.particleSignal.ToArray(), Allocator.Persistent);
+            Runtimedata.targetAnimatedBoneSignalCurrent = new NativeArray<Vector3>(PreInitalData.targetAnimatedBoneSignalCurrent.ToArray(), Allocator.Persistent);
+            Runtimedata.targetAnimatedBoneSignalPrevious = new NativeArray<Vector3>(PreInitalData.targetAnimatedBoneSignalPrevious.ToArray(), Allocator.Persistent);
+            Runtimedata.particleSignalCurrent = new NativeArray<Vector3>(PreInitalData.particleSignalCurrent.ToArray(), Allocator.Persistent);
+            Runtimedata.particleSignalPrevious = new NativeArray<Vector3>(PreInitalData.particleSignalPrevious.ToArray(), Allocator.Persistent);
         }
         public Vector3 ConstrainLengthBackwards(int JiggleIndex, Vector3 newPosition, float elasticity)
         {
@@ -101,26 +103,34 @@ namespace JigglePhysics
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
                 // Cache values for better performance
-                Vector3 currentFixedAnimatedBonePosition = SamplePosition(Runtimedata.targetAnimatedBoneSignal[SimulatedIndex], TimeAsDouble, diff);
+
+                Vector3 AnimatedCurrentSignal = Runtimedata.targetAnimatedBoneSignalCurrent[SimulatedIndex];
+                Vector3 AnimatedPreviousSignal = Runtimedata.targetAnimatedBoneSignalPrevious[SimulatedIndex];
+
+                Vector3 currentFixedAnimatedBonePosition = SamplePosition( AnimatedCurrentSignal, AnimatedPreviousSignal, TimeAsDouble, diff);
                 Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex] = currentFixedAnimatedBonePosition;
 
                 if (JiggleBones[SimulatedIndex].JiggleParentIndex == -1)
                 {
                     Runtimedata.workingPosition[SimulatedIndex] = currentFixedAnimatedBonePosition;
 
-                    PositionSignal particleSignal = Runtimedata.particleSignal[SimulatedIndex];
-                    SetPosition(ref particleSignal, currentFixedAnimatedBonePosition);
-                    Runtimedata.particleSignal[SimulatedIndex] = particleSignal;
+                    Vector3 particleSignalCurrent = Runtimedata.particleSignalCurrent[SimulatedIndex];
+                    Vector3 particleSignalPrevious = Runtimedata.particleSignalPrevious[SimulatedIndex];
+
+                    SetPosition(ref particleSignalCurrent,ref particleSignalPrevious, currentFixedAnimatedBonePosition);
+
+                    Runtimedata.particleSignalCurrent[SimulatedIndex] = particleSignalCurrent;
+                    Runtimedata.particleSignalPrevious[SimulatedIndex] = particleSignalPrevious;
                     continue;
                 }
 
-                // Cache signals for better performance
-                Vector3 currentSignal = Runtimedata.particleSignal[SimulatedIndex].currentFrame;
-                Vector3 previousSignal = Runtimedata.particleSignal[SimulatedIndex].previousFrame;
+                // Cache signals for better performance.
+                Vector3 currentSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
+                Vector3 previousSignal = Runtimedata.particleSignalPrevious[SimulatedIndex];
 
                 int parentIndex = JiggleBones[SimulatedIndex].JiggleParentIndex;
-                Vector3 parentCurrentSignal = Runtimedata.particleSignal[parentIndex].currentFrame;
-                Vector3 parentPreviousSignal = Runtimedata.particleSignal[parentIndex].previousFrame;
+                Vector3 parentCurrentSignal = Runtimedata.particleSignalCurrent[parentIndex];
+                Vector3 parentPreviousSignal = Runtimedata.particleSignalPrevious[parentIndex];
 
                 // Precompute deltas
                 Vector3 deltaSignal = currentSignal - previousSignal;
@@ -218,9 +228,13 @@ namespace JigglePhysics
             }
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                var particleSignal = Runtimedata.particleSignal[SimulatedIndex];
-                SetPosition(ref particleSignal, Runtimedata.workingPosition[SimulatedIndex]);
-                Runtimedata.particleSignal[SimulatedIndex] = particleSignal;
+                Vector3 CurrentSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
+                Vector3 PreviousSignal = Runtimedata.particleSignalPrevious[SimulatedIndex];
+
+                SetPosition(ref CurrentSignal, ref PreviousSignal, Runtimedata.workingPosition[SimulatedIndex]);
+
+                Runtimedata.particleSignalCurrent[SimulatedIndex] = CurrentSignal;
+                Runtimedata.particleSignalPrevious[SimulatedIndex] = PreviousSignal;
             }
         }
         public void PrepareBone(Vector3 position, JiggleRigLOD jiggleRigLOD, double TimeAsDouble)
@@ -228,6 +242,8 @@ namespace JigglePhysics
             currentFrame = TimeAsDouble;
             for (int PointIndex = 0; PointIndex < simulatedPointsCount; PointIndex++)
             {
+                Vector3 CurrentSignal = Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex];
+                Vector3 PreviousSignal = Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex];
                 // If bone is not animated, return to last unadulterated pose
                 if (Runtimedata.hasTransform[PointIndex])
                 {
@@ -242,16 +258,21 @@ namespace JigglePhysics
                     }
                 }
                 else
-                { 
-                    PositionSignal BoneSignalHas = Runtimedata.targetAnimatedBoneSignal[PointIndex];
+                {
+
+
                     int ParentIndex = JiggleBones[PointIndex].JiggleParentIndex;
-                    SetPosition(ref BoneSignalHas, GetProjectedPosition(PointIndex, ParentIndex));
-                    Runtimedata.targetAnimatedBoneSignal[PointIndex] = BoneSignalHas;
+                    SetPosition(ref CurrentSignal,ref PreviousSignal, GetProjectedPosition(PointIndex, ParentIndex));
+
+                    Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
+                    Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
                     continue;
                 }
-                var targetAnimatedBoneSignal = Runtimedata.targetAnimatedBoneSignal[PointIndex];
-                SetPosition(ref targetAnimatedBoneSignal, ComputedTransforms[PointIndex].position);
-                Runtimedata.targetAnimatedBoneSignal[PointIndex] = targetAnimatedBoneSignal;
+
+                SetPosition(ref CurrentSignal, ref PreviousSignal, ComputedTransforms[PointIndex].position);
+                Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
+                Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
+
                 ComputedTransforms[PointIndex].GetLocalPositionAndRotation(out Vector3 pos, out Quaternion Rot);
                 Runtimedata.lastValidPoseBoneRotation[PointIndex] = Rot;
                 Runtimedata.lastValidPoseBoneLocalPosition[PointIndex] = pos;
@@ -262,14 +283,19 @@ namespace JigglePhysics
         {
             double diff = currentFrame - previousFrame;
 
-            Runtimedata.extrapolatedPosition[0] = SamplePosition(Runtimedata.particleSignal[0], timeAsDouble, diff);
+            Vector3 CurrentSignal = Runtimedata.particleSignalCurrent[0];
+            Vector3 PreviousSignal = Runtimedata.particleSignalPrevious[0];
+
+            Runtimedata.extrapolatedPosition[0] = SamplePosition(CurrentSignal, PreviousSignal, timeAsDouble, diff);
 
             Vector3 virtualPosition = Runtimedata.extrapolatedPosition[0];
 
             Vector3 offset = ComputedTransforms[0].transform.position - virtualPosition;
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
             {
-                Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + SamplePosition(Runtimedata.particleSignal[SimulatedIndex], timeAsDouble, diff);
+                CurrentSignal = Runtimedata.particleSignalCurrent[SimulatedIndex];
+                PreviousSignal = Runtimedata.particleSignalPrevious[SimulatedIndex];
+                Runtimedata.extrapolatedPosition[SimulatedIndex] = offset + SamplePosition(CurrentSignal, PreviousSignal, timeAsDouble, diff);
             }
 
             for (int SimulatedIndex = 0; SimulatedIndex < simulatedPointsCount; SimulatedIndex++)
@@ -280,8 +306,14 @@ namespace JigglePhysics
                 }
                 int ChildIndex = JiggleBones[SimulatedIndex].childIndex;
                 // Cache frequently accessed values
-                Vector3 targetPosition = SamplePosition(Runtimedata.targetAnimatedBoneSignal[SimulatedIndex], timeAsDouble, diff);
-                Vector3 childTargetPosition = SamplePosition(Runtimedata.targetAnimatedBoneSignal[ChildIndex], timeAsDouble, diff);
+                Vector3 CurrentAnimated = Runtimedata.targetAnimatedBoneSignalCurrent[SimulatedIndex];
+                Vector3 PreviousAnimated = Runtimedata.targetAnimatedBoneSignalPrevious[SimulatedIndex];
+
+                Vector3 ChildCurrentAnimated = Runtimedata.targetAnimatedBoneSignalCurrent[ChildIndex];
+                Vector3 ChildPreviousAnimated = Runtimedata.targetAnimatedBoneSignalPrevious[ChildIndex];
+
+                Vector3 targetPosition = SamplePosition(CurrentAnimated, PreviousAnimated, timeAsDouble, diff);
+                Vector3 childTargetPosition = SamplePosition(ChildCurrentAnimated, ChildPreviousAnimated, timeAsDouble, diff);
                 // Blend positions
                 Vector3 positionBlend = Vector3.Lerp(targetPosition, Runtimedata.extrapolatedPosition[SimulatedIndex], jiggleSettingsdata.blend);
 
@@ -314,19 +346,19 @@ namespace JigglePhysics
                 }
             }
         }
-        public void SetPosition(ref PositionSignal signal, Vector3 position)
+        public void SetPosition(ref Vector3 Current, ref Vector3 Previous, Vector3 position)
         {
-            signal.previousFrame = signal.currentFrame;
-            signal.currentFrame = position;
+            Previous = Current;
+            Current = position;
         }
-        public Vector3 SamplePosition(PositionSignal signal, double time, double diff)
+        public Vector3 SamplePosition(Vector3 Current, Vector3 Previous, double time, double diff)
         {
             if (diff == 0)
             {
-                return signal.previousFrame;
+                return Previous;
             }
             double t = (time - previousFrame) / diff;
-            return Vector3.Lerp(signal.previousFrame, signal.currentFrame, (float)t);
+            return Vector3.Lerp(Previous, Current, (float)t);
         }
     }
 }

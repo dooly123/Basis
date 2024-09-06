@@ -14,7 +14,11 @@ namespace JigglePhysics
         public NativeArray<Vector3> extrapolatedPosition;
         public NativeArray<bool> hasTransform;
         public NativeArray<float> normalizedIndex;
-        public NativeArray<PositionSignal> targetAnimatedBoneSignal;
-        public NativeArray<PositionSignal> particleSignal;
+
+        public NativeArray<Vector3> targetAnimatedBoneSignalCurrent;
+        public NativeArray<Vector3> particleSignalCurrent;
+
+        public NativeArray<Vector3> targetAnimatedBoneSignalPrevious;
+        public NativeArray<Vector3> particleSignalPrevious;
     }
 }

@@ -40,22 +40,24 @@ public class JiggleRigBase
     public void MatchAnimationInstantly(int JiggleBoneIndex, double time)
     {
         Vector3 position = GetTransformPosition(JiggleBoneIndex);
-        var outputA = Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndex];
-        var outputB = Runtimedata.particleSignal[JiggleBoneIndex];
+
+        Vector3 AnimatedCurrent = Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex];
+        Vector3 AnimatedPrevious = Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex];
+
+        Vector3 particleCurrent = Runtimedata.particleSignalCurrent[JiggleBoneIndex];
+        Vector3 particlePrevious = Runtimedata.particleSignalPrevious[JiggleBoneIndex];
 
         previousFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME * 2f;
         currentFrame = time - JiggleRigBuilder.MAX_CATCHUP_TIME;
 
-        FlattenSignal(ref outputA, position);
-        FlattenSignal(ref outputB, position);
+        FlattenSignal(ref AnimatedCurrent,ref AnimatedPrevious, position);
+        FlattenSignal(ref particleCurrent,ref particlePrevious, position);
 
-        Runtimedata.targetAnimatedBoneSignal[JiggleBoneIndex] = outputA;
-        Runtimedata.particleSignal[JiggleBoneIndex] = outputB;
-    }
-    public void FlattenSignal(ref PositionSignal signal, Vector3 position)
-    {
-        signal.previousFrame = position;
-        signal.currentFrame = position;
+        Runtimedata.targetAnimatedBoneSignalCurrent[JiggleBoneIndex] = AnimatedCurrent;
+        Runtimedata.targetAnimatedBoneSignalPrevious[JiggleBoneIndex] = AnimatedPrevious;
+
+        Runtimedata.particleSignalCurrent[JiggleBoneIndex] = particleCurrent;
+        Runtimedata.particleSignalPrevious[JiggleBoneIndex] = particlePrevious;
     }
     /// <summary>
     /// Computes the projected position of a JiggleBone based on its parent JiggleBone.
@@ -123,18 +125,33 @@ public class JiggleRigBase
         {
             Vector3 position = GetTransformPosition(PointsIndex);
             Vector3 diff = position - Runtimedata.preTeleportPosition[PointsIndex];
-            var outputA = Runtimedata.targetAnimatedBoneSignal[PointsIndex];
-            var outputB = Runtimedata.particleSignal[PointsIndex];
-            FlattenSignal(ref outputA, position);
-            OffsetSignal(ref outputB, diff);
-            Runtimedata.targetAnimatedBoneSignal[PointsIndex] = outputA;
-            Runtimedata.particleSignal[PointsIndex] = outputB;
+
+            Vector3 AnimatedCurrent = Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex];
+            Vector3 AnimatedPrevious = Runtimedata.targetAnimatedBoneSignalPrevious[PointsIndex];
+
+            Vector3 particleCurrent = Runtimedata.particleSignalCurrent[PointsIndex];
+            Vector3 particlePrevious = Runtimedata.particleSignalPrevious[PointsIndex];
+
+            FlattenSignal(ref AnimatedCurrent,ref AnimatedPrevious, position);
+            OffsetSignal(ref particleCurrent, ref particlePrevious, diff);
+
+            Runtimedata.targetAnimatedBoneSignalCurrent[PointsIndex] = AnimatedCurrent;
+            Runtimedata.targetAnimatedBoneSignalPrevious[PointsIndex] = AnimatedPrevious;
+
+            Runtimedata.particleSignalCurrent[PointsIndex] = particleCurrent;
+            Runtimedata.particleSignalPrevious[PointsIndex] = particlePrevious;
+
             Runtimedata.workingPosition[PointsIndex] += diff;
         }
     }
-    public void OffsetSignal(ref PositionSignal signal, Vector3 offset)
+    public void FlattenSignal(ref Vector3 previousFrame, ref Vector3 currentFrame, Vector3 position)
     {
-        signal.previousFrame = signal.previousFrame + offset;
-        signal.currentFrame = signal.currentFrame + offset;
+        previousFrame = position;
+        currentFrame = position;
+    }
+    public void OffsetSignal(ref Vector3 previousFrame, ref Vector3 currentFrame, Vector3 offset)
+    {
+        previousFrame += offset;
+        currentFrame += offset;
     }
 }

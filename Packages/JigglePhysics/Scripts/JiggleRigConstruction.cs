@@ -1,6 +1,7 @@
 using JigglePhysics;
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public static class JiggleRigConstruction
@@ -17,8 +18,12 @@ public static class JiggleRigConstruction
         public List<Vector3> extrapolatedPosition;
         public List<bool> hasTransform;
         public List<float> normalizedIndex;
-        public List<PositionSignal> targetAnimatedBoneSignal;
-        public List<PositionSignal> particleSignal;
+
+        public List<Vector3> targetAnimatedBoneSignalCurrent;
+        public List<Vector3> particleSignalCurrent;
+
+        public List<Vector3> targetAnimatedBoneSignalPrevious;
+        public List<Vector3> particleSignalPrevious;
     }
     public static void InitalizeLists(JiggleRig JiggleRig)
     {
@@ -33,8 +38,12 @@ public static class JiggleRigConstruction
         JiggleRig.PreInitalData.extrapolatedPosition = new List<Vector3>();
         JiggleRig.PreInitalData.hasTransform = new List<bool>();
         JiggleRig.PreInitalData.normalizedIndex = new List<float>();
-        JiggleRig.PreInitalData.targetAnimatedBoneSignal = new List<PositionSignal>();
-        JiggleRig.PreInitalData.particleSignal = new List<PositionSignal>();
+
+        JiggleRig.PreInitalData.targetAnimatedBoneSignalCurrent = new List<Vector3>();
+        JiggleRig.PreInitalData.particleSignalCurrent = new List<Vector3>();
+
+        JiggleRig.PreInitalData.targetAnimatedBoneSignalPrevious = new List<Vector3>();
+        JiggleRig.PreInitalData.particleSignalPrevious = new List<Vector3>();
     }
     public static void CreateSimulatedPoints(JiggleRig JiggleRig, Transform[] ignoredTransforms, Transform currentTransform, JiggleBone parentJiggleBone)
     {
@@ -155,8 +164,14 @@ public static class JiggleRigConstruction
                 position = Vector3.zero;
             }
         }
-        JiggleRig.PreInitalData.targetAnimatedBoneSignal.Add(new PositionSignal(position));
-        JiggleRig.PreInitalData.particleSignal.Add(new PositionSignal(position));
+        JiggleRig.PreInitalData.targetAnimatedBoneSignalCurrent.Add(position);
+        JiggleRig.PreInitalData.particleSignalCurrent.Add(position);
+
+        JiggleRig.PreInitalData.targetAnimatedBoneSignalPrevious.Add(position);
+        JiggleRig.PreInitalData.particleSignalPrevious.Add(position);
+
+
+
         JiggleRig.PreInitalData.hasTransform.Add(transform != null);
         if (parent == null)
         {
