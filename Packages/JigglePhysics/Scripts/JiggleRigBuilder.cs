@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -129,7 +128,7 @@ namespace JigglePhysics
                     {
                         int ParentIndex = jiggleRigs[jiggleIndex].JiggleBones[PointIndex].JiggleParentIndex;
                         PreviousSignal = CurrentSignal;
-                        CurrentSignal = JiggleRigHelper.GetProjectedPosition(PointIndex, ParentIndex,ref jiggleRigs[jiggleIndex]);
+                        CurrentSignal = JiggleRigHelper.GetProjectedPosition(PointIndex, ParentIndex, ref jiggleRigs[jiggleIndex]);
                         jiggleRigs[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
                         jiggleRigs[jiggleIndex].Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
                         continue;
@@ -220,7 +219,25 @@ namespace JigglePhysics
                         {
                             for (int PointIndex = simulatedPointsCount[jiggleIndex] - 1; PointIndex >= 0; PointIndex--)
                             {
-                                jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex] = JiggleRigHelper.ConstrainLengthBackwards(PointIndex, jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex], jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * 0.5f,ref jiggleRigs[jiggleIndex]);
+                                // Inline implementation of ConstrainLengthBackwards
+                                if (jiggleRigs[jiggleIndex].JiggleBones[PointIndex].childIndex != -1)
+                                {
+                                    Vector3 newPosition = jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex];
+                                    Vector3 diffVector = newPosition - jiggleRigs[jiggleIndex].Runtimedata.workingPosition[jiggleRigs[jiggleIndex].JiggleBones[PointIndex].childIndex];
+                                    Vector3 dir = diffVector.normalized;
+
+                                    int ParentIndex = jiggleRigs[jiggleIndex].JiggleBones[PointIndex].JiggleParentIndex;
+                                    float lengthToParent = Vector3.Distance(
+                                        jiggleRigs[jiggleIndex].Runtimedata.currentFixedAnimatedBonePosition[PointIndex],
+                                        jiggleRigs[jiggleIndex].Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]
+                                    );
+
+                                    jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex] = Vector3.Lerp(
+                                        newPosition,
+                                        jiggleRigs[jiggleIndex].Runtimedata.workingPosition[jiggleRigs[jiggleIndex].JiggleBones[PointIndex].childIndex] + dir * lengthToParent,
+                                        jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * 0.5f
+                                    );
+                                }
                             }
                         }
 
@@ -361,7 +378,7 @@ namespace JigglePhysics
 
                     // Calculate child position and vector differences
                     int childIndex = jiggleRigs[jiggleIndex].JiggleBones[SimulatedIndex].childIndex;
-                    Vector3 childPosition = JiggleRigHelper.GetTransformPosition(childIndex,ref jiggleRigs[jiggleIndex]);
+                    Vector3 childPosition = JiggleRigHelper.GetTransformPosition(childIndex, ref jiggleRigs[jiggleIndex]);
                     Vector3 cachedAnimatedVector = childPosition - positionBlend;
                     Vector3 simulatedVector = childPositionBlend - positionBlend;
 
