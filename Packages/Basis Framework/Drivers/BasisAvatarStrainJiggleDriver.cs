@@ -29,11 +29,11 @@ namespace Basis.Scripts.Drivers
                     Jiggler.levelOfDetail = SimpleJiggleLOD;
                     Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
                     SimpleJiggleLOD.Initalize(Renderer);
-                    List<JiggleRig> Jiggles = new List<JiggleRig>();
+                    List<JiggleRigRuntime> Jiggles = new List<JiggleRigRuntime>();
                     for (int StrainIndex = 0; StrainIndex < player.Avatar.JiggleStrains.Count; StrainIndex++)
                     {
                         BasisJiggleStrain Strain = player.Avatar.JiggleStrains[StrainIndex];
-                        JiggleRig JiggleRig = Conversion(Strain);
+                        JiggleRigRuntime JiggleRig = Conversion(Strain);
                         Jiggles.Add(JiggleRig);
                     }
                     Jiggler.jiggleRigs = Jiggles.ToArray();
@@ -63,7 +63,7 @@ namespace Basis.Scripts.Drivers
         {
             Jiggler.wind = Wind;
         }
-        public JiggleRig Conversion(BasisJiggleStrain Strain)
+        public JiggleRigRuntime Conversion(BasisJiggleStrain Strain)
         {
             JiggleSettings Base = new JiggleSettings();
             JiggleSettingsData Data = new JiggleSettingsData();
@@ -76,18 +76,17 @@ namespace Basis.Scripts.Drivers
             Data.elasticitySoften = Strain.ElasticitySoften;
             Data.radiusMultiplier = Strain.RadiusMultiplier;
             Base.SetData(Data);
-            JiggleRig JiggleRig = AssignUnComputedData(Strain.RootTransform, Base, Strain.IgnoredTransforms, Strain.Colliders);
+            JiggleRigRuntime JiggleRig = AssignUnComputedData(Strain.RootTransform, Base, Strain.IgnoredTransforms, Strain.Colliders);
             return JiggleRig;
         }
-        public JiggleRig AssignUnComputedData(Transform rootTransform, JiggleSettingsBase jiggleSettings, Transform[] ignoredTransforms, Collider[] colliders)
+        public JiggleRigRuntime AssignUnComputedData(Transform rootTransform, JiggleSettingsBase jiggleSettings, Transform[] ignoredTransforms, Collider[] colliders)
         {
-            JiggleRig JiggleRig = new JiggleRig();
+            JiggleRigRuntime JiggleRig = new JiggleRigRuntime();
             JiggleRig.rootTransform = rootTransform;
             JiggleRig.jiggleSettings = jiggleSettings;
             JiggleRig.ignoredTransforms = ignoredTransforms;
             JiggleRig.colliders = colliders;
             JiggleRig.collidersCount = colliders.Length;
-            JiggleRig.Zero = Vector3.zero;
             return JiggleRig;
         }
     }

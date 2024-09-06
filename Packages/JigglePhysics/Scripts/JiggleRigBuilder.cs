@@ -12,7 +12,7 @@ namespace JigglePhysics
         public const float VERLET_TIME_STEP = 0.02f;
         public const float MAX_CATCHUP_TIME = VERLET_TIME_STEP * 4f;
 
-        public JiggleRig[] jiggleRigs;
+        public JiggleRigRuntime[] jiggleRigs;
 
         [Tooltip("An air force that is applied to the entire rig, this is useful to plug in some wind volumes from external sources.")]
         [SerializeField]
@@ -31,18 +31,21 @@ namespace JigglePhysics
         private Vector3 JigPosition;
         public double currentFrame;
         public double previousFrame;
+        public Vector3 Zero;
+        public float squaredDeltaTime;
         void OnDisable()
         {
             CachedSphereCollider.RemoveBuilder(this);
 
             for (int JiggleCount = 0; JiggleCount < jiggleRigsCount; JiggleCount++)
             {
-                JiggleRigHelper.PrepareTeleport(jiggleRigs[JiggleCount]);
+                JiggleRigHelper.PrepareTeleport(ref jiggleRigs[JiggleCount]);
             }
         }
 
         public void Initialize()
         {
+            Zero = Vector3.zero;
             gravity = Physics.gravity;
             accumulation = 0f;
             jiggleRigsCount = jiggleRigs.Length;
@@ -54,13 +57,12 @@ namespace JigglePhysics
             ComputeSquareVelvetTiming(VERLET_TIME_STEP);
             for (int JiggleCount = 0; JiggleCount < jiggleRigsCount; JiggleCount++)
             {
-                JiggleRigHelper.Initialize(jiggleRigs[JiggleCount],levelOfDetail);
+                JiggleRigHelper.Initialize(ref jiggleRigs[JiggleCount], levelOfDetail);
             }
 
             CachedSphereCollider.AddBuilder(this);
             dirtyFromEnable = true;
         }
-        public float squaredDeltaTime;
         public void ComputeSquareVelvetTiming(float VelvetTiming)
         {
             // Precompute values outside the loop
@@ -75,8 +77,12 @@ namespace JigglePhysics
         {
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
             {
-                JiggleRigHelper.OnDestroy(jiggleRigs[jiggleIndex]);
+                JiggleRigHelper.OnDestroy(ref jiggleRigs[jiggleIndex]);
             }
+        }
+        private void LateUpdate()
+        {
+            Advance(Time.deltaTime, Time.timeAsDouble, VERLET_TIME_STEP);
         }
         public void Advance(float deltaTime, double timeAsDouble, float velvetTiming)
         {
@@ -130,7 +136,7 @@ namespace JigglePhysics
                     {
                         int ParentIndex = jiggleRigs[jiggleIndex].JiggleBones[PointIndex].JiggleParentIndex;
                         PreviousSignal = CurrentSignal;
-                        CurrentSignal = JiggleRigHelper.GetProjectedPosition(PointIndex, ParentIndex, jiggleRigs[jiggleIndex]);
+                        CurrentSignal = JiggleRigHelper.GetProjectedPosition(PointIndex, ParentIndex,ref jiggleRigs[jiggleIndex]);
                         jiggleRigs[jiggleIndex].Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
                         jiggleRigs[jiggleIndex].Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
                         continue;
@@ -153,7 +159,7 @@ namespace JigglePhysics
                 RecordFrame(timeAsDouble);
                 for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
                 {
-                    JiggleRigHelper.FinishTeleport(jiggleRigs[jiggleIndex]);
+                    JiggleRigHelper.FinishTeleport(ref jiggleRigs[jiggleIndex]);
                 }
                 dirtyFromEnable = false;
             }
@@ -221,7 +227,7 @@ namespace JigglePhysics
                         {
                             for (int PointIndex = jiggleRigs[jiggleIndex].simulatedPointsCount - 1; PointIndex >= 0; PointIndex--)
                             {
-                                jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex] = JiggleRigHelper.ConstrainLengthBackwards(PointIndex, jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex], jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * 0.5f, jiggleRigs[jiggleIndex]);
+                                jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex] = JiggleRigHelper.ConstrainLengthBackwards(PointIndex, jiggleRigs[jiggleIndex].Runtimedata.workingPosition[PointIndex], jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * jiggleRigs[jiggleIndex].jiggleSettingsdata.lengthElasticity * 0.5f,ref jiggleRigs[jiggleIndex]);
                             }
                         }
 
@@ -362,12 +368,12 @@ namespace JigglePhysics
 
                     // Calculate child position and vector differences
                     int childIndex = jiggleRigs[jiggleIndex].JiggleBones[SimulatedIndex].childIndex;
-                    Vector3 childPosition = JiggleRigHelper.GetTransformPosition(childIndex, jiggleRigs[jiggleIndex]);
+                    Vector3 childPosition = JiggleRigHelper.GetTransformPosition(childIndex,ref jiggleRigs[jiggleIndex]);
                     Vector3 cachedAnimatedVector = childPosition - positionBlend;
                     Vector3 simulatedVector = childPositionBlend - positionBlend;
 
                     // Rotate the transform based on the vector differences
-                    if (cachedAnimatedVector != jiggleRigs[jiggleIndex].Zero && simulatedVector != jiggleRigs[jiggleIndex].Zero)
+                    if (cachedAnimatedVector != Zero && simulatedVector != Zero)
                     {
                         Quaternion animPoseToPhysicsPose = Quaternion.FromToRotation(cachedAnimatedVector, simulatedVector);
                         jiggleRigs[jiggleIndex].ComputedTransforms[SimulatedIndex].rotation = animPoseToPhysicsPose * jiggleRigs[jiggleIndex].ComputedTransforms[SimulatedIndex].rotation;
@@ -386,16 +392,12 @@ namespace JigglePhysics
             CachedSphereCollider.FinishedPass();
             wasLODActive = true;
         }
-        private void LateUpdate()
-        {
-            Advance(Time.deltaTime, Time.timeAsDouble, VERLET_TIME_STEP);
-        }
 
         public void PrepareTeleport()
         {
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                JiggleRigHelper.PrepareTeleport(jiggleRigs[JiggleIndex]);
+                JiggleRigHelper.PrepareTeleport(ref jiggleRigs[JiggleIndex]);
             }
         }
 
@@ -404,7 +406,7 @@ namespace JigglePhysics
             RecordFrame(TimeASDouble);
             for (int JiggleIndex = 0; JiggleIndex < jiggleRigsCount; JiggleIndex++)
             {
-                JiggleRigHelper.FinishTeleport(jiggleRigs[JiggleIndex]);
+                JiggleRigHelper.FinishTeleport(ref jiggleRigs[JiggleIndex]);
             }
         }
         public void FinishTeleport()
