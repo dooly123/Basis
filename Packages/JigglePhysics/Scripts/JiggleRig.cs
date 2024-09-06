@@ -24,7 +24,7 @@ namespace JigglePhysics
         public Vector3 Zero = Vector3.zero;
         public void Initialize()
         {
-            JiggleRigConstruction.InitalizeLists(this);
+            InitalizeLists(this);
             CreateSimulatedPoints(this, ignoredTransforms, rootTransform, null);
             InitalizeIndexes();
             simulatedPointsCount = JiggleBones.Length;
@@ -107,7 +107,7 @@ namespace JigglePhysics
                 Vector3 AnimatedCurrentSignal = Runtimedata.targetAnimatedBoneSignalCurrent[SimulatedIndex];
                 Vector3 AnimatedPreviousSignal = Runtimedata.targetAnimatedBoneSignalPrevious[SimulatedIndex];
 
-                Vector3 currentFixedAnimatedBonePosition = SamplePosition( AnimatedCurrentSignal, AnimatedPreviousSignal, TimeAsDouble, diff);
+                Vector3 currentFixedAnimatedBonePosition = SamplePosition(AnimatedCurrentSignal, AnimatedPreviousSignal, TimeAsDouble, diff);
                 Runtimedata.currentFixedAnimatedBonePosition[SimulatedIndex] = currentFixedAnimatedBonePosition;
 
                 if (JiggleBones[SimulatedIndex].JiggleParentIndex == -1)
@@ -117,7 +117,7 @@ namespace JigglePhysics
                     Vector3 particleSignalCurrent = Runtimedata.particleSignalCurrent[SimulatedIndex];
                     Vector3 particleSignalPrevious = Runtimedata.particleSignalPrevious[SimulatedIndex];
 
-                    SetPosition(ref particleSignalCurrent,ref particleSignalPrevious, currentFixedAnimatedBonePosition);
+                    SetPosition(ref particleSignalCurrent, ref particleSignalPrevious, currentFixedAnimatedBonePosition);
 
                     Runtimedata.particleSignalCurrent[SimulatedIndex] = particleSignalCurrent;
                     Runtimedata.particleSignalPrevious[SimulatedIndex] = particleSignalPrevious;
@@ -262,7 +262,7 @@ namespace JigglePhysics
 
 
                     int ParentIndex = JiggleBones[PointIndex].JiggleParentIndex;
-                    SetPosition(ref CurrentSignal,ref PreviousSignal, GetProjectedPosition(PointIndex, ParentIndex));
+                    SetPosition(ref CurrentSignal, ref PreviousSignal, GetProjectedPosition(PointIndex, ParentIndex));
 
                     Runtimedata.targetAnimatedBoneSignalCurrent[PointIndex] = CurrentSignal;
                     Runtimedata.targetAnimatedBoneSignalPrevious[PointIndex] = PreviousSignal;
