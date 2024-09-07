@@ -21,19 +21,6 @@ namespace JigglePhysics
         public bool[] Visible;
         public int VisibleCount;
         public Vector3 CameraPositon;
-        public class JiggleRigVisibleFlag : MonoBehaviour
-        {
-            public int VisibleFlagIndex;
-            public Action<bool, int> VisibilityChange;
-            public void OnBecameInvisible()
-            {
-                VisibilityChange?.Invoke(false, VisibleFlagIndex);
-            }
-            public void OnBecameVisible()
-            {
-                VisibilityChange?.Invoke(true, VisibleFlagIndex);
-            }
-        }
         public void Initalize(Renderer[] Renderer)
         {
             JiggleRigVisibleFlag jiggleRigVisibleFlag = null;

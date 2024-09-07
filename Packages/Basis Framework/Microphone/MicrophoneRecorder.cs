@@ -2,18 +2,19 @@
 using System;
 using System.Linq;
 using Basis.Scripts.Device_Management;
+using System.Threading;
 public class MicrophoneRecorder : MicrophoneRecorderBase
 {
     public int head = 0;
     private int bufferLength;
-    private int dataLength;
-    private int position;
-    private int remain;
     public bool HasEvents = false;
     public int PacketSize;
     public bool UseDenoiser = false;
     public static Action<bool> OnPausedAction;
     public bool MicrophoneIsStarted = false;
+    private Thread processingThread;
+    private bool isProcessing = false;
+    public int position;
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -64,6 +65,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             HasEvents = false;
         }
         base.OnDestroy();
+        OnDestroyThread();
     }
     private void OnBootModeChanged(string mode)
     {
@@ -163,36 +165,64 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
                 // No new data has been recorded since the last update
                 return;
             }
+
             clip.GetData(microphoneBufferArray, 0);
-            dataLength = GetDataLength(bufferLength, head, position);
-            while (dataLength >= ProcessBufferLength)
+
+            if (!isProcessing)
             {
-                remain = bufferLength - head;
-                if (remain < ProcessBufferLength)
-                {
-                    Array.Copy(microphoneBufferArray, head, processBufferArray, 0, remain);
-                    Array.Copy(microphoneBufferArray, 0, processBufferArray, remain, ProcessBufferLength - remain);
-                }
-                else
-                {
-                    Array.Copy(microphoneBufferArray, head, processBufferArray, 0, ProcessBufferLength);
-                }
-                AdjustVolume(); // Adjust the volume of the audio data
-                if (UseDenoiser)
-                {
-                    ApplyDeNoise(); // Apply noise gate before processing the audio
-                }
-                if (IsTransmitWorthy())
-                {
-                    OnHasAudio?.Invoke();
-                }
-                else
-                {
-                    OnHasSilence?.Invoke();
-                }
-                head = (head + ProcessBufferLength) % bufferLength;
-                dataLength -= ProcessBufferLength;
+                // Start the thread only if it's not already running
+                isProcessing = true;
+                processingThread = new Thread(() => ProcessAudioData(position));
+                processingThread.Start();
             }
+        }
+    }
+    void ProcessAudioData(int position)
+    {
+        int dataLength = GetDataLength(bufferLength, head, position);
+
+        while (dataLength >= ProcessBufferLength)
+        {
+            int remain = bufferLength - head;
+            if (remain < ProcessBufferLength)
+            {
+                Array.Copy(microphoneBufferArray, head, processBufferArray, 0, remain);
+                Array.Copy(microphoneBufferArray, 0, processBufferArray, remain, ProcessBufferLength - remain);
+            }
+            else
+            {
+                Array.Copy(microphoneBufferArray, head, processBufferArray, 0, ProcessBufferLength);
+            }
+
+            AdjustVolume(); // Adjust the volume of the audio data
+
+            if (UseDenoiser)
+            {
+                ApplyDeNoise(); // Apply noise gate before processing the audio
+            }
+
+            if (IsTransmitWorthy())
+            {
+                OnHasAudio?.Invoke();
+            }
+            else
+            {
+                OnHasSilence?.Invoke();
+            }
+
+            head = (head + ProcessBufferLength) % bufferLength;
+            dataLength -= ProcessBufferLength;
+        }
+
+        // Mark processing as finished
+        isProcessing = false;
+    }
+    void OnDestroyThread()
+    {
+        // Ensure the thread is properly terminated when the object is destroyed
+        if (processingThread != null && processingThread.IsAlive)
+        {
+            processingThread.Abort();
         }
     }
 }
