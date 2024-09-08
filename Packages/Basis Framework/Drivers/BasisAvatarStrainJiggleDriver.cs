@@ -39,7 +39,8 @@ namespace Basis.Scripts.Drivers
                     }
                     Jiggler.jiggleRigs = Jiggles.ToArray();
                     Jiggler.JiggleRigsRuntime = JigglesRuntime.ToArray();
-                    Jiggler.Initialize();
+                    Transform Hips = player.Avatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
+                    Jiggler.Initialize(Hips);
                 }
             }
             if (Jiggler != null)

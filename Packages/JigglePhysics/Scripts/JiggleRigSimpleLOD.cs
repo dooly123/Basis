@@ -8,7 +8,7 @@ namespace JigglePhysics
     public class JiggleRigSimpleLOD : JiggleRigLOD
     {
         [Tooltip("Distance to disable the jiggle rig")]
-        public float distance = 30;
+        public float DisableAtDistance = 30;
         [Tooltip("Level of detail manager. This system will control how the jiggle rig saves performance cost.")]
         public float blend = 0.5f;
         public Camera currentCamera;
@@ -16,6 +16,8 @@ namespace JigglePhysics
         public bool[] Visible;
         public int VisibleCount;
         public Vector3 CameraPositon;
+        public float CalculatedDistance;
+        public float currentBlend;
         public void Initalize(Renderer[] Renderer)
         {
             JiggleRigVisibleFlag jiggleRigVisibleFlag = null;
@@ -100,26 +102,18 @@ namespace JigglePhysics
             {
                 return false;
             }
-            UpdateCameraPosition();
-            return Vector3.Distance(camera.transform.position, position) < distance;
+            UpdateCameraPosition(camera);
+            return Vector3.Distance(camera.transform.position, position) < DisableAtDistance;
         }
-        /// <summary>
-        /// needs to stop computing every frame
-        /// 
-        /// </summary>
-        /// <param name="position"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public override JiggleSettingsData AdjustJiggleSettingsData(Vector3 position, JiggleSettingsData data)
+        public override void UpdateDistance(Vector3 position)
         {
-            var currentBlend = (Vector3.Distance(CameraPositon, position) - distance + blend) / blend;
+            CalculatedDistance = Vector3.Distance(CameraPositon, position);
+            currentBlend = (CalculatedDistance - DisableAtDistance + blend) / blend;
             currentBlend = Mathf.Clamp01(1f - currentBlend);
-            data.blend = currentBlend;
-            return data;
         }
-        public override void UpdateCameraPosition()
+        public override void UpdateCameraPosition(Camera Camera)
         {
-            CameraPositon = currentCamera.transform.position;
+            CameraPositon = Camera.transform.position;
         }
     }
 }

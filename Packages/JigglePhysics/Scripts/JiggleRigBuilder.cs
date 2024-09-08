@@ -41,13 +41,16 @@ namespace JigglePhysics
         public List<bool> TempNeedsCollisions = new List<bool>();
         public List<int> TempcollidersCount = new List<int>();
         public List<int> TempsimulatedPointsCount = new List<int>();
-        public void Initialize()
+
+        public Transform PositionForCheckingAgainst;
+        public void Initialize(Transform PositionForCheckingAgainst)
         {
             VectorZero = Vector3.zero;
             gravity = Physics.gravity;
             accumulation = 0f;
             jiggleRigsCount = jiggleRigs.Length;
-            JigPosition = transform.position;
+            JigPosition = PositionForCheckingAgainst.position;
+            this.PositionForCheckingAgainst = PositionForCheckingAgainst;
 
             double CurrentTime = Time.timeAsDouble;
             currentFrame = CurrentTime;
@@ -83,7 +86,7 @@ namespace JigglePhysics
         [BurstCompile]
         public void Advance(float deltaTime, double timeAsDouble, float verletTiming)
         {
-            JigPosition = transform.position; // Cache the position at the start of Advance
+            JigPosition = PositionForCheckingAgainst.position; // Cache the position at the start of Advance
             // Early exit if not active, avoiding unnecessary checks
             if (!levelOfDetail.CheckActive(JigPosition))
             {
@@ -97,7 +100,6 @@ namespace JigglePhysics
                 wasLODActive = false;
                 return;
             }
-
             // Handle the transition from inactive to active
             if (!wasLODActive)
             {
@@ -105,7 +107,7 @@ namespace JigglePhysics
             }
 
             CachedSphereCollider.StartPass();
-
+            levelOfDetail.UpdateDistance(JigPosition);
             // Combine similar loops for cache-friendliness
             currentFrame = timeAsDouble;
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)
@@ -163,7 +165,7 @@ namespace JigglePhysics
                     JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneRotation[BoneChainIndex] = Rot;
                     JiggleRigsRuntime[jiggleIndex].Runtimedata.lastValidPoseBoneLocalPosition[BoneChainIndex] = pos;
                 }
-                JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata = levelOfDetail.AdjustJiggleSettingsData(JigPosition, JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata);
+                JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.blend = levelOfDetail.currentBlend;
             }
 
             if (dirtyFromEnable)
