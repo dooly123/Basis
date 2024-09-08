@@ -1,120 +1,150 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.LipSync.Scripts;
 using System;
 using UnityEngine;
-using static Basis.Scripts.LipSync.Scripts.OVRLipSync;
-
+using uLipSync;
+using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 namespace Basis.Scripts.Drivers
 {
-    public class BasisVisemeDriver : OVRLipSyncContextBase
+    public class BasisVisemeDriver : MonoBehaviour
     {
-        public int laughterBlendTarget = -1;
-        public float laughterThreshold = 0.5f;
-        public float laughterMultiplier = 1.5f;
         public int smoothAmount = 70;
-        public float laughterScore = 0.0f;
-        public float LastlaughterScore = 0.0f;
-        public float[] FinalBlendShapes;
         public bool[] HasViseme;
-        public bool HasVisemeLaughter;
         public int BlendShapeCount;
         public BasisPlayer Player;
         public BasisAvatar Avatar;
+        public uLipSync.uLipSync uLipSync;
+        public uLipSyncBlendShape uLipSyncBlendShape;
+        public List<PhonemeBlendShapeInfo> phonemeBlendShapeTable = new List<PhonemeBlendShapeInfo>();
+        public uLipSync.Profile profile;
+        [System.Serializable]
+        public class PhonemeBlendShapeInfo
+        {
+            public string phoneme;
+            public int blendShape;
+        }
+
         public void Initialize(BasisPlayer BasisPlayer)
         {
-            // Debug.Log("Initalizing " + nameof(BasisVisemeDriver));  
-            Avatar = BasisPlayer.Avatar; 
+            Avatar = BasisPlayer.Avatar;
             Player = BasisPlayer;
-            Smoothing = smoothAmount;
-            BlendShapeCount = Avatar.FaceVisemeMovement.Length;
-            FinalBlendShapes = new float[Enum.GetNames(typeof(Viseme)).Length];
-            Array.Fill(FinalBlendShapes, -1);
-            HasViseme = new bool[BlendShapeCount];
-            for (int Index = 0; Index < BlendShapeCount; Index++)
+            if (Avatar.FaceVisemeMesh != null)
             {
-                if (Avatar.FaceVisemeMovement[Index] != -1)
+                // Start loading the ScriptableObject from Addressables using the addressable key
+                AsyncOperationHandle<uLipSync.Profile> handle = Addressables.LoadAssetAsync<uLipSync.Profile>("Packages/com.hecomi.ulipsync/Assets/Profiles/uLipSync-Profile-Sample.asset");
+
+                // Wait for the operation to complete
+                handle.WaitForCompletion();
+                //Packages/com.hecomi.ulipsync/Assets/Profiles/uLipSync-Profile-Sample.asset
+                profile = handle.Result;
+
+                uLipSync = this.gameObject.AddComponent<uLipSync.uLipSync>();
+                uLipSync.profile = profile;
+
+                uLipSyncBlendShape = this.gameObject.AddComponent<uLipSyncBlendShape>();
+                uLipSyncBlendShape.skinnedMeshRenderer = Avatar.FaceVisemeMesh;
+                uLipSyncBlendShape.updateMethod = UpdateMethod.External;
+
+                BlendShapeCount = Avatar.FaceVisemeMovement.Length;
+                HasViseme = new bool[BlendShapeCount];
+                for (int Index = 0; Index < BlendShapeCount; Index++)
                 {
-                    HasViseme[Index] = true;
-                }
-                else
-                {
-                    HasViseme[Index] = false;
-                }
-            }
-            LastlaughterScore = -1;
-            HasVisemeLaughter = laughterBlendTarget != -1;
-        }
-        public void EventLateUpdate()
-        {
-            if (Avatar != null)
-            {
-                if (Player.FaceisVisible)
-                {
-                    // get the current viseme frame
-                    OVRLipSync.Frame frame = GetCurrentPhonemeFrame();
-                    if (frame != null)
+                    if (Avatar.FaceVisemeMovement[Index] != -1)
                     {
-                        for (int Index = 0; Index < BlendShapeCount; Index++)
+                        HasViseme[Index] = true;
+                        switch (Index)
                         {
-                            if (HasViseme[Index])
-                            {
-                                // Viseme blend weights are in range of 0->1.0, we need to make range 100
-                                if (FinalBlendShapes[Index] != frame.Visemes[Index])
+                            case 10:
                                 {
-                                    float VisemeModified = frame.Visemes[Index] * 100.0f;
-                                    Avatar.FaceVisemeMesh.SetBlendShapeWeight(Avatar.FaceVisemeMovement[Index], VisemeModified);
-                                    FinalBlendShapes[Index] = frame.Visemes[Index];
+                                    PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
+                                    {
+                                        phoneme = "A",
+                                        blendShape = Index
+                                    };
+                                    phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
+                                    break;
                                 }
-                            }
-                        }
-                        if (HasVisemeLaughter)
-                        {
-                            // Laughter score will be raw classifier output in [0,1]
-                            float laughterScore = frame.laughterScore;
-                            if (LastlaughterScore != laughterScore)
-                            {
-                                // Threshold then re-map to [0,1]
-                                laughterScore = laughterScore < laughterThreshold ? 0.0f : laughterScore - laughterThreshold;
-                                laughterScore = Mathf.Min(laughterScore * laughterMultiplier, 1.0f);
-                                laughterScore *= 1.0f / laughterThreshold;
-                                float LaughterScoreModified = laughterScore * 100.0f;
-                                Avatar.FaceVisemeMesh.SetBlendShapeWeight(laughterBlendTarget, LaughterScoreModified);
-                                LastlaughterScore = laughterScore;
-                            }
+
+                            case 12:
+                                {
+                                    PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
+                                    {
+                                        phoneme = "I",
+                                        blendShape = Index
+                                    };
+                                    phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
+                                    break;
+                                }
+
+                            case 14:
+                                {
+                                    PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
+                                    {
+                                        phoneme = "U",
+                                        blendShape = Index
+                                    };
+                                    phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
+                                    break;
+                                }
+
+                            case 11:
+                                {
+                                    PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
+                                    {
+                                        phoneme = "E",
+                                        blendShape = Index
+                                    };
+                                    phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
+                                    break;
+                                }
+                            case 13:
+                                {
+                                    PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
+                                    {
+                                        phoneme = "O",
+                                        blendShape = Index
+                                    };
+                                    phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
+                                    break;
+                                }
+                            case 7:
+                                {
+                                    PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
+                                    {
+                                        phoneme = "S",
+                                        blendShape = Index
+                                    };
+                                    phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
+                                    break;
+                                }
+
                         }
                     }
                     else
                     {
-                        Debug.Log("missing frame");
-                    }
-                    laughterScore = Frame.laughterScore;
-                    // Update smoothing value
-                    if (smoothAmount != Smoothing)
-                    {
-                        Smoothing = smoothAmount;
+                        HasViseme[Index] = false;
                     }
                 }
+
+
+                for (int Index = 0; Index < phonemeBlendShapeTable.Count; Index++)
+                {
+                    PhonemeBlendShapeInfo info = phonemeBlendShapeTable[Index];
+                    uLipSyncBlendShape.AddBlendShape(info.phoneme, info.blendShape);
+                }
+                uLipSyncBlendShape.updateMethod = UpdateMethod.LipSyncUpdateEvent;
+                uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
             }
         }
-        /// <summary>
-        /// data is coming from the audio thread
-        /// place that data into a seperate thread. false, no longer doing this.
-        /// this way we dont bog down the audio thread. false, no longer doing this.
-        /// it comes in every 20ms
-        /// </summary>
-        /// <param name="data"></param>
         public void ProcessAudioSamples(float[] data)
         {
             if (Avatar != null)
             {
                 if (Player.FaceisVisible)
                 {
-                    if (Context == 0)
-                    {
-                        return;
-                    }
-                    OVRLipSync.ProcessFrame(Context, data, this.Frame, false);
+                    uLipSync.OnDataReceived(data, 1);
                 }
             }
         }

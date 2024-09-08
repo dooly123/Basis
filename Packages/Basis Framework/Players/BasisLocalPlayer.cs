@@ -189,7 +189,6 @@ namespace Basis.Scripts.BasisSdk.Players
             VisemeDriver.Initialize(this);
             if (HasCalibrationEvents == false)
             {
-                BasisLocalInputActions.LateUpdateEvent += VisemeDriver.EventLateUpdate;
                 MicrophoneRecorderBase.OnHasAudio += DriveAudioToViseme;
                 MicrophoneRecorderBase.OnHasSilence += DriveAudioToViseme;
                 HasCalibrationEvents = true;
@@ -210,7 +209,6 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             if (HasCalibrationEvents)
             {
-                BasisLocalInputActions.LateUpdateEvent -= VisemeDriver.EventLateUpdate;
                 MicrophoneRecorderBase.OnHasAudio -= DriveAudioToViseme;
                 MicrophoneRecorderBase.OnHasSilence -= DriveAudioToViseme;
                 HasCalibrationEvents = false;

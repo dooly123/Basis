@@ -48,10 +48,6 @@ public partial class BasisAudioReceiverBase
         {
             PlayEntireBuffer();
         }
-        if (visemeDriver != null)
-        {
-            visemeDriver.EventLateUpdate();
-        }
     }
 
     private void PlayEntireBuffer()
