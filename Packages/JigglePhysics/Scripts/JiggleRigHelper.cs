@@ -64,11 +64,11 @@ public static class JiggleRigHelper
         JiggleRigBuilder.TempNeedsCollisions.Add(NeedsCollision);
         if (NeedsCollision)
         {
-            if (!CachedSphereCollider.TryGet(out JiggleRigBase.sphereCollider))
-            {
-                Debug.LogError("Missing Sphere Collider Bailing!");
-                return Count;  // No need to proceed if there's no valid sphereCollider
-            }
+          //  if (!CachedSphereCollider.TryGet(out JiggleRigBase.sphereCollider))
+          //  {
+             //   Debug.LogError("Missing Sphere Collider Bailing!");
+             //   return Count;  // No need to proceed if there's no valid sphereCollider
+           // }
         }
         JiggleRigRuntime.SignalJob = new UpdateParticleSignalsJob
         {

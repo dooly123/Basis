@@ -38,15 +38,18 @@ namespace JigglePhysics
         }
         public static void StartPass()
         {
+            /*
             if ((remainingBuilders <= -1 || remainingBuilders >= builders.Count) && TryGet(out SphereCollider collider))
             {
                 collider.includeLayers = 0;//include just default player 
                 collider.excludeLayers = -1;//everything but default
                 remainingBuilders = 0;
             }
+            */
         }
         public static void FinishedPass()
         {
+            /*
             remainingBuilders++;
             if (remainingBuilders >= builders.Count && TryGet(out SphereCollider collider))
             {
@@ -54,7 +57,9 @@ namespace JigglePhysics
                 collider.excludeLayers = 0;//include just default player
                 remainingBuilders = -1;
             }
+            */
         }
+        /*
         public static bool TryGet(out SphereCollider collider)
         {
             if (_hasSphere)
@@ -106,5 +111,6 @@ namespace JigglePhysics
                 throw;
             }
         }
+        */
     }
 }

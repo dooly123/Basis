@@ -258,7 +258,6 @@ public class BasisSDKMirror : MonoBehaviour
             {
                 name = "__MirrorReflection" + eye.ToString() + GetInstanceID(),
                 isPowerOfTwo = true,
-                hideFlags = HideFlags.DontSave,
                 antiAliasing = Antialising
             };
             string Property = "_ReflectionTex" + eye.ToString();
