@@ -285,6 +285,10 @@ namespace Basis.Scripts.UI
                 Canvas CurrentTopLevel = Results[Index];
                 if (CurrentTopLevel != null)
                 {
+                    if(CurrentTopLevel.worldCamera == null)
+                    {
+                        CurrentTopLevel.worldCamera = BasisLocalCameraDriver.Instance.Camera;
+                    }
                     SortedRaycastGraphics(CurrentTopLevel, ray, MaxDistance, Mask, CurrentTopLevel.worldCamera, ref SortedGraphics);
                     ProcessSortedHitsResults(CurrentTopLevel, ray, MaxDistance, true, SortedGraphics, SortedRays);
                     if (SortedGraphics.Count != 0)
