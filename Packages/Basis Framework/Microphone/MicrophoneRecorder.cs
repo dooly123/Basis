@@ -63,6 +63,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
 
     public new void OnDestroy()
     {
+        StopProcessingThread();  // Stop the processing thread
         if (HasEvents)
         {
             SMDMicrophone.OnMicrophoneChanged -= ResetMicrophones;
@@ -73,7 +74,6 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             HasEvents = false;
         }
         base.OnDestroy();
-        StopProcessingThread();  // Stop the processing thread
     }
 
     private void OnBootModeChanged(string mode)
@@ -210,11 +210,22 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         lock (processingLock)
         {
             isRunning = false;
-            processingEvent.Set();  // Wake up the thread to stop it
-            processingThread.Join();  // Wait for the thread to finish
+
+            // Safely trigger the event if the thread is waiting on it
+            processingEvent?.Set();
+
+            // Check if the thread is still alive before attempting to join it
+            if (processingThread != null && processingThread.IsAlive)
+            {
+                // Wait for the thread to finish, with a timeout to prevent hanging
+                bool terminated = processingThread.Join(1000); // 1 second timeout
+            }
         }
     }
-
+    void OnApplicationQuit()
+    {
+        StopProcessingThread();
+    }
     public void ProcessAudioData(int position)
     {
         int dataLength = GetDataLength(bufferLength, head, position);
