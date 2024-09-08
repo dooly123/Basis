@@ -47,24 +47,24 @@ namespace Basis.Scripts.Drivers
                 Debug.Log("not setting up BasisVisemeDriver blendShapeCount was empty");
                 return false;
             }
-            if (Avatar.FaceVisemeMesh.sharedMesh.blendShapeCount != Avatar.FaceVisemeMovement.Length)
-            {
-                Debug.Log("not setting up BasisVisemeDriver blendShapeCount != stored data");
-                return false;
-            }
-            // Start loading the ScriptableObject from Addressables using the addressable key
-            AsyncOperationHandle<uLipSync.Profile> handle = Addressables.LoadAssetAsync<uLipSync.Profile>("Packages/com.hecomi.ulipsync/Assets/Profiles/uLipSync-Profile-Sample.asset");
 
-            // Wait for the operation to complete
-            handle.WaitForCompletion();
-            profile = handle.Result;
-
-            GameObject.Destroy(uLipSync);
             GameObject.Destroy(uLipSyncBlendShape);
 
             uLipSync = BasisHelpers.GetOrAddComponent<uLipSync.uLipSync>(this.gameObject);
 
-            uLipSync.profile = profile;
+            if (uLipSync.profile == null)
+            {
+                if (profile == null)
+                {
+                    // Start loading the ScriptableObject from Addressables using the addressable key
+                    AsyncOperationHandle<uLipSync.Profile> handle = Addressables.LoadAssetAsync<uLipSync.Profile>("Packages/com.hecomi.ulipsync/Assets/Profiles/uLipSync-Profile-Sample.asset");
+
+                    // Wait for the operation to complete
+                    handle.WaitForCompletion();
+                    profile = handle.Result;
+                }
+                uLipSync.profile = profile;
+            }
 
             uLipSyncBlendShape = BasisHelpers.GetOrAddComponent<uLipSyncBlendShape>(this.gameObject);
 
@@ -156,6 +156,7 @@ namespace Basis.Scripts.Drivers
                 uLipSyncBlendShape.AddBlendShape(info.phoneme, info.blendShape);
             }
             uLipSyncBlendShape.updateMethod = UpdateMethod.LipSyncUpdateEvent;
+            uLipSync.onLipSyncUpdate.RemoveAllListeners();
             uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
             WasSuccessful = true;
             return true;
