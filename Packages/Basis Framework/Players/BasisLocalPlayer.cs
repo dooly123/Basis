@@ -186,7 +186,7 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 VisemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(this.gameObject);
             }
-            VisemeDriver.Initialize(this);
+            VisemeDriver.TryInitialize(this);
             if (HasCalibrationEvents == false)
             {
                 MicrophoneRecorderBase.OnHasAudio += DriveAudioToViseme;

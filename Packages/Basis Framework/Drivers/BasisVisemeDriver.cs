@@ -6,6 +6,7 @@ using uLipSync;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Basis.Scripts.BasisSdk.Helpers;
 namespace Basis.Scripts.Drivers
 {
     public class BasisVisemeDriver : MonoBehaviour
@@ -25,18 +26,31 @@ namespace Basis.Scripts.Drivers
             public string phoneme;
             public int blendShape;
         }
-
-        public void Initialize(BasisPlayer BasisPlayer)
+        public bool WasSuccessful;
+        public bool TryInitialize(BasisPlayer BasisPlayer)
         {
+            WasSuccessful = false;
             Avatar = BasisPlayer.Avatar;
             Player = BasisPlayer;
             if (Avatar == null)
             {
-                return;
+                Debug.Log("not setting up BasisVisemeDriver Avatar was null");
+                return false;
             }
             if (Avatar.FaceVisemeMesh == null)
             {
-                return;
+                Debug.Log("not setting up BasisVisemeDriver FaceVisemeMesh was null");
+                return false;
+            }
+            if (Avatar.FaceVisemeMesh.sharedMesh.blendShapeCount == 0)
+            {
+                Debug.Log("not setting up BasisVisemeDriver blendShapeCount was empty");
+                return false;
+            }
+            if (Avatar.FaceVisemeMesh.sharedMesh.blendShapeCount != Avatar.FaceVisemeMovement.Length)
+            {
+                Debug.Log("not setting up BasisVisemeDriver blendShapeCount != stored data");
+                return false;
             }
             // Start loading the ScriptableObject from Addressables using the addressable key
             AsyncOperationHandle<uLipSync.Profile> handle = Addressables.LoadAssetAsync<uLipSync.Profile>("Packages/com.hecomi.ulipsync/Assets/Profiles/uLipSync-Profile-Sample.asset");
@@ -45,13 +59,17 @@ namespace Basis.Scripts.Drivers
             handle.WaitForCompletion();
             profile = handle.Result;
 
-            uLipSync = this.gameObject.AddComponent<uLipSync.uLipSync>();
+            GameObject.Destroy(uLipSync);
+            GameObject.Destroy(uLipSyncBlendShape);
+
+            uLipSync = BasisHelpers.GetOrAddComponent<uLipSync.uLipSync>(this.gameObject);
+
             uLipSync.profile = profile;
 
-            uLipSyncBlendShape = this.gameObject.AddComponent<uLipSyncBlendShape>();
+            uLipSyncBlendShape = BasisHelpers.GetOrAddComponent<uLipSyncBlendShape>(this.gameObject);
+
             uLipSyncBlendShape.skinnedMeshRenderer = Avatar.FaceVisemeMesh;
             uLipSyncBlendShape.updateMethod = UpdateMethod.External;
-
             BlendShapeCount = Avatar.FaceVisemeMovement.Length;
             HasViseme = new bool[BlendShapeCount];
             for (int Index = 0; Index < BlendShapeCount; Index++)
@@ -139,16 +157,20 @@ namespace Basis.Scripts.Drivers
             }
             uLipSyncBlendShape.updateMethod = UpdateMethod.LipSyncUpdateEvent;
             uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
+            WasSuccessful = true;
+            return true;
         }
         public void ProcessAudioSamples(float[] data)
         {
-            if (Avatar != null)
+            if (WasSuccessful == false)
             {
-                if (Player.FaceisVisible)
-                {
-                    uLipSync.OnDataReceived(data, 1);
-                }
+                return;
             }
+            if (Player.FaceisVisible == false)
+            {
+                return;
+            }
+            uLipSync.OnDataReceived(data, 1);
         }
     }
 }

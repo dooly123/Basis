@@ -85,7 +85,7 @@ public class BasisAudioReceiver : BasisAudioReceiverBase
         {
             visemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(audioSource.gameObject);
         }
-        visemeDriver.Initialize(networkedPlayer.Player);
+        visemeDriver.TryInitialize(networkedPlayer.Player);
         if(BasisRemoteVisemeAudioDriver == null)
         {
             BasisRemoteVisemeAudioDriver = BasisHelpers.GetOrAddComponent<BasisRemoteVisemeAudioDriver>(audioSource.gameObject);
