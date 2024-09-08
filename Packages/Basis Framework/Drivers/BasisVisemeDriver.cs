@@ -20,6 +20,7 @@ namespace Basis.Scripts.Drivers
         public uLipSyncBlendShape uLipSyncBlendShape;
         public List<PhonemeBlendShapeInfo> phonemeBlendShapeTable = new List<PhonemeBlendShapeInfo>();
         public uLipSync.Profile profile;
+        public bool FirstTime = false;
         [System.Serializable]
         public class PhonemeBlendShapeInfo
         {
@@ -47,11 +48,12 @@ namespace Basis.Scripts.Drivers
                 Debug.Log("not setting up BasisVisemeDriver blendShapeCount was empty");
                 return false;
             }
-
-            GameObject.Destroy(uLipSyncBlendShape);
-
+            if (uLipSync == null)
+            {
+                FirstTime = true;
+            }
             uLipSync = BasisHelpers.GetOrAddComponent<uLipSync.uLipSync>(this.gameObject);
-
+            phonemeBlendShapeTable.Clear();
             if (uLipSync.profile == null)
             {
                 if (profile == null)
@@ -150,14 +152,17 @@ namespace Basis.Scripts.Drivers
                     HasViseme[Index] = false;
                 }
             }
+            uLipSyncBlendShape.blendShapes.Clear();
             for (int Index = 0; Index < phonemeBlendShapeTable.Count; Index++)
             {
                 PhonemeBlendShapeInfo info = phonemeBlendShapeTable[Index];
                 uLipSyncBlendShape.AddBlendShape(info.phoneme, info.blendShape);
             }
             uLipSyncBlendShape.updateMethod = UpdateMethod.LipSyncUpdateEvent;
-            uLipSync.onLipSyncUpdate.RemoveAllListeners();
-            uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
+            if (FirstTime)
+            {
+                uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
+            }
             WasSuccessful = true;
             return true;
         }

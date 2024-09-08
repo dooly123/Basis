@@ -46,7 +46,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void AvatarSwitchedFallBack()
         {
-            UpdateFaceRenderer();
+            UpdateFaceRenderer();//dont process face for fallback
             OnAvatarSwitchedFallBack?.Invoke();
         }
         public void AvatarSwitched()
@@ -56,19 +56,22 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void UpdateFaceRenderer()
         {
-            if (Avatar != null && Avatar.FaceVisemeMesh != null)
+            FaceisVisible = false;
+            if (Avatar == null)
             {
-                FaceisVisible = Avatar.FaceVisemeMesh.isVisible;
-                if (FaceRenderer == null)
-                {
-                    FaceRenderer = BasisHelpers.GetOrAddComponent<BasisMeshRendererCheck>(Avatar.FaceVisemeMesh.gameObject);
-                    FaceRenderer.Check += UpdateFaceVisibility;
-                }
+                Debug.LogError("Missing Avatar");
             }
-            else
+            if (Avatar.FaceVisemeMesh == null)
             {
-                FaceisVisible = false;
+                Debug.Log("Missing Face for " + DisplayName);
             }
+            UpdateFaceVisibility(Avatar.FaceVisemeMesh.isVisible);
+            if (FaceRenderer != null)
+            {
+                GameObject.Destroy(FaceRenderer);
+            }
+            FaceRenderer = BasisHelpers.GetOrAddComponent<BasisMeshRendererCheck>(Avatar.FaceVisemeMesh.gameObject);
+            FaceRenderer.Check += UpdateFaceVisibility;
         }
     }
 }
