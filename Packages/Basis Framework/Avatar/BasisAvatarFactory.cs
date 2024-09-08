@@ -61,7 +61,7 @@ namespace Basis.Scripts.Avatar
             catch (Exception e)
             {
                 Debug.LogError($"Loading avatar failed: {e}");
-                //here LD await LoadAvatarAfterError(Player);
+                 await LoadAvatarAfterError(Player);
             }
         }
 
