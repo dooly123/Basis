@@ -107,7 +107,6 @@ namespace JigglePhysics
             }
 
             CachedSphereCollider.StartPass();
-            levelOfDetail.UpdateDistance(JigPosition);
             // Combine similar loops for cache-friendliness
             currentFrame = timeAsDouble;
             for (int jiggleIndex = 0; jiggleIndex < jiggleRigsCount; jiggleIndex++)

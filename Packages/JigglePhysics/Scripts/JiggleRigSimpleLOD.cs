@@ -15,9 +15,8 @@ namespace JigglePhysics
         public bool LastVisiblity;
         public bool[] Visible;
         public int VisibleCount;
-        public Vector3 CameraPositon;
-        public float CalculatedDistance;
         public float currentBlend;
+        public float RawCameraDistance;
         public void Initalize(Renderer[] Renderer)
         {
             JiggleRigVisibleFlag jiggleRigVisibleFlag = null;
@@ -102,18 +101,13 @@ namespace JigglePhysics
             {
                 return false;
             }
-            UpdateCameraPosition(camera);
-            return Vector3.Distance(camera.transform.position, position) < DisableAtDistance;
-        }
-        public override void UpdateDistance(Vector3 position)
-        {
-            CalculatedDistance = Vector3.Distance(CameraPositon, position);
-            currentBlend = (CalculatedDistance - DisableAtDistance + blend) / blend;
+            RawCameraDistance = Vector3.Distance(camera.transform.position, position);
+
+            bool Check = RawCameraDistance < DisableAtDistance;
+            currentBlend = (RawCameraDistance - DisableAtDistance + blend) / blend;
             currentBlend = Mathf.Clamp01(1f - currentBlend);
-        }
-        public override void UpdateCameraPosition(Camera Camera)
-        {
-            CameraPositon = Camera.transform.position;
+
+            return Check;
         }
     }
 }
