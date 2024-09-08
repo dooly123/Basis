@@ -23,66 +23,6 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public int rmsWindowSize = 10; // Size of the moving average window
     public float averageRms;
     public RNNoise.NET.Denoiser Denoiser = new RNNoise.NET.Denoiser();
-    public void AdjustVolume()
-    {
-        if (ProcessedLogVolume == 1)
-        {
-            // No need to modify
-            return;
-        }
-
-        for (int Index = 0; Index < ProcessBufferLength; Index++)
-        {
-            processBufferArray[Index] *= ProcessedLogVolume;
-        }
-    }
-    public float GetRMS()
-    {
-        // Use a double for the sum to avoid overflow and precision issues
-        double sum = 0.0;
-
-        for (int Index = 0; Index < ProcessBufferLength; Index++)
-        {
-            float value = processBufferArray[Index];
-            sum += value * value;
-        }
-
-        return Mathf.Sqrt((float)(sum / ProcessBufferLength));
-    }
-    public int GetDataLength(int bufferLength, int head, int position)
-    {
-        if (position < head)
-        {
-            return bufferLength - head + position;
-        }
-        else
-        {
-            return position - head;
-        }
-    }
-    public void ChangeAudio(float volume)
-    {
-        Volume = volume;
-        // ProcessedLogVolume = volume;
-        // Convert the volume to a logarithmic scale
-        float Scaled = 1 + 9 * Volume;
-        ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
-    }
-    public void ApplyDeNoise()
-    {
-        Denoiser.Denoise(processBufferArray);
-    }
-    public void RollingRMS()
-    {
-        float rms = GetRMS();
-        rmsValues[rmsIndex] = rms;
-        rmsIndex = (rmsIndex + 1) % rmsWindowSize;
-        averageRms = rmsValues.Average();
-    }
-    public bool IsTransmitWorthy()
-    {
-        return averageRms > silenceThreshold;
-    }
     public void OnDestroy()
     {
         Denoiser.Dispose();

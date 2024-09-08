@@ -43,10 +43,6 @@ namespace Basis.Scripts.Drivers
                     Jiggler.Initialize(Hips);
                 }
             }
-            if (Jiggler != null)
-            {
-                Jiggler.FinishTeleport();
-            }
         }
         public void PrepareTeleport()
         {

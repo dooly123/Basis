@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Basis.Scripts.Device_Management;
 using System.Threading;
+
 public class MicrophoneRecorder : MicrophoneRecorderBase
 {
     public int head = 0;
@@ -13,8 +14,11 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     public static Action<bool> OnPausedAction;
     public bool MicrophoneIsStarted = false;
     private Thread processingThread;
-    private bool isProcessing = false;
+    private bool isRunning = true;
+    private ManualResetEvent processingEvent = new ManualResetEvent(false);
+    private object processingLock = new object();
     public int position;
+
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -25,6 +29,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         }
         return false;
     }
+
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -35,47 +40,52 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         rmsValues = new float[rmsWindowSize];
         bufferLength = microphoneBufferArray.Length;
         PacketSize = ProcessBufferLength * 4;
-        if (HasEvents == false)
+        if (!HasEvents)
         {
             SMDMicrophone.OnMicrophoneChanged += ResetMicrophones;
             SMDMicrophone.OnMicrophoneVolumeChanged += ChangeAudio;
-            SMDMicrophone.OnMicrophoneUseDenoiserChanged += ConfigureDenioser;
+            SMDMicrophone.OnMicrophoneUseDenoiserChanged += ConfigureDenoiser;
             BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
             HasEvents = true;
         }
         ChangeAudio(SMDMicrophone.SelectedVolumeMicrophone);
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
-        ConfigureDenioser(SMDMicrophone.SelectedDenoiserMicrophone);
+        ConfigureDenoiser(SMDMicrophone.SelectedDenoiserMicrophone);
+
+        StartProcessingThread();  // Start the processing thread once
     }
 
-    private void ConfigureDenioser(bool useDenoiser)
+    private void ConfigureDenoiser(bool useDenoiser)
     {
         UseDenoiser = useDenoiser;
         Debug.Log("Setting Denoiser To " + UseDenoiser);
     }
+
     public new void OnDestroy()
     {
         if (HasEvents)
         {
             SMDMicrophone.OnMicrophoneChanged -= ResetMicrophones;
             SMDMicrophone.OnMicrophoneVolumeChanged -= ChangeAudio;
-            SMDMicrophone.OnMicrophoneUseDenoiserChanged -= ConfigureDenioser;
+            SMDMicrophone.OnMicrophoneUseDenoiserChanged -= ConfigureDenoiser;
             BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
 
             HasEvents = false;
         }
         base.OnDestroy();
-        OnDestroyThread();
+        StopProcessingThread();  // Stop the processing thread
     }
+
     private void OnBootModeChanged(string mode)
     {
         ResetMicrophones(SMDMicrophone.SelectedMicrophone);
     }
+
     public void ResetMicrophones(string newMicrophone)
     {
         if (string.IsNullOrEmpty(newMicrophone))
         {
-            Debug.LogError("microphone was empty or null");
+            Debug.LogError("Microphone was empty or null");
             return;
         }
         if (Microphone.devices.Length == 0)
@@ -83,22 +93,20 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             Debug.LogError("No Microphones found!");
             return;
         }
-        if (Microphone.devices.Contains(newMicrophone) == false)
+        if (!Microphone.devices.Contains(newMicrophone))
         {
-            Debug.LogError("Microphone " + newMicrophone);
+            Debug.LogError("Microphone " + newMicrophone + " not found!");
             return;
         }
         bool isRecording = Microphone.IsRecording(newMicrophone);
         Debug.Log(isRecording ? $"Is Recording {MicrophoneDevice}" : $"Is not Recording {MicrophoneDevice}");
-        bool MicrophoneNotMatchCheck = MicrophoneDevice != newMicrophone;
-        if (MicrophoneNotMatchCheck)
+        if (MicrophoneDevice != newMicrophone)
         {
             StopMicrophone();
         }
-        //if we are not recording or the current microphone does not match the new one.
-        if (isRecording == false)
+        if (!isRecording)
         {
-            if (IsPaused == false)
+            if (!IsPaused)
             {
                 Debug.Log("Starting Microphone :" + newMicrophone);
                 clip = Microphone.Start(newMicrophone, true, BasisOpusSettings.RecordingFullLength, samplingFrequency);
@@ -111,6 +119,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             MicrophoneDevice = newMicrophone;
         }
     }
+
     private void StopMicrophone()
     {
         if (string.IsNullOrEmpty(MicrophoneDevice))
@@ -122,18 +131,22 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         MicrophoneDevice = null;
         MicrophoneIsStarted = false;
     }
+
     public void ToggleIsPaused()
     {
         IsPaused = !IsPaused;
     }
+
     public void SetPauseState(bool isPaused)
     {
         IsPaused = isPaused;
     }
+
     public bool GetPausedState()
     {
         return IsPaused;
     }
+
     public static bool isPaused = false;
     private bool IsPaused
     {
@@ -155,6 +168,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             OnPausedAction?.Invoke(isPaused);
         }
     }
+
     void LateUpdate()
     {
         if (MicrophoneIsStarted)
@@ -168,16 +182,40 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
 
             clip.GetData(microphoneBufferArray, 0);
 
-            if (!isProcessing)
-            {
-                // Start the thread only if it's not already running
-                isProcessing = true;
-                processingThread = new Thread(() => ProcessAudioData(position));
-                processingThread.Start();
-            }
+            // Signal the processing thread to start processing the audio data
+            processingEvent.Set();
         }
     }
-    void ProcessAudioData(int position)
+
+    void StartProcessingThread()
+    {
+        processingThread = new Thread(() =>
+        {
+            while (isRunning)
+            {
+                processingEvent.WaitOne();  // Wait until there's data to process
+                lock (processingLock)
+                {
+                    if (!isRunning) break;  // Exit if the thread should stop
+                    ProcessAudioData(position);
+                }
+                processingEvent.Reset();  // Reset the event to wait for new data
+            }
+        });
+        processingThread.Start();
+    }
+
+    void StopProcessingThread()
+    {
+        lock (processingLock)
+        {
+            isRunning = false;
+            processingEvent.Set();  // Wake up the thread to stop it
+            processingThread.Join();  // Wait for the thread to finish
+        }
+    }
+
+    public void ProcessAudioData(int position)
     {
         int dataLength = GetDataLength(bufferLength, head, position);
 
@@ -194,11 +232,11 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
                 Array.Copy(microphoneBufferArray, head, processBufferArray, 0, ProcessBufferLength);
             }
 
-            AdjustVolume(); // Adjust the volume of the audio data
+            AdjustVolume();  // Adjust the volume of the audio data
 
             if (UseDenoiser)
             {
-                ApplyDeNoise(); // Apply noise gate before processing the audio
+                ApplyDeNoise();  // Apply noise gate before processing the audio
             }
 
             RollingRMS();
@@ -215,16 +253,65 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             head = (head + ProcessBufferLength) % bufferLength;
             dataLength -= ProcessBufferLength;
         }
-
-        // Mark processing as finished
-        isProcessing = false;
     }
-    void OnDestroyThread()
+        public void AdjustVolume()
     {
-        // Ensure the thread is properly terminated when the object is destroyed
-        if (processingThread != null && processingThread.IsAlive)
+        if (ProcessedLogVolume == 1)
         {
-            processingThread.Abort();
+            // No need to modify
+            return;
         }
+
+        for (int Index = 0; Index < ProcessBufferLength; Index++)
+        {
+            processBufferArray[Index] *= ProcessedLogVolume;
+        }
+    }
+    public float GetRMS()
+    {
+        // Use a double for the sum to avoid overflow and precision issues
+        double sum = 0.0;
+
+        for (int Index = 0; Index < ProcessBufferLength; Index++)
+        {
+            float value = processBufferArray[Index];
+            sum += value * value;
+        }
+
+        return Mathf.Sqrt((float)(sum / ProcessBufferLength));
+    }
+    public int GetDataLength(int bufferLength, int head, int position)
+    {
+        if (position < head)
+        {
+            return bufferLength - head + position;
+        }
+        else
+        {
+            return position - head;
+        }
+    }
+    public void ChangeAudio(float volume)
+    {
+        Volume = volume;
+        // ProcessedLogVolume = volume;
+        // Convert the volume to a logarithmic scale
+        float Scaled = 1 + 9 * Volume;
+        ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
+    }
+    public void ApplyDeNoise()
+    {
+        Denoiser.Denoise(processBufferArray);
+    }
+    public void RollingRMS()
+    {
+        float rms = GetRMS();
+        rmsValues[rmsIndex] = rms;
+        rmsIndex = (rmsIndex + 1) % rmsWindowSize;
+        averageRms = rmsValues.Average();
+    }
+    public bool IsTransmitWorthy()
+    {
+        return averageRms > silenceThreshold;
     }
 }
