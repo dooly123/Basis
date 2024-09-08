@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Jobs;
@@ -253,8 +252,7 @@ namespace JigglePhysics
                                         JiggleRigsRuntime[jiggleIndex].Runtimedata.currentFixedAnimatedBonePosition[ParentIndex]
                                     );
 
-                                    JiggleRigsRuntime[jiggleIndex].Runtimedata.workingPosition[PointIndex] = Vector3.Lerp(
-                                        newPosition,
+                                    JiggleRigsRuntime[jiggleIndex].Runtimedata.workingPosition[PointIndex] = Vector3.Lerp( newPosition,
                                         JiggleRigsRuntime[jiggleIndex].Runtimedata.workingPosition[jiggleRigs[jiggleIndex].JiggleBones[PointIndex].childIndex] + dir * lengthToParent,
                                         JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.lengthElasticity * JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.lengthElasticity * 0.5f
                                     );
@@ -265,7 +263,7 @@ namespace JigglePhysics
                         // Adjust working positions based on parent constraints
                         for (int PointIndex = 0; PointIndex < simulatedPointsCount[jiggleIndex]; PointIndex++)
                         {
-                            if (jiggleRigs[jiggleIndex].JiggleBones[PointIndex].JiggleParentIndex == -1 || !JiggleRigsRuntime[jiggleIndex].Runtimedata.hasTransform[PointIndex])
+                            if (!JiggleRigsRuntime[jiggleIndex].Runtimedata.hasTransform[PointIndex] || jiggleRigs[jiggleIndex].JiggleBones[PointIndex].JiggleParentIndex == -1)
                             {
                                 continue;
                             }
@@ -388,9 +386,10 @@ namespace JigglePhysics
                     Vector3 targetPosition = (percentage == 0) ? PreviousAnimated : Vector3.Lerp(PreviousAnimated, CurrentAnimated, percentage);
                     Vector3 childTargetPosition = (percentage == 0) ? ChildPreviousAnimated : Vector3.Lerp(ChildPreviousAnimated, ChildCurrentAnimated, percentage);
                     // Blend positions
-                    Vector3 positionBlend = Vector3.Lerp(targetPosition, JiggleRigsRuntime[jiggleIndex].Runtimedata.extrapolatedPosition[SimulatedIndex], JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.blend);
+                    float Blend = JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.blend;
+                    Vector3 positionBlend = Vector3.Lerp(targetPosition, JiggleRigsRuntime[jiggleIndex].Runtimedata.extrapolatedPosition[SimulatedIndex], Blend);
 
-                    Vector3 childPositionBlend = Vector3.Lerp(childTargetPosition, JiggleRigsRuntime[jiggleIndex].Runtimedata.extrapolatedPosition[ChildIndex], JiggleRigsRuntime[jiggleIndex].jiggleSettingsdata.blend);
+                    Vector3 childPositionBlend = Vector3.Lerp(childTargetPosition, JiggleRigsRuntime[jiggleIndex].Runtimedata.extrapolatedPosition[ChildIndex], Blend);
 
                     if (jiggleRigs[jiggleIndex].JiggleBones[SimulatedIndex].JiggleParentIndex != -1)
                     {

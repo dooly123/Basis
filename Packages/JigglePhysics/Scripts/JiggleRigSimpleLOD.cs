@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System;
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -8,14 +7,10 @@ namespace JigglePhysics
     [System.Serializable]
     public class JiggleRigSimpleLOD : JiggleRigLOD
     {
-
         [Tooltip("Distance to disable the jiggle rig")]
-        [SerializeField]
-        float distance = 30;
+        public float distance = 30;
         [Tooltip("Level of detail manager. This system will control how the jiggle rig saves performance cost.")]
-        [SerializeField]
-        float blend = 0.5f;
-        [SerializeField]
+        public float blend = 0.5f;
         public Camera currentCamera;
         public bool LastVisiblity;
         public bool[] Visible;

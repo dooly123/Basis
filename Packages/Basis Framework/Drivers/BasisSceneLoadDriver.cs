@@ -9,6 +9,11 @@ namespace Basis.Scripts.Drivers
     public static class BasisSceneLoadDriver
     {
         public static ProgressReport progressCallback;
+        /// <summary>
+        /// local but can be used remote
+        /// </summary>
+        /// <param name="SceneToLoad"></param>
+        /// <returns></returns>
         public static async Task LoadSceneAddressables(string SceneToLoad)
         {
             Debug.Log("Loading Scene " + SceneToLoad);
@@ -16,11 +21,18 @@ namespace Basis.Scripts.Drivers
             await AddressableLoadFactory.LoadAddressableResourceAsync<SceneInstance>(Process);
             Debug.Log("Loaded Scene " + SceneToLoad);
         }
-        public static async Task LoadSceneAssetBundle(string SceneToLoad,string HashUrl)
+
+        /// <summary>
+        /// remote but can be used local.
+        /// </summary>
+        /// <param name="SceneToLoadUrl"></param>
+        /// <param name="HashUrl"></param>
+        /// <returns></returns>
+        public static async Task LoadSceneAssetBundle(string SceneToLoadUrl,string HashUrl = "")
         {
-            Debug.Log("Loading Scene " + SceneToLoad);
-            await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoad, HashUrl, BasisStorageManagement.WorldDirectory, progressCallback);
-            Debug.Log("Loaded Scene " + SceneToLoad);
+            Debug.Log("Loading Scene " + SceneToLoadUrl);
+            await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoadUrl, HashUrl, BasisStorageManagement.WorldDirectory, progressCallback);
+            Debug.Log("Loaded Scene " + SceneToLoadUrl);
         }
     }
 }

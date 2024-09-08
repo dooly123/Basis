@@ -1,5 +1,4 @@
 using Basis.Scripts.BasisSdk;
-using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using JigglePhysics;
 using System.Collections.Generic;
@@ -10,29 +9,28 @@ namespace Basis.Scripts.Drivers
     {
         public BasisPlayer player;
         public JiggleRigBuilder Jiggler;
-        public JiggleRigSimpleLOD SimpleJiggleLOD = new JiggleRigSimpleLOD();
         public void OnCalibration()
         {
             if (Jiggler != null)
             {
-                PrepareTeleport();
+                GameObject.Destroy(Jiggler);
             }
             if (player.Avatar != null)
             {
                 if (player.Avatar.JiggleStrains != null && player.Avatar.JiggleStrains.Count != 0)
                 {
-                    if (Jiggler != null)
-                    {
-                        GameObject.Destroy(Jiggler);
-                    }
+                    int Count = player.Avatar.JiggleStrains.Count;
                     Jiggler = player.Avatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
-                    SimpleJiggleLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
-                    Jiggler.levelOfDetail = SimpleJiggleLOD;
+
+                    Jiggler.levelOfDetail = new JiggleRigSimpleLOD
+                    {
+                        currentCamera = BasisLocalCameraDriver.Instance.Camera
+                    };
                     Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
-                    SimpleJiggleLOD.Initalize(Renderer);
+                    Jiggler.levelOfDetail.Initalize(Renderer);
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
                     List<JiggleRigRuntime> JigglesRuntime = new List<JiggleRigRuntime>();
-                    for (int StrainIndex = 0; StrainIndex < player.Avatar.JiggleStrains.Count; StrainIndex++)
+                    for (int StrainIndex = 0; StrainIndex < Count; StrainIndex++)
                     {
                         BasisJiggleStrain Strain = player.Avatar.JiggleStrains[StrainIndex];
                         JiggleRig JiggleRig = Conversion(Strain);

@@ -81,7 +81,7 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     }
     public bool IsTransmitWorthy()
     {
-        return averageRms < silenceThreshold;
+        return averageRms > silenceThreshold;
     }
     public void OnDestroy()
     {

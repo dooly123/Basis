@@ -201,6 +201,8 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
                 ApplyDeNoise(); // Apply noise gate before processing the audio
             }
 
+            RollingRMS();
+
             if (IsTransmitWorthy())
             {
                 OnHasAudio?.Invoke();
