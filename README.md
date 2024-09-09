@@ -16,7 +16,7 @@ The Social VR Framework</br>
 As a framework, Basis provides you with all the necessary tools to create your own Social VR Platform to use as a Ready-To-Use Foundation to be built upon.
 This allows you to focus on your vision, without needing to do any heavy lifting to get going. Basis is designed with great care to remove any barrier that previously made VR projects notoriously hard to set up.
 
-We are a MIT-Licensed Open-Source project with the focus on open development and full access to any optional modification desired or required.
+We are a MIT-Licensed Open-Source project with a focus on open development and full access to any optional modification desired or required.
 
 Our goal is to help equip VR Creators, so we can accelerate the growth of VR.
 
@@ -26,14 +26,14 @@ We are actively working on Basis. If you like what you see please consider contr
 
  ## How you can Contribute
 
-After a half-year of development we have only recently put Basis on github, that means while everything is operational, we still have to work on fixing plenty of bugs.
+After a half-year of development, we have only recently put Basis on github, which that means while everything is operational, we still have to work on fixing plenty of bugs.
 
-Do you have a suggestion to improve Basis? Please Fork the repo and create a pull request! You can also open an issue with the tag “improvement”.
+Do you have a suggestion for improving Basis? Please Fork the repo and create a pull request! You can also open an issue with the tag “improvement”.
 Not sure how to contribute but still wanting to help out? Consider donating! We appreciate any help possible.
 
 <noscript><a href="https://liberapay.com/dooly/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript> [Github Sponsor](https://github.com/sponsors/dooly123)</br>[KoFi](https://ko-fi.com/dooly)</br>
 
-Please help shape the future of Basis and leave your mark in its foundation. 
+Please help shape the future of Basis and leave your mark on its foundation. 
 
  #### Creating a Fork
 
@@ -45,7 +45,7 @@ Please help shape the future of Basis and leave your mark in its foundation.
 
  ## Installation
  
-This project is currently using Unity 6 (6000.0.15f1)
+This project is currently using Unity 6 (6000.0.18f1)
 Other Unity versions may work but will require changes and adaptations.
 Currently, only OPENXR is supported.
 
@@ -75,6 +75,7 @@ Distributed under the MIT License. See [MIT License](https://opensource.org/lice
 
 This would not be possible without the following:
 
+- [ULipSync](https://github.com/hecomi/uLipSync)
 - [DarkRift 2](https://github.com/DarkRiftNetworking/ )
 - [UnityJigglePhysics](https://github.com/naelstrof/UnityJigglePhysics)
 - [UnityOpus](https://github.com/TyounanMOTI/UnityOpus)
