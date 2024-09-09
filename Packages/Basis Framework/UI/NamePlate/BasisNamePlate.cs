@@ -35,18 +35,18 @@ namespace Basis.Scripts.UI.NamePlate
         }
         private void ProgresReport(float progress)
         {
-            if (HasActiveLoadingbar == false)
+            if (progress != 100)
             {
-                StartProgressBar();
+                if (HasActiveLoadingbar == false)
+                {
+                    StartProgressBar();
+                }
+
                 UpdateProgressBar(progress);
             }
             else
             {
-                UpdateProgressBar(progress);
-                if (progress == 100)
-                {
-                    StopProgressBar();
-                }
+                StopProgressBar();
             }
         }
 

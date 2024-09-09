@@ -115,10 +115,8 @@ namespace Basis.Scripts.Avatar
 
         private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, string hash, BasisPlayer Player)
         {
-            return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(
-                AvatarAddress, hash, AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress),
-                BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad
-            );
+            string FileName = AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress);
+            return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, hash, FileName, BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad);
         }
 
         private static void InitializePlayerAvatar(BasisPlayer Player, GameObject Output)

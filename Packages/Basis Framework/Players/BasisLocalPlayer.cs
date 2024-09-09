@@ -43,6 +43,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public bool HasEvents = false;
         public MicrophoneRecorder MicrophoneRecorder;
         public static string MainCamera = "Assets/Prefabs/Loadins/Main Camera.prefab";
+        public bool SpawnPlayerOnSceneLoad = true;
         public async Task LocalInitialize()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -133,7 +134,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {
-            BasisAvatarStrainJiggleDriver.PrepareTeleport();
+         //   BasisAvatarStrainJiggleDriver.PrepareTeleport();
             Debug.Log("Teleporting");
             Move.enabled = false;
             transform.SetPositionAndRotation(position, rotation);
@@ -142,12 +143,12 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 AvatarDriver.AnimatorDriver.HandleTeleport();
             }
-            BasisAvatarStrainJiggleDriver.FinishTeleport();
+           // BasisAvatarStrainJiggleDriver.FinishTeleport();
             OnSpawnedEvent?.Invoke();
         }
         public void OnSceneLoadedCallback(Scene scene, LoadSceneMode mode)
         {
-            if (BasisSceneFactory.Instance != null)
+            if (BasisSceneFactory.Instance != null && SpawnPlayerOnSceneLoad)
             {
                 //swap over to on scene load
                 BasisSceneFactory.Instance.SpawnPlayer(this);

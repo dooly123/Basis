@@ -14,7 +14,6 @@ public static class BasisGameObjectAssetBundleManager
         }
         string localPath = Path.Combine(folderPath, AddressableManagement.GetFileNameFromUrl(url));
         GameObject LoadRequest = await CheckAndLoadGameObjectBundleAsync(url, Hash, localPath, assetName, Position, Rotation, progressCallback);
-        progressCallback?.Invoke(100);
         return LoadRequest;
     }
 
@@ -33,6 +32,7 @@ public static class BasisGameObjectAssetBundleManager
         BasisLoadedAssets BasisLoadedAssets = await LoadBundle(url, Hash, localPath, progressCallback);
         if(BasisLoadedAssets == null)
         {
+            progressCallback?.Invoke(100); // Set progress to 100 when done
             return null;
         }
         if (BasisLoadedAssets.Bundle != null)
@@ -49,7 +49,6 @@ public static class BasisGameObjectAssetBundleManager
             {
                 Debug.LogError("cant find Gameobject with name " + assetName);
             }
-
             Debug.LogError("Failed to load the specified GameObject from AssetBundle.");
         }
         else
@@ -63,7 +62,7 @@ public static class BasisGameObjectAssetBundleManager
                 Debug.LogError("Failed to load AssetBundle from disk. was marked as bundle not loaded");
             }
         }
-
+        progressCallback?.Invoke(100); // Set progress to 100 when done
         return null;
     }
 }

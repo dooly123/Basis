@@ -13,7 +13,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public string UUID;
         public BasisAvatar Avatar;
         public AddressableGenericResource AvatarAddressableGenericResource;
-        public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
+      //  public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
         public string AvatarUrl;
         public byte AvatarLoadMode;//0 downloading 1 local
         public bool HasAvatarDriver;
@@ -35,9 +35,9 @@ namespace Basis.Scripts.BasisSdk.Players
                 Debug.LogError("Mising CharacterIKCalibration");
                 HasAvatarDriver = false;
             }
-            if (BasisAvatarStrainJiggleDriver != null)
+          // if (BasisAvatarStrainJiggleDriver != null)
             {
-                BasisAvatarStrainJiggleDriver.OnCalibration();
+          //      BasisAvatarStrainJiggleDriver.OnCalibration();
             }
         }
         private void UpdateFaceVisibility(bool State)
