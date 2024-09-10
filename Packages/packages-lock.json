@@ -18,6 +18,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.basis.basistests": {
+      "version": "file:basistests",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.hecomi.ulipsync": {
       "version": "file:uLipSync",
       "depth": 0,

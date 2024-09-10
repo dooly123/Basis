@@ -1,7 +1,7 @@
+using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using UnityEngine;
-using UnityEngine.Rendering;
 using static SerializableDarkRift;
 
 namespace Basis.Scripts.Tests

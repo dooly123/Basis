@@ -34,7 +34,7 @@ namespace Basis.Scripts.UI.UI_Panels
                 AdvancedSettings.onClick.AddListener(ToggleAdvancedSettings);
             }
             BasisSceneLoadDriver.progressCallback += ProgresReport;
-            BasisNetworkManagement.OnExists += LoadCurrentSettings;
+            BasisNetworkManagement.OnEnableInstanceCreate += LoadCurrentSettings;
         }
         public void LoadCurrentSettings()
         {
