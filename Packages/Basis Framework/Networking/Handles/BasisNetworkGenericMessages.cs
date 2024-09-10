@@ -93,6 +93,7 @@ public static class BasisNetworkGenericMessages
     // Handler for server avatar data messages with no recipients and no payload
     public static void HandleServerAvatarDataMessage_NoRecipients_NoPayload(DarkRiftReader reader)
     {
+        Debug.LogError("interpreting HandleServerAvatarDataMessage_NoRecipients_NoPayload");
         reader.Read(out ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoRecipients_NoPayload);
         ushort avatarLinkID = serverAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage.assignedAvatarPlayer; // destination
         if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
@@ -106,6 +107,10 @@ public static class BasisNetworkGenericMessages
             {
                 var output = serverAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage;
                 player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage_NoRecipients_NoPayload.playerIdMessage.playerID, output.messageIndex, null,null); // Pass null payload
+            }
+            else
+            {
+                Debug.LogError("cant accept payload no avatar!");
             }
         }
         else

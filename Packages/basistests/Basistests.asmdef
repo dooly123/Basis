@@ -8,13 +8,19 @@
         "GUID:b4ae365a73764ee478adc74cb89832fe",
         "GUID:e0cd26848372d4e5c891c569017e11f1",
         "GUID:2665a8d13d1b3f18800f46e256720795",
-        "GUID:84651a3751eca9349aac36a66bba901b"
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "DarkRift.Client.dll",
+        "DarkRift.dll",
+        "DarkRift.Server.dll",
+        "LiteNetLibListenerPlugin.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

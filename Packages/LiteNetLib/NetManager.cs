@@ -1567,11 +1567,8 @@ namespace LiteNetLib
             _updateTriggerEvent.Set();
             if (!_manualMode)
             {
-                if (_logicThread != null)
-                {
-                    _logicThread.Join();
-                    _logicThread = null;
-                }
+                _logicThread.Join();
+                _logicThread = null;
             }
 
             //clear peers

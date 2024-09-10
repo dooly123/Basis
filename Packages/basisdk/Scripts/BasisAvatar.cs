@@ -34,9 +34,19 @@ namespace Basis.Scripts.BasisSdk
         /// <param name="buffer"></param>
         /// <param name="DeliveryMethod"></param>
         /// <param name="Recipients">if null everyone but self, you can include yourself to make it loop back over the network</param>
-        public void NetworkMessageSend(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null)
+        public void NetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null)
         {
             OnNetworkMessageSend?.Invoke(MessageIndex, buffer, DeliveryMethod, Recipients);
+        }
+        /// <summary>
+        /// this is used for sending Network Messages
+        /// </summary>
+        /// <param name="MessageIndex"></param>
+        /// <param name="DeliveryMethod"></param>
+        /// <param name="Recipients">if null everyone but self, you can include yourself to make it loop back over the network</param>
+        public void NetworkMessageSend(byte MessageIndex, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable)
+        {
+            OnNetworkMessageSend?.Invoke(MessageIndex, null, DeliveryMethod);
         }
         /// <summary>
         /// this is used for Receiving Network Messages

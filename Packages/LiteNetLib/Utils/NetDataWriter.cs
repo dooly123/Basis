@@ -344,7 +344,6 @@ namespace LiteNetLib.Utils
             Put(endPoint.Port);
         }
 
-
         public void Put(string value)
         {
             Put(value, 0);

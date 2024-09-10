@@ -85,12 +85,17 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             {
                 Recipients = null;
             }
-
+            // Check if Recipients array is valid or not
+            if (buffer != null && buffer.Length == 0)
+            {
+                buffer = null;
+            }
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 // Check if there are no recipients and no payload
                 if (Recipients == null && buffer == null)
                 {
+                    Debug.Log("Sending with no Recipients or buffer");
                     // No recipients, no payload case
                     AvatarDataMessage_NoRecipients_NoPayload avatarDataMessage = new AvatarDataMessage_NoRecipients_NoPayload
                     {
@@ -107,6 +112,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 // Check if there are no recipients but there is a payload
                 else if (Recipients == null)
                 {
+                    Debug.Log("Sending with no Recipients ");
                     // No recipients but has payload
                     AvatarDataMessage_NoRecipients avatarDataMessage = new AvatarDataMessage_NoRecipients
                     {
@@ -124,6 +130,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 // Case where there are recipients (payload could be null or not)
                 else
                 {
+                    Debug.Log("Sending with Recipients and buffer");
                     AvatarDataMessage avatarDataMessage = new AvatarDataMessage
                     {
                         assignedAvatarPlayer = NetworkedPlayer.NetId,
