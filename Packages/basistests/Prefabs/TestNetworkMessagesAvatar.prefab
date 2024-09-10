@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 1101372594041093526}
   - component: {fileID: 7617675277052637975}
   - component: {fileID: 3394121841743186029}
-  - component: {fileID: 6863670055108481208}
   - component: {fileID: 5145596988306134416}
   m_Layer: 0
   m_Name: TestNetworkMessagesAvatar
@@ -178,23 +177,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6863670055108481208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1072945206867927742}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 115eaaf7a823c1447af757ea326b7393, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  avatar: {fileID: 7617675277052637975}
-  MessageIndexTest: 0
-  SubmittingData: 01
-  Recipients: 
-  BasisPlayer: {fileID: 0}
 --- !u!114 &5145596988306134416
 MonoBehaviour:
   m_ObjectHideFlags: 0
