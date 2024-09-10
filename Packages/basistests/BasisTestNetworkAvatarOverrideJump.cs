@@ -40,16 +40,10 @@ public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour
     }
     private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer = null, ushort[] Recipients = null)
     {
+        Debug.Log("got message " + MessageIndex);
         if (MessageIndex == MessageIndexTest)
         {
-            if (BasisNetworkManagement.AvatarToPlayer(avatar, out BasisPlayer))
-            {
-                if (BasisPlayer.IsLocal)
-                {
-                    BasisLocalPlayer Local = (BasisLocalPlayer)BasisPlayer;
-                    Local.Move.HandleJump();
-                }
-            }
+            BasisLocalPlayer.Instance.Move.HandleJump();
         }
     }
 }
