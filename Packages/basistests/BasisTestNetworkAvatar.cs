@@ -55,6 +55,6 @@ public class BasisTestNetworkAvatar : MonoBehaviour
 
     private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients = null)
     {
-        Debug.Log("OnNetworkMessageReceived from player " + PlayerID + " with message Index " + MessageIndex + " | " + buffer.Length);
+      //  Debug.Log("OnNetworkMessageReceived from player " + PlayerID + " with message Index " + MessageIndex + " | " + buffer.Length);
     }
 }
