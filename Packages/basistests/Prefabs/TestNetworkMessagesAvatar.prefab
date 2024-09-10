@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 3394121841743186029}
   - component: {fileID: 6863670055108481208}
   m_Layer: 0
-  m_Name: TestAvatar 1
+  m_Name: TestNetworkMessagesAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

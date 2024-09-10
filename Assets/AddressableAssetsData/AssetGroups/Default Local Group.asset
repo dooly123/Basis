@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 37c75a6cf72db324eb01200602299fc8
   m_SerializeEntries:
   - m_GUID: 006588c022f93b045befde2b2edd4114
-    m_Address: TestNetworMessagesAvatar
+    m_Address: TestNetworkMessagesAvatar
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

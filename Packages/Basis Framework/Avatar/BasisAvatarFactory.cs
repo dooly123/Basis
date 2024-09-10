@@ -42,11 +42,16 @@ namespace Basis.Scripts.Avatar
                     case 1://localload
                         Debug.Log("Requested Avatar was a Addressable Avatar " + AvatarAddress);
                         var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
 
                         if (GameObjects.Count > 0)
                         {
+                            Debug.Log("Found Avatar for " + AvatarAddress);
                             Output = GameObjects[0];
+                        }
+                        else
+                        {
+                            Debug.LogError("Cant Find Local Avatar for " + AvatarAddress);
                         }
                         break;
                    default:
