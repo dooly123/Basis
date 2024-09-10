@@ -46,6 +46,7 @@ namespace Basis.Scripts.Networking
                 Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
                 BasisNetworkManagement.Instance.Client.SendMessage(ReadyMessage, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
                 BasisNetworkManagement.OnLocalPlayerJoined?.Invoke(player, BasisLocalPlayer);
+                BasisNetworkManagement.HasSentOnLocalPlayerJoin = true;
             }
         }
     }

@@ -78,14 +78,16 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             }
         }
 
-        private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod)
+        private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod, ushort[] Recipients = null)
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
                 {
+                    assignedAvatarPlayer = NetworkedPlayer.NetId,
                     messageIndex = MessageIndex,
-                    buffer = buffer
+                    payload = buffer,
+                    recipients = Recipients
                 };
                 writer.Write(AvatarDataMessage);
                 using (var msg = Message.Create(BasisTags.AvatarGenericMessage, writer))

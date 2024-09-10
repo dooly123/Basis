@@ -23,11 +23,22 @@ namespace Basis.Scripts.BasisSdk
         public AvatarNetworkMessageReceiveEvent OnNetworkMessageReceived;
         public AvatarNetworkMessageSendEvent OnNetworkMessageSend;
         /// <summary>
+        /// this is used for sending Network Messages
+        /// </summary>
+        /// <param name="MessageIndex"></param>
+        /// <param name="buffer"></param>
+        /// <param name="DeliveryMethod"></param>
+        /// <param name="Recipients">if null everyone but self, you can include yourself to make it loop back over the network</param>
+        public void NetworkMessageSend(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null)
+        {
+            OnNetworkMessageSend?.Invoke(MessageIndex, buffer, DeliveryMethod, Recipients);
+        }
+        /// <summary>
         /// this is used for Receiving Network Messages
         /// </summary>
         /// <param name="MessageIndex"></param>
         /// <param name="buffer"></param>
-        public delegate void AvatarNetworkMessageReceiveEvent(byte MessageIndex, byte[] buffer);
+        public delegate void AvatarNetworkMessageReceiveEvent(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients = null);
 
 
         /// <summary>
@@ -36,7 +47,7 @@ namespace Basis.Scripts.BasisSdk
         /// <param name="MessageIndex"></param>
         /// <param name="buffer"></param>
         /// <param name="DeliveryMethod"></param>
-
-        public delegate void AvatarNetworkMessageSendEvent(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable);
+        /// <param name="Recipients">if null everyone but self, you can include yourself to make it loop back over the network</param>
+        public delegate void AvatarNetworkMessageSendEvent(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null);
     }
 }

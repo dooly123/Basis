@@ -9,12 +9,12 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 using static SerializableDarkRift;
 namespace Basis.Scripts.Networking
 {
-    public static class BasisNetworkCreateRemote
+    public static class BasisNetworkHandleRemote
     {
         public static async Task HandleCreateRemotePlayer(DarkRiftReader reader,Transform Parent)
         {
             reader.Read(out ServerReadyMessage SRM);
-            await BasisNetworkCreateRemote.CreateRemotePlayer(SRM, Parent);
+            await BasisNetworkHandleRemote.CreateRemotePlayer(SRM, Parent);
         }
         public static async Task HandleCreateAllRemoteClients(DarkRiftReader reader, Transform Parent)
         {
@@ -22,7 +22,7 @@ namespace Basis.Scripts.Networking
             int RemoteLength = allRemote.serverSidePlayer.Length;
             for (int PlayerIndex = 0; PlayerIndex < RemoteLength; PlayerIndex++)
             {
-                await BasisNetworkCreateRemote.CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex], Parent);
+                await BasisNetworkHandleRemote.CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex], Parent);
             }
         }
         public static async Task<BasisNetworkedPlayer> CreateRemotePlayer(ServerReadyMessage ServerReadyMessage, InstantiationParameters instantiationParameters)

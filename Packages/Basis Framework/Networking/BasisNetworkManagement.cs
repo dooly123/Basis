@@ -9,7 +9,6 @@ using DarkRift.Server.Plugins.Commands;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static SerializableDarkRift;
@@ -33,6 +32,7 @@ namespace Basis.Scripts.Networking
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>
         public static Action<BasisNetworkedPlayer, BasisLocalPlayer> OnLocalPlayerJoined;
+        public static bool HasSentOnLocalPlayerJoin = false;
         /// <summary>
         /// this occurs after a remote user has been authenticated and joined & spawned
         /// </summary>
@@ -45,7 +45,7 @@ namespace Basis.Scripts.Networking
             {
                 Instance = this;
             }
-            if(BasisScene.Instance != null)
+            if (BasisScene.Instance != null)
             {
                 SetupSceneEvents(BasisScene.Instance);
             }
@@ -137,10 +137,10 @@ namespace Basis.Scripts.Networking
                             BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
                             break;
                         case BasisTags.CreateRemotePlayerTag:
-                            await BasisNetworkCreateRemote.HandleCreateRemotePlayer(reader, this.transform);
+                            await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
                             break;
                         case BasisTags.CreateRemotePlayersTag:
-                            await BasisNetworkCreateRemote.HandleCreateAllRemoteClients(reader, this.transform);
+                            await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
                             break;
                         case BasisTags.SceneGenericMessage:
                             BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
@@ -154,6 +154,120 @@ namespace Basis.Scripts.Networking
                     }
                 }
             }
+        }
+        public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
+        {
+            if (Instance == null)
+            {
+                Debug.LogError("Network Not Ready!");
+                NetworkedPlayer = null;
+                BasisPlayer = null;
+                return false;
+            }
+            if (Avatar == null)
+            {
+                Debug.LogError("Missing Avatar! Make sure your not sending in a null item");
+                NetworkedPlayer = null;
+                BasisPlayer = null;
+                return false;
+            }
+            int AvatarInstance = Avatar.GetInstanceID();
+            foreach (BasisNetworkedPlayer NPlayer in Instance.Players.Values)
+            {
+                if (NPlayer == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player.Avatar == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player.Avatar.GetInstanceID() == AvatarInstance)
+                {
+                    NetworkedPlayer = NPlayer;
+                    BasisPlayer = NPlayer.Player;
+                    return true;
+                }
+            }
+            NetworkedPlayer = null;
+            BasisPlayer = null;
+            return false;
+        }
+        public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer)
+        {
+            if (Instance == null)
+            {
+                Debug.LogError("Network Not Ready!");
+                BasisPlayer = null;
+                return false;
+            }
+            if (Avatar == null)
+            {
+                Debug.LogError("Missing Avatar! Make sure your not sending in a null item");
+                BasisPlayer = null;
+                return false;
+            }
+            int AvatarInstance = Avatar.GetInstanceID();
+            foreach (BasisNetworkedPlayer NPlayer in Instance.Players.Values)
+            {
+                if (NPlayer == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player.Avatar == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player.Avatar.GetInstanceID() == AvatarInstance)
+                {
+                    BasisPlayer = NPlayer.Player;
+                    return true;
+                }
+            }
+            BasisPlayer = null;
+            return false;
+        }
+        public static bool PlayerToNetworkedPlayer(BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
+        {
+            if (Instance == null)
+            {
+                Debug.LogError("Network Not Ready!");
+                NetworkedPlayer = null;
+                return false;
+            }
+            if (BasisPlayer == null)
+            {
+                Debug.LogError("Missing Player! make sure your not sending in a null item");
+                NetworkedPlayer = null;
+                return false;
+            }
+            int BasisPlayerInstance = BasisPlayer.GetInstanceID();
+            foreach (BasisNetworkedPlayer NPlayer in Instance.Players.Values)
+            {
+                if (NPlayer == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player == null)
+                {
+                    continue;
+                }
+                if (NPlayer.Player.GetInstanceID() == BasisPlayerInstance)
+                {
+                    NetworkedPlayer = NPlayer;
+                    return true;
+                }
+            }
+            NetworkedPlayer = null;
+            return false;
         }
     }
 }

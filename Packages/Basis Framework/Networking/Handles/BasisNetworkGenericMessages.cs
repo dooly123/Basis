@@ -11,20 +11,25 @@ public static class BasisNetworkGenericMessages
     public static void HandleServerSceneDataMessage(DarkRiftReader reader)
     {
         reader.Read(out ServerSceneDataMessage ServerAvatarChangeMessage);
-        ushort PlayerID = ServerAvatarChangeMessage.PlayerIdMessage.playerID;
-        SceneDataMessage SceneDataMessage = ServerAvatarChangeMessage.SceneDataMessage;
+        ushort PlayerID = ServerAvatarChangeMessage.playerIdMessage.playerID;
+        SceneDataMessage SceneDataMessage = ServerAvatarChangeMessage.sceneDataMessage;
         BasisScene.Instance.OnNetworkMessageReceived?.Invoke(PlayerID, SceneDataMessage.messageIndex, SceneDataMessage.buffer);
     }
     public static void HandleServerAvatarDataMessage(DarkRiftReader reader)
     {
         reader.Read(out ServerAvatarDataMessage ServerAvatarDataMessage);
-        ushort PlayerID = ServerAvatarDataMessage.playerIdMessage.playerID;
-        if (BasisNetworkManagement.Instance.Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
+        ushort AvatarLinkID = ServerAvatarDataMessage.avatarDataMessage.assignedAvatarPlayer;//destination
+        if (BasisNetworkManagement.Instance.Players.TryGetValue(AvatarLinkID, out BasisNetworkedPlayer Player))
         {
+            if(Player.Player == null)
+            {
+                Debug.LogError("Missing Player! " + AvatarLinkID);
+                return;
+            }
             if (Player.Player.Avatar != null)
             {
                 AvatarDataMessage output = ServerAvatarDataMessage.avatarDataMessage;
-                Player.Player.Avatar.OnNetworkMessageReceived?.Invoke(output.messageIndex, output.buffer);
+                Player.Player.Avatar.OnNetworkMessageReceived?.Invoke(ServerAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, output.recipients);
             }
         }
         else
@@ -32,14 +37,15 @@ public static class BasisNetworkGenericMessages
             Debug.Log("Missing Player For Message " + ServerAvatarDataMessage.playerIdMessage.playerID);
         }
     }
-    public static void OnNetworkMessageSend(ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable)
+    public static void OnNetworkMessageSend(ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null)
     {
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
             SceneDataMessage AvatarDataMessage = new SceneDataMessage
             {
                 messageIndex = MessageIndex,
-                buffer = buffer
+                buffer = buffer,
+                recipients = Recipients,
             };
             writer.Write(AvatarDataMessage);
             using (var msg = Message.Create(BasisTags.SceneGenericMessage, writer))

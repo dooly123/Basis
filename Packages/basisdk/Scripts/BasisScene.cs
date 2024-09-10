@@ -25,7 +25,7 @@ namespace Basis.Scripts.BasisSdk
         /// </summary>
         /// <param name="MessageIndex"></param>
         /// <param name="buffer"></param>
-        public delegate void SceneNetworkMessageReceiveEvent(ushort PlayerID, ushort MessageIndex, byte[] buffer);
+        public delegate void SceneNetworkMessageReceiveEvent(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients = null);
 
 
         /// <summary>
@@ -35,6 +35,6 @@ namespace Basis.Scripts.BasisSdk
         /// <param name="buffer"></param>
         /// <param name="DeliveryMethod"></param>
 
-        public delegate void SceneNetworkMessageSendEvent(ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable);
+        public delegate void SceneNetworkMessageSendEvent(ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null);
     }
 }

@@ -105,6 +105,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93a3f727319dd564e9cecc34d3584422
+    m_Address: TestAvatar
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 98a748106e6c47748a99038c99c23bb8
     m_Address: LoadingAvatar
     m_ReadOnly: 0

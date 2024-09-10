@@ -9,7 +9,8 @@ namespace Basis.Scripts.UI.UI_Panels
 {
     public class BasisUIAvatarSelection : BasisUIBase
     {
-        public List<string> AvatarUrls = new List<string>();
+        [SerializeField]
+        public List<AvatarLoadRequest> AvatarUrls = new List<AvatarLoadRequest>();
         public RectTransform ParentedAvatarButtons;
         public GameObject ButtonPrefab; // Prefab for the button
         public const string AvatarSelection = "BasisUIAvatarSelection";
@@ -21,11 +22,18 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             BasisCursorManagement.UnlockCursor(nameof(BasisUIAvatarSelection));
         }
+        [System.Serializable]
+        public struct AvatarLoadRequest
+        {
+            public string AvatarAddress;
+            //LoadModeNetworkDownloadable = 0; LoadModeLocal = 1;
+            public byte IsLocalLoad;
+        }
         public void Initialize()
         {
             for (int Index = 0; Index < AvatarUrls.Count; Index++)
             {
-                string url = AvatarUrls[Index];
+                AvatarLoadRequest url = AvatarUrls[Index];
                 // Create a new button from the prefab
                 GameObject buttonObject = Instantiate(ButtonPrefab);
                 buttonObject.transform.SetParent(ParentedAvatarButtons, false);
@@ -33,8 +41,8 @@ namespace Basis.Scripts.UI.UI_Panels
                 // Get the Button component and set its onClick listener
                 if (buttonObject.TryGetComponent<Button>(out Button button))
                 {
-                    string avatarUrl = url; // Capture the url in the local variable for the lambda
-                    button.onClick.AddListener(() => OnButtonPressed(avatarUrl));
+                    string avatarUrl = url.AvatarAddress; // Capture the url in the local variable for the lambda
+                    button.onClick.AddListener(() => OnButtonPressed(url));
 
                     // Optionally set the button's label to something meaningful, like the URL or a part of it
                     TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
@@ -45,12 +53,11 @@ namespace Basis.Scripts.UI.UI_Panels
                 }
             }
         }
-
-        public async void OnButtonPressed(string Url)
+        public async void OnButtonPressed(AvatarLoadRequest AvatarLoadRequest)
         {
             if (BasisLocalPlayer.Instance != null)
             {
-                await BasisLocalPlayer.Instance.CreateAvatar(Url, BasisLocalPlayer.LoadModeNetworkDownloadable,string.Empty);
+                await BasisLocalPlayer.Instance.CreateAvatar(AvatarLoadRequest.AvatarAddress, AvatarLoadRequest.IsLocalLoad, string.Empty);
             }
         }
 

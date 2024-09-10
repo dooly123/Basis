@@ -301,7 +301,7 @@ public static class BasisMenuItemsEditor
         BasisNetworkManagement NetworkConnector = BasisNetworkManagement.Instance;
         if (NetworkConnector != null)
         {
-            await BasisNetworkCreateRemote.CreateRemotePlayer(ServerReadyMessage, NetworkConnector.transform);
+            await BasisNetworkHandleRemote.CreateRemotePlayer(ServerReadyMessage, NetworkConnector.transform);
         }
     }
     [System.Serializable]
