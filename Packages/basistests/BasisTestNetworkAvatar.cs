@@ -2,8 +2,6 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using DarkRift.Server.Plugins.Commands;
-using System;
 using UnityEngine;
 public class BasisTestNetworkAvatar : MonoBehaviour
 {
@@ -48,6 +46,7 @@ public class BasisTestNetworkAvatar : MonoBehaviour
     }
     public void LoopSend()
     {
+        Debug.Log("Sening Loop Data");
         avatar.NetworkMessageSend(MessageIndexTest, SubmittingData, DarkRift.DeliveryMethod.Unreliable, Recipients);
     }
 

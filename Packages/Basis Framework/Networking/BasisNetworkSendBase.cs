@@ -80,6 +80,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod, ushort[] Recipients = null)
         {
+            if(Recipients != null && Recipients.Length == 0)
+            {
+                Recipients = null;
+            }
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 AvatarDataMessage AvatarDataMessage = new AvatarDataMessage

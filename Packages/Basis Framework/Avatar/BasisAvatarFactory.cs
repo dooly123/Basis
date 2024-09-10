@@ -36,9 +36,11 @@ namespace Basis.Scripts.Avatar
                 switch (Mode)
                 {
                     case 0://download
+                        Debug.Log("Requested Avatar was a AssetBundle Avatar " + AvatarAddress);
                         Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
                         break;
                     case 1://localload
+                        Debug.Log("Requested Avatar was a Addressable Avatar " + AvatarAddress);
                         var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
                         (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
 
@@ -48,6 +50,7 @@ namespace Basis.Scripts.Avatar
                         }
                         break;
                    default:
+                        Debug.Log("Using Default, this means index was out of acceptable range! " + AvatarAddress);
                         Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
                         break;
                 }

@@ -761,7 +761,7 @@ MonoBehaviour:
     IsLocalLoad: 0
   - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/thebutlah.bundle
     IsLocalLoad: 0
-  - AvatarAddress: TestAvatar
+  - AvatarAddress: TestNetworkMessagesAvatar
     IsLocalLoad: 1
   ParentedAvatarButtons: {fileID: 673662174573543822}
   ButtonPrefab: {fileID: 617829828588750553}

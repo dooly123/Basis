@@ -21,7 +21,7 @@ public static class BasisNetworkGenericMessages
         ushort AvatarLinkID = ServerAvatarDataMessage.avatarDataMessage.assignedAvatarPlayer;//destination
         if (BasisNetworkManagement.Instance.Players.TryGetValue(AvatarLinkID, out BasisNetworkedPlayer Player))
         {
-            if(Player.Player == null)
+            if (Player.Player == null)
             {
                 Debug.LogError("Missing Player! " + AvatarLinkID);
                 return;
@@ -39,6 +39,10 @@ public static class BasisNetworkGenericMessages
     }
     public static void OnNetworkMessageSend(ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null)
     {
+        if (Recipients != null && Recipients.Length == 0)
+        {
+            Recipients = null;
+        }
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
             SceneDataMessage AvatarDataMessage = new SceneDataMessage
