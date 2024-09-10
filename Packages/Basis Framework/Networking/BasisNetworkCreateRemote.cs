@@ -2,14 +2,29 @@
 using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Player;
+using DarkRift;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using static SerializableDarkRift;
 namespace Basis.Scripts.Networking
 {
-    public static class BasisCreateRemote
+    public static class BasisNetworkCreateRemote
     {
+        public static async Task HandleCreateRemotePlayer(DarkRiftReader reader,Transform Parent)
+        {
+            reader.Read(out ServerReadyMessage SRM);
+            await BasisNetworkCreateRemote.CreateRemotePlayer(SRM, Parent);
+        }
+        public static async Task HandleCreateAllRemoteClients(DarkRiftReader reader, Transform Parent)
+        {
+            reader.Read(out CreateAllRemoteMessage allRemote);
+            int RemoteLength = allRemote.serverSidePlayer.Length;
+            for (int PlayerIndex = 0; PlayerIndex < RemoteLength; PlayerIndex++)
+            {
+                await BasisNetworkCreateRemote.CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex], Parent);
+            }
+        }
         public static async Task<BasisNetworkedPlayer> CreateRemotePlayer(ServerReadyMessage ServerReadyMessage, InstantiationParameters instantiationParameters)
         {
             string avatarID = ServerReadyMessage.localReadyMessage.clientAvatarChangeMessage.avatarID;

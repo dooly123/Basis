@@ -299,7 +299,10 @@ public static class BasisMenuItemsEditor
     public async static void CreateTestRemotePlayer(ServerReadyMessage ServerReadyMessage)
     {
         BasisNetworkManagement NetworkConnector = BasisNetworkManagement.Instance;
-        await NetworkConnector.CreateRemotePlayer(ServerReadyMessage);
+        if (NetworkConnector != null)
+        {
+            await BasisNetworkCreateRemote.CreateRemotePlayer(ServerReadyMessage, NetworkConnector.transform);
+        }
     }
     [System.Serializable]
     [ProfilerModuleMetadata("Byte Array Count")]

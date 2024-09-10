@@ -1,46 +1,44 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Networking.Factorys;
-using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using Basis.Scripts.Networking.Recievers;
-using Basis.Scripts.Player;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
-using DarkRift.Server;
 using DarkRift.Server.Plugins.Commands;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
-//using UnityEditor;
 using UnityEngine;
-using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using static SerializableDarkRift;
-
 namespace Basis.Scripts.Networking
 {
     public class BasisNetworkManagement : MonoBehaviour
     {
-        public BasisLowLevelClient Client;
-        public bool HasAuthenticated = false;
-        public static BasisNetworkManagement Instance;
-        public PlayerIdMessage PlayerID = new PlayerIdMessage();
-        public ReadyMessage readyMessage = new ReadyMessage();
-        public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
-        public bool ForceConnect = false;
         public string Ip = "170.64.184.249";
         public ushort Port = 4296;
-        public static string LocalHost = "localhost";
+        public bool HasAuthenticated = false;
+
+        public BasisLowLevelClient Client;
+        public ReadyMessage readyMessage = new ReadyMessage();
+
+        public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
+
+        public bool ForceConnect = false;
         public bool TryToReconnectAutomatically = true;
         public bool HasInitalizedClient = false;
+        /// <summary>
+        /// this occurs after the localplayer has been approved by the network and setup
+        /// </summary>
         public static Action<BasisNetworkedPlayer, BasisLocalPlayer> OnLocalPlayerJoined;
+        /// <summary>
+        /// this occurs after a remote user has been authenticated and joined & spawned
+        /// </summary>
         public static Action<BasisNetworkedPlayer, BasisRemotePlayer> OnRemotePlayerJoined;
-        public static Action OnExists;
+        public static Action OnEnableInstanceCreate;
+        public static BasisNetworkManagement Instance;
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -52,12 +50,8 @@ namespace Basis.Scripts.Networking
                 SetupSceneEvents(BasisScene.Instance);
             }
             BasisScene.Ready.AddListener(SetupSceneEvents);
-            if (Client == null)
-            {
-                Client = GetComponent<BasisLowLevelClient>();
-            }
             this.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-            OnExists?.Invoke();
+            OnEnableInstanceCreate?.Invoke();
             if (ForceConnect)
             {
                 Connect(Port, Ip);
@@ -65,24 +59,7 @@ namespace Basis.Scripts.Networking
         }
         public void SetupSceneEvents(BasisScene BasisScene)
         {
-            BasisScene.OnNetworkMessageSend += OnNetworkMessageSend;
-        }
-
-        private void OnNetworkMessageSend(ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable)
-        {
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
-            {
-                SceneDataMessage AvatarDataMessage = new SceneDataMessage
-                {
-                    messageIndex = MessageIndex,
-                    buffer = buffer
-                };
-                writer.Write(AvatarDataMessage);
-                using (var msg = Message.Create(BasisTags.SceneGenericMessage, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, DeliveryMethod);
-                }
-            }
+            BasisScene.OnNetworkMessageSend += BasisNetworkGenericMessages.OnNetworkMessageSend;
         }
         public void Connect()
         {
@@ -97,51 +74,12 @@ namespace Basis.Scripts.Networking
                 Client.Disconnected += Disconnected;
                 HasInitalizedClient = true;
             }
-            if (IpString.ToLower() == LocalHost)
-            {
-                string[] IpStrings = ResolveLocahost(IpString);
-                IpString = IpStrings[0];
-            }
-            IPAddress Ip = IPAddress.Parse(IpString);
             if (HasAuthenticated == false)
             {
                 HasAuthenticated = true;
                 Client.MessageReceived += MessageReceived;
             }
-            Client.ConnectInBackground(Ip, Port, Callback);
-        }
-        public string[] ResolveLocahost(string localhost)
-        {
-            string[] addresses = ResolveLocalhostToIP(localhost);
-            if (addresses != null)
-            {
-            }
-            else
-            {
-                Debug.LogError("Failed to resolve localhost to IP address.");
-            }
-            return addresses;
-        }
-        string[] ResolveLocalhostToIP(string hostname)
-        {
-            try
-            {
-                IPAddress[] ips = Dns.GetHostAddresses(hostname);
-                if (ips != null && ips.Length > 0)
-                {
-                    string[] addresses = new string[ips.Length];
-                    for (int Index = 0; Index < ips.Length; Index++)
-                    {
-                        addresses[Index] = ips[Index].ToString();
-                    }
-                    return addresses;
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError("Failed to resolve localhost to IP address: " + ex.Message);
-            }
-            return null;
+            Client.ConnectInBackground(BasisNetworkIPResolve.IpOutput(IpString), Port, Callback);
         }
         private void Disconnected(object sender, DisconnectedEventArgs e)
         {
@@ -175,7 +113,7 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-        private async void MessageReceived(object sender, DarkRift.Client.MessageReceivedEventArgs e)
+        private async void MessageReceived(object sender, MessageReceivedEventArgs e)
         {
             using (Message message = e.GetMessage())
             {
@@ -184,64 +122,31 @@ namespace Basis.Scripts.Networking
                     switch (message.Tag)
                     {
                         case BasisTags.AuthSuccess:
-                            BasisNetworkedPlayer player = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(transform.position, transform.rotation, transform));
-                            ushort playerID = Client.ID;
-                            BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
-                            player.ReInitialize(BasisLocalPlayer.Instance, playerID);
-                            if (Players.TryAdd(playerID, player))
-                            {
-
-                                Debug.Log("added local Player " + Client.ID);
-                            }
-                            else
-                            {
-                                Debug.LogError("Cant add " + playerID);
-                            }
-                            using (DarkRiftWriter writer = DarkRiftWriter.Create())
-                            {
-                                BasisNetworkAvatarCompressor.CompressIntoSendBase(player.NetworkSend, BasisLocalPlayer.Avatar.Animator);
-                                readyMessage.localAvatarSyncMessage = player.NetworkSend.LASM;
-                                readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
-                                {
-                                    avatarID = BasisLocalPlayer.AvatarUrl,
-                                    loadMode = BasisLocalPlayer.AvatarLoadMode,
-                                };
-                                readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
-                                {
-                                    playerUUID = BasisLocalPlayer.UUID,
-                                    playerDisplayName = BasisLocalPlayer.DisplayName
-                                };
-                                writer.Write(readyMessage);
-                                Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
-                                Client.SendMessage(ReadyMessage, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
-                                OnLocalPlayerJoined?.Invoke(player, BasisLocalPlayer);
-                            }
+                            await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
                             break;
                         case BasisTags.AvatarMuscleUpdateTag:
-                            HandleAvatarUpdate(reader);
-                            break;
-                        case BasisTags.CreateRemotePlayerTag:
-                            await HandleCreateRemotePlayer(reader);
-                            break;
-                        case BasisTags.CreateRemotePlayersTag:
-                            await HandleCreateAllRemoteClients(reader);
+                            BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
                             break;
                         case BasisTags.AudioSegmentTag:
-                            HandleAudioUpdate(reader);
+                            BasisNetworkHandleVoice.HandleAudioUpdate(reader);
                             break;
                         case BasisTags.DisconnectTag:
-                            HandleDisconnection(reader);
+                            BasisNetworkHandleRemoval.HandleDisconnection(reader);
                             break;
                         case BasisTags.AvatarChangeMessage:
-                            HandleAvatarChangeMessage(reader);
+                            BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
                             break;
-
+                        case BasisTags.CreateRemotePlayerTag:
+                            await BasisNetworkCreateRemote.HandleCreateRemotePlayer(reader, this.transform);
+                            break;
+                        case BasisTags.CreateRemotePlayersTag:
+                            await BasisNetworkCreateRemote.HandleCreateAllRemoteClients(reader, this.transform);
+                            break;
                         case BasisTags.SceneGenericMessage:
-                            HandleServerSceneDataMessage(reader);
+                            BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
                             break;
-
                         case BasisTags.AvatarGenericMessage:
-                            HandleServerAvatarDataMessage(reader);
+                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
                             break;
                         default:
                             Debug.Log("Unknown message at " + message.Tag);
@@ -250,156 +155,5 @@ namespace Basis.Scripts.Networking
                 }
             }
         }
-        private void HandleServerSceneDataMessage(DarkRiftReader reader)
-        {
-            reader.Read(out ServerSceneDataMessage ServerAvatarChangeMessage);
-            ushort PlayerID = ServerAvatarChangeMessage.PlayerIdMessage.playerID;
-            SceneDataMessage SceneDataMessage = ServerAvatarChangeMessage.SceneDataMessage;
-            BasisScene.Instance.OnNetworkMessageReceived?.Invoke(PlayerID, SceneDataMessage.messageIndex, SceneDataMessage.buffer);
-        }
-        private void HandleServerAvatarDataMessage(DarkRiftReader reader)
-        {
-            reader.Read(out ServerAvatarDataMessage ServerAvatarDataMessage);
-            ushort PlayerID = ServerAvatarDataMessage.playerIdMessage.playerID;
-            if (Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
-            {
-                if (Player.Player.Avatar != null)
-                {
-                    AvatarDataMessage output = ServerAvatarDataMessage.avatarDataMessage;
-                    Player.Player.Avatar.OnNetworkMessageReceived?.Invoke(output.messageIndex, output.buffer);
-                }
-            }
-            else
-            {
-                Debug.Log("Missing Player For Message " + ServerAvatarDataMessage.playerIdMessage.playerID);
-            }
-        }
-        private void HandleAvatarChangeMessage(DarkRiftReader reader)
-        {
-            reader.Read(out ServerAvatarChangeMessage ServerAvatarChangeMessage);
-            ushort PlayerID = ServerAvatarChangeMessage.uShortPlayerId.playerID;
-            if (Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
-            {
-                BasisNetworkReceiver networkReceiver = (BasisNetworkReceiver)Player.NetworkSend;
-                networkReceiver.ReceiveAvatarChangeRequest(ServerAvatarChangeMessage);
-            }
-            else
-            {
-                Debug.Log("Missing Player For Message " + ServerAvatarChangeMessage.uShortPlayerId.playerID);
-            }
-        }
-        private void HandleDisconnection(DarkRiftReader reader)
-        {
-            if (Players.TryGetValue(reader.ReadUInt16(), out BasisNetworkedPlayer player))
-            {
-                GameObject.Destroy(player.gameObject);
-            }
-        }
-        private void HandleAvatarUpdate(DarkRiftReader reader)
-        {
-            reader.Read(out ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage);
-            if (Players.TryGetValue(ServerSideSyncPlayerMessage.playerIdMessage.playerID, out BasisNetworkedPlayer player))
-            {
-                BasisNetworkReceiver networkReceiver = (BasisNetworkReceiver)player.NetworkSend;
-                networkReceiver.ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage);
-            }
-            else
-            {
-                Debug.Log("Missing Player For Message " + ServerSideSyncPlayerMessage.playerIdMessage.playerID);
-            }
-        }
-        private void HandleAudioUpdate(DarkRiftReader reader)
-        {
-            reader.Read(out AudioSegmentMessage AudioUpdate);
-            if (Players.TryGetValue(AudioUpdate.playerIdMessage.playerID, out BasisNetworkedPlayer player))
-            {
-                BasisNetworkReceiver networkReceiver = (BasisNetworkReceiver)player.NetworkSend;
-                if (AudioUpdate.wasSilentData)
-                {
-                    networkReceiver.ReceiveSilentNetworkAudio(AudioUpdate.silentData);
-                }
-                else
-                {
-                    networkReceiver.ReceiveNetworkAudio(AudioUpdate);
-                }
-            }
-            else
-            {
-                Debug.Log("Missing Player For Message " + AudioUpdate.playerIdMessage.playerID);
-            }
-        }
-        private async Task HandleCreateRemotePlayer(DarkRiftReader reader)
-        {
-            reader.Read(out ServerReadyMessage SRM);
-            await CreateRemotePlayer(SRM);
-        }
-        private async Task HandleCreateAllRemoteClients(DarkRiftReader reader)
-        {
-            reader.Read(out CreateAllRemoteMessage allRemote);
-            int RemoteLength = allRemote.serverSidePlayer.Length;
-            for (int PlayerIndex = 0; PlayerIndex < RemoteLength; PlayerIndex++)
-            {
-                await CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex]);
-            }
-        }
-        public async Task CreateRemotePlayer(ServerReadyMessage ServerReadyMessage)
-        {
-            InstantiationParameters instantiationParameters = new InstantiationParameters(Vector3.zero, Quaternion.identity, transform);
-            string avatarID = ServerReadyMessage.localReadyMessage.clientAvatarChangeMessage.avatarID;
-            if (string.IsNullOrEmpty(avatarID))
-            {
-                Debug.Log("bad! empty avatar for " + ServerReadyMessage.playerIdMessage.playerID);
-            }
-            else
-            {
-                //   Debug.Log("requesting Avatar load " + avatarID);
-            }
-            BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.localReadyMessage.playerMetaDataMessage);
-            BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
-            networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
-            if (Players.TryAdd(ServerReadyMessage.playerIdMessage.playerID, networkedPlayer))
-            {
-                Debug.Log("added Player " + ServerReadyMessage.playerIdMessage.playerID);
-            }
-            else
-            {
-                Debug.LogError("Cant add " + ServerReadyMessage.playerIdMessage.playerID);
-            }
-            BasisNetworkAvatarDecompressor.DeCompress(networkedPlayer.NetworkSend, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
-            OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
-        }
-
-        public NetworkServerConnection Server;
-        /*
-        [MenuItem("Host/Host")]
-        public static void Host()
-        {
-            ServerSpawnData ServerSpawnData = new ServerSpawnData();
-            ServerSpawnData.Data = new ServerSpawnData.DataSettings();
-            ServerSpawnData.Data.Directory = "Data/";
-
-            ServerSpawnData.Metrics = new ServerSpawnData.MetricsSettings();
-            ServerSpawnData.Metrics.EnablePerMessageMetrics = false;
-            //  ServerSpawnData.Metrics.MetricsWriter = new ServerSpawnData.MetricsSettings.MetricsWriterSettings();
-            //  ServerSpawnData.Metrics.MetricsWriter.
-
-            ServerSpawnData.Listeners = new ServerSpawnData.ListenersSettings();
-
-            ServerSpawnData.Cache = new ServerSpawnData.CacheSettings();
-
-            ServerSpawnData.EventsFromDispatcher = true;
-
-            ServerSpawnData.Server = new ServerSpawnData.ServerSettings();
-
-            DarkRiftServer server = new DarkRiftServer(ServerSpawnData);
-
-            server.StartServer();
-            while (!server.Disposed)
-            {
-                server.DispatcherWaitHandle.WaitOne();
-                server.ExecuteDispatcherTasks();
-            }
-        }
-        */
     }
 }
