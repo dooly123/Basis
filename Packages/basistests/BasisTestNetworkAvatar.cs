@@ -10,38 +10,41 @@ public class BasisTestNetworkAvatar : MonoBehaviour
     public byte MessageIndexTest;
     public byte[] SubmittingData;
     public ushort[] Recipients = null;
+    public BasisPlayer BasisPlayer;
     public void Awake()
     {
+        avatar.OnAvatarReady += OnAvatarReady;
+    }
+    private void OnAvatarReady(bool IsOwner)
+    {
+        Debug.Log("was called!");
         if (BasisNetworkManagement.HasSentOnLocalPlayerJoin == false)
         {
             BasisNetworkManagement.OnLocalPlayerJoined += OnLocalPlayerJoined;
         }
         else
         {
-            Setup();
+            SetupIfLocal();
         }
+        //recieve messages
         avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
+    }
+    private void OnLocalPlayerJoined(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
+    {
+        SetupIfLocal();
     }
     public void OnDestroy()
     {
         BasisNetworkManagement.OnLocalPlayerJoined -= OnLocalPlayerJoined;
     }
-    private void OnLocalPlayerJoined(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
+    private void SetupIfLocal()
     {
-        Setup();
-    }
-    private void Setup()
-    {
-        if (BasisNetworkManagement.AvatarToPlayer(avatar, out BasisPlayer Player))
+        if (BasisNetworkManagement.AvatarToPlayer(avatar, out BasisPlayer))
         {
-            if (Player.IsLocal)
+            if (BasisPlayer.IsLocal)
             {
                 InvokeRepeating(nameof(LoopSend), 0, 1);//local avatar lets start sending data!
             }
-        }
-        else
-        {
-            Debug.LogError("Was Unable to find the owner of this avatar" + this.gameObject.name);
         }
     }
     public void LoopSend()

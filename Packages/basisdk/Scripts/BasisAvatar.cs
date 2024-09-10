@@ -22,6 +22,11 @@ namespace Basis.Scripts.BasisSdk
         public bool HasSendEvent;
         public AvatarNetworkMessageReceiveEvent OnNetworkMessageReceived;
         public AvatarNetworkMessageSendEvent OnNetworkMessageSend;
+        public OnReady OnAvatarReady;
+        /// <summary>
+        /// this is called when the owner of this gameobject is ready for you to request data about it
+        /// </summary>
+        public delegate void OnReady(bool IsOwner);
         /// <summary>
         /// this is used for sending Network Messages
         /// </summary>

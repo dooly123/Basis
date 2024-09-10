@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using UnityEngine.SceneManagement;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 public static class BasisSceneAssetBundleManager
@@ -41,8 +42,8 @@ public static class BasisSceneAssetBundleManager
         catch (Exception E)
         {
             Debug.LogError("Unable to Loadin asset bundle " + E.Message);
+            return;
         }
-
         if (BasisLoadedAssets.Bundle != null)
         {
             await LoadSceneFromAssetBundleAsync(BasisLoadedAssets.Bundle, progressCallback);

@@ -4,6 +4,7 @@ using Basis.Scripts.Addressable_Driver.Loading;
 using Basis.Scripts.Addressable_Driver.Resource;
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Basis.Scripts.Avatar
     {
         public const string LoadingAvatar = "LoadingAvatar";
 
-        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress,byte Mode, string hash)
+        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, byte Mode, string hash)
         {
             if (string.IsNullOrEmpty(AvatarAddress))
             {
@@ -54,7 +55,7 @@ namespace Basis.Scripts.Avatar
                             Debug.LogError("Cant Find Local Avatar for " + AvatarAddress);
                         }
                         break;
-                   default:
+                    default:
                         Debug.Log("Using Default, this means index was out of acceptable range! " + AvatarAddress);
                         Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
                         break;
@@ -69,7 +70,7 @@ namespace Basis.Scripts.Avatar
             catch (Exception e)
             {
                 Debug.LogError($"Loading avatar failed: {e}");
-                 await LoadAvatarAfterError(Player);
+                await LoadAvatarAfterError(Player);
             }
         }
 
@@ -97,7 +98,7 @@ namespace Basis.Scripts.Avatar
                         break;
                     case 1://localload
                         var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(AvatarAddress, Para);
 
                         if (GameObjects.Count > 0)
                         {
@@ -111,7 +112,7 @@ namespace Basis.Scripts.Avatar
                 Player.AvatarUrl = AvatarAddress;
                 Player.AvatarLoadMode = Mode;
 
-                InitializePlayerAvatar(Player, Output);
+               InitializePlayerAvatar(Player, Output);
                 Player.AvatarSwitched();
             }
             catch (Exception e)
@@ -137,12 +138,15 @@ namespace Basis.Scripts.Avatar
                 {
                     CreateLocal(localPlayer);
                     localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
+                    Avatar.OnAvatarReady?.Invoke(true);
                 }
                 else if (Player is BasisRemotePlayer remotePlayer)
                 {
                     CreateRemote(remotePlayer);
                     remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
+                    Avatar.OnAvatarReady?.Invoke(false);
                 }
+               //no longer needed await Awaitable.NextFrameAsync();//this is so we can let scripts set up a frame before this call
             }
         }
 
@@ -155,7 +159,7 @@ namespace Basis.Scripts.Avatar
 
                 if (GameObjects.Count > 0)
                 {
-                    InitializePlayerAvatar(Player, GameObjects[0]);
+                 InitializePlayerAvatar(Player, GameObjects[0]);
                 }
 
                 Player.AvatarSwitchedFallBack();

@@ -13,7 +13,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public GameObject AudioSourceGameobject;
         public BasisBoneControl MouthControl;
         public bool HasEvents = false;
-        public async void RemoteInitialize(string AvatarURL, PlayerMetaDataMessage PlayerMetaDataMessage)
+        public async void RemoteInitialize(ClientAvatarChangeMessage CACM, PlayerMetaDataMessage PlayerMetaDataMessage)
         {
             DisplayName = PlayerMetaDataMessage.playerDisplayName;
             UUID = PlayerMetaDataMessage.playerUUID;
@@ -27,7 +27,7 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             if (Avatar == null)
             {
-                CreateAvatar(AvatarURL);
+                CreateAvatar(CACM.avatarID, CACM.loadMode);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
@@ -48,7 +48,7 @@ namespace Basis.Scripts.BasisSdk.Players
             AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
         }
         public bool LockAvatarFromChanging;
-        public async void CreateAvatar(string Loader = BasisAvatarFactory.LoadingAvatar)
+        public async void CreateAvatar(string Loader = BasisAvatarFactory.LoadingAvatar,byte NetworkMode = 0)
         {
             if (string.IsNullOrEmpty(Loader))
             {
@@ -57,10 +57,10 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             else
             {
-                Debug.Log("loading avatar from " + Loader);
+                Debug.Log("loading avatar from " + Loader + " with net mode " + NetworkMode);
                 if (LockAvatarFromChanging == false)
                 {
-                    await BasisAvatarFactory.LoadAvatar(this, Loader, BasisPlayer.LoadModeNetworkDownloadable, string.Empty);
+                    await BasisAvatarFactory.LoadAvatar(this, Loader, NetworkMode, string.Empty);
                 }
             }
         }

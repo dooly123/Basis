@@ -113,48 +113,73 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-        private async void MessageReceived(object sender, MessageReceivedEventArgs e)
+private async void MessageReceived(object sender, MessageReceivedEventArgs e)
+{
+    using (Message message = e.GetMessage())
+    {
+        using (DarkRiftReader reader = message.GetReader())
         {
-            using (Message message = e.GetMessage())
+            switch (message.Tag)
             {
-                using (DarkRiftReader reader = message.GetReader())
-                {
-                    switch (message.Tag)
-                    {
-                        case BasisTags.AuthSuccess:
-                            await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
-                            break;
-                        case BasisTags.AvatarMuscleUpdateTag:
-                            BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
-                            break;
-                        case BasisTags.AudioSegmentTag:
-                            BasisNetworkHandleVoice.HandleAudioUpdate(reader);
-                            break;
-                        case BasisTags.DisconnectTag:
-                            BasisNetworkHandleRemoval.HandleDisconnection(reader);
-                            break;
-                        case BasisTags.AvatarChangeMessage:
-                            BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
-                            break;
-                        case BasisTags.CreateRemotePlayerTag:
-                            await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
-                            break;
-                        case BasisTags.CreateRemotePlayersTag:
-                            await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
-                            break;
-                        case BasisTags.SceneGenericMessage:
-                            BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
-                            break;
-                        case BasisTags.AvatarGenericMessage:
-                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
-                            break;
-                        default:
-                            Debug.Log("Unknown message at " + message.Tag);
-                            break;
-                    }
-                }
+                case BasisTags.AuthSuccess:
+                    await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
+                    break;
+
+                case BasisTags.AvatarMuscleUpdateTag:
+                    BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
+                    break;
+
+                case BasisTags.AudioSegmentTag:
+                    BasisNetworkHandleVoice.HandleAudioUpdate(reader);
+                    break;
+
+                case BasisTags.DisconnectTag:
+                    BasisNetworkHandleRemoval.HandleDisconnection(reader);
+                    break;
+
+                case BasisTags.AvatarChangeMessage:
+                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
+                    break;
+
+                case BasisTags.CreateRemotePlayerTag:
+                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
+                    break;
+
+                case BasisTags.CreateRemotePlayersTag:
+                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
+                    break;
+
+                case BasisTags.SceneGenericMessage:
+                    BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
+                    break;
+
+                case BasisTags.SceneGenericMessage_NoRecipients:
+                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
+                    break;
+
+                case BasisTags.SceneGenericMessage_NoRecipients_NoPayload:
+                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
+                    break;
+
+                case BasisTags.AvatarGenericMessage:
+                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
+                    break;
+
+                case BasisTags.AvatarGenericMessage_NoRecipients:
+                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
+                    break;
+
+                case BasisTags.AvatarGenericMessage_NoRecipients_NoPayload:
+                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
+                    break;
+
+                default:
+                    Debug.Log("Unknown message tag: " + message.Tag);
+                    break;
             }
         }
+    }
+}
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {
             if (Instance == null)
@@ -211,27 +236,30 @@ namespace Basis.Scripts.Networking
                 BasisPlayer = null;
                 return false;
             }
-            int AvatarInstance = Avatar.GetInstanceID();
             foreach (BasisNetworkedPlayer NPlayer in Instance.Players.Values)
             {
                 if (NPlayer == null)
                 {
+                    Debug.LogError("Network Player was null!");
                     continue;
                 }
                 if (NPlayer.Player == null)
                 {
+                    Debug.LogError("Player was null!");
                     continue;
                 }
                 if (NPlayer.Player.Avatar == null)
                 {
+                    Debug.LogError("Avatar was null!");
                     continue;
                 }
-                if (NPlayer.Player.Avatar.GetInstanceID() == AvatarInstance)
+                if (Avatar == NPlayer.Player.Avatar)
                 {
                     BasisPlayer = NPlayer.Player;
                     return true;
                 }
             }
+            Debug.LogError("Avatar was not found on any player that is known");
             BasisPlayer = null;
             return false;
         }
