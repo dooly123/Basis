@@ -130,7 +130,11 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
                 LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
                 Vector3 adjustedHeadPosition = new Vector3(InjectedX, BasisLocalPlayer.Instance.PlayerEyeHeight, InjectedZ);
-                if (BasisLocalInputActions.Crouching && BlockCrouching == false)
+                if (BlockCrouching)
+                {
+                    BasisLocalInputActions.Crouching = false;
+                }
+                if (BasisLocalInputActions.Crouching)
                 {
                     adjustedHeadPosition.y -= Control.TposeLocal.position.y * crouchPercentage;
                 }
