@@ -15,9 +15,9 @@ MonoBehaviour:
   m_DefaultGroup: 37c75a6cf72db324eb01200602299fc8
   m_currentHash:
     serializedVersion: 2
-    Hash: c70b4b310ae9548f81d0e985ff60a337
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
-  m_BuildRemoteCatalog: 1
+  m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
   m_DisableCatalogUpdateOnStart: 0
   m_InternalIdNamingMode: 0
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_SharedBundleSettings: 0
   m_SharedBundleSettingsCustomGroupIndex: 0
   m_ContiguousBundles: 1
-  m_StripUnityVersionFromBundleBuild: 0
+  m_StripUnityVersionFromBundleBuild: 1
   m_DisableVisibleSubAssetRepresentations: 0
   m_BuiltInBundleNaming: 0
   mBuiltInBundleCustomNaming: 
@@ -52,7 +52,7 @@ MonoBehaviour:
   m_RemoteCatalogBuildPath:
     m_Id: 
   m_RemoteCatalogLoadPath:
-    m_Id: 
+    m_Id: 1a076a8174ca4cd49b23ecaa3168bd9b
   m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
@@ -61,7 +61,6 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: ad7c5f3b122ea3740a8e538a1d7bfb73, type: 2}
   - {fileID: 11400000, guid: 8298f2c823bf80e4680803ddba8c95e5, type: 2}
-  - {fileID: 11400000, guid: c306eda2830d8aa41a649da35f302efc, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles

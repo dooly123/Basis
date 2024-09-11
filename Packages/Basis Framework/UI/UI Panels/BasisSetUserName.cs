@@ -25,6 +25,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField IPaddress;
         public TMP_InputField Port;
         public TMP_InputField Password;
+        public Button UseLocalhost;
         public void Start()
         {
             UserNameTMP_InputField.text = BasisDataStore.LoadString(LoadFileName, string.Empty);
@@ -32,9 +33,14 @@ namespace Basis.Scripts.UI.UI_Panels
             if (AdvancedSettingsPanel != null)
             {
                 AdvancedSettings.onClick.AddListener(ToggleAdvancedSettings);
+                UseLocalhost.onClick.AddListener(UseLocalHost);
             }
             BasisSceneLoadDriver.progressCallback += ProgresReport;
             BasisNetworkManagement.OnEnableInstanceCreate += LoadCurrentSettings;
+        }
+        public void UseLocalHost()
+        {
+            IPaddress.text = "localhost";
         }
         public void LoadCurrentSettings()
         {
@@ -47,6 +53,7 @@ namespace Basis.Scripts.UI.UI_Panels
             if (AdvancedSettingsPanel != null)
             {
                 AdvancedSettings.onClick.RemoveListener(ToggleAdvancedSettings);
+                UseLocalhost.onClick.RemoveListener(UseLocalHost);
             }
             BasisSceneLoadDriver.progressCallback -= ProgresReport;
         }
