@@ -90,6 +90,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71c6687014327544c95558a736c226c7
+    m_Address: Locomotion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78f02360f31c1a547b937559d34b03b1
     m_Address: Locomotion
     m_ReadOnly: 0

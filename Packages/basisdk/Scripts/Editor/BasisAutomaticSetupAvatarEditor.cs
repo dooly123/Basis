@@ -19,7 +19,6 @@ public static class BasisAutomaticSetupAvatarEditor
             {
                 if (CheckAnimator(avatar))
                 {
-                    AddDefaultRuntimeControllerIfNull(avatar);
                     if (TryFindNeckAndHead(avatar, out Transform Neck, out Transform Head))
                     {
                         TrySetAvatarEyePosition(avatar);
@@ -59,14 +58,6 @@ public static class BasisAutomaticSetupAvatarEditor
             return false;
         }
         return true;
-    }
-    private static void AddDefaultRuntimeControllerIfNull(BasisAvatar avatar)
-    {
-        if (avatar.Animator.runtimeAnimatorController == null)
-        {
-            Debug.Log("runtimeAnimatorController Was null adding default");
-            avatar.Animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/Animator/Locomotion.controller");
-        }
     }
     private static bool TryFindOrCheckAvatar(BasisAvatar avatar)
     {
