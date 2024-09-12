@@ -8,10 +8,19 @@ public static class BasisNetworkHandleRemoval
     public static void HandleDisconnection(DarkRiftReader reader)
     {
         ushort DisconnectValue = reader.ReadUInt16();
-        if (BasisNetworkManagement.Instance.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer player))
+        if (BasisNetworkManagement.Instance.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer NetworkedPlayer))
         {
-            GameObject.Destroy(player.gameObject);
+            BasisNetworkManagement.RemovePlayer(DisconnectValue);
+
+            if (NetworkedPlayer.Player.IsLocal)
+            {
+                BasisNetworkManagement.OnLocalPlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisLocalPlayer)NetworkedPlayer.Player);
+            }
+            else
+            {
+                BasisNetworkManagement.OnRemotePlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisRemotePlayer)NetworkedPlayer.Player);
+            }
+            GameObject.Destroy(NetworkedPlayer.gameObject);
         }
-        BasisNetworkManagement.Instance.Players.Remove(DisconnectValue);
     }
 }

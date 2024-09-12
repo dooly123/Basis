@@ -14,7 +14,7 @@ public static class BasisNetworkGenericMessages
         reader.Read(out ServerSceneDataMessage serverSceneDataMessage);
         ushort playerID = serverSceneDataMessage.playerIdMessage.playerID;
         SceneDataMessage sceneDataMessage = serverSceneDataMessage.sceneDataMessage;
-        BasisScene.Instance.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
+        BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
     }
 
     // Handler for server avatar data messages
@@ -50,7 +50,7 @@ public static class BasisNetworkGenericMessages
         reader.Read(out ServerSceneDataMessage_NoRecipients serverSceneDataMessage_NoRecipients);
         ushort playerID = serverSceneDataMessage_NoRecipients.playerIdMessage.playerID;
         var sceneDataMessage = serverSceneDataMessage_NoRecipients.sceneDataMessage;
-        BasisScene.Instance.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
+        BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
     }
 
     // Handler for server scene data messages with no recipients and no payload
@@ -59,7 +59,7 @@ public static class BasisNetworkGenericMessages
         reader.Read(out ServerSceneDataMessage_NoRecipients_NoPayload serverSceneDataMessage_NoRecipients_NoPayload);
         ushort playerID = serverSceneDataMessage_NoRecipients_NoPayload.playerIdMessage.playerID;
         var sceneDataMessage = serverSceneDataMessage_NoRecipients_NoPayload.sceneDataMessage;
-        BasisScene.Instance.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, null); // Pass null payload
+        BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, null); // Pass null payload
     }
 
     // Handler for server avatar data messages with no recipients
@@ -105,7 +105,7 @@ public static class BasisNetworkGenericMessages
             if (player.Player.Avatar != null)
             {
                 var output = serverAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage;
-                player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage_NoRecipients_NoPayload.playerIdMessage.playerID, output.messageIndex, null,null); // Pass null payload
+                player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage_NoRecipients_NoPayload.playerIdMessage.playerID, output.messageIndex, null, null); // Pass null payload
             }
             else
             {
@@ -118,25 +118,71 @@ public static class BasisNetworkGenericMessages
         }
     }
     // Sending message with different conditions
-    public static void OnNetworkMessageSend(ushort messageIndex, byte[] buffer, DeliveryMethod deliveryMethod = DeliveryMethod.Unreliable, ushort[] recipients = null)
+    public static void OnNetworkMessageSend(ushort messageIndex, byte[] buffer = null, DeliveryMethod deliveryMethod = DeliveryMethod.Unreliable, ushort[] recipients = null)
     {
+        // Check if Recipients array is valid or not
         if (recipients != null && recipients.Length == 0)
         {
             recipients = null;
         }
 
+        // Check if buffer is valid or not
+        if (buffer != null && buffer.Length == 0)
+        {
+            buffer = null;
+        }
+
         using (DarkRiftWriter writer = DarkRiftWriter.Create())
         {
-            SceneDataMessage sceneDataMessage = new SceneDataMessage
+            // Check if there are no recipients and no payload
+            if (recipients == null && buffer == null)
             {
-                messageIndex = messageIndex,
-                payload = buffer,
-                recipients = recipients,
-            };
-            writer.Write(sceneDataMessage);
-            using (var msg = Message.Create(BasisTags.SceneGenericMessage, writer))
+                // Debug.Log("Sending with no Recipients or buffer");
+                // No recipients, no payload case
+                SceneDataMessage_NoRecipients_NoPayload sceneDataMessage = new SceneDataMessage_NoRecipients_NoPayload
+                {
+                    messageIndex = messageIndex
+                };
+                writer.Write(sceneDataMessage);
+
+                using (var msg = Message.Create(BasisTags.SceneGenericMessage_NoRecipients_NoPayload, writer))
+                {
+                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
+                }
+            }
+            // Check if there are no recipients but there is a payload
+            else if (recipients == null)
             {
-                BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
+                // Debug.Log("Sending with no Recipients");
+                // No recipients but has payload
+                SceneDataMessage_NoRecipients sceneDataMessage = new SceneDataMessage_NoRecipients
+                {
+                    messageIndex = messageIndex,
+                    payload = buffer
+                };
+                writer.Write(sceneDataMessage);
+
+                using (var msg = Message.Create(BasisTags.SceneGenericMessage_NoRecipients, writer))
+                {
+                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
+                }
+            }
+            // Case where there are recipients (payload could be null or not)
+            else
+            {
+                //Debug.Log("Sending with Recipients and buffer");
+                SceneDataMessage sceneDataMessage = new SceneDataMessage
+                {
+                    messageIndex = messageIndex,
+                    payload = buffer,
+                    recipients = recipients
+                };
+                writer.Write(sceneDataMessage);
+
+                using (var msg = Message.Create(BasisTags.SceneGenericMessage, writer))
+                {
+                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
+                }
             }
         }
     }

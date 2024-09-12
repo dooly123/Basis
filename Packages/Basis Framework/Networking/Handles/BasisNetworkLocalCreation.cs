@@ -15,14 +15,14 @@ namespace Basis.Scripts.Networking
     {
         public static async Task HandleAuthSuccess(Transform Parent)
         {
-            BasisNetworkedPlayer player = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(Parent.position, Parent.rotation, Parent));
+            BasisNetworkedPlayer NetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(Parent.position, Parent.rotation, Parent));
             ushort playerID = BasisNetworkManagement.Instance.Client.ID;
             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
-            player.ReInitialize(BasisLocalPlayer.Instance, playerID);
-            if (BasisNetworkManagement.Instance.Players.TryAdd(playerID, player))
+            NetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, playerID);
+            if (BasisNetworkManagement.AddPlayer(NetworkedPlayer))
             {
 
-                Debug.Log("added local Player " + BasisNetworkManagement.Instance.Client.ID);
+                Debug.Log("added local Player " + playerID);
             }
             else
             {
@@ -30,8 +30,8 @@ namespace Basis.Scripts.Networking
             }
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
-                BasisNetworkAvatarCompressor.CompressIntoSendBase(player.NetworkSend, BasisLocalPlayer.Avatar.Animator);
-                BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = player.NetworkSend.LASM;
+                BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
+                BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = NetworkedPlayer.NetworkSend.LASM;
                 BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
                     avatarID = BasisLocalPlayer.AvatarUrl,
@@ -45,7 +45,7 @@ namespace Basis.Scripts.Networking
                 writer.Write(BasisNetworkManagement.Instance.readyMessage);
                 Message ReadyMessage = Message.Create(BasisTags.ReadyStateTag, writer);
                 BasisNetworkManagement.Instance.Client.SendMessage(ReadyMessage, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
-                BasisNetworkManagement.OnLocalPlayerJoined?.Invoke(player, BasisLocalPlayer);
+                BasisNetworkManagement.OnLocalPlayerJoined?.Invoke(NetworkedPlayer, BasisLocalPlayer);
                 BasisNetworkManagement.HasSentOnLocalPlayerJoin = true;
             }
         }

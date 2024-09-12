@@ -33,12 +33,12 @@ namespace Basis.Scripts.Networking
             {
                 BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.localReadyMessage.playerMetaDataMessage);
                 BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
-
-                if (BasisNetworkManagement.Instance.Players.TryAdd(ServerReadyMessage.playerIdMessage.playerID, networkedPlayer))
+                networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
+                if (BasisNetworkManagement.AddPlayer(networkedPlayer))
                 {
                     Debug.Log("Added Player " + ServerReadyMessage.playerIdMessage.playerID);
+                    BasisNetworkManagement.OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
                 }
-                networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
                 return networkedPlayer;
             }
             else

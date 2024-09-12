@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class BasisTestNetworkScene : MonoBehaviour
 {
-    public BasisScene scene;
     public byte[] SendingData;
     public void Awake()
     {
@@ -33,8 +32,8 @@ public class BasisTestNetworkScene : MonoBehaviour
     /// <param name="player2"></param>
     public void OnLocalPlayerJoined(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
     {
-        scene.OnNetworkMessageReceived += OnNetworkMessageReceived;
-        scene.OnNetworkMessageSend.Invoke(1, SendingData, DarkRift.DeliveryMethod.ReliableOrdered);
+        BasisScene.OnNetworkMessageReceived += OnNetworkMessageReceived;
+        BasisScene.OnNetworkMessageSend.Invoke(1, SendingData, DarkRift.DeliveryMethod.ReliableOrdered);
     }
     private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer,ushort[] Recipients)
     {

@@ -24,7 +24,30 @@ namespace Basis.Scripts.Networking
         public ReadyMessage readyMessage = new ReadyMessage();
 
         public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
-
+        public static bool AddPlayer(BasisNetworkedPlayer Player)
+        {
+            if (Instance != null)
+            {
+                return Instance.Players.TryAdd(Player.NetId, Player);
+            }
+            return false;
+        }
+        public static bool RemovePlayer(ushort NetID)
+        {
+            if (Instance != null)
+            {
+                return Instance.Players.Remove(NetID);
+            }
+            return false;
+        }
+        public static bool RemovePlayer(BasisNetworkedPlayer BasisNetworkedPlayer)
+        {
+            if (Instance != null)
+            {
+                return Instance.Players.Remove(BasisNetworkedPlayer.NetId);
+            }
+            return false;
+        }
         public bool ForceConnect = false;
         public bool TryToReconnectAutomatically = true;
         public bool HasInitalizedClient = false;
@@ -37,6 +60,17 @@ namespace Basis.Scripts.Networking
         /// this occurs after a remote user has been authenticated and joined & spawned
         /// </summary>
         public static Action<BasisNetworkedPlayer, BasisRemotePlayer> OnRemotePlayerJoined;
+
+
+        /// <summary>
+        /// this occurs after the localplayer has removed
+        /// </summary>
+        public static Action<BasisNetworkedPlayer, BasisLocalPlayer> OnLocalPlayerLeft;
+        /// <summary>
+        /// this occurs after a remote user has removed
+        /// </summary>
+        public static Action<BasisNetworkedPlayer, BasisRemotePlayer> OnRemotePlayerLeft;
+
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public void OnEnable()
@@ -113,73 +147,73 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-private async void MessageReceived(object sender, MessageReceivedEventArgs e)
-{
-    using (Message message = e.GetMessage())
-    {
-        using (DarkRiftReader reader = message.GetReader())
+        private async void MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            switch (message.Tag)
+            using (Message message = e.GetMessage())
             {
-                case BasisTags.AuthSuccess:
-                    await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
-                    break;
+                using (DarkRiftReader reader = message.GetReader())
+                {
+                    switch (message.Tag)
+                    {
+                        case BasisTags.AuthSuccess:
+                            await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
+                            break;
 
-                case BasisTags.AvatarMuscleUpdateTag:
-                    BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
-                    break;
+                        case BasisTags.AvatarMuscleUpdateTag:
+                            BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
+                            break;
 
-                case BasisTags.AudioSegmentTag:
-                    BasisNetworkHandleVoice.HandleAudioUpdate(reader);
-                    break;
+                        case BasisTags.AudioSegmentTag:
+                            BasisNetworkHandleVoice.HandleAudioUpdate(reader);
+                            break;
 
-                case BasisTags.DisconnectTag:
-                    BasisNetworkHandleRemoval.HandleDisconnection(reader);
-                    break;
+                        case BasisTags.DisconnectTag:
+                            BasisNetworkHandleRemoval.HandleDisconnection(reader);
+                            break;
 
-                case BasisTags.AvatarChangeMessage:
-                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
-                    break;
+                        case BasisTags.AvatarChangeMessage:
+                            BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
+                            break;
 
-                case BasisTags.CreateRemotePlayerTag:
-                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
-                    break;
+                        case BasisTags.CreateRemotePlayerTag:
+                            await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
+                            break;
 
-                case BasisTags.CreateRemotePlayersTag:
-                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
-                    break;
+                        case BasisTags.CreateRemotePlayersTag:
+                            await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
+                            break;
 
-                case BasisTags.SceneGenericMessage:
-                    BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
-                    break;
+                        case BasisTags.SceneGenericMessage:
+                            BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
+                            break;
 
-                case BasisTags.SceneGenericMessage_NoRecipients:
-                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
-                    break;
+                        case BasisTags.SceneGenericMessage_NoRecipients:
+                            BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
+                            break;
 
-                case BasisTags.SceneGenericMessage_NoRecipients_NoPayload:
-                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
-                    break;
+                        case BasisTags.SceneGenericMessage_NoRecipients_NoPayload:
+                            BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
+                            break;
 
-                case BasisTags.AvatarGenericMessage:
-                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
-                    break;
+                        case BasisTags.AvatarGenericMessage:
+                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
+                            break;
 
-                case BasisTags.AvatarGenericMessage_NoRecipients:
-                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
-                    break;
+                        case BasisTags.AvatarGenericMessage_NoRecipients:
+                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
+                            break;
 
-                case BasisTags.AvatarGenericMessage_NoRecipients_NoPayload:
-                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
-                    break;
+                        case BasisTags.AvatarGenericMessage_NoRecipients_NoPayload:
+                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
+                            break;
 
-                default:
-                    Debug.Log("Unknown message tag: " + message.Tag);
-                    break;
+                        default:
+                            Debug.Log("Unknown message tag: " + message.Tag);
+                            break;
+                    }
+                }
             }
         }
-    }
-}
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {
             if (Instance == null)
@@ -296,6 +330,22 @@ private async void MessageReceived(object sender, MessageReceivedEventArgs e)
             }
             NetworkedPlayer = null;
             return false;
+        }
+        // API to get the oldest available ushort starting from 0
+        public ushort GetOldestAvailablePlayerUshort()
+        {
+            ushort smallestValue = ushort.MaxValue; // Initialize with the maximum possible ushort value
+
+            // Iterate over the dictionary's keys
+            foreach (ushort key in Players.Keys)
+            {
+                if (key < smallestValue) // If a smaller key is found, update smallestValue
+                {
+                    smallestValue = key;
+                }
+            }
+
+            return smallestValue;
         }
     }
 }
