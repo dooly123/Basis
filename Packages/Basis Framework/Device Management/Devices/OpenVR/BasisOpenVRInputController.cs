@@ -73,7 +73,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             LocalRawPosition = poseAction[inputSource].localPosition;
             LocalRawRotation = poseAction[inputSource].localRotation;
         }
-        FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+        FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
         FinalRotation = LocalRawRotation;
         if (hasRoleAssigned)
         {

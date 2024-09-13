@@ -36,17 +36,14 @@ namespace Basis.Scripts.Device_Management
                 HasEvents = false;
             }
         }
-        public void StartWaitAndSetUILocation(bool Final)
+        public void StartWaitAndSetUILocation()
         {
-            if (Final)
-            {
-                UpdateVisualSizeAndOffset();
-            }
+            UpdateVisualSizeAndOffset();
         }
         public void UpdateVisualSizeAndOffset()
         {
             gameObject.transform.localScale = Vector3.one * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
-            gameObject.transform.SetLocalPositionAndRotation(ModelPositionOffset * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale, ModelRotationOffset);
+            gameObject.transform.SetLocalPositionAndRotation(ModelPositionOffset * BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale, ModelRotationOffset);
         }
     }
 }

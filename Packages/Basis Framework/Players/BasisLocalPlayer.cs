@@ -14,24 +14,26 @@ namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
     {
-        public static float DefaultPlayerEyeHeight = 1.64f;
-        public static float DefaultAvatarEyeHeight = 1.64f;
-        public float PlayerEyeHeight = 1.64f;
-        public float RatioPlayerToAvatarScale = 1f;
-        public float RatioPlayerToEyeDefaultScale = 1f;
-        public float RatioAvatarToAvatarEyeDefaultScale = 1f;
+
         public static BasisLocalPlayer Instance;
         public static Action OnLocalPlayerCreatedAndReady;
         public static Action OnLocalPlayerCreated;
         public BasisCharacterController.BasisCharacterController Move;
         public event Action OnLocalAvatarChanged;
         public event Action OnSpawnedEvent;
+
+        public static float DefaultPlayerEyeHeight = 1.64f;
+        public static float DefaultAvatarEyeHeight = 1.64f;
+        public float PlayerEyeHeight = 1.64f;
+        public float RatioPlayerToAvatarScale = 1f;
+        public float EyeRatioPlayerToDefaultScale = 1f;
+        public float EyeRatioAvatarToAvatarDefaultScale = 1f;//should be used for the player
         /// <summary>
         /// the bool when true is the final size
         /// the bool when false is not the final size
         /// use the bool to 
         /// </summary>
-        public event Action<bool> OnPlayersHeightChanged;
+        public Action OnPlayersHeightChanged;
         public BasisLocalBoneDriver LocalBoneDriver;
         public BasisBoneControl Hips;
         public BasisLocalAvatarDriver AvatarDriver;
@@ -75,62 +77,6 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             MicrophoneRecorder.TryInitialize();
             OnLocalPlayerCreatedAndReady?.Invoke();
-        }
-        /// <summary>
-        /// instead of reading the data of the component i would use OnPlayersHeightChanged
-        ///  we wait until the next 2 frame so we can let all devices and systems reset to there native size first. 
-        ///  (total of 4 frames)
-        /// </summary>
-        public async Task SetPlayersEyeHeight()
-        {
-            Debug.Log("recalculating local Height!");
-            RatioPlayerToAvatarScale = 1f;
-
-            RatioPlayerToEyeDefaultScale = 1f;
-            RatioAvatarToAvatarEyeDefaultScale = 1f;
-
-            OnPlayersHeightChanged?.Invoke(false);
-
-
-            // This will wait for 3 frames allowing the devices to provide good final positions
-            await Awaitable.NextFrameAsync();
-            await Awaitable.NextFrameAsync();
-
-            TransformBinders.BasisLockToInput BasisLockToInput = BasisLocalCameraDriver.Instance.BasisLockToInput;
-            if (BasisLockToInput != null)
-            {
-                if (BasisLockToInput.AttachedInput != null)
-                {
-                    PlayerEyeHeight = BasisLockToInput.AttachedInput.LocalRawPosition.y;
-                    Debug.Log("recalculating local Height!");
-                    Debug.Log("Local Eye Height is " + PlayerEyeHeight);
-                }
-            }
-
-        float avatarHeight = AvatarDriver.ActiveEyeHeight();
-            Debug.Log("Reading Player Eye Height "+ PlayerEyeHeight);
-            if (PlayerEyeHeight <= 0 || avatarHeight <= 0)
-            {
-                RatioPlayerToAvatarScale = 1;
-                if (PlayerEyeHeight <= 0)
-                {
-                    PlayerEyeHeight = 1.64f;
-                }
-                Debug.LogError("Scale was below zero");
-            }
-            else
-            {
-                RatioPlayerToAvatarScale = avatarHeight / PlayerEyeHeight;
-            }
-            //lets get the some height / the default for that height
-            RatioAvatarToAvatarEyeDefaultScale = avatarHeight / DefaultAvatarEyeHeight;
-            RatioPlayerToEyeDefaultScale = PlayerEyeHeight / DefaultPlayerEyeHeight;
-            // This will wait for 3 frames allowing the devices to provide good final positions
-            await Awaitable.NextFrameAsync();
-            await Awaitable.NextFrameAsync();
-
-            Debug.Log("Player Height Set" + PlayerEyeHeight);
-            OnPlayersHeightChanged?.Invoke(true);
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {

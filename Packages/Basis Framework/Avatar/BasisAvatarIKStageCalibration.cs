@@ -106,9 +106,9 @@ namespace Basis.Scripts.Avatar
 
             return rolesToDiscover;
         }
-        public static async void FullBodyCalibration()
+        public static void FullBodyCalibration()
         {
-            await BasisLocalPlayer.Instance.SetPlayersEyeHeight();
+            BasisHeightDriver.SetPlayersEyeHeight(BasisLocalPlayer.Instance);
             foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
             {
                 Input.UnAssignFBTracker();
@@ -163,8 +163,8 @@ namespace Basis.Scripts.Avatar
             {
                 if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl control, role))
                 {
-                    float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale;
-                    Debug.Log("Using a scaler of  " + BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale + " leading to a scaled Distance of " + ScaledDistance);
+                    float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
+                    Debug.Log("Using a scaler of  " + BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale + " leading to a scaled Distance of " + ScaledDistance);
                     BasisTrackerMapping mapping = new BasisTrackerMapping(control, role, connectors, ScaledDistance);
                     boneTransformMappings.Add(mapping);
                 }

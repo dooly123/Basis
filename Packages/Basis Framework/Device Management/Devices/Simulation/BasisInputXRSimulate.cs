@@ -25,9 +25,9 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
                 FollowMovement.SetLocalPositionAndRotation(newPosition, lerpedRotation);
             }
             FollowMovement.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
-            LocalRawPosition /= BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+            LocalRawPosition /= BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale;
 
-            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale;
             FinalRotation = LocalRawRotation;
             if (hasRoleAssigned)
             {

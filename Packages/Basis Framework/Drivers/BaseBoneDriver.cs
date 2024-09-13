@@ -263,18 +263,18 @@ namespace Basis.Scripts.Drivers
                 {
                     if (BasisBoneTrackedRoleCommonCheck.CheckIfRightHand(Frole) || BasisBoneTrackedRoleCommonCheck.CheckIfLeftHand(Frole))
                     {
-                        Gizmos.Sphere(BonePosition, HandGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale, Control.Color);
+                        Gizmos.Sphere(BonePosition, HandGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
                     }
                     else
                     {
-                        Gizmos.Sphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale, Control.Color);
+                        Gizmos.Sphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
                     }
                 }
                 if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
                 {
                     if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(Control, out BasisBoneTrackedRole role))
                     {
-                        Gizmos.Sphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.RatioAvatarToAvatarEyeDefaultScale, Control.Color);
+                        Gizmos.Sphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
                     }
                 }
             }

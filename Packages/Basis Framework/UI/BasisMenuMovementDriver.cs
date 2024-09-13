@@ -109,7 +109,7 @@ namespace Basis.Scripts.UI.UI_Panels
                     Vector3 projectedPos = Vector3.ProjectOnPlane(newPos, LocalPlayer.transform.up).normalized;
 
                     // Calculate the base new position by considering the player's position, scale, and offset
-                    newPos = LocalPlayer.transform.position + (projectedPos * (0.5f * LocalPlayer.RatioPlayerToEyeDefaultScale));
+                    newPos = LocalPlayer.transform.position + (projectedPos * (0.5f * LocalPlayer.EyeRatioPlayerToDefaultScale));
 
                     // Transform the relative offsets by the rotation to apply them correctly in world space
                     Vector3 rotatedOffsets = rotation * menuPosOffset;
@@ -128,7 +128,7 @@ namespace Basis.Scripts.UI.UI_Panels
                         hand.BoneModelTransform.GetPositionAndRotation(out position, out rotation);
 
                         // Set new position and rotation
-                        transform.SetPositionAndRotation(position + (menuPosOffset * LocalPlayer.RatioPlayerToEyeDefaultScale), rotation * Quaternion.Euler(menuRotOffset));
+                        transform.SetPositionAndRotation(position + (menuPosOffset * LocalPlayer.EyeRatioPlayerToDefaultScale), rotation * Quaternion.Euler(menuRotOffset));
                     }
                     else
                     {

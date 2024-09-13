@@ -37,7 +37,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
                     }
                 }
 
-                FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+                FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
                 FinalRotation = LocalRawRotation;
 
                 // Input States

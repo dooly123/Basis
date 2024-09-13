@@ -64,7 +64,7 @@ namespace Basis.Scripts.Avatar
                 Player.AvatarLoadMode = Mode;
 
                 InitializePlayerAvatar(Player, Output);
-                await Player.SetPlayersEyeHeight();
+                BasisHeightDriver.SetPlayersEyeHeight(Player);
                 Player.AvatarSwitched();
             }
             catch (Exception e)

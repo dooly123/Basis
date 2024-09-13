@@ -116,7 +116,7 @@ namespace Basis.Scripts.Drivers
 
         private void CalculateStepHeight()
         {
-            StepHeight = DefaultFootOffset * Localplayer.RatioPlayerToAvatarScale;
+            StepHeight = DefaultFootOffset * Localplayer.EyeRatioPlayerToDefaultScale;
         }
 
         private void CalculateFootDistance()

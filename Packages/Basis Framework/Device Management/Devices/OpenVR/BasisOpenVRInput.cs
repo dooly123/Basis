@@ -36,7 +36,7 @@ public class BasisOpenVRInput : BasisInput
                     LocalRawPosition = deviceTransform.pos;
                     LocalRawRotation = deviceTransform.rot;
 
-                    FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+                    FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
                     FinalRotation = LocalRawRotation;
                     if (hasRoleAssigned)
                     {

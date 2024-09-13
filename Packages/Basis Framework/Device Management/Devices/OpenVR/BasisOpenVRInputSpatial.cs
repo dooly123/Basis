@@ -27,7 +27,7 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
             LocalRawPosition = resultPose.position;
             LocalRawRotation = resultPose.rotation;
 
-            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
             FinalRotation = LocalRawRotation;
             if (hasRoleAssigned)
             {
