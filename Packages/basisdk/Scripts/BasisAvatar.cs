@@ -15,7 +15,7 @@ namespace Basis.Scripts.BasisSdk
         public int[] BlinkViseme = new int[] { -1 };
         public int laughterBlendTarget = -1;
         [SerializeField]
-        public List<Renderer> Renders = new List<Renderer>();
+        public Renderer[] Renders;
         [SerializeField]
         public List<BasisJiggleStrain> JiggleStrains = new List<BasisJiggleStrain>();
 

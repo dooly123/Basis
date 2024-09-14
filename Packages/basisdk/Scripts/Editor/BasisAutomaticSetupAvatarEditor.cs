@@ -133,7 +133,7 @@ public static class BasisAutomaticSetupAvatarEditor
     }
     private static void UpdateAvatarRenders(BasisAvatar avatar)
     {
-        avatar.Renders = avatar.GetComponentsInChildren<Renderer>(true).ToList();
+        avatar.Renders = avatar.GetComponentsInChildren<Renderer>(true);
     }
 }
 }

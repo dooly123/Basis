@@ -4,7 +4,6 @@ using Basis.Scripts.Addressable_Driver.Loading;
 using Basis.Scripts.Addressable_Driver.Resource;
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Networking;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -134,19 +133,28 @@ namespace Basis.Scripts.Avatar
             {
                 DeleteLastAvatar(Player);
                 Player.Avatar = Avatar;
+                Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
                 if (Player is BasisLocalPlayer localPlayer)
                 {
                     CreateLocal(localPlayer);
                     localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
                     Avatar.OnAvatarReady?.Invoke(true);
+                    foreach (Renderer Render in Player.Avatar.Renders)
+                    {
+                        Render.renderingLayerMask = 2;
+                    }
                 }
                 else if (Player is BasisRemotePlayer remotePlayer)
                 {
                     CreateRemote(remotePlayer);
                     remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
                     Avatar.OnAvatarReady?.Invoke(false);
+                    foreach (Renderer Render in Player.Avatar.Renders)
+                    {
+                        Render.renderingLayerMask = 3;
+                    }
                 }
-               //no longer needed await Awaitable.NextFrameAsync();//this is so we can let scripts set up a frame before this call
+                //no longer needed await Awaitable.NextFrameAsync();//this is so we can let scripts set up a frame before this call
             }
         }
 
