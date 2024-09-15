@@ -107,7 +107,7 @@ MonoBehaviour:
   m_PrefilteringModeDeferredRendering: 0
   m_PrefilteringModeScreenSpaceOcclusion: 0
   m_PrefilterDebugKeywords: 1
-  m_PrefilterWriteRenderingLayers: 1
+  m_PrefilterWriteRenderingLayers: 0
   m_PrefilterHDROutput: 1
   m_PrefilterAlphaOutput: 1
   m_PrefilterSSAODepthNormals: 0

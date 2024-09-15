@@ -148,8 +148,6 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             FinalPosition = LocalRawPosition;
             FinalRotation = LocalRawRotation;
             UpdatePlayerControl();
-            BasisInputEye.LeftPosition = this.transform.position;
-            BasisInputEye.RightPosition = this.transform.position;
         }
         public void CalculateAdjustment()
         {

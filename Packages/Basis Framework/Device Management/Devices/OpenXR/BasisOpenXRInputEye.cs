@@ -1,3 +1,4 @@
+using Basis.Scripts.Drivers;
 using System.Collections.Generic;
 using UnityEngine.XR;
 
@@ -33,6 +34,11 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
             }
             if (rightEyeState.TryGetPosition(out RightPosition))
             {
+            }
+            if (BasisLocalCameraDriver.HasInstance)
+            {
+                BasisLocalCameraDriver.LeftEye = LeftPosition;
+                BasisLocalCameraDriver.RightEye = RightPosition;
             }
         }
     }

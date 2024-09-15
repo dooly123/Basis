@@ -1,3 +1,4 @@
+using Basis.Scripts.Drivers;
 using Valve.VR;
 
 namespace Basis.Scripts.Device_Management.Devices.OpenVR
@@ -10,8 +11,13 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         }
         public override void Simulate()
         {
-            LeftPosition = SteamVR.instance.eyes[0].pos;
-            RightPosition = SteamVR.instance.eyes[1].pos;
+            LeftPosition = SteamVR.instance.eyes[0].pos;//0 = left
+            RightPosition = SteamVR.instance.eyes[1].pos; //1 = right
+            if (BasisLocalCameraDriver.HasInstance)
+            {
+                BasisLocalCameraDriver.LeftEye = LeftPosition;
+                BasisLocalCameraDriver.RightEye = RightPosition;
+            }
         }
     }
 }

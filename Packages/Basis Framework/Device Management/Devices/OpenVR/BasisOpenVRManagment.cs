@@ -116,9 +116,6 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                 bool foundRole = TryAssignRole(device.deviceClass, device.deviceIndex, out BasisBoneTrackedRole role, out SteamVR_Input_Sources source);
                 await spatial.Initialize(UnityEngine.SpatialTracking.TrackedPoseDriver.TrackedPose.Center, uniqueID, notUniqueID, nameof(BasisOpenVRManagement), foundRole, role, source);
 
-                var eye = gameObject.AddComponent<BasisOpenVRInputEye>();
-                eye.Initalize();
-
                 BasisDeviceManagement.Instance.TryAdd(spatial);
                 TypicalDevices.TryAdd(uniqueID, device);
             }

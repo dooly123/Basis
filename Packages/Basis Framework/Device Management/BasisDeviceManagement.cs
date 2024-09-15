@@ -44,6 +44,10 @@ namespace Basis.Scripts.Device_Management
         /// <returns></returns>
         public static bool IsUserInDesktop()
         {
+            if(BasisDeviceManagement.Instance == null)
+            {
+                return false;
+            }
             if (Desktop == BasisDeviceManagement.Instance.CurrentMode)
             {
                 return true;

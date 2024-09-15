@@ -43,6 +43,8 @@ namespace Basis.Scripts.Drivers
         public float duration = 0.35f;
         public float halfDuration;
         public Vector3 largerScale;
+        public static Vector3 LeftEye;
+        public static Vector3 RightEye;
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -189,6 +191,28 @@ namespace Basis.Scripts.Drivers
             else
             {
                 return Vector3.zero;
+            }
+        }
+        public static Vector3 LeftEyePosition()
+        {
+            if (BasisDeviceManagement.IsUserInDesktop())
+            {
+                return Instance.transform.position;
+            }
+            else
+            {
+                return LeftEye;
+            }
+        }
+        public static Vector3 RightEyePosition()
+        {
+            if (BasisDeviceManagement.IsUserInDesktop())
+            {
+                return Instance.transform.position;
+            }
+            else
+            {
+                return RightEye;
             }
         }
         public static Quaternion Rotation()
