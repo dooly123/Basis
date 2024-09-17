@@ -17,6 +17,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public ushort PortDefault = 4296;
         public string PassWordDefault = "Default";
         public ushort SelectedPort = 4296;
+        public bool IsServer = false;
         public void OnEnable()
         {
             IP.contentType = TMP_InputField.ContentType.Standard;
@@ -50,7 +51,7 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             if (IP != null)
             {
-                NetworkConnector.Connect(SelectedPort, IP.text);
+                NetworkConnector.Connect(SelectedPort, IP.text, IsServer);
             }
         }
 

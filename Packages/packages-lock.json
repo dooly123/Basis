@@ -6,6 +6,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.basis.basisconsoledisplay": {
+      "version": "file:basisconsole",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.basis.basisdk": {
       "version": "file:basisdk",
       "depth": 0,
@@ -20,6 +26,12 @@
     },
     "com.basis.basistests": {
       "version": "file:basistests",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.basis.odinserializer": {
+      "version": "file:BasisSerializer.OdinSerializer",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

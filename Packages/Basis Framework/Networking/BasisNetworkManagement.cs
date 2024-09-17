@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using BasisSerializer.OdinSerializer;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
@@ -88,7 +89,7 @@ namespace Basis.Scripts.Networking
             OnEnableInstanceCreate?.Invoke();
             if (ForceConnect)
             {
-                Connect(Port, Ip);
+                Connect(Port, Ip, ISServer);
             }
         }
         public void SetupSceneEvents(BasisScene BasisScene)
@@ -97,10 +98,16 @@ namespace Basis.Scripts.Networking
         }
         public void Connect()
         {
-            Connect(Port, Ip);
+            Connect(Port, Ip, ISServer);
         }
-        public void Connect(ushort Port, string IpString)
+        public void Connect(ushort Port, string IpString, bool StartServer)
         {
+            Debug.Log("Connecting with Port " + Port + " IpString " + IpString + " Is Server = " + StartServer);
+            if (StartServer)
+            {
+                BasisNetworkServer NetworkServer = BasisHelpers.GetOrAddComponent<BasisNetworkServer>(this.gameObject);
+                NetworkServer.Create();
+            }
             HasAuthenticated = false;
             if (HasInitalizedClient == false)
             {
@@ -115,13 +122,14 @@ namespace Basis.Scripts.Networking
             }
             Client.ConnectInBackground(BasisNetworkIPResolve.IpOutput(IpString), Port, Callback);
         }
+        public bool ISServer = false;
         private void Disconnected(object sender, DisconnectedEventArgs e)
         {
             Debug.LogError("Disconnected from Server " + e.Error);
             Disconnect();
             if (TryToReconnectAutomatically)
             {
-                Connect(Port, Ip);
+                Connect(Port, Ip, ISServer);
             }
             else
             {
