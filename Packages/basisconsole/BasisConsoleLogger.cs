@@ -35,7 +35,7 @@ public class BasisConsoleLogger : BasisUIBase
     public Canvas Canvas;
     public void ToggleMouse()
     {
-        BasisCursorManagement.UnlockCursor(nameof(BasisUISettings));
+        BasisCursorManagement.LockCursor(nameof(BasisConsoleLogger));
     }
     public void OnButtonReleased()
     {
@@ -141,11 +141,11 @@ public class BasisConsoleLogger : BasisUIBase
 
     public override void DestroyEvent()
     {
-        BasisCursorManagement.LockCursor(nameof(BasisUISettings));
+        BasisCursorManagement.LockCursor(nameof(BasisConsoleLogger));
     }
 
     public override void InitalizeEvent()
     {
-        BasisCursorManagement.UnlockCursor(nameof(BasisUISettings));
+        BasisCursorManagement.UnlockCursor(nameof(BasisConsoleLogger));
     }
 }
