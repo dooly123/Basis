@@ -17,7 +17,7 @@ public class BasisConsoleLogger : BasisUIBase
     public bool IsUpdating = true;
     public TextMeshProUGUI CollapseButtonText;
     public TextMeshProUGUI StopButtonText;
-    public float updateInterval = 0.04f; // 40 milliseconds
+    public float updateInterval = 0.1f; // 100 milliseconds
     public float timeSinceLastUpdate = 0f;
     public BasisButtonHeldCallBack BasisButtonHeldCallBack;
     public Button MouseLock;

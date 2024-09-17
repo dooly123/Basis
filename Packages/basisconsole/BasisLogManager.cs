@@ -5,15 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
-
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using UnityEngine;
-
 public static class BasisLogManager
 {
     private static readonly ConcurrentQueue<(string logString, string stackTrace, LogType type)> logQueue = new ConcurrentQueue<(string, string, LogType)>();
@@ -124,14 +115,15 @@ public static class BasisLogManager
         {
             if (logQueue.TryDequeue(out var logEntry))
             {
-                AddLog(logEntry.logString, logEntry.type);
+               // logEntry.stackTrace
+                AddLog(logEntry.logString,logEntry.stackTrace, logEntry.type);
                 LogChanged = true;
             }
             Thread.Sleep(PollingInMs); // Prevents CPU overutilization
         }
     }
 
-    private static void AddLog(string logString, LogType type)
+    private static void AddLog(string logString, string stackTrace, LogType type)
     {
         string coloredLog = ColorizeLog(logString, type);
 
@@ -144,6 +136,8 @@ public static class BasisLogManager
                 case LogType.Error:
                 case LogType.Exception:
                     AddLogEntry(errorEntries, coloredLog);
+                    string stackTraceLog = ColorizeLog(stackTrace, type);
+                    AddLogEntry(errorEntries, stackTraceLog);
                     break;
                 case LogType.Warning:
                     AddLogEntry(warningEntries, coloredLog);
@@ -217,7 +211,7 @@ public static class BasisLogManager
             string[] lines = File.ReadAllLines(logFilePath);
             foreach (string line in lines)
             {
-                AddLog(line, LogType.Log);
+                AddLog(line,string.Empty, LogType.Log);
             }
         }
     }
