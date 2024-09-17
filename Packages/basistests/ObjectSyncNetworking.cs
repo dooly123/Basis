@@ -143,11 +143,8 @@ public class ObjectSyncNetworking : MonoBehaviour
         // Check if this is the correct message
         if (MessageIndex == this.MessageIndex)
         {
+            byteArray = buffer;
             Storeddata = SerializationUtility.DeserializeValue<BasisPositionRotationScale>(byteArray, DataFormat.Binary);
-
-            // Update position, rotation, and scale on the object
-            transform.SetPositionAndRotation(Storeddata.Position, Storeddata.Rotation);
-            transform.localScale = Storeddata.Scale;
         }
     }
 }
