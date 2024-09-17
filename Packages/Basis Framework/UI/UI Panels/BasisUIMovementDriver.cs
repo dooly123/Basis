@@ -6,14 +6,12 @@ namespace Basis.Scripts.UI.UI_Panels
 {
     public class BasisUIMovementDriver : MonoBehaviour
     {
-        public BasisLocalPlayer LocalPlayer;
         public Vector3 WorldOffset = new Vector3(0, 0, 0.5f);
         public bool hasLocalCreationEvent = false;
         public Vector3 Position;
         public Quaternion Rotation;
         public void OnEnable()
         {
-            LocalPlayer = BasisLocalPlayer.Instance;
             if (BasisLocalPlayer.Instance != null)
             {
                 LocalPlayerGenerated();
@@ -52,7 +50,7 @@ namespace Basis.Scripts.UI.UI_Panels
             BasisLocalCameraDriver.GetPositionAndRotation(out Position, out Rotation);
 
             // Log the current scale for debugging purposes
-            Debug.Log("Scale was " + LocalPlayer.EyeRatioPlayerToDefaultScale);
+            Debug.Log("Scale was " + BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale);
 
             // Extract the yaw (rotation around the vertical axis) and ignore pitch and roll
             Vector3 eulerRotation = Rotation.eulerAngles;
@@ -63,7 +61,7 @@ namespace Basis.Scripts.UI.UI_Panels
             Quaternion horizontalRotation = Quaternion.Euler(eulerRotation);
 
             // Set the position and the adjusted horizontal rotation
-            transform.SetPositionAndRotation(Position + (horizontalRotation * (WorldOffset * LocalPlayer.EyeRatioPlayerToDefaultScale)), horizontalRotation);
+            transform.SetPositionAndRotation(Position + (horizontalRotation * (WorldOffset * BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale)), horizontalRotation);
         }
     }
 }

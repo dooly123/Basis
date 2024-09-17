@@ -5,7 +5,6 @@ using Basis.Scripts.Networking.NetworkedPlayer;
 using BasisSerializer.OdinSerializer;
 using DarkRift;
 using UnityEngine;
-
 public class ObjectSyncNetworking : MonoBehaviour
 {
     public ushort MessageIndex = 3321;
@@ -21,7 +20,6 @@ public class ObjectSyncNetworking : MonoBehaviour
     public Vector3 previousScale;
     public bool NeedsAUpdate = false;
     public Rigidbody Rigidbody;
-
     public BasisPositionRotationScale Storeddata = new BasisPositionRotationScale();
     public void Awake()
     {
@@ -31,7 +29,6 @@ public class ObjectSyncNetworking : MonoBehaviour
         BasisNetworkManagement.OnLocalPlayerLeft += OnLocalPlayerLeft;
         BasisNetworkManagement.OnRemotePlayerLeft += OnRemotePlayerLeft;
     }
-
     public void OnDestroy()
     {
         BasisScene.OnNetworkMessageReceived -= OnNetworkMessageReceived;
@@ -40,7 +37,6 @@ public class ObjectSyncNetworking : MonoBehaviour
         BasisNetworkManagement.OnLocalPlayerLeft -= OnLocalPlayerLeft;
         BasisNetworkManagement.OnRemotePlayerLeft -= OnRemotePlayerLeft;
     }
-
     public void OnRemotePlayerLeft(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
     {
         // Handle the remote player leaving
@@ -153,11 +149,5 @@ public class ObjectSyncNetworking : MonoBehaviour
             transform.SetPositionAndRotation(Storeddata.Position, Storeddata.Rotation);
             transform.localScale = Storeddata.Scale;
         }
-    }
-    public struct BasisPositionRotationScale
-    {
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public Vector3 Scale;
     }
 }

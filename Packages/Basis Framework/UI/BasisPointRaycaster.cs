@@ -208,7 +208,7 @@ namespace Basis.Scripts.UI
             {
                 if (PhysicHit.transform != null)
                 {
-                    if (BasisDeviceManagement.IsUserInDesktop() && BasisCursorManagement.LockState() != CursorLockMode.Locked)
+                    if (BasisDeviceManagement.IsUserInDesktop() && BasisCursorManagement.ActiveLockState() != CursorLockMode.Locked)
                     {
                         highlightQuadInstance.SetActive(false);
                     }

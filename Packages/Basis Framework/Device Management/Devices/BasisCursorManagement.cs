@@ -14,11 +14,11 @@ public static class BasisCursorManagement
         Cursor.visible = false;
         Debug.Log("Requested a forced Cursor Lock for " + requestName);
     }
-    public static CursorLockMode LockState()
+    public static CursorLockMode ActiveLockState()
     {
         return Cursor.lockState;
     }
-    public static bool Visible()
+    public static bool IsVisible()
     {
         return Cursor.visible;
     }

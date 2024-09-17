@@ -55,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 356a8bb117010ea4084b0dd6463d28b0
+    m_Address: LoggerUI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 35e7c7e4293a3cb41844fb14a5d75725
     m_Address: NetworkedPlayer
     m_ReadOnly: 0

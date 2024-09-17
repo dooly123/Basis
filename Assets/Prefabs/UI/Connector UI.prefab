@@ -645,7 +645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 0.39607844}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1947,7 +1947,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8917893734727658160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1988,7 +1988,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87e7a2b5ca91e74f93d8eb6d575954e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LocalPlayer: {fileID: 0}
   WorldOffset: {x: 0, y: 0, z: 0.5}
   hasLocalCreationEvent: 0
   Position: {x: 0, y: 0, z: 0}
