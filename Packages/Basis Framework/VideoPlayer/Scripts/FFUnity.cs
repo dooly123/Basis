@@ -126,7 +126,7 @@ namespace FFmpeg.Unity
                 _audioLocker.ReleaseMutex();
             }
             _videoFrameClones.Clear();
-            foreach (var tex in _videoTextures)
+            foreach (TexturePool.TexturePoolState tex in _videoTextures)
             {
                 _texturePool.Release(tex);
             }
@@ -146,8 +146,6 @@ namespace FFmpeg.Unity
             }
             _videoDecoder.Seek();
             _audioDecoder?.Seek();
-
-
             FFUnityAudioHelper.PlayAll(AudioOutput, _audioClip);
             seekTarget = null;
             _paused = false;
@@ -160,7 +158,6 @@ namespace FFmpeg.Unity
             _streamAudioCtx = new FFmpegCtx(audio);
             Init();
         }
-
         public void Play(string urlV, string urlA)
         {
             DeInit();
@@ -182,7 +179,9 @@ namespace FFmpeg.Unity
         public void Resume()
         {
             if (!CanSeek)
+            {
                 Init();
+            }
             _paused = false;
         }
         public void Pause()
@@ -209,7 +208,6 @@ namespace FFmpeg.Unity
 
             // Stopwatches are more accurate than Time.timeAsDouble(?)
             _videoWatch = new Stopwatch();
-
             // pre-allocate buffers, prevent the C# GC from using CPU
             _texturePool = new TexturePool(_videoBufferCount);
             _videoTextures = new Queue<TexturePool.TexturePoolState>(_videoBufferCount);
@@ -351,13 +349,15 @@ namespace FFmpeg.Unity
             }
             return false;
         }
+        Stopwatch FillVideoBuffersStopWatch = new Stopwatch();
         private long FillVideoBuffers(bool mainThread, double invFps, double fpsMs)
         {
             if (_streamVideoCtx == null || _streamAudioCtx == null)
+            {
                 return 0;
-            Stopwatch sw = new Stopwatch();
-            sw.Restart();
-            while (sw.ElapsedMilliseconds <= fpsMs)
+            }
+            FillVideoBuffersStopWatch.Restart();
+            while (FillVideoBuffersStopWatch.ElapsedMilliseconds <= fpsMs)
             {
                 double time = default;
                 bool decodeV = true;
@@ -466,7 +466,7 @@ namespace FFmpeg.Unity
                     }
                 }
             }
-            return sw.ElapsedMilliseconds;
+            return FillVideoBuffersStopWatch.ElapsedMilliseconds;
         }
         private unsafe Texture2D UpdateVideo(int idx)
         {
@@ -484,7 +484,9 @@ namespace FFmpeg.Unity
                 tex.texture = FFUnityFrameHelper.SaveFrame(videoFrame, videoFrame.width, videoFrame.height, _videoDecoder.HWPixelFormat);
             }
             else
+            {
                 FFUnityFrameHelper.SaveFrame(videoFrame, videoFrame.width, videoFrame.height, tex.texture, _videoDecoder.HWPixelFormat);
+            }
             tex.texture.name = $"{name}-Texture2D-{idx}";
             _videoTextures.Enqueue(tex);
             Profiler.EndSample();
