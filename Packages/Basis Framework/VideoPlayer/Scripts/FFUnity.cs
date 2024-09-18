@@ -77,10 +77,6 @@ namespace FFmpeg.Unity
         private int _audioDisplayIndex = 0;
         private int _videoWriteIndex = 0;
         private int _audioWriteIndex = 0;
-        // logging
-        public Action<object> Log = UnityEngine.Debug.Log;
-        public Action<object> LogWarning = UnityEngine.Debug.LogWarning;
-        public Action<object> LogError = UnityEngine.Debug.LogError;
         private bool _lastAudioRead = false;
         private int _audioMissCount = 0;
         private double _lastVideoDecodeTime;
@@ -88,8 +84,9 @@ namespace FFmpeg.Unity
         [NonSerialized]
         public int skippedFrames = 0;
         public double VideoCatchupMultiplier = 5;
-        public float[] vals;
         public int LastTotalSize;
+        public int synchronizingmaxIterations = 128;
+        Stopwatch FillVideoBuffersStopWatch = new Stopwatch();
         private void OnEnable()
         {
             _paused = true;
@@ -99,6 +96,10 @@ namespace FFmpeg.Unity
             _paused = true;
         }
         private void OnDestroy()
+        {
+            DeInit();
+        }
+        public void DeInit()
         {
             _paused = true;
             _decodeThread?.Abort();
@@ -111,7 +112,7 @@ namespace FFmpeg.Unity
         }
         public void Seek(double seek)
         {
-            Log(nameof(Seek));
+            UnityEngine.Debug.Log(nameof(Seek));
             _paused = true;
             seekTarget = seek;
         }
@@ -165,17 +166,6 @@ namespace FFmpeg.Unity
             _streamAudioCtx = new FFmpegCtx(urlA);
             Init();
         }
-        public void DeInit()
-        {
-            _paused = true;
-            _decodeThread?.Abort();
-            _decodeThread?.Join();
-            _texturePool?.Dispose();
-            _videoDecoder?.Dispose();
-            _audioDecoder?.Dispose();
-            _streamVideoCtx?.Dispose();
-            _streamAudioCtx?.Dispose();
-        }
         public void Resume()
         {
             if (!CanSeek)
@@ -205,7 +195,6 @@ namespace FFmpeg.Unity
         private void Init()
         {
             _paused = true;
-
             // Stopwatches are more accurate than Time.timeAsDouble(?)
             _videoWatch = new Stopwatch();
             // pre-allocate buffers, prevent the C# GC from using CPU
@@ -217,11 +206,9 @@ namespace FFmpeg.Unity
             _audioFrames = new AVFrame[_audioBufferCount];
             _audioMemStream = new MemoryStream();
             _audioStream = new Queue<float>(_audioBufferSize * 4);
-
             ResetTimers();
             _lastVideoTex = null;
             _lastTexData = null;
-
             // init decoders
             _videoMutex = new Mutex(false, "Video Mutex");
             _videoDecoder = new VideoStreamDecoder(_streamVideoCtx, AVMediaType.AVMEDIA_TYPE_VIDEO, _hwType);
@@ -229,28 +216,85 @@ namespace FFmpeg.Unity
             _audioDecoder = new VideoStreamDecoder(_streamAudioCtx, AVMediaType.AVMEDIA_TYPE_AUDIO);
             _audioClip = AudioClip.Create($"{name}-AudioClip", _audioBufferSize * _audioDecoder.Channels, _audioDecoder.Channels, _audioDecoder.SampleRate, true, AudioCallback);
             FFUnityAudioHelper.PlayAll(AudioOutput, _audioClip);
-            Log(nameof(Play));
+            UnityEngine.Debug.Log(nameof(Play));
             Seek(0d);
         }
         private void Update()
         {
-            if (_videoWatch == null || _streamVideoCtx == null)
+            if (!IsInitialized())
             {
                 return;
             }
+            HandleEndOfStream();
+            if (HandleSeeking())
+            {
+                return;
+            }
+            UpdatePlaybackState();
+            if (!_paused)
+            {
+                StartOrResumeDecodeThread();
+                UpdateVideoDisplay();
+            }
+            _prevTime = _offset;
+            _wasPaused = _paused;
+        }
 
-            if (CanSeek && (_offset >= _streamVideoCtx.GetLength() || (_streamVideoCtx.EndReached && (_audioDecoder == null || _streamAudioCtx.EndReached) && _videoTextures.Count == 0 && (_audioDecoder == null || _audioStream.Count == 0))) && !_paused)
+        /// <summary>
+        /// Checks if the stream and video context are initialized.
+        /// </summary>
+        private bool IsInitialized()
+        {
+            if (_videoWatch == null || _streamVideoCtx == null)
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// Handles the end of the video stream and pauses if necessary.
+        /// </summary>
+        private void HandleEndOfStream()
+        {
+            if (CanSeek && IsStreamAtEnd() && !_paused)
             {
                 Pause();
             }
+        }
+        /// <summary>
+        /// Determines whether the video and audio streams have reached their end.
+        /// </summary>
+        /// <returns>True if both streams are at the end, false otherwise.</returns>
+        private bool IsStreamAtEnd()
+        {
+            return _offset >= _streamVideoCtx.GetLength()
+                || (_streamVideoCtx.EndReached &&
+                    (_audioDecoder == null || _streamAudioCtx.EndReached)
+                    && _videoTextures.Count == 0
+                    && (_audioDecoder == null || _audioStream.Count == 0));
+        }
+        /// <summary>
+        /// Handles seeking by performing an internal seek if necessary.
+        /// </summary>
+        /// <returns>True if a seek is in progress and has been handled, false otherwise.</returns>
+        private bool HandleSeeking()
+        {
             if (seekTarget.HasValue && (_decodeThread == null || !_decodeThread.IsAlive))
             {
                 SeekInternal(seekTarget.Value);
+                return true;
             }
-
+            return false;
+        }
+        /// <summary>
+        /// Updates the playback state, handling pause and resume logic.
+        /// </summary>
+        private void UpdatePlaybackState()
+        {
             if (!_paused)
             {
                 _offset = _elapsedOffset;
+
                 if (!_videoWatch.IsRunning)
                 {
                     _videoWatch.Start();
@@ -265,62 +309,106 @@ namespace FFmpeg.Unity
                     FFUnityAudioHelper.PauseAll(AudioOutput);
                 }
             }
-
-            if (!_paused)
-            {
-                if (_decodeThread == null || !_decodeThread.IsAlive)
-                    StartDecodeThread();
-
-                int idx = _videoDisplayIndex;
-                int j = 0;
-                while (Math.Abs(_elapsedOffsetVideo - (PlaybackTime + _videoOffset)) >= 0.25d || _lastVideoTex == null)
-                {
-                    j++;
-                    if (j >= 128)
-                        break;
-                    if (_videoMutex.WaitOne())
-                    {
-                        bool failed = !UpdateVideoFromClones(idx);
-                        _videoMutex.ReleaseMutex();
-                        // if (failed)
-                        //     break;
-                    }
-                    Present(idx, true);
-                }
-            }
-            _prevTime = _offset;
-            _wasPaused = _paused;
         }
-        private void Update_Thread()
+        /// <summary>
+        /// Starts the decode thread if necessary.
+        /// </summary>
+        private void StartOrResumeDecodeThread()
         {
-            Log("AV Thread started.");
-            double fps;
-            if (!_streamVideoCtx.TryGetFps(_videoDecoder, out fps))
-                fps = 30d;
-            double fpsMs = 1d / fps * 1000;
-            fps = 1d / fps;
+            if (_decodeThread == null || !_decodeThread.IsAlive)
+            {
+                StartDecodeThread();
+            }
+        }
+        /// <summary>
+        /// Updates the video display, synchronizing with the audio playback.
+        /// </summary>
+        private void UpdateVideoDisplay()
+        {
+            int idx = _videoDisplayIndex;
+            int iterations = 0;
+
+            while (ShouldUpdateVideo() && iterations < synchronizingmaxIterations)
+            {
+                iterations++;
+                if (_videoMutex.WaitOne())
+                {
+                    bool updateFailed = !UpdateVideoFromClones(idx);
+                    _videoMutex.ReleaseMutex();
+                }
+                Present(idx, true);
+            }
+        }
+        /// <summary>
+        /// Determines whether the video display should be updated.
+        /// </summary>
+        /// <returns>True if the video display needs updating, false otherwise.</returns>
+        private bool ShouldUpdateVideo()
+        {
+            return Math.Abs(_elapsedOffsetVideo - (PlaybackTime + _videoOffset)) >= 0.25d || _lastVideoTex == null;
+        }
+        private void UpdateThread()
+        {
+            UnityEngine.Debug.Log("AV Thread started.");
+
+            double targetFps = GetVideoFps();
+            double frameTimeMs = GetFrameTimeMs(targetFps);
+            double frameInterval = 1d / targetFps;
+
+            // Continuously update video frames while not paused
             while (!_paused)
             {
                 try
                 {
-                    long ms = FillVideoBuffers(false, fps, fpsMs);
-                    Thread.Sleep((int)Math.Max(5, fpsMs - ms));
+                    long elapsedMs = FillVideoBuffers(false, frameInterval, frameTimeMs);
+
+                    // Calculate the sleep duration, ensuring a minimum of 5ms sleep to avoid tight loops
+                    int sleepDurationMs = (int)Math.Max(5, frameTimeMs - elapsedMs);
+                    Thread.Sleep(sleepDurationMs);
                 }
                 catch (Exception e)
                 {
-                    LogError(e);
+                    UnityEngine.Debug.LogError($"Error in video update thread: {e}");
                 }
             }
-            Log("AV Thread stopped.");
+
+            // Log and finalize thread operation
+            UnityEngine.Debug.Log("AV Thread stopped.");
             _videoWatch.Stop();
             _paused = true;
         }
+
+        /// <summary>
+        /// Gets the frame rate of the video, defaulting to 30fps if not available.
+        /// </summary>
+        private double GetVideoFps()
+        {
+            if (!_streamVideoCtx.TryGetFps(_videoDecoder, out double fps))
+            {
+                fps = 30d;
+            }
+            return fps;
+        }
+
+        /// <summary>
+        /// Calculates the time per frame in milliseconds based on the FPS.
+        /// </summary>
+        private double GetFrameTimeMs(double fps)
+        {
+            return (1d / fps) * 1000;
+        }
         private void StartDecodeThread()
         {
-            _decodeThread = new Thread(() => Update_Thread());
+            _decodeThread = new Thread(() => UpdateThread());
             _decodeThread.Name = $"AV Decode Thread {name}";
             _decodeThread.Start();
         }
+        /// <summary>
+        /// Generates a Image
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <param name="display"></param>
+        /// <returns></returns>
         private bool Present(int idx, bool display)
         {
             if (_lastTexData.HasValue)
@@ -349,124 +437,183 @@ namespace FFmpeg.Unity
             }
             return false;
         }
-        Stopwatch FillVideoBuffersStopWatch = new Stopwatch();
         private long FillVideoBuffers(bool mainThread, double invFps, double fpsMs)
         {
-            if (_streamVideoCtx == null || _streamAudioCtx == null)
+            if (IsInitialized() == false)
             {
                 return 0;
             }
             FillVideoBuffersStopWatch.Restart();
+
+            // Main loop that runs as long as we are within the target frame time
             while (FillVideoBuffersStopWatch.ElapsedMilliseconds <= fpsMs)
             {
+                // Initialize state variables
                 double time = default;
-                bool decodeV = true;
-                bool decodeA = _audioDecoder != null;
-                if (_lastVideoTex != null)
+                bool decodeV = ShouldDecodeVideo();
+                bool decodeA = _audioDecoder != null && ShouldDecodeAudio();
+
+                // Process video frames
+                if (decodeV && TryProcessVideoFrame(mainThread, ref time))
                 {
-                    if (Math.Abs(_elapsedOffsetVideo - PlaybackTime) > _videoTimeBuffer * VideoCatchupMultiplier && !CanSeek)
-                    {
-                        _timeOffset = -PlaybackTime;
-                    }
+                    continue;
                 }
-                if (_lastVideoTex != null && _videoDecoder.CanDecode() && _streamVideoCtx.TryGetTime(_videoDecoder, out time))
+
+                // Process audio frames
+                if (decodeA && TryProcessAudioFrame(ref time))
                 {
-                    if (_elapsedOffsetVideo + _videoTimeBuffer < time)
-                        decodeV = false;
+                    continue;
+                }
+            }
+
+            return FillVideoBuffersStopWatch.ElapsedMilliseconds;
+        }
+        /// <summary>
+        /// Determines whether the video frame should be decoded.
+        /// </summary>
+        private bool ShouldDecodeVideo()
+        {
+            if (_lastVideoTex != null)
+            {
+                // Adjust the time offset if playback and video are out of sync
+                if (Math.Abs(_elapsedOffsetVideo - PlaybackTime) > _videoTimeBuffer * VideoCatchupMultiplier && !CanSeek)
+                {
+                    _timeOffset = -PlaybackTime;
+                }
+
+                // Check if the current video decoder can decode and is in sync
+                if (_videoDecoder.CanDecode() && _streamVideoCtx.TryGetTime(_videoDecoder, out var time))
+                {
+                    if (_elapsedOffsetVideo + _videoTimeBuffer < time) return false;
+
                     if (_elapsedOffsetVideo > time + _videoSkipBuffer && CanSeek)
                     {
                         _streamVideoCtx.NextFrame(out _);
                         skippedFrames++;
-                        decodeV = false;
-                    }
-                }
-                if (_lastVideoTex != null && _audioDecoder != null && _audioDecoder.CanDecode() && _streamAudioCtx.TryGetTime(_audioDecoder, out time))
-                {
-                    if (_elapsedOffset + _audioTimeBuffer < time)
-                        decodeA = false;
-                    if (_elapsedOffset > time + _audioSkipBuffer && CanSeek)
-                    {
-                        _streamAudioCtx.NextFrame(out _);
-                        skippedFrames++;
-                        decodeA = false;
-                    }
-                }
-                {
-                    int vid = -1;
-                    int aud = -1;
-                    AVFrame vFrame = default;
-                    AVFrame aFrame = default;
-                    if (decodeV)
-                    {
-                        _streamVideoCtx.NextFrame(out _);
-                        vid = _videoDecoder.Decode(out vFrame);
-                    }
-                    if (decodeA)
-                    {
-                        _streamAudioCtx.NextFrame(out _);
-                        aud = _audioDecoder.Decode(out aFrame);
-                    }
-                    switch (vid)
-                    {
-                        case 0:
-                            if (_streamVideoCtx.TryGetTime(_videoDecoder, vFrame, out time) && _elapsedOffsetVideo > time + _videoSkipBuffer && CanSeek)
-                                break;
-                            if (_streamVideoCtx.TryGetTime(_videoDecoder, vFrame, out time) && time != 0)
-                                _lastVideoDecodeTime = time;
-                            _videoFrames[_videoWriteIndex % _videoFrames.Length] = vFrame;
-                            if (mainThread)
-                            {
-                                UpdateVideo(_videoWriteIndex % _videoFrames.Length);
-                            }
-                            else
-                            {
-                                {
-                                    if (_videoMutex.WaitOne(1))
-                                    {
-                                        byte[] frameClone = new byte[vFrame.width * vFrame.height * 3];
-                                        if (!FFUnityFrameHelper.SaveFrame(vFrame, vFrame.width, vFrame.height, frameClone, _videoDecoder.HWPixelFormat))
-                                        {
-                                            LogError("Could not save frame");
-                                            _videoWriteIndex--;
-                                        }
-                                        else
-                                        {
-                                            _streamVideoCtx.TryGetTime(_videoDecoder, vFrame, out time);
-                                            _lastPts = time;
-                                            _videoFrameClones.Enqueue(new FFTexData()
-                                            {
-                                                time = time,
-                                                data = frameClone,
-                                                w = vFrame.width,
-                                                h = vFrame.height,
-                                            });
-                                        }
-                                        _videoMutex.ReleaseMutex();
-                                    }
-                                }
-                            }
-                            _videoWriteIndex++;
-                            break;
-                        case 1:
-                            break;
-                    }
-                    switch (aud)
-                    {
-                        case 0:
-                            if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && _elapsedOffset > time + _audioSkipBuffer && CanSeek)
-                                break;
-                            if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && time != 0)
-                                _lastAudioDecodeTime = time;
-                            _audioFrames[_audioWriteIndex % _audioFrames.Length] = aFrame;
-                            UpdateAudio(_audioWriteIndex % _audioFrames.Length);
-                            _audioWriteIndex++;
-                            break;
-                        case 1:
-                            break;
+                        return false;
                     }
                 }
             }
-            return FillVideoBuffersStopWatch.ElapsedMilliseconds;
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether the audio frame should be decoded.
+        /// </summary>
+        private bool ShouldDecodeAudio()
+        {
+            if (_audioDecoder != null && _audioDecoder.CanDecode() && _streamAudioCtx.TryGetTime(_audioDecoder, out var time))
+            {
+                if (_elapsedOffset + _audioTimeBuffer < time) return false;
+
+                if (_elapsedOffset > time + _audioSkipBuffer && CanSeek)
+                {
+                    _streamAudioCtx.NextFrame(out _);
+                    skippedFrames++;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Processes the video frame, decodes it, and manages the buffer.
+        /// </summary>
+        private bool TryProcessVideoFrame(bool mainThread, ref double time)
+        {
+            int vid = -1;
+            AVFrame vFrame = default;
+
+            // Attempt to decode the next video frame
+            _streamVideoCtx.NextFrame(out _);
+            vid = _videoDecoder.Decode(out vFrame);
+
+            if (vid == 0)
+            {
+                if (_streamVideoCtx.TryGetTime(_videoDecoder, vFrame, out time) && _elapsedOffsetVideo > time + _videoSkipBuffer && CanSeek)
+                    return false;
+
+                if (_streamVideoCtx.TryGetTime(_videoDecoder, vFrame, out time) && time != 0)
+                    _lastVideoDecodeTime = time;
+
+                // Store the video frame in the buffer
+                _videoFrames[_videoWriteIndex % _videoFrames.Length] = vFrame;
+
+                if (mainThread)
+                {
+                    UpdateVideo(_videoWriteIndex % _videoFrames.Length);
+                }
+                else
+                {
+                    EnqueueVideoFrame(vFrame, time);
+                }
+
+                _videoWriteIndex++;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Processes the audio frame, decodes it, and manages the buffer.
+        /// </summary>
+        private bool TryProcessAudioFrame(ref double time)
+        {
+            int aud = -1;
+            AVFrame aFrame = default;
+
+            // Attempt to decode the next audio frame
+            _streamAudioCtx.NextFrame(out _);
+            aud = _audioDecoder.Decode(out aFrame);
+
+            if (aud == 0)
+            {
+                if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && _elapsedOffset > time + _audioSkipBuffer && CanSeek)
+                    return false;
+
+                if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && time != 0)
+                    _lastAudioDecodeTime = time;
+
+                // Store the audio frame in the buffer
+                _audioFrames[_audioWriteIndex % _audioFrames.Length] = aFrame;
+                UpdateAudio(_audioWriteIndex % _audioFrames.Length);
+
+                _audioWriteIndex++;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Enqueues the video frame data for background processing.
+        /// </summary>
+        private void EnqueueVideoFrame(AVFrame vFrame, double time)
+        {
+            if (_videoMutex.WaitOne(1))
+            {
+                byte[] frameClone = new byte[vFrame.width * vFrame.height * 3];
+                if (!FFUnityFrameHelper.SaveFrame(vFrame, vFrame.width, vFrame.height, frameClone, _videoDecoder.HWPixelFormat))
+                {
+                    UnityEngine.Debug.LogError("Could not save frame");
+                    _videoWriteIndex--;
+                }
+                else
+                {
+                    _streamVideoCtx.TryGetTime(_videoDecoder, vFrame, out time);
+                    _lastPts = time;
+
+                    _videoFrameClones.Enqueue(new FFTexData
+                    {
+                        time = time,
+                        data = frameClone,
+                        w = vFrame.width,
+                        h = vFrame.height,
+                    });
+                }
+                _videoMutex.ReleaseMutex();
+            }
         }
         private unsafe Texture2D UpdateVideo(int idx)
         {
@@ -538,7 +685,7 @@ namespace FFmpeg.Unity
                 int size = ffmpeg.av_samples_get_buffer_size(null, 1, audioFrame.nb_samples, _audioDecoder.SampleFormat, 1);
                 if (size < 0)
                 {
-                    LogError("audio buffer size is less than zero");
+                    UnityEngine.Debug.LogError("audio buffer size is less than zero");
                     Profiler.EndSample();
                     return;
                 }
@@ -566,4 +713,4 @@ namespace FFmpeg.Unity
             Profiler.EndSample();
         }
     }
-    }
+}
