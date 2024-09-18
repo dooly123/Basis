@@ -1257,8 +1257,17 @@ MonoBehaviour:
   _audioSkipBuffer: 0.25
   _hwType: 7
   VideoCatchupMultiplier: 5
-  vals: []
   LastTotalSize: 0
+  synchronizingmaxIterations: 128
+  unityTextureGeneration:
+    PresumedInitalTextureSizeX: 1280
+    PresumedInitalTextureSizeY: 720
+    texture: {fileID: 0}
+    ActivelyRenderering: 1
+    FilterMode: 1
+    TextureWrapMode: 1
+    TextureFormat: 3
+    hasMipChain: 0
 --- !u!1 &7187874680083524858
 GameObject:
   m_ObjectHideFlags: 0

@@ -52,7 +52,6 @@ namespace FFmpeg.Unity
         private TexturePool.TexturePoolState _lastVideoTex;
         private TexturePool _texturePool;
         private FFTexData? _lastTexData;
-        private Texture2D image;
         private AudioClip _audioClip;
         private MaterialPropertyBlock propertyBlock;
         public Action<Texture2D> OnDisplay = null;
@@ -192,6 +191,8 @@ namespace FFmpeg.Unity
             _timeOffset = 0d;
             timer = 0d;
         }
+        [SerializeField]
+        public FFUnityTextureGeneration unityTextureGeneration = new FFUnityTextureGeneration();
         private void Init()
         {
             _paused = true;
@@ -209,6 +210,9 @@ namespace FFmpeg.Unity
             ResetTimers();
             _lastVideoTex = null;
             _lastTexData = null;
+
+            unityTextureGeneration.InitializeTexture();
+
             // init decoders
             _videoMutex = new Mutex(false, "Video Mutex");
             _videoDecoder = new VideoStreamDecoder(_streamVideoCtx, AVMediaType.AVMEDIA_TYPE_VIDEO, _hwType);
@@ -336,7 +340,7 @@ namespace FFmpeg.Unity
                     bool updateFailed = !UpdateVideoFromClones(idx);
                     _videoMutex.ReleaseMutex();
                 }
-                Present(idx, true);
+                Present(idx);
             }
         }
         /// <summary>
@@ -404,38 +408,27 @@ namespace FFmpeg.Unity
             _decodeThread.Start();
         }
         /// <summary>
-        /// Generates a Image
+        /// Generates an Image
         /// </summary>
         /// <param name="idx"></param>
         /// <param name="display"></param>
         /// <returns></returns>
-        private bool Present(int idx, bool display)
+        private bool Present(int idx)
         {
-            if (_lastTexData.HasValue)
-            {
-                _lastVideoTex = new TexturePool.TexturePoolState()
-                {
-                    pts = _lastTexData.Value.time,
-                };
-                if (display)
-                {
-                    if (image == null)
-                    {
-                        image = new Texture2D(16, 16, TextureFormat.RGB24, false);
-                    }
-                    if (image.width != _lastTexData.Value.w || image.height != _lastTexData.Value.h)
-                    {
-                        image.Reinitialize(_lastTexData.Value.w, _lastTexData.Value.h);
-                    }
-                    image.SetPixelData(_lastTexData.Value.data, 0);
-                    image.Apply(false);
+            if (!_lastTexData.HasValue)
+                return false; // Early exit if no texture data
 
-                    OnDisplay?.Invoke(image);
-                }
-                _lastTexData = null;
-                return true;
-            }
-            return false;
+            _lastVideoTex = new TexturePool.TexturePoolState()
+            {
+                pts = _lastTexData.Value.time,
+            };
+
+            unityTextureGeneration.UpdateTexture(_lastTexData.Value);
+            // Invoke the display callback
+            OnDisplay?.Invoke(unityTextureGeneration.texture);
+
+            _lastTexData = null; // Clear after processing
+            return true;
         }
         private long FillVideoBuffers(bool mainThread, double invFps, double fpsMs)
         {
@@ -654,19 +647,36 @@ namespace FFmpeg.Unity
         }
         private unsafe void AudioCallback(float[] data)
         {
-            if (_audioLocker.WaitOne(0))
+            // Attempt to acquire the lock with minimal blocking
+            if (!_audioLocker.WaitOne(0))
+                return;
+
+            // Reduce locking duration by processing audio data outside the lock as much as possible
+            try
             {
-                if (_audioStream.Count < data.Length)
+                int availableSamples = _audioStream.Count;
+
+                // Check if there are enough samples to fill the audio buffer
+                _lastAudioRead = availableSamples >= data.Length;
+
+                // Batch processing: dequeue as many elements as possible
+                int samplesToDequeue = Math.Min(availableSamples, data.Length);
+
+                for (int SampleIndex = 0; SampleIndex < samplesToDequeue; SampleIndex++)
                 {
-                    _lastAudioRead = false;
+                    // Efficiently dequeue audio samples
+                    _audioStream.TryDequeue(out data[SampleIndex]);
                 }
-                for (int i = 0; i < data.Length; i++)
+
+                // Zero out the rest of the buffer if there aren't enough samples
+                if (samplesToDequeue < data.Length)
                 {
-                    if (_audioStream.Count > 0)
-                        data[i] = _audioStream.Dequeue();
-                    else
-                        data[i] = 0;
+                    Array.Clear(data, samplesToDequeue, data.Length - samplesToDequeue);
                 }
+            }
+            finally
+            {
+                // Always release the mutex to avoid deadlocks
                 _audioLocker.ReleaseMutex();
             }
         }
