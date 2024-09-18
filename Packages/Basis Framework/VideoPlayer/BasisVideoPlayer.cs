@@ -140,7 +140,7 @@ public class BasisVideoPlayer : MonoBehaviour
     // API method to set the playback volume
     public void SetVolume(float volume)
     {
-        FFUnityAudioHelper.SetVolume(ffmpeg.AudioOutput, Mathf.Clamp(volume, 0f, 1f));
+        FFUnityAudioHelper.SetVolume(ffmpeg.AudioProcessing.AudioOutput, Mathf.Clamp(volume, 0f, 1f));
     }
 
     // API method to retrieve the current playback time

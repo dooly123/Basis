@@ -23,10 +23,14 @@ public static class FFUnityAudioHelper
             }
         }
     }
-    public static void PlayAll(List<FFUnityAudio> AudioSources,AudioClip Clip)
+    public static void PlayAll(List<FFUnityAudio> AudioSources,int Channel,AudioClip Clip)
     {
         foreach (FFUnityAudio FFUnityAudio in AudioSources)
         {
+            if(FFUnityAudio.Channel != Channel)
+            {
+                continue;
+            }
             if (FFUnityAudio.source != null)
             {
                 FFUnityAudio.source.clip = Clip;
