@@ -505,15 +505,11 @@ namespace FFmpeg.Unity
         }
         private unsafe void AudioCallback(float[] data)
         {
-            byte[] bytes = new byte[data.Length * sizeof(float)];
             if (_audioLocker.WaitOne(0))
             {
-                // /*
                 if (_audioStream.Count < data.Length)
                 {
                     _lastAudioRead = false;
-                    // _audioLocker.ReleaseMutex();
-                    // return;
                 }
                 for (int i = 0; i < data.Length; i++)
                 {
@@ -522,11 +518,8 @@ namespace FFmpeg.Unity
                     else
                         data[i] = 0;
                 }
-                // */
-                // _audioMemStream.Read(bytes);
                 _audioLocker.ReleaseMutex();
             }
-            // Buffer.BlockCopy(bytes, 0, data, 0, bytes.Length);
         }
         private unsafe void UpdateAudio(int idx)
         {
@@ -551,25 +544,20 @@ namespace FFmpeg.Unity
                 float[] backBuffer3 = new float[size / sizeof(float)];
                 Marshal.Copy((IntPtr)audioFrame.data[ch], backBuffer2, 0, size);
                 Buffer.BlockCopy(backBuffer2, 0, backBuffer3, 0, backBuffer2.Length);
+                for (int i = 0; i < backBuffer3.Length; i++)
                 {
-                    for (int i = 0; i < backBuffer3.Length; i++)
-                    {
-                        vals.Add(backBuffer3[i]);
-                    }
+                    vals.Add(backBuffer3[i]);
                 }
             }
             if (_audioLocker.WaitOne(0))
             {
                 int c = vals.Count / _audioDecoder.Channels;
-                for (int i = 0; i < c; i++)
+                for (int valueIndex = 0; valueIndex < c; valueIndex++)
                 {
-                    // float val = 0f;
-                    for (int j = 0; j < _audioDecoder.Channels; j++)
+                    for (int ChannelIndex = 0; ChannelIndex < _audioDecoder.Channels; ChannelIndex++)
                     {
-                        // val += vals[i + c * j];
-                        _audioStream.Enqueue(vals[i + c * j]);
+                        _audioStream.Enqueue(vals[valueIndex + c * ChannelIndex]);
                     }
-                    // _audioStream.Enqueue(val / _audioDecoder.Channels);
                 }
                 _audioLocker.ReleaseMutex();
             }
