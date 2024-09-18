@@ -72,8 +72,6 @@ namespace FFmpeg.Unity
         // buffers
         private AVFrame[] _videoFrames;
         private AVFrame[] _audioFrames;
-        private int _videoDisplayIndex = 0;
-        private int _audioDisplayIndex = 0;
         private int _videoWriteIndex = 0;
         private int _audioWriteIndex = 0;
         private bool _lastAudioRead = false;
@@ -86,6 +84,8 @@ namespace FFmpeg.Unity
         public int LastTotalSize;
         public int synchronizingmaxIterations = 128;
         Stopwatch FillVideoBuffersStopWatch = new Stopwatch();
+        [SerializeField]
+        public FFUnityTextureGeneration unityTextureGeneration = new FFUnityTextureGeneration();
         private void OnEnable()
         {
             _paused = true;
@@ -179,9 +179,6 @@ namespace FFmpeg.Unity
         }
         private void ResetTimers()
         {
-            // reset index counters and timers
-            _videoDisplayIndex = 0;
-            _audioDisplayIndex = 0;
             _videoWriteIndex = 0;
             _audioWriteIndex = 0;
             _lastPts = null;
@@ -191,8 +188,6 @@ namespace FFmpeg.Unity
             _timeOffset = 0d;
             timer = 0d;
         }
-        [SerializeField]
-        public FFUnityTextureGeneration unityTextureGeneration = new FFUnityTextureGeneration();
         private void Init()
         {
             _paused = true;
@@ -329,7 +324,6 @@ namespace FFmpeg.Unity
         /// </summary>
         private void UpdateVideoDisplay()
         {
-            int idx = _videoDisplayIndex;
             int iterations = 0;
 
             while (ShouldUpdateVideo() && iterations < synchronizingmaxIterations)
@@ -337,10 +331,10 @@ namespace FFmpeg.Unity
                 iterations++;
                 if (_videoMutex.WaitOne())
                 {
-                    bool updateFailed = !UpdateVideoFromClones(idx);
+                    bool updateFailed = !UpdateVideoFromClones();
                     _videoMutex.ReleaseMutex();
                 }
-                Present(idx);
+                Present();
             }
         }
         /// <summary>
@@ -410,10 +404,8 @@ namespace FFmpeg.Unity
         /// <summary>
         /// Generates an Image
         /// </summary>
-        /// <param name="idx"></param>
-        /// <param name="display"></param>
         /// <returns></returns>
-        private bool Present(int idx)
+        private bool Present()
         {
             if (!_lastTexData.HasValue)
                 return false; // Early exit if no texture data
@@ -632,7 +624,7 @@ namespace FFmpeg.Unity
             Profiler.EndSample();
             return tex.texture;
         }
-        private unsafe bool UpdateVideoFromClones(int idx)
+        private unsafe bool UpdateVideoFromClones()
         {
             Profiler.BeginSample(nameof(UpdateVideoFromClones), this);
             if (_videoFrameClones.Count == 0)
