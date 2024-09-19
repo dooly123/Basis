@@ -12,6 +12,8 @@ namespace FFmpeg.Unity
         public TextureWrapMode TextureWrapMode = TextureWrapMode.Clamp;
         public TextureFormat TextureFormat = TextureFormat.RGB24;
         public bool hasMipChain = false;
+        public int CachedlastWidth;
+        public int CachedlastHeight;
         public void InitializeTexture()
         {
             InitializeTexture(PresumedInitalTextureSizeY, PresumedInitalTextureSizeX);
@@ -22,7 +24,8 @@ namespace FFmpeg.Unity
             texture = new Texture2D(width, height, TextureFormat, hasMipChain);
             texture.filterMode = FilterMode; // Adjust this based on your requirements (e.g., Point, Trilinear)
             texture.wrapMode = TextureWrapMode;  // Adjust this if needed
-
+            CachedlastWidth = width;
+            CachedlastHeight = height;
             // Optionally mark it as non-readable to save memory and improve performance.
             texture.Apply(updateMipmaps: false, makeNoLongerReadable: false);
         }
@@ -32,7 +35,7 @@ namespace FFmpeg.Unity
         {
             if (ActivelyRenderering)
             {
-                if (texture.width != texData.w || texture.height != texData.h)
+                if (CachedlastWidth != texData.w || CachedlastHeight != texData.h)
                 {
                     InitializeTexture(texData.w, texData.h);  // Reinitialize texture if dimensions changed
                 }

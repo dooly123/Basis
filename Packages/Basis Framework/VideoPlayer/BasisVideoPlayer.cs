@@ -3,6 +3,7 @@ using System.Net.Http;
 using System;
 using UnityEngine;
 using FFmpeg.Unity;
+using System.Threading.Tasks;
 
 public class BasisVideoPlayer : MonoBehaviour
 {
@@ -12,16 +13,16 @@ public class BasisVideoPlayer : MonoBehaviour
     public MeshRenderer mesh;
     public string MaterialTextureId = "_EmissionMap";
     public Material RuntimeMaterial;
-    private void Start()
+    private async void Start()
     {
         RuntimeMaterial = Material.Instantiate(mesh.sharedMaterial);
         RuntimeMaterial.mainTextureScale = new Vector2(1, -1);
-        RuntimeMaterial.mainTextureOffset = new Vector2(0,1);
+        RuntimeMaterial.mainTextureOffset = new Vector2(0, 1);
         mesh.sharedMaterial = RuntimeMaterial;
         ffmpeg.OnDisplay = OnDisplay;
         if (!string.IsNullOrEmpty(contentUrl))
         {
-            Play(contentUrl); // Play the provided URL if it's set
+            await PlayAsync(contentUrl); // Play the provided URL if it's set
         }
     }
 
@@ -32,9 +33,12 @@ public class BasisVideoPlayer : MonoBehaviour
         RuntimeMaterial.SetTexture(MaterialTextureId, tex);
         mesh.UpdateGIMaterials();
     }
-
+    public async void Play(string url)
+    {
+        await PlayAsync(url);
+    }
     // Play a video from a URL or local file path
-    public void Play(string url)
+    public async Task PlayAsync(string url)
     {
         if (string.IsNullOrEmpty(url))
         {
@@ -47,16 +51,19 @@ public class BasisVideoPlayer : MonoBehaviour
 
         if (stream)
         {
-            PlayStream(contentUrl);  // Handle streaming
+            await PlayStreamAsync(contentUrl);  // Handle streaming
         }
         else
         {
-            PlayFile(contentUrl);  // Handle local file
+            await PlayFileAsync(contentUrl);  // Handle local file
         }
     }
-
+    public async void PlayFile(string filePath)
+    {
+       await PlayFileAsync(filePath);
+    }
     // Play a local video file using FFmpeg
-    public void PlayFile(string filePath)
+    public async Task PlayFileAsync(string filePath)
     {
         try
         {
@@ -65,7 +72,7 @@ public class BasisVideoPlayer : MonoBehaviour
                 Debug.Log("Playing local file: " + filePath);
                 using (FileStream videoStream = File.OpenRead(filePath))
                 {
-                    ffmpeg.Play(videoStream, videoStream);
+                    await ffmpeg.PlayAsync(videoStream, videoStream);
                 }
             }
             else
@@ -78,16 +85,23 @@ public class BasisVideoPlayer : MonoBehaviour
             Debug.LogError("Error playing file: " + e.Message);
         }
     }
-
+    public async void PlayStream(string url)
+    {
+       await PlayStreamAsync(url);
+    }
     // Play a video stream from a URL
-    public void PlayStream(string url)
+    public async Task PlayStreamAsync(string url)
     {
         Debug.Log("Playing stream from URL: " + url);
-        ffmpeg.Play(url, url);
+        await ffmpeg.PlayAsync(url, url);
+    }
+    public async void PlayFromWeb(string url)
+    {
+      await  PlayAsyncFromWeb(url);
     }
 
     // Optionally, allow for downloading and playing video from the web using HTTP
-    public async void PlayFromWeb(string url)
+    public async Task PlayAsyncFromWeb(string url)
     {
         HttpClient client = new HttpClient();
         try
@@ -96,7 +110,7 @@ public class BasisVideoPlayer : MonoBehaviour
             response.EnsureSuccessStatusCode();
 
             Stream videoStream = await response.Content.ReadAsStreamAsync();
-            ffmpeg.Play(videoStream, videoStream);
+            await ffmpeg.PlayAsync(videoStream, videoStream);
         }
         catch (Exception e)
         {
@@ -105,7 +119,7 @@ public class BasisVideoPlayer : MonoBehaviour
     }
     public void TogglePlay()
     {
-        if(ffmpeg.IsPaused)
+        if (ffmpeg.IsPaused)
         {
             Resume();
         }
