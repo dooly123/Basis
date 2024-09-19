@@ -37,9 +37,8 @@ namespace FFmpeg.Unity
                     InitializeTexture(texData.w, texData.h);  // Reinitialize texture if dimensions changed
                 }
 
-                // Load raw byte data (assumes RGBA32 format)
+                // Load raw byte data (assumes RGB24 format)
                 texture.LoadRawTextureData(texData.data);
-
                 // Apply the texture updates to GPU (false to not generate mipmaps for performance)
                 texture.Apply(updateMipmaps: false);
             }
