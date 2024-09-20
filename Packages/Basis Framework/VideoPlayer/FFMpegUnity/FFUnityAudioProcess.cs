@@ -10,8 +10,6 @@ namespace FFmpeg.Unity
     [System.Serializable]
     public class FFUnityAudioProcess
     {
-        // --- Audio ---
-        [SerializeField]
         public List<FFUnityAudio> AudioOutput = new List<FFUnityAudio>();
         public bool IsPaused => _paused;
         [SerializeField] public bool _paused;
@@ -35,6 +33,17 @@ namespace FFmpeg.Unity
         public FFmpegCtx _streamAudioCtx;
         public AudioClip[] _audioClips; // One for each channel
         public AVFrame[] _audioFrames;
+        public bool HasAnyAudioLeft()
+        {
+            foreach (Queue<float> Queue in _audioStreams)
+            {
+                if (Queue.Count > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         // Handles seeking in audio
         public void SeekAudio(double seek)
         {
@@ -61,10 +70,9 @@ namespace FFmpeg.Unity
             // Seek audio decoder explicitly
             _audioDecoder?.Seek();
 
-            // Play audio after seeking for each channel
-            for (int channel = 0; channel < _audioDecoder.Channels; channel++)
+            for (int ChannelIndex = 0; ChannelIndex < _audioClips.Length; ChannelIndex++)
             {
-                FFUnityAudioHelper.PlayAll(AudioOutput, channel, _audioClips[channel]);
+                FFUnityAudioHelper.PlayAll(AudioOutput, ChannelIndex, _audioClips[ChannelIndex]);
             }
         }
 
@@ -79,78 +87,33 @@ namespace FFmpeg.Unity
             _audioFrames = new AVFrame[_audioBufferCount];
             _audioMemStream = new MemoryStream();
             _audioStreams = new List<Queue<float>>();
+
             _audioLocker = new Mutex(false, "Audio Mutex");
             _audioDecoder = new VideoStreamDecoder(_streamAudioCtx, AVMediaType.AVMEDIA_TYPE_AUDIO);
+
+            // Initialize AudioSources and AudioClips for each channel
             _audioClips = new AudioClip[_audioDecoder.Channels];
             for (int channel = 0; channel < _audioDecoder.Channels; channel++)
             {
-                _audioStreams.Add(new Queue<float>(_audioBufferSize));
+                _audioStreams.Add(new Queue<float>(_audioBufferSize * 4));
+                var duplicate = channel;
                 // Create an AudioClip for each channel
-                _audioClips[channel] = AudioClip.Create($"{name}-AudioClip-{channel}", _audioBufferSize, 1, _audioDecoder.SampleRate, true);
-            }
-            foreach (FFUnityAudio Audio in AudioOutput)
-            {
-                Audio.Initialize(_audioClips[Audio.Channel], this);
+                _audioClips[channel] = AudioClip.Create($"{name}-AudioClip-{channel}", _audioBufferSize, 1, _audioDecoder.SampleRate, true, (data) => AudioCallback(data, duplicate));
+
+                // Play the audio for each channel
+                FFUnityAudioHelper.PlayAll(AudioOutput, channel, _audioClips[channel]);
             }
         }
-
-        /// <summary>
-        /// Determines whether the audio frame should be decoded.
-        /// </summary>
-        public bool ShouldDecodeAudio(FFUnity Unity)
-        {
-            if (_audioDecoder != null && _audioDecoder.CanDecode() && _streamAudioCtx.TryGetTime(_audioDecoder, out var time))
-            {
-                if (Unity._elapsedOffset + _audioTimeBuffer < time) return false;
-
-                if (Unity._elapsedOffset > time + _audioSkipBuffer && CanSeek)
-                {
-                    _streamAudioCtx.NextFrame(out _);
-                    Unity.skippedFrames++;
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Processes the audio frame, decodes it, and manages the buffer.
-        /// </summary>
-        public bool TryProcessAudioFrame(ref double time, FFUnity Unity)
-        {
-            int aud = -1;
-            AVFrame aFrame = default;
-
-            // Attempt to decode the next audio frame
-            _streamAudioCtx.NextFrame(out _);
-            aud = _audioDecoder.Decode(out aFrame);
-
-            if (aud == 0)
-            {
-                if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && Unity._elapsedOffset > time + _audioSkipBuffer && CanSeek)
-                    return false;
-
-                if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && time != 0)
-                    _lastAudioDecodeTime = time;
-
-                // Store the audio frame in the buffer
-                _audioFrames[_audioWriteIndex % _audioFrames.Length] = aFrame;
-                UpdateAudio(_audioWriteIndex % _audioFrames.Length);
-
-                _audioWriteIndex++;
-                return true;
-            }
-
-            return false;
-        }
-
         public unsafe void AudioCallback(float[] data, int channel)
         {
+
             // Attempt to acquire the lock with minimal blocking
             if (!_audioLocker.WaitOne(0))
+            {
+                UnityEngine.Debug.LogWarning("AudioCallback warning: Could not acquire audio lock.");
                 return;
+            }
 
-            // Reduce locking duration by processing audio data outside the lock as much as possible
             try
             {
                 var audioStream = _audioStreams[channel];
@@ -162,10 +125,12 @@ namespace FFmpeg.Unity
                 // Batch processing: dequeue as many elements as possible
                 int samplesToDequeue = Math.Min(availableSamples, data.Length);
 
-                for (int SampleIndex = 0; SampleIndex < samplesToDequeue; SampleIndex++)
+                for (int sampleIndex = 0; sampleIndex < samplesToDequeue; sampleIndex++)
                 {
-                    // Efficiently dequeue audio samples for this channel
-                    audioStream.TryDequeue(out data[SampleIndex]);
+                    if (audioStream.TryDequeue(out float sample))
+                    {
+                        data[sampleIndex] = sample;
+                    }
                 }
 
                 // Zero out the rest of the buffer if there aren't enough samples
@@ -174,13 +139,15 @@ namespace FFmpeg.Unity
                     Array.Clear(data, samplesToDequeue, data.Length - samplesToDequeue);
                 }
             }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogError($"AudioCallback error: {ex.Message}");
+            }
             finally
             {
-                // Always release the mutex to avoid deadlocks
                 _audioLocker.ReleaseMutex();
             }
         }
-
         public unsafe void UpdateAudio(int idx)
         {
             var audioFrame = _audioFrames[idx];
@@ -213,6 +180,55 @@ namespace FFmpeg.Unity
                 }
                 _audioLocker.ReleaseMutex();
             }
+        }
+
+        /// <summary>
+        /// Determines whether the audio frame should be decoded.
+        /// </summary>
+        public bool ShouldDecodeAudio(FFUnity Unity)
+        {
+            if (_audioDecoder != null && _audioDecoder.CanDecode() && _streamAudioCtx.TryGetTime(_audioDecoder, out var time))
+            {
+                if (Unity._elapsedOffset + _audioTimeBuffer < time) return false;
+
+                if (Unity._elapsedOffset > time + _audioSkipBuffer && CanSeek)
+                {
+                    _streamAudioCtx.NextFrame(out _);
+                    Unity.skippedFrames++;
+                    return false;
+                }
+            }
+            return true;
+        }
+        /// <summary>
+        /// Processes the audio frame, decodes it, and manages the buffer.
+        /// </summary>
+        public bool TryProcessAudioFrame(ref double time, FFUnity Unity)
+        {
+            int aud = -1;
+            AVFrame aFrame = default;
+
+            // Attempt to decode the next audio frame
+            _streamAudioCtx.NextFrame(out _);
+            aud = _audioDecoder.Decode(out aFrame);
+
+            if (aud == 0)
+            {
+                if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && Unity._elapsedOffset > time + _audioSkipBuffer && CanSeek)
+                    return false;
+
+                if (_streamAudioCtx.TryGetTime(_audioDecoder, aFrame, out time) && time != 0)
+                    _lastAudioDecodeTime = time;
+
+                // Store the audio frame in the buffer
+                _audioFrames[_audioWriteIndex % _audioFrames.Length] = aFrame;
+                UpdateAudio(_audioWriteIndex % _audioFrames.Length);
+
+                _audioWriteIndex++;
+                return true;
+            }
+
+            return false;
         }
     }
 }

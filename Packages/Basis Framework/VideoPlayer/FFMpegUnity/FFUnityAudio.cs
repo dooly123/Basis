@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 namespace FFmpeg.Unity
 {
@@ -7,7 +8,7 @@ namespace FFmpeg.Unity
         public AudioClip _audioClip;
         public int Channel;
         public FFUnityAudioProcess _audioProcess;
-
+        public Queue<float> _audioStream;
         public void Initialize(AudioClip audioClip, FFUnityAudioProcess audioProcess)
         {
             _audioClip = audioClip;
@@ -16,14 +17,8 @@ namespace FFmpeg.Unity
             source.loop = true; // Set to loop if necessary
             Debug.Log("total channels is " + _audioClip.channels);
             this.gameObject.name = "Audio for VideoPlayer [" + Channel + "]";
-        }
-
-        private void OnAudioFilterRead(float[] data, int channels)
-        {
-            if (_audioProcess != null)
-            {
-                _audioProcess.AudioCallback(data, Channel);
-            }
+            //create audioclip here and callback here aswell.
+            //queue should also be here
         }
     }
 }

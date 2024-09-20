@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Profiling;
 namespace FFmpeg.Unity
 {
-    public  class FFUnity : MonoBehaviour
+    public class FFUnity : MonoBehaviour
     {
         // Video-related fields
         public bool IsPaused => _paused;
@@ -364,7 +364,7 @@ namespace FFmpeg.Unity
             {
                 try
                 {
-                    long elapsedMs = FillVideoBuffers(false, frameInterval, frameTimeMs);
+                    long elapsedMs = FillVideoBuffers(frameInterval, frameTimeMs);
 
                     // Calculate the sleep duration, ensuring a minimum of 5ms sleep to avoid tight loops
                     int sleepDurationMs = (int)Math.Max(5, frameTimeMs - elapsedMs);
@@ -426,7 +426,7 @@ namespace FFmpeg.Unity
             _lastTexData = null; // Clear after processing
             return true;
         }
-        private long FillVideoBuffers(bool mainThread, double invFps, double fpsMs)
+        private long FillVideoBuffers(double invFps, double fpsMs)
         {
             if (IsInitialized() == false)
             {
@@ -443,7 +443,7 @@ namespace FFmpeg.Unity
                 bool decodeA = AudioProcessing._audioDecoder != null && AudioProcessing.ShouldDecodeAudio(this);
 
                 // Process video frames
-                if (decodeV && TryProcessVideoFrame(mainThread, ref time))
+                if (decodeV && TryProcessVideoFrame(ref time))
                 {
                     continue;
                 }
@@ -488,7 +488,7 @@ namespace FFmpeg.Unity
         /// <summary>
         /// Processes the video frame, decodes it, and manages the buffer.
         /// </summary>
-        private bool TryProcessVideoFrame(bool mainThread, ref double time)
+        private bool TryProcessVideoFrame(ref double time)
         {
             int vid = -1;
             AVFrame vFrame = default;
@@ -508,15 +508,7 @@ namespace FFmpeg.Unity
                 // Store the video frame in the buffer
                 _videoFrames[_videoWriteIndex % _videoFrames.Length] = vFrame;
 
-                if (mainThread)
-                {
-                    UpdateVideo(_videoWriteIndex % _videoFrames.Length);
-                }
-                else
-                {
-                    EnqueueVideoFrame(vFrame, time);
-                }
-
+                EnqueueVideoFrame(vFrame, time);
                 _videoWriteIndex++;
                 return true;
             }
@@ -551,30 +543,6 @@ namespace FFmpeg.Unity
                 }
                 _videoMutex.ReleaseMutex();
             }
-        }
-        private unsafe Texture2D UpdateVideo(int idx)
-        {
-            Profiler.BeginSample(nameof(UpdateVideo), this);
-            AVFrame videoFrame;
-            videoFrame = _videoFrames[idx];
-            if (videoFrame.data[0] == null)
-            {
-                Profiler.EndSample();
-                return null;
-            }
-            var tex = _texturePool.Get();
-            if (tex.texture == null)
-            {
-                tex.texture = FFUnityFrameHelper.SaveFrame(videoFrame, videoFrame.width, videoFrame.height, _videoDecoder.HWPixelFormat);
-            }
-            else
-            {
-                FFUnityFrameHelper.SaveFrame(videoFrame, videoFrame.width, videoFrame.height, tex.texture, _videoDecoder.HWPixelFormat);
-            }
-            tex.texture.name = $"{name}-Texture2D-{idx}";
-            _videoTextures.Enqueue(tex);
-            Profiler.EndSample();
-            return tex.texture;
         }
         private unsafe bool UpdateVideoFromClones()
         {

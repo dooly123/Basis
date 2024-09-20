@@ -1428,6 +1428,7 @@ GameObject:
   - component: {fileID: 7164331642933240871}
   - component: {fileID: 912005458244577639}
   - component: {fileID: 6811371427397274770}
+  - component: {fileID: 3659225647121256430}
   m_Layer: 0
   m_Name: Basis VideoPlayer
   m_TagString: Untagged
@@ -1505,6 +1506,8 @@ MonoBehaviour:
     TextureWrapMode: 1
     TextureFormat: 3
     hasMipChain: 0
+    CachedlastWidth: 0
+    CachedlastHeight: 0
   AudioProcessing:
     AudioOutput:
     - {fileID: 3171138045850047298}
@@ -1520,6 +1523,19 @@ MonoBehaviour:
     _audioMissCount: 0
     _lastAudioDecodeTime: 0
     _audioClips: []
+--- !u!114 &3659225647121256430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7094584365412441598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee23a6879c749a14b8dec92247d47848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VideoPlayer: {fileID: 912005458244577639}
 --- !u!1 &7187874680083524858
 GameObject:
   m_ObjectHideFlags: 0
