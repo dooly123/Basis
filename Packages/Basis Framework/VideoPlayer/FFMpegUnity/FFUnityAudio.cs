@@ -7,12 +7,9 @@ namespace FFmpeg.Unity
         public AudioSource source;
         public AudioClip _audioClip;
         public int Channel;
-        public FFUnityAudioProcess _audioProcess;
-        public Queue<float> _audioStream;
-        public void Initialize(AudioClip audioClip, FFUnityAudioProcess audioProcess)
+        public void Initialize(AudioClip audioClip)
         {
             _audioClip = audioClip;
-            _audioProcess = audioProcess;
             source.clip = _audioClip;
             source.loop = true; // Set to loop if necessary
             Debug.Log("total channels is " + _audioClip.channels);

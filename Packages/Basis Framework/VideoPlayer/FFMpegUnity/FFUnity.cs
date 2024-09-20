@@ -223,7 +223,11 @@ namespace FFmpeg.Unity
             _videoFrames = new AVFrame[_videoBufferCount];
             _videoFrameClones = new Queue<FFTexData>(_videoBufferCount);
             // init decoders
+#if  UNITY_EDITOR
             _videoMutex = new Mutex(false, "Video Mutex");
+#else
+_videoMutex = new Mutex(false); // Or another synchronization method
+#endif
             _videoDecoder = new VideoStreamDecoder(_streamVideoCtx, AVMediaType.AVMEDIA_TYPE_VIDEO, _hwType);
         }
         private void Update()
