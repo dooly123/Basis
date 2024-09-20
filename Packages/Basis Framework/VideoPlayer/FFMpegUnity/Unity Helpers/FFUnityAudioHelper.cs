@@ -16,7 +16,7 @@ public static class FFUnityAudioHelper
     }
     public static void StopAll(List<FFUnityAudio> AudioSources)
     {
-        foreach(FFUnityAudio FFUnityAudio in AudioSources)
+        foreach (FFUnityAudio FFUnityAudio in AudioSources)
         {
             if (FFUnityAudio.source != null)
             {
@@ -28,14 +28,14 @@ public static class FFUnityAudioHelper
     {
         foreach (FFUnityAudio FFUnityAudio in AudioSources)
         {
-            if(FFUnityAudio.Channel != Channel)
+            if (FFUnityAudio.Channel != Channel)
             {
                 continue;
             }
             if (FFUnityAudio.source != null)
             {
                 FFUnityAudio.source.clip = Clip;
-                FFUnityAudio.source.Play();
+                FFUnityAudio.source.PlayScheduled(AudioSettings.dspTime);
             }
         }
     }
