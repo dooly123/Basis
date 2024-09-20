@@ -21,7 +21,7 @@ namespace FFmpeg.Unity
         public int _audioBufferSize = 128;
 
         // Circular buffer for each channel's audio stream
-        public List<Queue<float>> _audioStreams;
+        public List<CircularAudioBuffer> _audioStreams;
 
         public MemoryStream _audioMemStream;
         public Mutex _audioLocker = new Mutex();
@@ -34,32 +34,16 @@ namespace FFmpeg.Unity
         public AudioClip[] _audioClips; // One for each channel
         public AVFrame[] _audioFrames;
 
-        public bool HasAnyAudioLeft()
-        {
-            foreach (Queue<float> buffer in _audioStreams)
-            {
-                if (buffer.Count > 0)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public void SeekAudio(double seek)
         {
             // Stop all audio output
             FFUnityAudioHelper.StopAll(AudioOutput);
 
-            // Lock audio and reset stream
-            if (_audioLocker.WaitOne())
+            // Reset stream
+            _audioMemStream.Position = 0;
+            foreach (var stream in _audioStreams)
             {
-                _audioMemStream.Position = 0;
-                foreach (var stream in _audioStreams)
-                {
-                    stream.Clear();
-                }
-                _audioLocker.ReleaseMutex();
+                stream.Clear();
             }
 
             if (CanSeek)
@@ -85,7 +69,7 @@ namespace FFmpeg.Unity
         {
             _audioFrames = new AVFrame[_audioBufferCount];
             _audioMemStream = new MemoryStream();
-            _audioStreams = new List<Queue<float>>();
+            _audioStreams = new List<CircularAudioBuffer>();
 
             _audioLocker = new Mutex(false, "Audio Mutex");
             _audioDecoder = new VideoStreamDecoder(_streamAudioCtx, AVMediaType.AVMEDIA_TYPE_AUDIO);
@@ -93,7 +77,7 @@ namespace FFmpeg.Unity
             _audioClips = new AudioClip[_audioDecoder.Channels];
             for (int channel = 0; channel < _audioDecoder.Channels; channel++)
             {
-                _audioStreams.Add(new Queue<float>(_audioBufferSize * 4));
+                _audioStreams.Add(new CircularAudioBuffer(_audioDecoder.SampleRate));
                 var duplicate = channel;
                 _audioClips[channel] = AudioClip.Create($"{name}-AudioClip-{channel}", _audioBufferSize, 1, _audioDecoder.SampleRate, true, (data) => AudioCallback(data, duplicate));
 
@@ -104,36 +88,14 @@ namespace FFmpeg.Unity
         public unsafe void AudioCallback(float[] data, int channel)
         {
             var audioStream = _audioStreams[channel];
-            int availableSamples = audioStream.Count;
 
-            _lastAudioRead = availableSamples >= data.Length;
-
-            int samplesToDequeue = Math.Min(availableSamples, data.Length);
-
-            if (_audioLocker.WaitOne(0))
+            try
             {
-                try
-                {
-                    for (int sampleIndex = 0; sampleIndex < samplesToDequeue; sampleIndex++)
-                    {
-                        if (audioStream.TryDequeue(out float sample))
-                        {
-                            data[sampleIndex] = sample;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    UnityEngine.Debug.LogError($"AudioCallback error: {ex.Message}");
-                }
-                finally
-                {
-                    _audioLocker.ReleaseMutex();
-                }
+                audioStream.Read(data);
             }
-            if (samplesToDequeue < data.Length)
+            catch (Exception ex)
             {
-                Array.Clear(data, samplesToDequeue, data.Length - samplesToDequeue);
+                UnityEngine.Debug.LogError($"AudioCallback error: {ex}");
             }
         }
 
@@ -157,14 +119,7 @@ namespace FFmpeg.Unity
                 float[] backBuffer3 = new float[size / sizeof(float)];
                 Marshal.Copy((IntPtr)audioFrame.data[ch], backBuffer2, 0, size);
                 Buffer.BlockCopy(backBuffer2, 0, backBuffer3, 0, backBuffer2.Length);
-                if (_audioLocker.WaitOne(0))
-                {
-                    foreach (float sample in backBuffer3)
-                    {
-                        _audioStreams[(int)ch].Enqueue(sample);
-                    }
-                    _audioLocker.ReleaseMutex();
-                }
+                _audioStreams[(int)ch].Write(backBuffer3);
             }
         }
 

@@ -207,6 +207,7 @@ namespace FFmpeg.Unity
             unityTextureGeneration.InitializeTexture();
 
             InitVideo();
+            AudioProcessing.CanSeek = CanSeek;
             AudioProcessing.InitAudio(nameof(this.gameObject));
 
             UnityEngine.Debug.Log(nameof(PlayAsync));
@@ -337,7 +338,7 @@ namespace FFmpeg.Unity
                 iterations++;
                 if (_videoMutex.WaitOne(0))
                 {
-                    bool updateFailed = !UpdateVideoFromClones();
+                    UpdateVideoFromClones();
                     _videoMutex.ReleaseMutex();
                 }
                 Present();
@@ -428,7 +429,7 @@ namespace FFmpeg.Unity
         }
         private long FillVideoBuffers(double invFps, double fpsMs)
         {
-            if (IsInitialized() == false)
+            if (!IsInitialized())
             {
                 return 0;
             }
