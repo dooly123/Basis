@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using AOT;
 
 namespace FFmpeg.Unity.Helpers
 {
     public sealed unsafe class VideoStreamDecoder : IDisposable
     {
+        [StructLayout(LayoutKind.Sequential)]
+        private struct FFOpaqueData
+        {
+            public AVPixelFormat hwPixelFormat;
+        }
+
         private readonly FFmpegCtx _ctx;
+        internal readonly GCHandle thisHandle;
         private readonly AVCodecContext* _pCodecContext;
         private readonly AVFrame* _pFrame;
         private AVFrame* _receivedFrame;
@@ -57,8 +65,14 @@ namespace FFmpeg.Unity.Helpers
                 }
             }
 
+            thisHandle = GCHandle.Alloc(new FFOpaqueData()
+            {
+                hwPixelFormat = HWPixelFormat,
+            }, GCHandleType.Pinned);
+
             _pCodecContext = ffmpeg.avcodec_alloc_context3(codec);
             _pCodecContext->thread_count = 0;
+            _pCodecContext->opaque = GCHandle.ToIntPtr(thisHandle).ToPointer();
 
             if (HWDeviceType != AVHWDeviceType.AV_HWDEVICE_TYPE_NONE)
             {
@@ -81,7 +95,7 @@ namespace FFmpeg.Unity.Helpers
             }
             ffmpeg.avcodec_open2(_pCodecContext, codec, null).ThrowExceptionIfError();
 
-            CodecName = ffmpeg.avcodec_get_name(codec->id);
+            // CodecName = ffmpeg.avcodec_get_name(codec->id); // This currently crashes on IL2CPP builds.
             FrameSize = new Size(_pCodecContext->width, _pCodecContext->height);
             PixelFormat = _pCodecContext->pix_fmt;
             Channels = _pCodecContext->ch_layout.nb_channels;
@@ -92,26 +106,26 @@ namespace FFmpeg.Unity.Helpers
             _receivedFrame = ffmpeg.av_frame_alloc();
         }
 
-        private AVPixelFormat GetHWFormat(AVCodecContext* @s, AVPixelFormat* @fmt)
+        [MonoPInvokeCallback(typeof(AVCodecContext_get_format))]
+        private static AVPixelFormat GetHWFormat(AVCodecContext* @s, AVPixelFormat* @fmt)
         {
-            int* p;
-
-            for (p = (int*)fmt; *p != -1; p++)
+            if (s == null)
             {
-                if (*p == (int)HWPixelFormat)
-                    return (AVPixelFormat)(*p);
+                return AVPixelFormat.AV_PIX_FMT_NONE;
             }
+            var handle = GCHandle.FromIntPtr((IntPtr)s->opaque);
+            if (!handle.IsAllocated)
+            {
+                UnityEngine.Debug.LogError("opaque is not set!");
+                return AVPixelFormat.AV_PIX_FMT_NONE;
+            }
+            var self = (FFOpaqueData)handle.Target;
 
-            return AVPixelFormat.AV_PIX_FMT_NONE;
-        }
-
-        private AVPixelFormat GetSWFormat(AVCodecContext* @s, AVPixelFormat* @fmt)
-        {
             int* p;
 
             for (p = (int*)fmt; *p != -1; p++)
             {
-                // if (*p == (int)HWPixelFormat)
+                if (*p == (int)self.hwPixelFormat)
                     return (AVPixelFormat)(*p);
             }
 
@@ -129,6 +143,8 @@ namespace FFmpeg.Unity.Helpers
 
             if (_pCodecContext != null)
                 ffmpeg.avcodec_close(_pCodecContext);
+            if (thisHandle.IsAllocated)
+                thisHandle.Free();
         }
 
         public bool CanDecode()

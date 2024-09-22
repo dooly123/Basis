@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using AOT;
 using UnityEngine;
 
 namespace FFmpeg.Unity.Helpers
@@ -174,6 +175,7 @@ namespace FFmpeg.Unity.Helpers
             return true;
         }
 
+        [MonoPInvokeCallback(typeof(avio_alloc_context_read_packet))]
         internal static int ReadPacketCallback(void* @opaque, byte* @buf, int @buf_size)
         {
             int ret = ffmpeg.AVERROR_EOF;
@@ -201,6 +203,7 @@ namespace FFmpeg.Unity.Helpers
             return count == 0 ? ret : count;
         }
 
+        [MonoPInvokeCallback(typeof(avio_alloc_context_seek))]
         internal static long SeekPacketCallback(void* @opaque, long @offset, int @whence)
         {
             int ret = ffmpeg.AVERROR_EOF;
