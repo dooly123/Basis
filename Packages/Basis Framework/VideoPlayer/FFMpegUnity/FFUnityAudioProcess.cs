@@ -71,7 +71,7 @@ namespace FFmpeg.Unity
             _audioMemStream = new MemoryStream();
             _audioStreams = new List<CircularAudioBuffer>();
 
-            _audioLocker = new Mutex(false, "Audio Mutex");
+            _audioLocker = new Mutex();
             _audioDecoder = new VideoStreamDecoder(_streamAudioCtx, AVMediaType.AVMEDIA_TYPE_AUDIO);
 
             _audioClips = new AudioClip[_audioDecoder.Channels];
