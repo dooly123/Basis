@@ -84,7 +84,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 376698671958739697}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
@@ -138,19 +138,7 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 912005458244577639}
-        m_TargetAssemblyTypeName: BasisVideoPlayer, BasisVideoPlayer
-        m_MethodName: Play
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -772,19 +760,6 @@ MonoBehaviour:
   source: {fileID: 1535721566851755140}
   _audioClip: {fileID: 0}
   Channel: 1
-  _audioProcess:
-    AudioOutput: []
-    _paused: 0
-    CanSeek: 1
-    _audioTimeBuffer: 1
-    _audioSkipBuffer: 0.25
-    _audioBufferCount: 1
-    _audioBufferSize: 128
-    _audioWriteIndex: 0
-    _lastAudioRead: 0
-    _audioMissCount: 0
-    _lastAudioDecodeTime: 0
-    _audioClips: []
 --- !u!1 &6115230289141605534
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8180443038188417339
 RectTransform:
   m_ObjectHideFlags: 0
@@ -819,9 +794,9 @@ RectTransform:
   - {fileID: 5169301248610476501}
   m_Father: {fileID: 3384146663180425003}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 237.15, y: -25}
   m_SizeDelta: {x: 474.3, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5594024822196760721
@@ -1469,11 +1444,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ffmpeg: {fileID: 6811371427397274770}
-  contentUrl: 
   stream: 1
   mesh: {fileID: 8318058068607956400}
   MaterialTextureId: _EmissionMap
   RuntimeMaterial: {fileID: 0}
+  Field: {fileID: 8576166549018468321}
 --- !u!114 &6811371427397274770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1981,21 +1956,6 @@ MonoBehaviour:
   source: {fileID: 4534713613582081332}
   _audioClip: {fileID: 0}
   Channel: 0
-  _audioProcess:
-    AudioOutput:
-    - {fileID: 3171138045850047298}
-    - {fileID: 3971839707164535680}
-    _paused: 0
-    CanSeek: 1
-    _audioTimeBuffer: 1
-    _audioSkipBuffer: 0.25
-    _audioBufferCount: 1
-    _audioBufferSize: 128
-    _audioWriteIndex: 0
-    _lastAudioRead: 0
-    _audioMissCount: 0
-    _lastAudioDecodeTime: 0
-    _audioClips: []
 --- !u!1 &8142517087249102415
 GameObject:
   m_ObjectHideFlags: 0

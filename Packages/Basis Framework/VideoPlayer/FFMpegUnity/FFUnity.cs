@@ -71,7 +71,7 @@ namespace FFmpeg.Unity
         [SerializeField] public FFUnityAudioProcess AudioProcessing = new FFUnityAudioProcess();
         private void OnEnable()
         {
-            _paused = true;
+            _paused = false;
         }
         private void OnDisable()
         {

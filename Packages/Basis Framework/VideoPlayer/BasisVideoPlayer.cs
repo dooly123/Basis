@@ -4,26 +4,26 @@ using System;
 using UnityEngine;
 using FFmpeg.Unity;
 using System.Threading.Tasks;
+using System.Collections;
+using UnityEngine.UI;
+using TMPro;
 
 public class BasisVideoPlayer : MonoBehaviour
 {
     public FFUnity ffmpeg; // FFmpeg integration script or component
-    public string contentUrl;  // URL or path to the video file
     public bool stream = false;  // Flag for streaming or local file
     public MeshRenderer mesh;
     public string MaterialTextureId = "_EmissionMap";
     public Material RuntimeMaterial;
-    private async void Start()
+    public TMP_InputField Field;
+    private void Start()
     {
         RuntimeMaterial = Material.Instantiate(mesh.sharedMaterial);
         RuntimeMaterial.mainTextureScale = new Vector2(1, -1);
         RuntimeMaterial.mainTextureOffset = new Vector2(0, 1);
         mesh.sharedMaterial = RuntimeMaterial;
         ffmpeg.OnDisplay = OnDisplay;
-        if (!string.IsNullOrEmpty(contentUrl))
-        {
-            await PlayAsync(contentUrl); // Play the provided URL if it's set
-        }
+        Play(Field.text);
     }
 
     // Display the video texture on a 3D mesh in Unity
@@ -45,17 +45,15 @@ public class BasisVideoPlayer : MonoBehaviour
             Debug.LogError("Error: URL or file path is empty.");
             return;
         }
-
-        contentUrl = url;
-        ffmpeg.CanSeek = !contentUrl.StartsWith("rtmp://") && !stream;
+        ffmpeg.CanSeek = !url.StartsWith("rtmp://") && !stream;
 
         if (stream)
         {
-            await PlayStreamAsync(contentUrl);  // Handle streaming
+            await PlayStreamAsync(url);  // Handle streaming
         }
         else
         {
-            await PlayFileAsync(contentUrl);  // Handle local file
+            await PlayFileAsync(url);  // Handle local file
         }
     }
     public async void PlayFile(string filePath)
