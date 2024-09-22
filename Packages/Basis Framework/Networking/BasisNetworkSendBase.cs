@@ -77,74 +77,64 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
         }
-
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
         {
-            // Check if Recipients array is valid or not
-            if (Recipients != null && Recipients.Length == 0)
-            {
-                Recipients = null;
-            }
-            // Check if Recipients array is valid or not
-            if (buffer != null && buffer.Length == 0)
-            {
-                buffer = null;
-            }
+            // Check if Recipients or buffer arrays are valid or not
+            if (Recipients != null && Recipients.Length == 0) Recipients = null;
+            if (buffer != null && buffer.Length == 0) buffer = null;
+
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
-                // Check if there are no recipients and no payload
-                if (Recipients == null && buffer == null)
+                // Handle cases based on presence of Recipients and buffer
+                if (Recipients == null)
                 {
-                    //Debug.Log("Sending with no Recipients or buffer");
-                    // No recipients, no payload case
-                    AvatarDataMessage_NoRecipients_NoPayload avatarDataMessage = new AvatarDataMessage_NoRecipients_NoPayload
+                    if (buffer == null)
                     {
-                        assignedAvatarPlayer = NetworkedPlayer.NetId,
-                        messageIndex = MessageIndex
-                    };
-                    writer.Write(avatarDataMessage);
+                        AvatarDataMessage_NoRecipients_NoPayload AvatarDataMessage_NoRecipients_NoPayload = new AvatarDataMessage_NoRecipients_NoPayload
+                        {
+                            assignedAvatarPlayer = NetworkedPlayer.NetId,
+                            messageIndex = MessageIndex
+                        };
+                        writer.Write(AvatarDataMessage_NoRecipients_NoPayload);
+                        // No recipients and no payload
+                        WriteAndSendMessage(BasisTags.AvatarGenericMessage_NoRecipients_NoPayload,writer, DeliveryMethod);
+                    }
+                    else
+                    {
+                        AvatarDataMessage_NoRecipients AvatarDataMessage_NoRecipients = new AvatarDataMessage_NoRecipients
+                        {
+                            assignedAvatarPlayer = NetworkedPlayer.NetId,
+                            messageIndex = MessageIndex,
+                            payload = buffer
+                        };
 
-                    using (var msg = Message.Create(BasisTags.AvatarGenericMessage_NoRecipients_NoPayload, writer))
-                    {
-                        BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.AvatarChannel, DeliveryMethod);
+                        writer.Write(AvatarDataMessage_NoRecipients);
+                        // No recipients but has payload
+                        WriteAndSendMessage(BasisTags.AvatarGenericMessage_NoRecipients,writer, DeliveryMethod);
                     }
                 }
-                // Check if there are no recipients but there is a payload
-                else if (Recipients == null)
-                {
-                   // Debug.Log("Sending with no Recipients ");
-                    // No recipients but has payload
-                    AvatarDataMessage_NoRecipients avatarDataMessage = new AvatarDataMessage_NoRecipients
-                    {
-                        assignedAvatarPlayer = NetworkedPlayer.NetId,
-                        messageIndex = MessageIndex,
-                        payload = buffer
-                    };
-                    writer.Write(avatarDataMessage);
-
-                    using (var msg = Message.Create(BasisTags.AvatarGenericMessage_NoRecipients, writer))
-                    {
-                        BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.AvatarChannel, DeliveryMethod);
-                    }
-                }
-                // Case where there are recipients (payload could be null or not)
                 else
                 {
-                  //  Debug.Log("Sending with Recipients and buffer");
-                    AvatarDataMessage avatarDataMessage = new AvatarDataMessage
+                    AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
                     {
                         assignedAvatarPlayer = NetworkedPlayer.NetId,
                         messageIndex = MessageIndex,
                         payload = buffer,
                         recipients = Recipients
                     };
-                    writer.Write(avatarDataMessage);
-
-                    using (var msg = Message.Create(BasisTags.AvatarGenericMessage, writer))
-                    {
-                        BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.AvatarChannel, DeliveryMethod);
-                    }
+                    // Recipients present, payload may or may not be present
+                    writer.Write(AvatarDataMessage);
+                    WriteAndSendMessage(BasisTags.AvatarGenericMessage,writer, DeliveryMethod);
                 }
+            }
+        }
+
+        // Helper method to avoid code duplication
+        private void WriteAndSendMessage(ushort tag, DarkRiftWriter writer, DeliveryMethod deliveryMethod)
+        {
+            using (var msg = Message.Create(tag, writer))
+            {
+                BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.AvatarChannel, deliveryMethod);
             }
         }
     }
