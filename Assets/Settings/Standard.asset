@@ -36,7 +36,7 @@ MonoBehaviour:
   m_LightProbeSystem: 1
   m_ProbeVolumeMemoryBudget: 1024
   m_ProbeVolumeBlendingMemoryBudget: 256
-  m_SupportProbeVolumeGPUStreaming: 1
+  m_SupportProbeVolumeGPUStreaming: 0
   m_SupportProbeVolumeDiskStreaming: 1
   m_SupportProbeVolumeScenarios: 1
   m_SupportProbeVolumeScenarioBlending: 1

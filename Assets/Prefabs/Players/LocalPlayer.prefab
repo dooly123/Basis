@@ -52,23 +52,35 @@ MonoBehaviour:
   DisplayName: 
   UUID: 
   Avatar: {fileID: 0}
-  BasisAvatarStrainJiggleDriver: {fileID: 277109516044041921}
   AvatarUrl: 
+  AvatarLoadMode: 0
   HasAvatarDriver: 0
+  FaceisVisible: 0
+  FaceRenderer: {fileID: 0}
+  Move: {fileID: 8783102315984964394}
   PlayerEyeHeight: 1.64
   RatioPlayerToAvatarScale: 1
-  RatioPlayerToEyeDefaultScale: 1
-  RatioAvatarToAvatarEyeDefaultScale: 1
-  Move: {fileID: 8783102315984964394}
+  EyeRatioPlayerToDefaultScale: 1
+  EyeRatioAvatarToAvatarDefaultScale: 1
   LocalBoneDriver: {fileID: 1116109802514353462}
   Hips:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
+    HasEvents: 0
     hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -92,7 +104,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -112,11 +124,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -125,12 +137,14 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
   AvatarDriver: {fileID: 5000096567804979388}
-  FootPlacementDriver: {fileID: 0}
   VisemeDriver: {fileID: 0}
-  SelfOutput: {fileID: 0}
   GroundMask:
     serializedVersion: 2
     m_Bits: 1
+  HasEvents: 0
+  MicrophoneRecorder: {fileID: 0}
+  SpawnPlayerOnSceneLoad: 1
+  HasCalibrationEvents: 0
 --- !u!114 &1116109802514353462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +162,7 @@ MonoBehaviour:
   trackedRoles: 
   HasControls: 0
   ProvidedTime: 0
-  WorldRotation: {x: 0, y: 0, z: 0, w: 0}
+  DeltaTime: 0
 --- !u!114 &5000096567804979388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,12 +175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5838aa3334f5e5a40b4f9837a0d7cd65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveEyeHeight: 1.75
-  runtimeAnimatorController: {fileID: 9100000, guid: 44e34e57747369b4791afeff1fe21695,
-    type: 2}
+  runtimeAnimatorController: {fileID: 9100000, guid: 44e34e57747369b4791afeff1fe21695, type: 2}
   SkinnedMeshRenderer: []
   Player: {fileID: 4587526044252889482}
   InTPose: 0
+  HasEvents: 0
   HeadScale: {x: 0, y: 0, z: 0}
   HeadScaledDown: {x: 0, y: 0, z: 0}
   LocalDriver: {fileID: 0}
@@ -192,14 +205,6 @@ MonoBehaviour:
   ChestSpineRig: {fileID: 0}
   LeftShoulderRig: {fileID: 0}
   RightShoulderRig: {fileID: 0}
-  LeftFingersRig: {fileID: 0}
-  RightFingersRig: {fileID: 0}
-  LeftFingersLayer:
-    m_Rig: {fileID: 0}
-    m_Active: 0
-  RightFingersLayer:
-    m_Rig: {fileID: 0}
-    m_Active: 0
   LeftHandLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
@@ -218,10 +223,10 @@ MonoBehaviour:
   RightToeLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
-  HeadLayer:
+  RigHeadLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
-  UpperChestLayer:
+  ChestSpineLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
   LeftShoulderLayer:
@@ -233,7 +238,9 @@ MonoBehaviour:
   Rigs: []
   Builder: {fileID: 0}
   AdditionalTransforms: []
-  MicrophoneRecorder: {fileID: 0}
+  HasTposeEvent: 0
+  Locomotion: Locomotion
+  BasisMuscleDriver: {fileID: 0}
 --- !u!114 &277109516044041921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,10 +255,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4587526044252889482}
   Jiggler: {fileID: 0}
-  SimpleJiggleLOD:
-    distance: 30
-    blend: 0.5
-    currentCamera: {fileID: 0}
 --- !u!114 &8783102315984964394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,8 +271,8 @@ MonoBehaviour:
   bottomPoint: {x: 0, y: 0, z: 0}
   LastbottomPoint: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
-  RunSpeed: 2.4
-  playerSpeed: 2
+  RunSpeed: 5
+  playerSpeed: 3
   gravityValue: -9.81
   RaycastDistance: 0.2
   MinimumColliderSize: 0.01
@@ -277,13 +280,23 @@ MonoBehaviour:
   Running: 0
   driver: {fileID: 1116109802514353462}
   Eye:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
+    HasEvents: 0
     hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -307,7 +320,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -327,11 +340,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -340,13 +353,23 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
   Head:
+    Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
     BoneModelTransform: {fileID: 0}
+    HasEvents: 0
     hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
     hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
     GeneralLocation: 0
     RotationControl:
       Lerp: 0
@@ -370,7 +393,7 @@ MonoBehaviour:
       LerpAmount: 0
       Lerp: 0
       TaretInterpreter: 0
-    FinalApplied:
+    OutGoingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -390,11 +413,11 @@ MonoBehaviour:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    TrackerData:
+    IncomingData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
-    CurrentWorldData:
+    OutgoingWorldData:
       Use: 0
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
@@ -412,6 +435,8 @@ MonoBehaviour:
   currentVerticalSpeed: 0
   Rotation: {x: 0, y: 0}
   RotationSpeed: 140
+  HasEvents: 0
+  pushPower: 1
 --- !u!143 &5548795088377030369
 CharacterController:
   m_ObjectHideFlags: 0
