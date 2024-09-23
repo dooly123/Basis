@@ -79,13 +79,16 @@ namespace FFmpeg.Unity
         }
         private void OnDestroy()
         {
+            JoinThreads();
             DeInit();
+        }
+        public void JoinThreads()
+        {
+            _paused = true;
+            _decodeThread?.Join();
         }
         public void DeInit()
         {
-            _paused = true;
-            _decodeThread?.Abort();
-            _decodeThread?.Join();
             DeInitVideo();
             AudioProcessing.DeInitAudio();
         }
@@ -154,23 +157,24 @@ namespace FFmpeg.Unity
         {
             await Task.Run(() =>
             {
-                DeInit();
-                // Initialize video context
-                _streamVideoCtx = new FFmpegCtx(video);
-                AudioProcessing._streamAudioCtx = new FFmpegCtx(audio);
+                JoinThreads();
             });
+            DeInit();
+            // Initialize video context
+            _streamVideoCtx = new FFmpegCtx(video);
+            AudioProcessing._streamAudioCtx = new FFmpegCtx(audio);
             Init();
         }
         public async Task PlayAsync(string urlV, string urlA)
         {
             await Task.Run(() =>
             {
-                DeInit();
-
-                // Initialize video context
-                _streamVideoCtx = new FFmpegCtx(urlV);
-                AudioProcessing._streamAudioCtx = new FFmpegCtx(urlA);
+                JoinThreads();
             });
+            DeInit();
+            // Initialize video context
+            _streamVideoCtx = new FFmpegCtx(urlV);
+            AudioProcessing._streamAudioCtx = new FFmpegCtx(urlA);
             Init();
         }
         public void Resume()

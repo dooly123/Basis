@@ -15,7 +15,7 @@ public class CircularAudioBuffer
     public void Clear()
     {
         Array.Fill(_buffer, 0f);
-        _readPosition = _buffer.Length / 2;
+        _readPosition = 0;
         _writePosition = 0;
     }
 
