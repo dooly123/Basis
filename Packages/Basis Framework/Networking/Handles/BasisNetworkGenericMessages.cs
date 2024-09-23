@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
+using DarkRift.Basis_Common.Serializable;
 using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
 using static SerializableDarkRift;
@@ -16,7 +17,17 @@ public static class BasisNetworkGenericMessages
         SceneDataMessage sceneDataMessage = serverSceneDataMessage.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
     }
-
+    public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID,ushort NetIdNewOwner);
+    public static void HandleOwnershipTransfer(DarkRiftReader reader)
+    {
+        reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
+        BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
+    }
+    public static void HandleOwnershipResponse(DarkRiftReader reader)
+    {
+        reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
+        BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
+    }
     // Handler for server avatar data messages
     public static void HandleServerAvatarDataMessage(DarkRiftReader reader)
     {

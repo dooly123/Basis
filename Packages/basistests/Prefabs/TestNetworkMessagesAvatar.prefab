@@ -190,10 +190,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatar: {fileID: 7617675277052637975}
-  MessageIndexTest: 2
-  Recipients: 
+  MessageIndexTest: 3
+  Recipients: 3e00
   BasisPlayer: {fileID: 0}
   Isready: 0
+  Buffer: 00
   Method: 0
 --- !u!1 &1296995252794619015
 GameObject:

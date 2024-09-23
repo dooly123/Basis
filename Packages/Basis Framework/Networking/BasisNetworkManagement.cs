@@ -2,7 +2,6 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using BasisSerializer.OdinSerializer;
 using DarkRift;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
@@ -12,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static BasisNetworkGenericMessages;
 using static SerializableDarkRift;
 namespace Basis.Scripts.Networking
 {
@@ -23,7 +23,10 @@ namespace Basis.Scripts.Networking
 
         public BasisLowLevelClient Client;
         public ReadyMessage readyMessage = new ReadyMessage();
-
+        /// <summary>
+        /// fire when ownership is changed for a unique string
+        /// </summary>
+        public static OnNetworkMessageReceiveOwnershipTransfer OnOwnershipTransfer;
         public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
         public static bool AddPlayer(BasisNetworkedPlayer Player)
         {
@@ -215,12 +218,25 @@ namespace Basis.Scripts.Networking
                             BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
                             break;
 
+
+                        case BasisTags.OwnershipResponse:
+                            BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
+                            break;
+
+                        case BasisTags.OwnershipTransfer:
+                            BasisNetworkGenericMessages.HandleOwnershipTransfer(reader);
+                            break;
+
                         default:
                             Debug.Log("Unknown message tag: " + message.Tag);
                             break;
                     }
                 }
             }
+        }
+        public static void RequestOwnership()
+        {
+
         }
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {
