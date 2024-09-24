@@ -105,6 +105,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ae1051fd2d154e43bd647430b08a010
+    m_Address: Packages/com.basis.basisdk/Materials/VideoPlayer.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 664b0a1856405914186fc25229d9d893
     m_Address: vr_tracker_vive_1_0
     m_ReadOnly: 0
