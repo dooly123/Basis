@@ -19,9 +19,17 @@ public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour
     {
         avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
         BasisNetworkManagement.OnLocalPlayerJoined += SignalReadyTosend;
+        if(BasisNetworkManagement.HasSentOnLocalPlayerJoin)
+        {
+            ValidateIfIsReady();
+        }
     }
 
     private void SignalReadyTosend(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
+    {
+        ValidateIfIsReady();
+    }
+    public void ValidateIfIsReady()
     {
         if (BasisNetworkManagement.AvatarToPlayer(avatar, out BasisPlayer))
         {

@@ -44,12 +44,12 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
 
         private async void OnDeviceConnected(int deviceIndex, bool deviceConnected)
         {
-          await  OnDeviceConnected((uint)deviceIndex, deviceConnected);
+            await OnDeviceConnected((uint)deviceIndex, deviceConnected);
         }
 
         private async void OnTrackedDeviceRoleChanged(VREvent_t vrEvent)
         {
-         await   OnDeviceConnected(vrEvent.trackedDeviceIndex, true);
+            await OnDeviceConnected(vrEvent.trackedDeviceIndex, true);
         }
 
         private async Task OnDeviceConnected(uint deviceIndex, bool deviceConnected)
@@ -198,7 +198,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         public void DestroyPhysicalTrackedDevice(string id)
         {
             TypicalDevices.Remove(id);
-            BasisDeviceManagement.Instance.RemoveDevicesFrom("BasisOpenVRManagement", id);
+            BasisDeviceManagement.Instance.RemoveDevicesFrom(nameof(BasisOpenVRManagement), id);
         }
 
         private async Task HandleExistingDevice(string uniqueID, string notUniqueID, string className, OpenVRDevice device)

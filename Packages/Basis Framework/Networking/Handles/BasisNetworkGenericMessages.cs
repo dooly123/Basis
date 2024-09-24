@@ -21,11 +21,23 @@ public static class BasisNetworkGenericMessages
     public static void HandleOwnershipTransfer(DarkRiftReader reader)
     {
         reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
-        BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
+        HandleOwnership(OwnershipTransferMessage);
     }
     public static void HandleOwnershipResponse(DarkRiftReader reader)
     {
         reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
+        HandleOwnership(OwnershipTransferMessage);
+    }
+    public static void HandleOwnership(OwnershipTransferMessage OwnershipTransferMessage)
+    {
+        if (BasisNetworkManagement.Instance.OwnershipPairing.ContainsKey(OwnershipTransferMessage.ownershipID))
+        {
+            BasisNetworkManagement.Instance.OwnershipPairing[OwnershipTransferMessage.ownershipID] = OwnershipTransferMessage.playerIdMessage.playerID;
+        }
+        else
+        {
+            BasisNetworkManagement.Instance.OwnershipPairing.TryAdd(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
+        }
         BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
     }
     // Handler for server avatar data messages

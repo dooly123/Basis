@@ -3,6 +3,7 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
+using DarkRift.Basis_Common.Serializable;
 using DarkRift.Client;
 using DarkRift.Client.Unity;
 using DarkRift.Server.Plugins.Commands;
@@ -77,12 +78,14 @@ namespace Basis.Scripts.Networking
 
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
+        public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
             {
                 Instance = this;
             }
+            OwnershipPairing.Clear();
             if (BasisScene.Instance != null)
             {
                 SetupSceneEvents(BasisScene.Instance);
@@ -138,6 +141,7 @@ namespace Basis.Scripts.Networking
             {
                 SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
             }
+            OwnershipPairing.Clear();
         }
         public void Disconnect()
         {
@@ -234,9 +238,42 @@ namespace Basis.Scripts.Networking
                 }
             }
         }
-        public static void RequestOwnership()
+        public static void RequestOwnership(string UniqueNetworkId,ushort NewOwner)
         {
-
+            OwnershipTransferMessage OwnershipTransferMessage = new OwnershipTransferMessage
+            {
+                playerIdMessage = new PlayerIdMessage
+                {
+                    playerID = NewOwner
+                }
+            };
+            using (DarkRiftWriter writer = DarkRiftWriter.Create())
+            {
+                writer.Write(OwnershipTransferMessage);
+                using (Message serverOwnershipInitialize = Message.Create(BasisTags.OwnershipTransfer, writer))
+                {
+                  BasisNetworkManagement.Instance.Client.SendMessage(serverOwnershipInitialize, DarkRift.Server.Plugins.Commands.BasisNetworking.EventsChannel, DeliveryMethod.ReliableSequenced);
+                }
+            }
+        }
+        public static void RequestCurrentOwnership(string UniqueNetworkId)
+        {
+            OwnershipTransferMessage OwnershipTransferMessage = new OwnershipTransferMessage
+            {
+                playerIdMessage = new PlayerIdMessage
+                {
+                    playerID = BasisNetworkManagement.Instance.Client.ID
+                },
+                ownershipID = UniqueNetworkId
+            };
+            using (DarkRiftWriter writer = DarkRiftWriter.Create())
+            {
+                writer.Write(OwnershipTransferMessage);
+                using (Message serverOwnershipInitialize = Message.Create(BasisTags.OwnershipResponse, writer))
+                {
+                    BasisNetworkManagement.Instance.Client.SendMessage(serverOwnershipInitialize, DarkRift.Server.Plugins.Commands.BasisNetworking.EventsChannel, DeliveryMethod.ReliableSequenced);
+                }
+            }
         }
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {
