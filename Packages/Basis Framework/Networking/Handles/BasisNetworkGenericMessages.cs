@@ -44,7 +44,8 @@ public static class BasisNetworkGenericMessages
     public static void HandleServerAvatarDataMessage(DarkRiftReader reader)
     {
         reader.Read(out ServerAvatarDataMessage serverAvatarDataMessage);
-        ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.PlayerIdMessage.playerID; // destination
+      //  Debug.Log("running " + nameof(HandleServerAvatarDataMessage));
+        ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
@@ -89,7 +90,7 @@ public static class BasisNetworkGenericMessages
     public static void HandleServerAvatarDataMessage_NoRecipients(DarkRiftReader reader)
     {
         reader.Read(out ServerAvatarDataMessage_NoRecipients serverAvatarDataMessage_NoRecipients);
-        ushort avatarLinkID = serverAvatarDataMessage_NoRecipients.avatarDataMessage.PlayerIdMessage.playerID; // destination
+        ushort avatarLinkID = serverAvatarDataMessage_NoRecipients.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)

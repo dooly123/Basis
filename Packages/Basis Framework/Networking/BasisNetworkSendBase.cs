@@ -106,7 +106,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     {
                         AvatarDataMessage_NoRecipients AvatarDataMessage_NoRecipients = new AvatarDataMessage_NoRecipients
                         {
-                             PlayerIdMessage = new PlayerIdMessage() { playerID = NetId },
+                             playerIdMessage = new PlayerIdMessage() { playerID = NetId },
                             messageIndex = MessageIndex,
                             payload = buffer
                         };
@@ -132,7 +132,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     {
                         AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
                         {
-                             PlayerIdMessage = new PlayerIdMessage() { playerID = NetId },
+                             playerIdMessage = new PlayerIdMessage() { playerID = NetId },
                             messageIndex = MessageIndex,
                             payload = buffer,
                             recipients = Recipients
