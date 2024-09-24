@@ -75,6 +75,7 @@ Distributed under the MIT License. See [MIT License](https://opensource.org/lice
 
 This would not be possible without the following:
 
+- [FFmpeg Builds](https://github.com/BtbN/FFmpeg-Builds?tab=MIT-1-ov-file) (lgpl 3)
 - [OdinSerializer](https://github.com/TeamSirenix/odin-serializer)
 - [ULipSync](https://github.com/hecomi/uLipSync)
 - [DarkRift 2](https://github.com/DarkRiftNetworking/ )
