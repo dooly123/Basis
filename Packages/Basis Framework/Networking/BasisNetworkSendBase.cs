@@ -81,7 +81,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             // Check if Recipients or buffer arrays are valid or not
             if (Recipients != null && Recipients.Length == 0) Recipients = null;
+
             if (buffer != null && buffer.Length == 0) buffer = null;
+
+            ushort NetId = NetworkedPlayer.NetId;
 
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
@@ -92,7 +95,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     {
                         AvatarDataMessage_NoRecipients_NoPayload AvatarDataMessage_NoRecipients_NoPayload = new AvatarDataMessage_NoRecipients_NoPayload
                         {
-                            assignedAvatarPlayer = NetworkedPlayer.NetId,
+                             playerIdMessage = new PlayerIdMessage() { playerID = NetId },
                             messageIndex = MessageIndex
                         };
                         writer.Write(AvatarDataMessage_NoRecipients_NoPayload);
@@ -103,7 +106,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     {
                         AvatarDataMessage_NoRecipients AvatarDataMessage_NoRecipients = new AvatarDataMessage_NoRecipients
                         {
-                            assignedAvatarPlayer = NetworkedPlayer.NetId,
+                             PlayerIdMessage = new PlayerIdMessage() { playerID = NetId },
                             messageIndex = MessageIndex,
                             payload = buffer
                         };
@@ -115,16 +118,29 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
                 else
                 {
-                    AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
+                    if (buffer == null)
                     {
-                        assignedAvatarPlayer = NetworkedPlayer.NetId,
-                        messageIndex = MessageIndex,
-                        payload = buffer,
-                        recipients = Recipients
-                    };
-                    // Recipients present, payload may or may not be present
-                    writer.Write(AvatarDataMessage);
-                    WriteAndSendMessage(BasisTags.AvatarGenericMessage,writer, DeliveryMethod);
+                        AvatarDataMessage_Recipients_NoPayload AvatarDataMessage = new AvatarDataMessage_Recipients_NoPayload();
+                        AvatarDataMessage.playerIdMessage = new PlayerIdMessage() { playerID = NetId };
+                        AvatarDataMessage.messageIndex = MessageIndex;
+                        AvatarDataMessage.recipients = Recipients;
+                        // Recipients present, payload may or may not be present
+                        writer.Write(AvatarDataMessage);
+                        WriteAndSendMessage(BasisTags.AvatarGenericMessage_Recipients_NoPayload, writer, DeliveryMethod);
+                    }
+                    else
+                    {
+                        AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
+                        {
+                             PlayerIdMessage = new PlayerIdMessage() { playerID = NetId },
+                            messageIndex = MessageIndex,
+                            payload = buffer,
+                            recipients = Recipients
+                        };
+                        // Recipients present, payload may or may not be present
+                        writer.Write(AvatarDataMessage);
+                        WriteAndSendMessage(BasisTags.AvatarGenericMessage, writer, DeliveryMethod);
+                    }
                 }
             }
         }

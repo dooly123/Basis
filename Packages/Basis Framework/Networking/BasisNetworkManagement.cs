@@ -222,6 +222,14 @@ namespace Basis.Scripts.Networking
                             BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
                             break;
 
+                        case BasisTags.AvatarGenericMessage_Recipients_NoPayload:
+                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage_Recipients_NoPayload(reader);
+                            break;
+
+                        case BasisTags.SceneGenericMessage_Recipients_NoPayload:
+                            BasisNetworkGenericMessages.HandleServerSceneDataMessage_Recipients_NoPayload(reader);
+                            break;
+
 
                         case BasisTags.OwnershipResponse:
                             BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
@@ -317,6 +325,12 @@ namespace Basis.Scripts.Networking
             BasisPlayer = null;
             return false;
         }
+        /// <summary>
+        /// on the remote player this will only work...
+        /// </summary>
+        /// <param name="Avatar"></param>
+        /// <param name="BasisPlayer"></param>
+        /// <returns></returns>
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer)
         {
             if (Instance == null)
@@ -354,7 +368,7 @@ namespace Basis.Scripts.Networking
                     return true;
                 }
             }
-            Debug.LogError("Avatar was not found on any player that is known");
+            Debug.LogError("Avatar was not found on any player that is known checked " + Instance.Players.Count);
             BasisPlayer = null;
             return false;
         }
