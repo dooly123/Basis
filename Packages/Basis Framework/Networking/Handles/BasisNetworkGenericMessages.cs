@@ -21,18 +21,31 @@ public static class BasisNetworkGenericMessages
     public static void HandleOwnershipTransfer(DarkRiftReader reader)
     {
         reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
-        BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
+        HandleOwnership(OwnershipTransferMessage);
     }
     public static void HandleOwnershipResponse(DarkRiftReader reader)
     {
         reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
+        HandleOwnership(OwnershipTransferMessage);
+    }
+    public static void HandleOwnership(OwnershipTransferMessage OwnershipTransferMessage)
+    {
+        if (BasisNetworkManagement.Instance.OwnershipPairing.ContainsKey(OwnershipTransferMessage.ownershipID))
+        {
+            BasisNetworkManagement.Instance.OwnershipPairing[OwnershipTransferMessage.ownershipID] = OwnershipTransferMessage.playerIdMessage.playerID;
+        }
+        else
+        {
+            BasisNetworkManagement.Instance.OwnershipPairing.TryAdd(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
+        }
         BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
     }
     // Handler for server avatar data messages
     public static void HandleServerAvatarDataMessage(DarkRiftReader reader)
     {
         reader.Read(out ServerAvatarDataMessage serverAvatarDataMessage);
-        ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.assignedAvatarPlayer; // destination
+      //  Debug.Log("running " + nameof(HandleServerAvatarDataMessage));
+        ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
@@ -77,7 +90,7 @@ public static class BasisNetworkGenericMessages
     public static void HandleServerAvatarDataMessage_NoRecipients(DarkRiftReader reader)
     {
         reader.Read(out ServerAvatarDataMessage_NoRecipients serverAvatarDataMessage_NoRecipients);
-        ushort avatarLinkID = serverAvatarDataMessage_NoRecipients.avatarDataMessage.assignedAvatarPlayer; // destination
+        ushort avatarLinkID = serverAvatarDataMessage_NoRecipients.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
@@ -105,7 +118,7 @@ public static class BasisNetworkGenericMessages
     public static void HandleServerAvatarDataMessage_NoRecipients_NoPayload(DarkRiftReader reader)
     {
         reader.Read(out ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoRecipients_NoPayload);
-        ushort avatarLinkID = serverAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage.assignedAvatarPlayer; // destination
+        ushort avatarLinkID = serverAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
@@ -196,5 +209,38 @@ public static class BasisNetworkGenericMessages
                 }
             }
         }
+    }
+
+    // Handler for server avatar data messages with recipients but no payload
+    public static void HandleServerAvatarDataMessage_Recipients_NoPayload(DarkRiftReader reader)
+    {
+        reader.Read(out ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoPayload);
+        ushort avatarLinkID = serverAvatarDataMessage_NoPayload.avatarDataMessage.playerIdMessage.playerID; // destination
+        if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
+        {
+            if (player.Player == null)
+            {
+                Debug.LogError("Missing Player! " + avatarLinkID);
+                return;
+            }
+            if (player.Player.Avatar != null)
+            {
+                AvatarDataMessage_NoRecipients_NoPayload output = serverAvatarDataMessage_NoPayload.avatarDataMessage;
+                player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage_NoPayload.playerIdMessage.playerID, output.messageIndex, null, null);
+            }
+        }
+        else
+        {
+            Debug.Log("Missing Player For Message " + serverAvatarDataMessage_NoPayload.playerIdMessage.playerID);
+        }
+    }
+
+    // Handler for server scene data messages with recipients but no payload
+    public static void HandleServerSceneDataMessage_Recipients_NoPayload(DarkRiftReader reader)
+    {
+        reader.Read(out ServerSceneDataMessage_NoRecipients_NoPayload serverSceneDataMessage_NoPayload);
+        ushort playerID = serverSceneDataMessage_NoPayload.playerIdMessage.playerID;
+        SceneDataMessage_NoRecipients_NoPayload sceneDataMessage = serverSceneDataMessage_NoPayload.sceneDataMessage;
+        BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, null);
     }
 }

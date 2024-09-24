@@ -172,7 +172,7 @@ MonoBehaviour:
     HasTrackedRole: 1
     TrackedRole: 0
   - DeviceID: oculus_quest_plus_controller_left
-    VersionNumber: 1
+    VersionNumber: 2
     matchableDeviceIds:
     - oculus_quest_plus_controller_left
     HasRayCastSupport: 1
@@ -181,12 +181,12 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0.03, y: -0.07, z: 0.1}
-    AvatarRotationOffset: {x: 0, y: 3, z: 80}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0.05}
+    AvatarRotationOffset: {x: 340, y: 10, z: 90}
     HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_quest_plus_controller_right
-    VersionNumber: 1
+    VersionNumber: 2
     matchableDeviceIds:
     - oculus_quest_plus_controller_right
     HasRayCastSupport: 1
@@ -195,7 +195,7 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0.01, y: -0.07, z: 0.1}
-    AvatarRotationOffset: {x: 0, y: 3, z: 270}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0.05}
+    AvatarRotationOffset: {x: 340, y: 10, z: 270}
     HasTrackedRole: 1
     TrackedRole: 19

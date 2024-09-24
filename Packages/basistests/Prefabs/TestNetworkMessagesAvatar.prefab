@@ -191,7 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   avatar: {fileID: 7617675277052637975}
   MessageIndexTest: 3
-  Recipients: 3e00
+  Recipients: 010002000300040005000600
   BasisPlayer: {fileID: 0}
   Isready: 0
   Buffer: 00

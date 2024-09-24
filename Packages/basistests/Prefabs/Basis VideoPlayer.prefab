@@ -1449,6 +1449,7 @@ MonoBehaviour:
   MaterialTextureId: _EmissionMap
   RuntimeMaterial: {fileID: 0}
   Field: {fileID: 8576166549018468321}
+  Content: 
 --- !u!114 &6811371427397274770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1511,6 +1512,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VideoPlayer: {fileID: 912005458244577639}
+  MyUniqueString: testing this damn string4098
+  MyCurrentOwner: 33
 --- !u!1 &7187874680083524858
 GameObject:
   m_ObjectHideFlags: 0

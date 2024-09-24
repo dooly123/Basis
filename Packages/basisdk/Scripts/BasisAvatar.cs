@@ -44,7 +44,6 @@ namespace Basis.Scripts.BasisSdk
         /// </summary>
         /// <param name="MessageIndex"></param>
         /// <param name="DeliveryMethod"></param>
-        /// <param name="Recipients">if null everyone but self, you can include yourself to make it loop back over the network</param>
         public void NetworkMessageSend(byte MessageIndex, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable)
         {
             OnNetworkMessageSend?.Invoke(MessageIndex, null, DeliveryMethod);

@@ -3,6 +3,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour
@@ -17,15 +18,24 @@ public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour
     public DeliveryMethod Method = DeliveryMethod.Unreliable;
     public void Awake()
     {
+        avatar.OnAvatarReady += OnAvatarReady;
         avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
-        BasisNetworkManagement.OnLocalPlayerJoined += SignalReadyTosend;
     }
-
-    private void SignalReadyTosend(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
+    public void OnDestroy()
     {
-        if (BasisNetworkManagement.AvatarToPlayer(avatar, out BasisPlayer))
+        avatar.OnAvatarReady -= OnAvatarReady;
+        avatar.OnNetworkMessageReceived -= OnNetworkMessageReceived;
+    }
+    private void OnAvatarReady(bool IsOwner)
+    {
+        Debug.Log("OnAvatarReady");
+        if (IsOwner)
         {
-            Isready = true;
+            if (BasisNetworkManagement.AvatarToPlayer(avatar, out BasisPlayer))
+            {
+                Isready = true;
+                Debug.Log("Actually ran!");
+            }
         }
     }
 
