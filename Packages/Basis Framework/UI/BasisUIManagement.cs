@@ -28,6 +28,10 @@ public class BasisUIManagement : MonoBehaviour
     }
     public void RemoveUI(BasisUIBase BasisUIBase)
     {
+        if (BasisUIBase == null)
+        {
+            return;
+        }
         if (basisUIBases.Contains(BasisUIBase))
         {
             Debug.Log("Remove Menu " + BasisUIBase.gameObject.name);

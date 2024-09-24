@@ -689,7 +689,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &1307651583072996997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,6 +760,8 @@ MonoBehaviour:
   - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/hapi%20final.bundle
     IsLocalLoad: 0
   - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/thebutlah.bundle
+    IsLocalLoad: 0
+  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/table.bundle
     IsLocalLoad: 0
   - AvatarAddress: TestNetworkMessagesAvatar
     IsLocalLoad: 1

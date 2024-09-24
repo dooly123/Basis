@@ -13,6 +13,7 @@ public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour
     public ushort[] Recipients = null;
     public BasisPlayer BasisPlayer;
     public bool Isready;
+    public byte[] Buffer;
     public DeliveryMethod Method = DeliveryMethod.Unreliable;
     public void Awake()
     {
@@ -34,7 +35,9 @@ public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour
         {
             if (Keyboard.current[Key.Space].wasPressedThisFrame)
             {
-                avatar.NetworkMessageSend(MessageIndexTest, Method);
+                //(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable, ushort[] Recipients = null)
+                avatar.NetworkMessageSend(MessageIndexTest, Buffer, Method, Recipients);
+               // BasisNetworkManagement.RequestOwnership();
             }
         }
     }

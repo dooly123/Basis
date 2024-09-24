@@ -33,7 +33,7 @@ public class BasisTestNetworkScene : MonoBehaviour
     public void OnLocalPlayerJoined(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
     {
         BasisScene.OnNetworkMessageReceived += OnNetworkMessageReceived;
-        BasisScene.OnNetworkMessageSend.Invoke(1, SendingData, DarkRift.DeliveryMethod.ReliableOrdered);
+        BasisScene.OnNetworkMessageSend(1, SendingData, DarkRift.DeliveryMethod.ReliableOrdered);
     }
     private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer,ushort[] Recipients)
     {

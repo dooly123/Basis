@@ -116,8 +116,10 @@ namespace Basis.Scripts.BasisSdk.Players
                 // Calculate the difference between the current rotation and the T-pose rotation
                 Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeWorld.rotation);
 
+            //    Avatar.Animator.transform.localRotation = rotationDifference;
+                Avatar.Animator.transform.position = positionDifference;
                 // Apply the calculated position and rotation to the Avatar's animator transform
-                Avatar.Animator.transform.SetPositionAndRotation(positionDifference, rotationDifference);
+               Avatar.Animator.transform.localRotation = currentRotation;
             }
             //}
         }
