@@ -17,7 +17,7 @@ namespace Basis.Scripts.BasisSdk
         [SerializeField]
         public Renderer[] Renders;
         [SerializeField]
-        public List<BasisJiggleStrain> JiggleStrains = new List<BasisJiggleStrain>();
+        public BasisJiggleStrain[] JiggleStrains;
 
         public bool HasSendEvent;
         public AvatarNetworkMessageReceiveEvent OnNetworkMessageReceived;

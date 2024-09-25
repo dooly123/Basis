@@ -17,9 +17,9 @@ namespace Basis.Scripts.Drivers
             }
             if (player.Avatar != null)
             {
-                if (player.Avatar.JiggleStrains != null && player.Avatar.JiggleStrains.Count != 0)
+                if (player.Avatar.JiggleStrains != null && player.Avatar.JiggleStrains.Length != 0)
                 {
-                    int Count = player.Avatar.JiggleStrains.Count;
+                    int Count = player.Avatar.JiggleStrains.Length;
                     Jiggler = player.Avatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
 
                     Jiggler.levelOfDetail = new JiggleRigSimpleLOD
