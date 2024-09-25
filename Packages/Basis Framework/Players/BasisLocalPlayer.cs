@@ -28,6 +28,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public float RatioPlayerToAvatarScale = 1f;
         public float EyeRatioPlayerToDefaultScale = 1f;
         public float EyeRatioAvatarToAvatarDefaultScale = 1f;//should be used for the player
+
         /// <summary>
         /// the bool when true is the final size
         /// the bool when false is not the final size

@@ -14,7 +14,7 @@ public class BasisVideoPlayer : MonoBehaviour
     public string MaterialTextureId = "_EmissionMap";
     public Material RuntimeMaterial;
     public TMP_InputField Field;
-    public string Content;
+   // public string Content;
     private void Start()
     {
         RuntimeMaterial = Material.Instantiate(mesh.sharedMaterial);
@@ -22,7 +22,7 @@ public class BasisVideoPlayer : MonoBehaviour
         RuntimeMaterial.mainTextureOffset = new Vector2(0, 1);
         mesh.sharedMaterial = RuntimeMaterial;
         ffmpeg.OnDisplay = OnDisplay;
-        Play(Content);
+        Play(Field.text);
     }
 
     // Display the video texture on a 3D mesh in Unity

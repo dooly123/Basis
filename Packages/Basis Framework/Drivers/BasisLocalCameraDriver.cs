@@ -71,9 +71,13 @@ namespace Basis.Scripts.Drivers
             StartingScale = MicrophoneMutedIcon.transform.localScale;
             // Target scale for the "bounce" effect (e.g., 1.2 times larger)
             largerScale = StartingScale * 1.2f;
-            OnPausedEvent(MicrophoneRecorder.isPaused);
+            UpdateMicrophoneVisuals(MicrophoneRecorder.isPaused,false);
         }
         private void OnPausedEvent(bool IsMuted)
+        {
+            UpdateMicrophoneVisuals(IsMuted,true);
+        }
+        public void UpdateMicrophoneVisuals(bool IsMuted, bool PlaySound)
         {
             // Cancel the current coroutine if it's running
             if (scaleCoroutine != null)
@@ -84,7 +88,11 @@ namespace Basis.Scripts.Drivers
             {
                 MicrophoneMutedIcon.gameObject.SetActive(true);
                 MicrophoneUnMutedIcon.gameObject.SetActive(false);
-                AudioSource.PlayOneShot(MuteSound);
+                if (PlaySound)
+                {
+                    AudioSource.PlayOneShot(MuteSound);
+
+                }
                 // Start a new coroutine for the scale animation
                 scaleCoroutine = StartCoroutine(ScaleIcons(MicrophoneMutedIcon.gameObject));
             }
@@ -92,7 +100,10 @@ namespace Basis.Scripts.Drivers
             {
                 MicrophoneMutedIcon.gameObject.SetActive(false);
                 MicrophoneUnMutedIcon.gameObject.SetActive(true);
-                AudioSource.PlayOneShot(UnMuteSound);
+                if (PlaySound)
+                {
+                    AudioSource.PlayOneShot(UnMuteSound);
+                }
                 // Start a new coroutine for the scale animation
                 scaleCoroutine = StartCoroutine(ScaleIcons(MicrophoneUnMutedIcon.gameObject));
             }
@@ -134,10 +145,10 @@ namespace Basis.Scripts.Drivers
         }
         public void OnDestroy()
         {
-            MicrophoneRecorder.OnPausedAction -= OnPausedEvent;
             RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
             BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
             BasisLocalPlayer.Instance.OnPlayersHeightChanged -= OnHeightChanged;
+            MicrophoneRecorder.OnPausedAction -= OnPausedEvent;
             HasEvents = false;
             HasInstance = false;
         }

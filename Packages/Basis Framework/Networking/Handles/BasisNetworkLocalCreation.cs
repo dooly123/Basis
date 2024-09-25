@@ -18,7 +18,7 @@ namespace Basis.Scripts.Networking
             BasisNetworkedPlayer NetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(Parent.position, Parent.rotation, Parent));
             ushort playerID = BasisNetworkManagement.Instance.Client.ID;
             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
-            NetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, playerID);
+            NetworkedPlayer.ReInitialize(BasisLocalPlayer, playerID);
             if (BasisNetworkManagement.AddPlayer(NetworkedPlayer))
             {
 

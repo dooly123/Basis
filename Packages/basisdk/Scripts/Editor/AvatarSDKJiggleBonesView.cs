@@ -1,4 +1,5 @@
 using Basis.Scripts.BasisSdk;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -258,14 +259,30 @@ public class AvatarSDKJiggleBonesView
 
     private void RemoveBasisJiggleStrain(int index)
     {
-        if (index < 0 || index >= Inspector.Avatar.JiggleStrains.Count)
+        if (index < 0 || index >= Inspector.Avatar.JiggleStrains.Length)
         {
             Debug.LogWarning("Invalid index for removal");
             return;
         }
-        Inspector.Avatar.JiggleStrains.RemoveAt(index);
+        Inspector.Avatar.JiggleStrains = RemoveAt(Inspector.Avatar.JiggleStrains, index);
 
         Inspector.serializedObject.ApplyModifiedProperties();
         RefreshListView();
+    }
+    static T[] RemoveAt<T>(T[] array, int index)
+    {
+        if (index < 0 || index >= array.Length)
+            throw new ArgumentOutOfRangeException("Index is out of range.");
+
+        // Create a new array with a size that is one less than the original array
+        T[] result = new T[array.Length - 1];
+
+        // Copy elements before the index
+        Array.Copy(array, 0, result, 0, index);
+
+        // Copy elements after the index
+        Array.Copy(array, index + 1, result, index, array.Length - index - 1);
+
+        return result;
     }
 }

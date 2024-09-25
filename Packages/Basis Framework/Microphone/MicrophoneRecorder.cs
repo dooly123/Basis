@@ -18,7 +18,6 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     private ManualResetEvent processingEvent = new ManualResetEvent(false);
     private object processingLock = new object();
     public int position;
-
     public bool TryInitialize()
     {
         if (!IsInitialize)
