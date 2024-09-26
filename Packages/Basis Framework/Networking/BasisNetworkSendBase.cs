@@ -75,6 +75,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     NetworkedPlayer.Player.Avatar.OnNetworkMessageSend += OnNetworkMessageSend;
                     NetworkedPlayer.Player.Avatar.HasSendEvent = true;
                 }
+                NetworkedPlayer.Player.Avatar.LinkedPlayerID = NetworkedPlayer.NetId;
+                NetworkedPlayer.Player.Avatar.OnAvatarNetworkReady?.Invoke();
             }
         }
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
