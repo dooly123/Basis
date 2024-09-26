@@ -616,7 +616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &669651794468475275
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1080,6 +1080,8 @@ MonoBehaviour:
     IsLocalLoad: 1
   ParentedAvatarButtons: {fileID: 673662174573543822}
   ButtonPrefab: {fileID: 617829828588750553}
+  AddAvatarInputField: {fileID: 0}
+  AddAvatarApply: {fileID: 0}
 --- !u!114 &-3767234770868675314
 MonoBehaviour:
   m_ObjectHideFlags: 0
