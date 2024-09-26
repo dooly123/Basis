@@ -54,7 +54,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             historyBuffer.Clear();
             base.OnDestroy();
         }
-        public override void PollData()
+        public override void DoPollData()
         {
             if (SteamVR.active)
             {

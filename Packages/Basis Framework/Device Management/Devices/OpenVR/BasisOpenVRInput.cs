@@ -23,7 +23,7 @@ public class BasisOpenVRInput : BasisInput
         Device = device;
         await InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
     }
-    public override void PollData()
+    public override void DoPollData()
     {
         if (SteamVR.active)
         {

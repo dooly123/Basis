@@ -84,7 +84,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 376698671958739697}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
@@ -1110,7 +1110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "https://stream.vrcdn.live/live/vrcdn.live.ts\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1137,7 +1137,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 25.25
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1449,7 +1449,6 @@ MonoBehaviour:
   MaterialTextureId: _EmissionMap
   RuntimeMaterial: {fileID: 0}
   Field: {fileID: 8576166549018468321}
-  Content: 
 --- !u!114 &6811371427397274770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,8 +1511,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VideoPlayer: {fileID: 912005458244577639}
-  MyUniqueString: testing this damn string4098
   MyCurrentOwner: 33
+  MyUniqueString: testing this damn string4098
 --- !u!1 &7187874680083524858
 GameObject:
   m_ObjectHideFlags: 0

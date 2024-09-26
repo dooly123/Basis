@@ -77,7 +77,6 @@ public class BasisUIRaycastProcess
             currentEventData.pointerCurrentRaycast = raycastResult;
             currentEventData.pointerPressRaycast = raycastResult;
             bool IsDownThisFrame = Current.Trigger == 1;
-            bool ReleasedThisFrame = LastCurrent.Trigger == 1 && LastCurrent.Trigger == 0;
             //Debug.Log("running "  + raycastResult.gameObject);
             if (IsDownThisFrame)
             {
