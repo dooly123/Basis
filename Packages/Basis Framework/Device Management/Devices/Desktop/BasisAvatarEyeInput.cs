@@ -119,7 +119,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             rotationX += lookVector.x * rotationSpeed;
             rotationY -= lookVector.y * rotationSpeed;
         }
-        public override void PollData()
+        public override void DoPollData()
         {
             if (hasRoleAssigned)
             {

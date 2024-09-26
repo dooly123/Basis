@@ -26,6 +26,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField Port;
         public TMP_InputField Password;
         public Button UseLocalhost;
+        public static string StartingPassword = "basis18072024";
         public void Start()
         {
             UserNameTMP_InputField.text = BasisDataStore.LoadString(LoadFileName, string.Empty);
@@ -46,7 +47,7 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             IPaddress.text = BasisNetworkManagement.Instance.Ip;
             Port.text = BasisNetworkManagement.Instance.Port.ToString();
-            Password.text = "basis18072024"; //BasisNetworkConnector.Instance.Client.LiteNetLibConnnection.authenticationKey;
+            Password.text = StartingPassword; //BasisNetworkConnector.Instance.Client.LiteNetLibConnnection.authenticationKey;
         }
         public void OnDestroy()
         {

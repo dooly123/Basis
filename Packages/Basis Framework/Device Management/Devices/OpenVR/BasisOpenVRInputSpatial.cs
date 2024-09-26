@@ -27,7 +27,7 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
         {
             base.OnDestroy();
         }
-        public override void PollData()
+        public override void DoPollData()
         {
             if (PoseDataSource.TryGetDataFromSource(TrackedPose, out Pose resultPose))
             {

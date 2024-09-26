@@ -299,27 +299,16 @@ namespace Basis.Scripts.Networking
                 BasisPlayer = null;
                 return false;
             }
-            int AvatarInstance = Avatar.GetInstanceID();
-            foreach (BasisNetworkedPlayer NPlayer in Instance.Players.Values)
+            if(Avatar.TryGetLinkedPlayer(out ushort id))
             {
-                if (NPlayer == null)
-                {
-                    continue;
-                }
-                if (NPlayer.Player == null)
-                {
-                    continue;
-                }
-                if (NPlayer.Player.Avatar == null)
-                {
-                    continue;
-                }
-                if (NPlayer.Player.Avatar.GetInstanceID() == AvatarInstance)
-                {
-                    NetworkedPlayer = NPlayer;
-                    BasisPlayer = NPlayer.Player;
-                    return true;
-                }
+                BasisNetworkedPlayer output =  Instance.Players[id];
+                NetworkedPlayer = output;
+                BasisPlayer = output.Player;
+                return true;
+            }
+            else
+            {
+                Debug.LogError("the player was not assigned at this time!");
             }
             NetworkedPlayer = null;
             BasisPlayer = null;
@@ -345,30 +334,16 @@ namespace Basis.Scripts.Networking
                 BasisPlayer = null;
                 return false;
             }
-            foreach (BasisNetworkedPlayer NPlayer in Instance.Players.Values)
+            if (Avatar.TryGetLinkedPlayer(out ushort id))
             {
-                if (NPlayer == null)
-                {
-                    Debug.LogError("Network Player was null!");
-                    continue;
-                }
-                if (NPlayer.Player == null)
-                {
-                    Debug.LogError("Player was null!");
-                    continue;
-                }
-                if (NPlayer.Player.Avatar == null)
-                {
-                    Debug.LogError("Avatar was null!");
-                    continue;
-                }
-                if (Avatar == NPlayer.Player.Avatar)
-                {
-                    BasisPlayer = NPlayer.Player;
-                    return true;
-                }
+                BasisNetworkedPlayer output = Instance.Players[id];
+                BasisPlayer = output.Player;
+                return true;
             }
-            Debug.LogError("Avatar was not found on any player that is known checked " + Instance.Players.Count);
+            else
+            {
+                Debug.LogError("the player was not assigned at this time!");
+            }
             BasisPlayer = null;
             return false;
         }

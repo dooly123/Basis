@@ -10,7 +10,7 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
         public bool AddSomeRandomizedInput = false;
         public float MinMaxOffset = 0.0001f;
         public float LerpAmount = 0.1f;
-        public override void PollData()
+        public override void DoPollData()
         {
             if (AddSomeRandomizedInput)
             {

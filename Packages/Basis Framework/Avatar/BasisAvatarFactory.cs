@@ -136,6 +136,7 @@ namespace Basis.Scripts.Avatar
                 Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
                 if (Player is BasisLocalPlayer localPlayer)
                 {
+                    Player.Avatar.IsOwnedLocally = true;
                     CreateLocal(localPlayer);
                     localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
                     Avatar.OnAvatarReady?.Invoke(true);
@@ -146,6 +147,7 @@ namespace Basis.Scripts.Avatar
                 }
                 else if (Player is BasisRemotePlayer remotePlayer)
                 {
+                    Player.Avatar.IsOwnedLocally = false;
                     CreateRemote(remotePlayer);
                     remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
                     Avatar.OnAvatarReady?.Invoke(false);
@@ -191,12 +193,14 @@ namespace Basis.Scripts.Avatar
                 if (Player.IsLocal)
                 {
                     BasisLocalPlayer BasisLocalPlayer =(BasisLocalPlayer)Player;
+                    Player.Avatar.IsOwnedLocally = true;
                     CreateLocal(BasisLocalPlayer);
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
                 }
                 else
                 {
                     BasisRemotePlayer BasisRemotePlayer =(BasisRemotePlayer)Player;
+                    Player.Avatar.IsOwnedLocally = false;
                     CreateRemote(BasisRemotePlayer);
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
                 }

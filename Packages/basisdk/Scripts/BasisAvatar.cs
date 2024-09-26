@@ -1,5 +1,5 @@
 using DarkRift;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Basis.Scripts.BasisSdk
@@ -14,6 +14,37 @@ namespace Basis.Scripts.BasisSdk
         public int[] FaceVisemeMovement = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
         public int[] BlinkViseme = new int[] { -1 };
         public int laughterBlendTarget = -1;
+
+        private ushort linkedPlayerID;
+        public bool HasLinkedPlayer { get; private set; } = false;
+        public Action OnAvatarNetworkReady;
+        public bool IsOwnedLocally;
+        // Property for LinkedPlayerID with logic to set HasLinkedPlayer
+        public ushort LinkedPlayerID
+        {
+            get => linkedPlayerID;
+            set
+            {
+                linkedPlayerID = value;
+                HasLinkedPlayer = true;
+            }
+        }
+
+        // Try to set the linked player
+        public bool TryGetLinkedPlayer(out ushort Id)
+        {
+            if (HasLinkedPlayer)
+            {
+                Id = LinkedPlayerID;
+                return true;
+            }
+            else
+            {
+                Id = 0;
+            }
+            return false;
+        }
+
         [SerializeField]
         public Renderer[] Renders;
         [SerializeField]

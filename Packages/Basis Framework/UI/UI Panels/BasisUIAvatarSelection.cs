@@ -14,6 +14,8 @@ namespace Basis.Scripts.UI.UI_Panels
         public RectTransform ParentedAvatarButtons;
         public GameObject ButtonPrefab; // Prefab for the button
         public const string AvatarSelection = "BasisUIAvatarSelection";
+        public TMP_InputField AddAvatarInputField;
+        public Button AddAvatarApply;
         public void Start()
         {
             Initialize();
@@ -31,6 +33,18 @@ namespace Basis.Scripts.UI.UI_Panels
         }
         public void Initialize()
         {
+            BasisUIAvatarRequest.LoadAllAvatars();
+            int AvatarUrlsCount = BasisUIAvatarRequest.LocallyStoredAvatarUrls.Count;
+            for (int Index = 0; Index < AvatarUrlsCount; Index++)
+            {
+                string Url = BasisUIAvatarRequest.LocallyStoredAvatarUrls[Index];
+                AvatarLoadRequest AvatarLoadRequest = new AvatarLoadRequest
+                {
+                    AvatarAddress = Url,
+                    IsLocalLoad = 0
+                };
+                AvatarUrls.Add(AvatarLoadRequest);
+            }
             for (int Index = 0; Index < AvatarUrls.Count; Index++)
             {
                 AvatarLoadRequest url = AvatarUrls[Index];

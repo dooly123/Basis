@@ -22,7 +22,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
                 BasisOpenXRInputEye.Initalize();
             }
         }
-        public override void PollData()
+        public override void DoPollData()
         {
             if (Device.isValid)
             {
