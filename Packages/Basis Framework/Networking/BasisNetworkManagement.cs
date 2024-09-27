@@ -28,12 +28,12 @@ namespace Basis.Scripts.Networking
         /// fire when ownership is changed for a unique string
         /// </summary>
         public static OnNetworkMessageReceiveOwnershipTransfer OnOwnershipTransfer;
-        public Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
+        public static Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
         public static bool AddPlayer(BasisNetworkedPlayer Player)
         {
             if (Instance != null)
             {
-                return Instance.Players.TryAdd(Player.NetId, Player);
+                return Players.TryAdd(Player.NetId, Player);
             }
             return false;
         }
@@ -41,7 +41,7 @@ namespace Basis.Scripts.Networking
         {
             if (Instance != null)
             {
-                return Instance.Players.Remove(NetID);
+                return Players.Remove(NetID);
             }
             return false;
         }
@@ -49,7 +49,7 @@ namespace Basis.Scripts.Networking
         {
             if (Instance != null)
             {
-                return Instance.Players.Remove(BasisNetworkedPlayer.NetId);
+                return Players.Remove(BasisNetworkedPlayer.NetId);
             }
             return false;
         }
@@ -98,6 +98,20 @@ namespace Basis.Scripts.Networking
                 Connect(Port, Ip, ISServer);
             }
         }
+        public void OnDestroy()
+        {
+            Players.Clear();
+        }
+        public static bool TryGetLocalPlayerID(out ushort LocalID)
+        {
+            if(Instance != null && Instance.Client != null)
+            {
+                LocalID =  Instance.Client.ID;
+                return true;
+            }
+            LocalID = 0;
+            return false;
+        }
         public void SetupSceneEvents(BasisScene BasisScene)
         {
             BasisScene.OnNetworkMessageSend += BasisNetworkGenericMessages.OnNetworkMessageSend;
@@ -133,6 +147,7 @@ namespace Basis.Scripts.Networking
         {
             Debug.LogError("Disconnected from Server " + e.Error);
             Disconnect();
+            Players.Clear();
             if (TryToReconnectAutomatically)
             {
                 Connect(Port, Ip, ISServer);
@@ -301,7 +316,7 @@ namespace Basis.Scripts.Networking
             }
             if(Avatar.TryGetLinkedPlayer(out ushort id))
             {
-                BasisNetworkedPlayer output =  Instance.Players[id];
+                BasisNetworkedPlayer output = Players[id];
                 NetworkedPlayer = output;
                 BasisPlayer = output.Player;
                 return true;
@@ -336,7 +351,7 @@ namespace Basis.Scripts.Networking
             }
             if (Avatar.TryGetLinkedPlayer(out ushort id))
             {
-                BasisNetworkedPlayer output = Instance.Players[id];
+                BasisNetworkedPlayer output = Players[id];
                 BasisPlayer = output.Player;
                 return true;
             }
@@ -362,7 +377,7 @@ namespace Basis.Scripts.Networking
                 return false;
             }
             int BasisPlayerInstance = BasisPlayer.GetInstanceID();
-            foreach (BasisNetworkedPlayer NPlayer in Instance.Players.Values)
+            foreach (BasisNetworkedPlayer NPlayer in Players.Values)
             {
                 if (NPlayer == null)
                 {

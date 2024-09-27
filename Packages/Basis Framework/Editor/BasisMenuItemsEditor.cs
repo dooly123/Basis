@@ -274,27 +274,23 @@ public static class BasisMenuItemsEditor
     [MenuItem("Basis/Player/Spawn Fake Remote")]
     public static void SpawnFakeRemote()
     {
-        BasisNetworkManagement NetworkConnector = BasisNetworkManagement.Instance;
-        if (NetworkConnector != null)
+        ServerReadyMessage serverSideSyncPlayerMessage = new ServerReadyMessage
         {
-            ServerReadyMessage serverSideSyncPlayerMessage = new ServerReadyMessage
+            playerIdMessage = new PlayerIdMessage
             {
-                playerIdMessage = new PlayerIdMessage
-                {
-                    playerID = (ushort)(NetworkConnector.Players.Count + 1)
-                },
-                localReadyMessage = new ReadyMessage()
-            };
-            serverSideSyncPlayerMessage.localReadyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage();
-            serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = new LocalAvatarSyncMessage();
-            BasisNetworkTransmitter Transmitter = GameObject.FindFirstObjectByType<BasisNetworkTransmitter>();
-            if (Transmitter != null)
-            {
-                Debug.Log("Apply SpawnFakeRemote");
-                serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
-            }
-            CreateTestRemotePlayer(serverSideSyncPlayerMessage);
+                playerID = (ushort)(BasisNetworkManagement.Players.Count + 1)
+            },
+            localReadyMessage = new ReadyMessage()
+        };
+        serverSideSyncPlayerMessage.localReadyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage();
+        serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = new LocalAvatarSyncMessage();
+        BasisNetworkTransmitter Transmitter = GameObject.FindFirstObjectByType<BasisNetworkTransmitter>();
+        if (Transmitter != null)
+        {
+            Debug.Log("Apply SpawnFakeRemote");
+            serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
         }
+        CreateTestRemotePlayer(serverSideSyncPlayerMessage);
     }
     public async static void CreateTestRemotePlayer(ServerReadyMessage ServerReadyMessage)
     {
