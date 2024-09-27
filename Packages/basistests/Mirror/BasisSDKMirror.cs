@@ -95,13 +95,13 @@ public class BasisSDKMirror : MonoBehaviour
         if (IsCameraAble(camera))
         {
             OnCamerasRenderering?.Invoke();
+            BasisLocalCameraDriver.Instance.ScaleHeadToNormal();
             ThisPosition = Renderer.transform.position;
             projectionMatrix = camera.projectionMatrix;
-            normal = Renderer.transform.TransformDirection(projectionDirection).normalized;
-            reflectionPlane = new Vector4(normal.x, normal.y, normal.z, -Vector3.Dot(normal, ThisPosition) - m_ClipPlaneOffset);
-            BasisHelpers.CalculateReflectionMatrix(ref reflectionMatrix, reflectionPlane);
+            normal = Renderer.transform.TransformDirection(projectionDirection);
             UpdateCameraState(SRC, camera);
             OnCamerasFinished?.Invoke();
+            BasisLocalCameraDriver.Instance.ScaleheadToZero();
         }
     }
     public bool IsCameraAble(Camera camera)
@@ -132,13 +132,10 @@ public class BasisSDKMirror : MonoBehaviour
         InsideRendering = true;
         RenderCamera(camera, StereoscopicEye.Left, SRC);
         RenderCamera(camera, StereoscopicEye.Right, SRC);//for testing purposes.
-        // if (XRSettings.enabled)
-        // {
-        //     RenderCamera(camera, StereoscopicEye.Right, SRC);
-        // }
 
         InsideRendering = false;
     }
+
     private void RenderCamera(Camera camera, StereoscopicEye eye, ScriptableRenderContext SRC)
     {
         //  Debug.Log("Rendering Camera");
@@ -156,52 +153,24 @@ public class BasisSDKMirror : MonoBehaviour
             portalCamera = RightCamera;
         }
         SetupReflection(camera, portalCamera, eye);
-        GL.invertCulling = true;
 #pragma warning disable CS0618
         UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
 #pragma warning restore CS0618
-        GL.invertCulling = false;
     }
     private void SetupReflection(Camera srcCamera, Camera destCamera, StereoscopicEye eye)
     {
         // Get the correct eye offset (difference between left/right eye positions)
         Vector3 eyeOffset = GetEyePosition(eye);
 
-        // Calculate the original eye position in world space
-        Vector3 oldEyePos = srcCamera.transform.position + srcCamera.transform.TransformVector(eyeOffset);
-
-        // Reflect the old eye position using the reflection matrix
-        Vector3 newEyePos = reflectionMatrix.MultiplyPoint(oldEyePos);
-
-        // Set the new eye position for the reflection camera
-        destCamera.transform.position = newEyePos;
-
-        // Ensure the reflection camera does not inherit the head's rotation
-        // Reflect the forward and up vectors, and construct the rotation manually
-        Vector3 forward = srcCamera.transform.forward;
-        Vector3 up = srcCamera.transform.up;
-
-        Vector3 reflectedForward = reflectionMatrix.MultiplyVector(forward);
-        Vector3 reflectedUp = reflectionMatrix.MultiplyVector(up);
-
-        // Set the camera's rotation manually using the reflected forward and up vectors
-        destCamera.transform.rotation = Quaternion.LookRotation(reflectedForward, reflectedUp);
-
-        // Calculate the correct reflection matrix for the camera's position and orientation
-        Matrix4x4 reflectionWorldToCamera = srcCamera.worldToCameraMatrix * reflectionMatrix;
-
-        // Set the worldToCameraMatrix for the reflection camera
-        destCamera.worldToCameraMatrix = reflectionWorldToCamera;
+        destCamera.transform.localPosition = Vector3.Reflect(transform.InverseTransformPoint(eyeOffset), Vector3.forward);
+        destCamera.transform.localRotation = Quaternion.LookRotation(Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.forward), Vector3.forward), Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.up), Vector3.forward));
 
         // Calculate the clip plane for the reflection camera
-        Vector4 clipPlane = BasisHelpers.CameraSpacePlane(reflectionWorldToCamera, ThisPosition, normal, m_ClipPlaneOffset);
+        Vector4 clipPlane = BasisHelpers.CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal, m_ClipPlaneOffset);
 
         // Modify the projection matrix for oblique near-plane clipping
-        Matrix4x4 projection = srcCamera.projectionMatrix;
-        BasisHelpers.CalculateObliqueMatrix(ref projection, clipPlane);
-
-        // Apply the new projection matrix to the reflection camera
-        destCamera.projectionMatrix = projection;
+        destCamera.projectionMatrix = srcCamera.projectionMatrix;
+        destCamera.projectionMatrix = destCamera.CalculateObliqueMatrix(clipPlane);
     }
     private Vector3 GetEyePosition(StereoscopicEye eye)
     {

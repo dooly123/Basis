@@ -146,9 +146,9 @@ namespace Basis.Scripts.BasisSdk.Helpers
         }
         public static Vector4 CameraSpacePlane(Matrix4x4 worldToCameraMatrix, Vector3 pos, Vector3 normal, float ClipOffset, float sideSign = 1.0f)
         {
-            Vector3 offsetPos = pos + normal * ClipOffset;
+            Vector3 offsetPos = pos + normal.normalized * ClipOffset;
             Vector3 cpos = worldToCameraMatrix.MultiplyPoint(offsetPos);
-            Vector3 cnormal = worldToCameraMatrix.MultiplyVector(normal).normalized * sideSign;
+            Vector3 cnormal = worldToCameraMatrix.MultiplyVector(normal) * sideSign;
             return new Vector4(cnormal.x, cnormal.y, cnormal.z, -Vector3.Dot(cpos, cnormal));
         }
     }
