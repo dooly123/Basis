@@ -66,7 +66,7 @@ namespace Basis.Scripts.Drivers
                 BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
                 InstanceExists?.Invoke();
                 HasEvents = true;
-            }
+            } 
             halfDuration = duration / 2f; // Time to scale up and down
             StartingScale = MicrophoneMutedIcon.transform.localScale;
             // Target scale for the "bounce" effect (e.g., 1.2 times larger)
@@ -79,6 +79,7 @@ namespace Basis.Scripts.Drivers
         }
         public void UpdateMicrophoneVisuals(bool IsMuted, bool PlaySound)
         {
+           // Debug.Log(nameof(UpdateMicrophoneVisuals));
             // Cancel the current coroutine if it's running
             if (scaleCoroutine != null)
             {
@@ -86,6 +87,8 @@ namespace Basis.Scripts.Drivers
             }
             if (IsMuted)
             {
+               // Debug.Log(nameof(UpdateMicrophoneVisuals) + IsMuted);
+
                 MicrophoneMutedIcon.gameObject.SetActive(true);
                 MicrophoneUnMutedIcon.gameObject.SetActive(false);
                 if (PlaySound)
@@ -98,6 +101,8 @@ namespace Basis.Scripts.Drivers
             }
             else
             {
+               // Debug.Log(nameof(UpdateMicrophoneVisuals) + IsMuted);
+
                 MicrophoneMutedIcon.gameObject.SetActive(false);
                 MicrophoneUnMutedIcon.gameObject.SetActive(true);
                 if (PlaySound)

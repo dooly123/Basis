@@ -5,6 +5,7 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
     public class BasisAvatarEyeInput : BasisInput
@@ -123,6 +124,8 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         {
             if (hasRoleAssigned)
             {
+                characterInputActions.InputState.CopyTo(InputState);
+               // InputState.CopyTo(characterInputActions.InputState);
                 // Apply modulo operation to keep rotation within 0 to 360 range
                 rotationX %= 360f;
                 rotationY %= 360f;

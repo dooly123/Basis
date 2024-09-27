@@ -37,6 +37,8 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public static string InputActions = "InputActions";
         public bool HasEvents = false;
         public static Action LateUpdateEvent;
+        [SerializeField]
+        public BasisInputState InputState = new BasisInputState();
         public void OnEnable()
         {
             InputSystem.settings.SetInternalFeatureFlag("USE_OPTIMIZED_CONTROLS", true);
@@ -148,18 +150,11 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         public void PrimaryGet()
         {
-            if (CharacterEyeInput != null)
-            {
-                CharacterEyeInput.InputState.PrimaryButtonGetState = true;
-            }
+            InputState.PrimaryButtonGetState = true;
         }
         public void CancelPrimaryGet()
         {
-            if (CharacterEyeInput != null)
-            {
-                CharacterEyeInput.InputState.PrimaryButtonGetState = false;
-            }
-
+            InputState.PrimaryButtonGetState = false;
         }
         public void RemoveCallback()
         {
@@ -196,17 +191,10 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         public void LeftMouse(float state)
         {
-            if (CharacterEyeInput != null)
-            {
-                CharacterEyeInput.InputState.Trigger = state;
-            }
+            InputState.Trigger = state;
         }
         public void RightMouse(float state)
         {
-            if (CharacterEyeInput != null)
-            {
-
-            }
         }
         public void SwitchDesktop()
         {
