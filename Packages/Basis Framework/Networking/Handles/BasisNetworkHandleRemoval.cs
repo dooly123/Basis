@@ -8,7 +8,7 @@ public static class BasisNetworkHandleRemoval
     public static void HandleDisconnection(DarkRiftReader reader)
     {
         ushort DisconnectValue = reader.ReadUInt16();
-        if (BasisNetworkManagement.Instance.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer NetworkedPlayer))
+        if (BasisNetworkManagement.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer NetworkedPlayer))
         {
             BasisNetworkManagement.RemovePlayer(DisconnectValue);
 

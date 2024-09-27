@@ -46,7 +46,7 @@ public static class BasisNetworkGenericMessages
         reader.Read(out ServerAvatarDataMessage serverAvatarDataMessage);
       //  Debug.Log("running " + nameof(HandleServerAvatarDataMessage));
         ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.playerIdMessage.playerID; // destination
-        if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
+        if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
             {
@@ -91,7 +91,7 @@ public static class BasisNetworkGenericMessages
     {
         reader.Read(out ServerAvatarDataMessage_NoRecipients serverAvatarDataMessage_NoRecipients);
         ushort avatarLinkID = serverAvatarDataMessage_NoRecipients.avatarDataMessage.playerIdMessage.playerID; // destination
-        if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
+        if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
             {
@@ -119,7 +119,7 @@ public static class BasisNetworkGenericMessages
     {
         reader.Read(out ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoRecipients_NoPayload);
         ushort avatarLinkID = serverAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage.playerIdMessage.playerID; // destination
-        if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
+        if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
             {
@@ -216,7 +216,7 @@ public static class BasisNetworkGenericMessages
     {
         reader.Read(out ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoPayload);
         ushort avatarLinkID = serverAvatarDataMessage_NoPayload.avatarDataMessage.playerIdMessage.playerID; // destination
-        if (BasisNetworkManagement.Instance.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
+        if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
             {
