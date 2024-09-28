@@ -176,7 +176,7 @@ public class BasisSDKMirror : MonoBehaviour
         Camera portalCamera;
         RenderTexture portalTexture;
 
-        if (eye == MonoOrStereoscopicEye.Left)
+        if (eye != MonoOrStereoscopicEye.Right)
         {
             portalTexture = PortalTextureLeft;
             portalCamera = LeftCamera;
@@ -193,18 +193,21 @@ public class BasisSDKMirror : MonoBehaviour
     }
     private void SetupReflection(Camera srcCamera, Camera destCamera, MonoOrStereoscopicEye eye)
     {
-        // Get the correct eye offset (difference between left/right eye positions)
-        Vector3 eyeOffset = srcCamera.transform.position;
+        Vector3 eyeOffset = eye == MonoOrStereoscopicEye.Mono ? srcCamera.transform.position : srcCamera.GetStereoViewMatrix((StereoscopicEye)eye).inverse.MultiplyPoint(Vector3.zero);
 
         destCamera.transform.localPosition = Vector3.Reflect(transform.InverseTransformPoint(eyeOffset), Vector3.forward);
         destCamera.transform.localRotation = Quaternion.LookRotation(Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.forward), Vector3.forward), Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.up), Vector3.forward));
 
         // Calculate the clip plane for the reflection camera
         Vector4 clipPlane = BasisHelpers.CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal, m_ClipPlaneOffset);
+        clipPlane.x *= -1; // Applied to projection matrix with flipped x
 
         // Modify the projection matrix for oblique near-plane clipping
-        destCamera.projectionMatrix = eye == MonoOrStereoscopicEye.Mono ? srcCamera.projectionMatrix : srcCamera.GetStereoProjectionMatrix((StereoscopicEye)eye);
-        destCamera.projectionMatrix = destCamera.CalculateObliqueMatrix(clipPlane);
+        Matrix4x4 projectionMatrix = eye == MonoOrStereoscopicEye.Mono ? srcCamera.projectionMatrix : srcCamera.GetStereoProjectionMatrix((StereoscopicEye)eye);
+        BasisHelpers.CalculateObliqueMatrix(ref projectionMatrix, clipPlane);
+        // Chirality hack: Flip X on the projection matrix, since the shader inverts the uv.x
+        projectionMatrix = Matrix4x4.Scale(new Vector3(-1,1,1)) * projectionMatrix * Matrix4x4.Scale(new Vector3(-1,1,1));
+        destCamera.projectionMatrix = projectionMatrix;
     }
     private Vector3 GetEyePosition(MonoOrStereoscopicEye eye)
     {
