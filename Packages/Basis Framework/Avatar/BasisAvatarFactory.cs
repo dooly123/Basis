@@ -15,7 +15,6 @@ namespace Basis.Scripts.Avatar
     public static class BasisAvatarFactory
     {
         public const string LoadingAvatar = "LoadingAvatar";
-
         public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, byte Mode, string hash)
         {
             if (string.IsNullOrEmpty(AvatarAddress))
@@ -140,9 +139,9 @@ namespace Basis.Scripts.Avatar
                     CreateLocal(localPlayer);
                     localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
                     Avatar.OnAvatarReady?.Invoke(true);
-                    foreach (Renderer Render in Player.Avatar.Renders)
+                    for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
-                        Render.renderingLayerMask = 2;
+                        Avatar.Renders[Index].renderingLayerMask = 6;
                     }
                 }
                 else if (Player is BasisRemotePlayer remotePlayer)
@@ -151,9 +150,9 @@ namespace Basis.Scripts.Avatar
                     CreateRemote(remotePlayer);
                     remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
                     Avatar.OnAvatarReady?.Invoke(false);
-                    foreach (Renderer Render in Player.Avatar.Renders)
+                    for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
-                        Render.renderingLayerMask = 3;
+                        Avatar.Renders[Index].renderingLayerMask = 7;
                     }
                 }
                 //no longer needed await Awaitable.NextFrameAsync();//this is so we can let scripts set up a frame before this call
@@ -189,13 +188,17 @@ namespace Basis.Scripts.Avatar
             if (InSceneLoadingAvatar.TryGetComponent(out BasisAvatar Avatar))
             {
                 Player.Avatar = Avatar;
-
+                Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
                 if (Player.IsLocal)
                 {
                     BasisLocalPlayer BasisLocalPlayer =(BasisLocalPlayer)Player;
                     Player.Avatar.IsOwnedLocally = true;
                     CreateLocal(BasisLocalPlayer);
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
+                    for (int Index = 0; Index < Player.Avatar.Renders.Length; Index++)
+                    {
+                        Avatar.Renders[Index].renderingLayerMask = 6;
+                    }
                 }
                 else
                 {
@@ -203,6 +206,10 @@ namespace Basis.Scripts.Avatar
                     Player.Avatar.IsOwnedLocally = false;
                     CreateRemote(BasisRemotePlayer);
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
+                    for (int Index = 0; Index < Player.Avatar.Renders.Length; Index++)
+                    {
+                        Avatar.Renders[Index].renderingLayerMask = 7;
+                    }
                 }
             }
         }
