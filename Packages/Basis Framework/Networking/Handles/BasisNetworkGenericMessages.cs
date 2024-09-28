@@ -17,7 +17,7 @@ public static class BasisNetworkGenericMessages
         SceneDataMessage sceneDataMessage = serverSceneDataMessage.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
     }
-    public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID,ushort NetIdNewOwner);
+    public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID,ushort NetIdNewOwner,bool IsOwner);
     public static void HandleOwnershipTransfer(DarkRiftReader reader)
     {
         reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
@@ -38,7 +38,10 @@ public static class BasisNetworkGenericMessages
         {
             BasisNetworkManagement.Instance.OwnershipPairing.TryAdd(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
         }
-        BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
+
+        bool isLocalOwner = OwnershipTransferMessage.playerIdMessage.playerID == BasisNetworkManagement.Instance.Client.ID;
+
+        BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID, isLocalOwner);
     }
     // Handler for server avatar data messages
     public static void HandleServerAvatarDataMessage(DarkRiftReader reader)

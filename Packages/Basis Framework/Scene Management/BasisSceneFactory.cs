@@ -68,13 +68,22 @@ public class BasisSceneFactory : MonoBehaviour
     }
     public void RequestSpawnPoint(out Vector3 Position, out Quaternion Rotation)
     {
-        if (BasisScene.SpawnPoint == null)
+        if (BasisScene != null)
         {
-            this.transform.GetPositionAndRotation(out Position, out Rotation);
+            if (BasisScene.SpawnPoint == null)
+            {
+                this.transform.GetPositionAndRotation(out Position, out Rotation);
+            }
+            else
+            {
+                BasisScene.SpawnPoint.GetPositionAndRotation(out Position, out Rotation);
+            }
         }
         else
         {
-            BasisScene.SpawnPoint.GetPositionAndRotation(out Position, out Rotation);
+            Debug.LogError("Missing BasisScene!");
+            Position = Vector3.zero;
+            Rotation = Quaternion.identity;
         }
     }
 }

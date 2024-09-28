@@ -56,7 +56,7 @@ public class BasisVideoPlayerNetworked : MonoBehaviour
         BasisNetworkManagement.OnOwnershipTransfer += OnOwnershipTransfer;
         BasisNetworkManagement.RequestCurrentOwnership(MyUniqueString);
     }
-    private void OnOwnershipTransfer(string UniqueEntityID, ushort NetIdNewOwner)
+    private void OnOwnershipTransfer(string UniqueEntityID, ushort NetIdNewOwner, bool IsOwner)
     {
         if (UniqueEntityID == MyUniqueString)
         {
