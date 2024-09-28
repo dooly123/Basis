@@ -351,12 +351,24 @@
         "com.unity.xr.legacyinputhelpers": "2.1.4"
       }
     },
+    "dev.hai-vr.basis.comms": {
+      "version": "file:HVRBasisAvatarComms",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "jp.lilxyzw.liltoon": {
       "version": "https://github.com/lilxyzw/lilToon.git?path=Assets/lilToon#master",
       "depth": 0,
       "source": "git",
       "dependencies": {},
       "hash": "b96470d3dd9092b840052578048b2307fe6d8786"
+    },
+    "net.virtualwebsite.voxels": {
+      "version": "file:net.virtualwebsite.voxels",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

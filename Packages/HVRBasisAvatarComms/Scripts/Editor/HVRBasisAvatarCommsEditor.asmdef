@@ -1,0 +1,19 @@
+{
+    "name": "HVRBasisAvatarCommsEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8c9aa0e006f5b5347af5c5470971dfae",
+        "GUID:36654df604fac454eb30035133ddc310"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
