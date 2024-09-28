@@ -6,6 +6,8 @@ using static UnityEngine.Camera;
 using Basis.Scripts.Drivers;
 using System;
 using Basis.Scripts.BasisSdk.Helpers;
+using Basis.Scripts.Device_Management;
+using System.Collections;
 public class BasisSDKMirror : MonoBehaviour
 {
     public Renderer Renderer;//only renders when this is visible
@@ -55,6 +57,18 @@ public class BasisSDKMirror : MonoBehaviour
         BasisLocalCameraDriver.InstanceExists += Initalize;
         RenderPipeline.beginCameraRendering += UpdateCamera;
     }
+
+    public IEnumerator Start()
+    {
+        yield return new WaitUntil(() => BasisDeviceManagement.Instance);
+        BasisDeviceManagement.Instance.OnBootModeChanged += BootModeChanged;
+    }
+
+    public void OnDestroy()
+    {
+        BasisDeviceManagement.Instance.OnBootModeChanged -= BootModeChanged;
+    }
+
     public void OnDisable()
     {
         if (PortalTextureLeft != null)
@@ -76,6 +90,19 @@ public class BasisSDKMirror : MonoBehaviour
         BasisLocalCameraDriver.InstanceExists -= Initalize;
         RenderPipeline.beginCameraRendering -= UpdateCamera;
     }
+
+    private void BootModeChanged(string obj)
+    {
+        StartCoroutine(BootModeChangedCoroutine(obj));
+    }
+
+    private IEnumerator BootModeChangedCoroutine(string obj)
+    {
+        yield return null;
+        OnDisable();
+        OnEnable();
+    }
+
     public void Initalize()
     {
         Camera Camera = BasisLocalCameraDriver.Instance.Camera;
@@ -95,13 +122,13 @@ public class BasisSDKMirror : MonoBehaviour
         if (IsCameraAble(camera))
         {
             OnCamerasRenderering?.Invoke();
+            BasisLocalCameraDriver.Instance.ScaleHeadToNormal();
             ThisPosition = Renderer.transform.position;
             projectionMatrix = camera.projectionMatrix;
-            normal = Renderer.transform.TransformDirection(projectionDirection).normalized;
-            reflectionPlane = new Vector4(normal.x, normal.y, normal.z, -Vector3.Dot(normal, ThisPosition) - m_ClipPlaneOffset);
-            BasisHelpers.CalculateReflectionMatrix(ref reflectionMatrix, reflectionPlane);
+            normal = Renderer.transform.TransformDirection(projectionDirection);
             UpdateCameraState(SRC, camera);
             OnCamerasFinished?.Invoke();
+            BasisLocalCameraDriver.Instance.ScaleheadToZero();
         }
     }
     public bool IsCameraAble(Camera camera)
@@ -130,22 +157,26 @@ public class BasisSDKMirror : MonoBehaviour
         }
         //  Debug.Log("Passed InsideRendering");
         InsideRendering = true;
-        RenderCamera(camera, StereoscopicEye.Left, SRC);
-        RenderCamera(camera, StereoscopicEye.Right, SRC);//for testing purposes.
-        // if (XRSettings.enabled)
-        // {
-        //     RenderCamera(camera, StereoscopicEye.Right, SRC);
-        // }
+        if (camera.stereoEnabled)
+        {
+            RenderCamera(camera, MonoOrStereoscopicEye.Left, SRC);
+            RenderCamera(camera, MonoOrStereoscopicEye.Right, SRC);
+        }
+        else
+        {
+            RenderCamera(camera, MonoOrStereoscopicEye.Mono, SRC);
+        }
 
         InsideRendering = false;
     }
-    private void RenderCamera(Camera camera, StereoscopicEye eye, ScriptableRenderContext SRC)
+
+    private void RenderCamera(Camera camera, MonoOrStereoscopicEye eye, ScriptableRenderContext SRC)
     {
         //  Debug.Log("Rendering Camera");
         Camera portalCamera;
         RenderTexture portalTexture;
 
-        if (eye == StereoscopicEye.Left)
+        if (eye == MonoOrStereoscopicEye.Left)
         {
             portalTexture = PortalTextureLeft;
             portalCamera = LeftCamera;
@@ -156,56 +187,28 @@ public class BasisSDKMirror : MonoBehaviour
             portalCamera = RightCamera;
         }
         SetupReflection(camera, portalCamera, eye);
-        GL.invertCulling = true;
 #pragma warning disable CS0618
         UniversalRenderPipeline.RenderSingleCamera(SRC, portalCamera);
 #pragma warning restore CS0618
-        GL.invertCulling = false;
     }
-    private void SetupReflection(Camera srcCamera, Camera destCamera, StereoscopicEye eye)
+    private void SetupReflection(Camera srcCamera, Camera destCamera, MonoOrStereoscopicEye eye)
     {
         // Get the correct eye offset (difference between left/right eye positions)
-        Vector3 eyeOffset = GetEyePosition(eye);
+        Vector3 eyeOffset = srcCamera.transform.position;
 
-        // Calculate the original eye position in world space
-        Vector3 oldEyePos = srcCamera.transform.position + srcCamera.transform.TransformVector(eyeOffset);
-
-        // Reflect the old eye position using the reflection matrix
-        Vector3 newEyePos = reflectionMatrix.MultiplyPoint(oldEyePos);
-
-        // Set the new eye position for the reflection camera
-        destCamera.transform.position = newEyePos;
-
-        // Ensure the reflection camera does not inherit the head's rotation
-        // Reflect the forward and up vectors, and construct the rotation manually
-        Vector3 forward = srcCamera.transform.forward;
-        Vector3 up = srcCamera.transform.up;
-
-        Vector3 reflectedForward = reflectionMatrix.MultiplyVector(forward);
-        Vector3 reflectedUp = reflectionMatrix.MultiplyVector(up);
-
-        // Set the camera's rotation manually using the reflected forward and up vectors
-        destCamera.transform.rotation = Quaternion.LookRotation(reflectedForward, reflectedUp);
-
-        // Calculate the correct reflection matrix for the camera's position and orientation
-        Matrix4x4 reflectionWorldToCamera = srcCamera.worldToCameraMatrix * reflectionMatrix;
-
-        // Set the worldToCameraMatrix for the reflection camera
-        destCamera.worldToCameraMatrix = reflectionWorldToCamera;
+        destCamera.transform.localPosition = Vector3.Reflect(transform.InverseTransformPoint(eyeOffset), Vector3.forward);
+        destCamera.transform.localRotation = Quaternion.LookRotation(Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.forward), Vector3.forward), Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.up), Vector3.forward));
 
         // Calculate the clip plane for the reflection camera
-        Vector4 clipPlane = BasisHelpers.CameraSpacePlane(reflectionWorldToCamera, ThisPosition, normal, m_ClipPlaneOffset);
+        Vector4 clipPlane = BasisHelpers.CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal, m_ClipPlaneOffset);
 
         // Modify the projection matrix for oblique near-plane clipping
-        Matrix4x4 projection = srcCamera.projectionMatrix;
-        BasisHelpers.CalculateObliqueMatrix(ref projection, clipPlane);
-
-        // Apply the new projection matrix to the reflection camera
-        destCamera.projectionMatrix = projection;
+        destCamera.projectionMatrix = eye == MonoOrStereoscopicEye.Mono ? srcCamera.projectionMatrix : srcCamera.GetStereoProjectionMatrix((StereoscopicEye)eye);
+        destCamera.projectionMatrix = destCamera.CalculateObliqueMatrix(clipPlane);
     }
-    private Vector3 GetEyePosition(StereoscopicEye eye)
+    private Vector3 GetEyePosition(MonoOrStereoscopicEye eye)
     {
-        if (eye == StereoscopicEye.Left)
+        if (eye == MonoOrStereoscopicEye.Left)
         {
             return BasisLocalCameraDriver.LeftEyePosition();
         }
