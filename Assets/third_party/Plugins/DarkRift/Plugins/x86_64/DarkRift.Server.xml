@@ -4343,12 +4343,6 @@
                 The rules we are following
             </summary>
         </member>
-        <member name="M:DarkRift.Server.Plugins.BasisNetworking.Ownership.OwnershipManagement.NextAvailableIndex">
-            <summary>
-            Generates the next available index for networkIdentifier in a thread-safe manner.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:DarkRift.Server.Plugins.BasisNetworking.Ownership.OwnershipManagement.OwnershipTransfer(DarkRift.Message,DarkRift.Server.MessageReceivedEventArgs,System.Collections.Concurrent.ConcurrentDictionary{System.UInt16,DarkRift.Server.IClient})">
             <summary>
             Handles the ownership transfer for all clients with proper error handling.
@@ -4359,7 +4353,7 @@
             Requests either new or existing ownership with thread safety and rollback.
             </summary>
         </member>
-        <member name="M:DarkRift.Server.Plugins.BasisNetworking.Ownership.OwnershipManagement.AddOwnership(System.String,System.UInt16,System.UInt16@)">
+        <member name="M:DarkRift.Server.Plugins.BasisNetworking.Ownership.OwnershipManagement.AddOwnership(System.String,System.UInt16)">
             <summary>
             Adds an object with ownership information to the database in a thread-safe manner.
             </summary>

@@ -11,8 +11,8 @@ TagManager:
   - Player
   - Water
   - UI
-  - 
-  - 
+  - LocalPlayerAvatar
+  - RemotePlayerAvatar
   - 
   - 
   - 
