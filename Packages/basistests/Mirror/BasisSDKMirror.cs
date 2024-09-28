@@ -194,13 +194,13 @@ public class BasisSDKMirror : MonoBehaviour
     private void SetupReflection(Camera srcCamera, Camera destCamera, MonoOrStereoscopicEye eye)
     {
         // Get the correct eye offset (difference between left/right eye positions)
-        Vector3 eyeOffset = srcCamera.transform.position;//GetEyePosition(eye);
+        Vector3 eyeOffset = srcCamera.transform.position;
 
         destCamera.transform.localPosition = Vector3.Reflect(transform.InverseTransformPoint(eyeOffset), Vector3.forward);
         destCamera.transform.localRotation = Quaternion.LookRotation(Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.forward), Vector3.forward), Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.up), Vector3.forward));
 
         // Calculate the clip plane for the reflection camera
-        Vector4 clipPlane = BasisHelpers.CameraSpacePlane(eye == MonoOrStereoscopicEye.Mono ? destCamera.worldToCameraMatrix : destCamera.GetStereoViewMatrix((StereoscopicEye)eye), ThisPosition, normal, m_ClipPlaneOffset);
+        Vector4 clipPlane = BasisHelpers.CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal, m_ClipPlaneOffset);
 
         // Modify the projection matrix for oblique near-plane clipping
         destCamera.projectionMatrix = eye == MonoOrStereoscopicEye.Mono ? srcCamera.projectionMatrix : srcCamera.GetStereoProjectionMatrix((StereoscopicEye)eye);
