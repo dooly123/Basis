@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   comment: "This blendshape actuation definition file is based on the Unified Blendshapes
     naming convention, as defined in the VRCFaceTracking document. However, it uses
-    the MouthSmile blended shape, to make it closer to how blendshapes usually found
-    on models by artists who create hybrid ARKit blendshapes:\n- The blended shape
-    MouthSmile* is defined.\n    - To avoid conflict, the base shapes MouthCornerPull*
-    and MouthCornerSlant* are not defined.\nhttps://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes"
+    the MouthSmile and BrowDown blended shapes, to make it closer to how blendshapes
+    usually found on models by artists who create hybrid ARKit blendshapes:\n- The
+    blended shape MouthSmile* is defined.\n    - To avoid conflict, the base shapes
+    MouthCornerPull* and MouthCornerSlant* are not defined.\n- The blended shape
+    BrowDown* is defined.\n    - To avoid conflict, the base shapes BrowPinch* and
+    BrowLowerer* are not defined.\nhttps://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes"
   definitions:
   - address: FT/v2/EyeLeftX
     inStart: 0
@@ -416,138 +418,6 @@ MonoBehaviour:
       m_RotationOrder: 4
     blendshapes:
     - EyeSquintLeft
-    onlyFirstMatch: 0
-  - address: FT/v2/BrowPinchRight
-    inStart: 0
-    inEnd: 1
-    outStart: 0
-    outEnd: 1
-    useCurve: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    blendshapes:
-    - BrowPinchRight
-    onlyFirstMatch: 0
-  - address: FT/v2/BrowPinchLeft
-    inStart: 0
-    inEnd: 1
-    outStart: 0
-    outEnd: 1
-    useCurve: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    blendshapes:
-    - BrowPinchLeft
-    onlyFirstMatch: 0
-  - address: FT/v2/BrowLowererRight
-    inStart: 0
-    inEnd: 1
-    outStart: 0
-    outEnd: 1
-    useCurve: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    blendshapes:
-    - BrowLowererRight
-    onlyFirstMatch: 0
-  - address: FT/v2/BrowLowererLeft
-    inStart: 0
-    inEnd: 1
-    outStart: 0
-    outEnd: 1
-    useCurve: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    blendshapes:
-    - BrowLowererLeft
     onlyFirstMatch: 0
   - address: FT/v2/BrowInnerUpRight
     inStart: 0
@@ -3122,4 +2992,70 @@ MonoBehaviour:
       m_RotationOrder: 4
     blendshapes:
     - MouthSmileRight
+    onlyFirstMatch: 0
+  - address: FT/v2/BrowDownRight
+    inStart: 0
+    inEnd: 1
+    outStart: 0
+    outEnd: 1
+    useCurve: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    blendshapes:
+    - BrowDownRight
+    onlyFirstMatch: 0
+  - address: FT/v2/BrowDownLeft
+    inStart: 0
+    inEnd: 1
+    outStart: 0
+    outEnd: 1
+    useCurve: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    blendshapes:
+    - BrowDownLeft
     onlyFirstMatch: 0
