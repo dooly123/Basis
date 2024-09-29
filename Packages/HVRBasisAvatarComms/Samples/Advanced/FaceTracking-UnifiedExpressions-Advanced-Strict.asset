@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c1eb7223814a194fadef176508140fd, type: 3}
-  m_Name: FaceTracking-UnifiedExpressions
+  m_Name: FaceTracking-UnifiedExpressions-Advanced-Strict
   m_EditorClassIdentifier: 
   comment: 'This blendshape actuation definition file is based on the Unified Blendshapes
-    naming convention, as defined in the VRCFaceTracking document:
+    naming convention, as defined in the VRCFaceTracking document. However, this
+    does NOT use the MouthSmile* blended shape that is usually found on models by
+    artists who create hybrid ARKit blendshapes:
 
     https://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes'
   definitions:
