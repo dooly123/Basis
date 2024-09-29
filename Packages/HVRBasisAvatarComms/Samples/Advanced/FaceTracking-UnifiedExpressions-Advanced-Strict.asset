@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   comment: 'This blendshape actuation definition file is based on the Unified Blendshapes
     naming convention, as defined in the VRCFaceTracking document. However, this
-    does NOT use the MouthSmile* blended shape that is usually found on models by
-    artists who create hybrid ARKit blendshapes:
+    does NOT use some of the blended shapes that are usually found on models by artists
+    who create hybrid ARKit blendshapes:
 
     https://docs.vrcft.io/docs/tutorial-avatars/tutorial-avatars-extras/unified-blendshapes'
   definitions:
