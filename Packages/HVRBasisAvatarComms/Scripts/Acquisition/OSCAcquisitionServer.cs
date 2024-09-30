@@ -7,6 +7,9 @@ namespace HVR.Basis.Comms
     [AddComponentMenu("HVR.Basis/Comms/Internal/OSC Acquisition Server")]
     internal class OSCAcquisitionServer : MonoBehaviour
     {
+        public static OSCAcquisitionServer SceneInstance => CommsUtil.GetOrCreateSceneInstance(ref _sceneInstance);
+        private static OSCAcquisitionServer _sceneInstance;
+
         private HVROsc _client;
         private const int OurFakeServerPort = 9000;
         private const int ExternalProgramReceiverPort = 9001;

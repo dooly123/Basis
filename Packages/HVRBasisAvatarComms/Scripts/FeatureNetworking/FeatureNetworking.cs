@@ -15,7 +15,7 @@ namespace HVR.Basis.Comms
         public delegate void InterpolatedDataChanged(float[] current);
 
         [SerializeField] private FeatureNetPairing[] netPairings; // Unsafe: May contain malformed GUIDs, or null components, or non-networkable components.
-        [SerializeField] private BasisAvatar avatar;
+        [HideInInspector] [SerializeField] private BasisAvatar avatar;
 
         private Dictionary<Guid, ICommsNetworkable> _guidToNetworkable;
         private Guid[] _orderedGuids;
@@ -27,10 +27,37 @@ namespace HVR.Basis.Comms
 
         private void Awake()
         {
+            if (avatar == null) avatar = CommsUtil.GetAvatar(this);
+            if (avatar.GetComponentInChildren<HVRAvatarComms>(true) == null)
+            {
+                avatar.gameObject.AddComponent<HVRAvatarComms>();
+            }
+            
             var rand = new System.Random();
             var safeNetPairings = netPairings
                 .Where(pairing => Guid.TryParse(pairing.guid, out _))
-                .Where(pairing => pairing.component != null && pairing.component is ICommsNetworkable)
+                .Where(pairing => pairing.component != null)
+                .Select(pairing =>
+                {
+                    if (pairing.component is ICommsNetworkable) return pairing;
+
+                    // Be lenient if the user has dragged the Transform into this.
+                    var lookingForNetworkable = pairing.component.GetComponents<Component>();
+                    foreach (var candidate in lookingForNetworkable)
+                    {
+                        if (candidate is ICommsNetworkable)
+                        {
+                            return new FeatureNetPairing
+                            {
+                                guid = pairing.guid,
+                                component = candidate
+                            };
+                        }
+                    }
+
+                    return pairing; // Will not go through the following .Where predicate
+                })
+                .Where(pairing => pairing.component is ICommsNetworkable)
                 // Shuffling the array makes sure we catch implementation mistakes early.
                 // The order of the list of pairings should not matter between clients because of the Negotiation packet.
                 .OrderBy(_ => rand.Next())

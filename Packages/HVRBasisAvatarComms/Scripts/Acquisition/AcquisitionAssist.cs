@@ -10,8 +10,13 @@ namespace HVR.Basis.Comms
     public class AcquisitionAssist : MonoBehaviour
     {
         public BlendshapeActuationDefinitionFile definitionFile;
-        public AcquisitionService acquisitionService;
+        [HideInInspector] public AcquisitionService acquisitionService;
         internal Dictionary<string, float> memory = new Dictionary<string, float>();
+
+        private void Awake()
+        {
+            if (acquisitionService == null) acquisitionService = AcquisitionService.SceneInstance;
+        }
 
         private void OnAddressUpdated(string address, float value)
         {
