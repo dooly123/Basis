@@ -999,6 +999,7 @@ GameObject:
   - component: {fileID: 1036067617934251197}
   - component: {fileID: 2645338253211475504}
   - component: {fileID: 3566278912178505188}
+  - component: {fileID: 7199841575825319390}
   m_Layer: 5
   m_Name: HamBurgerMenu
   m_TagString: Untagged
@@ -1134,6 +1135,19 @@ MonoBehaviour:
   hasLocalCreationEvent: 0
   Position: {x: 0, y: 0, z: 0}
   Rotation: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7199841575825319390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7434544960807650688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d70abc58c9ac244ca780e8e3291b761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 4
 --- !u!1 &8509309538099924209
 GameObject:
   m_ObjectHideFlags: 0
