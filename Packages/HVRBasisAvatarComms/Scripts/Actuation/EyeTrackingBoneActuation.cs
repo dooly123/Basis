@@ -1,7 +1,6 @@
 ﻿using System;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Eye_Follow;
-using Basis.Scripts.Networking;
 using UnityEngine;
 
 namespace HVR.Basis.Comms
@@ -14,7 +13,7 @@ namespace HVR.Basis.Comms
         private const string EyeY = "FT/v2/EyeY";
         private static readonly string[] OurAddresses = { EyeLeftX, EyeRightX, EyeY };
         
-        [SerializeField] private AcquisitionService acquisitionService;
+        [HideInInspector] [SerializeField] private AcquisitionService acquisitionService;
         [SerializeField] private float multiplyX = 1f;
         [SerializeField] private float multiplyY = 1f;
         
@@ -24,6 +23,11 @@ namespace HVR.Basis.Comms
         private bool _needsUpdateThisFrame;
         
         private bool _anyAddressUpdated;
+
+        private void Awake()
+        {
+            if (acquisitionService == null) acquisitionService = AcquisitionService.SceneInstance;
+        }
 
         private void OnEnable()
         {

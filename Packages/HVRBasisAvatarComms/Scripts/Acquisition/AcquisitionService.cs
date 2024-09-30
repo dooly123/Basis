@@ -6,6 +6,9 @@ namespace HVR.Basis.Comms
     [AddComponentMenu("HVR.Basis/Comms/Acquisition Service")]
     public class AcquisitionService : MonoBehaviour
     {
+        public static AcquisitionService SceneInstance => CommsUtil.GetOrCreateSceneInstance(ref _sceneInstance);
+        private static AcquisitionService _sceneInstance;
+
         public delegate void AddressUpdated(string address, float value);
 
         private readonly Dictionary<string, AcquisitionForAddress> _addressUpdated = new Dictionary<string, AcquisitionForAddress>();

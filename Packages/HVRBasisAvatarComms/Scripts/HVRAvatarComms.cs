@@ -16,8 +16,8 @@ namespace HVR.Basis.Comms
         public const byte OurMessageIndex = 0xC0;
         private const int BytesPerGuid = 16;
 
-        [SerializeField] private BasisAvatar avatar;
-        [SerializeField] private FeatureNetworking featureNetworking;
+        [HideInInspector] [SerializeField] private BasisAvatar avatar;
+        [HideInInspector] [SerializeField] private FeatureNetworking featureNetworking;
         
         private bool _isWearer;
         private ushort _wearerNetId;
@@ -28,8 +28,8 @@ namespace HVR.Basis.Comms
 
         private void Awake()
         {
-            if (avatar == null) avatar = GetComponentInParent<BasisAvatar>(true); // Defensive
-            if (featureNetworking == null) featureNetworking = GetComponentInParent<FeatureNetworking>(true); // Defensive
+            if (avatar == null) avatar = CommsUtil.GetAvatar(this);
+            if (featureNetworking == null) featureNetworking = CommsUtil.FeatureNetworkingFromAvatar(avatar);
             if (avatar == null || featureNetworking == null)
             {
                 throw new InvalidOperationException("Broke assumption: Avatar and/or FeatureNetworking cannot be found.");
