@@ -1,9 +1,12 @@
-﻿using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class BasisPrefabAssetBundleBuilder
 {
+    public static BasisAvatarBuildProcessor preProcessor;
+    public delegate GameObject BasisAvatarBuildProcessor(GameObject copyOfPrefab);
+    
     public static void BuildAssetBundle(GameObject prefab, BasisBuildSettings settings)
     {
         try
@@ -13,8 +16,31 @@ public class BasisPrefabAssetBundleBuilder
                 Debug.LogError("Prefab is null.");
                 return;
             }
-
-            string assetPath = AssetDatabase.GetAssetPath(prefab);
+            
+            string assetPath;
+            if (preProcessor != null)
+            {
+                string originalPrefabFileName = prefab.name.ToLower();
+                
+                GameObject copy = Object.Instantiate(prefab);
+                copy = preProcessor.Invoke(copy);
+                copy.name = prefab.name;
+                GameObjectUtility.RemoveMonoBehavioursWithMissingScript(copy);
+                
+                string destination = $"Assets/ZZZ_Generated/{GUID.Generate().ToString()}";
+                Directory.CreateDirectory("Assets/ZZZ_Generated");
+                Directory.CreateDirectory(destination);
+                string prefabPath = $"{destination}/{originalPrefabFileName}.prefab";
+                PrefabUtility.SaveAsPrefabAsset(copy, prefabPath);
+                
+                Object.DestroyImmediate(copy);
+                assetPath = prefabPath;
+            }
+            else
+            {
+                assetPath = AssetDatabase.GetAssetPath(prefab);
+            }
+            
             AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath);
             string assetBundleName = prefab.name.ToLower() + settings.BundleExtension;
             assetImporter.assetBundleName = assetBundleName;
