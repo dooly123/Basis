@@ -1,3 +1,4 @@
+using System;
 using HVR.Basis.Comms;
 using UnityEngine;
 
@@ -5,5 +6,5 @@ using UnityEngine;
 public class BlendshapeActuationDefinitionFile : ScriptableObject
 {
     [TextArea] public string comment; 
-    public BlendshapeActuationDefinition[] definitions;
+    public BlendshapeActuationDefinition[] definitions = Array.Empty<BlendshapeActuationDefinition>();
 }
