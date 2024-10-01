@@ -14,7 +14,7 @@ namespace HVR.Basis.Comms
 
         public delegate void InterpolatedDataChanged(float[] current);
 
-        [SerializeField] private FeatureNetPairing[] netPairings; // Unsafe: May contain malformed GUIDs, or null components, or non-networkable components.
+        [SerializeField] private FeatureNetPairing[] netPairings = new FeatureNetPairing[0]; // Unsafe: May contain malformed GUIDs, or null components, or non-networkable components.
         [HideInInspector] [SerializeField] private BasisAvatar avatar;
 
         private Dictionary<Guid, ICommsNetworkable> _guidToNetworkable;
@@ -126,6 +126,24 @@ namespace HVR.Basis.Comms
                 
                 networkable.OnGuidAssigned(index, guid);
             }
+        }
+
+        public bool TryAddPairingIfNotExists(Component networkable)
+        {
+            if (netPairings.All(pairing => pairing.component != networkable))
+            {
+                netPairings = netPairings.Concat(new[]
+                {
+                    new FeatureNetPairing
+                    {
+                        guid = Guid.NewGuid().ToString(),
+                        component = networkable
+                    }
+                }).ToArray();
+                return true;
+            }
+
+            return false;
         }
     }
 

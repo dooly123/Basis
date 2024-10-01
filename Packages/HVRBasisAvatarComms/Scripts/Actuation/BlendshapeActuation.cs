@@ -12,9 +12,9 @@ namespace HVR.Basis.Comms
         private const int MaxAddresses = 256;
         private const float BlendshapeAtFullStrength = 100f;
 
-        [SerializeField] private SkinnedMeshRenderer[] renderers;
-        [SerializeField] private BlendshapeActuationDefinitionFile[] definitionFiles;
-        [SerializeField] private BlendshapeActuationDefinition[] definitions;
+        [SerializeField] private SkinnedMeshRenderer[] renderers = Array.Empty<SkinnedMeshRenderer>();
+        [SerializeField] private BlendshapeActuationDefinitionFile[] definitionFiles = Array.Empty<BlendshapeActuationDefinitionFile>();
+        [SerializeField] private BlendshapeActuationDefinition[] definitions = Array.Empty<BlendshapeActuationDefinition>();
         
         [HideInInspector] [SerializeField] private BasisAvatar avatar;
         [HideInInspector] [SerializeField] private FeatureNetworking featureNetworking;
