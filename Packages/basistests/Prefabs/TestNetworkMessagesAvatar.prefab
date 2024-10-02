@@ -151,6 +151,7 @@ MonoBehaviour:
   FaceVisemeMovement: 
   BlinkViseme: ffffffffffffffff
   laughterBlendTarget: -1
+  IsOwnedLocally: 0
   Renders:
   - {fileID: 5332160820655396527}
   JiggleStrains: []
