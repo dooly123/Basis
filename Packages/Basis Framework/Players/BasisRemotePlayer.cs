@@ -13,6 +13,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public GameObject AudioSourceGameobject;
         public BasisBoneControl MouthControl;
         public bool HasEvents = false;
+        public bool LockAvatarFromChanging;
         public async void RemoteInitialize(ClientAvatarChangeMessage CACM, PlayerMetaDataMessage PlayerMetaDataMessage)
         {
             DisplayName = PlayerMetaDataMessage.playerDisplayName;
@@ -47,7 +48,6 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
         }
-        public bool LockAvatarFromChanging;
         public async void CreateAvatar(string Loader = BasisAvatarFactory.LoadingAvatar,byte NetworkMode = 0)
         {
             if (string.IsNullOrEmpty(Loader))

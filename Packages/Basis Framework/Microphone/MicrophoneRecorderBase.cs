@@ -17,7 +17,6 @@ public abstract class MicrophoneRecorderBase : MonoBehaviour
     public float[] processBufferArray;
     public float noiseGateThreshold = 0.01f; // Threshold for the noise gate
     public int Channels = 1;
-    public float ProcessedLogVolume;
     public float[] rmsValues;
     public int rmsIndex = 0;
     public int rmsWindowSize = 10; // Size of the moving average window
