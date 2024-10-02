@@ -48,9 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88442c47edff2f146a5c91d510ce41ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveEyeHeight: 1.75
-  runtimeAnimatorController: {fileID: 9100000, guid: 78f02360f31c1a547b937559d34b03b1,
-    type: 2}
+  runtimeAnimatorController: {fileID: 9100000, guid: 78f02360f31c1a547b937559d34b03b1, type: 2}
   SkinnedMeshRenderer: []
   Player: {fileID: 3578141255088103770}
   InTPose: 0
@@ -71,9 +69,11 @@ MonoBehaviour:
   DisplayName: 
   UUID: 
   Avatar: {fileID: 0}
-  BasisAvatarStrainJiggleDriver: {fileID: 7026422538752026465}
   AvatarUrl: 
+  AvatarLoadMode: 0
   HasAvatarDriver: 0
+  FaceisVisible: 0
+  FaceRenderer: {fileID: 0}
   RemoteBoneDriver: {fileID: 8753016558906673911}
   RemoteAvatarDriver: {fileID: 4496089132972522230}
   AudioSourceGameobject: {fileID: 5669630751523980901}
@@ -151,6 +151,7 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       position: {x: 0, y: 0, z: 0}
   HasEvents: 0
+  LockAvatarFromChanging: 0
 --- !u!114 &7026422538752026465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,10 +166,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3578141255088103770}
   Jiggler: {fileID: 0}
-  SimpleJiggleLOD:
-    distance: 30
-    blend: 0.5
-    currentCamera: {fileID: 0}
 --- !u!114 &8753016558906673911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,8 +376,7 @@ AudioSource:
   m_GameObject: {fileID: 5669630751523980901}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -2845339637905098028, guid: 471a0209081144d4da2426822e8a0b47,
-    type: 2}
+  OutputAudioMixerGroup: {fileID: -2845339637905098028, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -437,7 +433,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

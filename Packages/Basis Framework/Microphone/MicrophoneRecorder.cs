@@ -3,6 +3,10 @@ using System;
 using System.Linq;
 using Basis.Scripts.Device_Management;
 using System.Threading;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Burst;
+using Unity.Mathematics;
 
 public class MicrophoneRecorder : MicrophoneRecorderBase
 {
@@ -18,6 +22,9 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     private ManualResetEvent processingEvent = new ManualResetEvent(false);
     private object processingLock = new object();
     public int position;
+    public NativeArray<float> PBA;
+    public VolumeAdjustmentJob VAJ;
+    public JobHandle handle;
     public bool TryInitialize()
     {
         if (!IsInitialize)
@@ -28,11 +35,16 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         }
         return false;
     }
-
     public void Initialize()
     {
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
         processBufferArray = BasisOpusSettings.CalculateProcessBuffer();
+        PBA = new NativeArray<float>(processBufferArray, Allocator.Persistent);
+        VAJ = new VolumeAdjustmentJob
+        {
+            processBufferArray = PBA,
+            Volume = Volume
+        };
         ProcessBufferLength = processBufferArray.Length;
         samplingFrequency = BasisOpusSettings.GetSampleFreq();
         microphoneBufferArray = new float[BasisOpusSettings.RecordingFullLength * samplingFrequency];
@@ -71,6 +83,11 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             BasisDeviceManagement.Instance.OnBootModeChanged -= OnBootModeChanged;
 
             HasEvents = false;
+        }
+        // Dispose the NativeArray when done to avoid memory leaks
+        if (VAJ.processBufferArray.IsCreated)
+        {
+            VAJ.processBufferArray.Dispose();
         }
         base.OnDestroy();
     }
@@ -264,17 +281,25 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             dataLength -= ProcessBufferLength;
         }
     }
-        public void AdjustVolume()
+    public void AdjustVolume()
     {
-        if (ProcessedLogVolume == 1)
-        {
-            // No need to modify
-            return;
-        }
+        VAJ.processBufferArray.CopyFrom(processBufferArray);
 
-        for (int Index = 0; Index < ProcessBufferLength; Index++)
+        handle = VAJ.Schedule(processBufferArray.Length, 64);
+        handle.Complete();
+
+        VAJ.processBufferArray.CopyTo(processBufferArray);
+    }
+    [BurstCompile]
+   public struct VolumeAdjustmentJob : IJobParallelFor
+    {
+        [NativeDisableParallelForRestriction]
+        public NativeArray<float> processBufferArray;
+        public float Volume;
+
+        public void Execute(int index)
         {
-            processBufferArray[Index] *= ProcessedLogVolume;
+            processBufferArray[index] = math.sign(processBufferArray[index]) * math.log(1 + Volume * math.abs(processBufferArray[index]));
         }
     }
     public float GetRMS()
@@ -304,10 +329,8 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     public void ChangeAudio(float volume)
     {
         Volume = volume;
-        // ProcessedLogVolume = volume;
-        // Convert the volume to a logarithmic scale
-        float Scaled = 1 + 9 * Volume;
-        ProcessedLogVolume = (float)Math.Log10(Scaled); // Logarithmic scaling between 0 and 1
+        // Create the job
+        VAJ.Volume = Volume;
     }
     public void ApplyDeNoise()
     {

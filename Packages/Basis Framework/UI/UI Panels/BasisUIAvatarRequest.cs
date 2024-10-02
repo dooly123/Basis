@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class BasisUIAvatarRequest
 {
-    public static string AvatarRequests = "/AvatarRequests/AvatarRequests.BAS";
+    public static string AvatarRequests = "AvatarRequests.BAS";
     public static List<string> LocallyStoredAvatarUrls = new List<string>();
     public static bool IsInitalized = false;
     public static void LoadAllAvatars()
@@ -14,14 +14,15 @@ public static class BasisUIAvatarRequest
             IsInitalized = true;
         }
     }
-    public static void AddAvatarURL(string URL)
+    public static bool Save(string AvatarUrl)
     {
-        Save(URL);
-    }
-    private static bool Save(string AvatarUrl)
-    {
+        if (string.IsNullOrEmpty(AvatarUrl))
+        {
+            return false;
+        }
         if (LocallyStoredAvatarUrls.Contains(AvatarUrl) == false)
         {
+            LocallyStoredAvatarUrls.Add(AvatarUrl);
             BasisDataStore.SaveUrlList(LocallyStoredAvatarUrls, AvatarRequests);
             return true;
         }

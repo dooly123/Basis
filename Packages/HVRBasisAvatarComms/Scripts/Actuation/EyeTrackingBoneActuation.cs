@@ -1,13 +1,12 @@
 ﻿using System;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Eye_Follow;
+using Basis.Scripts.Networking;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 namespace HVR.Basis.Comms
 {
     [AddComponentMenu("HVR.Basis/Comms/Eye Tracking Bone Actuation")]
-    [Preserve]
     public class EyeTrackingBoneActuation : MonoBehaviour
     {
         private const string EyeLeftX = "FT/v2/EyeLeftX";
@@ -23,6 +22,8 @@ namespace HVR.Basis.Comms
         private float _fEyeRightX;
         private float _fEyeY;
         private bool _needsUpdateThisFrame;
+        
+        private bool _anyAddressUpdated;
 
         private void OnEnable()
         {
@@ -38,6 +39,10 @@ namespace HVR.Basis.Comms
 
         private void OnAddressUpdated(string address, float value)
         {
+            // FIXME: Temp fix, we'll need to hook to NetworkReady instead.
+            // This is a quick fix so that we don't need to reupload the avatar.
+            _anyAddressUpdated = _anyAddressUpdated || value != 0f;
+            
             switch (address)
             {
                 case EyeLeftX: _fEyeLeftX = value; break;
@@ -58,9 +63,12 @@ namespace HVR.Basis.Comms
 
         private void ForceUpdate()
         {
-            SetBuiltInEyeFollowDriverOverriden(true);
+            if (!_anyAddressUpdated) return;
             
-            // FIXME: Debug a problem with our address registration
+            // FIXME: Temp fix, we'll need to hook to NetworkReady instead.
+            // This is a quick fix so that we don't need to reupload the avatar.
+            SetBuiltInEyeFollowDriverOverriden(false);
+            SetBuiltInEyeFollowDriverOverriden(true);
             acquisitionService.UnregisterAddresses(OurAddresses, OnAddressUpdated);
             acquisitionService.RegisterAddresses(OurAddresses, OnAddressUpdated);
 

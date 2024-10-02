@@ -37,6 +37,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public Action OnPlayersHeightChanged;
         public BasisLocalBoneDriver LocalBoneDriver;
         public BasisBoneControl Hips;
+        public BasisBoneControl CenterEye;
         public BasisLocalAvatarDriver AvatarDriver;
     //    public BasisFootPlacementDriver FootPlacementDriver;
         public BasisVisemeDriver VisemeDriver;
@@ -63,6 +64,7 @@ namespace Basis.Scripts.BasisSdk.Players
           //  FootPlacementDriver.Initialize();
             Move.Initialize();
             LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
+            LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
             if (HasEvents == false)
             {
                 LocalBoneDriver.ReadyToRead += SimulateHips;
@@ -103,26 +105,26 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void SimulateHips()
         {
-            //  if (Hips.HasBone && AvatarDriver.InTPose == false)
-            //{
-            if (Avatar != null && Avatar.Animator != null)
+            if (Hips.HasBone)
             {
-                // Get the current rotation of the hips bone
-                Quaternion currentRotation = Hips.OutgoingWorldData.rotation;
+                if (Avatar != null && Avatar.Animator != null)
+                {
+                    // Get the current rotation of the hips bone
+                    Quaternion currentRotation = Hips.OutgoingWorldData.rotation;
 
-                // Calculate the rotated T-pose position using the current rotation
-                Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
-                Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
+                    // Calculate the rotated T-pose position using the current rotation
+                    Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
+                    Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
 
-                // Calculate the difference between the current rotation and the T-pose rotation
-                Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeWorld.rotation);
+                    // Calculate the difference between the current rotation and the T-pose rotation
+                    Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeWorld.rotation);
 
-            //    Avatar.Animator.transform.localRotation = rotationDifference;
-                Avatar.Animator.transform.position = positionDifference;
-                // Apply the calculated position and rotation to the Avatar's animator transform
-               Avatar.Animator.transform.localRotation = currentRotation;
+                    //    Avatar.Animator.transform.localRotation = rotationDifference;
+                    Avatar.Animator.transform.position = positionDifference;
+                    // Apply the calculated position and rotation to the Avatar's animator transform
+                    Avatar.Animator.transform.localRotation = rotationDifference;
+                }
             }
-            //}
         }
         public async Task CreateAvatar(string AddressableID,byte mode,string hash = "")
         {

@@ -364,12 +364,6 @@
       "dependencies": {},
       "hash": "b96470d3dd9092b840052578048b2307fe6d8786"
     },
-    "net.virtualwebsite.voxels": {
-      "version": "file:net.virtualwebsite.voxels",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

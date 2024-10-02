@@ -17,6 +17,8 @@ public class BasisAvatarSDKInspector : Editor
     public VisualElement rootElement;
     public AvatarSDKJiggleBonesView AvatarSDKJiggleBonesView = new AvatarSDKJiggleBonesView();
 
+    public Button EventCallbackAvatarBundleButton { get; private set; }
+
     private void OnEnable()
     {
         visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(AvatarPathConstants.uxmlPath);
@@ -138,6 +140,9 @@ public class BasisAvatarSDKInspector : Editor
     {
         Button avatarEyePositionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.avatarEyePositionButton);
         Button avatarMouthPositionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.avatarMouthPositionButton);
+
+        Button AvatarBundleButton = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarBundleButton);
+
         Button AvatarAutomaticVisemeDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticVisemeDetection);
         Button AvatarAutomaticBlinkDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticBlinkDetection);
         EventCallback<ChangeEvent<Vector2>> eventCallbackAvatarEyePosition = BasisHelpersGizmo.CallBackVector2Field(uiElementsRoot, AvatarPathConstants.avatarEyePositionField, Avatar.AvatarEyePosition);
@@ -183,8 +188,17 @@ public class BasisAvatarSDKInspector : Editor
         {
             eventCallbackFaceVisemeMeshField += EventCallbackFaceVisemeMesh;
         }
-
+        if(AvatarBundleButton != null)
+        {
+            AvatarBundleButton.clicked += () => EventCallbackAvatarBundle();
+        }
+        ///AvatarBundle
         avatarEyePositionClick.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
         avatarMouthPositionClick.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
+    }
+
+    private void EventCallbackAvatarBundle()
+    {
+        BasisPrefabAssetBundleBuilder.BuildAssetBundle(Avatar.gameObject, BasisBuildSettings.Default());
     }
 }

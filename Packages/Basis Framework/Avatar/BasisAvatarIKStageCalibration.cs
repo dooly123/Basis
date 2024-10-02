@@ -4,7 +4,6 @@ using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
 
 namespace Basis.Scripts.Avatar
@@ -109,10 +108,7 @@ namespace Basis.Scripts.Avatar
         public static void FullBodyCalibration()
         {
             BasisHeightDriver.SetPlayersEyeHeight(BasisLocalPlayer.Instance);
-            foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
-            {
-                Input.UnAssignFBTracker();
-            }
+            BasisDeviceManagement.UnassignFBTrackers();
             //disable builder and it will be updated when the animator updates
             //now lets grab and apply the height
             BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApplyWithoutLerp();
@@ -121,7 +117,8 @@ namespace Basis.Scripts.Avatar
             BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
             List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
             List<BasisBoneTrackedRole> trackInputRoles = new List<BasisBoneTrackedRole>();
-            for (int Index = 0; Index < rolesToDiscover.Count; Index++)
+            int count = rolesToDiscover.Count;
+            for (int Index = 0; Index < count; Index++)
             {
                 BasisBoneTrackedRole Role = rolesToDiscover[Index];
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(Role))
@@ -130,7 +127,8 @@ namespace Basis.Scripts.Avatar
                 }
             }
             List<CalibrationConnector> connectors = new List<CalibrationConnector>();
-            for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
+            int AllInputDevicesCount = BasisDeviceManagement.Instance.AllInputDevices.Count;
+            for (int Index = 0; Index < AllInputDevicesCount; Index++)
             {
                 BasisInput baseInput = BasisDeviceManagement.Instance.AllInputDevices[Index];
                 if (baseInput.TryGetRole(out BasisBoneTrackedRole role))
@@ -159,8 +157,10 @@ namespace Basis.Scripts.Avatar
                 }
             }
             List<BasisTrackerMapping> boneTransformMappings = new List<BasisTrackerMapping>();
-            foreach (BasisBoneTrackedRole role in trackInputRoles)
+            int Count = trackInputRoles.Count;
+            for (int Index = 0; Index < Count; Index++)
             {
+                BasisBoneTrackedRole role = trackInputRoles[Index];
                 if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl control, role))
                 {
                     float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
@@ -231,8 +231,9 @@ namespace Basis.Scripts.Avatar
             }
 
             // Execute all stored calibration actions
-            foreach (var action in calibrationActions)
+            for (int Index = 0; Index < calibrationActions.Count; Index++)
             {
+                Action action = calibrationActions[Index];
                 action();
             }
         }

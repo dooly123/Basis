@@ -3,6 +3,8 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Common;
 using Basis.Scripts.Common.Enums;
+using Basis.Scripts.Device_Management;
+using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEngine;
@@ -57,6 +59,7 @@ namespace Basis.Scripts.Drivers
             RuntimeAnimatorController RAC = op.WaitForCompletion();
             Player.Avatar.Animator.runtimeAnimatorController = RAC;
             ForceUpdateAnimator(Player.Avatar.Animator);
+            BasisDeviceManagement.UnassignFBTrackers();
             TposeStateChange?.Invoke();
         }
         public void ResetAvatarAnimator()
@@ -301,8 +304,9 @@ namespace Basis.Scripts.Drivers
         }
         public void updateWhenOffscreen(bool State)
         {
-            foreach (SkinnedMeshRenderer Render in SkinnedMeshRenderer)
+            for (int Index = 0; Index < SkinnedMeshRenderer.Length; Index++)
             {
+                SkinnedMeshRenderer Render = SkinnedMeshRenderer[Index];
                 Render.updateWhenOffscreen = State;
             }
         }

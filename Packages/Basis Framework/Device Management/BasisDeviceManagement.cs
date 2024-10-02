@@ -1,6 +1,5 @@
 using Basis.Scripts.Addressable_Driver.Resource;
 using Basis.Scripts.BasisSdk.Helpers;
-using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Command_Line_Args;
 using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.Drivers;
@@ -25,6 +24,8 @@ namespace Basis.Scripts.Device_Management
         public string[] BakedInCommandLineArgs = new string[] { };
         public static string NetworkManagement = "NetworkManagement";
         public string CurrentMode = "None";
+        [SerializeField]
+        public const string Desktop = "Desktop";
         public string DefaultMode()
         {
             if (Application.platform == RuntimePlatform.Android)
@@ -73,8 +74,6 @@ namespace Basis.Scripts.Device_Management
         public List<StoredPreviousDevice> PreviouslyConnectedDevices = new List<StoredPreviousDevice>();
         [SerializeField]
         public List<BasisDeviceMatchSettings> UseAbleDeviceConfigs = new List<BasisDeviceMatchSettings>();
-        [SerializeField]
-        public const string Desktop = "Desktop";
         void Start()
         {
             if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
@@ -105,6 +104,13 @@ namespace Basis.Scripts.Device_Management
                 BasisXRManagement.CheckForPass -= CheckForPass;
 
                 OnInitializationCompleted -= RunAfterInitialized;
+            }
+        }
+        public static void UnassignFBTrackers()
+        {
+            foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+            {
+                Input.UnAssignFBTracker();
             }
         }
         public bool TryFindBasisBaseTypeManagement(string Name, out List<BasisBaseTypeManagement> Match)
@@ -272,9 +278,9 @@ namespace Basis.Scripts.Device_Management
             var inputDevices = Instance.AllInputDevices;
             var showTrackedVisualTasks = new List<Task>();
 
-            foreach (var input in inputDevices)
+            for (int Index = 0; Index < inputDevices.Count; Index++)
             {
-                showTrackedVisualTasks.Add(input.ShowTrackedVisual());
+                showTrackedVisualTasks.Add(inputDevices[Index].ShowTrackedVisual());
             }
 
             await Task.WhenAll(showTrackedVisualTasks);

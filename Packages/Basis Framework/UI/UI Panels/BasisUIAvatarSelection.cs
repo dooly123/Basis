@@ -16,8 +16,10 @@ namespace Basis.Scripts.UI.UI_Panels
         public const string AvatarSelection = "BasisUIAvatarSelection";
         public TMP_InputField AddAvatarInputField;
         public Button AddAvatarApply;
+        private List<AvatarLoadRequest> AvatarUrlsRuntime = new List<AvatarLoadRequest>();
         public void Start()
         {
+            AddAvatarApply.onClick.AddListener(AddAvatar);
             Initialize();
         }
         public override void InitalizeEvent()
@@ -31,8 +33,28 @@ namespace Basis.Scripts.UI.UI_Panels
             //LoadModeNetworkDownloadable = 0; LoadModeLocal = 1;
             public byte IsLocalLoad;
         }
+        public void AddAvatar()
+        {
+            if(string.IsNullOrEmpty(AddAvatarInputField.text) == false)
+            {
+                BasisUIAvatarRequest.Save(AddAvatarInputField.text);
+                Initialize();
+            }
+            else
+            {
+                Debug.LogError("tried to add a empty or null avatar!");
+            }
+        }
+        public List<GameObject> CreatedCopies = new List<GameObject>();
         public void Initialize()
         {
+            foreach (GameObject go in CreatedCopies)
+            {
+               GameObject.Destroy(go);
+            }
+            AvatarUrlsRuntime.Clear();
+            CreatedCopies.Clear();
+            AvatarUrlsRuntime.AddRange(AvatarUrls);
             BasisUIAvatarRequest.LoadAllAvatars();
             int AvatarUrlsCount = BasisUIAvatarRequest.LocallyStoredAvatarUrls.Count;
             for (int Index = 0; Index < AvatarUrlsCount; Index++)
@@ -43,11 +65,11 @@ namespace Basis.Scripts.UI.UI_Panels
                     AvatarAddress = Url,
                     IsLocalLoad = 0
                 };
-                AvatarUrls.Add(AvatarLoadRequest);
+                AvatarUrlsRuntime.Add(AvatarLoadRequest);
             }
-            for (int Index = 0; Index < AvatarUrls.Count; Index++)
+            for (int Index = 0; Index < AvatarUrlsRuntime.Count; Index++)
             {
-                AvatarLoadRequest url = AvatarUrls[Index];
+                AvatarLoadRequest url = AvatarUrlsRuntime[Index];
                 // Create a new button from the prefab
                 GameObject buttonObject = Instantiate(ButtonPrefab);
                 buttonObject.transform.SetParent(ParentedAvatarButtons, false);
@@ -65,6 +87,7 @@ namespace Basis.Scripts.UI.UI_Panels
                         buttonText.text = Path.GetFileNameWithoutExtension(avatarUrl); // or some other meaningful name
                     }
                 }
+                CreatedCopies.Add(buttonObject);
             }
         }
         public async void OnButtonPressed(AvatarLoadRequest AvatarLoadRequest)

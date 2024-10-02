@@ -141,7 +141,7 @@ namespace Basis.Scripts.Avatar
                     Avatar.OnAvatarReady?.Invoke(true);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
-                        Avatar.Renders[Index].renderingLayerMask = 6;
+                        Avatar.Renders[Index].gameObject.layer = 6;
                     }
                 }
                 else if (Player is BasisRemotePlayer remotePlayer)
@@ -152,7 +152,7 @@ namespace Basis.Scripts.Avatar
                     Avatar.OnAvatarReady?.Invoke(false);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
-                        Avatar.Renders[Index].renderingLayerMask = 7;
+                        Avatar.Renders[Index].gameObject.layer = 7;
                     }
                 }
                 //no longer needed await Awaitable.NextFrameAsync();//this is so we can let scripts set up a frame before this call
@@ -170,8 +170,11 @@ namespace Basis.Scripts.Avatar
                 {
                  InitializePlayerAvatar(Player, GameObjects[0]);
                 }
+                Player.AvatarUrl = LoadingAvatar;
+                Player.AvatarLoadMode = 1;
+                Player.AvatarSwitched();
 
-                Player.AvatarSwitchedFallBack();
+                //we want to use Avatar Switched instead of the fallback version to let the server know this is what we actually want to use.
             }
             catch (Exception e)
             {
@@ -197,7 +200,7 @@ namespace Basis.Scripts.Avatar
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
                     for (int Index = 0; Index < Player.Avatar.Renders.Length; Index++)
                     {
-                        Avatar.Renders[Index].renderingLayerMask = 6;
+                        Avatar.Renders[Index].gameObject.layer = 6;
                     }
                 }
                 else
@@ -208,7 +211,7 @@ namespace Basis.Scripts.Avatar
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
                     for (int Index = 0; Index < Player.Avatar.Renders.Length; Index++)
                     {
-                        Avatar.Renders[Index].renderingLayerMask = 7;
+                        Avatar.Renders[Index].gameObject.layer = 7;
                     }
                 }
             }

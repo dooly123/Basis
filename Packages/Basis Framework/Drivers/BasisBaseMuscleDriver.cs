@@ -54,6 +54,24 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     public Vector2 LastRightMiddlePercentage = new Vector2(-1.1f, -1.1f);
     public Vector2 LastRightRingPercentage = new Vector2(-1.1f, -1.1f);
     public Vector2 LastRightLittlePercentage = new Vector2(-1.1f, -1.1f);
+    public Dictionary<Vector2, PoseDataAdditional> CoordToPose = new Dictionary<Vector2, PoseDataAdditional>();
+    public Vector2[] coordKeys; // Cached array of keys for optimization
+
+    public PoseDataAdditional LeftThumbAdditional;
+    public PoseDataAdditional LeftIndexAdditional;
+    public PoseDataAdditional LeftMiddleAdditional;
+    public PoseDataAdditional LeftRingAdditional;
+    public PoseDataAdditional LeftLittleAdditional;
+
+    public PoseDataAdditional RightThumbAdditional;
+    public PoseDataAdditional RightIndexAdditional;
+    public PoseDataAdditional RightMiddleAdditional;
+    public PoseDataAdditional RightRingAdditional;
+    public PoseDataAdditional RightLittleAdditional;
+    public NativeArray<Vector2> coordKeysArray;
+    public NativeArray<float> distancesArray;
+    public NativeArray<int> closestIndexArray;
+    public float LerpSpeed = 17f;
     // Dictionary to store the mapping
     public Dictionary<Vector2, PoseData> pointMap = new Dictionary<Vector2, PoseData>();
     public static float MapValue(float value, float minSource, float maxSource, float minTarget, float maxTarget)
@@ -140,24 +158,6 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
         Array.Fill(muscleArray, fillValue);
         muscleArray[1] = specificValue;
     }
-    public Dictionary<Vector2, PoseDataAdditional> CoordToPose = new Dictionary<Vector2, PoseDataAdditional>();
-    public Vector2[] coordKeys; // Cached array of keys for optimization
-
-    public PoseDataAdditional LeftThumbAdditional;
-    public PoseDataAdditional LeftIndexAdditional;
-    public PoseDataAdditional LeftMiddleAdditional;
-    public PoseDataAdditional LeftRingAdditional;
-    public PoseDataAdditional LeftLittleAdditional;
-
-    public PoseDataAdditional RightThumbAdditional;
-    public PoseDataAdditional RightIndexAdditional;
-    public PoseDataAdditional RightMiddleAdditional;
-    public PoseDataAdditional RightRingAdditional;
-    public PoseDataAdditional RightLittleAdditional;
-    public NativeArray<Vector2> coordKeysArray;
-    public NativeArray<float> distancesArray;
-    public NativeArray<int> closestIndexArray;
-    public float LerpSpeed = 17f;
     public void UpdateAllFingers(Basis.Scripts.Common.BasisTransformMapping Map, ref PoseData Current)
     {
         float Rotation = LerpSpeed * Time.deltaTime;
@@ -252,9 +252,35 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     {
         if (hasTransform)
         {
-            currentPose.position = Vector3.Lerp(currentPose.position, First.position, Rotation);
-            currentPose.rotation = Quaternion.Slerp(currentPose.rotation, First.rotation, Rotation);
-            trans.SetLocalPositionAndRotation(currentPose.position, currentPose.rotation);
+            // Lerp the position and slerp the rotation
+            Vector3 newPosition = Vector3.Lerp(currentPose.position, First.position, Rotation);
+            Quaternion newRotation = Quaternion.Slerp(currentPose.rotation, First.rotation, Rotation);
+
+            bool positionChanged = currentPose.position != First.position;
+            bool rotationChanged = currentPose.rotation != First.rotation;
+
+            // Update the current pose
+            currentPose.position = newPosition;
+            currentPose.rotation = newRotation;
+
+            // If both position and rotation have changed, set them together
+            if (positionChanged && rotationChanged)
+            {
+                trans.SetLocalPositionAndRotation(newPosition, newRotation);
+            }
+            else
+            {
+                // Otherwise, set them separately if either has changed
+                if (positionChanged)
+                {
+                    trans.localPosition = newPosition;
+                }
+
+                if (rotationChanged)
+                {
+                    trans.localRotation = newRotation;
+                }
+            }
         }
     }
     public bool GetClosestValue(Vector2 percentage, out PoseDataAdditional first)
@@ -297,8 +323,7 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
 
         public void Execute(int index)
         {
-            float distance = Vector2.Distance(coordKeys[index], target);
-            distances[index] = distance;
+            distances[index] = Vector2.Distance(coordKeys[index], target);
         }
     }
 

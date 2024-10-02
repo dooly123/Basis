@@ -4,6 +4,7 @@ public class AvatarPathConstants
 
     public static readonly string avatarEyePositionButton = "AvatarEyePositionButton";
     public static readonly string avatarMouthPositionButton = "AvatarMouthPositionButton";
+    public static readonly string AvatarBundleButton = "AvatarBundleButton";
     public static readonly string AvatarAutomaticVisemeDetection = "AvatarAutomaticVisemeDetection";
     public static readonly string AvatarAutomaticBlinkDetection = "AvatarAutomaticBlinkDetection";
     public static readonly string avatarEyePositionField = "AvatarEyePositionField";

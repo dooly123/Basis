@@ -45,11 +45,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1cc31e1e1ea40854ab5316e65900eb34
-    m_Address: Packages/net.virtualwebsite.voxels/BasisDemo/Voxels.unity
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26ade42e4ff7eb64eb194e1a6453ad85
     m_Address: NetworkManagement
     m_ReadOnly: 0

@@ -1,12 +1,11 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace Basis.Scripts.Editor
 {
-public static class BasisAutomaticSetupAvatarEditor
+    public static class BasisAutomaticSetupAvatarEditor
 {
     // Offset to estimate the mouth position relative to the head
     public static Vector3 mouthOffset = new Vector3(0f, 0.025f, 0.15f);

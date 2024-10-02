@@ -43,5 +43,3 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
-  - LocalPlayer
-  - RemotePlayer
