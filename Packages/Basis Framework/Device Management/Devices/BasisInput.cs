@@ -60,8 +60,9 @@ namespace Basis.Scripts.Device_Management.Devices
         public void AssignRoleAndTracker(BasisBoneTrackedRole Role)
         {
             hasRoleAssigned = true;
-            foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+            for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
             {
+                BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
                 if (Input.TryGetRole(out BasisBoneTrackedRole found) && Input != this)
                 {
                     if (found == Role)
