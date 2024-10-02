@@ -361,35 +361,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AvatarUrls:
+  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lyuma.bundle
+    IsLocalLoad: 0
   - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/aurellia.bundle
     IsLocalLoad: 0
   - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/yun.bundle
     IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/doolyav.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/peechav.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/boo.bundle
-    IsLocalLoad: 0
   - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lumain.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lyuma.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/vowgan.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lanowen.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/small%20dooly.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/castle.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/doolyavwithclothes.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/hapi%20final.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/thebutlah.bundle
-    IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/table.bundle
     IsLocalLoad: 0
   - AvatarAddress: TestNetworkMessagesAvatar
     IsLocalLoad: 1
