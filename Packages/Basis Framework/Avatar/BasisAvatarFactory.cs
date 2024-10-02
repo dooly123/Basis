@@ -170,8 +170,11 @@ namespace Basis.Scripts.Avatar
                 {
                  InitializePlayerAvatar(Player, GameObjects[0]);
                 }
+                Player.AvatarUrl = LoadingAvatar;
+                Player.AvatarLoadMode = 1;
+                Player.AvatarSwitched();
 
-                Player.AvatarSwitchedFallBack();
+                //we want to use Avatar Switched instead of the fallback version to let the server know this is what we actually want to use.
             }
             catch (Exception e)
             {

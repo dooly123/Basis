@@ -93,6 +93,11 @@ namespace Basis.Scripts.Device_Management.Devices
         }
         public void UnAssignRoleAndTracker()
         {
+            if(Control != null)
+            {
+                Control.IncomingData.position = Vector3.zero;
+                Control.IncomingData.rotation = Quaternion.identity;
+            }
             if (BasisDeviceMatchableNames == null || BasisDeviceMatchableNames.HasTrackedRole == false)
             {
                 //unassign last

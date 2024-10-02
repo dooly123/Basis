@@ -107,6 +107,13 @@ namespace Basis.Scripts.Device_Management
                 OnInitializationCompleted -= RunAfterInitialized;
             }
         }
+        public static void UnassignFBTrackers()
+        {
+            foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
+            {
+                Input.UnAssignFBTracker();
+            }
+        }
         public bool TryFindBasisBaseTypeManagement(string Name, out List<BasisBaseTypeManagement> Match)
         {
             Match = new List<BasisBaseTypeManagement>();

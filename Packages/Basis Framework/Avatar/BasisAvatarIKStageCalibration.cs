@@ -109,10 +109,7 @@ namespace Basis.Scripts.Avatar
         public static void FullBodyCalibration()
         {
             BasisHeightDriver.SetPlayersEyeHeight(BasisLocalPlayer.Instance);
-            foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
-            {
-                Input.UnAssignFBTracker();
-            }
+            BasisDeviceManagement.UnassignFBTrackers();
             //disable builder and it will be updated when the animator updates
             //now lets grab and apply the height
             BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApplyWithoutLerp();
