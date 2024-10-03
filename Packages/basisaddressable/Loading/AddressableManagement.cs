@@ -13,6 +13,7 @@ namespace Basis.Scripts.Addressable_Driver.Loading
     public class AddressableManagement : MonoBehaviour
     {
         public Coroutine CheckTaskStatus;
+        public ContentPoliceSelector ContentPoliceSelector;
 [SerializeField]
         public List<BasisLoadedAssets> LoadedBundles = new List<BasisLoadedAssets>();
         public static List<AddressableLoadResourceBase> AsyncHandles = new List<AddressableLoadResourceBase>();

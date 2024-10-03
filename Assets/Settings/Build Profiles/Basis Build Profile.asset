@@ -170,6 +170,10 @@ MonoBehaviour:
         2}'
     - line: '|   - {fileID: -944628639613478452, guid: 5e4c3601c6a155f43af19da3bdd35a64,
         type: 3}'
+    - line: '|   - {fileID: -5957691810772215966, guid: 1d5aae00e097ba9419be9ec26ccae856,
+        type: 2}'
+    - line: '|   - {fileID: 4183660298247459095, guid: ad3dbbd57db07a1488d166f19ed6e7dc,
+        type: 2}'
     - line: '|   metroInputSource: 0'
     - line: '|   wsaTransparentSwapchain: 0'
     - line: '|   m_HolographicPauseOnTrackingLoss: 1'

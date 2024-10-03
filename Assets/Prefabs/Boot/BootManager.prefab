@@ -85,6 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da8d078d89b337479355b40c108f122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ContentPoliceSelector: {fileID: 11400000, guid: 8393424ebf34934449c2d1309a700837, type: 2}
   LoadedBundles: []
 --- !u!114 &8092540372531724008
 MonoBehaviour:

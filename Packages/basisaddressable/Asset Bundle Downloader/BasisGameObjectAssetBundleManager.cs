@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Basis.Scripts.Addressable_Driver.Loading;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using System.Collections.Generic;
 public static class BasisGameObjectAssetBundleManager
 {
     public static async Task<GameObject> DownloadAndLoadGameObjectAsync(string url, string Hash, string assetName, string subfolderName, Vector3 Position, Quaternion Rotation, ProgressReport progressCallback)
@@ -43,6 +44,7 @@ public static class BasisGameObjectAssetBundleManager
             if (asset != null)
             {
                 progressCallback?.Invoke(100); // Set progress to 100 when done
+                ContentControl(asset);
                 return UnityEngine.Object.Instantiate(asset, Position,Rotation);
             }
             else
@@ -64,5 +66,32 @@ public static class BasisGameObjectAssetBundleManager
         }
         progressCallback?.Invoke(100); // Set progress to 100 when done
         return null;
+    }
+
+    public static void ContentControl(GameObject SearchAndDestroy)
+    {
+        List<MonoBehaviour> monoBehaviours = new List<MonoBehaviour>();
+        SearchAndDestroy.GetComponentsInChildren(true, monoBehaviours);
+
+        int count = monoBehaviours.Count;
+        for (int Index = 0; Index < count; Index++)
+        {
+            MonoBehaviour mono = monoBehaviours[Index];
+            // Get the full name of the MonoBehaviour's type
+            string monoTypeName = mono.GetType().FullName;
+
+            // Check if the type is in the selectedTypes list
+            if (Instance.ContentPoliceSelector.selectedTypes.Contains(monoTypeName))
+            {
+               // Debug.Log($"MonoBehaviour {monoTypeName} is approved.");
+                // Do something if the MonoBehaviour type is approved
+            }
+            else
+            {
+                Debug.LogError($"MonoBehaviour {monoTypeName} is not approved.");
+                GameObject.Destroy(mono);
+                // Do something if the MonoBehaviour type is not approved
+            }
+        }
     }
 }

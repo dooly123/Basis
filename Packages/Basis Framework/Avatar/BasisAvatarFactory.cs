@@ -181,12 +181,18 @@ namespace Basis.Scripts.Avatar
                 Debug.LogError($"Fallback avatar loading failed: {e}");
             }
         }
-
+        /// <summary>
+        /// no content searching is done here since its local content.
+        /// </summary>
+        /// <param name="Player"></param>
+        /// <param name="LoadingAvatarToUse"></param>
         public static void LoadLoadingAvatar(BasisPlayer Player, string LoadingAvatarToUse)
         {
             var op = Addressables.LoadAssetAsync<GameObject>(LoadingAvatarToUse);
             var LoadingAvatar = op.WaitForCompletion();
+
             var InSceneLoadingAvatar = GameObject.Instantiate(LoadingAvatar, Player.transform.position, Quaternion.identity);
+
 
             if (InSceneLoadingAvatar.TryGetComponent(out BasisAvatar Avatar))
             {
