@@ -165,10 +165,10 @@ public static class BasisLogManager
     private static void AddLogEntry(List<string> logList, string log)
     {
         logList.Add(log);
-        if (logList.Count > 100) // Hardcoded max log entries
+        if (logList.Count > MaximumLogs) // Hardcoded max log entries
             logList.RemoveAt(0);
     }
-
+    public const int MaximumLogs = 500;
     public static List<string> GetLogs(LogType type)
     {
         lock (logLock)
