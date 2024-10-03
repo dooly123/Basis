@@ -75,7 +75,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         }
         public void ConvertFingerSplays()
         {
-            FingerSplays[0] = 0.5f;
+            FingerSplays[0] = 0;
             for (int Index = 1; Index < 5; Index++)
             {
                 FingerSplays[Index] = BasisBaseMuscleDriver.MapValue(skeletonAction.fingerSplays[Index-1], 0, 1, -1f, 1f);

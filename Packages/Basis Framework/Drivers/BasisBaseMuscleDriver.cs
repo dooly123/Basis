@@ -255,32 +255,11 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
             // Lerp the position and slerp the rotation
             Vector3 newPosition = Vector3.Lerp(currentPose.position, First.position, Rotation);
             Quaternion newRotation = Quaternion.Slerp(currentPose.rotation, First.rotation, Rotation);
-
-            bool positionChanged = currentPose.position != First.position;
-            bool rotationChanged = currentPose.rotation != First.rotation;
-
             // Update the current pose
             currentPose.position = newPosition;
             currentPose.rotation = newRotation;
 
-            // If both position and rotation have changed, set them together
-            if (positionChanged && rotationChanged)
-            {
-                trans.SetLocalPositionAndRotation(newPosition, newRotation);
-            }
-            else
-            {
-                // Otherwise, set them separately if either has changed
-                if (positionChanged)
-                {
-                    trans.localPosition = newPosition;
-                }
-
-                if (rotationChanged)
-                {
-                    trans.localRotation = newRotation;
-                }
-            }
+            trans.SetLocalPositionAndRotation(newPosition, newRotation);
         }
     }
     public bool GetClosestValue(Vector2 percentage, out PoseDataAdditional first)
