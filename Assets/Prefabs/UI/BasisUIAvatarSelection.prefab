@@ -367,8 +367,6 @@ MonoBehaviour:
     IsLocalLoad: 0
   - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/yun.bundle
     IsLocalLoad: 0
-  - AvatarAddress: https://BasisFramework.b-cdn.net/Avatars/StandaloneWindows64/lumain.bundle
-    IsLocalLoad: 0
   - AvatarAddress: TestNetworkMessagesAvatar
     IsLocalLoad: 1
   ParentedAvatarButtons: {fileID: 4707479195400357847}

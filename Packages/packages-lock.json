@@ -357,13 +357,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "jp.lilxyzw.liltoon": {
-      "version": "https://github.com/lilxyzw/lilToon.git?path=Assets/lilToon#master",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "b96470d3dd9092b840052578048b2307fe6d8786"
-    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

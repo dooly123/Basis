@@ -106,7 +106,7 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             if (Hips.HasBone)
             {
-                if (Avatar != null && Avatar.Animator != null)
+                if (Avatar != null)
                 {
                     // Get the current rotation of the hips bone
                     Quaternion currentRotation = Hips.OutgoingWorldData.rotation;
@@ -116,9 +116,9 @@ namespace Basis.Scripts.BasisSdk.Players
                     Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
 
                     //    Avatar.Animator.transform.localRotation = rotationDifference;
-                    Avatar.Animator.transform.position = positionDifference;
+                    Avatar.transform.position = positionDifference;
                     // Apply the calculated position and rotation to the Avatar's animator transform
-                    Avatar.Animator.transform.localRotation = currentRotation;
+                    Avatar.transform.localRotation = currentRotation;
                 }
             }
         }
