@@ -14,7 +14,6 @@ namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
     {
-
         public static BasisLocalPlayer Instance;
         public static Action OnLocalPlayerCreatedAndReady;
         public static Action OnLocalPlayerCreated;
@@ -116,13 +115,10 @@ namespace Basis.Scripts.BasisSdk.Players
                     Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
                     Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
 
-                    // Calculate the difference between the current rotation and the T-pose rotation
-                    Quaternion rotationDifference = currentRotation * Quaternion.Inverse(Hips.TposeWorld.rotation);
-
                     //    Avatar.Animator.transform.localRotation = rotationDifference;
                     Avatar.Animator.transform.position = positionDifference;
                     // Apply the calculated position and rotation to the Avatar's animator transform
-                    Avatar.Animator.transform.localRotation = rotationDifference;
+                    Avatar.Animator.transform.localRotation = currentRotation;
                 }
             }
         }
