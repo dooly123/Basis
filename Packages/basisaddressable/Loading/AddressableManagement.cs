@@ -151,6 +151,10 @@ namespace Basis.Scripts.Addressable_Driver.Loading
                 LoadedBundles.Add(BasisLoadedAssets);
                 return true;
             }
+            else
+            {
+                Debug.LogError("A Status was true A was " + Status + " | B was " + StatusB);
+            }
             BasisLoadedAssets = new BasisLoadedAssets();
             return false;
         }
