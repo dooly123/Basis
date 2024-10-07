@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace HVR.Basis.Comms
 {
-    [AddComponentMenu("HVR.Basis/Comms/Streamed Avatar Feature")]
+    [AddComponentMenu("HVR.Basis/Comms/Internal/Streamed Avatar Feature")]
     public class StreamedAvatarFeature : MonoBehaviour
     {
         private const int HeaderBytes = 2;

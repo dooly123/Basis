@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace HVR.Basis.Comms
 {
-    [AddComponentMenu("HVR.Basis/Comms/Acquisition Service")]
+    [AddComponentMenu("HVR.Basis/Comms/Internal/Acquisition Service")]
     public class AcquisitionService : MonoBehaviour
     {
         public static AcquisitionService SceneInstance => CommsUtil.GetOrCreateSceneInstance(ref _sceneInstance);
