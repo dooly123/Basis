@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace HVR.Basis.Comms
 {
-    [AddComponentMenu("HVR.Basis/Comms/Avatar Comms")]
+    [AddComponentMenu("HVR.Basis/Comms/Internal/Avatar Comms")]
     public class HVRAvatarComms : MonoBehaviour
     {
         private const DeliveryMethod NegotiationDelivery = DeliveryMethod.ReliableOrdered;
