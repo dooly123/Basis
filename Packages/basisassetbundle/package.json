@@ -1,0 +1,6 @@
+{
+  "name": "com.basis.basisassetbundle",
+  "displayName": "Basis Asset Bundle",
+  "version": "0.0.1",
+  "description": "AssetBundle Loader and Creator for the basis framework"
+}

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 15003, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Basis Build Profile
   m_EditorClassIdentifier: 
+  m_AssetVersion: 1
   m_BuildTarget: 19
   m_Subtarget: 2
   m_PlatformId: 4e3c793746204150860bf175a9a41a05
   m_PlatformBuildProfile:
     rid: 5644484285017620559
+  m_OverrideGlobalSceneList: 0
   m_Scenes:
   - m_enabled: 1
     m_path: Assets/Scenes/initialization.unity
@@ -422,12 +424,15 @@ MonoBehaviour:
     - line: '|   m_BuildTargetGraphicsJobMode: []'
     - line: '|   m_BuildTargetGraphicsAPIs:'
     - line: '|   - m_BuildTarget: WindowsStandaloneSupport'
-    - line: '|     m_APIs: 02000000'
+    - line: '|     m_APIs: 15000000'
     - line: '|     m_Automatic: 0'
     - line: '|   - m_BuildTarget: MacStandaloneSupport'
     - line: '|     m_APIs: 10000000'
     - line: '|     m_Automatic: 0'
     - line: '|   - m_BuildTarget: LinuxStandaloneSupport'
+    - line: '|     m_APIs: 15000000'
+    - line: '|     m_Automatic: 0'
+    - line: '|   - m_BuildTarget: AndroidPlayer'
     - line: '|     m_APIs: 15000000'
     - line: '|     m_Automatic: 0'
     - line: '|   m_BuildTargetVRSettings: []'

@@ -6,6 +6,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.basis.basisassetbundle": {
+      "version": "file:basisassetbundle",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.basis.basisconsoledisplay": {
       "version": "file:basisconsole",
       "depth": 0,
@@ -89,7 +95,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.17",
+      "version": "1.8.18",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -282,7 +288,7 @@
     },
     "com.unity.ugui": {
       "version": "2.0.0",
-      "depth": 1,
+      "depth": 2,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",
@@ -308,7 +314,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.legacyinputhelpers": {
-      "version": "2.1.10",
+      "version": "2.1.11",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -330,7 +336,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.openxr": {
-      "version": "1.12.0",
+      "version": "1.12.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
