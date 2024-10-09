@@ -4,7 +4,7 @@ using UnityEngine;
 public class BasisAssetBundleObject : ScriptableObject
 {
     public static string AssetBundleObject = "Assets/Settings/AssetBundleBuildSettings.asset";
-    public string ExportDirectory = "Packages/com.basis.basisdk/TemporaryStorage";
+    public string TemporaryStorage = "Packages/com.basis.basisdk/TemporaryStorage";
     public string BundleExtension = ".bundle";
     public string hashExtension = ".hash";
     public bool useCompression = true;

@@ -6,13 +6,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class BasisAssetBundleBuilder : MonoBehaviour
 {
-    public static void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject BundleAsset)
+    public static void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject settings)
     {
-        LogMessage("Starting AssetBundle build process for prefab.");
+        ClearTemporaryStorage(settings.AssetBundleDirectory);
+        EnsureDirectoryExists(settings.AssetBundleDirectory);
+        Debug.Log("Starting AssetBundle build process for prefab.");
 
         if (!IsValidPrefab(prefab))
         {
-            LogError("Invalid prefab. AssetBundle build aborted.");
+            Debug.LogError("Invalid prefab. AssetBundle build aborted.");
             return;
         }
 
@@ -20,70 +22,72 @@ public class BasisAssetBundleBuilder : MonoBehaviour
 
         try
         {
-            LogMessage($"Prefab '{prefab.name}' is valid. Saving to temporary storage...");
-            string prefabPath = SavePrefabToTemporaryStorage(prefab, BundleAsset, ref wasModified);
+            Debug.Log($"Prefab '{prefab.name}' is valid. Saving to temporary storage...");
+            string prefabPath = SavePrefabToTemporaryStorage(prefab, settings, ref wasModified,out string UniqueId);
 
             if (string.IsNullOrEmpty(prefabPath))
             {
-                LogError("Failed to save prefab to temporary storage. Aborting build.");
+                Debug.LogError("Failed to save prefab to temporary storage. Aborting build.");
                 return;
             }
 
-            LogMessage($"Prefab saved at '{prefabPath}'. Setting asset bundle name...");
-            string assetBundleName = SetAssetBundleName(prefab, BundleAsset);
+            Debug.Log($"Prefab saved at '{prefabPath}'. Setting asset bundle name...");
+            string assetBundleName = SetAssetBundleName(prefabPath, UniqueId, settings);
 
             if (string.IsNullOrEmpty(assetBundleName))
             {
-                LogError("Failed to set asset bundle name. Aborting build.");
+                Debug.LogError("Failed to set asset bundle name. Aborting build.");
                 return;
             }
 
-            LogMessage($"Asset bundle name set to '{assetBundleName}'. Building AssetBundle...");
-            BuildAssetBundle(BundleAsset, assetBundleName);
+            Debug.Log($"Asset bundle name set to '{assetBundleName}'. Building AssetBundle...");
+            BuildAssetBundle(settings, assetBundleName);
 
-            LogMessage("AssetBundle built successfully. Cleaning up...");
-            ResetAssetBundleName(prefab);
-            ClearTemporaryStorage(BundleAsset.ExportDirectory);
+            Debug.Log("AssetBundle built successfully. Cleaning up...");
+            ResetAssetBundleName(prefabPath);
+            ClearTemporaryStorage(settings.TemporaryStorage);
             AssetDatabase.Refresh();
-            LogMessage("Build process completed and cleaned up successfully.");
+            Debug.Log("Build process completed and cleaned up successfully.");
         }
         catch (Exception ex)
         {
-            HandleBuildError(ex, prefab, wasModified, BundleAsset.ExportDirectory);
+            HandleBuildError(ex, prefab, wasModified, settings.TemporaryStorage);
         }
     }
     public static void BuildAssetBundle(Scene scene, BasisAssetBundleObject settings)
     {
-        LogMessage("Starting AssetBundle build process for scene.");
+        ClearTemporaryStorage(settings.AssetBundleDirectory);
+        EnsureDirectoryExists(settings.AssetBundleDirectory);
+        Debug.Log("Starting AssetBundle build process for scene.");
 
         if (!IsSceneValid(scene))
         {
-            LogError("Invalid scene. AssetBundle build aborted.");
+            Debug.LogError("Invalid scene. AssetBundle build aborted.");
             return;
         }
 
         string tempScenePath = null;
         try
         {
-            LogMessage($"Scene '{scene.name}' is valid. Saving a temporary copy of the scene...");
-            tempScenePath = SaveSceneToTemporaryStorage(scene, settings);
+            Debug.Log($"Scene '{scene.name}' is valid. Saving a temporary copy of the scene...");
+            tempScenePath = SaveSceneToTemporaryStorage(scene, settings, out string UniqueId);
 
             if (string.IsNullOrEmpty(tempScenePath))
             {
-                LogError("Failed to save scene to temporary storage. Aborting build.");
+                Debug.LogError("Failed to save scene to temporary storage. Aborting build.");
                 return;
             }
 
-            LogMessage($"Temporary scene saved at '{tempScenePath}'. Preparing build map...");
+            Debug.Log($"Temporary scene saved at '{tempScenePath}'. Preparing build map...");
             string sceneName = Path.GetFileNameWithoutExtension(tempScenePath);
 
             AssetBundleBuild buildMap = new AssetBundleBuild
             {
-                assetBundleName = sceneName + settings.BundleExtension,
+                assetBundleName = UniqueId + settings.BundleExtension,
                 assetNames = new[] { tempScenePath },
             };
 
-            LogMessage($"Building AssetBundle with bundle name '{buildMap.assetBundleName}'...");
+            Debug.Log($"Building AssetBundle with bundle name '{buildMap.assetBundleName}'...");
             EnsureDirectoryExists(settings.AssetBundleDirectory);
 
             AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(
@@ -95,18 +99,18 @@ public class BasisAssetBundleBuilder : MonoBehaviour
 
             if (manifest != null)
             {
-                LogMessage("AssetBundle built successfully. Saving hashes...");
+                Debug.Log("AssetBundle built successfully. Saving hashes...");
                 BasisAssetBundleHashGeneration.ComputeAndSaveHashes(manifest, settings);
-                LogMessage("AssetBundle for scene built successfully.");
+                Debug.Log("AssetBundle for scene built successfully.");
             }
             else
             {
-                LogError("AssetBundle build failed.");
+                Debug.LogError("AssetBundle build failed.");
             }
         }
         catch (Exception ex)
         {
-            LogError($"Error while building AssetBundle from scene: {ex.Message}\n{ex.StackTrace}");
+            Debug.LogError($"Error while building AssetBundle from scene: {ex.Message}\n{ex.StackTrace}");
         }
         finally
         {
@@ -120,65 +124,63 @@ public class BasisAssetBundleBuilder : MonoBehaviour
     {
         if (prefab == null)
         {
-            LogError("Prefab is null.");
+            Debug.LogError("Prefab is null.");
             return false;
         }
 
         if (!PrefabUtility.IsPartOfPrefabInstance(prefab) && !PrefabUtility.IsPartOfPrefabAsset(prefab))
         {
-            LogWarning($"GameObject '{prefab.name}' is not part of a prefab.");
+            Debug.LogWarning($"GameObject '{prefab.name}' is not part of a prefab.");
             return false;
         }
 
         return true;
     }
-    private static string SavePrefabToTemporaryStorage(GameObject prefab, BasisAssetBundleObject BasisAssetBundleObject, ref bool wasModified)
+    private static string SavePrefabToTemporaryStorage(GameObject prefab, BasisAssetBundleObject BasisAssetBundleObject, ref bool wasModified,out string UniqueID)
     {
-        EnsureDirectoryExists(BasisAssetBundleObject.ExportDirectory);
-
-        string NewName = BasisGenerateUniqueID.GenerateUniqueID();
-        string prefabPath = Path.Combine(BasisAssetBundleObject.ExportDirectory, $"{NewName}.prefab");
+        EnsureDirectoryExists(BasisAssetBundleObject.TemporaryStorage);
+        UniqueID = BasisGenerateUniqueID.GenerateUniqueID();
+        string prefabPath = Path.Combine(BasisAssetBundleObject.TemporaryStorage, $"{UniqueID}.prefab");
         prefab = PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
-        LogMessage($"Prefab saved to '{prefabPath}'");
+        Debug.Log($"Prefab saved to '{prefabPath}'");
         wasModified = true;
 
         return prefabPath;
     }
-    private static string SaveSceneToTemporaryStorage(Scene scene, BasisAssetBundleObject settings)
+    private static string SaveSceneToTemporaryStorage(Scene scene, BasisAssetBundleObject settings,out string UniqueID)
     {
-        string tempSceneDir = settings.ExportDirectory;
+        string tempSceneDir = settings.TemporaryStorage;
         EnsureDirectoryExists(tempSceneDir);
 
         string sceneName = Path.GetFileNameWithoutExtension(scene.path);
 
-        string NewName = BasisGenerateUniqueID.GenerateUniqueID();
-        string tempScenePath = Path.Combine(tempSceneDir, NewName + ".unity");
+        UniqueID = BasisGenerateUniqueID.GenerateUniqueID();
+        string tempScenePath = Path.Combine(tempSceneDir, UniqueID + ".unity");
 
-        LogMessage($"Saving scene to temporary path: {tempScenePath}");
+        Debug.Log($"Saving scene to temporary path: {tempScenePath}");
 
         if (EditorSceneManager.SaveScene(scene, tempScenePath))
         {
-            LogMessage($"Scene successfully saved to {tempScenePath}");
+            Debug.Log($"Scene successfully saved to {tempScenePath}");
             return tempScenePath;
         }
 
-        LogError("Failed to save temporary scene.");
+        Debug.LogError("Failed to save temporary scene.");
         return null;
     }
-    private static string SetAssetBundleName(GameObject prefab, BasisAssetBundleObject settings)
+    private static string SetAssetBundleName(string NewCopy,string AssetBundleNewName, BasisAssetBundleObject settings)
     {
-        string assetPath = AssetDatabase.GetAssetPath(prefab);
-        AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath);
-        string assetBundleName = $"{prefab.name.ToLower()}{settings.BundleExtension}";
+        AssetImporter assetImporter = AssetImporter.GetAtPath(NewCopy);
+        string assetBundleName = $"{AssetBundleNewName}{settings.BundleExtension}";
 
         if (assetImporter != null)
         {
             assetImporter.assetBundleName = assetBundleName;
-            LogMessage($"Asset bundle name '{assetBundleName}' set for prefab '{prefab.name}'.");
+            Debug.Log($"Asset bundle name '{assetBundleName}'");
             return assetBundleName;
         }
 
-        LogError("Failed to set asset bundle name.");
+        Debug.LogError("Failed to set asset bundle name.");
         return null;
     }
     private static void BuildAssetBundle(BasisAssetBundleObject settings, string assetBundleName)
@@ -191,33 +193,33 @@ public class BasisAssetBundleBuilder : MonoBehaviour
 
         if (manifest != null)
         {
-            LogMessage($"AssetBundle '{assetBundleName}' built successfully in '{settings.AssetBundleDirectory}'.");
+            Debug.Log($"AssetBundle '{assetBundleName}' built successfully in '{settings.AssetBundleDirectory}'.");
             BasisAssetBundleHashGeneration.ComputeAndSaveHashes(manifest, settings);
         }
         else
         {
-            LogError("AssetBundle build failed.");
+            Debug.LogError("AssetBundle build failed.");
         }
     }
     private static bool IsSceneValid(Scene scene)
     {
         if (scene.isDirty || string.IsNullOrEmpty(scene.path))
         {
-            LogError("The active scene must be saved before building the AssetBundle.");
+            Debug.LogError("The active scene must be saved before building the AssetBundle.");
             return false;
         }
         return true;
     }
     private static void HandleBuildError(Exception ex, GameObject prefab, bool wasModified, string TemporaryStorage)
     {
-        LogError($"Error while building AssetBundle from prefab: {ex.Message}\n{ex.StackTrace}");
+        Debug.LogError($"Error while building AssetBundle from prefab: {ex.Message}\n{ex.StackTrace}");
 
         if (wasModified)
         {
-            ResetAssetBundleName(prefab);
+            ResetAssetBundleName(TemporaryStorage);
             ClearTemporaryStorage(TemporaryStorage);
             AssetDatabase.Refresh();
-            LogMessage("Temporary modifications and storage have been reset.");
+            Debug.LogError("Temporary modifications and storage have been reset.");
         }
     }
     private static void EnsureDirectoryExists(string directoryPath)
@@ -225,7 +227,7 @@ public class BasisAssetBundleBuilder : MonoBehaviour
         if (!Directory.Exists(directoryPath))
         {
             Directory.CreateDirectory(directoryPath);
-            LogMessage($"Directory created: {directoryPath}");
+            Debug.Log($"Directory created: {directoryPath}");
         }
     }
     private static void ClearTemporaryStorage(string tempStoragePath)
@@ -233,34 +235,21 @@ public class BasisAssetBundleBuilder : MonoBehaviour
         if (Directory.Exists(tempStoragePath))
         {
             Directory.Delete(tempStoragePath, true);
-            LogMessage("Temporary storage has been cleared.");
+            Debug.Log("Temporary storage has been cleared.");
         }
         else
         {
-            LogMessage("Temporary storage does not exist, no cleanup needed.");
+            Debug.Log("Temporary storage does not exist, no cleanup needed.");
         }
     }
-    private static void ResetAssetBundleName(GameObject prefab)
+    private static void ResetAssetBundleName(string TempPath)
     {
-        string assetPath = AssetDatabase.GetAssetPath(prefab);
-        AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath);
+        AssetImporter assetImporter = AssetImporter.GetAtPath(TempPath);
 
         if (assetImporter != null && !string.IsNullOrEmpty(assetImporter.assetBundleName))
         {
             assetImporter.assetBundleName = null;
-            LogMessage($"Asset bundle name for '{prefab.name}' has been reset.");
+            Debug.Log($"Asset bundle name for '{TempPath}' has been reset.");
         }
-    }
-    private static void LogMessage(string message)
-    {
-        Debug.Log(message);
-    }
-    private static void LogError(string message)
-    {
-        Debug.LogError(message);
-    }
-    private static void LogWarning(string message)
-    {
-        Debug.LogWarning(message);
     }
 }

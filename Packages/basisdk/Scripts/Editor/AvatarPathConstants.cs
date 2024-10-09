@@ -12,6 +12,6 @@ public class AvatarPathConstants
     public static readonly string AvatarBuildBundle = "AvatarBuildBundle";
 
     public static readonly string animatorField = "AnimatorField";
-    public static readonly string faceBlinkMeshField = "FaceBlinkMeshField";
-    public static readonly string faceVisemeMeshField = "FaceVisemeMeshField";
+    public static readonly string FaceBlinkMeshField = "FaceBlinkMeshField";
+    public static readonly string FaceVisemeMeshField = "FaceVisemeMeshField";
 }
