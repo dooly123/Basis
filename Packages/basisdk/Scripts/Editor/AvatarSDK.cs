@@ -197,6 +197,6 @@ public class BasisAvatarSDKInspector : Editor
     private void EventCallbackAvatarBundle()
     {
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
-        BasisAssetBundleBuilder.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject);
+        BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject);
     }
 }

@@ -17,7 +17,7 @@ public class BasisBuildAssetBundleMenu
             return;
         }
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
-        BasisAssetBundleBuilder.BuildAssetBundle(selectedObject, BasisAssetBundleObject);
+        BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject);
     }
     [MenuItem("Basis/Build All AssetBundles With BasisAvatar Script")]
     public static void BuildAllAssetBundlesWithBasisAvatar()
@@ -50,7 +50,7 @@ public class BasisBuildAssetBundleMenu
         foreach (GameObject prefab in prefabsWithBasisAvatar)
         {
             Debug.Log("Building AssetBundle for: " + prefab.name);
-            BasisAssetBundleBuilder.BuildAssetBundle(prefab, BasisAssetBundleObject);
+            BasisAssetBundlePipeline.BuildAssetBundle(prefab, BasisAssetBundleObject);
         }
     }
     [MenuItem("Basis/Build AssetBundle from Scene")]
@@ -58,6 +58,6 @@ public class BasisBuildAssetBundleMenu
     {
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
         Scene activeScene = SceneManager.GetActiveScene();
-        BasisAssetBundleBuilder.BuildAssetBundle(activeScene, BasisAssetBundleObject);
+        BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject);
     }
 }
