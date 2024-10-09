@@ -2,9 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
-public class BasisAssetBundleUtility
+public class BasisAssetBundleHashGeneration
 {
-    public static void ComputeAndSaveHashes(AssetBundleManifest manifest, BasisBuildSettings BuildSettings)
+    public static void ComputeAndSaveHashes(AssetBundleManifest manifest, BasisAssetBundleObject BuildSettings)
     {
         try
         {

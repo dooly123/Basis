@@ -188,7 +188,7 @@ public class BasisAvatarSDKInspector : Editor
         {
             eventCallbackFaceVisemeMeshField += EventCallbackFaceVisemeMesh;
         }
-        if(AvatarBundleButton != null)
+        if (AvatarBundleButton != null)
         {
             AvatarBundleButton.clicked += () => EventCallbackAvatarBundle();
         }
@@ -199,6 +199,7 @@ public class BasisAvatarSDKInspector : Editor
 
     private void EventCallbackAvatarBundle()
     {
-        BasisPrefabAssetBundleBuilder.BuildAssetBundle(Avatar.gameObject, BasisBuildSettings.Default());
+        BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
+        BasisAssetBundleBuilder.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject);
     }
 }

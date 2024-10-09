@@ -16,8 +16,8 @@ public class BasisBuildAssetBundleMenu
             Debug.LogError("No prefab selected. Please select a prefab in the Project window to build an AssetBundle.");
             return;
         }
-
-        BasisPrefabAssetBundleBuilder.BuildAssetBundle(selectedObject, BasisBuildSettings.Default());
+        BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
+        BasisAssetBundleBuilder.BuildAssetBundle(selectedObject, BasisAssetBundleObject);
     }
     [MenuItem("Basis/Build All AssetBundles With BasisAvatar Script")]
     public static void BuildAllAssetBundlesWithBasisAvatar()
@@ -45,18 +45,19 @@ public class BasisBuildAssetBundleMenu
             Debug.LogError("No prefabs with the BasisAvatar script found in the project.");
             return;
         }
-
+        BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
         // Iterate over all prefabs with BasisAvatar component and build AssetBundles
         foreach (GameObject prefab in prefabsWithBasisAvatar)
         {
             Debug.Log("Building AssetBundle for: " + prefab.name);
-            BasisPrefabAssetBundleBuilder.BuildAssetBundle(prefab, BasisBuildSettings.Default());
+            BasisAssetBundleBuilder.BuildAssetBundle(prefab, BasisAssetBundleObject);
         }
     }
     [MenuItem("Basis/Build AssetBundle from Scene")]
     public static void BuildAssetBundleFromScene()
     {
+        BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
         Scene activeScene = SceneManager.GetActiveScene();
-        BasisSceneAssetBundleBuilder.BuildAssetBundle(activeScene, BasisBuildSettings.Default());
+        BasisAssetBundleBuilder.BuildAssetBundle(activeScene, BasisAssetBundleObject);
     }
 }

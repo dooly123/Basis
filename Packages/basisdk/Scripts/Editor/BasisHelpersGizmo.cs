@@ -11,7 +11,11 @@ public static class BasisHelpersGizmo
     {
         Position = Handles.PositionHandle(Position, Rotation);
     }
-    public static Button Button(VisualElement VisualElement, string ButttonNameIdentifier)
+        public static void DrawWireSphere(Vector3 Position)
+        {
+            Gizmos.DrawWireSphere(Position, 0.01f);
+        }
+        public static Button Button(VisualElement VisualElement, string ButttonNameIdentifier)
     {
         // Find the button by name
         Button button = VisualElement.Q<Button>(ButttonNameIdentifier);

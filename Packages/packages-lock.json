@@ -6,12 +6,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.basis.basisassetbundle": {
-      "version": "file:basisassetbundle",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.basis.basisconsoledisplay": {
       "version": "file:basisconsole",
       "depth": 0,
