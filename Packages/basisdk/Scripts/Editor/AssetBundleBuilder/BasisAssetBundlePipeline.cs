@@ -6,20 +6,21 @@ using UnityEngine.SceneManagement;
 public static class BasisAssetBundlePipeline
 {
     // Define static delegates
-    public delegate void BeforeBuildHandler(GameObject prefab, BasisAssetBundleObject settings);
+    public delegate void BeforeBuildGameobjectHandler(GameObject prefab, BasisAssetBundleObject settings);
+    public delegate void BeforeBuildSceneHandler(Scene prefab, BasisAssetBundleObject settings);
     public delegate void AfterBuildHandler(string assetBundleName);
     public delegate void BuildErrorHandler(Exception ex, GameObject prefab, bool wasModified, string temporaryStorage);
 
     // Static delegates
-    public static BeforeBuildHandler OnBeforeBuildPrefab;
+    public static BeforeBuildGameobjectHandler OnBeforeBuildPrefab;
     public static AfterBuildHandler OnAfterBuildPrefab;
     public static BuildErrorHandler OnBuildErrorPrefab;
 
-    public static BeforeBuildHandler OnBeforeBuildScene;
+    public static BeforeBuildSceneHandler OnBeforeBuildScene;
     public static AfterBuildHandler OnAfterBuildScene;
     public static BuildErrorHandler OnBuildErrorScene;
 
-    public static void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject settings)
+    public static void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject settings,ref BasisBundleInformation BasisBundleInformation)
     {
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
         TemporaryStorageHandler.EnsureDirectoryExists(settings.AssetBundleDirectory);
@@ -40,7 +41,7 @@ public static class BasisAssetBundlePipeline
             string prefabPath = TemporaryStorageHandler.SavePrefabToTemporaryStorage(prefab, settings, ref wasModified, out string uniqueID);
             string assetBundleName = AssetBundleBuilder.SetAssetBundleName(prefabPath, uniqueID, settings);
 
-            AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName);
+            AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName,ref BasisBundleInformation, nameof(GameObject));
             AssetBundleBuilder.ResetAssetBundleName(prefabPath);
             TemporaryStorageHandler.ClearTemporaryStorage(settings.TemporaryStorage);
             AssetDatabase.Refresh();
@@ -56,7 +57,7 @@ public static class BasisAssetBundlePipeline
         }
     }
 
-    public static void BuildAssetBundle(Scene scene, BasisAssetBundleObject settings)
+    public static void BuildAssetBundle(Scene scene, BasisAssetBundleObject settings,ref BasisBundleInformation BasisBundleInformation)
     {
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
         TemporaryStorageHandler.EnsureDirectoryExists(settings.AssetBundleDirectory);
@@ -72,12 +73,12 @@ public static class BasisAssetBundlePipeline
         try
         {
             // Invoke the delegate before building the asset bundle
-            OnBeforeBuildScene?.Invoke(null, settings); // Pass `null` for prefab since this is a scene
+            OnBeforeBuildScene?.Invoke(scene, settings);
 
             tempScenePath = TemporaryStorageHandler.SaveSceneToTemporaryStorage(scene, settings, out string uniqueID);
             string assetBundleName = AssetBundleBuilder.SetAssetBundleName(tempScenePath, uniqueID, settings);
 
-            AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName);
+            AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, ref BasisBundleInformation,nameof(Scene));
             TemporaryStorageHandler.ClearTemporaryStorage(tempScenePath);
 
             // Invoke the delegate after building the asset bundle

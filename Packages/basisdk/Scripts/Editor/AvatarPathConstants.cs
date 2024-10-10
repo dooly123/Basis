@@ -14,4 +14,8 @@ public class AvatarPathConstants
     public static readonly string animatorField = "AnimatorField";
     public static readonly string FaceBlinkMeshField = "FaceBlinkMeshField";
     public static readonly string FaceVisemeMeshField = "FaceVisemeMeshField";
+
+    public static readonly string AvatarName = "avatarnameinput";
+    public static readonly string AvatarDescription = "avatardescriptioninput";
+    public static readonly string AvatarIcon = "AvatarIcon";
 }

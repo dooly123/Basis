@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [CustomEditor(typeof(BasisAvatar))]
-public class BasisAvatarSDKInspector : Editor
+public partial class BasisAvatarSDKInspector : Editor
 {
     public VisualTreeAsset visualTree;
     public BasisAvatar Avatar;
@@ -17,7 +17,7 @@ public class BasisAvatarSDKInspector : Editor
     public bool AvatarMouthPositionState = false;
     public VisualElement rootElement;
     public AvatarSDKJiggleBonesView AvatarSDKJiggleBonesView = new AvatarSDKJiggleBonesView();
-
+    public AvatarSDKVisemes AvatarSDKVisemes = new AvatarSDKVisemes();
     public Button EventCallbackAvatarBundleButton { get; private set; }
 
     private void OnEnable()
@@ -38,6 +38,7 @@ public class BasisAvatarSDKInspector : Editor
             BasisAutomaticSetupAvatarEditor.TryToAutomatic(this);
             SetupItems();
             AvatarSDKJiggleBonesView.Initialize(this);
+            AvatarSDKVisemes.Initialize(this);
         }
         else
         {
@@ -45,7 +46,6 @@ public class BasisAvatarSDKInspector : Editor
         }
         return rootElement;
     }
-
     public void AutomaticallyFindVisemes()
     {
         SkinnedMeshRenderer Renderer = Avatar.FaceVisemeMesh;
@@ -61,6 +61,7 @@ public class BasisAvatarSDKInspector : Editor
         }
         EditorUtility.SetDirty(Avatar);
         AssetDatabase.Refresh();
+        AvatarSDKVisemes.Initialize(this);
     }
 
     public void AutomaticallyFindBlinking()
@@ -78,6 +79,7 @@ public class BasisAvatarSDKInspector : Editor
         Avatar.BlinkViseme = Ints.ToArray();
         EditorUtility.SetDirty(Avatar);
         AssetDatabase.Refresh();
+        AvatarSDKVisemes.Initialize(this);
     }
 
     public void ClickedAvatarEyePositionButton(Button Button)
@@ -110,7 +112,7 @@ public class BasisAvatarSDKInspector : Editor
         EditorUtility.SetDirty(Avatar);
     }
 
-    public void EventCallbackFaceVisemeMesh(ChangeEvent<UnityEngine.Object> evt,ref SkinnedMeshRenderer Renderer)
+    public void EventCallbackFaceVisemeMesh(ChangeEvent<UnityEngine.Object> evt, ref SkinnedMeshRenderer Renderer)
     {
         Debug.Log(nameof(EventCallbackFaceVisemeMesh));
         Undo.RecordObject(Avatar, "Change Face Viseme Mesh");
@@ -163,9 +165,17 @@ public class BasisAvatarSDKInspector : Editor
         ObjectField faceBlinkMeshField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.FaceBlinkMeshField);
         ObjectField faceVisemeMeshField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.FaceVisemeMeshField);
 
+        TextField AvatarNameField = uiElementsRoot.Q<TextField>(AvatarPathConstants.AvatarName);
+        TextField AvatarDescriptionField = uiElementsRoot.Q<TextField>(AvatarPathConstants.AvatarDescription);
+        ObjectField AvatarIconField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.AvatarIcon);
+
+
+      //  AvatarIconField.value = 
+
         animatorField.allowSceneObjects = true;
         faceBlinkMeshField.allowSceneObjects = true;
         faceVisemeMeshField.allowSceneObjects = true;
+        AvatarIconField.allowSceneObjects = true;
 
         animatorField.value = Avatar.Animator;
         faceBlinkMeshField.value = Avatar.FaceBlinkMesh;
@@ -197,6 +207,18 @@ public class BasisAvatarSDKInspector : Editor
     private void EventCallbackAvatarBundle()
     {
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
-        BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject);
+
+        if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
+        {
+            BasisBundleInformation basisBundleInformation = new BasisBundleInformation
+            {
+                BasisBundleDescription = basisContentBase.BasisBundleDescription
+            };
+            BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, ref basisBundleInformation);
+        }
+        else
+        {
+            Debug.LogError("Missing the Avatar");
+        }
     }
 }

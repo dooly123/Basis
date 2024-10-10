@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class AssetBundleBuilder
 {
-    public static void BuildAssetBundle(BasisAssetBundleObject settings, string assetBundleName)
+    public static void BuildAssetBundle(BasisAssetBundleObject settings, string assetBundleName,ref BasisBundleInformation BasisBundleInformation,string Mode)
     {
         AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(
             settings.AssetBundleDirectory,
@@ -15,6 +15,7 @@ public static class AssetBundleBuilder
         if (manifest != null)
         {
             BasisAssetBundleHashGeneration.ComputeAndSaveHashes(manifest, settings);
+            BasisBasisBundleInformationHandler.CreateInformation(ref BasisBundleInformation, manifest,assetBundleName, Mode);
         }
         else
         {

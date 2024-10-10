@@ -17,7 +17,19 @@ public class BasisBuildAssetBundleMenu
             return;
         }
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
-        BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject);
+
+        if (selectedObject.TryGetComponent(out BasisContentBase basisContentBase))
+        {
+            BasisBundleInformation basisBundleInformation = new BasisBundleInformation
+            {
+                BasisBundleDescription = basisContentBase.BasisBundleDescription
+            };
+            BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, ref basisBundleInformation);
+        }
+        else
+        {
+            Debug.LogError("Missing the BasisContentBase");
+        }
     }
     [MenuItem("Basis/Build All AssetBundles With BasisAvatar Script")]
     public static void BuildAllAssetBundlesWithBasisAvatar()
@@ -47,10 +59,21 @@ public class BasisBuildAssetBundleMenu
         }
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
         // Iterate over all prefabs with BasisAvatar component and build AssetBundles
-        foreach (GameObject prefab in prefabsWithBasisAvatar)
+        foreach (GameObject selectedObject in prefabsWithBasisAvatar)
         {
-            Debug.Log("Building AssetBundle for: " + prefab.name);
-            BasisAssetBundlePipeline.BuildAssetBundle(prefab, BasisAssetBundleObject);
+            Debug.Log("Building AssetBundle for: " + selectedObject.name);
+            if (selectedObject.TryGetComponent(out BasisContentBase basisContentBase))
+            {
+                BasisBundleInformation basisBundleInformation = new BasisBundleInformation
+                {
+                    BasisBundleDescription = basisContentBase.BasisBundleDescription
+                };
+                BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, ref basisBundleInformation);
+            }
+            else
+            {
+                Debug.LogError("Missing the BasisContentBase");
+            }
         }
     }
     [MenuItem("Basis/Build AssetBundle from Scene")]
@@ -58,6 +81,18 @@ public class BasisBuildAssetBundleMenu
     {
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
         Scene activeScene = SceneManager.GetActiveScene();
-        BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject);
+        BasisScene BasisContentBase = GameObject.FindAnyObjectByType<BasisScene>(FindObjectsInactive.Exclude);
+        if (BasisContentBase.TryGetComponent(out BasisContentBase basisContentBase))
+        {
+            BasisBundleInformation basisBundleInformation = new BasisBundleInformation
+            {
+                BasisBundleDescription = basisContentBase.BasisBundleDescription
+            };
+            BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject, ref basisBundleInformation);
+        }
+        else
+        {
+            Debug.LogError("Missing the BasisScene");
+        }
     }
 }
