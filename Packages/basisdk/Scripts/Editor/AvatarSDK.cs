@@ -170,7 +170,7 @@ public partial class BasisAvatarSDKInspector : Editor
         ObjectField AvatarIconField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.AvatarIcon);
 
         animatorField.allowSceneObjects = true;
-        faceBlinkMeshField.allowSceneObjects = true;
+        faceBlinkMeshField.allowSceneObjects = true; 
         faceVisemeMeshField.allowSceneObjects = true;
         AvatarIconField.allowSceneObjects = true;
 
@@ -184,6 +184,8 @@ public partial class BasisAvatarSDKInspector : Editor
 
         AvatarNameField.RegisterCallback<ChangeEvent<string>>(AvatarName);
         AvatarDescriptionField.RegisterCallback<ChangeEvent<string>>(AvatarDescription);
+
+        AvatarIconField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(OnAssignTexture2D);
 
         // Button click events
         avatarEyePositionClick.clicked += () => ClickedAvatarEyePositionButton(avatarEyePositionClick);
@@ -206,6 +208,11 @@ public partial class BasisAvatarSDKInspector : Editor
         // Update Button Text
         avatarEyePositionClick.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
         avatarMouthPositionClick.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
+    }
+    public Texture2D Texture;
+    public void OnAssignTexture2D(ChangeEvent<UnityEngine.Object> Texture2D)
+    {
+        Texture = (Texture2D)Texture2D.newValue;
     }
     public void AvatarDescription(ChangeEvent<string> evt)
     {
