@@ -169,17 +169,21 @@ public partial class BasisAvatarSDKInspector : Editor
         TextField AvatarDescriptionField = uiElementsRoot.Q<TextField>(AvatarPathConstants.AvatarDescription);
         ObjectField AvatarIconField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.AvatarIcon);
 
-
-      //  AvatarIconField.value = 
-
         animatorField.allowSceneObjects = true;
         faceBlinkMeshField.allowSceneObjects = true;
         faceVisemeMeshField.allowSceneObjects = true;
         AvatarIconField.allowSceneObjects = true;
 
+        AvatarIconField.value = null;
         animatorField.value = Avatar.Animator;
         faceBlinkMeshField.value = Avatar.FaceBlinkMesh;
         faceVisemeMeshField.value = Avatar.FaceVisemeMesh;
+
+        AvatarNameField.value = Avatar.BasisBundleDescription.AssetBundleName;
+        AvatarDescriptionField.value = Avatar.BasisBundleDescription.AssetBundleDescription;
+
+        AvatarNameField.RegisterCallback<ChangeEvent<string>>(AvatarName);
+        AvatarDescriptionField.RegisterCallback<ChangeEvent<string>>(AvatarDescription);
 
         // Button click events
         avatarEyePositionClick.clicked += () => ClickedAvatarEyePositionButton(avatarEyePositionClick);
@@ -203,7 +207,18 @@ public partial class BasisAvatarSDKInspector : Editor
         avatarEyePositionClick.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
         avatarMouthPositionClick.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
     }
-
+    public void AvatarDescription(ChangeEvent<string> evt)
+    {
+        Avatar.BasisBundleDescription.AssetBundleDescription = evt.newValue;
+        EditorUtility.SetDirty(Avatar);
+        AssetDatabase.Refresh();
+    }
+    public void AvatarName(ChangeEvent<string> evt)
+    {
+        Avatar.BasisBundleDescription.AssetBundleName = evt.newValue;
+        EditorUtility.SetDirty(Avatar);
+        AssetDatabase.Refresh();
+    }
     private void EventCallbackAvatarBundle()
     {
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
