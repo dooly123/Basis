@@ -30,7 +30,7 @@ namespace Basis.Scripts.Drivers
         /// <param name="SceneToLoadUrl"></param>
         /// <param name="HashUrl"></param>
         /// <returns></returns>
-        public static async Task LoadSceneAssetBundle(string SceneToLoadUrl, string HashUrl = "", bool SpawnPlayerOnSceneLoad = true)
+        public static async Task LoadSceneAssetBundle(string SceneToLoadUrl, BasisBundleInformation HashUrl, bool SpawnPlayerOnSceneLoad = true)
         {
             SetIfPlayerShouldSpawnOnSceneLoad(SpawnPlayerOnSceneLoad);
             Debug.Log("Loading Scene " + SceneToLoadUrl);

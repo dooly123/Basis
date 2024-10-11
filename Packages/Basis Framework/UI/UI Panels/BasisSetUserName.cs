@@ -15,7 +15,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public Button Ready;
         public static string LoadFileName = "CachedUserName.BAS";
         public string SceneToLoad;
-        public string HashUrl = string.Empty;
+        public BasisBundleInformation HashUrl;
         public bool UseAddressables;
         public Image Loadingbar;
         public bool HasActiveLoadingbar = false;

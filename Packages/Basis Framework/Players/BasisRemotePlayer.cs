@@ -53,14 +53,14 @@ namespace Basis.Scripts.BasisSdk.Players
             if (string.IsNullOrEmpty(Loader))
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
-                await BasisAvatarFactory.LoadAvatar(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal, string.Empty);
+                await BasisAvatarFactory.LoadAvatar(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal, new BasisBundleInformation());
             }
             else
             {
                 Debug.Log("loading avatar from " + Loader + " with net mode " + NetworkMode);
                 if (LockAvatarFromChanging == false)
                 {
-                    await BasisAvatarFactory.LoadAvatar(this, Loader, NetworkMode, string.Empty);
+                    await BasisAvatarFactory.LoadAvatar(this, Loader, NetworkMode, new BasisBundleInformation());
                 }
             }
         }

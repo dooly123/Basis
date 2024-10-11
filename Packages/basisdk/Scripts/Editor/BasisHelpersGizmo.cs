@@ -47,7 +47,6 @@ namespace Basis.Scripts.BasisSdk.Helpers.Editor
 
         private static void OnVector2FieldValueChanged(ChangeEvent<Vector2> evt)
         {
-            throw new NotImplementedException();
         }
 
         public static void SetValueVector2Field(VisualElement visualElement, string fieldNameIdentifier, Vector2 Value)

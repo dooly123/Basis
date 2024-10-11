@@ -23,8 +23,8 @@ public static class BasisMenuItemsEditor
     [MenuItem("Basis/Avatar/ReloadAvatar")]
     public static async void ReloadAvatar()
     {
-        (string, byte) LastUsedAvatar = BasisDataStore.LoadAvatar(BasisLocalPlayer.LoadFileNameAndExtension, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal);
-        await BasisLocalPlayer.Instance.CreateAvatar(LastUsedAvatar.Item1, LastUsedAvatar.Item2);
+        BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(BasisLocalPlayer.LoadFileNameAndExtension, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal);
+        await BasisLocalPlayer.Instance.CreateAvatar(LastUsedAvatar.Name, LastUsedAvatar.Data,);
     }
     [MenuItem("Basis/Trackers/Hide Trackers")]
     public static void HideTrackersEditor()

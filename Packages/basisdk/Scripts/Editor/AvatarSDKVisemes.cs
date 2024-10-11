@@ -38,96 +38,99 @@ public class AvatarSDKVisemes
 
 
         ManualAvatarVisemesvisualElement.Clear();
-
-        // Get the list of blend shape names from the Avatar
-        List<string> MouthNames = AvatarHelper.FindAllNames(basisAvatarSDKInspector.Avatar.FaceVisemeMesh);
-        // Add "None" to the list of names to represent the -1 case
-        MouthNames.Insert(0, "None");
-
-        for (int index = 0; index < VisibleKeysMouth.Count; index++)
+        if (basisAvatarSDKInspector.Avatar.FaceVisemeMesh != null)
         {
-            // Create a horizontal container to hold both the label and the dropdown
-            rowContainer = new VisualElement();
-            rowContainer.style.flexDirection = FlexDirection.Row; // Horizontal layout
+            // Get the list of blend shape names from the Avatar
+            List<string> MouthNames = AvatarHelper.FindAllNames(basisAvatarSDKInspector.Avatar.FaceVisemeMesh);
+            // Add "None" to the list of names to represent the -1 case
+            MouthNames.Insert(0, "None");
 
-            // Create a label for the viseme name (assignable on the left)
-            Label visemeLabel = new Label(VisibleKeysMouth[index]);
-            visemeLabel.style.width = 150; // Adjust the width for alignment
-            visemeLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-
-            // Determine which item to select in the dropdown
-            int faceVisemeMovement = basisAvatarSDKInspector.Avatar.FaceVisemeMovement[index];
-            int selectedIndex = (faceVisemeMovement == -1) ? 0 : faceVisemeMovement + 1;
-
-            // Create the dropdown field (dropdown on the right)
-            DropdownField dropdownField = new DropdownField(MouthNames, selectedIndex);
-            dropdownField.style.flexGrow = 1; // Make dropdown take the remaining space
-
-            // Register callback for when the value changes
-            int currentIndex = index; // Capture the current index in a local variable
-            dropdownField.RegisterValueChangedCallback(evt =>
+            for (int index = 0; index < VisibleKeysMouth.Count; index++)
             {
-                // Get the index of the new value in the Names list
-                int newIndex = MouthNames.IndexOf(evt.newValue);
+                // Create a horizontal container to hold both the label and the dropdown
+                rowContainer = new VisualElement();
+                rowContainer.style.flexDirection = FlexDirection.Row; // Horizontal layout
 
-                // If "None" is selected, map it to -1, otherwise map to the corresponding index
-                basisAvatarSDKInspector.Avatar.FaceVisemeMovement[currentIndex] = (newIndex == 0) ? -1 : newIndex - 1;
-            });
+                // Create a label for the viseme name (assignable on the left)
+                Label visemeLabel = new Label(VisibleKeysMouth[index]);
+                visemeLabel.style.width = 150; // Adjust the width for alignment
+                visemeLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
 
-            // Add the label and dropdown to the horizontal container
-            rowContainer.Add(visemeLabel);
-            rowContainer.Add(dropdownField);
+                // Determine which item to select in the dropdown
+                int faceVisemeMovement = basisAvatarSDKInspector.Avatar.FaceVisemeMovement[index];
+                int selectedIndex = (faceVisemeMovement == -1) ? 0 : faceVisemeMovement + 1;
 
-            // Add the row to the main visual element
-            ManualAvatarVisemesvisualElement.Add(rowContainer);
+                // Create the dropdown field (dropdown on the right)
+                DropdownField dropdownField = new DropdownField(MouthNames, selectedIndex);
+                dropdownField.style.flexGrow = 1; // Make dropdown take the remaining space
+
+                // Register callback for when the value changes
+                int currentIndex = index; // Capture the current index in a local variable
+                dropdownField.RegisterValueChangedCallback(evt =>
+                {
+                    // Get the index of the new value in the Names list
+                    int newIndex = MouthNames.IndexOf(evt.newValue);
+
+                    // If "None" is selected, map it to -1, otherwise map to the corresponding index
+                    basisAvatarSDKInspector.Avatar.FaceVisemeMovement[currentIndex] = (newIndex == 0) ? -1 : newIndex - 1;
+                });
+
+                // Add the label and dropdown to the horizontal container
+                rowContainer.Add(visemeLabel);
+                rowContainer.Add(dropdownField);
+
+                // Add the row to the main visual element
+                ManualAvatarVisemesvisualElement.Add(rowContainer);
+            }
+
         }
-
-
-
-        VisualElement manualassignBlinkDetection = basisAvatarSDKInspector.rootElement.Q<VisualElement>("manualassignBlinkDetection");
-
-        manualassignBlinkDetection.Clear();
-        // Get the list of blend shape names from the Avatar
-        List<string> BlinkNames = AvatarHelper.FindAllNames(basisAvatarSDKInspector.Avatar.FaceBlinkMesh);
-        // Add "None" to the list of names to represent the -1 case
-        BlinkNames.Insert(0, "None");
-
-        for (int index = 0; index < VisibleKeysBlink.Count; index++)
+        if (basisAvatarSDKInspector.Avatar.FaceBlinkMesh != null)
         {
-            // Create a horizontal container to hold both the label and the dropdown
-            rowContainer = new VisualElement();
-            rowContainer.style.flexDirection = FlexDirection.Row; // Horizontal layout
+            VisualElement manualassignBlinkDetection = basisAvatarSDKInspector.rootElement.Q<VisualElement>("manualassignBlinkDetection");
 
-            // Create a label for the viseme name (assignable on the left)
-            Label visemeLabel = new Label(VisibleKeysBlink[index]);
-            visemeLabel.style.width = 150; // Adjust the width for alignment
-            visemeLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+            manualassignBlinkDetection.Clear();
+            // Get the list of blend shape names from the Avatar
+            List<string> BlinkNames = AvatarHelper.FindAllNames(basisAvatarSDKInspector.Avatar.FaceBlinkMesh);
+            // Add "None" to the list of names to represent the -1 case
+            BlinkNames.Insert(0, "None");
 
-            // Determine which item to select in the dropdown
-            int faceVisemeMovement = basisAvatarSDKInspector.Avatar.BlinkViseme[index];
-            int selectedIndex = (faceVisemeMovement == -1) ? 0 : faceVisemeMovement + 1;
-
-            // Create the dropdown field (dropdown on the right)
-            DropdownField dropdownField = new DropdownField(BlinkNames, selectedIndex);
-            dropdownField.style.flexGrow = 1; // Make dropdown take the remaining space
-
-            // Register callback for when the value changes
-            int currentIndex = index; // Capture the current index in a local variable
-            dropdownField.RegisterValueChangedCallback(evt =>
+            for (int index = 0; index < VisibleKeysBlink.Count; index++)
             {
-                // Get the index of the new value in the Names list
-                int newIndex = BlinkNames.IndexOf(evt.newValue);
+                // Create a horizontal container to hold both the label and the dropdown
+                rowContainer = new VisualElement();
+                rowContainer.style.flexDirection = FlexDirection.Row; // Horizontal layout
 
-                // If "None" is selected, map it to -1, otherwise map to the corresponding index
-                basisAvatarSDKInspector.Avatar.BlinkViseme[currentIndex] = (newIndex == 0) ? -1 : newIndex - 1;
-            });
+                // Create a label for the viseme name (assignable on the left)
+                Label visemeLabel = new Label(VisibleKeysBlink[index]);
+                visemeLabel.style.width = 150; // Adjust the width for alignment
+                visemeLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
 
-            // Add the label and dropdown to the horizontal container
-            rowContainer.Add(visemeLabel);
-            rowContainer.Add(dropdownField);
+                // Determine which item to select in the dropdown
+                int faceVisemeMovement = basisAvatarSDKInspector.Avatar.BlinkViseme[index];
+                int selectedIndex = (faceVisemeMovement == -1) ? 0 : faceVisemeMovement + 1;
 
-            // Add the row to the main visual element
-            manualassignBlinkDetection.Add(rowContainer);
+                // Create the dropdown field (dropdown on the right)
+                DropdownField dropdownField = new DropdownField(BlinkNames, selectedIndex);
+                dropdownField.style.flexGrow = 1; // Make dropdown take the remaining space
+
+                // Register callback for when the value changes
+                int currentIndex = index; // Capture the current index in a local variable
+                dropdownField.RegisterValueChangedCallback(evt =>
+                {
+                    // Get the index of the new value in the Names list
+                    int newIndex = BlinkNames.IndexOf(evt.newValue);
+
+                    // If "None" is selected, map it to -1, otherwise map to the corresponding index
+                    basisAvatarSDKInspector.Avatar.BlinkViseme[currentIndex] = (newIndex == 0) ? -1 : newIndex - 1;
+                });
+
+                // Add the label and dropdown to the horizontal container
+                rowContainer.Add(visemeLabel);
+                rowContainer.Add(dropdownField);
+
+                // Add the row to the main visual element
+                manualassignBlinkDetection.Add(rowContainer);
+            }
         }
     }
 }

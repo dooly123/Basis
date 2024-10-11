@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 public static class BasisSceneAssetBundleManager
 {
-    public static async Task DownloadAndLoadSceneAsync(string url,string Hash, string subfolderName, ProgressReport progressCallback)
+    public static async Task DownloadAndLoadSceneAsync(string url, BasisBundleInformation Hash, string subfolderName, ProgressReport progressCallback)
     {
         string folderPath = Path.Combine(Application.persistentDataPath, subfolderName);
         if (Directory.Exists(folderPath) == false)
@@ -18,7 +18,7 @@ public static class BasisSceneAssetBundleManager
 
         await CheckAndLoadSceneBundleAsync(url, Hash, localPath, progressCallback);
     }
-    private static async Task CheckAndLoadSceneBundleAsync(string url,string Hash, string localPath, ProgressReport progressCallback)
+    private static async Task CheckAndLoadSceneBundleAsync(string url, BasisBundleInformation Hash, string localPath, ProgressReport progressCallback)
     {
         if (File.Exists(localPath))
         {
@@ -27,16 +27,16 @@ public static class BasisSceneAssetBundleManager
         else
         {
             Debug.Log("AssetBundle not found locally, downloading.");
-            await DownloadAssetBundleAsync(url, localPath, progressCallback);
+            await AddressableManagement.Instance.AssetBundleManagement.DownloadAssetBundleAsync(url, localPath, progressCallback);
         }
         await LoadSceneBundleFromDiskAsync(url, Hash, localPath, progressCallback);
     }
-    private static async Task LoadSceneBundleFromDiskAsync(string url,string Hash, string localPath, ProgressReport progressCallback)
+    private static async Task LoadSceneBundleFromDiskAsync(string url, BasisBundleInformation Hash, string localPath, ProgressReport progressCallback)
     {
         BasisLoadedAssets BasisLoadedAssets = new BasisLoadedAssets();
         try
         {
-            BasisLoadedAssets = await LoadBundle(url, Hash, localPath, progressCallback);
+            BasisLoadedAssets = await AddressableManagement.Instance.AssetBundleManagement.LoadBundle(url, Hash, localPath, progressCallback);
         }
         catch (Exception E)
         {

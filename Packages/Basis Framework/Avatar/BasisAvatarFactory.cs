@@ -15,7 +15,7 @@ namespace Basis.Scripts.Avatar
     public static class BasisAvatarFactory
     {
         public const string LoadingAvatar = "LoadingAvatar";
-        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, byte Mode, string hash)
+        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, byte Mode, BasisBundleInformation hash)
         {
             if (string.IsNullOrEmpty(AvatarAddress))
             {
@@ -23,8 +23,6 @@ namespace Basis.Scripts.Avatar
                 await LoadAvatarAfterError(Player);
                 return;
             }
-
-            hash = await BasisAssetBundleHashLookup.GetHashOrFallback(hash, AvatarAddress);
 
             DeleteLastAvatar(Player);
             LoadLoadingAvatar(Player, LoadingAvatar);
@@ -72,7 +70,7 @@ namespace Basis.Scripts.Avatar
             }
         }
 
-        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress, byte Mode, string hash = "")
+        public static async Task LoadAvatar(BasisRemotePlayer Player, string AvatarAddress, byte Mode, BasisBundleInformation BasisBundleInformation)
         {
             if (string.IsNullOrEmpty(AvatarAddress))
             {
@@ -80,8 +78,6 @@ namespace Basis.Scripts.Avatar
                 await LoadAvatarAfterError(Player);
                 return;
             }
-
-            hash = await BasisAssetBundleHashLookup.GetHashOrFallback(hash, AvatarAddress);
 
             DeleteLastAvatar(Player);
             LoadLoadingAvatar(Player, LoadingAvatar);
@@ -92,7 +88,7 @@ namespace Basis.Scripts.Avatar
                 switch (Mode)
                 {
                     case 0://download
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
                         break;
                     case 1://localload
                         var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
@@ -104,7 +100,7 @@ namespace Basis.Scripts.Avatar
                         }
                         break;
                     default:
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
                         break;
                 }
                 Player.AvatarUrl = AvatarAddress;
@@ -120,7 +116,7 @@ namespace Basis.Scripts.Avatar
             }
         }
 
-        private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, string hash, BasisPlayer Player)
+        private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, BasisBundleInformation hash, BasisPlayer Player)
         {
             string FileName = AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress);
             return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, hash, FileName, BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad);

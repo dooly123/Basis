@@ -17,7 +17,7 @@ namespace Basis.Scripts.Common
         Debug.Log("Avatar saved to " + filePath);
     }
         [System.Serializable]
-        private class BasisSavedAvatar
+        public class BasisSavedAvatar
         {
             public string Name;
             public byte Data;
@@ -34,7 +34,7 @@ namespace Basis.Scripts.Common
             }
         }
         // Method to load the avatar (string and byte) from a file using JSON
-        public static (string, byte) LoadAvatar(string fileNameAndExtension, string defaultName, byte defaultData)
+        public static BasisSavedAvatar LoadAvatar(string fileNameAndExtension, string defaultName, byte defaultData)
     {
         string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
         if (File.Exists(filePath))
@@ -47,12 +47,12 @@ namespace Basis.Scripts.Common
                 avatarName = defaultName;
             }
             Debug.Log("Avatar loaded from " + filePath);
-            return (avatarName, avatarData);
+            return avatarWrapper;
         }
         else
         {
             Debug.LogWarning("File not found at " + filePath);
-            return (defaultName, defaultData);
+            return null;
         }
     }
     // Method to save the string to a file using JSON

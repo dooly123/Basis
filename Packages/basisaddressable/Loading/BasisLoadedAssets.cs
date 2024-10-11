@@ -11,7 +11,7 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         public AssetBundle Bundle;
         public string Url;
         public string localPath;
-        public string Hash;
+        public BasisBundleInformation Hash;
         public bool IsBundleLoaded;
     }
 }

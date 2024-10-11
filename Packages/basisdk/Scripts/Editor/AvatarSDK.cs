@@ -167,10 +167,13 @@ public partial class BasisAvatarSDKInspector : Editor
 
         TextField AvatarNameField = uiElementsRoot.Q<TextField>(AvatarPathConstants.AvatarName);
         TextField AvatarDescriptionField = uiElementsRoot.Q<TextField>(AvatarPathConstants.AvatarDescription);
+
+        TextField AvatarpasswordField = uiElementsRoot.Q<TextField>(AvatarPathConstants.Avatarpassword);
+
         ObjectField AvatarIconField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.AvatarIcon);
 
         animatorField.allowSceneObjects = true;
-        faceBlinkMeshField.allowSceneObjects = true; 
+        faceBlinkMeshField.allowSceneObjects = true;
         faceVisemeMeshField.allowSceneObjects = true;
         AvatarIconField.allowSceneObjects = true;
 
@@ -184,6 +187,7 @@ public partial class BasisAvatarSDKInspector : Editor
 
         AvatarNameField.RegisterCallback<ChangeEvent<string>>(AvatarName);
         AvatarDescriptionField.RegisterCallback<ChangeEvent<string>>(AvatarDescription);
+        AvatarpasswordField.RegisterCallback<ChangeEvent<string>>(AvatarPassword);
 
         AvatarIconField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(OnAssignTexture2D);
 
@@ -214,6 +218,11 @@ public partial class BasisAvatarSDKInspector : Editor
     {
         Texture = (Texture2D)Texture2D.newValue;
     }
+    public string Password;
+    public void AvatarPassword(ChangeEvent<string> evt)
+    {
+        Password = evt.newValue;
+    }
     public void AvatarDescription(ChangeEvent<string> evt)
     {
         Avatar.BasisBundleDescription.AssetBundleDescription = evt.newValue;
@@ -228,19 +237,34 @@ public partial class BasisAvatarSDKInspector : Editor
     }
     private void EventCallbackAvatarBundle()
     {
-        BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
+        if (string.IsNullOrEmpty(Password))
+        {
+            Debug.LogError("IsNullOrEmpty " + Password);
 
-        if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
-        {   
-            BasisBundleInformation basisBundleInformation = new BasisBundleInformation
-            {
-                BasisBundleDescription = basisContentBase.BasisBundleDescription
-            };
-            BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject,basisBundleInformation, "Test");
         }
         else
         {
-            Debug.LogError("Missing the Avatar");
+            if (Password.Length < 5)
+            {
+                Debug.LogError("Password needs to be longer then 5 " + Password);
+            }
+            else
+            {
+                BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
+
+                if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
+                {
+                    BasisBundleInformation basisBundleInformation = new BasisBundleInformation
+                    {
+                        BasisBundleDescription = basisContentBase.BasisBundleDescription
+                    };
+                    BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, basisBundleInformation, Password);
+                }
+                else
+                {
+                    Debug.LogError("Missing the Avatar");
+                }
+            }
         }
     }
 }

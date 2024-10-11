@@ -32,14 +32,16 @@ public static class AssetBundleBuilder
                 basisBundleInformation.Add(Output);
 
                 // Encrypt the bundle asynchronously
-                await EncryptBundle(Password, actualFilePath, settings, manifest);
+               string EncryptedFilePath = await EncryptBundle(Password, actualFilePath, settings, manifest);
 
                 // Delete the bundle file if it exists
                 if (File.Exists(actualFilePath))
                 {
                     File.Delete(actualFilePath);
                 }
-                OpenRelativePath(actualFilePath);
+              string Pathout =  Path.GetDirectoryName(actualFilePath);
+
+                OpenRelativePath(Pathout);
             }
             // Find and delete all .manifest files in the AssetBundle directory
             string[] manifestFiles = Directory.GetFiles(settings.AssetBundleDirectory, "*.manifest");
@@ -91,7 +93,7 @@ public static class AssetBundleBuilder
     }
 
     // Example usage to convert relative paths like './AssetBundles/...'
-    public static void OpenRelativePath(string relativePath)
+    public static string OpenRelativePath(string relativePath)
     {
         // Get the root path of the project (up to the Assets folder)
         string projectRoot = Application.dataPath.Replace("/Assets", "");
@@ -107,6 +109,7 @@ public static class AssetBundleBuilder
 
         // Open the folder or file in explorer
         OpenFolderInExplorer(fullPath);
+        return fullPath;
     }
     public struct InformationHash
     {
@@ -114,7 +117,7 @@ public static class AssetBundleBuilder
         public Hash128 bundleHash;
     }
     // Method to encrypt a file using a password
-    public static async Task EncryptBundle(string password, string actualFilePath, BasisAssetBundleObject buildSettings, AssetBundleManifest assetBundleManifest)
+    public static async Task<string> EncryptBundle(string password, string actualFilePath, BasisAssetBundleObject buildSettings, AssetBundleManifest assetBundleManifest)
     {
         System.Diagnostics.Stopwatch encryptionTimer = System.Diagnostics.Stopwatch.StartNew();
 
@@ -123,7 +126,7 @@ public static class AssetBundleBuilder
         if (bundles.Length == 0)
         {
             Debug.LogError("No asset bundles found in manifest.");
-            return;
+            return string.Empty;
         }
 
         // Reuse a single buffer for encryption to reduce memory pressure
@@ -142,6 +145,7 @@ public static class AssetBundleBuilder
 
         encryptionTimer.Stop();
         Debug.Log("Encryption took " + encryptionTimer.ElapsedMilliseconds + " ms for " + extendedFilePath);
+        return extendedFilePath;
     }
     public static string SetAssetBundleName(string assetPath, string uniqueID, BasisAssetBundleObject settings)
     {
