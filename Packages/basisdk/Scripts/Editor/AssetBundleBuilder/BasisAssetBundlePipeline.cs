@@ -20,7 +20,7 @@ public static class BasisAssetBundlePipeline
     public static AfterBuildHandler OnAfterBuildScene;
     public static BuildErrorHandler OnBuildErrorScene;
 
-    public static void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject settings,ref BasisBundleInformation BasisBundleInformation)
+    public static async void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
     {
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
         TemporaryStorageHandler.EnsureDirectoryExists(settings.AssetBundleDirectory);
@@ -41,7 +41,7 @@ public static class BasisAssetBundlePipeline
             string prefabPath = TemporaryStorageHandler.SavePrefabToTemporaryStorage(prefab, settings, ref wasModified, out string uniqueID);
             string assetBundleName = AssetBundleBuilder.SetAssetBundleName(prefabPath, uniqueID, settings);
 
-            AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName,ref BasisBundleInformation, nameof(GameObject));
+           await AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, BasisBundleInformation, nameof(GameObject), Password);
             AssetBundleBuilder.ResetAssetBundleName(prefabPath);
             TemporaryStorageHandler.ClearTemporaryStorage(settings.TemporaryStorage);
             AssetDatabase.Refresh();
@@ -54,10 +54,12 @@ public static class BasisAssetBundlePipeline
             // Handle the build error
             OnBuildErrorPrefab?.Invoke(ex, prefab, wasModified, settings.TemporaryStorage);
             BasisBundleErrorHandler.HandleBuildError(ex, prefab, wasModified, settings.TemporaryStorage);
+            EditorUtility.DisplayDialog("Failed To Build", "please check the console for the full issue, " + ex, "will do");
         }
+        EditorUtility.DisplayDialog("Completed Build", "successfully built asset bundles for assets, Will be found in ./AssetBundles", "ok");
     }
 
-    public static void BuildAssetBundle(Scene scene, BasisAssetBundleObject settings,ref BasisBundleInformation BasisBundleInformation)
+    public static async void BuildAssetBundle(Scene scene, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
     {
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
         TemporaryStorageHandler.EnsureDirectoryExists(settings.AssetBundleDirectory);
@@ -78,7 +80,7 @@ public static class BasisAssetBundlePipeline
             tempScenePath = TemporaryStorageHandler.SaveSceneToTemporaryStorage(scene, settings, out string uniqueID);
             string assetBundleName = AssetBundleBuilder.SetAssetBundleName(tempScenePath, uniqueID, settings);
 
-            AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, ref BasisBundleInformation,nameof(Scene));
+           await AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, BasisBundleInformation, nameof(Scene), Password);
             TemporaryStorageHandler.ClearTemporaryStorage(tempScenePath);
 
             // Invoke the delegate after building the asset bundle

@@ -24,7 +24,7 @@ public class BasisBuildAssetBundleMenu
             {
                 BasisBundleDescription = basisContentBase.BasisBundleDescription
             };
-            BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, ref basisBundleInformation);
+            BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, basisBundleInformation,"Test");
         }
         else
         {
@@ -68,7 +68,7 @@ public class BasisBuildAssetBundleMenu
                 {
                     BasisBundleDescription = basisContentBase.BasisBundleDescription
                 };
-                BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, ref basisBundleInformation);
+                BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject,basisBundleInformation, "Test");
             }
             else
             {
@@ -88,7 +88,7 @@ public class BasisBuildAssetBundleMenu
             {
                 BasisBundleDescription = basisContentBase.BasisBundleDescription
             };
-            BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject, ref basisBundleInformation);
+            BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject, basisBundleInformation, "Test");
         }
         else
         {

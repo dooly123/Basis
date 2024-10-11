@@ -7,9 +7,12 @@ public class BasisAssetBundleObject : ScriptableObject
     public string TemporaryStorage = "Packages/com.basis.basisdk/TemporaryStorage";
     public string BundleExtension = ".bundle";
     public string hashExtension = ".hash";
+    public string BasisMetaExtension = ".BasisMeta";
+    public string BasisBundleEncyptedExtension = ".BasisEncyptedBundle";
+    public string BasisMetaEncyptedExtension = ".BasisEncyptedMeta";
     public bool useCompression = true;
     public bool GenerateImage = true;
     public BuildTarget BuildTarget = BuildTarget.StandaloneWindows;
     public BuildAssetBundleOptions BuildAssetBundleOptions;
-    public string AssetBundleDirectory = "Assets/AssetBundles";
+    public string AssetBundleDirectory = "./AssetBundles";
 }

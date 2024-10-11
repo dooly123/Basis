@@ -231,12 +231,12 @@ public partial class BasisAvatarSDKInspector : Editor
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
 
         if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
-        {
+        {   
             BasisBundleInformation basisBundleInformation = new BasisBundleInformation
             {
                 BasisBundleDescription = basisContentBase.BasisBundleDescription
             };
-            BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, ref basisBundleInformation);
+            BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject,basisBundleInformation, "Test");
         }
         else
         {
