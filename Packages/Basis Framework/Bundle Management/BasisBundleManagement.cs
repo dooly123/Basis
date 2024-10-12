@@ -20,6 +20,10 @@ public static class BasisBundleManagement
         }
         return false;
     }
+    public static void LoadAllOnDisc()
+    {
+
+    }
     public static async Task DownloadMetaToDisc(BasisLoadedBundle BasisLoadedBundle, ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         string metaUrl = BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;

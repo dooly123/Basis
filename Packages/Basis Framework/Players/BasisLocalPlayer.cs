@@ -122,9 +122,9 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
         }
-        public async Task CreateAvatar(string AddressableID,byte mode, BasisBundleInformation BasisBundleInformationsh)
+        public async Task CreateAvatar(string AddressableID, byte mode, BasisBundleInformation BasisBundleInformation)
         {
-            await BasisAvatarFactory.LoadAvatar(this, AddressableID, mode, BasisBundleInformationsh);
+            await BasisAvatarFactory.LoadAvatar(this, AddressableID, mode, BasisBundleInformation);
             BasisDataStore.SaveAvatar(AddressableID, mode, LoadFileNameAndExtension);
             OnLocalAvatarChanged?.Invoke();
         }

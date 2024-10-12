@@ -29,7 +29,9 @@ namespace Basis.Scripts.UI.UI_Panels
         [System.Serializable]
         public struct AvatarLoadRequest
         {
-            public string AvatarAddress;
+            public string AvatarBundleAddress;
+            public string AvatarMetaAddress;
+            public string UnlockPassword;
             //LoadModeNetworkDownloadable = 0; LoadModeLocal = 1;
             public byte IsLocalLoad;
         }
@@ -59,10 +61,10 @@ namespace Basis.Scripts.UI.UI_Panels
             int AvatarUrlsCount = BasisUIAvatarRequest.LocallyStoredAvatarUrls.Count;
             for (int Index = 0; Index < AvatarUrlsCount; Index++)
             {
-                string Url = BasisUIAvatarRequest.LocallyStoredAvatarUrls[Index];
+                string AvatarBundleAddress = BasisUIAvatarRequest.LocallyStoredAvatarUrls[Index];
                 AvatarLoadRequest AvatarLoadRequest = new AvatarLoadRequest
                 {
-                    AvatarAddress = Url,
+                     AvatarBundleAddress = AvatarBundleAddress,
                     IsLocalLoad = 0
                 };
                 AvatarUrlsRuntime.Add(AvatarLoadRequest);

@@ -1,5 +1,6 @@
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using BasisSerializer.OdinSerializer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
@@ -80,9 +81,10 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
+                byte[] CompressedString = SerializationUtility.SerializeValue<string>(NetworkedPlayer.Player.AvatarUrl, DataFormat.Binary);
                 ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
-                    avatarID = NetworkedPlayer.Player.AvatarUrl,
+                     byteArray = NetworkedPlayer.Player.AvatarUrl,
                     loadMode = NetworkedPlayer.Player.AvatarLoadMode,
                 };
                 writer.Write(ClientAvatarChangeMessage);
