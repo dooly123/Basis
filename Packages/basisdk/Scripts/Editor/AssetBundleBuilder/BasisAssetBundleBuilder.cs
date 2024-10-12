@@ -130,7 +130,7 @@ public static class AssetBundleBuilder
         }
 
         // Reuse a single buffer for encryption to reduce memory pressure
-        byte[] buffer = new byte[BasisBundleEncryption.BufferSize];
+        byte[] buffer = new byte[BasisEncryptionWrapper.BufferSize];
 
         string extendedFilePath = Path.ChangeExtension(actualFilePath, buildSettings.BasisBundleEncyptedExtension);
 
@@ -141,7 +141,7 @@ public static class AssetBundleBuilder
         }
 
         Debug.Log("Encrypting " + actualFilePath);
-        await BasisBundleEncryption.EncryptFileAsync(actualFilePath, extendedFilePath, password, buffer);
+        await BasisEncryptionWrapper.EncryptFileAsync(actualFilePath, extendedFilePath, password, buffer);
 
         encryptionTimer.Stop();
         Debug.Log("Encryption took " + encryptionTimer.ElapsedMilliseconds + " ms for " + extendedFilePath);

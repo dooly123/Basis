@@ -29,12 +29,6 @@ namespace Basis.Scripts.Addressable_Driver.Loading
             Uri uri = new Uri(url);
             return Path.GetFileName(uri.LocalPath);
         }
-        public static string GetFileNameFromUrlWithoutExtension(string url)
-        {
-            Uri uri = new Uri(url);
-            string fileName = Path.GetFileName(uri.LocalPath); // Get the file name with extension
-            return Path.GetFileNameWithoutExtension(fileName); // Remove the extension and return
-        }
         private IEnumerator LoopCheckTask()
         {
             while (true)

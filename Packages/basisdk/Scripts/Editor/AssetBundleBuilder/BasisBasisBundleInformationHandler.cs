@@ -40,8 +40,8 @@ public static class BasisBasisBundleInformationHandler
             File.WriteAllText(filePath, json);
             Debug.Log($"BasisBundleInformation saved to {filePath}");
             string EncryptedPath = Path.ChangeExtension(filePath, BuildSettings.BasisMetaEncyptedExtension);
-            byte[] buffer = new byte[BasisBundleEncryption.BufferSize];
-            await BasisBundleEncryption.EncryptFileAsync(filePath, EncryptedPath, password, buffer);
+            byte[] buffer = new byte[BasisEncryptionWrapper.BufferSize];
+            await BasisEncryptionWrapper.EncryptFileAsync(filePath, EncryptedPath, password, buffer);
 
             // Delete the bundle file if it exists
             if (File.Exists(filePath))

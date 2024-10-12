@@ -34,7 +34,7 @@ namespace Basis.Scripts.Drivers
         {
             SetIfPlayerShouldSpawnOnSceneLoad(SpawnPlayerOnSceneLoad);
             Debug.Log("Loading Scene " + SceneToLoadUrl);
-            await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoadUrl, HashUrl, BasisStorageManagement.WorldDirectory, progressCallback);
+         //   await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoadUrl, HashUrl, BasisStorageManagement.WorldDirectory, progressCallback);
             Debug.Log("Loaded Scene " + SceneToLoadUrl);
         }
         /// <summary>

@@ -15,7 +15,7 @@ namespace Basis.Scripts.Avatar
     public static class BasisAvatarFactory
     {
         public const string LoadingAvatar = "LoadingAvatar";
-        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, byte Mode, BasisBundleInformation hash)
+        public static async Task LoadAvatar(BasisLocalPlayer Player, string AvatarAddress, byte Mode, BasisBundleInformation BasisBundleInformation)
         {
             if (string.IsNullOrEmpty(AvatarAddress))
             {
@@ -34,7 +34,7 @@ namespace Basis.Scripts.Avatar
                 {
                     case 0://download
                         Debug.Log("Requested Avatar was a AssetBundle Avatar " + AvatarAddress);
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
                         break;
                     case 1://localload
                         Debug.Log("Requested Avatar was a Addressable Avatar " + AvatarAddress);
@@ -53,7 +53,7 @@ namespace Basis.Scripts.Avatar
                         break;
                     default:
                         Debug.Log("Using Default, this means index was out of acceptable range! " + AvatarAddress);
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, hash, Player);
+                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
                         break;
                 }
                 Player.AvatarUrl = AvatarAddress;
@@ -118,8 +118,8 @@ namespace Basis.Scripts.Avatar
 
         private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, BasisBundleInformation hash, BasisPlayer Player)
         {
-            string FileName = AddressableManagement.GetFileNameFromUrlWithoutExtension(AvatarAddress);
-            return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, hash, FileName, BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad);
+            return null;
+            // return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, hash, FileName, BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad);
         }
 
         private static void InitializePlayerAvatar(BasisPlayer Player, GameObject Output)

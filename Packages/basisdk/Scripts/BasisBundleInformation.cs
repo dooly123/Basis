@@ -1,6 +1,7 @@
 [System.Serializable]
 public struct BasisBundleInformation
 {
+    public bool HasError;
     public BasisBundleDescription BasisBundleDescription;
     public BasisBundleGenerated BasisBundleGenerated;
 }

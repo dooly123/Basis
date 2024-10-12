@@ -10,53 +10,44 @@ namespace Basis.Scripts.Common
     {
         // Method to save the avatar(string and byte) to a file using JSON
         public static void SaveAvatar(string avatarName, byte avatarData, string fileNameAndExtension)
-    {
-        string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
-        string json = JsonUtility.ToJson(new BasisSavedAvatar(avatarName, avatarData));
-        File.WriteAllText(filePath, json);
-        Debug.Log("Avatar saved to " + filePath);
-    }
+        {
+            string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
+            string json = JsonUtility.ToJson(new BasisSavedAvatar(avatarName, avatarData));
+            File.WriteAllText(filePath, json);
+            Debug.Log("Avatar saved to " + filePath);
+        }
         [System.Serializable]
         public class BasisSavedAvatar
         {
-            public string Name;
-            public byte Data;
-
+            public string UniqueID;//this is associated with a ID on Disc
             public BasisSavedAvatar(string name, byte data)
             {
-                Name = name;
-                Data = data;
-            }
-
-            public (string, byte) ToValue()
-            {
-                return (Name, Data);
+                UniqueID = name;
             }
         }
         // Method to load the avatar (string and byte) from a file using JSON
         public static BasisSavedAvatar LoadAvatar(string fileNameAndExtension, string defaultName, byte defaultData)
-    {
-        string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
-        if (File.Exists(filePath))
         {
-            string json = File.ReadAllText(filePath);
-            BasisSavedAvatar avatarWrapper = JsonUtility.FromJson<BasisSavedAvatar>(json);
-            (string avatarName, byte avatarData) = avatarWrapper.ToValue();
-            if (string.IsNullOrEmpty(avatarName))
+            string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
+            if (File.Exists(filePath))
             {
-                avatarName = defaultName;
+                string json = File.ReadAllText(filePath);
+                BasisSavedAvatar avatarWrapper = JsonUtility.FromJson<BasisSavedAvatar>(json);
+                if (string.IsNullOrEmpty(avatarWrapper.UniqueID))
+                {
+                    avatarWrapper.UniqueID = defaultName;
+                }
+                Debug.Log("Avatar loaded from " + filePath);
+                return avatarWrapper;
             }
-            Debug.Log("Avatar loaded from " + filePath);
-            return avatarWrapper;
+            else
+            {
+                Debug.LogWarning("File not found at " + filePath);
+                return null;
+            }
         }
-        else
-        {
-            Debug.LogWarning("File not found at " + filePath);
-            return null;
-        }
-    }
-    // Method to save the string to a file using JSON
-    public static void SaveString(string stringContents, string fileNameAndExtension)
+        // Method to save the string to a file using JSON
+        public static void SaveString(string stringContents, string fileNameAndExtension)
         {
             string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
             string json = JsonUtility.ToJson(new BasisSavedString(stringContents));
@@ -231,15 +222,19 @@ namespace Basis.Scripts.Common
         {
             public List<string> UrlList;
 
-            public BasisSavedUrlList(List<string> urlList)
+            public BasisSavedUrlList(List<string> BundleURL)
             {
-                UrlList = urlList;
+                UrlList = BundleURL;
             }
 
             public List<string> ToValue()
             {
                 return UrlList;
             }
+        }
+        public struct BasisSavedContent
+        {
+
         }
     }
 }
