@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 public static class BasisBundleManagement
 {
-    public static ConcurrentDictionary<string, BasisLoadedBundle> LoadableBundles = new ConcurrentDictionary<string, BasisLoadedBundle>();
+    public static ConcurrentDictionary<string, BasisLoadableBundle> LoadableBundles = new ConcurrentDictionary<string, BasisLoadableBundle>();
     // Dictionary to track ongoing downloads keyed by MetaURL
     private static ConcurrentDictionary<string, Task<BasisBundleInformation>> OnGoingDownloads = new ConcurrentDictionary<string, Task<BasisBundleInformation>>();
     public static bool FindBundle(BasisBundleInformation BasisBundleInformation)
@@ -24,7 +24,15 @@ public static class BasisBundleManagement
     {
 
     }
-    public static async Task DownloadMetaToDisc(BasisLoadedBundle BasisLoadedBundle, ProgressReport progressCallback, CancellationToken cancellationToken)
+    /// <summary>
+    /// this api is safe to call with the same avatar mulitple times
+    /// its goal is to correctly return the same avatar data for all that request it.
+    /// </summary>
+    /// <param name="BasisLoadedBundle"></param>
+    /// <param name="progressCallback"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<BasisBundleInformation> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         string metaUrl = BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
 
@@ -43,14 +51,14 @@ public static class BasisBundleManagement
         if (bundleInfo.HasError)
         {
             Debug.LogError($"Failed to download and process meta for {metaUrl}");
-            return;
+            return new BasisBundleInformation() { HasError = true };
         }
 
         // Update the LoadableBundles dictionary after download completes
         LoadableBundles.TryAdd(bundleInfo.BasisBundleGenerated.AssetToLoadName, BasisLoadedBundle);
+        return bundleInfo;
     }
-
-    private static async Task<BasisBundleInformation> DownloadAndProcessMeta(BasisLoadedBundle BasisLoadedBundle, ProgressReport progressCallback, CancellationToken cancellationToken)
+    private static async Task<BasisBundleInformation> DownloadAndProcessMeta(BasisLoadableBundle BasisLoadedBundle, ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         try
         {

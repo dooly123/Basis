@@ -2,6 +2,8 @@ using Basis.Scripts.Avatar;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.NamePlate;
+using BasisSerializer.OdinSerializer;
+using System.Threading.Tasks;
 using UnityEngine;
 using static SerializableDarkRift;
 namespace Basis.Scripts.BasisSdk.Players
@@ -14,7 +16,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisBoneControl MouthControl;
         public bool HasEvents = false;
         public bool LockAvatarFromChanging;
-        public async void RemoteInitialize(ClientAvatarChangeMessage CACM, PlayerMetaDataMessage PlayerMetaDataMessage)
+        public async Task RemoteInitialize(ClientAvatarChangeMessage CACM, PlayerMetaDataMessage PlayerMetaDataMessage)
         {
             DisplayName = PlayerMetaDataMessage.playerDisplayName;
             UUID = PlayerMetaDataMessage.playerUUID;
@@ -28,7 +30,20 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             if (Avatar == null)
             {
-                CreateAvatar(CACM.avatarID, CACM.loadMode);
+                AvatarNetworkLoadInformation ALI = SerializationUtility.DeserializeValue<AvatarNetworkLoadInformation>(CACM.byteArray, DataFormat.Binary);
+                BasisLoadableBundle BasisLoadedBundle = new BasisLoadableBundle
+                {
+                    BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle() { BundleURL = ALI.AvatarBundleUrl, MetaURL = ALI.AvatarMetaUrl },
+                    UnlockPassword = ALI.UnlockPassword,
+                    BasisBundleInformation = new BasisBundleInformation(),//self assigned internally
+                     BasisLocalBundleEncypted = new BasisLocalEncyptedBundle(),//self assigned internally
+                    BasisLocalDeEncyptedBundle = new BasisLocalDecyptedBundle(),//self assigned internally
+                    LoadedAssetBundle = null,
+                };
+
+
+                BasisLoadedBundle.BasisBundleInformation =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
+                CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
@@ -48,19 +63,19 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
         }
-        public async void CreateAvatar(string Loader = BasisAvatarFactory.LoadingAvatar,byte NetworkMode = 0)
+        public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle, string Loader = BasisAvatarFactory.LoadingAvatar)
         {
             if (string.IsNullOrEmpty(Loader))
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
-                await BasisAvatarFactory.LoadAvatar(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal, new BasisBundleInformation());
+                await BasisAvatarFactory.LoadAvatarRemote(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeError, BasisAvatarFactory.LoadingAvatar, "N/A", BasisLoadableBundle);
             }
             else
             {
-                Debug.Log("loading avatar from " + Loader + " with net mode " + NetworkMode);
+                Debug.Log("loading avatar from " + Loader + " with net mode " + Mode);
                 if (LockAvatarFromChanging == false)
                 {
-                    await BasisAvatarFactory.LoadAvatar(this, Loader, NetworkMode, new BasisBundleInformation());
+                    await BasisAvatarFactory.LoadAvatarRemote(this, Loader, Mode, BasisLoadableBundle);
                 }
             }
         }

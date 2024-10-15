@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public struct BasisLoadedBundle
+public struct BasisLoadableBundle
 {
     public string UnlockPassword;
     //encrypted state

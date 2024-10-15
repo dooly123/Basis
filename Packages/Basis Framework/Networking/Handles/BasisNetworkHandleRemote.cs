@@ -29,7 +29,7 @@ namespace Basis.Scripts.Networking
         {
             ClientAvatarChangeMessage avatarID = ServerReadyMessage.localReadyMessage.clientAvatarChangeMessage;
 
-            if (!string.IsNullOrEmpty(avatarID.avatarID))
+            if (avatarID.byteArray != null)
             {
                 BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.localReadyMessage.playerMetaDataMessage);
                 BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);

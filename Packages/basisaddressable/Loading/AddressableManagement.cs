@@ -17,8 +17,6 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         public static List<Task> LoadingTasks = new List<Task>();
         public static AddressableManagement Instance;
         public AssetBundleManagement AssetBundleManagement = new AssetBundleManagement();
-        // Delegate to report progress (value between 0 and 100)
-        public delegate void ProgressReport(float progress);
         public void OnEnable()
         {
             Instance = this;

@@ -21,7 +21,7 @@ public static class BasisPlayerFactory
     {
         BasisPlayer Player = await CreatePlayer(LocalPlayerId, InstantiationParameters);
         BasisRemotePlayer CreatedRemotePlayer = (BasisRemotePlayer)Player;
-        CreatedRemotePlayer.RemoteInitialize(AvatarURL, PlayerMetaDataMessage);
+       await CreatedRemotePlayer.RemoteInitialize(AvatarURL, PlayerMetaDataMessage);
         return CreatedRemotePlayer;
     }
     public static async Task<BasisPlayer> CreatePlayer(string PlayerAddressableID, InstantiationParameters InstantiationParameters)
