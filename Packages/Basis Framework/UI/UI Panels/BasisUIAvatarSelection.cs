@@ -79,14 +79,14 @@ namespace Basis.Scripts.UI.UI_Panels
                 // Get the Button component and set its onClick listener
                 if (buttonObject.TryGetComponent<Button>(out Button button))
                 {
-                    string avatarUrl = url.AvatarAddress; // Capture the url in the local variable for the lambda
+                  //here  string avatarUrl = url.AvatarAddress; // Capture the url in the local variable for the lambda
                     button.onClick.AddListener(() => OnButtonPressed(url));
 
                     // Optionally set the button's label to something meaningful, like the URL or a part of it
                     TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
                     if (buttonText != null)
                     {
-                        buttonText.text = Path.GetFileNameWithoutExtension(avatarUrl); // or some other meaningful name
+                     //here  buttonText.text = Path.GetFileNameWithoutExtension(avatarUrl); // or some other meaningful name
                     }
                 }
                 CreatedCopies.Add(buttonObject);
@@ -96,7 +96,7 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             if (BasisLocalPlayer.Instance != null)
             {
-                await BasisLocalPlayer.Instance.CreateAvatar(AvatarLoadRequest.AvatarAddress, AvatarLoadRequest.IsLocalLoad, new BasisBundleInformation());
+              //here  await BasisLocalPlayer.Instance.CreateAvatar(AvatarLoadRequest.AvatarAddress, AvatarLoadRequest.IsLocalLoad, new BasisBundleInformation());
             }
         }
 

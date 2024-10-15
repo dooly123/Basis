@@ -20,13 +20,15 @@ public static class AssetBundleBuilder
             for (int Index = 0; Index < Files.Length; Index++)
             {
                 string FileOutput = Files[Index];
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(FileOutput);
                 Hash128 bundleHash = manifest.GetAssetBundleHash(FileOutput);
                 InformationHash informationHash = new InformationHash
                 {
-                    File = FileOutput,
+                    File = fileNameWithoutExtension,//excludes extension
                     bundleHash = bundleHash
                 };
                 string actualFilePath = Path.Combine(settings.AssetBundleDirectory, informationHash.File);
+                actualFilePath += ".bundle";
                 // Create bundle information and add it to the list
                 BasisBundleInformation Output = await BasisBasisBundleInformationHandler.CreateInformation(settings, BasisBundleInformation, informationHash, Mode, assetBundleName, settings.AssetBundleDirectory, Password);
                 basisBundleInformation.Add(Output);
@@ -116,6 +118,7 @@ public static class AssetBundleBuilder
         public string File;
         public Hash128 bundleHash;
     }
+    private static BasisProgressReport.ProgressReport Report;
     // Method to encrypt a file using a password
     public static async Task<string> EncryptBundle(string password, string actualFilePath, BasisAssetBundleObject buildSettings, AssetBundleManifest assetBundleManifest)
     {
@@ -128,24 +131,21 @@ public static class AssetBundleBuilder
             Debug.LogError("No asset bundles found in manifest.");
             return string.Empty;
         }
-
-        // Reuse a single buffer for encryption to reduce memory pressure
-        byte[] buffer = new byte[BasisEncryptionWrapper.BufferSize];
-
-        string extendedFilePath = Path.ChangeExtension(actualFilePath, buildSettings.BasisBundleEncyptedExtension);
+        string EncryptedPath = Path.ChangeExtension(actualFilePath, buildSettings.BasisBundleEncyptedExtension);
 
         // Delete existing encrypted file if present
-        if (File.Exists(extendedFilePath))
+        if (File.Exists(EncryptedPath))
         {
-            File.Delete(extendedFilePath);
+            File.Delete(EncryptedPath);
         }
-
         Debug.Log("Encrypting " + actualFilePath);
-        await BasisEncryptionWrapper.EncryptFileAsync(actualFilePath, extendedFilePath, password, buffer);
-
+        await BasisEncryptionWrapper.EncryptFileAsync(password, actualFilePath, EncryptedPath, (progress) =>
+        {
+            Debug.Log($"Progress: {progress}%");
+        });
         encryptionTimer.Stop();
-        Debug.Log("Encryption took " + encryptionTimer.ElapsedMilliseconds + " ms for " + extendedFilePath);
-        return extendedFilePath;
+        Debug.Log("Encryption took " + encryptionTimer.ElapsedMilliseconds + " ms for " + EncryptedPath);
+        return EncryptedPath;
     }
     public static string SetAssetBundleName(string assetPath, string uniqueID, BasisAssetBundleObject settings)
     {

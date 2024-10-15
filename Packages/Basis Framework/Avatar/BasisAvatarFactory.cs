@@ -43,7 +43,7 @@ namespace Basis.Scripts.Avatar
                         Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
                         break;
                 }
-                Player.AvatarNetworkLoadInformation = new BasisPlayer.AvatarNetworkLoadInformation() {  AvatarBundleUrl = AvatarAddress, AvatarMetaUrl = AvatarMetaUrl, UnlockPassword = UnlockPassword };
+                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() {  AvatarBundleUrl = AvatarAddress, AvatarMetaUrl = AvatarMetaUrl, UnlockPassword = UnlockPassword };
                 Player.AvatarLoadMode = Mode;
 
                 InitializePlayerAvatar(Player, Output);
@@ -74,17 +74,18 @@ namespace Basis.Scripts.Avatar
                 GameObject Output = null;
                 switch (Mode)
                 {
+                    //here
                     case 0://download
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
+                    //    Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
                         break;
                     case 1://localload
                            //Player.transform.position, Quaternion.identity
                            break;
                     default:
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
+                     //   Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
                         break;
                 }
-                Player.AvatarNetworkLoadInformation = new BasisPlayer.AvatarNetworkLoadInformation() { AvatarBundleUrl = AvatarAddress, AvatarMetaUrl = AvatarMetaUrl, UnlockPassword = UnlockPassword };
+               // Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { AvatarBundleUrl = AvatarAddress, AvatarMetaUrl = AvatarMetaUrl, UnlockPassword = UnlockPassword };
                 Player.AvatarLoadMode = Mode;
 
                InitializePlayerAvatar(Player, Output);
@@ -99,7 +100,8 @@ namespace Basis.Scripts.Avatar
 
         private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, BasisBundleInformation hash, BasisPlayer Player)
         {
-            return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, hash, FileName, BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad);
+            return null;
+        //here    return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, hash, FileName, BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad);
         }
 
         private static void InitializePlayerAvatar(BasisPlayer Player, GameObject Output)
@@ -145,7 +147,7 @@ namespace Basis.Scripts.Avatar
                 {
                  InitializePlayerAvatar(Player, GameObjects[0]);
                 }
-                Player.AvatarNetworkLoadInformation = new BasisPlayer.AvatarNetworkLoadInformation() { AvatarBundleUrl = LoadingAvatar, AvatarMetaUrl = LoadingAvatar, UnlockPassword = "N/A" };
+           //here     Player.AvatarNetworkLoadInformation = new BasisPlayer.AvatarNetworkLoadInformation() { AvatarBundleUrl = LoadingAvatar, AvatarMetaUrl = LoadingAvatar, UnlockPassword = "N/A" };
                 Player.AvatarLoadMode = 1;
                 Player.AvatarSwitched();
 

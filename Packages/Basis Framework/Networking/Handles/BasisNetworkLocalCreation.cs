@@ -30,14 +30,14 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Cant add " + playerID);
             }
 
-          byte[] CompressedString =  SerializationUtility.SerializeValue<string>(BasisLocalPlayer.AvatarUrl, DataFormat.Binary);
+            //new AvatarNetworkLoadInformation() { AvatarBundleUrl = AvatarAddress, AvatarMetaUrl = AvatarMetaUrl, UnlockPassword = UnlockPassword };  byte[] CompressedString =  SerializationUtility.SerializeValue<string>(BasisLocalPlayer.AvatarNetworkLoadInformation., DataFormat.Binary);
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
                 BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = NetworkedPlayer.NetworkSend.LASM;
                 BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
-                     byteArray = CompressedString,
+                   //  byteArray = CompressedString,
                     loadMode = BasisLocalPlayer.AvatarLoadMode,
                 };
                 BasisNetworkManagement.Instance.readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage

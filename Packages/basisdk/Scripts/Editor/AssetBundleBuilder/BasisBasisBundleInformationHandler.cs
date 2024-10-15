@@ -1,3 +1,4 @@
+using BasisSerializer.OdinSerializer;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -22,26 +23,61 @@ public static class BasisBasisBundleInformationHandler
         {
             File.Delete(filePath);
         }
-
+        ValidateBasisBundleInformation(ref BasisBundleInformation);
         // Serialize and save the BasisBundleInformation to disk
         await SaveBasisBundleInformation(BasisBundleInformation, filePath, BuildSettings, Password);
         return BasisBundleInformation;
     }
+    // Function to validate BasisBundleInformation
+    private static void ValidateBasisBundleInformation(ref BasisBundleInformation basisBundleInfo)
+    {
+        basisBundleInfo.HasError = false; // Reset the error flag
 
+        // Check BasisBundleDescription
+        if (string.IsNullOrEmpty(basisBundleInfo.BasisBundleDescription.AssetBundleName))
+        {
+            basisBundleInfo.HasError = true;
+            Debug.LogError("AssetBundleName is not assigned.");
+        }
+        if (string.IsNullOrEmpty(basisBundleInfo.BasisBundleDescription.AssetBundleDescription))
+        {
+            basisBundleInfo.HasError = true;
+            Debug.LogError("AssetBundleDescription is not assigned.");
+        }
+
+        // Check BasisBundleGenerated
+        if (string.IsNullOrEmpty(basisBundleInfo.BasisBundleGenerated.AssetBundleHash))
+        {
+            basisBundleInfo.HasError = true;
+            Debug.LogError("AssetBundleHash is not assigned.");
+        }
+        if (string.IsNullOrEmpty(basisBundleInfo.BasisBundleGenerated.AssetMode))
+        {
+            basisBundleInfo.HasError = true;
+            Debug.LogError("AssetMode is not assigned.");
+        }
+        if (string.IsNullOrEmpty(basisBundleInfo.BasisBundleGenerated.AssetToLoadName))
+        {
+            basisBundleInfo.HasError = true;
+            Debug.LogError("AssetToLoadName is not assigned.");
+        }
+    }
+    private static BasisProgressReport.ProgressReport Report;
     // Function to serialize and save BasisBundleInformation to disk
     private static async Task SaveBasisBundleInformation(BasisBundleInformation basisBundleInfo, string filePath, BasisAssetBundleObject BuildSettings, string password)
     {
-        // Example of serializing the BasisBundleInformation to JSON (you can use other formats if needed)
-        string json = JsonUtility.ToJson(basisBundleInfo, false);
-
+        byte[] Information = SerializationUtility.SerializeValue<BasisBundleInformation>(basisBundleInfo, DataFormat.JSON);
         try
         {
+            Debug.Log("Saving Json " + Information.Length);
             // Write JSON data to the file
-            File.WriteAllText(filePath, json);
+           await File.WriteAllBytesAsync(filePath, Information);
             Debug.Log($"BasisBundleInformation saved to {filePath}");
             string EncryptedPath = Path.ChangeExtension(filePath, BuildSettings.BasisMetaEncyptedExtension);
-            byte[] buffer = new byte[BasisEncryptionWrapper.BufferSize];
-            await BasisEncryptionWrapper.EncryptFileAsync(filePath, EncryptedPath, password, buffer);
+            await BasisEncryptionWrapper.EncryptFileAsync(password,filePath, EncryptedPath, (progress) =>
+            {
+                Debug.Log($"Progress: {progress}%");
+            });
 
             // Delete the bundle file if it exists
             if (File.Exists(filePath))

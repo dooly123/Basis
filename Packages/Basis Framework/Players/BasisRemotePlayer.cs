@@ -36,14 +36,14 @@ namespace Basis.Scripts.BasisSdk.Players
                     BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle() { BundleURL = ALI.AvatarBundleUrl, MetaURL = ALI.AvatarMetaUrl },
                     UnlockPassword = ALI.UnlockPassword,
                     BasisBundleInformation = new BasisBundleInformation(),//self assigned internally
-                     BasisLocalBundleEncypted = new BasisLocalEncyptedBundle(),//self assigned internally
-                    BasisLocalDeEncyptedBundle = new BasisLocalDecyptedBundle(),//self assigned internally
+                     BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),//self assigned internally
+                    BasisStoredDecyptedBundle = new BasisStoredDecyptedBundle(),//self assigned internally
                     LoadedAssetBundle = null,
                 };
 
 
                 BasisLoadedBundle.BasisBundleInformation =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
-                CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
+             //here  CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
@@ -68,14 +68,14 @@ namespace Basis.Scripts.BasisSdk.Players
             if (string.IsNullOrEmpty(Loader))
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
-                await BasisAvatarFactory.LoadAvatarRemote(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeError, BasisAvatarFactory.LoadingAvatar, "N/A", BasisLoadableBundle);
+              //here  await BasisAvatarFactory.LoadAvatarRemote(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeError, BasisAvatarFactory.LoadingAvatar, "N/A", BasisLoadableBundle);
             }
             else
             {
                 Debug.Log("loading avatar from " + Loader + " with net mode " + Mode);
                 if (LockAvatarFromChanging == false)
                 {
-                    await BasisAvatarFactory.LoadAvatarRemote(this, Loader, Mode, BasisLoadableBundle);
+                   //here await BasisAvatarFactory.LoadAvatarRemote(this, Loader, Mode, BasisLoadableBundle);
                 }
             }
         }

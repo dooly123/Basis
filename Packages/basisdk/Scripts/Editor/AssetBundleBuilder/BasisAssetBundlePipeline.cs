@@ -19,12 +19,40 @@ public static class BasisAssetBundlePipeline
     public static BeforeBuildSceneHandler OnBeforeBuildScene;
     public static AfterBuildHandler OnAfterBuildScene;
     public static BuildErrorHandler OnBuildErrorScene;
+    public static void ClearOutExistingSets()
+    {
+        // Get all asset paths in the project
+        string[] allAssetPaths = AssetDatabase.GetAllAssetPaths();
 
+        // Loop through each asset path
+        foreach (string assetPath in allAssetPaths)
+        {
+            // Get the AssetImporter for the asset at this path
+            AssetImporter importer = AssetImporter.GetAtPath(assetPath);
+
+            if (importer != null && !string.IsNullOrEmpty(importer.assetBundleName))
+            {
+                // Clear the assetBundleName for the asset
+                importer.assetBundleName = string.Empty;
+
+                // Apply the modified asset importer settings
+                importer.SaveAndReimport();
+
+                Debug.Log("Cleared AssetBundle for asset: " + assetPath);
+            }
+        }
+
+        // After clearing all AssetBundle names, optionally refresh the AssetDatabase
+        AssetDatabase.RemoveUnusedAssetBundleNames();
+        AssetDatabase.Refresh();
+
+        Debug.Log("All AssetBundle names cleared from Importer settings.");
+    }
     public static async void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
     {
+        ClearOutExistingSets();
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
         TemporaryStorageHandler.EnsureDirectoryExists(settings.AssetBundleDirectory);
-
         if (!BasisValidationHandler.IsValidPrefab(prefab))
         {
             Debug.LogError("Invalid prefab. AssetBundle build aborted.");
@@ -61,6 +89,7 @@ public static class BasisAssetBundlePipeline
 
     public static async void BuildAssetBundle(Scene scene, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
     {
+        ClearOutExistingSets();
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
         TemporaryStorageHandler.EnsureDirectoryExists(settings.AssetBundleDirectory);
 

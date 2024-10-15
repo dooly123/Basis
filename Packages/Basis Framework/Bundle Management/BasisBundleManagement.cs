@@ -1,48 +1,46 @@
+using BasisSerializer.OdinSerializer;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
-using static BasisProgressReport;
+
 public static class BasisBundleManagement
 {
     public static ConcurrentDictionary<string, BasisLoadableBundle> LoadableBundles = new ConcurrentDictionary<string, BasisLoadableBundle>();
+
     // Dictionary to track ongoing downloads keyed by MetaURL
     private static ConcurrentDictionary<string, Task<BasisBundleInformation>> OnGoingDownloads = new ConcurrentDictionary<string, Task<BasisBundleInformation>>();
+
     public static bool FindBundle(BasisBundleInformation BasisBundleInformation)
     {
+        Debug.Log($"Checking if bundle exists for {BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}");
         if (LoadableBundles.ContainsKey(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName))
         {
+            Debug.Log("Bundle found in LoadableBundles.");
             return true;
         }
+        Debug.Log("Bundle not found in LoadableBundles.");
         return false;
     }
-    public static void LoadAllOnDisc()
-    {
 
-    }
-    /// <summary>
-    /// this api is safe to call with the same avatar mulitple times
-    /// its goal is to correctly return the same avatar data for all that request it.
-    /// </summary>
-    /// <param name="BasisLoadedBundle"></param>
-    /// <param name="progressCallback"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public static async Task<BasisBundleInformation> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, ProgressReport progressCallback, CancellationToken cancellationToken)
+    public static async Task<BasisBundleInformation> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         string metaUrl = BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
+        Debug.Log($"Starting download process for {metaUrl}");
 
         // Check if there's an ongoing or completed download for this MetaURL
         if (!OnGoingDownloads.TryGetValue(metaUrl, out var downloadTask))
         {
-            // No ongoing download, so start a new one
+            Debug.Log($"No ongoing download for {metaUrl}, starting a new one.");
             downloadTask = DownloadAndProcessMeta(BasisLoadedBundle, progressCallback, cancellationToken);
             OnGoingDownloads.TryAdd(metaUrl, downloadTask);
+        }
+        else
+        {
+            Debug.Log($"Found an ongoing download for {metaUrl}, awaiting completion.");
         }
 
         // Await the task (this will wait for the first download if it's still in progress)
@@ -52,79 +50,126 @@ public static class BasisBundleManagement
         if (bundleInfo.HasError)
         {
             Debug.LogError($"Failed to download and process meta for {metaUrl}");
-            return new BasisBundleInformation() { HasError = true };
+            return bundleInfo;
         }
 
         // Update the LoadableBundles dictionary after download completes
         LoadableBundles.TryAdd(bundleInfo.BasisBundleGenerated.AssetToLoadName, BasisLoadedBundle);
+        Debug.Log($"Download and processing for {metaUrl} completed successfully.");
         return bundleInfo;
     }
-    private static async Task<BasisBundleInformation> DownloadAndProcessMeta(BasisLoadableBundle BasisLoadedBundle, ProgressReport progressCallback, CancellationToken cancellationToken)
+
+    private static async Task<BasisBundleInformation> DownloadAndProcessMeta(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         try
         {
+            Debug.Log($"Downloading meta file for {BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL}");
+            byte[] LoadedLocalMetaData;
             // Step 1: Download the meta file
-            byte[] LoadedLocalMetaData = await DownloadFile(BasisLoadedBundle.BasisLocalBundleEncypted.LocalMetaFile, progressCallback, cancellationToken);
+            if (BasisLoadedBundle.BasisRemoteBundleEncypted.IsLocal == false)
+            {
+                LoadedLocalMetaData = await DownloadFile(BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL, progressCallback, cancellationToken);
+            }
+            else
+            {
+                LoadedLocalMetaData = await LoadLocalFile(BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL, progressCallback, cancellationToken);
+            }
             if (LoadedLocalMetaData == null)
             {
-                Debug.LogError("Unable to download meta for " + BasisLoadedBundle.BasisLocalBundleEncypted.LocalMetaFile);
-                return new BasisBundleInformation() {HasError = true};
-            }
-
-            // Step 2: Decrypt the meta file
-            byte[] loadedlocalmeta = await BasisEncryptionWrapper.DecryptBytesAsync(LoadedLocalMetaData, BasisLoadedBundle.UnlockPassword);
-            if (loadedlocalmeta == null)
-            {
-                Debug.LogError("Unable to load meta for " + BasisLoadedBundle.BasisLocalBundleEncypted.LocalMetaFile);
+                Debug.LogError($"Unable to download meta for {BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL}");
                 return new BasisBundleInformation() { HasError = true };
             }
+            Debug.Log($"Successfully downloaded meta file for {BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL}" + " Size " + LoadedLocalMetaData.Length);
 
+            // Step 2: Decrypt the meta file
+            Debug.Log("Decrypting meta file...");
+            byte[] loadedlocalmeta = await BasisEncryptionWrapper.DecryptDataAsync(LoadedLocalMetaData, BasisLoadedBundle.UnlockPassword);
+            if (loadedlocalmeta == null)
+            {
+                Debug.LogError($"Unable to decrypt meta for {BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL}");
+                return new BasisBundleInformation() { HasError = true };
+            }
             // Step 3: Convert the decrypted meta to a BasisBundleInformation object
+            Debug.Log("Converting decrypted meta file to BasisBundleInformation...");
             BasisBundleInformation BasisBundleInformation = ConvertBytesToJson(loadedlocalmeta);
 
             // Step 4: Download the bundle file
-            byte[] LoadedBundleData = await DownloadFile(BasisLoadedBundle.BasisLocalBundleEncypted.LocalBundleFile, progressCallback, cancellationToken);
+            Debug.Log($"Downloading bundle file from {BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL}");
+
+            byte[] LoadedBundleData;
+            if (BasisLoadedBundle.BasisRemoteBundleEncypted.IsLocal == false)
+            {
+                LoadedBundleData = await DownloadFile(BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL, progressCallback, cancellationToken);
+            }
+            else
+            {
+                LoadedBundleData = await LoadLocalFile(BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL, progressCallback, cancellationToken);
+            }
+            if (LoadedBundleData == null)
+            {
+                Debug.LogError($"Unable to download bundle file for {BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL}");
+                return new BasisBundleInformation() { HasError = true };
+            }
+            Debug.Log($"Successfully downloaded bundle file for {BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL}");
 
             // Step 5: Write meta and bundle to disk
-            string FilePathMeta = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".DecryptedMetaBasis", "/AssetBundles");
-            string FilePathBundle = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".EncyptedBundleBasis", "/AssetBundles");
+            Debug.Log("Writing meta and bundle files to disk...");
+
+            string FilePathMeta = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".DecryptedMetaBasis", "AssetBundles");
+            string FilePathBundle = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".EncryptedBundleBasis", "AssetBundles");
 
             await WriteToFileAsync(FilePathMeta, loadedlocalmeta, progressCallback, cancellationToken);
             await WriteToFileAsync(FilePathBundle, LoadedBundleData, progressCallback, cancellationToken);
 
-            // Return the processed bundle information
+            Debug.Log("Meta and bundle files written to disk successfully.");
             return BasisBundleInformation;
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error during download and process of meta: {ex.Message}");
-            return new BasisBundleInformation() { HasError = true };
+            Debug.LogError($"Error during download and processing of meta: {ex.Message}");
         }
+        return new BasisBundleInformation() { HasError = true };
     }
 
-    public static string GenerateFolderPath(string FileName, string SubFolder)
+    public static string GenerateFolderPath(string fileName, string subFolder)
     {
-        string folderPath = Path.Combine(Application.persistentDataPath, SubFolder);
-        if (Directory.Exists(folderPath) == false)
+        Debug.Log($"Generating folder path for {fileName} in subfolder {subFolder}");
+
+        // Create the full folder path
+        string folderPath = Path.Combine(Application.persistentDataPath, subFolder);
+
+        // Check if the directory exists, and create it if it doesn't
+        if (!Directory.Exists(folderPath))
         {
+            Debug.Log($"Directory {folderPath} does not exist. Creating directory.");
             Directory.CreateDirectory(folderPath);
         }
-        string localPath = Path.Combine(folderPath, FileName);
+
+        // Create the full file path
+        string localPath = Path.Combine(folderPath, fileName);
+        Debug.Log($"Generated folder path: {localPath}");
+
+        // Return the local path
         return localPath;
     }
 
     public static BasisBundleInformation ConvertBytesToJson(byte[] loadedlocalmeta)
     {
-        // Convert the byte array to a JSON string (assuming UTF-8 encoding)
-        string jsonString = Encoding.UTF8.GetString(loadedlocalmeta);
+        if (loadedlocalmeta == null || loadedlocalmeta.Length == 0)
+        {
+            Debug.LogError($"Data for {nameof(BasisBundleInformation)} is empty or null.");
+            return new BasisBundleInformation() { HasError = true };
+        }
 
-        // Deserialize the JSON string into a BasisBundleInformation object
-        BasisBundleInformation bundleInfo = JsonUtility.FromJson<BasisBundleInformation>(jsonString);
-        return bundleInfo;
+        // Convert the byte array to a JSON string (assuming UTF-8 encoding)
+        Debug.Log($"Converting byte array to JSON string...");
+        BasisBundleInformation Information = SerializationUtility.DeserializeValue<BasisBundleInformation>(loadedlocalmeta, DataFormat.JSON);
+        return Information;
     }
 
-    public static async Task<byte[]> DownloadFile(string url, ProgressReport progressCallback, CancellationToken cancellationToken = default)
+    public static async Task<byte[]> DownloadFile(string url, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken = default)
     {
+        Debug.Log($"Starting file download from {url}");
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
             var asyncOperation = request.SendWebRequest();
@@ -147,25 +192,56 @@ public static class BasisBundleManagement
             // Handle potential download errors
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Failed to download file: {request.error} for url {url}");
+                Debug.LogError($"Failed to download file: {request.error} for URL {url}");
                 return null;
             }
 
-            try
-            {
-                // Asynchronously write the downloaded file to disk
-                byte[] fileData = request.downloadHandler.data;
-                return fileData;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Error saving file to disk: {ex.Message}");
-                return null;
-            }
+            Debug.Log($"Successfully downloaded file from {url}");
+            return request.downloadHandler.data;
         }
     }
+    public static async Task<byte[]> LoadLocalFile(string filePath, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken = default)
+    {
+        Debug.Log($"Starting file load from {filePath}");
 
-    private static async Task WriteToFileAsync(string filePath, byte[] data, ProgressReport progressCallback, CancellationToken cancellationToken)
+        // Check if the file exists
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError($"File does not exist: {filePath}");
+            return null;
+        }
+
+        long fileSize = new FileInfo(filePath).Length;
+        byte[] fileData = new byte[fileSize];
+
+        // Open the file stream for reading
+        using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true))
+        {
+            long totalBytesRead = 0;
+            int bytesRead;
+
+            // Read the file in chunks
+            while ((bytesRead = await fileStream.ReadAsync(fileData, (int)totalBytesRead, (int)(fileSize - totalBytesRead), cancellationToken)) > 0)
+            {
+                totalBytesRead += bytesRead;
+
+                // Check if cancellation is requested
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    Debug.Log("Load cancelled.");
+                    return null;
+                }
+
+                // Report progress (0% to 100%)
+                progressCallback?.Invoke((float)totalBytesRead / fileSize * 100);
+            }
+        }
+
+        Debug.Log($"Successfully loaded file from {filePath}");
+        return fileData;
+    }
+
+    private static async Task WriteToFileAsync(string filePath, byte[] data, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         // Ensure the directory exists
         string directory = Path.GetDirectoryName(filePath);

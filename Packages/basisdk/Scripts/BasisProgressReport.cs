@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public static class BasisProgressReport
 {
     // Delegate to report progress (value between 0 and 100)
