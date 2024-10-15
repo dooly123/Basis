@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using static BasisProgressReport;
 namespace Basis.Scripts.Drivers
 {
     public static class BasisSceneLoadDriver

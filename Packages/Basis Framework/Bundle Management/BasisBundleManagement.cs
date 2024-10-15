@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using static BasisProgressReport;
 public static class BasisBundleManagement
 {
     public static ConcurrentDictionary<string, BasisLoadableBundle> LoadableBundles = new ConcurrentDictionary<string, BasisLoadableBundle>();

@@ -4,6 +4,7 @@ using UnityEngine;
 using Basis.Scripts.Addressable_Driver.Loading;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 using System.Collections.Generic;
+using static BasisProgressReport;
 public static class BasisGameObjectAssetBundleManager
 {
     public static async Task<GameObject> DownloadAndLoadGameObjectAsync(string url, BasisBundleInformation Hash, string assetName, string subfolderName, Vector3 Position, Quaternion Rotation, ProgressReport progressCallback)

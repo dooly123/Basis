@@ -80,6 +80,7 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void SendOutLatestAvatar()
         {
+
             byte[] LAI = SerializationUtility.SerializeValue<AvatarNetworkLoadInformation>(NetworkedPlayer.Player.AvatarNetworkLoadInformation, DataFormat.Binary);
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {

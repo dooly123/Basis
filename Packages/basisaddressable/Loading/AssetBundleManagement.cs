@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using static BasisProgressReport;
 namespace Basis.Scripts.Addressable_Driver.Loading
 {
     public class AssetBundleManagement

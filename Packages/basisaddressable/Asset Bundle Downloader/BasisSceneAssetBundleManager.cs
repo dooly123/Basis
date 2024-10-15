@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using static BasisProgressReport;
 public static class BasisSceneAssetBundleManager
 {
     public static async Task DownloadAndLoadSceneAsync(string url, BasisBundleInformation Hash, string subfolderName, ProgressReport progressCallback)

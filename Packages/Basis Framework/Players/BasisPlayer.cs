@@ -5,6 +5,7 @@ using System;
 using System.Threading;
 using UnityEngine;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using static BasisProgressReport;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public abstract partial class BasisPlayer : MonoBehaviour

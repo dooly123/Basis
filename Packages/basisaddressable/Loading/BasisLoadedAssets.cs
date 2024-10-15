@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using static BasisProgressReport;
 
 namespace Basis.Scripts.Addressable_Driver.Loading
 {
