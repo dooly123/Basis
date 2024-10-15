@@ -116,7 +116,7 @@ public static class BasisBundleManagement
             Debug.Log("Writing meta and bundle files to disk...");
 
             string FilePathMeta = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".DecryptedMetaBasis", "AssetBundles");
-            string FilePathBundle = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".EncryptedBundleBasis", "AssetBundles");
+            string FilePathBundle = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".DecryptedBundleBasis", "AssetBundles");
 
             await WriteToFileAsync(FilePathMeta, loadedlocalmeta, progressCallback, cancellationToken);
             await WriteToFileAsync(FilePathBundle, LoadedBundleData, progressCallback, cancellationToken);
@@ -233,7 +233,7 @@ public static class BasisBundleManagement
                 }
 
                 // Report progress (0% to 100%)
-                progressCallback?.Invoke((float)totalBytesRead / fileSize * 100);
+              //  progressCallback?.Invoke((float)totalBytesRead / fileSize * 100);
             }
         }
 
@@ -249,32 +249,33 @@ public static class BasisBundleManagement
         {
             Directory.CreateDirectory(directory);
         }
-
-        // Write the file data asynchronously
-        using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+        // Write the file data asynchronously on a separate thread
+        await Task.Run(async () =>
         {
-            int totalBytes = data.Length;
-            int bytesWritten = 0;
-
-            // Write data in chunks for better progress reporting
-            const int chunkSize = 8192; // 8KB per chunk
-            while (bytesWritten < totalBytes)
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
             {
-                // Check for cancellation
-                if (cancellationToken.IsCancellationRequested)
+                int totalBytes = data.Length;
+                int bytesWritten = 0;
+
+                // Write data in chunks for better progress reporting
+                const int chunkSize = 16 * 1024 * 1024; // 16 MB per chunk
+                while (bytesWritten < totalBytes)
                 {
-                    Debug.LogWarning("File write operation cancelled.");
-                    return;
+                    // Check for cancellation
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        Debug.LogWarning("File write operation cancelled.");
+                        return;
+                    }
+
+                    int bytesToWrite = Math.Min(chunkSize, totalBytes - bytesWritten);
+                    await fileStream.WriteAsync(data, bytesWritten, bytesToWrite, cancellationToken);
+                    bytesWritten += bytesToWrite;
+
+                    // Report file write progress (from 50% to 100%)
+                    float progress = 50 + ((float)bytesWritten / totalBytes) * 50;
                 }
-
-                int bytesToWrite = Math.Min(chunkSize, totalBytes - bytesWritten);
-                await fileStream.WriteAsync(data, bytesWritten, bytesToWrite, cancellationToken);
-                bytesWritten += bytesToWrite;
-
-                // Report file write progress (from 50% to 100%)
-                float progress = 50 + ((float)bytesWritten / totalBytes) * 50;
-                progressCallback?.Invoke(progress);
             }
-        }
+        });
     }
 }
