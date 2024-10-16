@@ -1,9 +1,6 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.ResourceManagement.ResourceProviders;
-using UnityEngine.SceneManagement;
 
 public class LoadABundle : MonoBehaviour
 {
@@ -32,19 +29,6 @@ public class LoadABundle : MonoBehaviour
                             GameObject.Instantiate(Request.asset);
                             break;
                         }
-
-                    case "Scene":
-                        {
-                            try
-                            {
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.LogError($"Error loading scene: {ex.Message}");
-                            }
-                            break;
-                        }
-
                     default:
                         Debug.LogError("Requested type " + BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetMode + " has no handler");
                         break;

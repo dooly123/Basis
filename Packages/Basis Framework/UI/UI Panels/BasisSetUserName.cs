@@ -14,8 +14,6 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField UserNameTMP_InputField;
         public Button Ready;
         public static string LoadFileName = "CachedUserName.BAS";
-        public string SceneToLoad;
-        public BasisBundleInformation HashUrl;
         public bool UseAddressables;
         public Image Loadingbar;
         public bool HasActiveLoadingbar = false;
@@ -120,11 +118,11 @@ namespace Basis.Scripts.UI.UI_Panels
             Debug.Log("connecting to default");
             if (UseAddressables)
             {
-                await BasisSceneLoadDriver.LoadSceneAddressables(SceneToLoad);
+                await BasisSceneLoadDriver.LoadSceneAddressables(BundledContentHolder.Instance.DefaultScene.BasisRemoteBundleEncypted.BundleURL);
             }
             else
             {
-                await BasisSceneLoadDriver.LoadSceneAssetBundle(SceneToLoad, HashUrl);
+                await BasisSceneLoadDriver.LoadSceneAssetBundle(BundledContentHolder.Instance.DefaultScene);
             }
             BasisUIComponent[] Components = FindObjectsByType<BasisUIComponent>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             foreach (BasisUIComponent Component in Components)

@@ -26,13 +26,13 @@ public static class BasisGameObjectAssetBundleManager
             Debug.Log("AssetBundle not found locally, downloading.");
             await AddressableManagement.Instance.AssetBundleManagement.DownloadAssetBundleAsync(url, localPath, progressCallback);
         }
-        return await LoadGameObjectBundleFromDiskAsync(url, Hash, localPath, assetName, Position,Rotation, progressCallback);
+        return await LoadGameObjectBundleFromDiskAsync(url, Hash, localPath, assetName, Position, Rotation, progressCallback);
     }
-    private static async Task<GameObject> LoadGameObjectBundleFromDiskAsync(string url, BasisBundleInformation Hash, string localPath, string assetName,Vector3 Position,Quaternion Rotation, ProgressReport progressCallback)
+    private static async Task<GameObject> LoadGameObjectBundleFromDiskAsync(string url, BasisBundleInformation Hash, string localPath, string assetName, Vector3 Position, Quaternion Rotation, ProgressReport progressCallback)
     {
         Debug.Log("Loading Bundle");
         BasisLoadedAssets BasisLoadedAssets = await AddressableManagement.Instance.AssetBundleManagement.LoadBundle(url, Hash, localPath, progressCallback);
-        if(BasisLoadedAssets == null)
+        if (BasisLoadedAssets == null)
         {
             progressCallback?.Invoke(100); // Set progress to 100 when done
             return null;
@@ -46,7 +46,7 @@ public static class BasisGameObjectAssetBundleManager
             {
                 progressCallback?.Invoke(100); // Set progress to 100 when done
                 ContentControl(asset);
-                return UnityEngine.Object.Instantiate(asset, Position,Rotation);
+                return UnityEngine.Object.Instantiate(asset, Position, Rotation);
             }
             else
             {
@@ -56,7 +56,7 @@ public static class BasisGameObjectAssetBundleManager
         }
         else
         {
-            if(BasisLoadedAssets.IsBundleLoaded)
+            if (BasisLoadedAssets.IsBundleLoaded)
             {
                 Debug.LogError("Failed to load AssetBundle from disk but its marked as loaded with loaded Amount " + BasisLoadedAssets.ProgressReportAvatarLoad);
             }
@@ -82,9 +82,9 @@ public static class BasisGameObjectAssetBundleManager
             string monoTypeName = mono.GetType().FullName;
 
             // Check if the type is in the selectedTypes list
-            if (Instance.ContentPoliceSelector.selectedTypes.Contains(monoTypeName))
+            if (BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
             {
-               // Debug.Log($"MonoBehaviour {monoTypeName} is approved.");
+                // Debug.Log($"MonoBehaviour {monoTypeName} is approved.");
                 // Do something if the MonoBehaviour type is approved
             }
             else
