@@ -12,7 +12,8 @@ public static class BasisBasisBundleInformationHandler
         {
             AssetBundleHash = InformationHash.bundleHash.ToString(),
             AssetToLoadName = InformationHash.File, // Asset bundle name
-            AssetMode = AssetMode // Provided asset mode
+            AssetMode = AssetMode, // Provided asset mode
+            AssetBundleCRC = InformationHash.CRC
         };
         // Form the meta file path using the provided extension from build settings
         string hashFilePath = Path.ChangeExtension(AssetBundlePath, BuildSettings.BasisMetaExtension);

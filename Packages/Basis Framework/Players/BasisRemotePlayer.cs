@@ -37,12 +37,11 @@ namespace Basis.Scripts.BasisSdk.Players
                     UnlockPassword = ALI.UnlockPassword,
                     BasisBundleInformation = new BasisBundleInformation(),//self assigned internally
                      BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),//self assigned internally
-                    BasisStoredDecyptedBundle = new BasisStoredDecyptedBundle(),//self assigned internally
                     LoadedAssetBundle = null,
                 };
 
 
-                BasisLoadedBundle.BasisBundleInformation =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
+                BasisLoadedBundle =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
              //here  CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);

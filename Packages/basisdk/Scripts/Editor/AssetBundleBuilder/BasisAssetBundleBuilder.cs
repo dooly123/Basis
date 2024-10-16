@@ -22,10 +22,12 @@ public static class AssetBundleBuilder
                 string FileOutput = Files[Index];
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(FileOutput);
                 Hash128 bundleHash = manifest.GetAssetBundleHash(FileOutput);
+                BuildPipeline.GetCRCForAssetBundle(FileOutput,out uint CRC);
                 InformationHash informationHash = new InformationHash
                 {
                     File = fileNameWithoutExtension,//excludes extension
-                    bundleHash = bundleHash
+                    bundleHash = bundleHash,
+                    CRC = CRC,
                 };
                 string actualFilePath = Path.Combine(settings.AssetBundleDirectory, informationHash.File);
                 actualFilePath += ".bundle";
@@ -117,6 +119,7 @@ public static class AssetBundleBuilder
     {
         public string File;
         public Hash128 bundleHash;
+        public uint CRC;
     }
     private static BasisProgressReport.ProgressReport Report;
     // Method to encrypt a file using a password

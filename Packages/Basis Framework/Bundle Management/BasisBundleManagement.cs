@@ -13,7 +13,8 @@ public static class BasisBundleManagement
 
     // Dictionary to track ongoing downloads keyed by MetaURL
     private static ConcurrentDictionary<string, Task<BasisBundleInformation>> OnGoingDownloads = new ConcurrentDictionary<string, Task<BasisBundleInformation>>();
-
+    // Write data in chunks for better progress reporting
+    const int chunkSize = 16 * 1024 * 1024; // 16 MB per chunk
     public static bool FindBundle(BasisBundleInformation BasisBundleInformation)
     {
         Debug.Log($"Checking if bundle exists for {BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}");
@@ -26,7 +27,7 @@ public static class BasisBundleManagement
         return false;
     }
 
-    public static async Task<BasisBundleInformation> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    public static async Task<BasisLoadableBundle> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         string metaUrl = BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
         Debug.Log($"Starting download process for {metaUrl}");
@@ -50,13 +51,15 @@ public static class BasisBundleManagement
         if (bundleInfo.HasError)
         {
             Debug.LogError($"Failed to download and process meta for {metaUrl}");
-            return bundleInfo;
+            BasisLoadedBundle.BasisBundleInformation = bundleInfo;
+            return BasisLoadedBundle;
         }
 
         // Update the LoadableBundles dictionary after download completes
         LoadableBundles.TryAdd(bundleInfo.BasisBundleGenerated.AssetToLoadName, BasisLoadedBundle);
         Debug.Log($"Download and processing for {metaUrl} completed successfully.");
-        return bundleInfo;
+        BasisLoadedBundle.BasisBundleInformation = bundleInfo;
+        return BasisLoadedBundle;
     }
 
     private static async Task<BasisBundleInformation> DownloadAndProcessMeta(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
@@ -120,7 +123,11 @@ public static class BasisBundleManagement
 
             await WriteToFileAsync(FilePathMeta, loadedlocalmeta, progressCallback, cancellationToken);
             await WriteToFileAsync(FilePathBundle, LoadedBundleData, progressCallback, cancellationToken);
-
+            BasisBundleInformation.BasisStoredDecyptedBundle = new BasisStoredDecyptedBundle
+            {
+                LocalMetaFile = FilePathMeta,
+                LocalBundleFile = FilePathBundle
+            };
             Debug.Log("Meta and bundle files written to disk successfully.");
             return BasisBundleInformation;
         }
@@ -257,8 +264,6 @@ public static class BasisBundleManagement
                 int totalBytes = data.Length;
                 int bytesWritten = 0;
 
-                // Write data in chunks for better progress reporting
-                const int chunkSize = 16 * 1024 * 1024; // 16 MB per chunk
                 while (bytesWritten < totalBytes)
                 {
                     // Check for cancellation
