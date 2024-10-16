@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
 [System.Serializable]
 public struct BasisLoadableBundle
