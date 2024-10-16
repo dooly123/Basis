@@ -24,7 +24,7 @@ public static class BasisMenuItemsEditor
     public static async void ReloadAvatar()
     {
         BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(BasisLocalPlayer.LoadFileNameAndExtension, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal);
-      //LD here  await BasisLocalPlayer.Instance.CreateAvatar(LastUsedAvatar.UniqueID, LastUsedAvatar.Data,);
+     await BasisLocalPlayer.Instance.CreateAvatar(LastUsedAvatar.UniqueID, LastUsedAvatar.Data,);
     }
     [MenuItem("Basis/Trackers/Hide Trackers")]
     public static void HideTrackersEditor()

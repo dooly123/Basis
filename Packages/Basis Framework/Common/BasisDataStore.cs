@@ -73,33 +73,6 @@ namespace Basis.Scripts.Common
             }
         }
 
-        // Method to save a list of URLs to a file using JSON
-        public static void SaveUrlList(List<string> urlList, string fileNameAndExtension)
-        {
-            string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
-            string json = JsonUtility.ToJson(new BasisSavedUrlList(urlList));
-            File.WriteAllText(filePath, json);
-            Debug.Log("URL List saved to " + filePath);
-        }
-
-        // Method to load a list of URLs from a file using JSON
-        public static List<string> LoadUrlList(string fileNameAndExtension, List<string> defaultValue)
-        {
-            string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
-            if (File.Exists(filePath))
-            {
-                string json = File.ReadAllText(filePath);
-                BasisSavedUrlList urlListWrapper = JsonUtility.FromJson<BasisSavedUrlList>(json);
-                Debug.Log("URL List loaded from " + filePath);
-                return urlListWrapper.ToValue();
-            }
-            else
-            {
-                Debug.LogWarning("File not found at " + filePath);
-                return defaultValue;
-            }
-        }
-
         // Method to save an int value to a file
         public static void SaveInt(int intValue, string fileNameAndExtension)
         {

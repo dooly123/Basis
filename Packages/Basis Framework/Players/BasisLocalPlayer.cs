@@ -72,7 +72,7 @@ namespace Basis.Scripts.BasisSdk.Players
                 HasEvents = true;
             }
             BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension,BasisAvatarFactory.LoadingAvatar,BasisPlayer.LoadModeLocal);
-       //here   await CreateAvatar(LastUsedAvatar.UniqueID);
+       await CreateAvatar(LastUsedAvatar.UniqueID);
             if (MicrophoneRecorder == null)
             {
                 MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
@@ -124,7 +124,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public async Task CreateAvatar(string AddressableID, byte mode, BasisBundleInformation BasisBundleInformation)
         {
-          //here  await BasisAvatarFactory.LoadAvatar(this, AddressableID, mode, BasisBundleInformation);
+            await BasisAvatarFactory.LoadAvatar(this, AddressableID, mode, BasisBundleInformation);
             BasisDataStore.SaveAvatar(AddressableID, mode, LoadFileNameAndExtension);
             OnLocalAvatarChanged?.Invoke();
         }

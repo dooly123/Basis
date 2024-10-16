@@ -9,12 +9,18 @@ using UnityEngine.Networking;
 
 public static class BasisBundleManagement
 {
+    public static string DecryptedMetaBasis = ".DecryptedMetaBasis";
+    public static string DecryptedBundleBasis = ".DecryptedBundleBasis";
+    public static string AssetBundles = "AssetBundles";
+    public static ConcurrentDictionary<string, BasisBundleInformation> UnLoadedBundles = new ConcurrentDictionary<string, BasisBundleInformation>();
+
     public static ConcurrentDictionary<string, BasisLoadableBundle> LoadableBundles = new ConcurrentDictionary<string, BasisLoadableBundle>();
 
     // Dictionary to track ongoing downloads keyed by MetaURL
     private static ConcurrentDictionary<string, Task<BasisBundleInformation>> OnGoingDownloads = new ConcurrentDictionary<string, Task<BasisBundleInformation>>();
     // Write data in chunks for better progress reporting
     const int chunkSize = 16 * 1024 * 1024; // 16 MB per chunk
+    public static BasisProgressReport.ProgressReport FindAllBundlesReport;
     public static bool FindBundle(BasisBundleInformation BasisBundleInformation)
     {
         Debug.Log($"Checking if bundle exists for {BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}");
@@ -26,7 +32,26 @@ public static class BasisBundleManagement
         Debug.Log("Bundle not found in LoadableBundles.");
         return false;
     }
+    public static async Task FindAllBundles()
+    {
+        string FolderPath = GenerateFolderPath(AssetBundles);
+        string[] Files = System.IO.Directory.GetFiles(FolderPath, $"*{DecryptedMetaBasis}");
+        //i want to do this over multiple frames
+        foreach (string File in Files)
+        {
+            byte[] LoadedLocalMetaData = await LoadLocalFile(File, FindAllBundlesReport, new CancellationToken());
+            BasisBundleInformation BasisBundleInformation = ConvertBytesToJson(LoadedLocalMetaData);
+            string AssetToLoadName = BasisBundleInformation.BasisBundleGenerated.AssetToLoadName;
+            if (UnLoadedBundles.TryAdd(AssetToLoadName, BasisBundleInformation))
+            {
 
+            }
+            else
+            {
+                Debug.LogError("There was a Duplicate Asset with " + AssetToLoadName);
+            }
+        }
+    }
     public static async Task<BasisLoadableBundle> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         string metaUrl = BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
@@ -119,8 +144,8 @@ public static class BasisBundleManagement
             // Step 5: Write meta and bundle to disk
             Debug.Log("Writing meta and bundle files to disk...");
 
-            string FilePathMeta = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".DecryptedMetaBasis", "AssetBundles");
-            string FilePathBundle = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + ".DecryptedBundleBasis", "AssetBundles");
+            string FilePathMeta = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + DecryptedMetaBasis, AssetBundles);
+            string FilePathBundle = GenerateFolderPath(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName + DecryptedBundleBasis, AssetBundles);
 
             await WriteToFileAsync(FilePathMeta, loadedlocalmeta, progressCallback, cancellationToken);
             await WriteToFileAsync(FilePathBundle, LoadedBundleData, progressCallback, cancellationToken);
@@ -138,10 +163,22 @@ public static class BasisBundleManagement
         }
         return new BasisBundleInformation() { HasError = true };
     }
-
     public static string GenerateFolderPath(string fileName, string subFolder)
     {
         Debug.Log($"Generating folder path for {fileName} in subfolder {subFolder}");
+
+        // Create the full folder path
+        string folderPath = GenerateFolderPath(subFolder);
+        // Create the full file path
+        string localPath = Path.Combine(folderPath, fileName);
+        Debug.Log($"Generated folder path: {localPath}");
+
+        // Return the local path
+        return localPath;
+    }
+    public static string GenerateFolderPath(string subFolder)
+    {
+        Debug.Log($"Generating folder path in subfolder {subFolder}");
 
         // Create the full folder path
         string folderPath = Path.Combine(Application.persistentDataPath, subFolder);
@@ -152,15 +189,8 @@ public static class BasisBundleManagement
             Debug.Log($"Directory {folderPath} does not exist. Creating directory.");
             Directory.CreateDirectory(folderPath);
         }
-
-        // Create the full file path
-        string localPath = Path.Combine(folderPath, fileName);
-        Debug.Log($"Generated folder path: {localPath}");
-
-        // Return the local path
-        return localPath;
+        return folderPath;
     }
-
     public static BasisBundleInformation ConvertBytesToJson(byte[] loadedlocalmeta)
     {
         if (loadedlocalmeta == null || loadedlocalmeta.Length == 0)

@@ -42,7 +42,7 @@ namespace Basis.Scripts.BasisSdk.Players
 
 
                 BasisLoadedBundle =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
-             //here  CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
+             CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
@@ -67,14 +67,14 @@ namespace Basis.Scripts.BasisSdk.Players
             if (string.IsNullOrEmpty(Loader))
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
-              //here  await BasisAvatarFactory.LoadAvatarRemote(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeError, BasisAvatarFactory.LoadingAvatar, "N/A", BasisLoadableBundle);
+              await BasisAvatarFactory.LoadAvatarRemote(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeError, BasisAvatarFactory.LoadingAvatar, "N/A", BasisLoadableBundle);
             }
             else
             {
                 Debug.Log("loading avatar from " + Loader + " with net mode " + Mode);
                 if (LockAvatarFromChanging == false)
                 {
-                   //here await BasisAvatarFactory.LoadAvatarRemote(this, Loader, Mode, BasisLoadableBundle);
+                  await BasisAvatarFactory.LoadAvatarRemote(this, Loader, Mode, BasisLoadableBundle);
                 }
             }
         }
