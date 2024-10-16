@@ -115,6 +115,7 @@ public static class BasisBundleManagement
             }
             Debug.Log($"Successfully downloaded bundle file for {BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL}");
 
+            LoadedBundleData = await BasisEncryptionWrapper.DecryptDataAsync(LoadedBundleData, BasisLoadedBundle.UnlockPassword);
             // Step 5: Write meta and bundle to disk
             Debug.Log("Writing meta and bundle files to disk...");
 
