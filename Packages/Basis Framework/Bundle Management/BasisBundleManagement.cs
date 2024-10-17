@@ -138,19 +138,6 @@ public static class BasisBundleManagement
         BasisLoadedBundle.BasisBundleInformation.HasError = true;
         return BasisLoadedBundle;
     }
-
-
-    public static bool FindBundle(BasisBundleInformation BasisBundleInformation)
-    {
-        Debug.Log($"Checking if bundle exists for {BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}");
-        if (QueryableBundles.ContainsKey(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName))
-        {
-            Debug.Log("Bundle found in LoadableBundles.");
-            return true;
-        }
-        Debug.Log("Bundle not found in LoadableBundles.");
-        return false;
-    }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static async void OnRuntimeMethodLoad()
     {

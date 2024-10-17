@@ -10,11 +10,12 @@ public static class BasisEncryptionWrapper
     private const int SaltSize = 16; // Size of the salt in bytes
     private const int KeySize = 32; // Size of the key in bytes (256 bits)
     private const int IvSize = 16; // Size of the IV in bytes (128 bits)
-    const int chunkSize = 16 * 1024; // 16 kib
+    private const int chunkSize = 16 * 1024; // 16 KiB
+
     public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, string password, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
-        var encryptedData = await Encrypt(password, dataToEncrypt);
+        var encryptedData = await Task.Run(() => Encrypt(password, dataToEncrypt)); // Run encryption on a separate thread
         reportProgress?.Invoke(100f);
         return encryptedData;
     }
@@ -22,14 +23,14 @@ public static class BasisEncryptionWrapper
     public static async Task<byte[]> DecryptDataAsync(byte[] dataToDecrypt, string password, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
-        var decryptedData = await Decrypt(password, dataToDecrypt);
+        var decryptedData = await Task.Run(() => Decrypt(password, dataToDecrypt)); // Run decryption on a separate thread
         reportProgress?.Invoke(100f);
         return decryptedData.Item1;
     }
 
-    private static async Task<byte[]> Encrypt(string password, byte[] dataToEncrypt)
+    private static byte[] Encrypt(string password, byte[] dataToEncrypt)
     {
-        byte[] salt = new byte[SaltSize]; // Generate a random salt
+        byte[] salt = new byte[SaltSize];
         using (var rng = new RNGCryptoServiceProvider())
         {
             rng.GetBytes(salt); // Fill the salt with random bytes
@@ -52,12 +53,12 @@ public static class BasisEncryptionWrapper
                 using (var msEncrypt = new MemoryStream())
                 {
                     // Write the salt and IV to the memory stream
-                    await msEncrypt.WriteAsync(salt, 0, salt.Length);
-                    await msEncrypt.WriteAsync(iv, 0, iv.Length);
+                    msEncrypt.Write(salt, 0, salt.Length);
+                    msEncrypt.Write(iv, 0, iv.Length);
 
                     using (var cryptoStream = new CryptoStream(msEncrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
                     {
-                        await cryptoStream.WriteAsync(dataToEncrypt, 0, dataToEncrypt.Length);
+                        cryptoStream.Write(dataToEncrypt, 0, dataToEncrypt.Length);
                     }
 
                     // Get the encrypted data from the memory stream
@@ -67,16 +68,16 @@ public static class BasisEncryptionWrapper
         }
     }
 
-    public static async Task<(byte[], byte[], byte[])> Decrypt(string password, byte[] dataToDecrypt)
+    private static (byte[], byte[], byte[]) Decrypt(string password, byte[] dataToDecrypt)
     {
         using (var msDecrypt = new MemoryStream(dataToDecrypt))
         {
             // Read the salt and IV from the memory stream
             byte[] salt = new byte[SaltSize];
-            await msDecrypt.ReadAsync(salt, 0, SaltSize);
+            msDecrypt.Read(salt, 0, SaltSize);
 
             byte[] iv = new byte[IvSize];
-            await msDecrypt.ReadAsync(iv, 0, IvSize);
+            msDecrypt.Read(iv, 0, IvSize);
 
             // Generate the key using the password and salt
             using (var key = new Rfc2898DeriveBytes(password, salt, 10000))
@@ -93,24 +94,23 @@ public static class BasisEncryptionWrapper
                     {
                         using (var msOutput = new MemoryStream())
                         {
-                            // Copy the decrypted data directly to the output memory stream
-                            await cryptoStream.CopyToAsync(msOutput);
+                            cryptoStream.CopyTo(msOutput);
+                            byte[] output = msOutput.ToArray();
+                            Debug.Log($"Total was {dataToDecrypt.Length}, without salt and IV it's {output.Length}");
 
-                            byte[] Output = msOutput.ToArray();
-                            Debug.Log("Total was " + dataToDecrypt.Length + " without salt and iv its " + Output.Length);
-                            // Return just the decrypted data as a byte array
-                            return (Output, salt, iv);
+                            return (output, salt, iv);
                         }
                     }
                 }
             }
         }
     }
+
     public static async Task ReadFileAsync(string filePath, Func<byte[], Task> processChunk, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
         var fileSize = new FileInfo(filePath).Length;
-        var buffer = new byte[chunkSize]; // Read in 4 KB chunks
+        var buffer = new byte[chunkSize];
         long totalRead = 0;
 
         using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -129,7 +129,7 @@ public static class BasisEncryptionWrapper
     public static async Task WriteFileAsync(string filePath, byte[] data, FileMode fileMode, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
-        long totalWritten = 0; // Write in 4 KB chunks
+        long totalWritten = 0;
 
         using (var fs = new FileStream(filePath, fileMode, FileAccess.Write))
         {
@@ -146,38 +146,25 @@ public static class BasisEncryptionWrapper
 
     public static async Task EncryptFileAsync(string password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
     {
-        // Read the entire data from the input file
-        byte[] dataToEncrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
-
-        // Encrypt the data
+        byte[] dataToEncrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
         var encryptedData = await EncryptDataAsync(dataToEncrypt, password, reportProgress);
-
-        // Write the encrypted data to the output file
         await WriteFileAsync(outputFilePath, encryptedData, FileMode.Create, reportProgress);
     }
 
     public static async Task DecryptFileAsync(string password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
     {
-        // Read the entire encrypted data from the input file
-        byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
-
-        // Decrypt the data
+        byte[] dataToDecrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
         var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
-
-        // Write the decrypted data to the output file
         await WriteFileAsync(outputFilePath, decryptedData, FileMode.Create, reportProgress);
     }
+
     public static async Task<byte[]> DecryptFileAsync(string password, string inputFilePath, ProgressReport reportProgress)
     {
-        // Read the entire encrypted data from the input file
-        byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
-
-        // Decrypt the data
+        byte[] dataToDecrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
         var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
         return decryptedData;
     }
 
-    // Helper method to read all bytes from a file asynchronously
     private static async Task<byte[]> ReadAllBytesAsync(string filePath, ProgressReport reportProgress)
     {
         reportProgress?.Invoke(0f);
