@@ -19,7 +19,7 @@ public static class BasisBundleManagement
     public static ConcurrentDictionary<string, BasisLoadableBundle> LoadableBundles = new ConcurrentDictionary<string, BasisLoadableBundle>();
 
     // Dictionary to track ongoing downloads keyed by MetaURL
-    private static ConcurrentDictionary<string, Task<BasisBundleInformation>> OnGoingDownloads = new ConcurrentDictionary<string, Task<BasisBundleInformation>>();
+    private static ConcurrentDictionary<string, Task<BasisLoadableBundle>> OnGoingDownloads = new ConcurrentDictionary<string, Task<BasisLoadableBundle>>();
     public static BasisProgressReport.ProgressReport FindAllBundlesReport;
 
     /// <summary>
@@ -76,20 +76,27 @@ public static class BasisBundleManagement
         }
 
         // Await the task (this will wait for the first download if it's still in progress)
-        BasisBundleInformation bundleInfo = await downloadTask;
+        BasisLoadableBundle bundleInfo = await downloadTask;
 
         // Handle the result or failure (if bundleInfo is null, there was an error)
-        if (bundleInfo.HasError)
+        if (bundleInfo.BasisBundleInformation.HasError)
         {
-            Debug.LogError($"Failed to download and process meta for {metaUrl}");
-            BasisLoadedBundle.BasisBundleInformation = bundleInfo;
+            if (BasisLoadedBundle.BasisRemoteBundleEncypted.IsLocal)
+            {
+                Debug.LogError($"Failed to Copy and process meta for {metaUrl}");
+            }
+            else
+            {
+                Debug.LogError($"Failed to download and process meta for {metaUrl}");
+            }
+            BasisLoadedBundle = bundleInfo;
             return BasisLoadedBundle;
         }
 
         // Update the LoadableBundles dictionary after download completes
-        LoadableBundles.TryAdd(bundleInfo.BasisBundleGenerated.AssetToLoadName, BasisLoadedBundle);
+        LoadableBundles.TryAdd(bundleInfo.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName, BasisLoadedBundle);
         Debug.Log($"Download and processing for {metaUrl} completed successfully.");
-        BasisLoadedBundle.BasisBundleInformation = bundleInfo;
+        BasisLoadedBundle = bundleInfo;
         return BasisLoadedBundle;
     }
     /// <summary>
@@ -101,7 +108,7 @@ public static class BasisBundleManagement
     /// <param name="progressCallback"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    private static async Task<BasisBundleInformation> DownloadAndProcessMeta(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    private static async Task<BasisLoadableBundle> DownloadAndProcessMeta(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         try
         {
@@ -145,15 +152,20 @@ public static class BasisBundleManagement
             {
                 await BasisIOManagement.DownloadFile(BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL, FilePathBundle, progressCallback, cancellationToken);
             }
-
             Debug.Log($"Successfully downloaded bundle file for {BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL}");
             Debug.Log("Meta and bundle files written to disk successfully.");
-            return BasisBundleInformation;
+
+            BasisLoadedBundle.BasisBundleInformation = BasisBundleInformation;
+
+            BasisLoadedBundle.BasisStoredEncyptedBundle.LocalBundleFile = FilePathBundle;
+            BasisLoadedBundle.BasisStoredEncyptedBundle.LocalMetaFile = FilePathMeta;
+            return BasisLoadedBundle;
         }
         catch (Exception ex)
         {
             Debug.LogError($"Error during download and processing of meta: {ex.Message}");
         }
-        return new BasisBundleInformation() { HasError = true };
+        BasisLoadedBundle.BasisBundleInformation.HasError = true;
+        return BasisLoadedBundle;
     }
 }
