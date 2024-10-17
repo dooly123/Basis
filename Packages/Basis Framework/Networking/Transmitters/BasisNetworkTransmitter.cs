@@ -82,7 +82,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public void SendOutLatestAvatar()
         {
 
-            byte[] LAI = SerializationUtility.SerializeValue<AvatarNetworkLoadInformation>(NetworkedPlayer.Player.AvatarNetworkLoadInformation, DataFormat.Binary);
+            byte[] LAI = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData);
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage

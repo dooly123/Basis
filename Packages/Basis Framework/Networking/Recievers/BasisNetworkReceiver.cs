@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Smoothing;
+using BasisSerializer.OdinSerializer;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -108,9 +109,9 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void ReceiveAvatarChangeRequest(ServerAvatarChangeMessage ServerAvatarChangeMessage)
         {
-            byte[] Data = ServerAvatarChangeMessage.clientAvatarChangeMessage.byteArray;
+            BasisLoadableBundle BasisLoadableBundle = BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(ServerAvatarChangeMessage.clientAvatarChangeMessage.byteArray);
 
-          RemotePlayer.CreateAvatar(ServerAvatarChangeMessage.clientAvatarChangeMessage.loadMode,);
+            RemotePlayer.CreateAvatar(ServerAvatarChangeMessage.clientAvatarChangeMessage.loadMode, BasisLoadableBundle);
         }
         public override async void Initialize(BasisNetworkedPlayer networkedPlayer)
         {

@@ -30,18 +30,10 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             if (Avatar == null)
             {
-                AvatarNetworkLoadInformation ALI = SerializationUtility.DeserializeValue<AvatarNetworkLoadInformation>(CACM.byteArray, DataFormat.Binary);
-                BasisLoadableBundle BasisLoadedBundle = new BasisLoadableBundle
-                {
-                    BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle() { BundleURL = ALI.AvatarBundleUrl, MetaURL = ALI.AvatarMetaUrl },
-                    UnlockPassword = ALI.UnlockPassword,
-                    BasisBundleInformation = new BasisBundleInformation(),//self assigned internally
-                     BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),//self assigned internally
-                    LoadedAssetBundle = null,
-                };
+                BasisLoadableBundle BasisLoadedBundle =  BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
 
 
-                BasisLoadedBundle =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
+                BasisLoadedBundle = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
 
              CreateAvatar(CACM.loadMode, BasisLoadedBundle);
             }

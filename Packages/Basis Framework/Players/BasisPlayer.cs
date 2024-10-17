@@ -4,7 +4,6 @@ using Basis.Scripts.Drivers;
 using System;
 using System.Threading;
 using UnityEngine;
-using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
 using static BasisProgressReport;
 namespace Basis.Scripts.BasisSdk.Players
 {
@@ -15,9 +14,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public string UUID;
         public BasisAvatar Avatar;
         public AddressableGenericResource AvatarAddressableGenericResource;
-        //  public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
-
-        public AvatarNetworkLoadInformation AvatarNetworkLoadInformation;
+        public BasisLoadableBundle AvatarMetaData;
         public bool HasAvatarDriver;
         public event Action OnAvatarSwitched;
         public event Action OnAvatarSwitchedFallBack;

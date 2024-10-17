@@ -86,7 +86,7 @@ namespace Basis.Scripts.Avatar
                         Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                 }
-                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, UnlockPassword = BasisLoadableBundle.UnlockPassword };
+                Player.AvatarMetaData =  BasisBundleConversionNetwork.ConvertFromNetwork(new AvatarNetworkLoadInformation() { AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, UnlockPassword = BasisLoadableBundle.UnlockPassword });
                 Player.AvatarLoadMode = Mode;
 
                 InitializePlayerAvatar(Player, Output);
@@ -139,7 +139,7 @@ namespace Basis.Scripts.Avatar
                         Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                 }
-                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,  UnlockPassword = BasisLoadableBundle.UnlockPassword };
+                Player.AvatarMetaData = BasisBundleConversionNetwork.ConvertFromNetwork(new AvatarNetworkLoadInformation() { AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, UnlockPassword = BasisLoadableBundle.UnlockPassword });
                 Player.AvatarLoadMode = Mode;
 
                 InitializePlayerAvatar(Player, Output);
@@ -211,7 +211,7 @@ namespace Basis.Scripts.Avatar
                 {
                     InitializePlayerAvatar(Player, GameObjects[0]);
                 }
-                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { };
+                Player.AvatarMetaData = BasisAvatarFactory.LoadingAvatar;
                 Player.AvatarLoadMode = 1;
                 Player.AvatarSwitched();
 
