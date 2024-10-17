@@ -167,6 +167,15 @@ public static class BasisEncryptionWrapper
         // Write the decrypted data to the output file
         await WriteFileAsync(outputFilePath, decryptedData, FileMode.Create, reportProgress);
     }
+    public static async Task<byte[]> DecryptFileAsync(string password, string inputFilePath, ProgressReport reportProgress)
+    {
+        // Read the entire encrypted data from the input file
+        byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
+
+        // Decrypt the data
+        var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
+        return decryptedData;
+    }
 
     // Helper method to read all bytes from a file asynchronously
     private static async Task<byte[]> ReadAllBytesAsync(string filePath, ProgressReport reportProgress)

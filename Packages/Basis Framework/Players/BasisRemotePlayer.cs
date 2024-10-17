@@ -42,6 +42,7 @@ namespace Basis.Scripts.BasisSdk.Players
 
 
                 BasisLoadedBundle =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
+
              CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);

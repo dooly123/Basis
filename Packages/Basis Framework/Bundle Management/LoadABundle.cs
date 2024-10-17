@@ -11,7 +11,7 @@ public class LoadABundle : MonoBehaviour
     async void Start()
     {
         BasisLoadableBundle = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadableBundle, Report, CancellationToken);
-        BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisLoadableBundle.BasisBundleInformation.BasisStoredDecyptedBundle.LocalBundleFile, BasisLoadableBundle.BasisBundleInformation);
+        BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, BasisLoadableBundle.BasisBundleInformation, BasisLoadableBundle.UnlockPassword, Report);
         await LoadAssetFromBundle.BundleToAsset(BasisLoadableBundle);
     }
     public static class LoadAssetFromBundle

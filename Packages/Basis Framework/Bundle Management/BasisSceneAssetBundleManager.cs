@@ -8,7 +8,7 @@ public static class BasisSceneAssetBundleManager
     public static async Task DownloadAndLoadSceneAsync(bool MakeSceneActiveScene, BasisLoadableBundle BasisLoadableBundle, ProgressReport progressCallback)
     {
         BasisLoadableBundle = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadableBundle, progressCallback, new CancellationToken());
-        BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisLoadableBundle.BasisBundleInformation.BasisStoredDecyptedBundle.LocalBundleFile, BasisLoadableBundle.BasisBundleInformation);
+        BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, BasisLoadableBundle.BasisBundleInformation, BasisLoadableBundle.UnlockPassword, progressCallback);
         await LoadSceneFromAssetBundleAsync(BasisLoadableBundle.LoadedAssetBundle, MakeSceneActiveScene, progressCallback);
     }
     private static async Task LoadSceneFromAssetBundleAsync(AssetBundle bundle,bool MakeActiveScene, ProgressReport progressCallback)

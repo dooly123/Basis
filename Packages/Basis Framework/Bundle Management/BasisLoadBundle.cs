@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using UnityEngine;
+using static BasisProgressReport;
 
 public static class BasisLoadBundle
 {
@@ -12,20 +13,20 @@ public static class BasisLoadBundle
     /// Loads an AssetBundle asynchronously from a specified file location. Uses caching to prevent reloading the same bundle.
     /// Returns the cached AssetBundle immediately if it's already loaded.
     /// </summary>
-    /// <param name="fileLocation">The file location of the AssetBundle.</param>
+    /// <param name="EncyptedfileLocation">The file location of the AssetBundle.</param>
     /// <param name="basisBundleInformation">Information related to the AssetBundle, including hash and CRC values.</param>
     /// <returns>The loaded AssetBundle if successful, otherwise null.</returns>
-    public static async Task<AssetBundle> LoadBasisBundle(string fileLocation, BasisBundleInformation basisBundleInformation)
+    public static async Task<AssetBundle> LoadBasisBundle(string EncyptedfileLocation, BasisBundleInformation basisBundleInformation,string Password, ProgressReport ProgressReport)
     {
         // Ensure the provided file location is valid
-        if (string.IsNullOrEmpty(fileLocation))
+        if (string.IsNullOrEmpty(EncyptedfileLocation))
         {
             Debug.LogError("Invalid file location provided was null or empty.");
             return null;
         }
 
         // Check if the bundle is already loaded and return it immediately
-        if (bundleCache.TryGetValue(fileLocation, out var cachedTask))
+        if (bundleCache.TryGetValue(EncyptedfileLocation, out var cachedTask))
         {
             // If the bundle is already loaded and available, return it immediately
             if (cachedTask.IsCompletedSuccessfully && cachedTask.Result != null)
@@ -40,44 +41,26 @@ public static class BasisLoadBundle
         }
 
         // Create a new task to load the AssetBundle on the main thread
-        Task<AssetBundle> loadTask = LoadAssetBundleAsync(fileLocation, basisBundleInformation);
+        Task<AssetBundle> loadTask = LoadAssetBundleAsync(EncyptedfileLocation, basisBundleInformation, Password, ProgressReport);
 
         // Add the task to the cache so subsequent requests will use the same task
-        if (!bundleCache.TryAdd(fileLocation, loadTask))
+        if (!bundleCache.TryAdd(EncyptedfileLocation, loadTask))
         {
             // If another thread added the same task simultaneously, return the cached one
-            return await bundleCache[fileLocation];
+            return await bundleCache[EncyptedfileLocation];
         }
 
         // Return the loaded AssetBundle
         return await loadTask;
     }
 
-    private static async Task<AssetBundle> LoadAssetBundleAsync(string fileLocation, BasisBundleInformation basisBundleInformation)
+    private static async Task<AssetBundle> LoadAssetBundleAsync(string fileLocation, BasisBundleInformation basisBundleInformation, string Password, ProgressReport ProgressReport)
     {
         try
         {
             // Load the AssetBundle from the file location asynchronously using CRC
-            AssetBundleCreateRequest assetBundleRequest = AssetBundle.LoadFromFileAsync(fileLocation, basisBundleInformation.BasisBundleGenerated.AssetBundleCRC);
-
-            // Wait for the AssetBundle to fully load asynchronously
-            while (!assetBundleRequest.isDone)
-            {
-                Debug.Log($"Loading AssetBundle... {assetBundleRequest.progress * 100}% completed.");
-                await Task.Yield(); // Yield control back to the main thread while waiting
-            }
-
-            // Check if loading succeeded
-            if (assetBundleRequest.assetBundle != null)
-            {
-                Debug.Log("AssetBundle loaded successfully.");
-                return assetBundleRequest.assetBundle;
-            }
-            else
-            {
-                Debug.LogError("AssetBundle loaded but is null. Possible corruption or incorrect file.");
-                return null;
-            }
+            Task<AssetBundle> Bundle = BasisEncryptionToData.GenerateBundleFromFile(Password, fileLocation, basisBundleInformation.BasisBundleGenerated.AssetBundleCRC, ProgressReport);
+            return await Bundle;
         }
         catch (Exception ex)
         {

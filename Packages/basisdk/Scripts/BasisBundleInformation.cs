@@ -4,8 +4,6 @@ public struct BasisBundleInformation
     public bool HasError;
     public BasisBundleDescription BasisBundleDescription;
     public BasisBundleGenerated BasisBundleGenerated;
-    //unencrypted state
-    public BasisStoredDecyptedBundle BasisStoredDecyptedBundle;
 }
 [System.Serializable]
 public struct BasisBundleDescription
