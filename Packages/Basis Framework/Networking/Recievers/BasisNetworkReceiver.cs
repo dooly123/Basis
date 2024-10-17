@@ -108,7 +108,9 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void ReceiveAvatarChangeRequest(ServerAvatarChangeMessage ServerAvatarChangeMessage)
         {
-          RemotePlayer.CreateAvatar(ServerAvatarChangeMessage.clientAvatarChangeMessage.avatarID, ServerAvatarChangeMessage.clientAvatarChangeMessage.loadMode);
+            byte[] Data = ServerAvatarChangeMessage.clientAvatarChangeMessage.byteArray;
+
+          RemotePlayer.CreateAvatar(ServerAvatarChangeMessage.clientAvatarChangeMessage.loadMode,);
         }
         public override async void Initialize(BasisNetworkedPlayer networkedPlayer)
         {

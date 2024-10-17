@@ -15,7 +15,6 @@ namespace Basis.Scripts.Addressable_Driver.Loading
         public static List<AddressableLoadResourceBase> AsyncHandles = new List<AddressableLoadResourceBase>();
         public static List<Task> LoadingTasks = new List<Task>();
         public static AddressableManagement Instance;
-        public AssetBundleManagement AssetBundleManagement = new AssetBundleManagement();
         public void OnEnable()
         {
             Instance = this;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using static BasisProgressReport;
@@ -68,7 +69,36 @@ public static class BasisLoadBundle
             return null;
         }
     }
+    /// <summary>
+    /// pew pew
+    /// </summary>
+    /// <param name="SearchAndDestroy"></param>
+    public static void ContentControlCondom(GameObject SearchAndDestroy)
+    {
+        List<MonoBehaviour> monoBehaviours = new List<MonoBehaviour>();
+        SearchAndDestroy.GetComponentsInChildren(true, monoBehaviours);
 
+        int count = monoBehaviours.Count;
+        for (int Index = 0; Index < count; Index++)
+        {
+            MonoBehaviour mono = monoBehaviours[Index];
+            // Get the full name of the MonoBehaviour's type
+            string monoTypeName = mono.GetType().FullName;
+
+            // Check if the type is in the selectedTypes list
+            if (BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
+            {
+                // Debug.Log($"MonoBehaviour {monoTypeName} is approved.");
+                // Do something if the MonoBehaviour type is approved
+            }
+            else
+            {
+                Debug.LogError($"MonoBehaviour {monoTypeName} is not approved.");
+                GameObject.Destroy(mono);
+                // Do something if the MonoBehaviour type is not approved
+            }
+        }
+    }
     /// <summary>
     /// Unloads the AssetBundle to free up memory and removes it from the cache.
     /// </summary>

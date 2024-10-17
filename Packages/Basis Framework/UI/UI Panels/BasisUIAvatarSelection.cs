@@ -28,9 +28,9 @@ namespace Basis.Scripts.UI.UI_Panels
         }
         public void AddAvatar()
         {
-            if(string.IsNullOrEmpty(AddAvatarInputField.text) == false)
+            if (string.IsNullOrEmpty(AddAvatarInputField.text) == false)
             {
-                BasisUIAvatarRequest.Save(AddAvatarInputField.text);
+                //HERE LD  BasisUIAvatarRequest.Save(AddAvatarInputField.text);
                 Initialize();
             }
             else
@@ -43,22 +43,22 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             foreach (GameObject go in CreatedCopies)
             {
-               GameObject.Destroy(go);
+                GameObject.Destroy(go);
             }
             AvatarUrlsRuntime.Clear();
             CreatedCopies.Clear();
             AvatarUrlsRuntime.AddRange(AvatarUrls);
-           await  BasisBundleManagement.FindAllBundles();
+            await BasisBundleManagement.FindAllBundles();
             int AvatarUrlsCount = BasisBundleManagement.UnLoadedBundles.Count;
             for (int Index = 0; Index < AvatarUrlsCount; Index++)
             {
-                string AvatarBundleAddress = BasisUIAvatarRequest.LocallyStoredAvatarUrls[Index];
-                BasisLoadableBundle AvatarLoadRequest = new BasisLoadableBundle
-                {
-                     AvatarBundleAddress = AvatarBundleAddress,
-                    IsLocalLoad = 0
-                };
-                AvatarUrlsRuntime.Add(AvatarLoadRequest);
+                // string AvatarBundleAddress = BasisUIAvatarRequest.LocallyStoredAvatarUrls[Index];
+                // BasisLoadableBundle AvatarLoadRequest = new BasisLoadableBundle
+                // {
+                //      AvatarBundleAddress = AvatarBundleAddress,
+                //    IsLocalLoad = 0
+                //};
+                // AvatarUrlsRuntime.Add(AvatarLoadRequest);
             }
             for (int Index = 0; Index < AvatarUrlsRuntime.Count; Index++)
             {
@@ -70,14 +70,14 @@ namespace Basis.Scripts.UI.UI_Panels
                 // Get the Button component and set its onClick listener
                 if (buttonObject.TryGetComponent<Button>(out Button button))
                 {
-                 string avatarUrl = url.AvatarAddress; // Capture the url in the local variable for the lambda
-                    button.onClick.AddListener(() => OnButtonPressed(url));
+                    // string avatarUrl = url.AvatarAddress; // Capture the url in the local variable for the lambda
+                    //  button.onClick.AddListener(() => OnButtonPressed(url));
 
                     // Optionally set the button's label to something meaningful, like the URL or a part of it
                     TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
                     if (buttonText != null)
                     {
-                 buttonText.text = Path.GetFileNameWithoutExtension(avatarUrl); // or some other meaningful name
+                        //  buttonText.text = Path.GetFileNameWithoutExtension(avatarUrl); // or some other meaningful name
                     }
                 }
                 CreatedCopies.Add(buttonObject);
@@ -87,7 +87,7 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             if (BasisLocalPlayer.Instance != null)
             {
-             await BasisLocalPlayer.Instance.CreateAvatar(AvatarLoadRequest.AvatarAddress, AvatarLoadRequest.IsLocalLoad, new BasisBundleInformation());
+                //    await BasisLocalPlayer.Instance.CreateAvatar(AvatarLoadRequest.AvatarAddress, AvatarLoadRequest.IsLocalLoad, new BasisBundleInformation());
             }
         }
 

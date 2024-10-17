@@ -5,6 +5,7 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -13,10 +14,40 @@ namespace Basis.Scripts.Avatar
 {
     public static class BasisAvatarFactory
     {
-        public const string LoadingAvatar = "LoadingAvatar";
-        public static async Task LoadAvatarLocal(BasisLocalPlayer Player, string AvatarAddress, byte Mode,string AvatarMetaUrl,string UnlockPassword, BasisBundleInformation BasisBundleInformation)
+      public static BasisLoadableBundle LoadingAvatar = new BasisLoadableBundle()
         {
-            if (string.IsNullOrEmpty(AvatarAddress))
+            BasisBundleInformation = new BasisBundleInformation()
+            {
+                BasisBundleDescription = new BasisBundleDescription()
+                {
+                    AssetBundleDescription = "LoadingAvatar",
+                    AssetBundleName = "LoadingAvatar"
+                },
+                HasError = false,
+                BasisBundleGenerated = new BasisBundleGenerated()
+                {
+                    AssetBundleCRC = 0,
+                    AssetBundleHash = "N/A",
+                    AssetMode = "Gameobject"
+                },
+            },
+            UnlockPassword = "N/A",
+            BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle()
+            {
+                BundleURL = "LoadingAvatar",
+                IsLocal = true,
+                MetaURL = "LoadingAvatar",
+            },
+            BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle()
+            {
+                LocalBundleFile = "LoadingAvatar",
+                LocalMetaFile = "LoadingAvatar",
+            },
+            LoadedAssetBundle = null,
+        };
+        public static async Task LoadAvatarLocal(BasisLocalPlayer Player,byte Mode, BasisLoadableBundle BasisLoadableBundle)
+        {
+            if (string.IsNullOrEmpty(BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL))
             {
                 Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
                 await LoadAvatarAfterError(Player);
@@ -24,7 +55,7 @@ namespace Basis.Scripts.Avatar
             }
 
             DeleteLastAvatar(Player);
-            LoadLoadingAvatar(Player, LoadingAvatar);
+            LoadLoadingAvatar(Player, LoadingAvatar.BasisStoredEncyptedBundle.LocalBundleFile);
 
             try
             {
@@ -32,18 +63,30 @@ namespace Basis.Scripts.Avatar
                 switch (Mode)
                 {
                     case 0://download
-                        Debug.Log("Requested Avatar was a AssetBundle Avatar " + AvatarAddress);
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
+                        Debug.Log("Requested Avatar was a AssetBundle Avatar " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                        Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                     case 1://localload
-                           //Player.transform.position, Quaternion.identity
+                        Debug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                        var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, Para);
+
+                        if (GameObjects.Count > 0)
+                        {
+                            Debug.Log("Found Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                            Output = GameObjects[0];
+                        }
+                        else
+                        {
+                            Debug.LogError("Cant Find Local Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                        }
                         break;
                     default:
-                        Debug.Log("Using Default, this means index was out of acceptable range! " + AvatarAddress);
-                        Output = await DownloadAndLoadAvatar(AvatarAddress, BasisBundleInformation, Player);
+                        Debug.Log("Using Default, this means index was out of acceptable range! " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                        Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                 }
-                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() {  AvatarBundleUrl = AvatarAddress, AvatarMetaUrl = AvatarMetaUrl, UnlockPassword = UnlockPassword };
+                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, UnlockPassword = BasisLoadableBundle.UnlockPassword };
                 Player.AvatarLoadMode = Mode;
 
                 InitializePlayerAvatar(Player, Output);
@@ -67,7 +110,7 @@ namespace Basis.Scripts.Avatar
             }
 
             DeleteLastAvatar(Player);
-            LoadLoadingAvatar(Player, LoadingAvatar);
+            LoadLoadingAvatar(Player, LoadingAvatar.BasisStoredEncyptedBundle.LocalBundleFile);
 
             try
             {
@@ -75,19 +118,31 @@ namespace Basis.Scripts.Avatar
                 switch (Mode)
                 {
                     case 0://download
-                      Output = await DownloadAndLoadAvatar(, Player);
+                        Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                     case 1://localload
-                           //Player.transform.position, Quaternion.identity
-                           break;
+                        Debug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                        var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, Para);
+
+                        if (GameObjects.Count > 0)
+                        {
+                            Debug.Log("Found Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                            Output = GameObjects[0];
+                        }
+                        else
+                        {
+                            Debug.LogError("Cant Find Local Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL);
+                        }
+                        break;
                     default:
-                      Output = await DownloadAndLoadAvatar(, Player);
+                        Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                 }
-               // Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { AvatarBundleUrl = AvatarAddress, AvatarMetaUrl = AvatarMetaUrl, UnlockPassword = UnlockPassword };
+                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL, AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,  UnlockPassword = BasisLoadableBundle.UnlockPassword };
                 Player.AvatarLoadMode = Mode;
 
-               InitializePlayerAvatar(Player, Output);
+                InitializePlayerAvatar(Player, Output);
                 Player.AvatarSwitched();
             }
             catch (Exception e)
@@ -96,12 +151,23 @@ namespace Basis.Scripts.Avatar
                 await LoadAvatarAfterError(Player);
             }
         }
-
-        private static async Task<GameObject> DownloadAndLoadAvatar(string AvatarAddress, BasisBundleInformation hash, BasisPlayer Player)
+        public static async Task<GameObject> DownloadAndLoadAvatar(BasisLoadableBundle BasisLoadableBundle, BasisPlayer BasisPlayer)
         {
-         return await BasisGameObjectAssetBundleManager.DownloadAndLoadGameObjectAsync(AvatarAddress, hash, FileName, BasisStorageManagement.AssetSubDirectory, Player.transform.position,Quaternion.identity, Player.ProgressReportAvatarLoad);
+            BasisLoadableBundle = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadableBundle, BasisPlayer.AvatarProgress, new CancellationToken());
+            BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, BasisLoadableBundle.BasisBundleInformation, BasisLoadableBundle.UnlockPassword, BasisPlayer.AvatarProgress);
+            if (BasisLoadableBundle.LoadedAssetBundle != null)
+            {
+                AssetBundleRequest Request = BasisLoadableBundle.LoadedAssetBundle.LoadAssetAsync<GameObject>(BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);
+                await Request;
+                GameObject InBundleGameobject = (GameObject)Request.asset;
+                return GameObject.Instantiate(InBundleGameobject, BasisPlayer.transform.position, Quaternion.identity);
+            }
+            else
+            {
+                Debug.LogError("Unable to load Asset Bundle");
+                return null;
+            }
         }
-
         private static void InitializePlayerAvatar(BasisPlayer Player, GameObject Output)
         {
             if (Output.TryGetComponent(out BasisAvatar Avatar))
@@ -139,13 +205,13 @@ namespace Basis.Scripts.Avatar
             try
             {
                 var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar, Para);
+                (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar.BasisStoredEncyptedBundle.LocalBundleFile, Para);
 
-                if (GameObjects.Count > 0)
+                if (GameObjects.Count != 0)
                 {
-                 InitializePlayerAvatar(Player, GameObjects[0]);
+                    InitializePlayerAvatar(Player, GameObjects[0]);
                 }
-               Player.AvatarNetworkLoadInformation = new BasisPlayer.AvatarNetworkLoadInformation() { AvatarBundleUrl = LoadingAvatar, AvatarMetaUrl = LoadingAvatar, UnlockPassword = "N/A" };
+                Player.AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation() { };
                 Player.AvatarLoadMode = 1;
                 Player.AvatarSwitched();
 
@@ -175,7 +241,7 @@ namespace Basis.Scripts.Avatar
                 Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
                 if (Player.IsLocal)
                 {
-                    BasisLocalPlayer BasisLocalPlayer =(BasisLocalPlayer)Player;
+                    BasisLocalPlayer BasisLocalPlayer = (BasisLocalPlayer)Player;
                     Player.Avatar.IsOwnedLocally = true;
                     CreateLocal(BasisLocalPlayer);
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
@@ -186,7 +252,7 @@ namespace Basis.Scripts.Avatar
                 }
                 else
                 {
-                    BasisRemotePlayer BasisRemotePlayer =(BasisRemotePlayer)Player;
+                    BasisRemotePlayer BasisRemotePlayer = (BasisRemotePlayer)Player;
                     Player.Avatar.IsOwnedLocally = false;
                     CreateRemote(BasisRemotePlayer);
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);

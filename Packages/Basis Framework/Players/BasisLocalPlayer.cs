@@ -59,8 +59,8 @@ namespace Basis.Scripts.BasisSdk.Players
             LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
             await BasisLocalInputActions.CreateInputAction(this);
             await BasisDeviceManagement.LoadGameobject(MainCamera, new InstantiationParameters());
-          //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
-          //  FootPlacementDriver.Initialize();
+            //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
+            //  FootPlacementDriver.Initialize();
             Move.Initialize();
             LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
             LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
@@ -71,8 +71,8 @@ namespace Basis.Scripts.BasisSdk.Players
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
             }
-            BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension,BasisAvatarFactory.LoadingAvatar,BasisPlayer.LoadModeLocal);
-       await CreateAvatar(LastUsedAvatar.UniqueID);
+          //here LD  BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal);
+            await CreateAvatar(BasisPlayer.LoadModeLocal,BasisAvatarFactory.LoadingAvatar);
             if (MicrophoneRecorder == null)
             {
                 MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
@@ -122,10 +122,10 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
         }
-        public async Task CreateAvatar(string AddressableID, byte mode, BasisBundleInformation BasisBundleInformation)
+        public async Task CreateAvatar(byte mode, BasisLoadableBundle BasisLoadableBundle)
         {
-            await BasisAvatarFactory.LoadAvatar(this, AddressableID, mode, BasisBundleInformation);
-            BasisDataStore.SaveAvatar(AddressableID, mode, LoadFileNameAndExtension);
+            await BasisAvatarFactory.LoadAvatarLocal(this, mode, BasisLoadableBundle);
+           //here LD BasisDataStore.SaveAvatar(AddressableID, mode, LoadFileNameAndExtension);
             OnLocalAvatarChanged?.Invoke();
         }
         public void OnCalibration()

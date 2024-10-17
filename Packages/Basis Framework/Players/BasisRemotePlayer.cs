@@ -43,7 +43,7 @@ namespace Basis.Scripts.BasisSdk.Players
 
                 BasisLoadedBundle =   await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
 
-             CreateAvatar(ALI.AvatarBundleUrl, CACM.loadMode, BasisLoadedBundle);
+             CreateAvatar(CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
@@ -63,19 +63,19 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
         }
-        public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle, string Loader = BasisAvatarFactory.LoadingAvatar)
+        public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle)
         {
-            if (string.IsNullOrEmpty(Loader))
+            if (BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile == BasisAvatarFactory.LoadingAvatar.BasisStoredEncyptedBundle.LocalBundleFile)
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
-              await BasisAvatarFactory.LoadAvatarRemote(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeError, BasisAvatarFactory.LoadingAvatar, "N/A", BasisLoadableBundle);
+                await BasisAvatarFactory.LoadAvatarRemote(this, BasisPlayer.LoadModeError, BasisLoadableBundle);
             }
             else
             {
-                Debug.Log("loading avatar from " + Loader + " with net mode " + Mode);
+                Debug.Log("loading avatar from " + BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile + " with net mode " + Mode);
                 if (LockAvatarFromChanging == false)
                 {
-                  await BasisAvatarFactory.LoadAvatarRemote(this, Loader, Mode, BasisLoadableBundle);
+                    await BasisAvatarFactory.LoadAvatarRemote(this, Mode, BasisLoadableBundle);
                 }
             }
         }
