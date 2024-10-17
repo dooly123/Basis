@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-
+using static LoadABundle;
 namespace Basis.Scripts.Avatar
 {
     public static class BasisAvatarFactory
@@ -153,8 +153,7 @@ namespace Basis.Scripts.Avatar
         }
         public static async Task<GameObject> DownloadAndLoadAvatar(BasisLoadableBundle BasisLoadableBundle, BasisPlayer BasisPlayer)
         {
-            BasisLoadableBundle = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadableBundle, BasisPlayer.AvatarProgress, new CancellationToken());
-            BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, BasisLoadableBundle.BasisBundleInformation, BasisLoadableBundle.UnlockPassword, BasisPlayer.AvatarProgress);
+           await BasisLoadhandler.LoadBundle(BasisLoadableBundle, BasisPlayer.ProgressReportAvatarLoad, new CancellationToken());
             if (BasisLoadableBundle.LoadedAssetBundle != null)
             {
                 AssetBundleRequest Request = BasisLoadableBundle.LoadedAssetBundle.LoadAssetAsync<GameObject>(BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);

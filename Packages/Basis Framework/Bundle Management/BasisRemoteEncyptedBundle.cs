@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public struct BasisRemoteEncyptedBundle
+public class BasisRemoteEncyptedBundle
 {
     public bool IsLocal;
     public string MetaURL;

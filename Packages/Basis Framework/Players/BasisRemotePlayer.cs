@@ -3,6 +3,7 @@ using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.NamePlate;
 using BasisSerializer.OdinSerializer;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using static SerializableDarkRift;
@@ -33,9 +34,10 @@ namespace Basis.Scripts.BasisSdk.Players
                 BasisLoadableBundle BasisLoadedBundle =  BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
 
 
-                BasisLoadedBundle = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, new System.Threading.CancellationToken());
+               var  Wrapper = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, CurrentAvatarsCancellationToken);
+                await BasisLoadhandler.LoadBundle(BasisLoadedBundle, AvatarProgress, new CancellationToken());
 
-             CreateAvatar(CACM.loadMode, BasisLoadedBundle);
+                CreateAvatar(CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);

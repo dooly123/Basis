@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public struct BasisLoadableBundle
+public class BasisLoadableBundle
 {
     public string UnlockPassword;
     //encrypted state

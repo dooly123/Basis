@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using static BasisProgressReport;
+using static BasisProgressReport;   
+using static BasisLoadhandler;
+using UnityEngine.SceneManagement;
 
 public static class BasisLoadBundle
 {
-    // Cache to store already loaded AssetBundles
-    private static ConcurrentDictionary<string, Task<AssetBundle>> bundleCache = new ConcurrentDictionary<string, Task<AssetBundle>>();
-
     /// <summary>
     /// Loads an AssetBundle asynchronously from a specified file location. Uses caching to prevent reloading the same bundle.
     /// Returns the cached AssetBundle immediately if it's already loaded.
@@ -17,42 +15,19 @@ public static class BasisLoadBundle
     /// <param name="EncyptedfileLocation">The file location of the AssetBundle.</param>
     /// <param name="basisBundleInformation">Information related to the AssetBundle, including hash and CRC values.</param>
     /// <returns>The loaded AssetBundle if successful, otherwise null.</returns>
-    public static async Task<AssetBundle> LoadBasisBundle(string EncyptedfileLocation, BasisBundleInformation basisBundleInformation,string Password, ProgressReport ProgressReport)
+    public static async Task<AssetBundle> LoadBasisBundle(BasisTrackedBundleWrapper BasisTrackedBundleWrapper, ProgressReport ProgressReport)
     {
         // Ensure the provided file location is valid
-        if (string.IsNullOrEmpty(EncyptedfileLocation))
+       BasisLoadableBundle Bundle = BasisTrackedBundleWrapper.LoadableBundle.Result;
+        if (Bundle != null && string.IsNullOrEmpty(Bundle.BasisStoredEncyptedBundle.LocalBundleFile))
         {
             Debug.LogError("Invalid file location provided was null or empty.");
             return null;
         }
-
-        // Check if the bundle is already loaded and return it immediately
-        if (bundleCache.TryGetValue(EncyptedfileLocation, out var cachedTask))
-        {
-            // If the bundle is already loaded and available, return it immediately
-            if (cachedTask.IsCompletedSuccessfully && cachedTask.Result != null)
-            {
-                Debug.Log("AssetBundle already loaded, returning cached version.");
-                return cachedTask.Result;
-            }
-
-            // If the task is still in progress, await it
-            Debug.Log("AssetBundle is already being loaded, waiting for the task to complete.");
-            return await cachedTask;
-        }
-
-        // Create a new task to load the AssetBundle on the main thread
-        Task<AssetBundle> loadTask = LoadAssetBundleAsync(EncyptedfileLocation, basisBundleInformation, Password, ProgressReport);
-
-        // Add the task to the cache so subsequent requests will use the same task
-        if (!bundleCache.TryAdd(EncyptedfileLocation, loadTask))
-        {
-            // If another thread added the same task simultaneously, return the cached one
-            return await bundleCache[EncyptedfileLocation];
-        }
+        BasisTrackedBundleWrapper.AssetBundle = LoadAssetBundleAsync(Bundle.BasisStoredEncyptedBundle.LocalBundleFile, Bundle.BasisBundleInformation, Bundle.UnlockPassword, ProgressReport);
 
         // Return the loaded AssetBundle
-        return await loadTask;
+        return await BasisTrackedBundleWrapper.AssetBundle;
     }
 
     private static async Task<AssetBundle> LoadAssetBundleAsync(string fileLocation, BasisBundleInformation basisBundleInformation, string Password, ProgressReport ProgressReport)
@@ -67,6 +42,50 @@ public static class BasisLoadBundle
         {
             Debug.LogError($"Exception occurred while loading AssetBundle: {ex.Message}");
             return null;
+        }
+    }
+    public static async Task LoadSceneFromAssetBundleAsync(AssetBundle bundle, bool MakeActiveScene, ProgressReport progressCallback)
+    {
+        string[] scenePaths = bundle.GetAllScenePaths();
+        if (scenePaths.Length == 0)
+        {
+            Debug.LogError("No scenes found in AssetBundle.");
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(scenePaths[0]))
+        {
+            // Load the scene asynchronously
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scenePaths[0], LoadSceneMode.Additive);
+
+            // Track scene loading progress
+            while (!asyncLoad.isDone)
+            {
+                progressCallback?.Invoke(50 + asyncLoad.progress * 50); // Progress from 50 to 100 during scene load
+                await Task.Yield();
+            }
+
+            Debug.Log("Scene loaded successfully from AssetBundle.");
+            Scene loadedScene = SceneManager.GetSceneByPath(scenePaths[0]);
+
+            // Set the loaded scene as the active scene
+            if (loadedScene.IsValid())
+            {
+                if (MakeActiveScene)
+                {
+                    SceneManager.SetActiveScene(loadedScene);
+                }
+                Debug.Log("Scene set as active: " + loadedScene.name);
+                progressCallback?.Invoke(100); // Set progress to 100 when done
+            }
+            else
+            {
+                Debug.LogError("Failed to get loaded scene.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Scene not found in AssetBundle.");
         }
     }
     /// <summary>
@@ -97,27 +116,6 @@ public static class BasisLoadBundle
                 GameObject.Destroy(mono);
                 // Do something if the MonoBehaviour type is not approved
             }
-        }
-    }
-    /// <summary>
-    /// Unloads the AssetBundle to free up memory and removes it from the cache.
-    /// </summary>
-    /// <param name="fileLocation">The file location used as the key in the cache.</param>
-    /// <param name="unloadAllLoadedObjects">Whether to unload all loaded objects.</param>
-    public static void UnloadAssetBundle(string fileLocation, bool unloadAllLoadedObjects = false)
-    {
-        if (bundleCache.TryRemove(fileLocation, out var bundleTask) && bundleTask.IsCompletedSuccessfully)
-        {
-            AssetBundle assetBundle = bundleTask.Result;
-            if (assetBundle != null)
-            {
-                assetBundle.Unload(unloadAllLoadedObjects);
-                Debug.Log("AssetBundle unloaded and removed from cache.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("AssetBundle is either not loaded or already removed from cache.");
         }
     }
 }

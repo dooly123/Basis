@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public struct BasisStoredEncyptedBundle
+public class BasisStoredEncyptedBundle
 {
     public string LocalMetaFile;
     public string LocalBundleFile;

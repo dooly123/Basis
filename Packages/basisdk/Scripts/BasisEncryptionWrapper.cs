@@ -10,7 +10,7 @@ public static class BasisEncryptionWrapper
     private const int SaltSize = 16; // Size of the salt in bytes
     private const int KeySize = 32; // Size of the key in bytes (256 bits)
     private const int IvSize = 16; // Size of the IV in bytes (128 bits)
-    const int chunkSize = 16 * 1024 * 1024; // 16 MB
+    const int chunkSize = 16 * 1024; // 16 kib
     public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, string password, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);

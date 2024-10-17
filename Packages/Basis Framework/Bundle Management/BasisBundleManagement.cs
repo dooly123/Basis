@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using static BasisLoadhandler;
 public static class BasisBundleManagement
 {
     public static string DecryptedMetaBasis = ".DecryptedMetaBasis";
@@ -14,61 +15,27 @@ public static class BasisBundleManagement
     public static string AssetBundles = "AssetBundles";
     public static string LockedBundles = "LockedBundles";
 
-    public static ConcurrentDictionary<string, BasisBundleInformation> UnLoadedBundles = new ConcurrentDictionary<string, BasisBundleInformation>();
-
-    public static ConcurrentDictionary<string, BasisLoadableBundle> LoadableBundles = new ConcurrentDictionary<string, BasisLoadableBundle>();
-
     // Dictionary to track ongoing downloads keyed by MetaURL
-    private static ConcurrentDictionary<string, Task<BasisLoadableBundle>> OnGoingDownloads = new ConcurrentDictionary<string, Task<BasisLoadableBundle>>();
     public static BasisProgressReport.ProgressReport FindAllBundlesReport;
-
     /// <summary>
     /// AssetToLoad,Password
     /// </summary>
     public static ConcurrentDictionary<string, string> UnlockedVisibleBundles = new ConcurrentDictionary<string, string>();
-    public static bool FindBundle(BasisBundleInformation BasisBundleInformation)
-    {
-        Debug.Log($"Checking if bundle exists for {BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}");
-        if (LoadableBundles.ContainsKey(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName))
-        {
-            Debug.Log("Bundle found in LoadableBundles.");
-            return true;
-        }
-        Debug.Log("Bundle not found in LoadableBundles.");
-        return false;
-    }
-    public static async Task FindAllBundles()
-    {
-        /*
-        string FolderPath = GenerateFolderPath(AssetBundles);
-        string[] Files = System.IO.Directory.GetFiles(FolderPath, $"*{DecryptedMetaBasis}");
-        //i want to do this over multiple frames
-        foreach (string File in Files)
-        {
-            BasisBundleInformation BasisBundleInformation = BasisEncryptionToData.GenerateMetaFromFile(,File);
-            string AssetToLoadName = BasisBundleInformation.BasisBundleGenerated.AssetToLoadName;
-            if (UnLoadedBundles.TryAdd(AssetToLoadName, BasisBundleInformation))
-            {
-
-            }
-            else
-            {
-                Debug.LogError("There was a Duplicate Asset with " + AssetToLoadName);
-            }
-        }
-        */
-    }
-    public static async Task<BasisLoadableBundle> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    public static async Task<BasisTrackedBundleWrapper> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         string metaUrl = BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
         Debug.Log($"Starting download process for {metaUrl}");
 
         // Check if there's an ongoing or completed download for this MetaURL
-        if (!OnGoingDownloads.TryGetValue(metaUrl, out var downloadTask))
+        if (!QueryableBundles.TryGetValue(metaUrl, out BasisTrackedBundleWrapper downloadTask))
         {
             Debug.Log($"No ongoing download for {metaUrl}, starting a new one.");
-            downloadTask = DownloadAndProcessMeta(BasisLoadedBundle, progressCallback, cancellationToken);
-            OnGoingDownloads.TryAdd(metaUrl, downloadTask);
+            downloadTask = new BasisTrackedBundleWrapper
+            {
+                LoadableBundle = DownloadAndProcessMeta(BasisLoadedBundle, progressCallback, cancellationToken),
+                metaUrl = metaUrl
+            };
+            QueryableBundles.TryAdd(metaUrl, downloadTask);
         }
         else
         {
@@ -76,7 +43,7 @@ public static class BasisBundleManagement
         }
 
         // Await the task (this will wait for the first download if it's still in progress)
-        BasisLoadableBundle bundleInfo = await downloadTask;
+        BasisLoadableBundle bundleInfo = await downloadTask.LoadableBundle;
 
         // Handle the result or failure (if bundleInfo is null, there was an error)
         if (bundleInfo.BasisBundleInformation.HasError)
@@ -89,15 +56,10 @@ public static class BasisBundleManagement
             {
                 Debug.LogError($"Failed to download and process meta for {metaUrl}");
             }
-            BasisLoadedBundle = bundleInfo;
-            return BasisLoadedBundle;
+            return downloadTask;
         }
-
-        // Update the LoadableBundles dictionary after download completes
-        LoadableBundles.TryAdd(bundleInfo.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName, BasisLoadedBundle);
         Debug.Log($"Download and processing for {metaUrl} completed successfully.");
-        BasisLoadedBundle = bundleInfo;
-        return BasisLoadedBundle;
+        return downloadTask;
     }
     /// <summary>
     /// generates unique id for new data 
@@ -142,10 +104,18 @@ public static class BasisBundleManagement
             string FilePathMeta = BasisIOManagement.GenerateFilePath($"{BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}{DecryptedMetaBasis}", AssetBundles);
             string FilePathBundle = BasisIOManagement.GenerateFilePath($"{BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}{DecryptedBundleBasis}", AssetBundles);
 
+            if (File.Exists(FilePathMeta))
+            {
+                File.Delete(FilePathMeta);
+            }
             File.Move(UniqueFilePath, FilePathMeta);//move encrypted to match new name.
 
             if (BasisLoadedBundle.BasisRemoteBundleEncypted.IsLocal)
             {
+                if (File.Exists(FilePathBundle))
+                {
+                    File.Delete(FilePathBundle);
+                }
                 File.Copy(BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL, FilePathBundle);//the goal here is just to get the data out
             }
             else
@@ -167,5 +137,44 @@ public static class BasisBundleManagement
         }
         BasisLoadedBundle.BasisBundleInformation.HasError = true;
         return BasisLoadedBundle;
+    }
+
+
+    public static bool FindBundle(BasisBundleInformation BasisBundleInformation)
+    {
+        Debug.Log($"Checking if bundle exists for {BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}");
+        if (QueryableBundles.ContainsKey(BasisBundleInformation.BasisBundleGenerated.AssetToLoadName))
+        {
+            Debug.Log("Bundle found in LoadableBundles.");
+            return true;
+        }
+        Debug.Log("Bundle not found in LoadableBundles.");
+        return false;
+    }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static async void OnRuntimeMethodLoad()
+    {
+        await FigureOutExistingContent();
+    }
+    public static async Task FigureOutExistingContent()
+    {
+        string FolderPath = BasisIOManagement.GenerateFolderPath(AssetBundles);
+        string[] Files = System.IO.Directory.GetFiles(FolderPath, $"*{DecryptedMetaBasis}");
+        /*
+        //i want to do this over multiple frames
+        foreach (string File in Files)
+        {
+            BasisBundleInformation BasisBundleInformation = BasisEncryptionToData.GenerateMetaFromFile(,File,);
+            string AssetToLoadName = BasisBundleInformation.BasisBundleGenerated.AssetToLoadName;
+            if (UnLoadedBundles.TryAdd(AssetToLoadName, BasisBundleInformation))
+            {
+
+            }
+            else
+            {
+                Debug.LogError("There was a Duplicate Asset with " + AssetToLoadName);
+            }
+        }
+        */
     }
 }

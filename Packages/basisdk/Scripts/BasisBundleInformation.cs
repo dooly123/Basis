@@ -1,18 +1,18 @@
 [System.Serializable]
-public struct BasisBundleInformation
+public class BasisBundleInformation
 {
     public bool HasError;
     public BasisBundleDescription BasisBundleDescription;
     public BasisBundleGenerated BasisBundleGenerated;
 }
 [System.Serializable]
-public struct BasisBundleDescription
+public class BasisBundleDescription
 {
     public string AssetBundleName;//user friendly name of this asset.
     public string AssetBundleDescription;//the description of this asset
 }
 [System.Serializable]
-public struct BasisBundleGenerated
+public class BasisBundleGenerated
 {
     public string AssetBundleHash;//hash stored seperately
     public string AssetMode;//Scene or Gameobject

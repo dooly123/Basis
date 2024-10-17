@@ -24,7 +24,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public const byte LoadModeError = 2;
         public bool FaceisVisible;
         public BasisMeshRendererCheck FaceRenderer;
-
+        public CancellationToken CurrentAvatarsCancellationToken;
         public byte AvatarLoadMode;//0 downloading 1 local
 
         public ProgressReport AvatarProgress;
