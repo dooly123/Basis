@@ -11,7 +11,7 @@ public static class BasisBundleManagement
     public static string DecryptedBundleBasis = ".DecryptedBundleBasis";
     public static string EncryptedMetaBasis = ".EncryptedMetaBasis";
     public static string EncryptedBundleBasis = ".EncryptedBundleBasis";
-
+    public static string MetaBasis = ".MetaBasis";
     public static string AssetBundles = "AssetBundles";
     public static string LockedBundles = "LockedBundles";
 
