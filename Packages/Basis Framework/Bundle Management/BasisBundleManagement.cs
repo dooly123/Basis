@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using static BasisLoadhandler;
 public static class BasisBundleManagement
 {
     public static string DecryptedMetaBasis = ".DecryptedMetaBasis";
