@@ -10,12 +10,12 @@ public static class BasisEncryptionToData
         AssetBundle AssetBundle = AssetBundle.LoadFromMemory(LoadedBundleData, CRC);
         return AssetBundle;
     }
-    public static async Task<BasisBundleInformation> GenerateMetaFromFile(string Password, string FilePath, BasisProgressReport.ProgressReport progressCallback)
+    public static async Task<BasisLoadableBundle> GenerateMetaFromFile(BasisLoadableBundle BasisLoadableBundle, string FilePath, BasisProgressReport.ProgressReport progressCallback)
     {
-        byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(Password, FilePath, progressCallback);
+        byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(BasisLoadableBundle.UnlockPassword, FilePath, progressCallback);
         Debug.Log("Converting decrypted meta file to BasisBundleInformation...");
-        BasisBundleInformation BasisBundleInformation = ConvertBytesToJson(LoadedMetaData);
-        return BasisBundleInformation;
+        BasisLoadableBundle.BasisBundleInformation = ConvertBytesToJson(LoadedMetaData);
+        return BasisLoadableBundle;
     }
     public static BasisBundleInformation ConvertBytesToJson(byte[] loadedlocalmeta)
     {

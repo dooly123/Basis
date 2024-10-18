@@ -7,7 +7,7 @@ public class LoadABundle : MonoBehaviour
     public BasisLoadableBundle BasisLoadableBundle;
     public bool UseCondom = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    async void Start()
+    async void OnEnable()
     {
         await BasisLoadhandler.LoadGameobjectBundle(BasisLoadableBundle, UseCondom, Report, CancellationToken);
     }

@@ -61,6 +61,54 @@ public static class BasisBundleManagement
         Debug.Log($"Download and processing for {metaUrl} completed successfully.");
         return downloadTask;
     }
+    public static BasisTrackedBundleWrapper DataOnDiscProcessMeta(
+        BasisLoadableBundle basisLoadedBundle,
+        string metaFilepath,
+        string localBundleFile,
+        BasisProgressReport.ProgressReport progressCallback,
+        CancellationToken cancellationToken)
+    {
+        // Log entry point
+        Debug.Log("Starting DataOnDiscProcessMeta method...");
+
+        try
+        {
+            // Set local paths
+            Debug.Log($"Setting local bundle file: {localBundleFile}");
+            basisLoadedBundle.BasisStoredEncyptedBundle.LocalBundleFile = localBundleFile;
+
+            Debug.Log($"Setting local meta file: {metaFilepath}");
+            basisLoadedBundle.BasisStoredEncyptedBundle.LocalMetaFile = metaFilepath;
+
+            // Fetching the meta URL
+            string metaUrl = basisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
+            Debug.Log($"Fetched meta URL: {metaUrl}");
+
+            // Generating meta from file
+            Debug.Log("Generating meta from file...");
+            var loadableBundle = BasisEncryptionToData.GenerateMetaFromFile(basisLoadedBundle, metaFilepath, progressCallback);
+
+            // Create and assign the download task
+            Debug.Log("Creating BasisTrackedBundleWrapper...");
+            BasisTrackedBundleWrapper downloadTask = new BasisTrackedBundleWrapper
+            {
+                LoadableBundle = loadableBundle,
+                metaUrl = metaUrl
+            };
+
+            // Add to queryable bundles
+            Debug.Log($"Adding to QueryableBundles with metaUrl: {metaUrl}");
+            QueryableBundles.TryAdd(metaUrl, downloadTask);
+
+            Debug.Log("DataOnDiscProcessMeta completed successfully.");
+            return downloadTask;
+        }
+        catch (Exception ex)
+        {
+            Debug.Log($"Error in DataOnDiscProcessMeta: {ex.Message}");
+            throw; // Optionally rethrow the exception to handle it further up
+        }
+    }
     /// <summary>
     /// generates unique id for new data 
     /// copy just the meta data to new location
@@ -95,14 +143,14 @@ public static class BasisBundleManagement
 
             // Step 2: Decrypt the meta file
             Debug.Log("Decrypting meta file...");
-            BasisBundleInformation BasisBundleInformation = await BasisEncryptionToData.GenerateMetaFromFile(BasisLoadedBundle.UnlockPassword, UniqueFilePath, progressCallback);
+            BasisLoadedBundle = await BasisEncryptionToData.GenerateMetaFromFile(BasisLoadedBundle, UniqueFilePath, progressCallback);
 
 
             // Step 4: Download the bundle file
             Debug.Log($"Downloading bundle file from {BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL}");
 
-            string FilePathMeta = BasisIOManagement.GenerateFilePath($"{BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}{DecryptedMetaBasis}", AssetBundles);
-            string FilePathBundle = BasisIOManagement.GenerateFilePath($"{BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}{DecryptedBundleBasis}", AssetBundles);
+            string FilePathMeta = BasisIOManagement.GenerateFilePath($"{BasisLoadedBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}{DecryptedMetaBasis}", AssetBundles);
+            string FilePathBundle = BasisIOManagement.GenerateFilePath($"{BasisLoadedBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName}{DecryptedBundleBasis}", AssetBundles);
 
             if (File.Exists(FilePathMeta))
             {
@@ -125,8 +173,6 @@ public static class BasisBundleManagement
             Debug.Log($"Successfully downloaded bundle file for {BasisLoadedBundle.BasisRemoteBundleEncypted.BundleURL}");
             Debug.Log("Meta and bundle files written to disk successfully.");
 
-            BasisLoadedBundle.BasisBundleInformation = BasisBundleInformation;
-
             BasisLoadedBundle.BasisStoredEncyptedBundle.LocalBundleFile = FilePathBundle;
             BasisLoadedBundle.BasisStoredEncyptedBundle.LocalMetaFile = FilePathMeta;
             return BasisLoadedBundle;
@@ -137,31 +183,5 @@ public static class BasisBundleManagement
         }
         BasisLoadedBundle.BasisBundleInformation.HasError = true;
         return BasisLoadedBundle;
-    }
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static async void OnRuntimeMethodLoad()
-    {
-        await FigureOutExistingContent();
-    }
-    public static async Task FigureOutExistingContent()
-    {
-        string FolderPath = BasisIOManagement.GenerateFolderPath(AssetBundles);
-        string[] Files = System.IO.Directory.GetFiles(FolderPath, $"*{DecryptedMetaBasis}");
-        /*
-        //i want to do this over multiple frames
-        foreach (string File in Files)
-        {
-            BasisBundleInformation BasisBundleInformation = BasisEncryptionToData.GenerateMetaFromFile(,File,);
-            string AssetToLoadName = BasisBundleInformation.BasisBundleGenerated.AssetToLoadName;
-            if (UnLoadedBundles.TryAdd(AssetToLoadName, BasisBundleInformation))
-            {
-
-            }
-            else
-            {
-                Debug.LogError("There was a Duplicate Asset with " + AssetToLoadName);
-            }
-        }
-        */
     }
 }
