@@ -61,15 +61,16 @@ public static class BasisBundleManagement
         Debug.Log($"Download and processing for {metaUrl} completed successfully.");
         return downloadTask;
     }
-    public static BasisTrackedBundleWrapper DataOnDiscProcessMeta(
-        BasisLoadableBundle basisLoadedBundle,
-        string metaFilepath,
-        string localBundleFile,
-        BasisProgressReport.ProgressReport progressCallback,
-        CancellationToken cancellationToken)
+    public static async Task<BasisTrackedBundleWrapper> DataOnDiscProcessMetaAsync(BasisLoadableBundle basisLoadedBundle, string metaFilepath, string localBundleFile, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         // Log entry point
         Debug.Log("Starting DataOnDiscProcessMeta method...");
+
+        if (basisLoadedBundle == null || string.IsNullOrEmpty(metaFilepath) || string.IsNullOrEmpty(localBundleFile))
+        {
+            Debug.LogError("Invalid parameters passed to DataOnDiscProcessMeta");
+            return null; // or handle accordingly
+        }
 
         try
         {
@@ -95,17 +96,22 @@ public static class BasisBundleManagement
                 LoadableBundle = loadableBundle,
                 metaUrl = metaUrl
             };
-
             // Add to queryable bundles
             Debug.Log($"Adding to QueryableBundles with metaUrl: {metaUrl}");
             QueryableBundles.TryAdd(metaUrl, downloadTask);
+
+            await loadableBundle;
 
             Debug.Log("DataOnDiscProcessMeta completed successfully.");
             return downloadTask;
         }
         catch (Exception ex)
         {
-            Debug.Log($"Error in DataOnDiscProcessMeta: {ex.Message}");
+            Debug.LogError($"Error in DataOnDiscProcessMeta: {ex.Message}\n{ex.StackTrace}");
+            if (ex.InnerException != null)
+            {
+                Debug.LogError($"Inner Exception: {ex.InnerException.Message}\n{ex.InnerException.StackTrace}");
+            }
             throw; // Optionally rethrow the exception to handle it further up
         }
     }

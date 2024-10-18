@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -69,7 +70,7 @@ public static class BasisLoadhandler
             OnDiscInformation OnDiscInformation = new OnDiscInformation();
             if (URLDisc)
             {
-                BasisTrackedBundleWrapper = BasisBundleManagement.DataOnDiscProcessMeta(BasisLoadableBundle, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
+               BasisTrackedBundleWrapper = await BasisBundleManagement.DataOnDiscProcessMetaAsync(BasisLoadableBundle, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
             }
             else
             {
@@ -144,7 +145,7 @@ public static class BasisLoadhandler
             OnDiscInformation OnDiscInformation = new OnDiscInformation();
             if (URLDisc)
             {
-                BasisTrackedBundleWrapper = BasisBundleManagement.DataOnDiscProcessMeta(BasisLoadableBundle, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
+                  BasisTrackedBundleWrapper = await BasisBundleManagement.DataOnDiscProcessMetaAsync(BasisLoadableBundle, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
             }
             else
             {
@@ -166,51 +167,58 @@ public static class BasisLoadhandler
             await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(BasisLoadableBundle, MakeActiveScene, Report);
         }
     }
-    private static Lazy<Task> _loadAllTask = new Lazy<Task>(() => LoadAllInternal());
+    public static ConcurrentDictionary<string, OnDiscInformation> loadableDiscData = new ConcurrentDictionary<string, OnDiscInformation>();
+    public static bool IsInitalized = false;
+    // Internal method to load all on-disk information
+    private static Task _loadAllTask;
+    private static object _initLock = new object();
+
+    private static SemaphoreSlim _initSemaphore = new SemaphoreSlim(1, 1); // To control concurrent access
+
     private static async Task EnsureLoadAllComplete()
     {
         if (!IsInitalized)
         {
-            await _loadAllTask.Value; // Wait for LoadAll to complete if not initialized
-        }
-    }
-
-
-    public struct OnDiscInformation
-    {
-        public string StoredMetaURL;//where we got file from
-        public string StoredMetaLocal;//where we stored the file
-        public string StoredBundleLocal;//where we stored the file
-        public string AssetToLoad;
-    }
-    public static List<OnDiscInformation> loadableDiscData = new List<OnDiscInformation>();
-    public static bool IsInitalized = false;
-    // Internal method to load all on-disk information
-    private static async Task LoadAllInternal()
-    {
-        // Define the directory where the files are saved
-        string directoryPath = Application.persistentDataPath;
-
-        // Use wildcard * to find all files with the .dat extension (or whatever you use)
-        string[] files = Directory.GetFiles(directoryPath, "*" + BasisBundleManagement.MetaBasis);
-        int Count = files.Length;
-        Debug.Log("Found On Disc Bundles " + Count);
-        for (int Index = 0; Index < Count; Index++)
-        {
-            string file = files[Index];
+            await _initSemaphore.WaitAsync(); // Awaiting the semaphore
             try
             {
-                // Read the file content as binary
-                byte[] fileData = await File.ReadAllBytesAsync(file);
-
-                // Deserialize the binary data back into an OnDiscInformation object
-                OnDiscInformation onDiscInformation = SerializationUtility.DeserializeValue<OnDiscInformation>(fileData, DataFormat.Binary);
-
-                // Add to the loadableDiscData if it's not already in the list
-                if (!loadableDiscData.Contains(onDiscInformation))
+                if (!IsInitalized) // Double-check if still not initialized
                 {
-                    loadableDiscData.Add(onDiscInformation);
-                    Debug.Log($"Loaded OnDiscInformation from {file}");
+                    await LoadAllInternal(); // Only initialize once
+                    IsInitalized = true;
+                }
+            }
+            finally
+            {
+                _initSemaphore.Release();
+            }
+        }
+    }
+    private static async Task LoadAllInternal()
+    {
+        // Initial logging
+        Debug.Log("Starting to load all OnDisc information...");
+
+        string path = BasisIOManagement.GenerateFolderPath(BasisBundleManagement.AssetBundles);
+        string[] files = Directory.GetFiles(path, $"*{BasisBundleManagement.MetaBasis}");
+        int count = files.Length;
+        Debug.Log($"Found {count} On Disc Bundles.");
+
+        for (int index = 0; index < count; index++)
+        {
+            string file = files[index];
+            Debug.Log($"Loading file: {file}");
+            try
+            {
+                byte[] fileData = await File.ReadAllBytesAsync(file);
+                OnDiscInformation onDiscInformation = SerializationUtility.DeserializeValue<OnDiscInformation>(fileData, DataFormat.Binary);
+                if (loadableDiscData.TryAdd(onDiscInformation.StoredMetaURL, onDiscInformation))
+                {
+                    Debug.Log($"Successfully added OnDiscInformation for {onDiscInformation.StoredMetaURL}");
+                }
+                else
+                {
+                    Debug.LogWarning($"OnDiscInformation for {onDiscInformation.StoredMetaURL} already exists.");
                 }
             }
             catch (Exception ex)
@@ -218,28 +226,32 @@ public static class BasisLoadhandler
                 Debug.LogError($"Failed to load OnDiscInformation from {file}: {ex.Message}");
             }
         }
-        IsInitalized = true; // Mark the process as complete
+        IsInitalized = true; // Mark initialization complete.
+        Debug.Log("Completed loading all OnDisc information.");
     }
-    public static bool HasURLOnDisc(string MetaURL,out OnDiscInformation Info)
+    private static readonly object _discInfoLock = new object();
+
+    public static bool HasURLOnDisc(string MetaURL, out OnDiscInformation Info)
     {
-        foreach (OnDiscInformation OnDiscInformation in loadableDiscData)
+        lock (_discInfoLock)
         {
-            if(OnDiscInformation.StoredMetaURL.Equals(MetaURL))
+            foreach (OnDiscInformation OnDiscInformation in loadableDiscData.Values)
             {
-                Debug.Log("File exists on Disc! " + MetaURL);
-                Info = OnDiscInformation;
-                return true;
+                if (OnDiscInformation.StoredMetaURL == MetaURL)
+                {
+                    Debug.Log("File exists on Disc! " + MetaURL);
+                    Info = OnDiscInformation;
+                    return true;
+                }
             }
+            Info = new OnDiscInformation();
+            return false;
         }
-        Info = new OnDiscInformation();
-        return false;
     }
     public static async Task TryAddOnDiscInfo(OnDiscInformation onDiscInformation)
     {
-        if (!loadableDiscData.Contains(onDiscInformation))
+        if (loadableDiscData.TryAdd(onDiscInformation.StoredMetaURL, onDiscInformation))
         {
-            loadableDiscData.Add(onDiscInformation);
-
             // Serialize the OnDiscInformation object to a binary format
             byte[] onDiscInfo = SerializationUtility.SerializeValue<OnDiscInformation>(onDiscInformation, DataFormat.Binary);
 
@@ -249,7 +261,7 @@ public static class BasisLoadhandler
             // Save the binary data to the file
             try
             {
-               await File.WriteAllBytesAsync(filePath, onDiscInfo);
+                await File.WriteAllBytesAsync(filePath, onDiscInfo);
                 Debug.Log($"Saved OnDiscInformation to {filePath}");
             }
             catch (Exception ex)
@@ -261,11 +273,5 @@ public static class BasisLoadhandler
         {
             Debug.LogError("Already has Disc Info");
         }
-    }
-    public class BasisTrackedBundleWrapper
-    {
-        public Task<BasisLoadableBundle> LoadableBundle;
-        public Task<AssetBundle> AssetBundle;
-        public string metaUrl;
     }
 }
