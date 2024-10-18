@@ -1,7 +1,4 @@
-﻿
-using UnityEngine;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class BasisLoadableBundle
 {
     public string UnlockPassword;
@@ -10,5 +7,4 @@ public class BasisLoadableBundle
     public BasisStoredEncyptedBundle BasisStoredEncyptedBundle;
     //loaded MetaFile
     public BasisBundleInformation BasisBundleInformation;
-    public AssetBundle LoadedAssetBundle;
 }

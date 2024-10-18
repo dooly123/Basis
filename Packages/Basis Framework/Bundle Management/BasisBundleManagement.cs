@@ -21,101 +21,45 @@ public static class BasisBundleManagement
     /// AssetToLoad,Password
     /// </summary>
     public static ConcurrentDictionary<string, string> UnlockedVisibleBundles = new ConcurrentDictionary<string, string>();
-    public static async Task<BasisTrackedBundleWrapper> DownloadAndSaveBundle(BasisLoadableBundle BasisLoadedBundle, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    public static async Task DownloadAndSaveBundle(BasisTrackedBundleWrapper BasisTrackedBundleWrapper, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
-        string metaUrl = BasisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
+        string metaUrl = BasisTrackedBundleWrapper.LoadableBundle.BasisRemoteBundleEncypted.MetaURL;
         Debug.Log($"Starting download process for {metaUrl}");
 
-        // Check if there's an ongoing or completed download for this MetaURL
-        if (!QueryableBundles.TryGetValue(metaUrl, out BasisTrackedBundleWrapper downloadTask))
+        Debug.Log($"No ongoing download for {metaUrl}, starting a new one.");
+        BasisTrackedBundleWrapper downloadTask = new BasisTrackedBundleWrapper
         {
-            Debug.Log($"No ongoing download for {metaUrl}, starting a new one.");
-            downloadTask = new BasisTrackedBundleWrapper
-            {
-                LoadableBundle = DownloadAndProcessMeta(BasisLoadedBundle, progressCallback, cancellationToken),
-                metaUrl = metaUrl
-            };
-            QueryableBundles.TryAdd(metaUrl, downloadTask);
-        }
-        else
-        {
-            Debug.Log($"Found an ongoing download for {metaUrl}, awaiting completion.");
-        }
-
-        // Await the task (this will wait for the first download if it's still in progress)
-        BasisLoadableBundle bundleInfo = await downloadTask.LoadableBundle;
-
-        // Handle the result or failure (if bundleInfo is null, there was an error)
-        if (bundleInfo.BasisBundleInformation.HasError)
-        {
-            if (BasisLoadedBundle.BasisRemoteBundleEncypted.IsLocal)
-            {
-                Debug.LogError($"Failed to Copy and process meta for {metaUrl}");
-            }
-            else
-            {
-                Debug.LogError($"Failed to download and process meta for {metaUrl}");
-            }
-            return downloadTask;
-        }
-        Debug.Log($"Download and processing for {metaUrl} completed successfully.");
-        return downloadTask;
+            LoadableBundle = await DownloadAndProcessMeta(BasisTrackedBundleWrapper.LoadableBundle, progressCallback, cancellationToken),
+            metaUrl = metaUrl
+        };
     }
-    public static async Task<BasisTrackedBundleWrapper> DataOnDiscProcessMetaAsync(BasisLoadableBundle basisLoadedBundle, string metaFilepath, string localBundleFile, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    public static async Task DataOnDiscProcessMetaAsync(BasisTrackedBundleWrapper BasisTrackedBundleWrapper, string metaFilepath, string localBundleFile, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
     {
         // Log entry point
         Debug.Log("Starting DataOnDiscProcessMeta method...");
 
-        if (basisLoadedBundle == null || string.IsNullOrEmpty(metaFilepath) || string.IsNullOrEmpty(localBundleFile))
+        if (BasisTrackedBundleWrapper == null || string.IsNullOrEmpty(metaFilepath) || string.IsNullOrEmpty(localBundleFile))
         {
             Debug.LogError("Invalid parameters passed to DataOnDiscProcessMeta");
-            return null; // or handle accordingly
+            return; // or handle accordingly
         }
+        // Set local paths
+        Debug.Log($"Setting local bundle file: {localBundleFile}");
+        BasisTrackedBundleWrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile = localBundleFile;
 
-        try
-        {
-            // Set local paths
-            Debug.Log($"Setting local bundle file: {localBundleFile}");
-            basisLoadedBundle.BasisStoredEncyptedBundle.LocalBundleFile = localBundleFile;
+        Debug.Log($"Setting local meta file: {metaFilepath}");
+        BasisTrackedBundleWrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalMetaFile = metaFilepath;
 
-            Debug.Log($"Setting local meta file: {metaFilepath}");
-            basisLoadedBundle.BasisStoredEncyptedBundle.LocalMetaFile = metaFilepath;
+        // Fetching the meta URL
+        string metaUrl = BasisTrackedBundleWrapper.LoadableBundle.BasisRemoteBundleEncypted.MetaURL;
 
-            // Fetching the meta URL
-            string metaUrl = basisLoadedBundle.BasisRemoteBundleEncypted.MetaURL;
-            Debug.Log($"Fetched meta URL: {metaUrl}");
-
-            // Generating meta from file
-            Debug.Log("Generating meta from file...");
-            var loadableBundle = BasisEncryptionToData.GenerateMetaFromFile(basisLoadedBundle, metaFilepath, progressCallback);
-
-            // Create and assign the download task
-            Debug.Log("Creating BasisTrackedBundleWrapper...");
-            BasisTrackedBundleWrapper downloadTask = new BasisTrackedBundleWrapper
-            {
-                LoadableBundle = loadableBundle,
-                metaUrl = metaUrl
-            };
-            // Add to queryable bundles
-            Debug.Log($"Adding to QueryableBundles with metaUrl: {metaUrl}");
-            QueryableBundles.TryAdd(metaUrl, downloadTask);
-
-            await loadableBundle;
-
-            Debug.Log("DataOnDiscProcessMeta completed successfully.");
-            return downloadTask;
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error in DataOnDiscProcessMeta: {ex.Message}\n{ex.StackTrace}");
-            if (ex.InnerException != null)
-            {
-                Debug.LogError($"Inner Exception: {ex.InnerException.Message}\n{ex.InnerException.StackTrace}");
-            }
-            throw; // Optionally rethrow the exception to handle it further up
-        }
+        Debug.Log($"Fetched meta URL: {metaUrl}");
+        // Create and assign the download task
+        Debug.Log("Creating BasisTrackedBundleWrapper...");
+        BasisTrackedBundleWrapper.LoadableBundle = await BasisEncryptionToData.GenerateMetaFromFile(BasisTrackedBundleWrapper.LoadableBundle, metaFilepath, progressCallback);
+        BasisTrackedBundleWrapper.metaUrl = BasisTrackedBundleWrapper.LoadableBundle.BasisRemoteBundleEncypted.MetaURL;
     }
-    /// <summary>
+    /// <summar>
     /// generates unique id for new data 
     /// copy just the meta data to new location
     /// decrypt it. rename file to match new 

@@ -32,9 +32,6 @@ namespace Basis.Scripts.BasisSdk.Players
             if (Avatar == null)
             {
                 BasisLoadableBundle BasisLoadedBundle =  BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
-
-
-               var  Wrapper = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, CurrentAvatarsCancellationToken);
                 await BasisLoadhandler.LoadGameobjectBundle(BasisLoadedBundle,true, AvatarProgress, new CancellationToken());
 
                 CreateAvatar(CACM.loadMode, BasisLoadedBundle);

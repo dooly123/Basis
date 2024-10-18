@@ -42,7 +42,6 @@ namespace Basis.Scripts.Avatar
                 LocalBundleFile = "LoadingAvatar",
                 LocalMetaFile = "LoadingAvatar",
             },
-            LoadedAssetBundle = null,
         };
         public static async Task LoadAvatarLocal(BasisLocalPlayer Player,byte Mode, BasisLoadableBundle BasisLoadableBundle)
         {
@@ -152,19 +151,9 @@ namespace Basis.Scripts.Avatar
         }
         public static async Task<GameObject> DownloadAndLoadAvatar(BasisLoadableBundle BasisLoadableBundle, BasisPlayer BasisPlayer)
         {
-           await BasisLoadhandler.LoadGameobjectBundle(BasisLoadableBundle,true, BasisPlayer.ProgressReportAvatarLoad, new CancellationToken());
-            if (BasisLoadableBundle.LoadedAssetBundle != null)
-            {
-                AssetBundleRequest Request = BasisLoadableBundle.LoadedAssetBundle.LoadAssetAsync<GameObject>(BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);
-                await Request;
-                GameObject InBundleGameobject = (GameObject)Request.asset;
-                return GameObject.Instantiate(InBundleGameobject, BasisPlayer.transform.position, Quaternion.identity);
-            }
-            else
-            {
-                Debug.LogError("Unable to load Asset Bundle");
-                return null;
-            }
+            GameObject Output = await BasisLoadhandler.LoadGameobjectBundle(BasisLoadableBundle, true, BasisPlayer.ProgressReportAvatarLoad, new CancellationToken());
+            Output.transform.SetPositionAndRotation(BasisPlayer.transform.position, Quaternion.identity);
+            return Output;
         }
         private static void InitializePlayerAvatar(BasisPlayer Player, GameObject Output)
         {

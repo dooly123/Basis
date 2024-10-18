@@ -33,7 +33,7 @@ namespace Basis.Scripts.Drivers
             SetIfPlayerShouldSpawnOnSceneLoad(SpawnPlayerOnSceneLoad);
             Debug.Log("Loading Scene ");
            await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(MakeSceneActiveScene, BasisLoadableBundle, progressCallback);
-            Debug.Log("Loaded Scene " + BasisLoadableBundle.LoadedAssetBundle.name);
+            Debug.Log("Loaded Scene ");
         }
         /// <summary>
         /// turning this off for loading in additional levels is recommended. :) 

@@ -5,28 +5,30 @@ using UnityEngine.SceneManagement;
 using static BasisProgressReport;
 public static class LoadAssetFromBundle
 {
-    public static async Task BundleToAsset(BasisLoadableBundle BasisLoadableBundle,bool UseContentCondum)
+    public static async Task<GameObject> BundleToAsset(BasisTrackedBundleWrapper BasisLoadableBundle,bool UseContentCondum)
     {
-        if (BasisLoadableBundle.LoadedAssetBundle != null)
+        if (BasisLoadableBundle.AssetBundle != null)
         {
-            switch (BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetMode)
+            BasisLoadableBundle output = BasisLoadableBundle.LoadableBundle;
+            switch (output.BasisBundleInformation.BasisBundleGenerated.AssetMode)
             {
                 case "GameObject":
                     {
-                        AssetBundleRequest Request = BasisLoadableBundle.LoadedAssetBundle.LoadAssetAsync<GameObject>(BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);
+                        AssetBundleRequest Request = BasisLoadableBundle.AssetBundle.LoadAssetAsync<GameObject>(output.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);
                         await Request;
                        GameObject Copied = ContentControlCondom((GameObject)Request.asset, UseContentCondum);
-                        break;
+                        return Copied;
                     }
                 default:
-                    Debug.LogError("Requested type " + BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetMode + " has no handler");
-                    break;
+                    Debug.LogError("Requested type " + output.BasisBundleInformation.BasisBundleGenerated.AssetMode + " has no handler");
+                    return null;
             }
         }
         else
         {
             Debug.LogError("Missing Bundle!");
         }
+        return null;
     }
     /// <summary>
     /// pew pew
@@ -70,9 +72,9 @@ public static class LoadAssetFromBundle
         // Return the modified copy of the GameObject
         return copy;
     }
-    public static async Task LoadSceneFromAssetBundleAsync(BasisLoadableBundle bundle, bool MakeActiveScene, ProgressReport progressCallback)
+    public static async Task LoadSceneFromAssetBundleAsync(BasisTrackedBundleWrapper bundle, bool MakeActiveScene, ProgressReport progressCallback)
     {
-        string[] scenePaths = bundle.LoadedAssetBundle.GetAllScenePaths();
+        string[] scenePaths = bundle.AssetBundle.GetAllScenePaths();
         if (scenePaths.Length == 0)
         {
             Debug.LogError("No scenes found in AssetBundle.");

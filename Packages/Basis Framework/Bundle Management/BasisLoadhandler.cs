@@ -3,93 +3,77 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 public static class BasisLoadhandler
 {
-    public static ConcurrentDictionary<string, BasisTrackedBundleWrapper> QueryableBundles = new ConcurrentDictionary<string, BasisTrackedBundleWrapper>();
-    public static async Task LoadGameobjectBundle(BasisLoadableBundle BasisLoadableBundle, bool UseCondom, BasisProgressReport.ProgressReport Report, CancellationToken CancellationToken)
+    public static Dictionary<string, BasisTrackedBundleWrapper> QueryableBundles = new Dictionary<string, BasisTrackedBundleWrapper>();
+    public static async Task<GameObject> LoadGameobjectBundle(BasisLoadableBundle BasisLoadableBundle, bool UseCondom, BasisProgressReport.ProgressReport Report, CancellationToken CancellationToken)
     {
         await EnsureLoadAllComplete();
         if (QueryableBundles.TryGetValue(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, out BasisTrackedBundleWrapper Wrapper))
         {
             //was previously loaded and already a loaded bundle skip everything and go for the source.
-            if (Wrapper.LoadableBundle != null)
-            {
-                if (Wrapper.LoadableBundle.IsCompletedSuccessfully)
-                {
-                    if (Wrapper.LoadableBundle.Result.LoadedAssetBundle != null)
-                    {
-                        await LoadAssetFromBundle.BundleToAsset(Wrapper.LoadableBundle.Result, UseCondom);
-                    }
-                    else
-                    {
-                        Debug.LogError("LoadedAssetBundle was missing");
-                    }
-                }
-                else
-                {
-                    BasisLoadableBundle Bundle = await Wrapper.LoadableBundle;
-                    if (Bundle.BasisBundleInformation.HasError == false)
-                    {
-                        if (Wrapper.AssetBundle == null)
-                        {
-                            Debug.LogError("Missing Bundle Task! " + Wrapper.metaUrl);
-                        }
-                        else
-                        {
-                            if (Wrapper.AssetBundle.IsCompletedSuccessfully)
-                            {
-                                await LoadAssetFromBundle.BundleToAsset(Bundle, UseCondom);
-                            }
-                            else
-                            {
-                                await Wrapper.AssetBundle;
-                                await LoadAssetFromBundle.BundleToAsset(Bundle, UseCondom);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("Error During the import for this tie in Loading bundle");
-                    }
-                }
-            }
-            else
-            {
-                Debug.LogError("Loaded Bundle was Null");
-            }
+            await Wrapper.WaitForBundleLoadAsync();
+            return await LoadAssetFromBundle.BundleToAsset(Wrapper, UseCondom);
         }
         else
         {
-            //first time, thats great but before we download the file lets check to see if we already have a saved version of it.
-            bool URLDisc = HasURLOnDisc(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,out OnDiscInformation Info);
-            BasisTrackedBundleWrapper BasisTrackedBundleWrapper;
-            OnDiscInformation OnDiscInformation = new OnDiscInformation();
-            if (URLDisc)
+            Wrapper = new BasisTrackedBundleWrapper()
             {
-               BasisTrackedBundleWrapper = await BasisBundleManagement.DataOnDiscProcessMetaAsync(BasisLoadableBundle, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
-            }
-            else
+                metaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,
+                AssetBundle = null,
+                LoadableBundle = BasisLoadableBundle,
+            };
+            try
             {
-                BasisTrackedBundleWrapper = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadableBundle, Report, CancellationToken);
-                OnDiscInformation = new OnDiscInformation()
+                if (QueryableBundles.TryAdd(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, Wrapper))
                 {
-                    StoredMetaURL = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisRemoteBundleEncypted.MetaURL,
-                    StoredMetaLocal = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisStoredEncyptedBundle.LocalMetaFile,
-                    AssetToLoad = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
-                    StoredBundleLocal = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisStoredEncyptedBundle.LocalBundleFile
-                };
-            }
 
-            BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisTrackedBundleWrapper, Report);
-            if (URLDisc == false)
-            {
-                await TryAddOnDiscInfo(OnDiscInformation);
+                }
+                else
+                {
+                    Debug.LogError("cant add Wrapper");
+                }
+
+                //first time, thats great but before we download the file lets check to see if we already have a saved version of it.
+                bool URLDisc = HasURLOnDisc(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, out OnDiscInformation Info);
+                OnDiscInformation OnDiscInformation = new OnDiscInformation();
+                if (URLDisc)
+                {
+                    await BasisBundleManagement.DataOnDiscProcessMetaAsync(Wrapper, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
+                }
+                else
+                {
+                    await BasisBundleManagement.DownloadAndSaveBundle(Wrapper, Report, CancellationToken);
+                }
+                if (URLDisc == false)
+                {
+                    OnDiscInformation = new OnDiscInformation()
+                    {
+                        StoredMetaURL = Wrapper.LoadableBundle.BasisRemoteBundleEncypted.MetaURL,
+                        StoredMetaLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalMetaFile,
+                        AssetToLoad = Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
+                        StoredBundleLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile
+                    };
+                }
+                AssetBundleCreateRequest output = await BasisEncryptionToData.GenerateBundleFromFile(Wrapper.LoadableBundle.UnlockPassword, Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC, Report);
+                await output;
+                if (URLDisc == false)
+                {
+                    await TryAddOnDiscInfo(OnDiscInformation);
+                }
+                Wrapper.AssetBundle = output.assetBundle;
+                GameObject Output = await LoadAssetFromBundle.BundleToAsset(Wrapper, UseCondom);
+                return Output;
             }
-            await LoadAssetFromBundle.BundleToAsset(BasisLoadableBundle, UseCondom);
+            catch (Exception e)
+            {
+                Wrapper.DidErrorOccur = true;
+                Debug.LogError(e);
+                return null;
+            }
         }
     }
     public static async Task LoadSceneBundle(bool MakeActiveScene, BasisLoadableBundle BasisLoadableBundle, BasisProgressReport.ProgressReport Report, CancellationToken CancellationToken)
@@ -98,73 +82,66 @@ public static class BasisLoadhandler
         if (QueryableBundles.TryGetValue(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, out BasisTrackedBundleWrapper Wrapper))
         {
             //was previously loaded and already a loaded bundle skip everything and go for the source.
-            if (Wrapper.LoadableBundle != null)
-            {
-                if (Wrapper.LoadableBundle.IsCompletedSuccessfully)
-                {
-                    if (Wrapper.LoadableBundle.Result.LoadedAssetBundle != null)
-                    {
-                        await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Wrapper.LoadableBundle.Result, MakeActiveScene, Report);
-                    }
-                    else
-                    {
-                        Debug.LogError("LoadedAssetBundle was missing");
-                    }
-                }
-                else
-                {
-                    BasisLoadableBundle Bundle = await Wrapper.LoadableBundle;
-                    if (Bundle.BasisBundleInformation.HasError == false)
-                    {
-                        if (Wrapper.AssetBundle.IsCompletedSuccessfully)
-                        {
-                            await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Bundle, MakeActiveScene, Report);
-                        }
-                        else
-                        {
-                            await Wrapper.AssetBundle;
-                            await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Bundle, MakeActiveScene, Report);
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("Error During the import for this tie in Loading bundle");
-                    }
-                }
-            }
-            else
-            {
-                Debug.LogError("Loaded Bundle was Null");
-            }
+            await Wrapper.WaitForBundleLoadAsync();
+            await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Wrapper, MakeActiveScene, Report);
+            return;
         }
         else
         {
-            //first time, thats great but before we download the file lets check to see if we already have a saved version of it.
-            bool URLDisc = HasURLOnDisc(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, out OnDiscInformation Info);
-            BasisTrackedBundleWrapper BasisTrackedBundleWrapper;
-            OnDiscInformation OnDiscInformation = new OnDiscInformation();
-            if (URLDisc)
+            Wrapper = new BasisTrackedBundleWrapper()
             {
-                  BasisTrackedBundleWrapper = await BasisBundleManagement.DataOnDiscProcessMetaAsync(BasisLoadableBundle, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
-            }
-            else
+                metaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,
+                AssetBundle = null,
+                LoadableBundle = BasisLoadableBundle,
+            };
+            try
             {
-                BasisTrackedBundleWrapper = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadableBundle, Report, CancellationToken);
-                OnDiscInformation = new OnDiscInformation()
+                if (QueryableBundles.TryAdd(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, Wrapper))
                 {
-                    StoredMetaURL = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisRemoteBundleEncypted.MetaURL,
-                    StoredMetaLocal = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisStoredEncyptedBundle.LocalMetaFile,
-                    AssetToLoad = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
-                     StoredBundleLocal = BasisTrackedBundleWrapper.LoadableBundle.Result.BasisStoredEncyptedBundle.LocalBundleFile
-                };
-            }
 
-            BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisTrackedBundleWrapper, Report);
-            if (URLDisc == false)
-            {
-                await TryAddOnDiscInfo(OnDiscInformation);
+                }
+                else
+                {
+                    Debug.LogError("cant add Wrapper");
+                }
+
+                //first time, thats great but before we download the file lets check to see if we already have a saved version of it.
+                bool URLDisc = HasURLOnDisc(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, out OnDiscInformation Info);
+                OnDiscInformation OnDiscInformation = new OnDiscInformation();
+                if (URLDisc)
+                {
+                    await BasisBundleManagement.DataOnDiscProcessMetaAsync(Wrapper, Info.StoredMetaLocal, Info.StoredBundleLocal, Report, CancellationToken);
+                }
+                else
+                {
+                    await BasisBundleManagement.DownloadAndSaveBundle(Wrapper, Report, CancellationToken);
+                }
+                if (URLDisc == false)
+                {
+                    OnDiscInformation = new OnDiscInformation()
+                    {
+                        StoredMetaURL = Wrapper.LoadableBundle.BasisRemoteBundleEncypted.MetaURL,
+                        StoredMetaLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalMetaFile,
+                        AssetToLoad = Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
+                        StoredBundleLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile
+                    };
+                }
+                AssetBundleCreateRequest output = await BasisEncryptionToData.GenerateBundleFromFile(Wrapper.LoadableBundle.UnlockPassword, Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC, Report);
+                await output;
+                if (URLDisc == false)
+                {
+                    await TryAddOnDiscInfo(OnDiscInformation);
+                }
+                Wrapper.AssetBundle = output.assetBundle;
+                await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Wrapper, MakeActiveScene, Report);
+                return;
             }
-            await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(BasisLoadableBundle, MakeActiveScene, Report);
+            catch (Exception e)
+            {
+                Wrapper.DidErrorOccur = true;
+                Debug.LogError(e);
+                return;
+            }
         }
     }
     public static ConcurrentDictionary<string, OnDiscInformation> loadableDiscData = new ConcurrentDictionary<string, OnDiscInformation>();

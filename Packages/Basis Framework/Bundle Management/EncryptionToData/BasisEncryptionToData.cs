@@ -4,11 +4,12 @@ using UnityEngine;
 
 public static class BasisEncryptionToData
 {
-    public static async Task<AssetBundle> GenerateBundleFromFile(string Password, string FilePath, uint CRC, BasisProgressReport.ProgressReport progressCallback)
+    public static async Task<AssetBundleCreateRequest> GenerateBundleFromFile(string Password, string FilePath, uint CRC, BasisProgressReport.ProgressReport progressCallback)
     {
         byte[] LoadedBundleData = await BasisEncryptionWrapper.DecryptFileAsync(Password, FilePath, progressCallback);
-        AssetBundle AssetBundle = AssetBundle.LoadFromMemory(LoadedBundleData, CRC);
-        return AssetBundle;
+        AssetBundleCreateRequest AssetBundleCreateRequest = AssetBundle.LoadFromMemoryAsync(LoadedBundleData, CRC);
+        await AssetBundleCreateRequest;
+        return AssetBundleCreateRequest;
     }
     public static async Task<BasisLoadableBundle> GenerateMetaFromFile(BasisLoadableBundle BasisLoadableBundle, string FilePath, BasisProgressReport.ProgressReport progressCallback)
     {
