@@ -8,6 +8,6 @@ public class LoadABundle : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
-        await BasisLoadhandler.LoadBundle(BasisLoadableBundle, Report, CancellationToken);
+        await BasisLoadhandler.LoadGameobjectBundle(BasisLoadableBundle, Report, CancellationToken);
     }
 }

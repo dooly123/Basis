@@ -5,7 +5,6 @@ public static class BasisSceneAssetBundleManager
 {
     public static async Task DownloadAndLoadSceneAsync(bool MakeSceneActiveScene, BasisLoadableBundle BasisLoadableBundle, ProgressReport progressCallback)
     {
-        await BasisLoadhandler.LoadBundle(BasisLoadableBundle, progressCallback, new CancellationToken());
-        await BasisLoadBundle.LoadSceneFromAssetBundleAsync(BasisLoadableBundle.LoadedAssetBundle, MakeSceneActiveScene, progressCallback);
+        await BasisLoadhandler.LoadSceneBundle(MakeSceneActiveScene,BasisLoadableBundle, progressCallback, new CancellationToken());
     }
 }

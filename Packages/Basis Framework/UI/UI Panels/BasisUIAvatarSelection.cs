@@ -48,7 +48,7 @@ namespace Basis.Scripts.UI.UI_Panels
             AvatarUrlsRuntime.Clear();
             CreatedCopies.Clear();
             AvatarUrlsRuntime.AddRange(AvatarUrls);
-            await BasisBundleManagement.FigureOutExistingContent();
+
          //   int AvatarUrlsCount = BasisBundleManagement.UnLoadedBundles.Count;
           //  for (int Index = 0; Index < AvatarUrlsCount; Index++)
             {
