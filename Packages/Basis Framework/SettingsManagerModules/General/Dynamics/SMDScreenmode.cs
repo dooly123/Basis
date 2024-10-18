@@ -4,6 +4,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
     public class SMDScreenmode : SettingsManagerOption
     {
         public SettingsManager Manager;
+        public bool OnlySetScreenModeOnce = true;
         public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager = null)
         {
             if (Manager == null)
@@ -14,19 +15,23 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 SettingsManagerDropDown.Clear(Manager, Option.OptionIndex);
                 Option.SelectableValueList.Clear();
-                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Exclusive FullScreen");
-                SMSelectableValues.AddSelection( Option.SelectableValueList, "Exclusive FullScreen", "Exclusive FullScreen");
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Fullscreen");
                 SMSelectableValues.AddSelection( Option.SelectableValueList, "Fullscreen", "Fullscreen");
+
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Maximized Window");
                 SMSelectableValues.AddSelection( Option.SelectableValueList, "Maximized Window", "Maximized Window");
+
                 SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Windowed");
                 SMSelectableValues.AddSelection( Option.SelectableValueList, "Windowed", "Windowed");
                 if (string.IsNullOrEmpty(Option.SelectedValue))
                 {
                     SettingsManagerDropDown.SetOptionsValue(Manager, 0, 0, true);
                     Option.SelectedValue = Option.SelectableValueList[0].RealValue;
-                    Screen.fullScreenMode = 0;
+                    if (OnlySetScreenModeOnce)
+                    {
+                        Screen.fullScreenMode = 0;
+                        OnlySetScreenModeOnce = false;
+                    }
                 }
                 else
                 {
@@ -35,7 +40,11 @@ namespace BattlePhaze.SettingsManager.Intergrations
                         if (Option.SelectableValueList[RealValuesIndex].RealValue == Option.SelectedValue)
                         {
                             SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
-                            Screen.fullScreenMode = (FullScreenMode)RealValuesIndex;
+                            if (OnlySetScreenModeOnce)
+                            {
+                                Screen.fullScreenMode = (FullScreenMode)RealValuesIndex;
+                                OnlySetScreenModeOnce = false;
+                            }
                             return;
                         }
                     }
