@@ -35,7 +35,7 @@ namespace Basis.Scripts.BasisSdk.Players
 
 
                var  Wrapper = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadedBundle, AvatarProgress, CurrentAvatarsCancellationToken);
-                await BasisLoadhandler.LoadGameobjectBundle(BasisLoadedBundle, AvatarProgress, new CancellationToken());
+                await BasisLoadhandler.LoadGameobjectBundle(BasisLoadedBundle,true, AvatarProgress, new CancellationToken());
 
                 CreateAvatar(CACM.loadMode, BasisLoadedBundle);
             }

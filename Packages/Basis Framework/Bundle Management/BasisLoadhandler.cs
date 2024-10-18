@@ -5,7 +5,7 @@ using UnityEngine;
 public static class BasisLoadhandler
 {
     public static ConcurrentDictionary<string, BasisTrackedBundleWrapper> QueryableBundles = new ConcurrentDictionary<string, BasisTrackedBundleWrapper>();
-    public static async Task LoadGameobjectBundle(BasisLoadableBundle BasisLoadableBundle, BasisProgressReport.ProgressReport Report, CancellationToken CancellationToken)
+    public static async Task LoadGameobjectBundle(BasisLoadableBundle BasisLoadableBundle,bool UseCondom, BasisProgressReport.ProgressReport Report, CancellationToken CancellationToken)
     {
         if (QueryableBundles.TryGetValue(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, out BasisTrackedBundleWrapper Wrapper))
         {
@@ -16,7 +16,7 @@ public static class BasisLoadhandler
                 {
                     if (Wrapper.LoadableBundle.Result.LoadedAssetBundle != null)
                     {
-                        await LoadAssetFromBundle.BundleToAsset(Wrapper.LoadableBundle.Result);
+                        await LoadAssetFromBundle.BundleToAsset(Wrapper.LoadableBundle.Result, UseCondom);
                     }
                     else
                     {
@@ -30,12 +30,12 @@ public static class BasisLoadhandler
                     {
                         if (Wrapper.AssetBundle.IsCompletedSuccessfully)
                         {
-                            await LoadAssetFromBundle.BundleToAsset(Bundle);
+                            await LoadAssetFromBundle.BundleToAsset(Bundle, UseCondom);
                         }
                         else
                         {
                             await Wrapper.AssetBundle;
-                            await LoadAssetFromBundle.BundleToAsset(Bundle);
+                            await LoadAssetFromBundle.BundleToAsset(Bundle, UseCondom);
                         }
                     }
                     else
@@ -53,7 +53,7 @@ public static class BasisLoadhandler
         {
             BasisTrackedBundleWrapper BasisTrackedBundleWrapper = await BasisBundleManagement.DownloadAndSaveBundle(BasisLoadableBundle, Report, CancellationToken);
             BasisLoadableBundle.LoadedAssetBundle = await BasisLoadBundle.LoadBasisBundle(BasisTrackedBundleWrapper, Report);
-            await LoadAssetFromBundle.BundleToAsset(BasisLoadableBundle);
+            await LoadAssetFromBundle.BundleToAsset(BasisLoadableBundle, UseCondom);
         }
     }
     public static async Task LoadSceneBundle(bool MakeActiveScene, BasisLoadableBundle BasisLoadableBundle, BasisProgressReport.ProgressReport Report, CancellationToken CancellationToken)
@@ -67,7 +67,7 @@ public static class BasisLoadhandler
                 {
                     if (Wrapper.LoadableBundle.Result.LoadedAssetBundle != null)
                     {
-                        await LoadAssetFromBundle.BundleToAsset(Wrapper.LoadableBundle.Result);
+                        await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Wrapper.LoadableBundle.Result,MakeActiveScene, Report);
                     }
                     else
                     {
@@ -81,12 +81,12 @@ public static class BasisLoadhandler
                     {
                         if (Wrapper.AssetBundle.IsCompletedSuccessfully)
                         {
-                            await LoadAssetFromBundle.BundleToAsset(Bundle);
+                            await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Bundle, MakeActiveScene, Report);
                         }
                         else
                         {
                             await Wrapper.AssetBundle;
-                            await LoadAssetFromBundle.BundleToAsset(Bundle);
+                            await LoadAssetFromBundle.LoadSceneFromAssetBundleAsync(Bundle, MakeActiveScene, Report);
                         }
                     }
                     else

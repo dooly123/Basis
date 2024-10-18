@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static BasisProgressReport;
 public static class LoadAssetFromBundle
 {
-    public static async Task BundleToAsset(BasisLoadableBundle BasisLoadableBundle)
+    public static async Task BundleToAsset(BasisLoadableBundle BasisLoadableBundle,bool UseContentCondum)
     {
         if (BasisLoadableBundle.LoadedAssetBundle != null)
         {
@@ -16,7 +15,7 @@ public static class LoadAssetFromBundle
                     {
                         AssetBundleRequest Request = BasisLoadableBundle.LoadedAssetBundle.LoadAssetAsync<GameObject>(BasisLoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);
                         await Request;
-                       GameObject Copied = ContentControlCondom((GameObject)Request.asset);
+                       GameObject Copied = ContentControlCondom((GameObject)Request.asset, UseContentCondum);
                         break;
                     }
                 default:
@@ -33,35 +32,37 @@ public static class LoadAssetFromBundle
     /// pew pew
     /// </summary>
     /// <param name="SearchAndDestroy"></param>
-    public static GameObject ContentControlCondom(GameObject SearchAndDestroy)
+    public static GameObject ContentControlCondom(GameObject SearchAndDestroy, bool UseContentCondum = true)
     {
         GameObject Disabled = new GameObject("Disabled");
         Disabled.SetActive(false);
         // Create a copy of the SearchAndDestroy GameObject
         GameObject copy = GameObject.Instantiate(SearchAndDestroy, Disabled.transform);
-
-        // Create a list to hold all MonoBehaviours in the copy
-        List<MonoBehaviour> monoBehaviours = new List<MonoBehaviour>();
-        copy.GetComponentsInChildren(true, monoBehaviours);
-
-        // Iterate through the list of MonoBehaviours and remove unapproved ones
-        int count = monoBehaviours.Count;
-        for (int Index = 0; Index < count; Index++)
+        if (UseContentCondum)
         {
-            MonoBehaviour mono = monoBehaviours[Index];
-            // Get the full name of the MonoBehaviour's type
-            string monoTypeName = mono.GetType().FullName;
+            // Create a list to hold all MonoBehaviours in the copy
+            List<MonoBehaviour> monoBehaviours = new List<MonoBehaviour>();
+            copy.GetComponentsInChildren(true, monoBehaviours);
 
-            // Check if the type is in the selectedTypes list
-            if (BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
+            // Iterate through the list of MonoBehaviours and remove unapproved ones
+            int count = monoBehaviours.Count;
+            for (int Index = 0; Index < count; Index++)
             {
-                // Debug.Log($"MonoBehaviour {monoTypeName} is approved.");
-                // Do something if the MonoBehaviour type is approved
-            }
-            else
-            {
-                Debug.LogError($"MonoBehaviour {monoTypeName} is not approved.");
-                GameObject.DestroyImmediate(mono); // Destroy the unapproved MonoBehaviour immediately
+                MonoBehaviour mono = monoBehaviours[Index];
+                // Get the full name of the MonoBehaviour's type
+                string monoTypeName = mono.GetType().FullName;
+
+                // Check if the type is in the selectedTypes list
+                if (BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
+                {
+                    // Debug.Log($"MonoBehaviour {monoTypeName} is approved.");
+                    // Do something if the MonoBehaviour type is approved
+                }
+                else
+                {
+                    Debug.LogError($"MonoBehaviour {monoTypeName} is not approved.");
+                    GameObject.DestroyImmediate(mono); // Destroy the unapproved MonoBehaviour immediately
+                }
             }
         }
         copy.transform.parent = null;
