@@ -10,7 +10,7 @@ namespace Basis.Scripts.UI.UI_Panels
     public class BasisUIAvatarSelection : BasisUIBase
     {
         [SerializeField]
-        public List<BasisLoadableBundle> AvatarUrls = new List<BasisLoadableBundle>();
+        public List<BasisLoadableBundle> preLoadedBundles = new List<BasisLoadableBundle>();
         public RectTransform ParentedAvatarButtons;
         public GameObject ButtonPrefab; // Prefab for the button
         public const string AvatarSelection = "BasisUIAvatarSelection";
@@ -53,16 +53,22 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             BasisLoadableBundle BasisLoadableBundle = new BasisLoadableBundle
             {
-                UnlockPassword = PasswordField.text
+                UnlockPassword = PasswordField.text,
+                BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
+                {
+                    BundleURL = BundleField.text,
+                    MetaURL = MetaField.text
+                },
+                BasisBundleInformation = new BasisBundleInformation() { BasisBundleDescription = new BasisBundleDescription(), BasisBundleGenerated = new BasisBundleGenerated() },
+                BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),
             };
-            BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL = BundleField.text;
-            BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL = MetaField.text;
+            await BasisLocalPlayer.Instance.CreateAvatar(0, BasisLoadableBundle);
+            BasisDataStoreAvatarKeys.AvatarKey AvatarKey = new BasisDataStoreAvatarKeys.AvatarKey
+            {
+                Url = MetaField.text,
 
-            AvatarUrls.Add(BasisLoadableBundle);
-
-            BasisDataStoreAvatarKeys.AvatarKey AvatarKey = new BasisDataStoreAvatarKeys.AvatarKey();
-            AvatarKey.Url = MetaField.text;
-            AvatarKey.Pass = PasswordField.text; 
+                Pass = PasswordField.text
+            };
             await BasisDataStoreAvatarKeys.AddNewKey(AvatarKey);
 
             await Initialize();
@@ -76,11 +82,27 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             AvatarUrlsRuntime.Clear();
             CreatedCopies.Clear();
-            AvatarUrlsRuntime.AddRange(AvatarUrls);
-
-            //saved avatars for (int Index = 0; Index < AvatarUrlsCount; Index++)
+            AvatarUrlsRuntime.AddRange(preLoadedBundles);
+           await BasisDataStoreAvatarKeys.LoadKeys();
+           List<BasisDataStoreAvatarKeys.AvatarKey> ActiveKeys = BasisDataStoreAvatarKeys.DisplayKeys();
+           int KeysCount = ActiveKeys.Count;
+            for (int Index = 0; Index < KeysCount; Index++)
             {
-                // AvatarUrlsRuntime.Add(AvatarLoadRequest);
+                BasisLoadhandler.HasURLOnDisc(ActiveKeys[Index].Url,out OnDiscInformation Information);
+                BasisLoadableBundle Bundle = new BasisLoadableBundle
+                {
+                    BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
+                    {
+                        BundleURL = Information.StoredBundleURL,
+                        MetaURL = Information.StoredMetaURL
+                    },
+                     BasisBundleInformation = new BasisBundleInformation() { BasisBundleDescription = new BasisBundleDescription(), BasisBundleGenerated = new BasisBundleGenerated() },
+
+                      BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle() { },
+
+                    UnlockPassword = ActiveKeys[Index].Pass
+                };
+                AvatarUrlsRuntime.Add(Bundle);
             }
             for (int Index = 0; Index < AvatarUrlsRuntime.Count; Index++)
             {

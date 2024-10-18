@@ -154,6 +154,10 @@ public static class BasisEncryptionWrapper
     public static async Task DecryptFileAsync(string password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
     {
         byte[] dataToDecrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
+        if (dataToDecrypt == null || dataToDecrypt.Length == 0)
+        {
+            new Exception("Data Requsted was null or empty");
+        }
         var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
         await WriteFileAsync(outputFilePath, decryptedData, FileMode.Create, reportProgress);
     }
@@ -161,6 +165,11 @@ public static class BasisEncryptionWrapper
     public static async Task<byte[]> DecryptFileAsync(string password, string inputFilePath, ProgressReport reportProgress)
     {
         byte[] dataToDecrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
+        if(dataToDecrypt == null || dataToDecrypt.Length == 0)
+        {
+            Debug.LogError("Data Requsted was null or empty");
+            return null;
+        } 
         var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
         return decryptedData;
     }

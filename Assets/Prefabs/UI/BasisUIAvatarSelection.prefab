@@ -658,7 +658,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &3843996678262047675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,26 +699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361c0db1e7f926e449b1c786f5569fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AvatarUrls:
-  - UnlockPassword: dooly
-    BasisRemoteBundleEncypted:
-      IsLocal: 1
-      MetaURL: C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\AssetBundles\504d916a-0e28-4653-a150-77ecd59e21bb_638646572143179901.BasisEncyptedMeta
-      BundleURL: C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis
-        Unity\AssetBundles\504d916a-0e28-4653-a150-77ecd59e21bb_638646572143179901.BasisEncyptedBundle
-    BasisStoredEncyptedBundle:
-      LocalMetaFile: 
-      LocalBundleFile: 
-    BasisBundleInformation:
-      HasError: 0
-      BasisBundleDescription:
-        AssetBundleName: 
-        AssetBundleDescription: 
-      BasisBundleGenerated:
-        AssetBundleHash: 
-        AssetMode: 
-        AssetToLoadName: 
-        AssetBundleCRC: 0
+  preLoadedBundles: []
   ParentedAvatarButtons: {fileID: 4707479195400357847}
   ButtonPrefab: {fileID: 5504761427362873086}
   MetaField: {fileID: 2269253443789147195}
@@ -1471,7 +1452,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -105, y: 342}
+  m_AnchoredPosition: {x: -105, y: 260}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &763412405237073563

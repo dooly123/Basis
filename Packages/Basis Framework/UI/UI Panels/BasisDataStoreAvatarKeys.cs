@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BasisSerializer.OdinSerializer;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -7,23 +8,19 @@ namespace Basis.Scripts.UI.UI_Panels
 {
     public static class BasisDataStoreAvatarKeys
     {
-        // The AvatarKey class stores the URL and Name fields
+        // The AvatarKey class stores the URL and Pass fields
+        [System.Serializable]
         public class AvatarKey
         {
-            public string Url { get; set; }
-            public string Pass { get; set; }
-
-            // Optional: Override ToString for better Debug.Log output
-            public override string ToString()
-            {
-                return $"Name: {Pass}, Url: {Url}";
-            }
+            public string Url;
+            public string Pass;
         }
 
-        // File path to store the keys
-        private static string FilePath = "VerySafePasswordStore.json";
+        // File path to store the keys, now using Unity's persistentDataPath
+        private static string FilePath => Path.Combine(Application.persistentDataPath, "VerySafePasswordStore.json");
 
         // A list to keep password keys in memory
+        [SerializeField]
         private static List<AvatarKey> keys = new List<AvatarKey>();
 
         // Add a new key to the list and save to disk
@@ -37,7 +34,7 @@ namespace Basis.Scripts.UI.UI_Panels
         // Remove a key from the list and save changes to disk
         public static async Task RemoveKey(AvatarKey keyToRemove)
         {
-            // Find key by matching Url or Name (up to your logic preference)
+            // Find key by matching Url and Pass
             var key = keys.Find(k => k.Url == keyToRemove.Url && k.Pass == keyToRemove.Pass);
             if (key != null)
             {
@@ -57,8 +54,8 @@ namespace Basis.Scripts.UI.UI_Panels
             if (File.Exists(FilePath))
             {
                 // Read the JSON from the file and deserialize into the keys list
-                string jsonString = await File.ReadAllTextAsync(FilePath);
-                keys = JsonUtility.FromJson<List<AvatarKey>>(jsonString) ?? new List<AvatarKey>();
+                byte[] ByteData = await File.ReadAllBytesAsync(FilePath);
+                keys = SerializationUtility.DeserializeValue<List<AvatarKey>>(ByteData, DataFormat.Binary);
                 Debug.Log("Keys loaded from file.");
             }
             else
@@ -71,19 +68,15 @@ namespace Basis.Scripts.UI.UI_Panels
         private static async Task SaveKeysToFile()
         {
             // Serialize the keys list to a JSON string and write to file
-            string jsonString = JsonUtility.ToJson(keys);
-            await File.WriteAllTextAsync(FilePath, jsonString);
-            Debug.Log("Keys saved to file.");
+            byte[] ByteData = SerializationUtility.SerializeValue<List<AvatarKey>>(keys, DataFormat.Binary);
+            await File.WriteAllBytesAsync(FilePath, ByteData);
+            Debug.Log($"Keys saved to file at: {FilePath}");
         }
 
         // Display all stored keys
-        public static void DisplayKeys()
+        public static List<AvatarKey> DisplayKeys()
         {
-            Debug.Log("Stored Keys:");
-            foreach (var key in keys)
-            {
-                Debug.Log(key); // This will use the ToString() method for output
-            }
+            return keys;
         }
     }
 }

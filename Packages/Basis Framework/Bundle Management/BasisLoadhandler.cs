@@ -14,15 +14,22 @@ public static class BasisLoadhandler
         await EnsureLoadAllComplete();
         if (QueryableBundles.TryGetValue(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, out BasisTrackedBundleWrapper Wrapper))
         {
-            //was previously loaded and already a loaded bundle skip everything and go for the source.
-            await Wrapper.WaitForBundleLoadAsync();
-            return await LoadAssetFromBundle.BundleToAsset(Wrapper, UseCondom);
+            try
+            {
+                //was previously loaded and already a loaded bundle skip everything and go for the source.
+                await Wrapper.WaitForBundleLoadAsync();
+                return await LoadAssetFromBundle.BundleToAsset(Wrapper, UseCondom);
+            }
+            catch
+            {
+                QueryableBundles.Remove(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL);
+                return null;
+            }
         }
         else
         {
             Wrapper = new BasisTrackedBundleWrapper()
             {
-                metaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,
                 AssetBundle = null,
                 LoadableBundle = BasisLoadableBundle,
             };
@@ -48,20 +55,18 @@ public static class BasisLoadhandler
                 {
                     await BasisBundleManagement.DownloadAndSaveBundle(Wrapper, Report, CancellationToken);
                 }
+                AssetBundleCreateRequest output = await BasisEncryptionToData.GenerateBundleFromFile(Wrapper.LoadableBundle.UnlockPassword, Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC, Report);
+                await output;
                 if (URLDisc == false)
                 {
                     OnDiscInformation = new OnDiscInformation()
                     {
                         StoredMetaURL = Wrapper.LoadableBundle.BasisRemoteBundleEncypted.MetaURL,
+                        StoredBundleURL = Wrapper.LoadableBundle.BasisRemoteBundleEncypted.BundleURL,
                         StoredMetaLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalMetaFile,
                         AssetToLoad = Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
                         StoredBundleLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile
                     };
-                }
-                AssetBundleCreateRequest output = await BasisEncryptionToData.GenerateBundleFromFile(Wrapper.LoadableBundle.UnlockPassword, Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC, Report);
-                await output;
-                if (URLDisc == false)
-                {
                     await TryAddOnDiscInfo(OnDiscInformation);
                 }
                 Wrapper.AssetBundle = output.assetBundle;
@@ -71,6 +76,7 @@ public static class BasisLoadhandler
             catch (Exception e)
             {
                 Wrapper.DidErrorOccur = true;
+                QueryableBundles.Remove(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL);
                 Debug.LogError(e);
                 return null;
             }
@@ -90,7 +96,6 @@ public static class BasisLoadhandler
         {
             Wrapper = new BasisTrackedBundleWrapper()
             {
-                metaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,
                 AssetBundle = null,
                 LoadableBundle = BasisLoadableBundle,
             };
@@ -116,20 +121,18 @@ public static class BasisLoadhandler
                 {
                     await BasisBundleManagement.DownloadAndSaveBundle(Wrapper, Report, CancellationToken);
                 }
+                AssetBundleCreateRequest output = await BasisEncryptionToData.GenerateBundleFromFile(Wrapper.LoadableBundle.UnlockPassword, Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC, Report);
+                await output;
                 if (URLDisc == false)
                 {
                     OnDiscInformation = new OnDiscInformation()
                     {
                         StoredMetaURL = Wrapper.LoadableBundle.BasisRemoteBundleEncypted.MetaURL,
+                        StoredBundleURL = Wrapper.LoadableBundle.BasisRemoteBundleEncypted.BundleURL,
                         StoredMetaLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalMetaFile,
                         AssetToLoad = Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
                         StoredBundleLocal = Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile
                     };
-                }
-                AssetBundleCreateRequest output = await BasisEncryptionToData.GenerateBundleFromFile(Wrapper.LoadableBundle.UnlockPassword, Wrapper.LoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile, Wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC, Report);
-                await output;
-                if (URLDisc == false)
-                {
                     await TryAddOnDiscInfo(OnDiscInformation);
                 }
                 Wrapper.AssetBundle = output.assetBundle;

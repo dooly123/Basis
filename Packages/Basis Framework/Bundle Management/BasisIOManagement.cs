@@ -21,15 +21,41 @@ public static class BasisIOManagement
     {
         Debug.Log($"Starting file download from {url}");
 
+        // Null or empty URL check
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            Debug.LogError("The provided URL is null or empty.");
+            return;
+        }
+
+        // Null or empty file path check
+        if (string.IsNullOrWhiteSpace(localFilePath))
+        {
+            Debug.LogError("The provided local file path is null or empty.");
+            return;
+        }
+
+        // Ensure directory exists
+        string directory = Path.GetDirectoryName(localFilePath);
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
         using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
-            request.downloadHandler = new DownloadHandlerBuffer(); // Use buffer to handle the response in smaller chunks
-            var asyncOperation = request.SendWebRequest();
-
-            // Create the file stream to write to
-            using (FileStream fileStream = new FileStream(localFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            // Stream the download directly to the file
+            request.downloadHandler = new DownloadHandlerFile(localFilePath)
             {
-                // Track download progress (0% to 50% during download)
+                removeFileOnAbort = true // Ensure incomplete downloads are cleaned up
+            };
+
+            UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest();
+            await asyncOperation;
+
+            try
+            {
+                // Track download progress and handle the download
                 while (!asyncOperation.isDone)
                 {
                     // Check if cancellation is requested
@@ -40,15 +66,8 @@ public static class BasisIOManagement
                         return;
                     }
 
-                    // Report progress (0% to 50%)
-                    progressCallback?.Invoke(asyncOperation.progress * 50);
-
-                    // Write to file in chunks
-                    byte[] downloadedData = request.downloadHandler.data;
-                    if (downloadedData != null && downloadedData.Length > 0)
-                    {
-                        await fileStream.WriteAsync(downloadedData, 0, downloadedData.Length, cancellationToken);
-                    }
+                    // Report progress (0% to 100%)
+                    progressCallback?.Invoke(asyncOperation.progress * 100);
 
                     await Task.Yield();
                 }
@@ -59,6 +78,18 @@ public static class BasisIOManagement
                     Debug.LogError($"Failed to download file: {request.error} for URL {url}");
                     return;
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"An error occurred while downloading the file: {ex.Message}");
+                return;
+            }
+
+            // Check if the file has been written successfully
+            if (!File.Exists(localFilePath))
+            {
+                Debug.LogError("The file was not created.");
+                return;
             }
 
             Debug.Log($"Successfully downloaded file from {url} to {localFilePath}");

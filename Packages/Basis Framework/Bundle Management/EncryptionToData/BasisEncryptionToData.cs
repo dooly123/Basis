@@ -13,6 +13,7 @@ public static class BasisEncryptionToData
     }
     public static async Task<BasisLoadableBundle> GenerateMetaFromFile(BasisLoadableBundle BasisLoadableBundle, string FilePath, BasisProgressReport.ProgressReport progressCallback)
     {
+        Debug.Log("BasisLoadableBundle.UnlockPassword" + BasisLoadableBundle.UnlockPassword);
         byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(BasisLoadableBundle.UnlockPassword, FilePath, progressCallback);
         Debug.Log("Converting decrypted meta file to BasisBundleInformation...");
         BasisLoadableBundle.BasisBundleInformation = ConvertBytesToJson(LoadedMetaData);

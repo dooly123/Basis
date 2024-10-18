@@ -6,7 +6,6 @@ public class BasisTrackedBundleWrapper
     public BasisLoadableBundle LoadableBundle;
     [SerializeField]
     public AssetBundle AssetBundle;
-    public string metaUrl;
     public bool DidErrorOccur = false;
     // Method to await the completion of the bundle loading
     public async Task WaitForBundleLoadAsync()
