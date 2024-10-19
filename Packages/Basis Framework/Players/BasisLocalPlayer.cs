@@ -9,6 +9,7 @@ using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Avatar;
+using Basis.Scripts.Common;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
@@ -46,6 +47,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public MicrophoneRecorder MicrophoneRecorder;
         public static string MainCamera = "Assets/Prefabs/Loadins/Main Camera.prefab";
         public bool SpawnPlayerOnSceneLoad = true;
+        public const string DefaultAvatar = "LoadingAvatar";
         public async Task LocalInitialize()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -70,7 +72,7 @@ namespace Basis.Scripts.BasisSdk.Players
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
             }
-          //here LD  BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal);
+          BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal);
             await CreateAvatar(BasisPlayer.LoadModeLocal,BasisAvatarFactory.LoadingAvatar);
             if (MicrophoneRecorder == null)
             {
@@ -124,7 +126,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public async Task CreateAvatar(byte mode, BasisLoadableBundle BasisLoadableBundle)
         {
             await BasisAvatarFactory.LoadAvatarLocal(this, mode, BasisLoadableBundle);
-           //here LD BasisDataStore.SaveAvatar(AddressableID, mode, LoadFileNameAndExtension);
+            BasisDataStore.SaveAvatar(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, mode, LoadFileNameAndExtension);
             OnLocalAvatarChanged?.Invoke();
         }
         public void OnCalibration()

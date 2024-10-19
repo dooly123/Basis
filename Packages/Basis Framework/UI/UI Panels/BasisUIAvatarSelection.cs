@@ -1,4 +1,5 @@
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -120,10 +121,17 @@ namespace Basis.Scripts.UI.UI_Panels
                     TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
                     if (buttonText != null)
                     {
-                        buttonText.text = url.BasisBundleInformation.BasisBundleDescription.AssetBundleName; // or some other meaningful name
+                        buttonText.text = url.BasisRemoteBundleEncypted.BundleURL; // or some other meaningful name
                     }
                 }
                 CreatedCopies.Add(buttonObject);
+            }
+        }
+        public static class SavedDataToLoadRequest
+        {
+            public static void LoadUsedAvatar9()
+            {
+             //   BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal);
             }
         }
         public async void OnButtonPressed(BasisLoadableBundle AvatarLoadRequest)
