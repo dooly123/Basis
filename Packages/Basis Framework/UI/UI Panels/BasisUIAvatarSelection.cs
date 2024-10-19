@@ -1,6 +1,8 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Common;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -84,12 +86,20 @@ namespace Basis.Scripts.UI.UI_Panels
             AvatarUrlsRuntime.Clear();
             CreatedCopies.Clear();
             AvatarUrlsRuntime.AddRange(preLoadedBundles);
-           await BasisDataStoreAvatarKeys.LoadKeys();
-           List<BasisDataStoreAvatarKeys.AvatarKey> ActiveKeys = BasisDataStoreAvatarKeys.DisplayKeys();
-           int KeysCount = ActiveKeys.Count;
+            await BasisDataStoreAvatarKeys.LoadKeys();
+            List<BasisDataStoreAvatarKeys.AvatarKey> ActiveKeys = BasisDataStoreAvatarKeys.DisplayKeys();
+            int KeysCount = ActiveKeys.Count;
             for (int Index = 0; Index < KeysCount; Index++)
             {
-                BasisLoadhandler.HasURLOnDisc(ActiveKeys[Index].Url,out OnDiscInformation Information);
+                BasisLoadhandler.HasURLOnDisc(ActiveKeys[Index].Url, out OnDiscInformation Information);
+                if (string.IsNullOrEmpty(Information.StoredBundleURL))
+                {
+                    continue;
+                }
+                if (string.IsNullOrEmpty(Information.StoredMetaURL))
+                {
+                    continue;
+                }
                 BasisLoadableBundle Bundle = new BasisLoadableBundle
                 {
                     BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
@@ -97,9 +107,9 @@ namespace Basis.Scripts.UI.UI_Panels
                         BundleURL = Information.StoredBundleURL,
                         MetaURL = Information.StoredMetaURL
                     },
-                     BasisBundleInformation = new BasisBundleInformation() { BasisBundleDescription = new BasisBundleDescription(), BasisBundleGenerated = new BasisBundleGenerated() },
+                    BasisBundleInformation = new BasisBundleInformation() { BasisBundleDescription = new BasisBundleDescription(), BasisBundleGenerated = new BasisBundleGenerated() },
 
-                      BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle() { },
+                    BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle() { },
 
                     UnlockPassword = ActiveKeys[Index].Pass
                 };
@@ -121,7 +131,12 @@ namespace Basis.Scripts.UI.UI_Panels
                     TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
                     if (buttonText != null)
                     {
-                        buttonText.text = url.BasisRemoteBundleEncypted.BundleURL; // or some other meaningful name
+                        // Create a Uri object from the URL
+                        Uri uri = new Uri(url.BasisRemoteBundleEncypted.BundleURL);
+
+                        // Get the last segment of the URL path, which is the file name
+                        string fileName = Path.GetFileName(uri.LocalPath);
+                        buttonText.text = fileName; // or some other meaningful name
                     }
                 }
                 CreatedCopies.Add(buttonObject);
