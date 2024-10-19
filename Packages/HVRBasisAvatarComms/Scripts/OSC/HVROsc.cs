@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using HVR.Basis.Comms.OSC.Lyuma;
-using UnityEngine.Scripting;
 
 namespace HVR.Basis.Comms.OSC
 {
-    [Preserve]
     public class HVROsc
     {
         private const int DefaultReceiverPort = 9000;

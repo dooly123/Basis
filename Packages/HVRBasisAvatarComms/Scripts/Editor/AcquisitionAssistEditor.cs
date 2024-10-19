@@ -1,7 +1,6 @@
-using HVR.Basis.Comms;
-using System.Linq;
+﻿using System.Linq;
 using UnityEditor;
-using UnityEngine;
+
 namespace HVR.Basis.Comms
 {
     [CustomEditor(typeof(AcquisitionAssist))]
@@ -25,7 +24,7 @@ namespace HVR.Basis.Comms
                 {
                     assist.memory[address] = newValue;
                     assist.acquisitionService.Submit(address, newValue);
-                }
+                } 
             }
         }
     }

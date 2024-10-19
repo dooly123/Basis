@@ -1,9 +1,11 @@
 {
-    "name": "HVRBasisAvatarCommsEditor",
+    "name": "HVR.Basis.Comms.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:8c9aa0e006f5b5347af5c5470971dfae",
-        "GUID:36654df604fac454eb30035133ddc310"
+        "BasisSDK",
+        "Basis",
+        "DarkRiftIntergration",
+        "HVR.Basis.Comms"
     ],
     "includePlatforms": [
         "Editor"

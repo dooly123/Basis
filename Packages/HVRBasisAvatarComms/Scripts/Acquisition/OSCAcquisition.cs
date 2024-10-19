@@ -1,40 +1,36 @@
 ﻿using Basis.Scripts.BasisSdk;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 namespace HVR.Basis.Comms
 {
     [AddComponentMenu("HVR.Basis/Comms/OSC Acquisition")]
-    [Preserve]
     public class OSCAcquisition : MonoBehaviour
     {
         private const string FakeWakeUpMessage = "avtr_00000000-d7dc-4a90-ab09-000000000000";
         
-        [SerializeField] private BasisAvatar avatar;
-        [SerializeField] private AcquisitionService acquisitionService;
+        [HideInInspector] [SerializeField] private BasisAvatar avatar;
+        [HideInInspector] [SerializeField] private AcquisitionService acquisitionService;
         
         private OSCAcquisitionServer _acquisitionServer;
         private bool _alreadyInitialized;
 
         private void Awake()
         {
-            avatar.OnAvatarNetworkReady -= OnAvatarNetworkReady;
-            avatar.OnAvatarNetworkReady += OnAvatarNetworkReady;
+            if (avatar == null) avatar = CommsUtil.GetAvatar(this);
+            if (acquisitionService == null) acquisitionService = AcquisitionService.SceneInstance;
+            
+            avatar.OnAvatarReady -= OnAvatarReady;
+            avatar.OnAvatarReady += OnAvatarReady;
         }
 
-        private void OnAvatarNetworkReady()
+        private void OnAvatarReady(bool isWearer)
         {
-            if (!avatar.IsOwnedLocally) return;
+            if (!isWearer) return;
             
             if (_alreadyInitialized) return;
             _alreadyInitialized = true;
-            
-            _acquisitionServer = FindFirstObjectByType<OSCAcquisitionServer>();
-            if (_acquisitionServer == null)
-            {
-                var go = new GameObject("OSCAcquisitionServer");
-                _acquisitionServer = go.AddComponent<OSCAcquisitionServer>();
-            }
+
+            _acquisitionServer = OSCAcquisitionServer.SceneInstance;
             _acquisitionServer.SendWakeUpMessage(FakeWakeUpMessage);
 
             _acquisitionServer.OnAddressUpdated -= OnAddressUpdated;
@@ -44,7 +40,7 @@ namespace HVR.Basis.Comms
         private void OnDestroy()
         {
             _acquisitionServer.OnAddressUpdated -= OnAddressUpdated;
-            avatar.OnAvatarNetworkReady -= OnAvatarNetworkReady;
+            avatar.OnAvatarReady -= OnAvatarReady;
         }
 
         private void OnAddressUpdated(string address, float value)

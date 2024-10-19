@@ -1,31 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Basis.Scripts.BasisSdk;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 namespace HVR.Basis.Comms
 {
     [AddComponentMenu("HVR.Basis/Comms/Blendshape Actuation")]
-    [Preserve]
     public class BlendshapeActuation : MonoBehaviour, ICommsNetworkable
     {
         private const int MaxAddresses = 256;
         private const float BlendshapeAtFullStrength = 100f;
 
-        [SerializeField] private SkinnedMeshRenderer[] renderers;
-        [SerializeField] private BlendshapeActuationDefinitionFile[] definitionFiles;
-        [SerializeField] private BlendshapeActuationDefinition[] definitions;
+        [SerializeField] private SkinnedMeshRenderer[] renderers = Array.Empty<SkinnedMeshRenderer>();
+        [SerializeField] private BlendshapeActuationDefinitionFile[] definitionFiles = Array.Empty<BlendshapeActuationDefinitionFile>();
+        [SerializeField] private BlendshapeActuationDefinition[] definitions = Array.Empty<BlendshapeActuationDefinition>();
         
-        // TODO: These should be auto-filled by the system.
-        [SerializeField] private FeatureNetworking featureNetworking;
-        [SerializeField] private AcquisitionService acquisition;
+        [HideInInspector] [SerializeField] private BasisAvatar avatar;
+        [HideInInspector] [SerializeField] private FeatureNetworking featureNetworking;
+        [HideInInspector] [SerializeField] private AcquisitionService acquisition;
         
         private Dictionary<string, int> _addressBase = new Dictionary<string, int>();
         private ComputedActuator[] _computedActuators;
         private ComputedActuator[][] _addressBaseIndexToActuators;
         private FeatureInterpolator featureInterpolator;
         private int _guidIndex;
+        private bool _isNetworkable;
+
+        private void Awake()
+        {
+            if (avatar == null) avatar = CommsUtil.GetAvatar(this);
+            if (featureNetworking == null) featureNetworking = CommsUtil.FeatureNetworkingFromAvatar(avatar);
+            if (acquisition == null) acquisition = AcquisitionService.SceneInstance;
+
+            avatar.OnAvatarReady -= OnAvatarReady;
+            avatar.OnAvatarReady += OnAvatarReady;
+        }
 
         private void OnAddressUpdated(string address, float inRange)
         {
@@ -46,7 +56,11 @@ namespace HVR.Basis.Comms
             }
             
             var streamed01 = Mathf.InverseLerp(lower, upper, inRange);
-            featureInterpolator.Store(index, streamed01);
+
+            if (featureInterpolator != null) // Can be null due to network late init, this is needed for local tests without initialization scene 
+            {
+                featureInterpolator.Store(index, streamed01);
+            }
         }
 
         private void OnInterpolatedDataChanged(float[] current)
@@ -80,7 +94,7 @@ namespace HVR.Basis.Comms
             }
         }
 
-        private void WhenNetworkIdAssigned()
+        private void OnAvatarReady(bool isWearer)
         {
             var allDefinitions = definitions
                 .Concat(definitionFiles.SelectMany(file => file.definitions))
@@ -148,6 +162,13 @@ namespace HVR.Basis.Comms
             }
 
             acquisition.RegisterAddresses(_addressBase.Keys.ToArray(), OnAddressUpdated);
+            _isNetworkable = true;
+        }
+
+        private void WhenNetworkIdAssigned()
+        {
+            if (!_isNetworkable) return;
+
             featureInterpolator = featureNetworking.NewInterpolator(_guidIndex, _addressBase.Count, OnInterpolatedDataChanged);
         }
 
@@ -165,9 +186,35 @@ namespace HVR.Basis.Comms
 
         private void OnDisable()
         {
+            if (_computedActuators != null)
+            {
+                ResetAllBlendshapesToZero();
+            }
+        }
+
+        private void OnDestroy()
+        {
             acquisition.UnregisterAddresses(_addressBase.Keys.ToArray(), OnAddressUpdated);
-            featureInterpolator.Unregister();
-            featureInterpolator = null;
+
+            if (featureInterpolator != null)
+            {
+                featureInterpolator.Unregister();
+                featureInterpolator = null;
+            }
+        }
+
+        private void ResetAllBlendshapesToZero()
+        {
+            foreach (var computedActuator in _computedActuators)
+            {
+                foreach (var target in computedActuator.Targets)
+                {
+                    foreach (var blendshapeIndex in target.BlendshapeIndices)
+                    {
+                        target.Renderer.SetBlendShapeWeight(blendshapeIndex, 0);
+                    }
+                }
+            }
         }
 
         private ComputedActuatorTarget[] ComputeTargets(Dictionary<SkinnedMeshRenderer, List<string>> smrToBlendshapeNames, string[] definitionBlendshapes, bool onlyFirstMatch)
