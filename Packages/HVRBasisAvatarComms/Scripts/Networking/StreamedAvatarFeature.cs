@@ -58,7 +58,7 @@ namespace HVR.Basis.Comms
         }
 
         /// Exposed for testing purposes.
-        internal void QueueEvent(StreamedAvatarFeaturePayload message)
+        public void QueueEvent(StreamedAvatarFeaturePayload message)
         {
             _queue.Enqueue(message);
         }
