@@ -199,30 +199,22 @@ MonoBehaviour:
         AssetMode: 
         AssetToLoadName: 
         AssetBundleCRC: 0
-      BasisStoredDecyptedBundle:
-        LocalMetaFile: 
-        LocalBundleFile: 
-    LoadedAssetBundle: {fileID: 0}
   DefaultAvatar:
     UnlockPassword: 
     BasisRemoteBundleEncypted:
-      IsLocal: 0
-      MetaURL: 
-      BundleURL: 
+      IsLocal: 1
+      MetaURL: LoadingAvatar
+      BundleURL: LoadingAvatar
     BasisStoredEncyptedBundle:
-      LocalMetaFile: 
-      LocalBundleFile: 
+      LocalMetaFile: LoadingAvatar
+      LocalBundleFile: LoadingAvatar
     BasisBundleInformation:
       HasError: 0
       BasisBundleDescription:
-        AssetBundleName: 
-        AssetBundleDescription: 
+        AssetBundleName: LoadingAvatar
+        AssetBundleDescription: LoadingAvatar
       BasisBundleGenerated:
         AssetBundleHash: 
-        AssetMode: 
-        AssetToLoadName: 
+        AssetMode: Gameobject
+        AssetToLoadName: LoadingAvatar
         AssetBundleCRC: 0
-      BasisStoredDecyptedBundle:
-        LocalMetaFile: 
-        LocalBundleFile: 
-    LoadedAssetBundle: {fileID: 0}

@@ -24,7 +24,7 @@ public class BasisBuildAssetBundleMenu
             {
                 BasisBundleDescription = basisContentBase.BasisBundleDescription
             };
-            BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, basisBundleInformation,"Test");
+            BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, basisBundleInformation, "Test");
         }
         else
         {
@@ -68,7 +68,7 @@ public class BasisBuildAssetBundleMenu
                 {
                     BasisBundleDescription = basisContentBase.BasisBundleDescription
                 };
-                BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject,basisBundleInformation, "Test");
+                BasisAssetBundlePipeline.BuildAssetBundle(selectedObject, BasisAssetBundleObject, basisBundleInformation, "Test");
             }
             else
             {
@@ -82,17 +82,10 @@ public class BasisBuildAssetBundleMenu
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
         Scene activeScene = SceneManager.GetActiveScene();
         BasisScene BasisContentBase = GameObject.FindAnyObjectByType<BasisScene>(FindObjectsInactive.Exclude);
-        if (BasisContentBase.TryGetComponent(out BasisContentBase basisContentBase))
+        BasisBundleInformation basisBundleInformation = new BasisBundleInformation
         {
-            BasisBundleInformation basisBundleInformation = new BasisBundleInformation
-            {
-                BasisBundleDescription = basisContentBase.BasisBundleDescription
-            };
-            BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject, basisBundleInformation, "Test");
-        }
-        else
-        {
-            Debug.LogError("Missing the BasisScene");
-        }
+            BasisBundleDescription = BasisContentBase.BasisBundleDescription
+        };
+        BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject, basisBundleInformation, "Scene");
     }
 }
