@@ -129,21 +129,28 @@ public static class BasisEncryptionWrapper
     public static async Task WriteFileAsync(string filePath, byte[] data, FileMode fileMode, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
+
+        const int bufferSize = 4194304; // 4 MB buffer
         long totalWritten = 0;
 
-        using (var fs = new FileStream(filePath, fileMode, FileAccess.Write))
+        using (var fs = new FileStream(filePath, fileMode, FileAccess.Write, FileShare.None, bufferSize, useAsync: true))
         {
-            for (int offset = 0; offset < data.Length; offset += chunkSize)
+            int offset = 0;
+            while (offset < data.Length)
             {
-                int bytesToWrite = Math.Min(chunkSize, data.Length - offset);
+                int bytesToWrite = Math.Min(bufferSize, data.Length - offset);
                 await fs.WriteAsync(data, offset, bytesToWrite);
                 totalWritten += bytesToWrite;
+                offset += bytesToWrite;
+
+                // Report progress periodically
                 reportProgress?.Invoke((float)totalWritten / data.Length * 100f);
             }
         }
+
+        // Report 100% completion
         reportProgress?.Invoke(100f);
     }
-
     public static async Task EncryptFileAsync(string password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
     {
         byte[] dataToEncrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
@@ -177,15 +184,20 @@ public static class BasisEncryptionWrapper
     private static async Task<byte[]> ReadAllBytesAsync(string filePath, ProgressReport reportProgress)
     {
         reportProgress?.Invoke(0f);
-        var fileInfo = new FileInfo(filePath);
-        var data = new byte[fileInfo.Length];
 
-        using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        const int bufferSize = 81920; // Standard buffer size (80 KB)
+        var fileInfo = new FileInfo(filePath);
+        byte[] data = new byte[fileInfo.Length];
+
+        using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, true))
         {
             int totalRead = 0;
             int bytesRead;
-            while ((bytesRead = await fs.ReadAsync(data, totalRead, data.Length - totalRead)) > 0)
+            byte[] buffer = new byte[bufferSize];
+
+            while ((bytesRead = await fs.ReadAsync(buffer, 0, Math.Min(bufferSize, data.Length - totalRead))) > 0)
             {
+                Buffer.BlockCopy(buffer, 0, data, totalRead, bytesRead);
                 totalRead += bytesRead;
                 reportProgress?.Invoke((float)totalRead / fileInfo.Length * 100f);
             }
