@@ -56,7 +56,7 @@ namespace Basis.Scripts.UI.UI_Panels
                 // Read the JSON from the file and deserialize into the keys list
                 byte[] ByteData = await File.ReadAllBytesAsync(FilePath);
                 keys = SerializationUtility.DeserializeValue<List<AvatarKey>>(ByteData, DataFormat.Binary);
-                Debug.Log("Keys loaded from file.");
+                Debug.Log("Keys loaded from file. with a count of " + keys.Count);
             }
             else
             {

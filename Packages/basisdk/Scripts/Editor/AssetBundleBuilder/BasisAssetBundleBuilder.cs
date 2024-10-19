@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using static BasisEncryptionWrapper;
 public static class AssetBundleBuilder
 {
     public static async Task<List<BasisBundleInformation>> BuildAssetBundle(BasisAssetBundleObject settings, string assetBundleName, BasisBundleInformation BasisBundleInformation, string Mode, string Password)
@@ -142,7 +143,11 @@ public static class AssetBundleBuilder
             File.Delete(EncryptedPath);
         }
         Debug.Log("Encrypting " + actualFilePath);
-        await BasisEncryptionWrapper.EncryptFileAsync(password, actualFilePath, EncryptedPath, (progress) =>
+        BasisPassword BasisPassword = new BasisPassword
+        {
+            VP = password
+        };
+        await BasisEncryptionWrapper.EncryptFileAsync(BasisPassword, actualFilePath, EncryptedPath, (progress) =>
         {
             Debug.Log($"Progress: {progress}%");
         });

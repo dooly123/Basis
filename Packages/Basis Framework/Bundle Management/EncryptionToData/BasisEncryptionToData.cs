@@ -6,15 +6,23 @@ public static class BasisEncryptionToData
 {
     public static async Task<AssetBundleCreateRequest> GenerateBundleFromFile(string Password, string FilePath, uint CRC, BasisProgressReport.ProgressReport progressCallback)
     {
-        byte[] LoadedBundleData = await BasisEncryptionWrapper.DecryptFileAsync(Password, FilePath, progressCallback);
+        var BasisPassword = new BasisEncryptionWrapper.BasisPassword
+        {
+            VP = Password
+        };
+        byte[] LoadedBundleData = await BasisEncryptionWrapper.DecryptFileAsync(BasisPassword, FilePath, progressCallback);
         AssetBundleCreateRequest AssetBundleCreateRequest = AssetBundle.LoadFromMemoryAsync(LoadedBundleData, CRC);
         await AssetBundleCreateRequest;
         return AssetBundleCreateRequest;
     }
     public static async Task<BasisLoadableBundle> GenerateMetaFromFile(BasisLoadableBundle BasisLoadableBundle, string FilePath, BasisProgressReport.ProgressReport progressCallback)
     {
-        Debug.Log("BasisLoadableBundle.UnlockPassword" + BasisLoadableBundle.UnlockPassword);
-        byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(BasisLoadableBundle.UnlockPassword, FilePath, progressCallback);
+        var BasisPassword = new BasisEncryptionWrapper.BasisPassword
+        {
+            VP = BasisLoadableBundle.UnlockPassword
+        };
+        // Debug.Log("BasisLoadableBundle.UnlockPassword" + BasisLoadableBundle.UnlockPassword);
+        byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(BasisPassword, FilePath, progressCallback);
         Debug.Log("Converting decrypted meta file to BasisBundleInformation...");
         BasisLoadableBundle.BasisBundleInformation = ConvertBytesToJson(LoadedMetaData);
         return BasisLoadableBundle;

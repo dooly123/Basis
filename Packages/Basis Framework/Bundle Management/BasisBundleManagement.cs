@@ -173,7 +173,7 @@ public static class BasisBundleManagement
 
         Debug.Log($"Fetched meta URL: {metaUrl}");
         // Create and assign the download task
-        Debug.Log("Creating BasisTrackedBundleWrapper...");
+        Debug.Log("Creating BasisTrackedBundleWrapper... at path : " + metaFilepath);
         BasisTrackedBundleWrapper.LoadableBundle = await BasisEncryptionToData.GenerateMetaFromFile(BasisTrackedBundleWrapper.LoadableBundle, metaFilepath, progressCallback);
     }
 }

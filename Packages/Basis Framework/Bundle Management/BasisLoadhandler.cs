@@ -9,6 +9,12 @@ using UnityEngine;
 public static class BasisLoadhandler
 {
     public static Dictionary<string, BasisTrackedBundleWrapper> QueryableBundles = new Dictionary<string, BasisTrackedBundleWrapper>();
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static async Task OnRuntimeMethodLoad()
+    {
+        Debug.Log("After Scene is loaded and game is running");
+        await EnsureLoadAllComplete();
+    }
     public static async Task<GameObject> LoadGameobjectBundle(BasisLoadableBundle BasisLoadableBundle, bool UseCondom, BasisProgressReport.ProgressReport Report, CancellationToken CancellationToken)
     {
         await EnsureLoadAllComplete();

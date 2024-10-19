@@ -75,7 +75,11 @@ public static class BasisBasisBundleInformationHandler
            await File.WriteAllBytesAsync(filePath, Information);
             Debug.Log($"BasisBundleInformation saved to {filePath}");
             string EncryptedPath = Path.ChangeExtension(filePath, BuildSettings.BasisMetaEncyptedExtension);
-            await BasisEncryptionWrapper.EncryptFileAsync(password,filePath, EncryptedPath, (progress) =>
+            var BasisPassword = new BasisEncryptionWrapper.BasisPassword
+            {
+                VP = password
+            };
+            await BasisEncryptionWrapper.EncryptFileAsync(BasisPassword, filePath, EncryptedPath, (progress) =>
             {
                 Debug.Log($"Progress: {progress}%");
             });

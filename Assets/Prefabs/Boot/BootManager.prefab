@@ -181,11 +181,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Selector: {fileID: 11400000, guid: 8393424ebf34934449c2d1309a700837, type: 2}
   DefaultScene:
-    UnlockPassword: 
+    UnlockPassword: Scene
     BasisRemoteBundleEncypted:
       IsLocal: 0
-      MetaURL: 
-      BundleURL: 
+      MetaURL: https://BasisFramework.b-cdn.net/Worlds/DX11/65225541-bd78-4197-a4bf-2cfc4de38af9_638649459532806462.BasisEncyptedMeta
+      BundleURL: https://BasisFramework.b-cdn.net/Worlds/DX11/65225541-bd78-4197-a4bf-2cfc4de38af9_638649459532806462.BasisEncyptedBundle
     BasisStoredEncyptedBundle:
       LocalMetaFile: 
       LocalBundleFile: 

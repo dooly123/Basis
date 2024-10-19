@@ -1,8 +1,7 @@
 using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Common;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -12,49 +11,54 @@ namespace Basis.Scripts.UI.UI_Panels
 {
     public class BasisUIAvatarSelection : BasisUIBase
     {
-        [SerializeField]
-        public List<BasisLoadableBundle> preLoadedBundles = new List<BasisLoadableBundle>();
-        public RectTransform ParentedAvatarButtons;
-        public GameObject ButtonPrefab; // Prefab for the button
+        [SerializeField] public List<BasisLoadableBundle> preLoadedBundles = new List<BasisLoadableBundle>();
+        [SerializeField] public RectTransform ParentedAvatarButtons;
+        [SerializeField] public GameObject ButtonPrefab;
+
         public const string AvatarSelection = "BasisUIAvatarSelection";
 
-        public TMP_InputField MetaField;
-        public TMP_InputField BundleField;
-        public TMP_InputField PasswordField;
+        [SerializeField] public TMP_InputField MetaField;
+        [SerializeField] public TMP_InputField BundleField;
+        [SerializeField] public TMP_InputField PasswordField;
 
-        public Button AddAvatarApply;
-        private List<BasisLoadableBundle> AvatarUrlsRuntime = new List<BasisLoadableBundle>();
-        public async void Start()
+        [SerializeField] public Button AddAvatarApply;
+        [SerializeField] public BasisProgressReport.ProgressReport Report;
+        [SerializeField]
+        public List<BasisLoadableBundle> avatarUrlsRuntime = new List<BasisLoadableBundle>();
+        [SerializeField]
+        public List<GameObject> createdCopies = new List<GameObject>();
+
+        private async void Start()
         {
             BasisDataStoreAvatarKeys.DisplayKeys();
             AddAvatarApply.onClick.AddListener(AddAvatar);
             await Initialize();
         }
+
         public override void InitalizeEvent()
         {
-            BasisCursorManagement.UnlockCursor(nameof(BasisUIAvatarSelection));
+            BasisCursorManagement.UnlockCursor(AvatarSelection);
         }
-        public async void AddAvatar()
+
+        private async void AddAvatar()
         {
-            bool MetaFieldState = string.IsNullOrEmpty(MetaField.text);
-            bool BundleFieldState = string.IsNullOrEmpty(BundleField.text);
-            bool PasswordFieldState = string.IsNullOrEmpty(PasswordField.text);
-            if (MetaFieldState)
+            if (string.IsNullOrEmpty(MetaField.text) || string.IsNullOrEmpty(BundleField.text) || string.IsNullOrEmpty(PasswordField.text))
             {
-                Debug.LogError("Meta Field was Empty");
+                Debug.LogError("All fields must be filled.");
                 return;
             }
-            if (BundleFieldState)
+
+            // Check if the avatar key already exists to prevent duplicates
+            List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys = BasisDataStoreAvatarKeys.DisplayKeys();
+            bool keyExists = activeKeys.Exists(key => key.Url == MetaField.text && key.Pass == PasswordField.text);
+
+            if (keyExists)
             {
-                Debug.LogError("Bundle Field was Empty");
+                Debug.LogWarning("The avatar key with the same URL and Password already exists. No duplicate will be added.");
                 return;
             }
-            if (PasswordFieldState)
-            {
-                Debug.LogError("Password Field was Empty");
-                return;
-            }
-            BasisLoadableBundle BasisLoadableBundle = new BasisLoadableBundle
+
+            BasisLoadableBundle loadableBundle = new BasisLoadableBundle
             {
                 UnlockPassword = PasswordField.text,
                 BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
@@ -62,111 +66,123 @@ namespace Basis.Scripts.UI.UI_Panels
                     BundleURL = BundleField.text,
                     MetaURL = MetaField.text
                 },
-                BasisBundleInformation = new BasisBundleInformation() { BasisBundleDescription = new BasisBundleDescription(), BasisBundleGenerated = new BasisBundleGenerated() },
-                BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),
+                BasisBundleInformation = new BasisBundleInformation
+                {
+                    BasisBundleDescription = new BasisBundleDescription(),
+                    BasisBundleGenerated = new BasisBundleGenerated()
+                },
+                BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle()
             };
-            await BasisLocalPlayer.Instance.CreateAvatar(0, BasisLoadableBundle);
-            BasisDataStoreAvatarKeys.AvatarKey AvatarKey = new BasisDataStoreAvatarKeys.AvatarKey
+
+            await BasisLocalPlayer.Instance.CreateAvatar(0, loadableBundle);
+
+            var avatarKey = new BasisDataStoreAvatarKeys.AvatarKey
             {
                 Url = MetaField.text,
-
                 Pass = PasswordField.text
             };
-            await BasisDataStoreAvatarKeys.AddNewKey(AvatarKey);
 
+            await BasisDataStoreAvatarKeys.AddNewKey(avatarKey);
             await Initialize();
         }
-        public List<GameObject> CreatedCopies = new List<GameObject>();
-        public async Task Initialize()
+
+        private async Task Initialize()
         {
-            foreach (GameObject go in CreatedCopies)
-            {
-                GameObject.Destroy(go);
-            }
-            AvatarUrlsRuntime.Clear();
-            CreatedCopies.Clear();
-            AvatarUrlsRuntime.AddRange(preLoadedBundles);
+            ClearCreatedCopies();
+            avatarUrlsRuntime.Clear();
+            avatarUrlsRuntime.AddRange(preLoadedBundles);
+
             await BasisDataStoreAvatarKeys.LoadKeys();
-            List<BasisDataStoreAvatarKeys.AvatarKey> ActiveKeys = BasisDataStoreAvatarKeys.DisplayKeys();
-            int KeysCount = ActiveKeys.Count;
-            for (int Index = 0; Index < KeysCount; Index++)
+            List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys = BasisDataStoreAvatarKeys.DisplayKeys();
+            int Count = activeKeys.Count;
+            for (int Index = 0; Index < Count; Index++)
             {
-                BasisLoadhandler.HasURLOnDisc(ActiveKeys[Index].Url, out OnDiscInformation Information);
-                if (string.IsNullOrEmpty(Information.StoredBundleURL))
+                if (BasisLoadhandler.HasURLOnDisc(activeKeys[Index].Url, out var info) == false)
                 {
+                    Debug.LogError("Missing File on Disc For " + activeKeys[Index].Url);
                     continue;
                 }
-                if (string.IsNullOrEmpty(Information.StoredMetaURL))
-                {
-                    continue;
-                }
-                BasisLoadableBundle Bundle = new BasisLoadableBundle
+
+                BasisLoadableBundle bundle = new BasisLoadableBundle
                 {
                     BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
                     {
-                        BundleURL = Information.StoredBundleURL,
-                        MetaURL = Information.StoredMetaURL
+                        BundleURL = info.StoredBundleURL,
+                        MetaURL = info.StoredMetaURL
                     },
-                    BasisBundleInformation = new BasisBundleInformation() { BasisBundleDescription = new BasisBundleDescription(), BasisBundleGenerated = new BasisBundleGenerated() },
-
-                    BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle() { },
-
-                    UnlockPassword = ActiveKeys[Index].Pass
+                    BasisBundleInformation = new BasisBundleInformation
+                    {
+                        BasisBundleDescription = new BasisBundleDescription(),
+                        BasisBundleGenerated = new BasisBundleGenerated()
+                    },
+                    BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),
+                    UnlockPassword = activeKeys[Index].Pass
                 };
-                AvatarUrlsRuntime.Add(Bundle);
+                Debug.Log("Adding Button");
+                avatarUrlsRuntime.Add(bundle);
             }
-            for (int Index = 0; Index < AvatarUrlsRuntime.Count; Index++)
-            {
-                BasisLoadableBundle url = AvatarUrlsRuntime[Index];
-                // Create a new button from the prefab
-                GameObject buttonObject = Instantiate(ButtonPrefab);
-                buttonObject.transform.SetParent(ParentedAvatarButtons, false);
-                buttonObject.SetActive(true);
-                // Get the Button component and set its onClick listener
-                if (buttonObject.TryGetComponent<Button>(out Button button))
-                {
-                    button.onClick.AddListener(() => OnButtonPressed(url));
+            Debug.Log("CreateAvatarButtons");
+            await CreateAvatarButtons(activeKeys);
+        }
 
-                    // Optionally set the button's label to something meaningful, like the URL or a part of it
+        private async Task CreateAvatarButtons(List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys)
+        {
+            for (int index = 0; index < avatarUrlsRuntime.Count; index++)
+            {
+                Debug.Log("CreateAvatarButton " + index);
+                var bundle = avatarUrlsRuntime[index];
+                var buttonObject = Instantiate(ButtonPrefab, ParentedAvatarButtons);
+                buttonObject.SetActive(true);
+
+                if (buttonObject.TryGetComponent<Button>(out var button))
+                {
+                    button.onClick.AddListener(() => OnButtonPressed(bundle));
+
                     TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
                     if (buttonText != null)
                     {
-                        // Create a Uri object from the URL
-                        Uri uri = new Uri(url.BasisRemoteBundleEncypted.BundleURL);
+                        var wrapper = new BasisTrackedBundleWrapper
+                        {
+                            LoadableBundle = bundle
+                        };
 
-                        // Get the last segment of the URL path, which is the file name
-                        string fileName = Path.GetFileName(uri.LocalPath);
-                        buttonText.text = fileName; // or some other meaningful name
+                        BasisLoadhandler.HasURLOnDisc(activeKeys[index].Url, out var info);
+                        try
+                        {
+                            await BasisBundleManagement.DataOnDiscProcessMetaAsync(wrapper, info.StoredMetaLocal, info.StoredBundleLocal, Report, new CancellationToken());
+                            buttonText.text = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleDescription.AssetBundleName;
+                        }
+                        catch (Exception E)
+                        {
+                            Debug.LogError(E);
+                            continue;
+                        }
                     }
                 }
-                CreatedCopies.Add(buttonObject);
+
+                createdCopies.Add(buttonObject);
             }
         }
-        public static class SavedDataToLoadRequest
+        private void ClearCreatedCopies()
         {
-            public static void LoadUsedAvatar9()
+            foreach (var copy in createdCopies)
             {
-             //   BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal);
+                Destroy(copy);
             }
+            createdCopies.Clear();
         }
-        public async void OnButtonPressed(BasisLoadableBundle AvatarLoadRequest)
+
+        private async void OnButtonPressed(BasisLoadableBundle avatarLoadRequest)
         {
             if (BasisLocalPlayer.Instance != null)
             {
-                if (AvatarLoadRequest.BasisRemoteBundleEncypted.IsLocal)
-                {
-                    await BasisLocalPlayer.Instance.CreateAvatar(0, AvatarLoadRequest);
-                }
-                else
-                {
-                    await BasisLocalPlayer.Instance.CreateAvatar(0, AvatarLoadRequest);
-                }
+                await BasisLocalPlayer.Instance.CreateAvatar(0, avatarLoadRequest);
             }
         }
 
         public override void DestroyEvent()
         {
-            BasisCursorManagement.LockCursor(nameof(BasisUIAvatarSelection));
+            BasisCursorManagement.LockCursor(AvatarSelection);
         }
     }
 }
