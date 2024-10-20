@@ -100,6 +100,7 @@ namespace Basis.Scripts.UI.UI_Panels
                 if (BasisLoadhandler.HasURLOnDisc(activeKeys[Index].Url, out var info) == false)
                 {
                     Debug.LogError("Missing File on Disc For " + activeKeys[Index].Url);
+                   await BasisDataStoreAvatarKeys.RemoveKey(activeKeys[Index]);
                     continue;
                 }
 
@@ -146,16 +147,16 @@ namespace Basis.Scripts.UI.UI_Panels
                             LoadableBundle = bundle
                         };
 
-                        BasisLoadhandler.HasURLOnDisc(activeKeys[index].Url, out var info);
                         try
                         {
+                            BasisLoadhandler.HasURLOnDisc(avatarUrlsRuntime[index].BasisRemoteBundleEncypted.MetaURL, out var info);
                             await BasisBundleManagement.DataOnDiscProcessMetaAsync(wrapper, info.StoredMetaLocal, info.StoredBundleLocal, Report, new CancellationToken());
                             buttonText.text = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleDescription.AssetBundleName;
                         }
                         catch (Exception E)
                         {
                             Debug.LogError(E);
-                            BasisLoadhandler.TryRemoveOnDiscInfo(activeKeys[index].Url);
+                            BasisLoadhandler.TryRemoveOnDiscInfo(avatarUrlsRuntime[index].BasisRemoteBundleEncypted.MetaURL);
 
                             continue;
                         }

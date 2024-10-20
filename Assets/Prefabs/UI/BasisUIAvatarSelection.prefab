@@ -699,14 +699,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361c0db1e7f926e449b1c786f5569fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preLoadedBundles: []
+  preLoadedBundles:
+  - UnlockPassword: password
+    BasisRemoteBundleEncypted:
+      IsLocal: 0
+      MetaURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/1a0fe16e-1c5f-4134-a10e-07c6c436bc97_638650053689621810.BasisEncyptedMet
+      BundleURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/1a0fe16e-1c5f-4134-a10e-07c6c436bc97_638650053689621810.BasisEncyptedBun
+    BasisStoredEncyptedBundle:
+      LocalMetaFile: 
+      LocalBundleFile: 
+    BasisBundleInformation:
+      HasError: 0
+      BasisBundleDescription:
+        AssetBundleName: 
+        AssetBundleDescription: 
+      BasisBundleGenerated:
+        AssetBundleHash: 
+        AssetMode: 
+        AssetToLoadName: 
+        AssetBundleCRC: 0
   ParentedAvatarButtons: {fileID: 4707479195400357847}
   ButtonPrefab: {fileID: 5504761427362873086}
   MetaField: {fileID: 2269253443789147195}
   BundleField: {fileID: 4212813629228086104}
   PasswordField: {fileID: 2259019079990160000}
   AddAvatarApply: {fileID: 2085562167410064864}
-  CreatedCopies: []
+  avatarUrlsRuntime: []
+  createdCopies: []
 --- !u!114 &4016401586506571100
 MonoBehaviour:
   m_ObjectHideFlags: 0
