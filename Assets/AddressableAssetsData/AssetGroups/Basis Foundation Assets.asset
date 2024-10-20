@@ -130,6 +130,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 861fed068fe3fd4449deba6697749c16
+    m_Address: UserNamePanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 86272a90b30fb814ea93537106bd9c2c
     m_Address: valve_controller_knu_right
     m_ReadOnly: 0
