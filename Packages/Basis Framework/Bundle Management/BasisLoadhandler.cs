@@ -26,9 +26,10 @@ public static class BasisLoadhandler
                 await Wrapper.WaitForBundleLoadAsync();
                 return await LoadAssetFromBundle.BundleToAsset(Wrapper, UseCondom);
             }
-            catch
+            catch (Exception E)
             {
                 QueryableBundles.Remove(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL);
+                Debug.LogError("Unable to load Loaded content " + E);
                 return null;
             }
         }
@@ -84,6 +85,15 @@ public static class BasisLoadhandler
                 Wrapper.DidErrorOccur = true;
                 QueryableBundles.Remove(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL);
                 Debug.LogError(e);
+                if (File.Exists(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalMetaFile))
+                {
+                    File.Delete(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalMetaFile);
+                }
+                if (File.Exists(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile))
+                {
+                    File.Delete(BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile);
+                }
+                loadableDiscData.TryRemove(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,out  OnDiscInformation Value);
                 return null;
             }
         }
@@ -258,6 +268,36 @@ public static class BasisLoadhandler
         else
         {
             Debug.LogError("Already has Disc Info");
+        }
+    }
+    public static void TryRemoveOnDiscInfo(string Path)
+    {
+        if (loadableDiscData.TryRemove(Path, out _))
+        {
+            // Define the file path in the persistent data directory
+            string filePath = BasisIOManagement.GenerateFilePath($"{Path}{BasisBundleManagement.MetaBasis}", BasisBundleManagement.AssetBundles);
+
+            // Try to delete the file
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    Debug.Log($"Deleted OnDiscInformation from {filePath}");
+                }
+                else
+                {
+                    Debug.LogWarning($"File not found at {filePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to delete OnDiscInformation: {ex.Message}");
+            }
+        }
+        else
+        {
+            Debug.LogError("OnDiscInformation not found or already removed");
         }
     }
 }

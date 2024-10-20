@@ -49,7 +49,10 @@ public class BasisUIManagement : MonoBehaviour
         for (int Index = 0; Index < Copied.Count; Index++)
         {
             BasisUIBase menu = Copied[Index];
-            menu.CloseThisMenu();
+            if (menu)
+            {
+                menu.CloseThisMenu();
+            }
         }
         basisUIBases.Clear();
     }

@@ -31,10 +31,8 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             if (Avatar == null)
             {
-                BasisLoadableBundle BasisLoadedBundle =  BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
-                await BasisLoadhandler.LoadGameobjectBundle(BasisLoadedBundle,true, AvatarProgress, new CancellationToken());
-
-                CreateAvatar(CACM.loadMode, BasisLoadedBundle);
+                BasisLoadableBundle BasisLoadedBundle = BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
+                await BasisAvatarFactory.LoadAvatarRemote(this, CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);

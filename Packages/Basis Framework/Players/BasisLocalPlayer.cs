@@ -10,6 +10,8 @@ using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Avatar;
 using Basis.Scripts.Common;
+using System.Collections.Generic;
+using Basis.Scripts.UI.UI_Panels;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
@@ -73,13 +75,52 @@ namespace Basis.Scripts.BasisSdk.Players
                 HasEvents = true;
             }
           BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal);
-            await CreateAvatar(BasisPlayer.LoadModeLocal,BasisAvatarFactory.LoadingAvatar);
+          await  Replaceme(LastUsedAvatar);
             if (MicrophoneRecorder == null)
             {
                 MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
             }
             MicrophoneRecorder.TryInitialize();
             OnLocalPlayerCreatedAndReady?.Invoke();
+        }
+        public async Task Replaceme(BasisDataStore.BasisSavedAvatar LastUsedAvatar)
+        {
+            if (BasisLoadhandler.HasURLOnDisc(LastUsedAvatar.UniqueID, out var info))
+            {
+                await BasisDataStoreAvatarKeys.LoadKeys();
+                List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys = BasisDataStoreAvatarKeys.DisplayKeys();
+                foreach (BasisDataStoreAvatarKeys.AvatarKey Key in activeKeys)
+                {
+                    if (Key.Url == LastUsedAvatar.UniqueID)
+                    {
+                        BasisLoadableBundle bundle = new BasisLoadableBundle
+                        {
+                            BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
+                            {
+                                BundleURL = info.StoredBundleURL,
+                                MetaURL = info.StoredMetaURL
+                            },
+                            BasisBundleInformation = new BasisBundleInformation
+                            {
+                                BasisBundleDescription = new BasisBundleDescription(),
+                                BasisBundleGenerated = new BasisBundleGenerated()
+                            },
+                            BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),
+                            UnlockPassword = Key.Pass
+                        };
+                        Debug.Log("loading previously loaded avatar");
+                        await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
+                        return;
+                    }
+                }
+                Debug.Log("no key found to load but was found on disc");
+                await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
+            }
+            else
+            {
+                Debug.Log("url was not found on disc");
+                await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
+            }
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {

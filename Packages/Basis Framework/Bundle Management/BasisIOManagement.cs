@@ -49,39 +49,28 @@ public static class BasisIOManagement
             {
                 removeFileOnAbort = true // Ensure incomplete downloads are cleaned up
             };
-
             UnityWebRequestAsyncOperation asyncOperation = request.SendWebRequest();
-            await asyncOperation;
-
-            try
+            // Track download progress and handle the download
+            while (!asyncOperation.isDone)
             {
-                // Track download progress and handle the download
-                while (!asyncOperation.isDone)
+                // Check if cancellation is requested
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    // Check if cancellation is requested
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        Debug.Log("Download cancelled.");
-                        request.Abort(); // Abort request on cancellation
-                        return;
-                    }
-
-                    // Report progress (0% to 100%)
-                    progressCallback?.Invoke(asyncOperation.progress * 100);
-
-                    await Task.Yield();
-                }
-
-                // Handle potential download errors
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.LogError($"Failed to download file: {request.error} for URL {url}");
+                    Debug.Log("Download cancelled.");
+                    request.Abort(); // Abort request on cancellation
                     return;
                 }
+
+                // Report progress (0% to 100%)
+                progressCallback?.Invoke(asyncOperation.webRequest.downloadProgress * 100);
+               // Debug.Log("downloading file " + asyncOperation.webRequest.downloadProgress);
+                await Task.Yield();
             }
-            catch (Exception ex)
+
+            // Handle potential download errors
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"An error occurred while downloading the file: {ex.Message}");
+                Debug.LogError($"Failed to download file: {request.error} for URL {url}");
                 return;
             }
 

@@ -78,6 +78,7 @@ namespace Basis.Scripts.Drivers
             {
                 if (Avatar.FaceVisemeMovement[Index] != -1)
                 {
+                    int FaceVisemeIndex = Avatar.FaceVisemeMovement[Index];
                     HasViseme[Index] = true;
                     switch (Index)
                     {
@@ -86,7 +87,7 @@ namespace Basis.Scripts.Drivers
                                 PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
                                 {
                                     phoneme = "A",
-                                    blendShape = Index
+                                    blendShape = FaceVisemeIndex
                                 };
                                 phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
                                 break;
@@ -97,7 +98,7 @@ namespace Basis.Scripts.Drivers
                                 PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
                                 {
                                     phoneme = "I",
-                                    blendShape = Index
+                                    blendShape = FaceVisemeIndex
                                 };
                                 phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
                                 break;
@@ -108,7 +109,7 @@ namespace Basis.Scripts.Drivers
                                 PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
                                 {
                                     phoneme = "U",
-                                    blendShape = Index
+                                    blendShape = FaceVisemeIndex
                                 };
                                 phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
                                 break;
@@ -119,7 +120,7 @@ namespace Basis.Scripts.Drivers
                                 PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
                                 {
                                     phoneme = "E",
-                                    blendShape = Index
+                                    blendShape = FaceVisemeIndex
                                 };
                                 phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
                                 break;
@@ -129,7 +130,7 @@ namespace Basis.Scripts.Drivers
                                 PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
                                 {
                                     phoneme = "O",
-                                    blendShape = Index
+                                    blendShape = FaceVisemeIndex
                                 };
                                 phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
                                 break;
@@ -139,7 +140,7 @@ namespace Basis.Scripts.Drivers
                                 PhonemeBlendShapeInfo PhonemeBlendShapeInfo = new PhonemeBlendShapeInfo
                                 {
                                     phoneme = "S",
-                                    blendShape = Index
+                                    blendShape = FaceVisemeIndex
                                 };
                                 phonemeBlendShapeTable.Add(PhonemeBlendShapeInfo);
                                 break;

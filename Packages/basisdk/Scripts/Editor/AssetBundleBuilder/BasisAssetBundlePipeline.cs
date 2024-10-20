@@ -2,6 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public static class BasisAssetBundlePipeline
 {
@@ -48,19 +49,15 @@ public static class BasisAssetBundlePipeline
 
         Debug.Log("All AssetBundle names cleared from Importer settings.");
     }
-    public static async void BuildAssetBundle(GameObject prefab, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
+    public static async void BuildAssetBundle(GameObject originalPrefab, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
     {
         ClearOutExistingSets();
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
         TemporaryStorageHandler.EnsureDirectoryExists(settings.AssetBundleDirectory);
-        if (!BasisValidationHandler.IsValidPrefab(prefab))
-        {
-            Debug.LogError("Invalid prefab. AssetBundle build aborted.");
-            return;
-        }
 
         bool wasModified = false;
 
+        GameObject prefab = Object.Instantiate(originalPrefab);
         try
         {
             // Invoke the delegate before building the asset bundle
@@ -69,7 +66,7 @@ public static class BasisAssetBundlePipeline
             string prefabPath = TemporaryStorageHandler.SavePrefabToTemporaryStorage(prefab, settings, ref wasModified, out string uniqueID);
             string assetBundleName = AssetBundleBuilder.SetAssetBundleName(prefabPath, uniqueID, settings);
 
-           await AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, BasisBundleInformation, "GameObject", Password);
+            await AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, BasisBundleInformation, "GameObject", Password);
             AssetBundleBuilder.ResetAssetBundleName(prefabPath);
             TemporaryStorageHandler.ClearTemporaryStorage(settings.TemporaryStorage);
             AssetDatabase.Refresh();
@@ -83,6 +80,10 @@ public static class BasisAssetBundlePipeline
             OnBuildErrorPrefab?.Invoke(ex, prefab, wasModified, settings.TemporaryStorage);
             BasisBundleErrorHandler.HandleBuildError(ex, prefab, wasModified, settings.TemporaryStorage);
             EditorUtility.DisplayDialog("Failed To Build", "please check the console for the full issue, " + ex, "will do");
+        }
+        finally
+        {
+            Object.DestroyImmediate(prefab);
         }
         EditorUtility.DisplayDialog("Completed Build", "successfully built asset bundles for assets, Will be found in ./AssetBundles", "ok");
     }
