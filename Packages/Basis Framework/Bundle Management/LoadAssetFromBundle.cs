@@ -38,6 +38,7 @@ public static class LoadAssetFromBundle
     {
         GameObject Disabled = new GameObject("Disabled");
         Disabled.SetActive(false);
+        SearchAndDestroy.SetActive(false);
         // Create a copy of the SearchAndDestroy GameObject
         GameObject copy = GameObject.Instantiate(SearchAndDestroy, Disabled.transform);
         if (UseContentCondum)
@@ -70,6 +71,7 @@ public static class LoadAssetFromBundle
         copy.transform.parent = null;
         GameObject.DestroyImmediate(Disabled);
         // Return the modified copy of the GameObject
+        Disabled.SetActive(true);
         return copy;
     }
     public static async Task LoadSceneFromAssetBundleAsync(BasisTrackedBundleWrapper bundle, bool MakeActiveScene, ProgressReport progressCallback)
