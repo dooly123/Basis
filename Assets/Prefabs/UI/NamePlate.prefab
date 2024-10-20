@@ -227,6 +227,8 @@ MonoBehaviour:
   Text: {fileID: 5913064765185686731}
   Loadingbar: {fileID: 2027450512927559089}
   YHeightMultiplier: 1.25
+  HasActiveLoadingbar: 0
+  BasisRemotePlayer: {fileID: 0}
 --- !u!114 &2997356888555999241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,7 +325,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 537365749, guid: 2f40c57d4ed9f194189003a5de9fa264, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -332,7 +334,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 50
 --- !u!114 &5659242795811902284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,7 +396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1095917590344183364
 RectTransform:
   m_ObjectHideFlags: 0
@@ -435,15 +437,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4048233, g: 0, b: 1, a: 0.72156864}
+  m_Color: {r: 0.65471697, g: 1, b: 0.98926574, a: 0.72156864}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 537365749, guid: 2f40c57d4ed9f194189003a5de9fa264, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -451,7 +453,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 100
 --- !u!1 &5630974054363374140
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,10 +519,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: test
+  m_text: Test Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ceea3a86a31c4774399e1ca523bf6850, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: ceea3a86a31c4774399e1ca523bf6850, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 98857fb5827ece748ae5394a1ad8342d, type: 2}
+  m_sharedMaterial: {fileID: 1150190466599654131, guid: 98857fb5827ece748ae5394a1ad8342d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -544,7 +546,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8.75
+  m_fontSize: 7
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
