@@ -8,8 +8,8 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
-using Basis.Scripts.Common;
 using Basis.Scripts.Avatar;
+using Basis.Scripts.Common;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisLocalPlayer : BasisPlayer
@@ -47,6 +47,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public MicrophoneRecorder MicrophoneRecorder;
         public static string MainCamera = "Assets/Prefabs/Loadins/Main Camera.prefab";
         public bool SpawnPlayerOnSceneLoad = true;
+        public const string DefaultAvatar = "LoadingAvatar";
         public async Task LocalInitialize()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -59,8 +60,8 @@ namespace Basis.Scripts.BasisSdk.Players
             LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
             await BasisLocalInputActions.CreateInputAction(this);
             await BasisDeviceManagement.LoadGameobject(MainCamera, new InstantiationParameters());
-          //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
-          //  FootPlacementDriver.Initialize();
+            //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
+            //  FootPlacementDriver.Initialize();
             Move.Initialize();
             LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
             LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
@@ -71,8 +72,8 @@ namespace Basis.Scripts.BasisSdk.Players
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
             }
-            (string,byte) LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension,BasisAvatarFactory.LoadingAvatar,BasisPlayer.LoadModeLocal);
-            await CreateAvatar(LastUsedAvatar.Item1, LastUsedAvatar.Item2, string.Empty);
+          BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal);
+            await CreateAvatar(BasisPlayer.LoadModeLocal,BasisAvatarFactory.LoadingAvatar);
             if (MicrophoneRecorder == null)
             {
                 MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
@@ -122,10 +123,10 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
         }
-        public async Task CreateAvatar(string AddressableID,byte mode,string hash = "")
+        public async Task CreateAvatar(byte mode, BasisLoadableBundle BasisLoadableBundle)
         {
-            await BasisAvatarFactory.LoadAvatar(this, AddressableID, mode, hash);
-            BasisDataStore.SaveAvatar(AddressableID, mode, LoadFileNameAndExtension);
+            await BasisAvatarFactory.LoadAvatarLocal(this, mode, BasisLoadableBundle);
+            BasisDataStore.SaveAvatar(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, mode, LoadFileNameAndExtension);
             OnLocalAvatarChanged?.Invoke();
         }
         public void OnCalibration()

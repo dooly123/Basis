@@ -2,6 +2,9 @@ using Basis.Scripts.Avatar;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.NamePlate;
+using BasisSerializer.OdinSerializer;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using static SerializableDarkRift;
 namespace Basis.Scripts.BasisSdk.Players
@@ -14,7 +17,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisBoneControl MouthControl;
         public bool HasEvents = false;
         public bool LockAvatarFromChanging;
-        public async void RemoteInitialize(ClientAvatarChangeMessage CACM, PlayerMetaDataMessage PlayerMetaDataMessage)
+        public async Task RemoteInitialize(ClientAvatarChangeMessage CACM, PlayerMetaDataMessage PlayerMetaDataMessage)
         {
             DisplayName = PlayerMetaDataMessage.playerDisplayName;
             UUID = PlayerMetaDataMessage.playerUUID;
@@ -28,7 +31,10 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             if (Avatar == null)
             {
-                CreateAvatar(CACM.avatarID, CACM.loadMode);
+                BasisLoadableBundle BasisLoadedBundle =  BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
+                await BasisLoadhandler.LoadGameobjectBundle(BasisLoadedBundle,true, AvatarProgress, new CancellationToken());
+
+                CreateAvatar(CACM.loadMode, BasisLoadedBundle);
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
@@ -48,19 +54,19 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
         }
-        public async void CreateAvatar(string Loader = BasisAvatarFactory.LoadingAvatar,byte NetworkMode = 0)
+        public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle)
         {
-            if (string.IsNullOrEmpty(Loader))
+            if (BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile == BasisAvatarFactory.LoadingAvatar.BasisStoredEncyptedBundle.LocalBundleFile)
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
-                await BasisAvatarFactory.LoadAvatar(this, BasisAvatarFactory.LoadingAvatar, BasisPlayer.LoadModeLocal, string.Empty);
+                await BasisAvatarFactory.LoadAvatarRemote(this, BasisPlayer.LoadModeError, BasisLoadableBundle);
             }
             else
             {
-                Debug.Log("loading avatar from " + Loader + " with net mode " + NetworkMode);
+                Debug.Log("loading avatar from " + BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile + " with net mode " + Mode);
                 if (LockAvatarFromChanging == false)
                 {
-                    await BasisAvatarFactory.LoadAvatar(this, Loader, NetworkMode, string.Empty);
+                    await BasisAvatarFactory.LoadAvatarRemote(this, Mode, BasisLoadableBundle);
                 }
             }
         }

@@ -6,12 +6,10 @@ using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 namespace HVR.Basis.Comms
 {
-    [AddComponentMenu("HVR.Basis/Comms/Streamed Avatar Feature")]
-    [Preserve]
+    [AddComponentMenu("HVR.Basis/Comms/Internal/Streamed Avatar Feature")]
     public class StreamedAvatarFeature : MonoBehaviour
     {
         private const int HeaderBytes = 2;
@@ -208,7 +206,7 @@ namespace HVR.Basis.Comms
         
         #endregion
     }
-    [Preserve]
+
     public class StreamedAvatarFeaturePayload
     {
         public float DeltaTime;

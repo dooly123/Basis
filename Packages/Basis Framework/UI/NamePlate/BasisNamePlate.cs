@@ -3,6 +3,7 @@ using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.UI_Panels;
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,20 +34,32 @@ namespace Basis.Scripts.UI.NamePlate
         {
             BasisRemotePlayer.ProgressReportAvatarLoad -= ProgresReport;
         }
-        private void ProgresReport(float progress)
+        public void ProgresReport(float progress)
         {
-            if (progress != 100)
+            // Add the action to the queue to be executed on the main thread
+            EnqueueOnMainThread(() =>
             {
-                if (HasActiveLoadingbar == false)
+                if (progress != 100)
                 {
-                    StartProgressBar();
-                }
+                    if (!HasActiveLoadingbar)
+                    {
+                        StartProgressBar();
+                    }
 
-                UpdateProgressBar(progress);
-            }
-            else
+                    UpdateProgressBar(progress);
+                }
+                else
+                {
+                    StopProgressBar();
+                }
+            });
+        }
+        // This method will queue the action to be executed on the main thread
+        private static void EnqueueOnMainThread(Action action)
+        {
+            lock (actions)
             {
-                StopProgressBar();
+                actions.Enqueue(action);
             }
         }
 
@@ -64,6 +77,7 @@ namespace Basis.Scripts.UI.NamePlate
             Loadingbar.gameObject.SetActive(false);
             HasActiveLoadingbar = false;
         }
+        private static readonly Queue<Action> actions = new Queue<Action>();
         private void Update()
         {
             // Get the direction to the camera
@@ -72,6 +86,15 @@ namespace Basis.Scripts.UI.NamePlate
                 GeneratePoint(),
                 Quaternion.Euler(transform.rotation.eulerAngles.x, Mathf.Atan2(directionToCamera.x, directionToCamera.z)
                 * Mathf.Rad2Deg, transform.rotation.eulerAngles.z));
+
+            // Ensure that actions are executed on the main thread
+            lock (actions)
+            {
+                while (actions.Count > 0)
+                {
+                    actions.Dequeue()?.Invoke();
+                }
+            }
         }
         public Vector3 GeneratePoint()
         {

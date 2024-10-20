@@ -3,11 +3,12 @@ using Basis.Scripts.BasisSdk.Helpers.Editor;
 using Basis.Scripts.Editor;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 [CustomEditor(typeof(BasisAvatar))]
-public class BasisAvatarSDKInspector : Editor
+public partial class BasisAvatarSDKInspector : Editor
 {
     public VisualTreeAsset visualTree;
     public BasisAvatar Avatar;
@@ -16,7 +17,7 @@ public class BasisAvatarSDKInspector : Editor
     public bool AvatarMouthPositionState = false;
     public VisualElement rootElement;
     public AvatarSDKJiggleBonesView AvatarSDKJiggleBonesView = new AvatarSDKJiggleBonesView();
-
+    public AvatarSDKVisemes AvatarSDKVisemes = new AvatarSDKVisemes();
     public Button EventCallbackAvatarBundleButton { get; private set; }
 
     private void OnEnable()
@@ -37,6 +38,7 @@ public class BasisAvatarSDKInspector : Editor
             BasisAutomaticSetupAvatarEditor.TryToAutomatic(this);
             SetupItems();
             AvatarSDKJiggleBonesView.Initialize(this);
+            AvatarSDKVisemes.Initialize(this);
         }
         else
         {
@@ -44,7 +46,6 @@ public class BasisAvatarSDKInspector : Editor
         }
         return rootElement;
     }
-
     public void AutomaticallyFindVisemes()
     {
         SkinnedMeshRenderer Renderer = Avatar.FaceVisemeMesh;
@@ -60,6 +61,7 @@ public class BasisAvatarSDKInspector : Editor
         }
         EditorUtility.SetDirty(Avatar);
         AssetDatabase.Refresh();
+        AvatarSDKVisemes.Initialize(this);
     }
 
     public void AutomaticallyFindBlinking()
@@ -77,6 +79,7 @@ public class BasisAvatarSDKInspector : Editor
         Avatar.BlinkViseme = Ints.ToArray();
         EditorUtility.SetDirty(Avatar);
         AssetDatabase.Refresh();
+        AvatarSDKVisemes.Initialize(this);
     }
 
     public void ClickedAvatarEyePositionButton(Button Button)
@@ -95,24 +98,32 @@ public class BasisAvatarSDKInspector : Editor
         EditorUtility.SetDirty(Avatar);
     }
 
-    public void EventCallbackAnimator(ChangeEvent<Object> evt)
+    public void EventCallbackAnimator(ChangeEvent<UnityEngine.Object> evt, ref Animator Renderer)
     {
+        Debug.Log(nameof(EventCallbackAnimator));
         Undo.RecordObject(Avatar, "Change Animator");
-        Avatar.Animator = (Animator)evt.newValue;
+        Renderer = (Animator)evt.newValue;
+        // Check if the Avatar is part of a prefab
+        if (PrefabUtility.IsPartOfPrefabInstance(Avatar))
+        {
+            // Record the prefab modification
+            PrefabUtility.RecordPrefabInstancePropertyModifications(Avatar);
+        }
         EditorUtility.SetDirty(Avatar);
     }
 
-    public void EventCallbackFaceBlinkMesh(ChangeEvent<Object> evt)
+    public void EventCallbackFaceVisemeMesh(ChangeEvent<UnityEngine.Object> evt, ref SkinnedMeshRenderer Renderer)
     {
-        Undo.RecordObject(Avatar, "Change Face Blink Mesh");
-        Avatar.FaceBlinkMesh = (SkinnedMeshRenderer)evt.newValue;
-        EditorUtility.SetDirty(Avatar);
-    }
-
-    public void EventCallbackFaceVisemeMesh(ChangeEvent<Object> evt)
-    {
+        Debug.Log(nameof(EventCallbackFaceVisemeMesh));
         Undo.RecordObject(Avatar, "Change Face Viseme Mesh");
-        Avatar.FaceVisemeMesh = (SkinnedMeshRenderer)evt.newValue;
+        Renderer = (SkinnedMeshRenderer)evt.newValue;
+
+        // Check if the Avatar is part of a prefab
+        if (PrefabUtility.IsPartOfPrefabInstance(Avatar))
+        {
+            // Record the prefab modification
+            PrefabUtility.RecordPrefabInstancePropertyModifications(Avatar);
+        }
         EditorUtility.SetDirty(Avatar);
     }
 
@@ -138,67 +149,122 @@ public class BasisAvatarSDKInspector : Editor
 
     public void SetupItems()
     {
+        // Initialize Buttons
         Button avatarEyePositionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.avatarEyePositionButton);
         Button avatarMouthPositionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.avatarMouthPositionButton);
+        Button avatarBundleButton = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarBundleButton);
+        Button avatarAutomaticVisemeDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticVisemeDetection);
+        Button avatarAutomaticBlinkDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticBlinkDetection);
 
-        Button AvatarBundleButton = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarBundleButton);
-
-        Button AvatarAutomaticVisemeDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticVisemeDetection);
-        Button AvatarAutomaticBlinkDetectionClick = BasisHelpersGizmo.Button(uiElementsRoot, AvatarPathConstants.AvatarAutomaticBlinkDetection);
+        // Initialize Event Callbacks for Vector2 fields (for Avatar Eye and Mouth Position)
         EventCallback<ChangeEvent<Vector2>> eventCallbackAvatarEyePosition = BasisHelpersGizmo.CallBackVector2Field(uiElementsRoot, AvatarPathConstants.avatarEyePositionField, Avatar.AvatarEyePosition);
         EventCallback<ChangeEvent<Vector2>> eventCallbackAvatarMouthPosition = BasisHelpersGizmo.CallBackVector2Field(uiElementsRoot, AvatarPathConstants.avatarMouthPositionField, Avatar.AvatarMouthPosition);
 
-        EventCallback<ChangeEvent<Object>> eventCallbackAnimatorField = BasisHelpersGizmo.ObjectField(uiElementsRoot, AvatarPathConstants.animatorField, Avatar.Animator);
-        EventCallback<ChangeEvent<Object>> eventCallbackFaceBlinkMeshField = BasisHelpersGizmo.ObjectField(uiElementsRoot, AvatarPathConstants.faceBlinkMeshField, Avatar.FaceBlinkMesh);
-        EventCallback<ChangeEvent<Object>> eventCallbackFaceVisemeMeshField = BasisHelpersGizmo.ObjectField(uiElementsRoot, AvatarPathConstants.faceVisemeMeshField, Avatar.FaceVisemeMesh);
+        // Initialize ObjectFields and assign references
+        ObjectField animatorField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.animatorField);
+        ObjectField faceBlinkMeshField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.FaceBlinkMeshField);
+        ObjectField faceVisemeMeshField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.FaceVisemeMeshField);
 
-        if (avatarEyePositionClick != null)
-        {
-            avatarEyePositionClick.clicked += () => ClickedAvatarEyePositionButton(avatarEyePositionClick);
-        }
-        if (avatarMouthPositionClick != null)
-        {
-            avatarMouthPositionClick.clicked += () => ClickedAvatarMouthPositionButton(avatarMouthPositionClick);
-        }
-        if (AvatarAutomaticVisemeDetectionClick != null)
-        {
-            AvatarAutomaticVisemeDetectionClick.clicked += () => AutomaticallyFindVisemes();
-        }
-        if (AvatarAutomaticBlinkDetectionClick != null)
-        {
-            AvatarAutomaticBlinkDetectionClick.clicked += () => AutomaticallyFindBlinking();
-        }
-        if (eventCallbackAvatarEyePosition != null)
-        {
-            eventCallbackAvatarEyePosition += OnEyeHeightValueChanged;
-        }
-        if (eventCallbackAvatarMouthPosition != null)
-        {
-            eventCallbackAvatarMouthPosition += OnMouthHeightValueChanged;
-        }
-        if (eventCallbackAnimatorField != null)
-        {
-            eventCallbackAnimatorField += EventCallbackAnimator;
-        }
-        if (eventCallbackFaceBlinkMeshField != null)
-        {
-            eventCallbackFaceBlinkMeshField += EventCallbackFaceBlinkMesh;
-        }
-        if (eventCallbackFaceVisemeMeshField != null)
-        {
-            eventCallbackFaceVisemeMeshField += EventCallbackFaceVisemeMesh;
-        }
-        if(AvatarBundleButton != null)
-        {
-            AvatarBundleButton.clicked += () => EventCallbackAvatarBundle();
-        }
-        ///AvatarBundle
+        TextField AvatarNameField = uiElementsRoot.Q<TextField>(AvatarPathConstants.AvatarName);
+        TextField AvatarDescriptionField = uiElementsRoot.Q<TextField>(AvatarPathConstants.AvatarDescription);
+
+        TextField AvatarpasswordField = uiElementsRoot.Q<TextField>(AvatarPathConstants.Avatarpassword);
+
+        ObjectField AvatarIconField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.AvatarIcon);
+
+        animatorField.allowSceneObjects = true;
+        faceBlinkMeshField.allowSceneObjects = true;
+        faceVisemeMeshField.allowSceneObjects = true;
+        AvatarIconField.allowSceneObjects = true;
+
+        AvatarIconField.value = null;
+        animatorField.value = Avatar.Animator;
+        faceBlinkMeshField.value = Avatar.FaceBlinkMesh;
+        faceVisemeMeshField.value = Avatar.FaceVisemeMesh;
+
+        AvatarNameField.value = Avatar.BasisBundleDescription.AssetBundleName;
+        AvatarDescriptionField.value = Avatar.BasisBundleDescription.AssetBundleDescription;
+
+        AvatarNameField.RegisterCallback<ChangeEvent<string>>(AvatarName);
+        AvatarDescriptionField.RegisterCallback<ChangeEvent<string>>(AvatarDescription);
+        AvatarpasswordField.RegisterCallback<ChangeEvent<string>>(AvatarPassword);
+
+        AvatarIconField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(OnAssignTexture2D);
+
+        // Button click events
+        avatarEyePositionClick.clicked += () => ClickedAvatarEyePositionButton(avatarEyePositionClick);
+        avatarMouthPositionClick.clicked += () => ClickedAvatarMouthPositionButton(avatarMouthPositionClick);
+        avatarAutomaticVisemeDetectionClick.clicked += AutomaticallyFindVisemes;
+        avatarAutomaticBlinkDetectionClick.clicked += AutomaticallyFindBlinking;
+        avatarBundleButton.clicked += EventCallbackAvatarBundle;
+
+        // Register change events
+        eventCallbackAvatarEyePosition += OnEyeHeightValueChanged;
+        eventCallbackAvatarMouthPosition += OnMouthHeightValueChanged;
+
+        // Register Animator field change event
+        animatorField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt => EventCallbackAnimator(evt, ref Avatar.Animator));
+
+        // Register Blink and Viseme Mesh field change events
+        faceBlinkMeshField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt => EventCallbackFaceVisemeMesh(evt, ref Avatar.FaceBlinkMesh));
+        faceVisemeMeshField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(evt => EventCallbackFaceVisemeMesh(evt, ref Avatar.FaceVisemeMesh));
+
+        // Update Button Text
         avatarEyePositionClick.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
         avatarMouthPositionClick.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
     }
-
+    public Texture2D Texture;
+    public void OnAssignTexture2D(ChangeEvent<UnityEngine.Object> Texture2D)
+    {
+        Texture = (Texture2D)Texture2D.newValue;
+    }
+    public string Password;
+    public void AvatarPassword(ChangeEvent<string> evt)
+    {
+        Password = evt.newValue;
+    }
+    public void AvatarDescription(ChangeEvent<string> evt)
+    {
+        Avatar.BasisBundleDescription.AssetBundleDescription = evt.newValue;
+        EditorUtility.SetDirty(Avatar);
+        AssetDatabase.Refresh();
+    }
+    public void AvatarName(ChangeEvent<string> evt)
+    {
+        Avatar.BasisBundleDescription.AssetBundleName = evt.newValue;
+        EditorUtility.SetDirty(Avatar);
+        AssetDatabase.Refresh();
+    }
     private void EventCallbackAvatarBundle()
     {
-        BasisPrefabAssetBundleBuilder.BuildAssetBundle(Avatar.gameObject, BasisBuildSettings.Default());
+        if (string.IsNullOrEmpty(Password))
+        {
+            Debug.LogError("IsNullOrEmpty " + Password);
+
+        }
+        else
+        {
+            if (Password.Length < 5)
+            {
+                Debug.LogError("Password needs to be longer then 5 " + Password);
+            }
+            else
+            {
+                BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
+
+                if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
+                {
+                    BasisBundleInformation basisBundleInformation = new BasisBundleInformation
+                    {
+                        BasisBundleDescription = basisContentBase.BasisBundleDescription
+                    };
+                    BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, basisBundleInformation, Password);
+                }
+                else
+                {
+                    Debug.LogError("Missing the Avatar");
+                }
+            }
+        }
     }
 }

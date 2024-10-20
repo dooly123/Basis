@@ -115,11 +115,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 711f26484029ae74fb4941919e44c0e2
-    m_Address: Hai
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 71c6687014327544c95558a736c226c7
     m_Address: Locomotion
     m_ReadOnly: 0

@@ -29,12 +29,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using UnityEngine.Scripting;
 
 namespace HVR.Basis.Comms.OSC.Lyuma
 {
-    [Preserve]
-    public class SimpleOSC
+
+public class SimpleOSC
 {
 	public enum Impulse {IMPULSE}
 	public struct TimeTag {

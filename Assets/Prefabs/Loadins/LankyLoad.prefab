@@ -100,6 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d50560fa4580c0743ae88a61a873ea83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BasisBundleDescription:
+    AssetBundleName: 
+    AssetBundleDescription: 
   Animator: {fileID: 7103285763428802826}
   FaceVisemeMesh: {fileID: 8839165641088738499}
   FaceBlinkMesh: {fileID: 8839165641088738499}
@@ -108,6 +111,7 @@ MonoBehaviour:
   FaceVisemeMovement: 
   BlinkViseme: ffffffffffffffff
   laughterBlendTarget: -1
+  IsOwnedLocally: 0
   Renders:
   - {fileID: 8839165641088738499}
   JiggleStrains: []

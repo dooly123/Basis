@@ -12,18 +12,19 @@ public class AvatarSDKJiggleBonesView
     public ListView JiggleStrainsList;
     public BasisAvatarSDKInspector Inspector;
     public SerializedProperty BasisJiggleStrainProperty;
-
+    public VisualElement AddButtonhere;
+    public static string JiggleStrain = "JiggleStrains";
     public void Initialize(BasisAvatarSDKInspector basisAvatarSDKInspector)
     {
         Inspector = basisAvatarSDKInspector;
-        BasisJiggleStrainProperty = Inspector.serializedObject.FindProperty("JiggleStrains");
-
+        BasisJiggleStrainProperty = Inspector.serializedObject.FindProperty(JiggleStrain);
+        AddButtonhere = Inspector.rootElement.Q<VisualElement>(JiggleStrain);
         // Add button to add new jiggle strain
         Button addButton = new Button(AddNewBasisJiggleStrain)
         {
             text = "Add New Basis Jiggle Strain"
         };
-        Inspector.rootElement.Add(addButton);
+        AddButtonhere.Add(addButton);
         CreateJiggleStrain();
         RefreshListView();
     }
@@ -41,10 +42,10 @@ public class AvatarSDKJiggleBonesView
         };
 
         Foldout foldout = new Foldout { text = "Jiggle Strains" };
-        foldout.value = true; // Set the initial value to expanded
+        foldout.value = false; // Set the initial value to expanded
         foldout.style.marginLeft = 10;
         foldout.Add(JiggleStrainsList);
-        Inspector.rootElement.Add(foldout);
+        AddButtonhere.Add(foldout);
     }
     private Foldout MakeListItem()
     {
@@ -55,7 +56,7 @@ public class AvatarSDKJiggleBonesView
 
         // Add a foldout for each JiggleStrain
         Foldout foldout = new Foldout { text = "Jiggle Strain" };
-        foldout.value = true; // Set the initial value to expanded
+        foldout.value = false; // Set the initial value to expanded
         foldout.style.marginLeft = 10;
         foldout.Add(container);
 

@@ -1,8 +1,11 @@
+using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using BasisSerializer.OdinSerializer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
+using static Basis.Scripts.BasisSdk.Players.BasisPlayer;
 using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.Transmitters
@@ -78,11 +81,13 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void SendOutLatestAvatar()
         {
+
+            byte[] LAI = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData);
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
-                    avatarID = NetworkedPlayer.Player.AvatarUrl,
+                     byteArray = LAI,
                     loadMode = NetworkedPlayer.Player.AvatarLoadMode,
                 };
                 writer.Write(ClientAvatarChangeMessage);

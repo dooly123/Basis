@@ -1551,7 +1551,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5199479126174117088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1594,8 +1594,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UserNameTMP_InputField: {fileID: 4515505752979409621}
   Ready: {fileID: 4394268792241491438}
-  SceneToLoad: https://BasisFramework.b-cdn.net/Worlds/gardenscene.bundle
-  HashUrl: 
   UseAddressables: 0
   Loadingbar: {fileID: 6385961944115185497}
   HasActiveLoadingbar: 0

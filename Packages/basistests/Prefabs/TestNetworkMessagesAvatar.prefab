@@ -143,6 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d50560fa4580c0743ae88a61a873ea83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BasisBundleDescription:
+    AssetBundleName: 
+    AssetBundleDescription: 
   Animator: {fileID: 3394121841743186029}
   FaceVisemeMesh: {fileID: 5332160820655396527}
   FaceBlinkMesh: {fileID: 5332160820655396527}

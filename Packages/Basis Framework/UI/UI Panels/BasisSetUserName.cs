@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,8 +16,6 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField UserNameTMP_InputField;
         public Button Ready;
         public static string LoadFileName = "CachedUserName.BAS";
-        public string SceneToLoad;
-        public string HashUrl = string.Empty;
         public bool UseAddressables;
         public Image Loadingbar;
         public bool HasActiveLoadingbar = false;
@@ -27,6 +27,22 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField Password;
         public Button UseLocalhost;
         public static string StartingPassword = "basis18072024";
+
+        // Queue to hold actions that need to be run on the main thread
+        private static readonly Queue<Action> mainThreadActions = new Queue<Action>();
+
+        private void Update()
+        {
+            // Process actions on the main thread
+            lock (mainThreadActions)
+            {
+                while (mainThreadActions.Count > 0)
+                {
+                    mainThreadActions.Dequeue()?.Invoke();
+                }
+            }
+        }
+
         public void Start()
         {
             UserNameTMP_InputField.text = BasisDataStore.LoadString(LoadFileName, string.Empty);
@@ -39,16 +55,19 @@ namespace Basis.Scripts.UI.UI_Panels
             BasisSceneLoadDriver.progressCallback += ProgresReport;
             BasisNetworkManagement.OnEnableInstanceCreate += LoadCurrentSettings;
         }
+
         public void UseLocalHost()
         {
             IPaddress.text = "localhost";
         }
+
         public void LoadCurrentSettings()
         {
             IPaddress.text = BasisNetworkManagement.Instance.Ip;
             Port.text = BasisNetworkManagement.Instance.Port.ToString();
             Password.text = StartingPassword; //BasisNetworkConnector.Instance.Client.LiteNetLibConnnection.authenticationKey;
         }
+
         public void OnDestroy()
         {
             if (AdvancedSettingsPanel != null)
@@ -61,34 +80,42 @@ namespace Basis.Scripts.UI.UI_Panels
 
         private void ProgresReport(float progress)
         {
-            if (HasActiveLoadingbar == false)
+            // Ensure this method is executed on the main thread
+            EnqueueOnMainThread(() =>
             {
-                StartProgressBar();
-                UpdateProgressBar(progress);
-            }
-            else
-            {
-                UpdateProgressBar(progress);
-                if (progress == 100)
+                if (HasActiveLoadingbar == false)
                 {
-                    StopProgressBar();
+                    StartProgressBar();
+                    UpdateProgressBar(progress);
                 }
-            }
+                else
+                {
+                    UpdateProgressBar(progress);
+                    if (progress == 100)
+                    {
+                        StopProgressBar();
+                    }
+                }
+            });
         }
+
         public void StartProgressBar()
         {
             Loadingbar.gameObject.SetActive(true);
             HasActiveLoadingbar = true;
         }
+
         public void UpdateProgressBar(float progress)
         {
             Loadingbar.rectTransform.localScale = new Vector3(progress / 100, 1f, 1f);
         }
+
         public void StopProgressBar()
         {
             Loadingbar.gameObject.SetActive(false);
             HasActiveLoadingbar = false;
         }
+
         public async void HasUserName()
         {
             // Set button to non-interactable immediately after clicking
@@ -115,16 +142,17 @@ namespace Basis.Scripts.UI.UI_Panels
                 Ready.interactable = true;
             }
         }
+
         public async Task CreateAssetBundle()
         {
             Debug.Log("connecting to default");
             if (UseAddressables)
             {
-                await BasisSceneLoadDriver.LoadSceneAddressables(SceneToLoad);
+                await BasisSceneLoadDriver.LoadSceneAddressables(BundledContentHolder.Instance.DefaultScene.BasisRemoteBundleEncypted.BundleURL);
             }
             else
             {
-                await BasisSceneLoadDriver.LoadSceneAssetBundle(SceneToLoad, HashUrl);
+                await BasisSceneLoadDriver.LoadSceneAssetBundle(BundledContentHolder.Instance.DefaultScene);
             }
             BasisUIComponent[] Components = FindObjectsByType<BasisUIComponent>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             foreach (BasisUIComponent Component in Components)
@@ -132,11 +160,21 @@ namespace Basis.Scripts.UI.UI_Panels
                 Destroy(Component.gameObject);
             }
         }
+
         public void ToggleAdvancedSettings()
         {
             if (AdvancedSettingsPanel != null)
             {
                 AdvancedSettingsPanel.SetActive(!AdvancedSettingsPanel.activeSelf);
+            }
+        }
+
+        // Helper method to enqueue actions to be executed on the main thread
+        private static void EnqueueOnMainThread(Action action)
+        {
+            lock (mainThreadActions)
+            {
+                mainThreadActions.Enqueue(action);
             }
         }
     }

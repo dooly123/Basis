@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace Basis.Scripts.BasisSdk
 {
-    public class BasisScene : MonoBehaviour
+    public class BasisScene : BasisContentBase
     {
         public Transform SpawnPoint;
         public float RespawnHeight = -100;

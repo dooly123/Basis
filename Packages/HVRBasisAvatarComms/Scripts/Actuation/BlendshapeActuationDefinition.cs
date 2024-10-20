@@ -1,11 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 namespace HVR.Basis.Comms
 {
     [Serializable]
-    [Preserve]
     public struct BlendshapeActuationDefinition
     {
         public string address;

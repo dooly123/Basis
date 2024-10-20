@@ -4,7 +4,7 @@ using Basis.Scripts.BasisSdk.Players;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using static Basis.Scripts.Addressable_Driver.Loading.AddressableManagement;
+using static BasisProgressReport;
 namespace Basis.Scripts.Drivers
 {
     public static class BasisSceneLoadDriver
@@ -27,15 +27,13 @@ namespace Basis.Scripts.Drivers
         /// <summary>
         /// remote but can be used local.
         /// </summary>
-        /// <param name="SceneToLoadUrl"></param>
-        /// <param name="HashUrl"></param>
         /// <returns></returns>
-        public static async Task LoadSceneAssetBundle(string SceneToLoadUrl, string HashUrl = "", bool SpawnPlayerOnSceneLoad = true)
+        public static async Task LoadSceneAssetBundle(BasisLoadableBundle BasisLoadableBundle, bool SpawnPlayerOnSceneLoad = true, bool MakeSceneActiveScene = true)
         {
             SetIfPlayerShouldSpawnOnSceneLoad(SpawnPlayerOnSceneLoad);
-            Debug.Log("Loading Scene " + SceneToLoadUrl);
-            await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(SceneToLoadUrl, HashUrl, BasisStorageManagement.WorldDirectory, progressCallback);
-            Debug.Log("Loaded Scene " + SceneToLoadUrl);
+            Debug.Log("Loading Scene ");
+           await BasisSceneAssetBundleManager.DownloadAndLoadSceneAsync(MakeSceneActiveScene, BasisLoadableBundle, progressCallback);
+            Debug.Log("Loaded Scene ");
         }
         /// <summary>
         /// turning this off for loading in additional levels is recommended. :) 

@@ -25,7 +25,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                 string resolutionString = resolution.width + "x" + resolution.height;
                 if (!SMSelectableValues.GetRealValueArray(option.SelectableValueList).Contains(resolutionString))
                 {
-                    SMSelectableValues.AddSelection( option.SelectableValueList, resolutionString, resolutionString);
+                    SMSelectableValues.AddSelection(option.SelectableValueList, resolutionString, resolutionString);
                     SettingsManagerDropDown.AddDropDownOption(manager, option.OptionIndex, resolutionString);
                     SortedResolution.Add(resolution);
                 }
@@ -50,7 +50,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                 {
                     if (SortedResolution[i].height == Screen.currentResolution.height
                         && SortedResolution[i].width == Screen.currentResolution.width
-                        && SortedResolution[i].refreshRate == Screen.currentResolution.refreshRate)
+                        && SortedResolution[i].refreshRateRatio.Equals(Screen.currentResolution.refreshRateRatio))
                     {
                         selectedIndex = i;
                         option.SelectedValue = SortedResolution[i].width + "x" + SortedResolution[i].height;
@@ -75,7 +75,11 @@ namespace BattlePhaze.SettingsManager.Intergrations
         public void SetResolution(int Width, int Height, int OptionIndex, int SelectableValue, SettingsManager Manager)
         {
             SettingsManagerDropDown.SetOptionsValue(Manager, OptionIndex, SelectableValue, true);
-            Screen.SetResolution(Width, Height, Screen.fullScreenMode);
+
+            if (Screen.width != Width || Screen.height != Height)
+            {
+                Screen.SetResolution(Width, Height, Screen.fullScreenMode);
+            }
         }
     }
 }

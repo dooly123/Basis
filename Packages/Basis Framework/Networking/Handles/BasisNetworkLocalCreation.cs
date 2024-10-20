@@ -2,13 +2,13 @@
 using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using BasisSerializer.OdinSerializer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using static SerializableDarkRift;
-
 namespace Basis.Scripts.Networking
 {
     public static class BasisNetworkLocalCreation
@@ -30,11 +30,12 @@ namespace Basis.Scripts.Networking
             }
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
+              byte[] Information =  BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
                 BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
                 BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = NetworkedPlayer.NetworkSend.LASM;
                 BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
-                    avatarID = BasisLocalPlayer.AvatarUrl,
+                    byteArray = Information,
                     loadMode = BasisLocalPlayer.AvatarLoadMode,
                 };
                 BasisNetworkManagement.Instance.readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
