@@ -246,7 +246,7 @@ public partial class BasisAvatarSDKInspector : Editor
         {
             if (Password.Length < 5)
             {
-                Debug.LogError("Password needs to be longer then 5 " + Password);
+                Debug.LogError("Password needs to be longer then 5 characters long.");
             }
             else
             {
