@@ -155,6 +155,8 @@ namespace Basis.Scripts.UI.UI_Panels
                         catch (Exception E)
                         {
                             Debug.LogError(E);
+                            BasisLoadhandler.TryRemoveOnDiscInfo(activeKeys[index].Url);
+
                             continue;
                         }
                     }

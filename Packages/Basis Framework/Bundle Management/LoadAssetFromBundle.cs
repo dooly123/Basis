@@ -17,6 +17,11 @@ public static class LoadAssetFromBundle
                         AssetBundleRequest Request = BasisLoadableBundle.AssetBundle.LoadAssetAsync<GameObject>(output.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);
                         await Request;
                        GameObject Copied = ContentControlCondom((GameObject)Request.asset, UseContentCondum);
+                        if(Copied == null)
+                        {
+                            Debug.LogError("Unable to proceed, null Gameobject");
+                            return  null;
+                        }
                         return Copied;
                     }
                 default:
@@ -28,19 +33,20 @@ public static class LoadAssetFromBundle
         {
             Debug.LogError("Missing Bundle!");
         }
+        Debug.LogError("Returning unable to load gameobject!");
         return null;
     }
     /// <summary>
-    /// pew pew
+    /// Creates a copy of a GameObject, removes any unapproved MonoBehaviours, and returns the cleaned copy.
     /// </summary>
-    /// <param name="SearchAndDestroy"></param>
+    /// <param name="SearchAndDestroy">The original GameObject to copy and clean.</param>
+    /// <param name="UseContentCondum">Whether to remove unapproved MonoBehaviours or not.</param>
+    /// <returns>A copy of the GameObject with unapproved scripts removed.</returns>
     public static GameObject ContentControlCondom(GameObject SearchAndDestroy, bool UseContentCondum = true)
     {
-        GameObject Disabled = new GameObject("Disabled");
-        Disabled.SetActive(false);
-        SearchAndDestroy.SetActive(false);
         // Create a copy of the SearchAndDestroy GameObject
-        GameObject copy = GameObject.Instantiate(SearchAndDestroy, Disabled.transform);
+        GameObject copy = GameObject.Instantiate(SearchAndDestroy);
+
         if (UseContentCondum)
         {
             // Create a list to hold all MonoBehaviours in the copy
@@ -48,30 +54,21 @@ public static class LoadAssetFromBundle
             copy.GetComponentsInChildren(true, monoBehaviours);
 
             // Iterate through the list of MonoBehaviours and remove unapproved ones
-            int count = monoBehaviours.Count;
-            for (int Index = 0; Index < count; Index++)
+            for (int i = monoBehaviours.Count - 1; i >= 0; i--)
             {
-                MonoBehaviour mono = monoBehaviours[Index];
-                // Get the full name of the MonoBehaviour's type
+                MonoBehaviour mono = monoBehaviours[i];
                 string monoTypeName = mono.GetType().FullName;
 
                 // Check if the type is in the selectedTypes list
-                if (BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
+                if (!BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
                 {
-                    // Debug.Log($"MonoBehaviour {monoTypeName} is approved.");
-                    // Do something if the MonoBehaviour type is approved
-                }
-                else
-                {
-                    Debug.LogError($"MonoBehaviour {monoTypeName} is not approved.");
+                    Debug.LogError($"MonoBehaviour {monoTypeName} is not approved and will be removed.");
                     GameObject.DestroyImmediate(mono); // Destroy the unapproved MonoBehaviour immediately
                 }
             }
         }
-        copy.transform.parent = null;
-        GameObject.DestroyImmediate(Disabled);
-        // Return the modified copy of the GameObject
-        Disabled.SetActive(true);
+
+        // Return the cleaned copy
         return copy;
     }
     public static async Task LoadSceneFromAssetBundleAsync(BasisTrackedBundleWrapper bundle, bool MakeActiveScene, ProgressReport progressCallback)
