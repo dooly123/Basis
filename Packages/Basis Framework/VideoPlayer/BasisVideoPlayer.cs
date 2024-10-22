@@ -18,7 +18,7 @@ public class BasisVideoPlayer : MonoBehaviour
    // public string Content;
     private void Start()
     {
-        RuntimeMaterial = Material.Instantiate(mesh.sharedMaterial);
+        if (RuntimeMaterial == null) RuntimeMaterial = Material.Instantiate(mesh.sharedMaterial);
         RuntimeMaterial.mainTextureScale = new Vector2(1, -1);
         RuntimeMaterial.mainTextureOffset = new Vector2(0, 1);
         mesh.sharedMaterial = RuntimeMaterial;
