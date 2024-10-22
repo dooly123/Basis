@@ -2,11 +2,14 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using BasisSerializer.OdinSerializer;
+using DarkRift;
 using UnityEngine;
 public class BasisVideoPlayerNetworked : MonoBehaviour
 {
     public BasisVideoPlayer VideoPlayer;
     public ushort MyCurrentOwner;
+    public const ushort UrlSyncId = 420;
     public string MyUniqueString = "testing this damn string";
     public void Awake()
     {
@@ -36,11 +39,14 @@ public class BasisVideoPlayerNetworked : MonoBehaviour
     }
     public void Play(string Url)
     {
-
+        byte[] CompressedString = SerializationUtility.SerializeValue(Url, DataFormat.Binary);
+        BasisScene.NetworkMessageSend(UrlSyncId, CompressedString, DeliveryMethod.ReliableSequenced);
     }
     private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients)
     {
-
+        if (MessageIndex != UrlSyncId) return;
+        string url = SerializationUtility.DeserializeValue<string>(buffer, DataFormat.Binary);
+        VideoPlayer.Play(url);
     }
     public void OnRemotePlayerLeft(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
     {
