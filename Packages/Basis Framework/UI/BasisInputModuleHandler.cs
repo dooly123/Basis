@@ -126,9 +126,9 @@ namespace Basis.Scripts.UI
                         {
                             BasisLocalPlayer.Instance.Move.BlockMovement = true;
                         }
-                        if (BasisAvatarEyeInput.Instance != null)
+                        if (BasisLocalInputActions.Instance != null)
                         {
-                            BasisAvatarEyeInput.Instance.BlockCrouching = true;
+                            BasisLocalInputActions.Instance.IgnoreCrouchToggle = true;
                         }
                         if (BasisDeviceManagement.Instance.CurrentMode == "OpenVRLoader" || BasisDeviceManagement.Instance.CurrentMode == "OpenXRLoader" || ForceKeyboard)
                         {
@@ -149,10 +149,9 @@ namespace Basis.Scripts.UI
                             {
                                 BasisLocalPlayer.Instance.Move.BlockMovement = true;
                             }
-                            if (BasisAvatarEyeInput.Instance != null)
+                            if (BasisLocalInputActions.Instance != null)
                             {
-                                BasisAvatarEyeInput.Instance.BlockCrouching = true;
-
+                                BasisLocalInputActions.Instance.IgnoreCrouchToggle = true;
                             }
                             if (BasisDeviceManagement.Instance.CurrentMode == "OpenVRLoader" || BasisDeviceManagement.Instance.CurrentMode == "OpenXRLoader" || ForceKeyboard)
                             {
@@ -175,9 +174,9 @@ namespace Basis.Scripts.UI
                     {
                         BasisLocalPlayer.Instance.Move.BlockMovement = false;
                     }
-                    if (BasisAvatarEyeInput.Instance != null)
+                    if (BasisLocalInputActions.Instance != null)
                     {
-                        BasisAvatarEyeInput.Instance.BlockCrouching = false;
+                        BasisLocalInputActions.Instance.IgnoreCrouchToggle = false;
                     }
                     var data = GetBaseEventData();
                     ExecuteEvents.Execute(EventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);

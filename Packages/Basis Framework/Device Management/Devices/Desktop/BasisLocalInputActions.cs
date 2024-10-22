@@ -36,6 +36,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public PlayerInput Input;
         public static string InputActions = "InputActions";
         public bool HasEvents = false;
+        public bool IgnoreCrouchToggle = false;
         public static Action LateUpdateEvent;
         [SerializeField]
         public BasisInputState InputState = new BasisInputState();
@@ -265,7 +266,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
 
             if (context.phase == InputActionPhase.Performed)
             {
-                Crouching = !Crouching;
+                if (!IgnoreCrouchToggle) Crouching = !Crouching;
                 if (CharacterEyeInput != null)
                 {
                     CharacterEyeInput.HandleMouseRotation(LookDirection);
