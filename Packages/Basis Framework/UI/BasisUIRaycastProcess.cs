@@ -41,12 +41,14 @@ public class BasisUIRaycastProcess
         {
             int DevicesCount = Inputs.Count;
             HasTarget = false;
+            var EffectiveMouseAction = false;
 
             for (int Index = 0; Index < DevicesCount; Index++)
             {
                 BasisInput input = Inputs[Index];
                 if (input.HasUIInputSupport && input.BasisPointRaycaster != null && input.BasisPointRaycaster.WasCorrectLayer)
                 {
+                    EffectiveMouseAction |= input.BasisPointRaycaster.CurrentEventData.WasLastDown == false && input.InputState.Trigger == 1;
                     if (input.BasisPointRaycaster.HadRaycastUITarget)
                     {
                         List<RaycastHitData> hitData = input.BasisPointRaycaster.SortedGraphics;
@@ -59,9 +61,18 @@ public class BasisUIRaycastProcess
                     }
                 }
             }
-            if (!HasTarget)
+            if (!HasTarget && EffectiveMouseAction)
             {
                 EventSystem.current.SetSelectedGameObject(null, null);
+            }
+
+            for (int Index = 0; Index < DevicesCount; Index++)
+            {
+                BasisInput input = Inputs[Index];
+                if (input.HasUIInputSupport && input.BasisPointRaycaster != null && input.BasisPointRaycaster.WasCorrectLayer)
+                {
+                    SendUpdateEventToSelectedObject(input.BasisPointRaycaster.CurrentEventData); //needed if you want to use the keyboard
+                }
             }
         }
     public void SimulateOnCanvas(RaycastResult raycastResult, RaycastHitData hit, BasisPointerEventData currentEventData, BasisInputState Current, BasisInputState LastCurrent)
@@ -95,13 +106,11 @@ public class BasisUIRaycastProcess
                     currentEventData.WasLastDown = false;
                 }
             }
-            SendUpdateEventToSelectedObject(currentEventData);//needed if you want to use the keyboard
 
             ProcessScrollWheel(currentEventData);
             ProcessPointerMovement(currentEventData);
             ProcessPointerButtonDrag(currentEventData);
         }
-
     }
     public void CheckOrApplySelectedGameobject(RaycastHitData hit, BasisPointerEventData CurrentEventData)
     {
