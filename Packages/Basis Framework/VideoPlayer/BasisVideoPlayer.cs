@@ -13,16 +13,17 @@ public class BasisVideoPlayer : MonoBehaviour
     public MeshRenderer mesh;
     public string MaterialTextureId = "_EmissionMap";
     public Material RuntimeMaterial;
+    public RenderTexture RuntimeTexture;
     public TMP_InputField Field;
    // public string Content;
     private void Start()
     {
-        RuntimeMaterial = Material.Instantiate(mesh.sharedMaterial);
+        if (RuntimeMaterial == null) RuntimeMaterial = Material.Instantiate(mesh.sharedMaterial);
         RuntimeMaterial.mainTextureScale = new Vector2(1, -1);
         RuntimeMaterial.mainTextureOffset = new Vector2(0, 1);
         mesh.sharedMaterial = RuntimeMaterial;
         ffmpeg.OnDisplay = OnDisplay;
-        Play(Field.text);
+        Play();
     }
 
     // Display the video texture on a 3D mesh in Unity
@@ -30,8 +31,15 @@ public class BasisVideoPlayer : MonoBehaviour
     {
         RuntimeMaterial.mainTexture = tex;
         RuntimeMaterial.SetTexture(MaterialTextureId, tex);
+        if (RuntimeTexture != null) Graphics.Blit(RuntimeMaterial.mainTexture, RuntimeTexture, RuntimeMaterial.mainTextureScale, RuntimeMaterial.mainTextureOffset);
         mesh.UpdateGIMaterials();
     }
+
+    public void Play()
+    {
+        Play(Field.text);
+    }
+    
     public async void Play(string url)
     {
         await PlayAsync(url);
