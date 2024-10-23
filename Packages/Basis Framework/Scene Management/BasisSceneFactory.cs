@@ -27,7 +27,7 @@ public class BasisSceneFactory : MonoBehaviour
         if (scene.MainCamera != null)
         {
             LoadCameraPropertys(scene.MainCamera);
-            GameObject.Destroy(scene.MainCamera);
+            GameObject.DestroyImmediate(scene.MainCamera.gameObject);
             Debug.Log("Destroying Main Camera Attached To Scene");
         }
         else
@@ -43,7 +43,7 @@ public class BasisSceneFactory : MonoBehaviour
                 if (camera != BasisLocalCameraDriver.Instance.Camera)
                 {
                     LoadCameraPropertys(camera);
-                    GameObject.Destroy(camera);
+                    GameObject.DestroyImmediate(camera.gameObject);
                 }
                 else
                 {

@@ -400,25 +400,6 @@ public class JiggleRigBuilder : MonoBehaviour, IJiggleAdvancable, IJiggleBlendab
             jiggleRigLOD.RemoveTrackedJiggleRig(this);
         }
     }
-
-    private void OnValidate() {
-        if (Application.isPlaying) {
-            JiggleRigLateUpdateHandler.RemoveJiggleRigAdvancable(this);
-            JiggleRigFixedUpdateHandler.RemoveJiggleRigAdvancable(this);
-            if (isActiveAndEnabled) {
-                switch (jiggleUpdateMode) {
-                    case JiggleUpdateMode.LateUpdate: JiggleRigLateUpdateHandler.AddJiggleRigAdvancable(this); break;
-                    case JiggleUpdateMode.FixedUpdate: JiggleRigFixedUpdateHandler.AddJiggleRigAdvancable(this); break;
-                    default: throw new ArgumentOutOfRangeException();
-                }
-            }
-        } else {
-            if (jiggleRigs == null) return;
-            foreach (JiggleRig rig in jiggleRigs) {
-                rig.Initialize();
-            }
-        }
-    }
 }
 
 }
