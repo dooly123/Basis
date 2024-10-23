@@ -12,12 +12,12 @@ namespace Basis.Scripts.BasisSdk
         public UnityEngine.Audio.AudioMixerGroup Group;
         public static BasisScene Instance;
         public static UnityEvent<BasisScene> Ready = new UnityEvent<BasisScene>();
+        public Camera MainCamera;
         public void Awake()
         {
             Instance = this;
             Ready?.Invoke(this);
         }
-        public bool HasSendEvent;
         public static SceneNetworkMessageReceiveEvent OnNetworkMessageReceived;
         public static SceneNetworkMessageSendEvent OnNetworkMessageSend;
         /// <summary>
