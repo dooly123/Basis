@@ -103,17 +103,13 @@ namespace Basis.Scripts.BasisSdk.Players
                         {
                             BasisLoadableBundle bundle = new BasisLoadableBundle
                             {
-                                BasisRemoteBundleEncrypted = new BasisRemoteEncyptedBundle
-                                {
-                                    BundleURL = info.StoredBundleURL,
-                                    MetaURL = info.StoredMetaURL
-                                },
+                                BasisRemoteBundleEncrypted = info.StoredRemote,
                                 BasisBundleInformation = new BasisBundleInformation
                                 {
                                     BasisBundleDescription = new BasisBundleDescription(),
                                     BasisBundleGenerated = new BasisBundleGenerated()
                                 },
-                                BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle(),
+                                BasisStoredEncryptedBundle = info.StoredLocal,
                                 UnlockPassword = Key.Pass
                             };
                             Debug.Log("loading previously loaded avatar");

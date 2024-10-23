@@ -104,7 +104,7 @@ public static class BasisLoadHandler
 
         if (isOnDisc)
         {
-            await BasisBundleManagement.ProcessOnDiscMetaDataAsync(wrapper, discInfo.StoredMetaLocal, discInfo.StoredBundleLocal, report, cancellationToken);
+            await BasisBundleManagement.ProcessOnDiscMetaDataAsync(wrapper, discInfo.StoredLocal, report, cancellationToken);
         }
         else
         {
@@ -124,11 +124,9 @@ public static class BasisLoadHandler
         {
             OnDiscInformation newDiscInfo = new OnDiscInformation
             {
-                StoredMetaURL = wrapper.LoadableBundle.BasisRemoteBundleEncrypted.MetaURL,
-                StoredBundleURL = wrapper.LoadableBundle.BasisRemoteBundleEncrypted.BundleURL,
-                StoredMetaLocal = wrapper.LoadableBundle.BasisStoredEncryptedBundle.LocalMetaFile,
-                AssetToLoad = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
-                StoredBundleLocal = wrapper.LoadableBundle.BasisStoredEncryptedBundle.LocalBundleFile
+                StoredRemote = wrapper.LoadableBundle.BasisRemoteBundleEncrypted,
+                StoredLocal = wrapper.LoadableBundle.BasisStoredEncryptedBundle,
+                AssetIDToLoad = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
             };
 
             await AddDiscInfo(newDiscInfo);
@@ -141,8 +139,9 @@ public static class BasisLoadHandler
         {
             foreach (var discInfo in OnDiscData.Values)
             {
-                if (discInfo.StoredMetaURL == metaUrl)
+                if (discInfo.StoredRemote.MetaURL == metaUrl)
                 {
+                    Debug.LogError("this is faulty the meta url is not what is on disc yet... ");
                     info = discInfo;
                     return true;
                 }
@@ -155,9 +154,9 @@ public static class BasisLoadHandler
 
     public static async Task AddDiscInfo(OnDiscInformation discInfo)
     {
-        if (OnDiscData.TryAdd(discInfo.StoredMetaURL, discInfo))
+        if (OnDiscData.TryAdd(discInfo.StoredRemote.MetaURL, discInfo))
         {
-            string filePath = BasisIOManagement.GenerateFilePath($"{discInfo.AssetToLoad}{BasisBundleManagement.MetaSuffix}", BasisBundleManagement.AssetBundles);
+            string filePath = BasisIOManagement.GenerateFilePath($"{discInfo.AssetIDToLoad}{BasisBundleManagement.MetaSuffix}", BasisBundleManagement.AssetBundles);
             byte[] serializedData = SerializationUtility.SerializeValue(discInfo, DataFormat.Binary);
 
             try
@@ -231,7 +230,7 @@ public static class BasisLoadHandler
             {
                 byte[] fileData = await File.ReadAllBytesAsync(file);
                 OnDiscInformation discInfo = SerializationUtility.DeserializeValue<OnDiscInformation>(fileData, DataFormat.Binary);
-                OnDiscData.TryAdd(discInfo.StoredMetaURL, discInfo);
+                OnDiscData.TryAdd(discInfo.StoredRemote.MetaURL, discInfo);
             }
             catch (Exception ex)
             {

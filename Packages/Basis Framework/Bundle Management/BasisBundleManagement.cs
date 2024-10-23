@@ -151,12 +151,7 @@ public static class BasisBundleManagement
             BasisTrackedBundleWrapper.LoadableBundle.BasisBundleInformation.HasError = true;
         }
     }
-    public static async Task ProcessOnDiscMetaDataAsync(
-        BasisTrackedBundleWrapper basisTrackedBundleWrapper,
-        string metaFilepath,
-        string localBundleFile,
-        BasisProgressReport.ProgressReport progressCallback,
-        CancellationToken cancellationToken)
+    public static async Task ProcessOnDiscMetaDataAsync(BasisTrackedBundleWrapper basisTrackedBundleWrapper, BasisStoredEncyptedBundle BasisStoredEncyptedBundle,BasisProgressReport.ProgressReport progressCallback,CancellationToken cancellationToken)
     {
         // Log entry point
         Debug.Log("Starting DataOnDiscProcessMeta method...");
@@ -165,18 +160,6 @@ public static class BasisBundleManagement
         if (basisTrackedBundleWrapper == null)
         {
             Debug.LogError("BasisTrackedBundleWrapper is null. Exiting method.");
-            return;
-        }
-
-        if (string.IsNullOrEmpty(metaFilepath))
-        {
-            Debug.LogError("metaFilepath is null or empty. Exiting method.");
-            return;
-        }
-
-        if (string.IsNullOrEmpty(localBundleFile))
-        {
-            Debug.LogError("localBundleFile is null or empty. Exiting method.");
             return;
         }
 
@@ -200,11 +183,9 @@ public static class BasisBundleManagement
         }
 
         // Set local paths
-        Debug.Log($"Setting local bundle file: {localBundleFile}");
-        basisTrackedBundleWrapper.LoadableBundle.BasisStoredEncryptedBundle.LocalBundleFile = localBundleFile;
+        Debug.Log($"Setting local bundle file: {BasisStoredEncyptedBundle.LocalBundleFile} Setting local meta file: {BasisStoredEncyptedBundle.LocalMetaFile}");
 
-        Debug.Log($"Setting local meta file: {metaFilepath}");
-        basisTrackedBundleWrapper.LoadableBundle.BasisStoredEncryptedBundle.LocalMetaFile = metaFilepath;
+        basisTrackedBundleWrapper.LoadableBundle.BasisStoredEncryptedBundle = BasisStoredEncyptedBundle;
 
         // Fetching the meta URL
         string metaUrl = basisTrackedBundleWrapper.LoadableBundle.BasisRemoteBundleEncrypted.MetaURL;
@@ -217,7 +198,7 @@ public static class BasisBundleManagement
         Debug.Log($"Fetched meta URL: {metaUrl}");
 
         // Create and assign the download task
-        Debug.Log("Creating BasisTrackedBundleWrapper... at path: " + metaFilepath);
+        Debug.Log("Creating BasisTrackedBundleWrapper... at path: " + BasisStoredEncyptedBundle);
 
         var loadableBundle = basisTrackedBundleWrapper.LoadableBundle;
         if (loadableBundle == null)
@@ -226,8 +207,7 @@ public static class BasisBundleManagement
             return;
         }
 
-        basisTrackedBundleWrapper.LoadableBundle = await BasisEncryptionToData.GenerateMetaFromFile(
-            loadableBundle, metaFilepath, progressCallback);
+        basisTrackedBundleWrapper.LoadableBundle = await BasisEncryptionToData.GenerateMetaFromFile(loadableBundle, BasisStoredEncyptedBundle.LocalMetaFile, progressCallback);
 
         if (basisTrackedBundleWrapper.LoadableBundle == null)
         {

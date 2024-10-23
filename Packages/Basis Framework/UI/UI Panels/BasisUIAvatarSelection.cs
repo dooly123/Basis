@@ -106,17 +106,13 @@ namespace Basis.Scripts.UI.UI_Panels
 
                 BasisLoadableBundle bundle = new BasisLoadableBundle
                 {
-                    BasisRemoteBundleEncrypted = new BasisRemoteEncyptedBundle
-                    {
-                        BundleURL = info.StoredBundleURL,
-                        MetaURL = info.StoredMetaURL
-                    },
+                    BasisRemoteBundleEncrypted = info.StoredRemote,
                     BasisBundleInformation = new BasisBundleInformation
                     {
                         BasisBundleDescription = new BasisBundleDescription(),
                         BasisBundleGenerated = new BasisBundleGenerated()
                     },
-                    BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle(),
+                    BasisStoredEncryptedBundle = info.StoredLocal,
                     UnlockPassword = activeKeys[Index].Pass
                 };
                 Debug.Log("Adding Button");
@@ -150,7 +146,7 @@ namespace Basis.Scripts.UI.UI_Panels
                         try
                         {
                             BasisLoadHandler.IsBundleOnDisc(avatarUrlsRuntime[index].BasisRemoteBundleEncrypted.MetaURL, out var info);
-                            await BasisBundleManagement.ProcessOnDiscMetaDataAsync(wrapper, info.StoredMetaLocal, info.StoredBundleLocal, Report, new CancellationToken());
+                            await BasisBundleManagement.ProcessOnDiscMetaDataAsync(wrapper, info.StoredLocal, Report, new CancellationToken());
                             buttonText.text = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleDescription.AssetBundleName;
                         }
                         catch (Exception E)
