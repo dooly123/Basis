@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -56,33 +57,41 @@ public class AvatarSDKVisemes
                 visemeLabel.style.width = 150; // Adjust the width for alignment
                 visemeLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
 
-                // Determine which item to select in the dropdown
-                int faceVisemeMovement = basisAvatarSDKInspector.Avatar.FaceVisemeMovement[index];
-                int selectedIndex = (faceVisemeMovement == -1) ? 0 : faceVisemeMovement + 1;
-
-                // Create the dropdown field (dropdown on the right)
-                DropdownField dropdownField = new DropdownField(MouthNames, selectedIndex);
-                dropdownField.style.flexGrow = 1; // Make dropdown take the remaining space
-
-                // Register callback for when the value changes
-                int currentIndex = index; // Capture the current index in a local variable
-                dropdownField.RegisterValueChangedCallback(evt =>
+                // Check if the index is within the bounds of FaceVisemeMovement
+                if (index >= 0 && index < basisAvatarSDKInspector.Avatar.FaceVisemeMovement.Length)
                 {
-                    // Get the index of the new value in the Names list
-                    int newIndex = MouthNames.IndexOf(evt.newValue);
+                    // Determine which item to select in the dropdown
+                    int faceVisemeMovement = basisAvatarSDKInspector.Avatar.FaceVisemeMovement[index];
+                    int selectedIndex = (faceVisemeMovement == -1) ? 0 : faceVisemeMovement + 1;
 
-                    // If "None" is selected, map it to -1, otherwise map to the corresponding index
-                    basisAvatarSDKInspector.Avatar.FaceVisemeMovement[currentIndex] = (newIndex == 0) ? -1 : newIndex - 1;
-                });
+                    // Create the dropdown field (dropdown on the right)
+                    DropdownField dropdownField = new DropdownField(MouthNames, selectedIndex);
+                    dropdownField.style.flexGrow = 1; // Make dropdown take the remaining space
 
-                // Add the label and dropdown to the horizontal container
-                rowContainer.Add(visemeLabel);
-                rowContainer.Add(dropdownField);
+                    // Register callback for when the value changes
+                    int currentIndex = index; // Capture the current index in a local variable
+                    dropdownField.RegisterValueChangedCallback(evt =>
+                    {
+                        // Get the index of the new value in the Names list
+                        int newIndex = MouthNames.IndexOf(evt.newValue);
 
-                // Add the row to the main visual element
-                ManualAvatarVisemesvisualElement.Add(rowContainer);
+                        // If "None" is selected, map it to -1, otherwise map to the corresponding index
+                        basisAvatarSDKInspector.Avatar.FaceVisemeMovement[currentIndex] = (newIndex == 0) ? -1 : newIndex - 1;
+                    });
+
+                    // Add the label and dropdown to the horizontal container
+                    rowContainer.Add(visemeLabel);
+                    rowContainer.Add(dropdownField);
+
+                    // Add the row to the main visual element
+                    ManualAvatarVisemesvisualElement.Add(rowContainer);
+                }
+                else
+                {
+                    // Log a warning if the index is out of bounds
+                    Debug.LogWarning($"Index {index} is out of bounds for FaceVisemeMovement.");
+                }
             }
-
         }
         if (basisAvatarSDKInspector.Avatar.FaceBlinkMesh != null)
         {

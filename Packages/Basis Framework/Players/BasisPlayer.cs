@@ -29,6 +29,7 @@ namespace Basis.Scripts.BasisSdk.Players
 
         public ProgressReport AvatarProgress;
         public CancellationToken CancellationToken;
+        public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
         public void InitalizeIKCalibration(BasisAvatarDriver BasisAvatarDriver)
         {
             if (BasisAvatarDriver != null)
@@ -40,9 +41,9 @@ namespace Basis.Scripts.BasisSdk.Players
                 Debug.LogError("Mising CharacterIKCalibration");
                 HasAvatarDriver = false;
             }
-          // if (BasisAvatarStrainJiggleDriver != null)
+         if (BasisAvatarStrainJiggleDriver != null)
             {
-          //      BasisAvatarStrainJiggleDriver.OnCalibration();
+               BasisAvatarStrainJiggleDriver.OnCalibration();
             }
         }
         private void UpdateFaceVisibility(bool State)

@@ -40,7 +40,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisBoneControl Hips;
         public BasisBoneControl CenterEye;
         public BasisLocalAvatarDriver AvatarDriver;
-    //    public BasisFootPlacementDriver FootPlacementDriver;
+    //   public BasisFootPlacementDriver FootPlacementDriver;
         public BasisVisemeDriver VisemeDriver;
         [SerializeField]
         public LayerMask GroundMask;
@@ -64,6 +64,8 @@ namespace Basis.Scripts.BasisSdk.Players
             await BasisDeviceManagement.LoadGameobject(MainCamera, new InstantiationParameters());
             //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
             //  FootPlacementDriver.Initialize();
+            BasisAvatarStrainJiggleDriver = BasisHelpers.GetOrAddComponent<BasisAvatarStrainJiggleDriver>(this.gameObject);
+            BasisAvatarStrainJiggleDriver.OnCalibration();
             Move.Initialize();
             LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
             LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
@@ -131,7 +133,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {
-         //   BasisAvatarStrainJiggleDriver.PrepareTeleport();
+           BasisAvatarStrainJiggleDriver.PrepareTeleport();
             Debug.Log("Teleporting");
             Move.enabled = false;
             transform.SetPositionAndRotation(position, rotation);
@@ -140,7 +142,7 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 AvatarDriver.AnimatorDriver.HandleTeleport();
             }
-           // BasisAvatarStrainJiggleDriver.FinishTeleport();
+            BasisAvatarStrainJiggleDriver.FinishTeleport();
             OnSpawnedEvent?.Invoke();
         }
         public void OnSceneLoadedCallback(Scene scene, LoadSceneMode mode)

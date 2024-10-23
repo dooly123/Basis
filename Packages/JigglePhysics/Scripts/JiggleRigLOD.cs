@@ -1,9 +1,59 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
-namespace JigglePhysics
-{
-    [System.Serializable]
-    public abstract class JiggleRigLOD
-    {
-        public abstract bool CheckActive(Vector3 position);
+
+namespace JigglePhysics {
+    [DisallowMultipleComponent]
+    public abstract class JiggleRigLOD : MonoBehaviour {
+        protected List<IJiggleBlendable> jiggles;
+        protected int jigglesCount;
+        protected bool wasActive;
+
+        protected virtual void Awake() {
+            jiggles = new List<IJiggleBlendable>();
+        }
+
+        public virtual void AddTrackedJiggleRig(IJiggleBlendable blendable) {
+            if (jiggles.Contains(blendable)) return;
+            jiggles.Add(blendable);
+            jigglesCount = jiggles.Count;
+        }
+        public virtual void RemoveTrackedJiggleRig(IJiggleBlendable blendable) {
+            if (!jiggles.Contains(blendable)) return;
+            jiggles.Remove(blendable);
+            jigglesCount = jiggles.Count;
+        }
+
+        private void Update()
+        {
+            if (!CheckActive())
+            {
+                if (wasActive)
+                {
+                    foreach (var jiggle in jiggles)
+                    {
+                        jiggle.enabled = false;
+                    }
+                }
+                wasActive = false;
+                return;
+            }
+            if (!wasActive)
+            {
+                foreach (var jiggle in jiggles)
+                {
+                    jiggle.enabled = true;
+                }
+            }
+            wasActive = true;
+        }
+        
+        protected abstract bool CheckActive();
+
+        private void OnDisable() {
+            foreach (var jiggle in jiggles) {
+                jiggle.enabled = false;
+            }
+        }
     }
 }

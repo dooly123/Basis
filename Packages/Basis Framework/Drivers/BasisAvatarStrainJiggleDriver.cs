@@ -1,8 +1,10 @@
 using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using JigglePhysics;
 using System.Collections.Generic;
 using UnityEngine;
+using static JigglePhysics.JiggleRigBuilder;
 namespace Basis.Scripts.Drivers
 {
     public class BasisAvatarStrainJiggleDriver : MonoBehaviour
@@ -20,27 +22,20 @@ namespace Basis.Scripts.Drivers
                 if (player.Avatar.JiggleStrains != null && player.Avatar.JiggleStrains.Length != 0)
                 {
                     int Count = player.Avatar.JiggleStrains.Length;
+                    JiggleRigRendererLOD JiggleRigRendererLOD = BasisHelpers.GetOrAddComponent<JiggleRigRendererLOD>(player.Avatar.Animator.gameObject);
+                    JiggleRigRendererLOD.Camera = BasisLocalCameraDriver.Instance.Camera;
                     Jiggler = player.Avatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
-
-                    Jiggler.levelOfDetail = new JiggleRigSimpleLOD
-                    {
-                        currentCamera = BasisLocalCameraDriver.Instance.Camera
-                    };
-                    Renderer[] Renderer = player.Avatar.GetComponentsInChildren<Renderer>();
-                    Jiggler.levelOfDetail.Initalize(Renderer);
+                    //   Renderer[] Renderer = player.Avatar.Renders;
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
-                    List<JiggleRigRuntime> JigglesRuntime = new List<JiggleRigRuntime>();
                     for (int StrainIndex = 0; StrainIndex < Count; StrainIndex++)
                     {
                         BasisJiggleStrain Strain = player.Avatar.JiggleStrains[StrainIndex];
                         JiggleRig JiggleRig = Conversion(Strain);
                         Jiggles.Add(JiggleRig);
-                        JigglesRuntime.Add(new JiggleRigRuntime());
                     }
-                    Jiggler.jiggleRigs = Jiggles.ToArray();
-                    Jiggler.JiggleRigsRuntime = JigglesRuntime.ToArray();
-                    Transform Hips = player.Avatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
-                    Jiggler.Initialize(Hips);
+                    Jiggler.jiggleRigs = Jiggles;
+                    //  Transform Hips = player.Avatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
+                    Jiggler.Initialize();
                 }
             }
         }
@@ -82,13 +77,8 @@ namespace Basis.Scripts.Drivers
         }
         public JiggleRig AssignUnComputedData(Transform rootTransform, JiggleSettingsBase jiggleSettings, Transform[] ignoredTransforms, Collider[] colliders)
         {
-            JiggleRig JiggleRig = new JiggleRig
-            {
-                rootTransform = rootTransform,
-                jiggleSettings = jiggleSettings,
-                ignoredTransforms = ignoredTransforms,
-                colliders = colliders
-            };
+            JiggleRig JiggleRig = new JiggleRig(rootTransform, jiggleSettings, ignoredTransforms, colliders);
+
             return JiggleRig;
         }
     }
