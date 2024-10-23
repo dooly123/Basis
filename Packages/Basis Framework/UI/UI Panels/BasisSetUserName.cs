@@ -148,7 +148,7 @@ namespace Basis.Scripts.UI.UI_Panels
             Debug.Log("connecting to default");
             if (UseAddressables)
             {
-                await BasisSceneLoadDriver.LoadSceneAddressables(BundledContentHolder.Instance.DefaultScene.BasisRemoteBundleEncypted.BundleURL);
+                await BasisSceneLoadDriver.LoadSceneAddressables(BundledContentHolder.Instance.DefaultScene.BasisRemoteBundleEncrypted.BundleURL);
             }
             else
             {

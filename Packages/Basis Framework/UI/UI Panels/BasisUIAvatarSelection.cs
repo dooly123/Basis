@@ -61,7 +61,7 @@ namespace Basis.Scripts.UI.UI_Panels
             BasisLoadableBundle loadableBundle = new BasisLoadableBundle
             {
                 UnlockPassword = PasswordField.text,
-                BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
+                BasisRemoteBundleEncrypted = new BasisRemoteEncyptedBundle
                 {
                     BundleURL = BundleField.text,
                     MetaURL = MetaField.text
@@ -71,7 +71,7 @@ namespace Basis.Scripts.UI.UI_Panels
                     BasisBundleDescription = new BasisBundleDescription(),
                     BasisBundleGenerated = new BasisBundleGenerated()
                 },
-                BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle()
+                BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle()
             };
 
             await BasisLocalPlayer.Instance.CreateAvatar(0, loadableBundle);
@@ -97,7 +97,7 @@ namespace Basis.Scripts.UI.UI_Panels
             int Count = activeKeys.Count;
             for (int Index = 0; Index < Count; Index++)
             {
-                if (BasisLoadhandler.HasURLOnDisc(activeKeys[Index].Url, out var info) == false)
+                if (BasisLoadHandler.IsBundleOnDisc(activeKeys[Index].Url, out var info) == false)
                 {
                     Debug.LogError("Missing File on Disc For " + activeKeys[Index].Url);
                    await BasisDataStoreAvatarKeys.RemoveKey(activeKeys[Index]);
@@ -106,7 +106,7 @@ namespace Basis.Scripts.UI.UI_Panels
 
                 BasisLoadableBundle bundle = new BasisLoadableBundle
                 {
-                    BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
+                    BasisRemoteBundleEncrypted = new BasisRemoteEncyptedBundle
                     {
                         BundleURL = info.StoredBundleURL,
                         MetaURL = info.StoredMetaURL
@@ -116,7 +116,7 @@ namespace Basis.Scripts.UI.UI_Panels
                         BasisBundleDescription = new BasisBundleDescription(),
                         BasisBundleGenerated = new BasisBundleGenerated()
                     },
-                    BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),
+                    BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle(),
                     UnlockPassword = activeKeys[Index].Pass
                 };
                 Debug.Log("Adding Button");
@@ -149,14 +149,14 @@ namespace Basis.Scripts.UI.UI_Panels
 
                         try
                         {
-                            BasisLoadhandler.HasURLOnDisc(avatarUrlsRuntime[index].BasisRemoteBundleEncypted.MetaURL, out var info);
-                            await BasisBundleManagement.DataOnDiscProcessMetaAsync(wrapper, info.StoredMetaLocal, info.StoredBundleLocal, Report, new CancellationToken());
+                            BasisLoadHandler.IsBundleOnDisc(avatarUrlsRuntime[index].BasisRemoteBundleEncrypted.MetaURL, out var info);
+                            await BasisBundleManagement.ProcessOnDiscMetaDataAsync(wrapper, info.StoredMetaLocal, info.StoredBundleLocal, Report, new CancellationToken());
                             buttonText.text = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleDescription.AssetBundleName;
                         }
                         catch (Exception E)
                         {
                             Debug.LogError(E);
-                            BasisLoadhandler.TryRemoveOnDiscInfo(avatarUrlsRuntime[index].BasisRemoteBundleEncypted.MetaURL);
+                            BasisLoadHandler.RemoveDiscInfo(avatarUrlsRuntime[index].BasisRemoteBundleEncrypted.MetaURL);
 
                             continue;
                         }

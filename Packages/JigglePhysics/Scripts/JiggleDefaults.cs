@@ -5,8 +5,9 @@ using UnityEngine;
 using System.Reflection;
 using UnityEditor;
 
-namespace JigglePhysics {
-public static class JiggleDefaults {
+namespace JigglePhysics
+{
+    public static class JiggleDefaults {
     private static string GetActiveFolderPath() {
         // Can't believe we need to use reflection to call this method!
         MethodInfo getActiveFolderPath = typeof(ProjectWindowUtil).GetMethod("GetActiveFolderPath", BindingFlags.Static | BindingFlags.NonPublic);

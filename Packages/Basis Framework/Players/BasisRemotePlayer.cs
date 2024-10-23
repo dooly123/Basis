@@ -54,14 +54,14 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle)
         {
-            if (BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile == BasisAvatarFactory.LoadingAvatar.BasisStoredEncyptedBundle.LocalBundleFile)
+            if (BasisLoadableBundle.BasisStoredEncryptedBundle.LocalBundleFile == BasisAvatarFactory.LoadingAvatar.BasisStoredEncryptedBundle.LocalBundleFile)
             {
                 Debug.Log("Avatar Load string was null or empty using fallback!");
                 await BasisAvatarFactory.LoadAvatarRemote(this, BasisPlayer.LoadModeError, BasisLoadableBundle);
             }
             else
             {
-                Debug.Log("loading avatar from " + BasisLoadableBundle.BasisStoredEncyptedBundle.LocalBundleFile + " with net mode " + Mode);
+                Debug.Log("loading avatar from " + BasisLoadableBundle.BasisStoredEncryptedBundle.LocalBundleFile + " with net mode " + Mode);
                 if (LockAvatarFromChanging == false)
                 {
                     await BasisAvatarFactory.LoadAvatarRemote(this, Mode, BasisLoadableBundle);

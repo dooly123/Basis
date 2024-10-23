@@ -93,7 +93,7 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             else
             {
-                if (BasisLoadhandler.HasURLOnDisc(LastUsedAvatar.UniqueID, out OnDiscInformation info))
+                if (BasisLoadHandler.IsBundleOnDisc(LastUsedAvatar.UniqueID, out OnDiscInformation info))
                 {
                     await BasisDataStoreAvatarKeys.LoadKeys();
                     List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys = BasisDataStoreAvatarKeys.DisplayKeys();
@@ -103,7 +103,7 @@ namespace Basis.Scripts.BasisSdk.Players
                         {
                             BasisLoadableBundle bundle = new BasisLoadableBundle
                             {
-                                BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
+                                BasisRemoteBundleEncrypted = new BasisRemoteEncyptedBundle
                                 {
                                     BundleURL = info.StoredBundleURL,
                                     MetaURL = info.StoredMetaURL
@@ -113,7 +113,7 @@ namespace Basis.Scripts.BasisSdk.Players
                                     BasisBundleDescription = new BasisBundleDescription(),
                                     BasisBundleGenerated = new BasisBundleGenerated()
                                 },
-                                BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),
+                                BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle(),
                                 UnlockPassword = Key.Pass
                             };
                             Debug.Log("loading previously loaded avatar");
@@ -176,7 +176,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public async Task CreateAvatar(byte mode, BasisLoadableBundle BasisLoadableBundle)
         {
             await BasisAvatarFactory.LoadAvatarLocal(this, mode, BasisLoadableBundle);
-            BasisDataStore.SaveAvatar(BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL, mode, LoadFileNameAndExtension);
+            BasisDataStore.SaveAvatar(BasisLoadableBundle.BasisRemoteBundleEncrypted.MetaURL, mode, LoadFileNameAndExtension);
             OnLocalAvatarChanged?.Invoke();
         }
         public void OnCalibration()

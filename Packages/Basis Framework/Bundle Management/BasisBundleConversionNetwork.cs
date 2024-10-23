@@ -8,13 +8,13 @@ public static class BasisBundleConversionNetwork
     {
         BasisLoadableBundle BasisLoadableBundle = new BasisLoadableBundle
         {
-            BasisRemoteBundleEncypted = new BasisRemoteEncyptedBundle
+            BasisRemoteBundleEncrypted = new BasisRemoteEncyptedBundle
             {
                 MetaURL = AvatarNetworkLoadInformation.AvatarMetaUrl,
                 BundleURL = AvatarNetworkLoadInformation.AvatarBundleUrl
             },
             BasisBundleInformation = new BasisBundleInformation(),
-            BasisStoredEncyptedBundle = new BasisStoredEncyptedBundle(),
+            BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle(),
             UnlockPassword = AvatarNetworkLoadInformation.UnlockPassword
         };
 
@@ -26,8 +26,8 @@ public static class BasisBundleConversionNetwork
     {
         AvatarNetworkLoadInformation AvatarNetworkLoadInformation = new AvatarNetworkLoadInformation
         {
-            AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.MetaURL,
-            AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncypted.BundleURL,
+            AvatarMetaUrl = BasisLoadableBundle.BasisRemoteBundleEncrypted.MetaURL,
+            AvatarBundleUrl = BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL,
             UnlockPassword = BasisLoadableBundle.UnlockPassword
         };
         return AvatarNetworkLoadInformation;

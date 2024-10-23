@@ -12,7 +12,7 @@ public class LoadABundle : MonoBehaviour
     async void OnEnable()
     {
         // Load the GameObject asynchronously
-        GameObject output = await BasisLoadhandler.LoadGameobjectBundle(BasisLoadableBundle, UseCondom, Report, CancellationToken);
+        GameObject output = await BasisLoadHandler.LoadGameObjectBundle(BasisLoadableBundle, UseCondom, Report, CancellationToken);
 
         // Set a random position with x, y, z between -50 and 50
         float randomX = UnityEngine.Random.Range(-50f, 50f);

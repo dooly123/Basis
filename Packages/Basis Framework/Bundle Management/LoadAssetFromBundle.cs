@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using static BasisProgressReport;
 public static class LoadAssetFromBundle
 {
-    public static async Task<GameObject> BundleToAsset(BasisTrackedBundleWrapper BasisLoadableBundle,bool UseContentCondum)
+    public static async Task<GameObject> LoadFromWrapper(BasisTrackedBundleWrapper BasisLoadableBundle, bool UseContentRemoval)
     {
         if (BasisLoadableBundle.AssetBundle != null)
         {
@@ -16,13 +16,15 @@ public static class LoadAssetFromBundle
                     {
                         AssetBundleRequest Request = BasisLoadableBundle.AssetBundle.LoadAssetAsync<GameObject>(output.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName);
                         await Request;
-                       GameObject Copied = ContentControlCondom((GameObject)Request.asset, UseContentCondum);
-                        if(Copied == null)
+                        GameObject loadedObject = Request.asset as GameObject;
+                        if (loadedObject == null)
                         {
                             Debug.LogError("Unable to proceed, null Gameobject");
-                            return  null;
+                            BasisLoadableBundle.DidErrorOccur = true;
+                            await BasisLoadableBundle.AssetBundle.UnloadAsync(true);
+                            return null;
                         }
-                        return Copied;
+                        return ContentControlCondom(loadedObject, UseContentRemoval);
                     }
                 default:
                     Debug.LogError("Requested type " + output.BasisBundleInformation.BasisBundleGenerated.AssetMode + " has no handler");
@@ -40,38 +42,38 @@ public static class LoadAssetFromBundle
     /// Creates a copy of a GameObject, removes any unapproved MonoBehaviours, and returns the cleaned copy.
     /// </summary>
     /// <param name="SearchAndDestroy">The original GameObject to copy and clean.</param>
-    /// <param name="UseContentCondum">Whether to remove unapproved MonoBehaviours or not.</param>
+    /// <param name="UseContentRemoval">Whether to remove unapproved MonoBehaviours or not.</param>
     /// <returns>A copy of the GameObject with unapproved scripts removed.</returns>
-    public static GameObject ContentControlCondom(GameObject SearchAndDestroy, bool UseContentCondum = true)
+    public static GameObject ContentControlCondom(GameObject SearchAndDestroy, bool UseContentRemoval = true)
     {
-        // Create a copy of the SearchAndDestroy GameObject
-        GameObject copy = GameObject.Instantiate(SearchAndDestroy);
 
-        if (UseContentCondum)
+        if (UseContentRemoval)
         {
             // Create a list to hold all MonoBehaviours in the copy
             List<MonoBehaviour> monoBehaviours = new List<MonoBehaviour>();
-            copy.GetComponentsInChildren(true, monoBehaviours);
+            SearchAndDestroy.GetComponentsInChildren(true, monoBehaviours);
 
             // Iterate through the list of MonoBehaviours and remove unapproved ones
-            for (int i = monoBehaviours.Count - 1; i >= 0; i--)
+            for (int Index = monoBehaviours.Count - 1; Index >= 0; Index--)
             {
-                MonoBehaviour mono = monoBehaviours[i];
-                string monoTypeName = mono.GetType().FullName;
-
-                // Check if the type is in the selectedTypes list
-                if (!BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
+                MonoBehaviour mono = monoBehaviours[Index];
+                if (mono != null)
                 {
-                    Debug.LogError($"MonoBehaviour {monoTypeName} is not approved and will be removed.");
-                    GameObject.DestroyImmediate(mono); // Destroy the unapproved MonoBehaviour immediately
+                    string monoTypeName = mono.GetType().FullName;
+
+                    // Check if the type is in the selectedTypes list
+                    if (!BundledContentHolder.Instance.Selector.selectedTypes.Contains(monoTypeName))
+                    {
+                        Debug.LogError($"MonoBehaviour {monoTypeName} is not approved and will be removed.");
+                        GameObject.DestroyImmediate(mono); // Destroy the unapproved MonoBehaviour immediately
+                    }
                 }
             }
         }
-
-        // Return the cleaned copy
-        return copy;
+        // Create a copy of the SearchAndDestroy GameObject
+        return GameObject.Instantiate(SearchAndDestroy);
     }
-    public static async Task LoadSceneFromAssetBundleAsync(BasisTrackedBundleWrapper bundle, bool MakeActiveScene, ProgressReport progressCallback)
+    public static async Task LoadSceneFromBundleAsync(BasisTrackedBundleWrapper bundle, bool MakeActiveScene, ProgressReport progressCallback)
     {
         string[] scenePaths = bundle.AssetBundle.GetAllScenePaths();
         if (scenePaths.Length == 0)
