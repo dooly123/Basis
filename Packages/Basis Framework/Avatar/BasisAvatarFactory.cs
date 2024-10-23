@@ -37,7 +37,7 @@ namespace Basis.Scripts.Avatar
                 IsLocal = true,
                 MetaURL = "LoadingAvatar",
             },
-            BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle()
+            BasisLocalEncryptedBundle = new BasisStoredEncyptedBundle()
             {
                 LocalBundleFile = "LoadingAvatar",
                 LocalMetaFile = "LoadingAvatar",
@@ -53,7 +53,7 @@ namespace Basis.Scripts.Avatar
             }
 
             DeleteLastAvatar(Player);
-            LoadLoadingAvatar(Player, LoadingAvatar.BasisStoredEncryptedBundle.LocalBundleFile);
+            LoadLoadingAvatar(Player, LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile);
 
             try
             {
@@ -108,7 +108,7 @@ namespace Basis.Scripts.Avatar
             }
 
             DeleteLastAvatar(Player);
-            LoadLoadingAvatar(Player, LoadingAvatar.BasisStoredEncryptedBundle.LocalBundleFile);
+            LoadLoadingAvatar(Player, LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile);
 
             try
             {
@@ -192,7 +192,7 @@ namespace Basis.Scripts.Avatar
             try
             {
                 var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar.BasisStoredEncryptedBundle.LocalBundleFile, Para);
+                (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile, Para);
 
                 if (GameObjects.Count != 0)
                 {

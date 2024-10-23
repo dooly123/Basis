@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static BasisProgressReport;
-public static class LoadAssetFromBundle
+public static class BasisBundleLoadAsset
 {
     public static async Task<GameObject> LoadFromWrapper(BasisTrackedBundleWrapper BasisLoadableBundle, bool UseContentRemoval)
     {

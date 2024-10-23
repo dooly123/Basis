@@ -4,7 +4,7 @@ public class BasisLoadableBundle
     public string UnlockPassword;
     //encrypted state
     public BasisRemoteEncyptedBundle BasisRemoteBundleEncrypted;
-    public BasisStoredEncyptedBundle BasisStoredEncryptedBundle;
+    public BasisStoredEncyptedBundle BasisLocalEncryptedBundle;
     //loaded MetaFile
     public BasisBundleInformation BasisBundleInformation;
 }

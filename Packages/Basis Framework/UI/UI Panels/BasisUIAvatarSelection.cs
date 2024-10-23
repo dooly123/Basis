@@ -71,7 +71,7 @@ namespace Basis.Scripts.UI.UI_Panels
                     BasisBundleDescription = new BasisBundleDescription(),
                     BasisBundleGenerated = new BasisBundleGenerated()
                 },
-                BasisStoredEncryptedBundle = new BasisStoredEncyptedBundle()
+                BasisLocalEncryptedBundle = new BasisStoredEncyptedBundle()
             };
 
             await BasisLocalPlayer.Instance.CreateAvatar(0, loadableBundle);
@@ -97,7 +97,7 @@ namespace Basis.Scripts.UI.UI_Panels
             int Count = activeKeys.Count;
             for (int Index = 0; Index < Count; Index++)
             {
-                if (BasisLoadHandler.IsBundleOnDisc(activeKeys[Index].Url, out var info) == false)
+                if (BasisLoadHandler.IsMetaDataOnDisc(activeKeys[Index].Url, out var info) == false)
                 {
                     Debug.LogError("Missing File on Disc For " + activeKeys[Index].Url);
                    await BasisDataStoreAvatarKeys.RemoveKey(activeKeys[Index]);
@@ -112,7 +112,7 @@ namespace Basis.Scripts.UI.UI_Panels
                         BasisBundleDescription = new BasisBundleDescription(),
                         BasisBundleGenerated = new BasisBundleGenerated()
                     },
-                    BasisStoredEncryptedBundle = info.StoredLocal,
+                    BasisLocalEncryptedBundle = info.StoredLocal,
                     UnlockPassword = activeKeys[Index].Pass
                 };
                 Debug.Log("Adding Button");
@@ -121,7 +121,6 @@ namespace Basis.Scripts.UI.UI_Panels
             Debug.Log("CreateAvatarButtons");
             await CreateAvatarButtons(activeKeys);
         }
-
         private async Task CreateAvatarButtons(List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys)
         {
             for (int index = 0; index < avatarUrlsRuntime.Count; index++)
@@ -145,8 +144,7 @@ namespace Basis.Scripts.UI.UI_Panels
 
                         try
                         {
-                            BasisLoadHandler.IsBundleOnDisc(avatarUrlsRuntime[index].BasisRemoteBundleEncrypted.MetaURL, out var info);
-                            await BasisBundleManagement.ProcessOnDiscMetaDataAsync(wrapper, info.StoredLocal, Report, new CancellationToken());
+                            await BasisLoadHandler.HandleMetaLoading(wrapper, Report, new CancellationToken());
                             buttonText.text = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleDescription.AssetBundleName;
                         }
                         catch (Exception E)

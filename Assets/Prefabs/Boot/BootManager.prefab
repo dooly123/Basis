@@ -182,11 +182,11 @@ MonoBehaviour:
   Selector: {fileID: 11400000, guid: 8393424ebf34934449c2d1309a700837, type: 2}
   DefaultScene:
     UnlockPassword: Scene
-    BasisRemoteBundleEncypted:
+    BasisRemoteBundleEncrypted:
       IsLocal: 0
-      MetaURL: https://BasisFramework.b-cdn.net/Worlds/DX11/71d820c1-564d-4375-8ae5-47a53679e01f_638649993610700760.BasisEncyptedMeta
-      BundleURL: https://BasisFramework.b-cdn.net/Worlds/DX11/71d820c1-564d-4375-8ae5-47a53679e01f_638649993610700760.BasisEncyptedBundle
-    BasisStoredEncyptedBundle:
+      MetaURL: https://BasisFramework.b-cdn.net/Worlds/DX11/3dd6aa45-a685-4ed2-ba6d-2d9c2f3c1765_638652274774362697.BasisEncyptedMeta
+      BundleURL: https://BasisFramework.b-cdn.net/Worlds/DX11/3dd6aa45-a685-4ed2-ba6d-2d9c2f3c1765_638652274774362697.BasisEncyptedBundle
+    BasisStoredEncryptedBundle:
       LocalMetaFile: 
       LocalBundleFile: 
     BasisBundleInformation:
@@ -201,13 +201,13 @@ MonoBehaviour:
         AssetBundleCRC: 0
   DefaultAvatar:
     UnlockPassword: 
-    BasisRemoteBundleEncypted:
-      IsLocal: 1
-      MetaURL: LoadingAvatar
-      BundleURL: LoadingAvatar
-    BasisStoredEncyptedBundle:
-      LocalMetaFile: LoadingAvatar
-      LocalBundleFile: LoadingAvatar
+    BasisRemoteBundleEncrypted:
+      IsLocal: 0
+      MetaURL: 
+      BundleURL: 
+    BasisStoredEncryptedBundle:
+      LocalMetaFile: 
+      LocalBundleFile: 
     BasisBundleInformation:
       HasError: 0
       BasisBundleDescription:

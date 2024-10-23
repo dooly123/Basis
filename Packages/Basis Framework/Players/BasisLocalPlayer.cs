@@ -93,7 +93,7 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             else
             {
-                if (BasisLoadHandler.IsBundleOnDisc(LastUsedAvatar.UniqueID, out OnDiscInformation info))
+                if (BasisLoadHandler.IsMetaDataOnDisc(LastUsedAvatar.UniqueID, out OnDiscInformation info))
                 {
                     await BasisDataStoreAvatarKeys.LoadKeys();
                     List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys = BasisDataStoreAvatarKeys.DisplayKeys();
@@ -109,7 +109,7 @@ namespace Basis.Scripts.BasisSdk.Players
                                     BasisBundleDescription = new BasisBundleDescription(),
                                     BasisBundleGenerated = new BasisBundleGenerated()
                                 },
-                                BasisStoredEncryptedBundle = info.StoredLocal,
+                                BasisLocalEncryptedBundle = info.StoredLocal,
                                 UnlockPassword = Key.Pass
                             };
                             Debug.Log("loading previously loaded avatar");

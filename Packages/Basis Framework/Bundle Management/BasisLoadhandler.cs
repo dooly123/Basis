@@ -32,7 +32,7 @@ public static class BasisLoadHandler
             try
             {
                 await wrapper.WaitForBundleLoadAsync();
-                return await LoadAssetFromBundle.LoadFromWrapper(wrapper, useContentRemoval);
+                return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval);
             }
             catch (Exception ex)
             {
@@ -52,7 +52,7 @@ public static class BasisLoadHandler
         if (LoadedBundles.TryGetValue(loadableBundle.BasisRemoteBundleEncrypted.MetaURL, out BasisTrackedBundleWrapper wrapper))
         {
             await wrapper.WaitForBundleLoadAsync();
-            await LoadAssetFromBundle.LoadSceneFromBundleAsync(wrapper, makeActiveScene, report);
+            await BasisBundleLoadAsset.LoadSceneFromBundleAsync(wrapper, makeActiveScene, report);
             return;
         }
 
@@ -61,7 +61,7 @@ public static class BasisLoadHandler
 
     private static async Task HandleFirstSceneLoad(BasisLoadableBundle loadableBundle, bool makeActiveScene, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
     {
-        var wrapper = new BasisTrackedBundleWrapper { AssetBundle = null, LoadableBundle = loadableBundle };
+        BasisTrackedBundleWrapper wrapper = new BasisTrackedBundleWrapper { AssetBundle = null, LoadableBundle = loadableBundle };
 
         if (!LoadedBundles.TryAdd(loadableBundle.BasisRemoteBundleEncrypted.MetaURL, wrapper))
         {
@@ -69,13 +69,17 @@ public static class BasisLoadHandler
             return;
         }
 
-        await HandleBundleLoading(wrapper, report, cancellationToken);
-        await LoadAssetFromBundle.LoadSceneFromBundleAsync(wrapper, makeActiveScene, report);
+        await HandleBundleAndMetaLoading(wrapper, report, cancellationToken);
+        await BasisBundleLoadAsset.LoadSceneFromBundleAsync(wrapper, makeActiveScene, report);
     }
 
     private static async Task<GameObject> HandleFirstBundleLoad(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
     {
-        var wrapper = new BasisTrackedBundleWrapper { AssetBundle = null, LoadableBundle = loadableBundle };
+        BasisTrackedBundleWrapper wrapper = new BasisTrackedBundleWrapper 
+        { 
+            AssetBundle = null,
+            LoadableBundle = loadableBundle
+        };
 
         if (!LoadedBundles.TryAdd(loadableBundle.BasisRemoteBundleEncrypted.MetaURL, wrapper))
         {
@@ -85,22 +89,67 @@ public static class BasisLoadHandler
 
         try
         {
-            await HandleBundleLoading(wrapper, report, cancellationToken);
-            return await LoadAssetFromBundle.LoadFromWrapper(wrapper, useContentRemoval);
+            await HandleBundleAndMetaLoading(wrapper, report, cancellationToken);
+            return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval);
         }
         catch (Exception ex)
         {
             Debug.LogError(ex);
             LoadedBundles.Remove(loadableBundle.BasisRemoteBundleEncrypted.MetaURL);
-            CleanupFiles(loadableBundle.BasisStoredEncryptedBundle);
+            CleanupFiles(loadableBundle.BasisLocalEncryptedBundle);
             OnDiscData.TryRemove(loadableBundle.BasisRemoteBundleEncrypted.MetaURL, out _);
             return null;
         }
     }
 
-    private static async Task HandleBundleLoading(BasisTrackedBundleWrapper wrapper, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    public static async Task HandleBundleAndMetaLoading(BasisTrackedBundleWrapper wrapper, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
     {
-        bool isOnDisc = IsBundleOnDisc(wrapper.LoadableBundle.BasisRemoteBundleEncrypted.MetaURL, out OnDiscInformation discInfo);
+        bool IsMetaOnDisc = IsMetaDataOnDisc(wrapper.LoadableBundle.BasisRemoteBundleEncrypted.MetaURL, out OnDiscInformation MetaInfo);
+        bool IsBundleOnDisc = IsBundleDataOnDisc(wrapper.LoadableBundle.BasisRemoteBundleEncrypted.BundleURL, out OnDiscInformation BundleInfo);
+
+        if (IsMetaOnDisc)
+        {
+            Debug.Log("ProcessOnDiscMetaDataAsync");
+            await BasisBundleManagement.ProcessOnDiscMetaDataAsync(wrapper, MetaInfo.StoredLocal, report, cancellationToken);
+        }
+        else
+        {
+            Debug.Log("Meta was no on disc downloading on next stage");
+        }
+        if (IsBundleOnDisc == false)
+        {
+            Debug.Log("DownloadStoreMetaAndBundle");
+            await BasisBundleManagement.DownloadStoreMetaAndBundle(wrapper, report, cancellationToken);
+        }
+        else
+        {
+            Debug.Log("Bundle was already on disc proceeding");
+        }
+
+        AssetBundleCreateRequest bundleRequest = await BasisEncryptionToData.GenerateBundleFromFile(
+            wrapper.LoadableBundle.UnlockPassword,
+            wrapper.LoadableBundle.BasisLocalEncryptedBundle.LocalBundleFile,
+            wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC,
+            report
+        );
+
+        wrapper.AssetBundle = bundleRequest.assetBundle;
+
+        if (IsMetaOnDisc == false)
+        {
+            OnDiscInformation newDiscInfo = new OnDiscInformation
+            {
+                StoredRemote = wrapper.LoadableBundle.BasisRemoteBundleEncrypted,
+                StoredLocal = wrapper.LoadableBundle.BasisLocalEncryptedBundle,
+                AssetIDToLoad = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
+            };
+
+            await AddDiscInfo(newDiscInfo);
+        }
+    }
+    public static async Task HandleMetaLoading(BasisTrackedBundleWrapper wrapper, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    {
+        bool isOnDisc = IsMetaDataOnDisc(wrapper.LoadableBundle.BasisRemoteBundleEncrypted.MetaURL, out OnDiscInformation discInfo);
 
         if (isOnDisc)
         {
@@ -108,42 +157,54 @@ public static class BasisLoadHandler
         }
         else
         {
-            await BasisBundleManagement.DownloadAndSaveBundle(wrapper, report, cancellationToken);
+            await BasisBundleManagement.DownloadAndSaveMetaFile(wrapper, report, cancellationToken);//just save the meta data
         }
-
-        AssetBundleCreateRequest bundleRequest = await BasisEncryptionToData.GenerateBundleFromFile(
-            wrapper.LoadableBundle.UnlockPassword,
-            wrapper.LoadableBundle.BasisStoredEncryptedBundle.LocalBundleFile,
-            wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetBundleCRC,
-            report
-        );
-
-        wrapper.AssetBundle = bundleRequest.assetBundle;
 
         if (!isOnDisc)
         {
             OnDiscInformation newDiscInfo = new OnDiscInformation
             {
                 StoredRemote = wrapper.LoadableBundle.BasisRemoteBundleEncrypted,
-                StoredLocal = wrapper.LoadableBundle.BasisStoredEncryptedBundle,
+                StoredLocal = wrapper.LoadableBundle.BasisLocalEncryptedBundle,
                 AssetIDToLoad = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
             };
 
             await AddDiscInfo(newDiscInfo);
         }
     }
-
-    public static bool IsBundleOnDisc(string metaUrl, out OnDiscInformation info)
+    public static bool IsMetaDataOnDisc(string MetaURL, out OnDiscInformation info)
     {
         lock (_discInfoLock)
         {
             foreach (var discInfo in OnDiscData.Values)
             {
-                if (discInfo.StoredRemote.MetaURL == metaUrl)
+                if (discInfo.StoredRemote.MetaURL == MetaURL)
                 {
-                    Debug.LogError("this is faulty the meta url is not what is on disc yet... ");
                     info = discInfo;
-                    return true;
+                    if (File.Exists(discInfo.StoredLocal.LocalMetaFile))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            info = new OnDiscInformation();
+            return false;
+        }
+    }
+    public static bool IsBundleDataOnDisc(string BundleURL, out OnDiscInformation info)
+    {
+        lock (_discInfoLock)
+        {
+            foreach (var discInfo in OnDiscData.Values)
+            {
+                if (discInfo.StoredRemote.BundleURL == BundleURL)
+                {
+                    info = discInfo;
+                    if (File.Exists(discInfo.StoredLocal.LocalBundleFile))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -156,22 +217,27 @@ public static class BasisLoadHandler
     {
         if (OnDiscData.TryAdd(discInfo.StoredRemote.MetaURL, discInfo))
         {
-            string filePath = BasisIOManagement.GenerateFilePath($"{discInfo.AssetIDToLoad}{BasisBundleManagement.MetaSuffix}", BasisBundleManagement.AssetBundles);
-            byte[] serializedData = SerializationUtility.SerializeValue(discInfo, DataFormat.Binary);
-
-            try
-            {
-                await File.WriteAllBytesAsync(filePath, serializedData);
-                Debug.Log($"Disc info saved to {filePath}");
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Failed to save disc info: {ex.Message}");
-            }
         }
         else
         {
-            Debug.LogError("Disc info already exists.");
+            OnDiscData[discInfo.StoredRemote.MetaURL] = discInfo;
+            Debug.Log("Disc info updated.");
+        }
+        string filePath = BasisIOManagement.GenerateFilePath($"{discInfo.AssetIDToLoad}{BasisBundleManagement.MetaLinkBasisSuffix}", BasisBundleManagement.AssetBundlesFolder);
+        byte[] serializedData = SerializationUtility.SerializeValue(discInfo, DataFormat.Binary);
+
+        try
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            await File.WriteAllBytesAsync(filePath, serializedData);
+            Debug.Log($"Disc info saved to {filePath}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to save disc info: {ex.Message}");
         }
     }
 
@@ -179,7 +245,7 @@ public static class BasisLoadHandler
     {
         if (OnDiscData.TryRemove(metaUrl, out _))
         {
-            string filePath = BasisIOManagement.GenerateFilePath($"{metaUrl}{BasisBundleManagement.MetaSuffix}", BasisBundleManagement.AssetBundles);
+            string filePath = BasisIOManagement.GenerateFilePath($"{metaUrl}{BasisBundleManagement.MetaLinkBasisSuffix}", BasisBundleManagement.AssetBundlesFolder);
 
             if (File.Exists(filePath))
             {
@@ -220,8 +286,8 @@ public static class BasisLoadHandler
     private static async Task LoadAllDiscData()
     {
         Debug.Log("Loading all disc data...");
-        string path = BasisIOManagement.GenerateFolderPath(BasisBundleManagement.AssetBundles);
-        string[] files = Directory.GetFiles(path, $"*{BasisBundleManagement.MetaSuffix}");
+        string path = BasisIOManagement.GenerateFolderPath(BasisBundleManagement.AssetBundlesFolder);
+        string[] files = Directory.GetFiles(path, $"*{BasisBundleManagement.MetaLinkBasisSuffix}");
 
         foreach (var file in files)
         {
