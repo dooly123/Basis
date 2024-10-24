@@ -2,8 +2,8 @@
 public class BasisBundleInformation
 {
     public bool HasError;
-    public BasisBundleDescription BasisBundleDescription;
-    public BasisBundleGenerated BasisBundleGenerated;
+    public BasisBundleDescription BasisBundleDescription = new BasisBundleDescription();
+    public BasisBundleGenerated BasisBundleGenerated = new BasisBundleGenerated();
 }
 [System.Serializable]
 public class BasisBundleDescription

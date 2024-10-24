@@ -2,7 +2,6 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -23,7 +22,8 @@ public class BasisSceneFactory : MonoBehaviour
     {
         BasisScene = scene;
         AttachMixerToAllSceneAudioSources();
-
+        RespawnCheckTimer = BasisScene.RespawnCheckTimer;
+        RespawnHeight = BasisScene.RespawnHeight;
         if (scene.MainCamera != null)
         {
             LoadCameraPropertys(scene.MainCamera);
@@ -51,8 +51,9 @@ public class BasisSceneFactory : MonoBehaviour
                 }
             }
         }
-        StartCoroutine(CheckHeightLoop());
+        BasisLocalPlayer = BasisLocalPlayer.Instance;
     }
+    public BasisLocalPlayer BasisLocalPlayer;
     public void LoadCameraPropertys(Camera Camera)
     {
         Camera RealCamera = BasisLocalCameraDriver.Instance.Camera;
@@ -100,27 +101,19 @@ public class BasisSceneFactory : MonoBehaviour
             Basis.Teleport(position, rotation);
         }
     }
-    IEnumerator CheckHeightLoop()
+    private float timeSinceLastCheck = 0f;
+    public float RespawnCheckTimer = 5f;
+    public float RespawnHeight = -100f;
+    public void FixedUpdate()
     {
-        while (true)
+        timeSinceLastCheck += Time.deltaTime;
+        // Check only if enough time has passed
+        if (timeSinceLastCheck > RespawnCheckTimer)
         {
-            CheckHeight();
-            yield return new WaitForSeconds(BasisScene.RespawnCheckTimer);
-        }
-    }
-    void CheckHeight()
-    {
-        if (BasisLocalPlayer.Instance != null)
-        {
-            float height = BasisLocalPlayer.Instance.transform.position.y;
-
-            // Perform the height check logic
-            if (height > BasisScene.RespawnHeight)
+            timeSinceLastCheck = 0f; // Reset timer
+            if (BasisLocalPlayer != null && BasisLocalPlayer.transform.position.y < RespawnHeight)
             {
-            }
-            else
-            {
-                SpawnPlayer(BasisLocalPlayer.Instance);
+                SpawnPlayer(BasisLocalPlayer);
             }
         }
     }

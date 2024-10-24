@@ -15,7 +15,7 @@ public static class BasisEncryptionWrapper
     public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, BasisPassword password, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
-        var encryptedData = await Task.Run(() => Encrypt(password, dataToEncrypt)); // Run encryption on a separate thread
+        var encryptedData = await Task.Run(() => Encrypt(password, dataToEncrypt, reportProgress)); // Run encryption on a separate thread
         reportProgress?.Invoke(100f);
         return encryptedData;
     }
@@ -23,18 +23,20 @@ public static class BasisEncryptionWrapper
     public static async Task<byte[]> DecryptDataAsync(byte[] dataToDecrypt, BasisPassword password, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
-        var decryptedData = await Task.Run(() => Decrypt(password.VP, dataToDecrypt)); // Run decryption on a separate thread
+        var decryptedData = await Task.Run(() => Decrypt(password.VP, dataToDecrypt, reportProgress)); // Run decryption on a separate thread
         reportProgress?.Invoke(100f);
         return decryptedData.Item1;
     }
 
-    private static byte[] Encrypt(BasisPassword password, byte[] dataToEncrypt)
+    private static byte[] Encrypt(BasisPassword password, byte[] dataToEncrypt, ProgressReport reportProgress = null)
     {
         byte[] salt = new byte[SaltSize];
         using (var rng = new RNGCryptoServiceProvider())
         {
             rng.GetBytes(salt); // Fill the salt with random bytes
         }
+
+        reportProgress?.Invoke(10f);
 
         using (var key = new Rfc2898DeriveBytes(password.VP, salt, 10000))
         {
@@ -44,6 +46,8 @@ public static class BasisEncryptionWrapper
             {
                 rng.GetBytes(iv); // Generate a random IV
             }
+
+            reportProgress?.Invoke(20f);
 
             using (var aes = Aes.Create())
             {
@@ -61,6 +65,8 @@ public static class BasisEncryptionWrapper
                         cryptoStream.Write(dataToEncrypt, 0, dataToEncrypt.Length);
                     }
 
+                    reportProgress?.Invoke(90f);
+
                     // Get the encrypted data from the memory stream
                     return msEncrypt.ToArray();
                 }
@@ -68,13 +74,16 @@ public static class BasisEncryptionWrapper
         }
     }
 
-    private static (byte[], byte[], byte[]) Decrypt(string password, byte[] dataToDecrypt)
+    private static (byte[], byte[], byte[]) Decrypt(string password, byte[] dataToDecrypt, ProgressReport reportProgress = null)
     {
-        if(dataToDecrypt == null || dataToDecrypt.Length == 0)
+        if (dataToDecrypt == null || dataToDecrypt.Length == 0)
         {
             Debug.LogError("Missing Data To Decrypt");
             return new(null, null, null);
         }
+
+        reportProgress?.Invoke(10f);
+
         using (var msDecrypt = new MemoryStream(dataToDecrypt))
         {
             // Read the salt and IV from the memory stream
@@ -83,6 +92,8 @@ public static class BasisEncryptionWrapper
 
             byte[] iv = new byte[IvSize];
             msDecrypt.Read(iv, 0, IvSize);
+
+            reportProgress?.Invoke(20f);
 
             // Generate the key using the password and salt
             using (var key = new Rfc2898DeriveBytes(password, salt, 10000))
@@ -101,7 +112,7 @@ public static class BasisEncryptionWrapper
                         {
                             cryptoStream.CopyTo(msOutput);
                             byte[] output = msOutput.ToArray();
-                            Debug.Log($"Total was {dataToDecrypt.Length}, without salt and IV it's {output.Length}");
+                            reportProgress?.Invoke(90f);
 
                             return (output, salt, iv);
                         }
@@ -156,23 +167,25 @@ public static class BasisEncryptionWrapper
         // Report 100% completion
         reportProgress?.Invoke(100f);
     }
+
     public struct BasisPassword
     {
         public string VP;
     }
+
     public static async Task EncryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
     {
-        byte[] dataToEncrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
+        byte[] dataToEncrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
         var encryptedData = await EncryptDataAsync(dataToEncrypt, password, reportProgress);
         await WriteFileAsync(outputFilePath, encryptedData, FileMode.Create, reportProgress);
     }
 
     public static async Task DecryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
     {
-        byte[] dataToDecrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
+        byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
         if (dataToDecrypt == null || dataToDecrypt.Length == 0)
         {
-            new Exception("Data Requsted was null or empty");
+            throw new Exception("Data requested was null or empty");
         }
         var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
         await WriteFileAsync(outputFilePath, decryptedData, FileMode.Create, reportProgress);
@@ -180,12 +193,12 @@ public static class BasisEncryptionWrapper
 
     public static async Task<byte[]> DecryptFileAsync(BasisPassword password, string inputFilePath, ProgressReport reportProgress)
     {
-        byte[] dataToDecrypt = await Task.Run(() => ReadAllBytesAsync(inputFilePath, reportProgress));
-        if(dataToDecrypt == null || dataToDecrypt.Length == 0)
+        byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
+        if (dataToDecrypt == null || dataToDecrypt.Length == 0)
         {
-            Debug.LogError("Data Requsted was null or empty");
+            Debug.LogError("Data requested was null or empty");
             return null;
-        } 
+        }
         var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
         return decryptedData;
     }
