@@ -110,8 +110,8 @@ public static class BasisAssetBundlePipeline
             tempScenePath = TemporaryStorageHandler.SaveSceneToTemporaryStorage(scene, settings, out string uniqueID);
             string assetBundleName = AssetBundleBuilder.SetAssetBundleName(tempScenePath, uniqueID, settings);
 
-           await AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, BasisBundleInformation, "Scene", Password);
-            TemporaryStorageHandler.ClearTemporaryStorage(tempScenePath);
+            await AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, BasisBundleInformation, "Scene", Password);
+            TemporaryStorageHandler.DeleteTemporaryStorageScene(uniqueID, settings);
 
             // Invoke the delegate after building the asset bundle
             OnAfterBuildScene?.Invoke(assetBundleName);

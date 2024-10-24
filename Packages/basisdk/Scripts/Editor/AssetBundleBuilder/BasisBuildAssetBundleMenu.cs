@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class BasisBuildAssetBundleMenu
 {
+    /*
     [MenuItem("Basis/Build AssetBundle From Prefab")]
     public static void BuildAssetBundleFromPrefab()
     {
@@ -76,6 +77,7 @@ public class BasisBuildAssetBundleMenu
             }
         }
     }
+    */
     [MenuItem("Basis/Build AssetBundle from Scene")]
     public static void BuildAssetBundleFromScene()
     {
