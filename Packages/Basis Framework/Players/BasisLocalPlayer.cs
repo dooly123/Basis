@@ -64,8 +64,6 @@ namespace Basis.Scripts.BasisSdk.Players
             await BasisDeviceManagement.LoadGameobject(MainCamera, new InstantiationParameters());
             //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
             //  FootPlacementDriver.Initialize();
-            BasisAvatarStrainJiggleDriver = BasisHelpers.GetOrAddComponent<BasisAvatarStrainJiggleDriver>(this.gameObject);
-            BasisAvatarStrainJiggleDriver.OnCalibration();
             Move.Initialize();
             LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
             LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
@@ -76,8 +74,15 @@ namespace Basis.Scripts.BasisSdk.Players
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
             }
-          BasisDataStore.BasisSavedAvatar LastUsedAvatar = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal);
-          await  Replaceme(LastUsedAvatar);
+         bool LoadedState = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal,out BasisDataStore.BasisSavedAvatar LastUsedAvatar);
+            if(LoadedState)
+            {
+                await LoadInitalAvatar(LastUsedAvatar);
+            }
+            else
+            {
+                await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
+            }
             if (MicrophoneRecorder == null)
             {
                 MicrophoneRecorder = BasisHelpers.GetOrAddComponent<MicrophoneRecorder>(this.gameObject);
@@ -85,46 +90,39 @@ namespace Basis.Scripts.BasisSdk.Players
             MicrophoneRecorder.TryInitialize();
             OnLocalPlayerCreatedAndReady?.Invoke();
         }
-        public async Task Replaceme(BasisDataStore.BasisSavedAvatar LastUsedAvatar)
+        public async Task LoadInitalAvatar(BasisDataStore.BasisSavedAvatar LastUsedAvatar)
         {
-            if (LastUsedAvatar == null)
+            if (BasisLoadHandler.IsMetaDataOnDisc(LastUsedAvatar.UniqueID, out OnDiscInformation info))
             {
+                await BasisDataStoreAvatarKeys.LoadKeys();
+                List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys = BasisDataStoreAvatarKeys.DisplayKeys();
+                foreach (BasisDataStoreAvatarKeys.AvatarKey Key in activeKeys)
+                {
+                    if (Key.Url == LastUsedAvatar.UniqueID)
+                    {
+                        BasisLoadableBundle bundle = new BasisLoadableBundle
+                        {
+                            BasisRemoteBundleEncrypted = info.StoredRemote,
+                            BasisBundleInformation = new BasisBundleInformation
+                            {
+                                BasisBundleDescription = new BasisBundleDescription(),
+                                BasisBundleGenerated = new BasisBundleGenerated()
+                            },
+                            BasisLocalEncryptedBundle = info.StoredLocal,
+                            UnlockPassword = Key.Pass
+                        };
+                        Debug.Log("loading previously loaded avatar");
+                        await CreateAvatar(LastUsedAvatar.loadmode, bundle);
+                        return;
+                    }
+                }
+                Debug.Log("failed to load last used : no key found to load but was found on disc");
                 await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
             }
             else
             {
-                if (BasisLoadHandler.IsMetaDataOnDisc(LastUsedAvatar.UniqueID, out OnDiscInformation info))
-                {
-                    await BasisDataStoreAvatarKeys.LoadKeys();
-                    List<BasisDataStoreAvatarKeys.AvatarKey> activeKeys = BasisDataStoreAvatarKeys.DisplayKeys();
-                    foreach (BasisDataStoreAvatarKeys.AvatarKey Key in activeKeys)
-                    {
-                        if (Key.Url == LastUsedAvatar.UniqueID)
-                        {
-                            BasisLoadableBundle bundle = new BasisLoadableBundle
-                            {
-                                BasisRemoteBundleEncrypted = info.StoredRemote,
-                                BasisBundleInformation = new BasisBundleInformation
-                                {
-                                    BasisBundleDescription = new BasisBundleDescription(),
-                                    BasisBundleGenerated = new BasisBundleGenerated()
-                                },
-                                BasisLocalEncryptedBundle = info.StoredLocal,
-                                UnlockPassword = Key.Pass
-                            };
-                            Debug.Log("loading previously loaded avatar");
-                            await CreateAvatar(LastUsedAvatar.loadmode, bundle);
-                            return;
-                        }
-                    }
-                    Debug.Log("failed to load last used : no key found to load but was found on disc");
-                    await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
-                }
-                else
-                {
-                    Debug.Log("failed to load last used : url was not found on disc");
-                    await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
-                }
+                Debug.Log("failed to load last used : url was not found on disc");
+                await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
             }
         }
         public void Teleport(Vector3 position, Quaternion rotation)

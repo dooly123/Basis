@@ -41,9 +41,11 @@ namespace Basis.Scripts.BasisSdk.Players
                 Debug.LogError("Mising CharacterIKCalibration");
                 HasAvatarDriver = false;
             }
-         if (BasisAvatarStrainJiggleDriver != null)
+            BasisAvatarStrainJiggleDriver = BasisHelpers.GetOrAddComponent<BasisAvatarStrainJiggleDriver>(this.gameObject);
+            BasisAvatarStrainJiggleDriver.OnCalibration();
+            if (BasisAvatarStrainJiggleDriver != null)
             {
-               BasisAvatarStrainJiggleDriver.OnCalibration();
+                BasisAvatarStrainJiggleDriver.OnCalibration();
             }
         }
         private void UpdateFaceVisibility(bool State)

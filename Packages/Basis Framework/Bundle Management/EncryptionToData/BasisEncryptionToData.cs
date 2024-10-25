@@ -13,7 +13,7 @@ public static class BasisEncryptionToData
         };
 
         // Decrypt the file asynchronously
-        byte[] LoadedBundleData = await BasisEncryptionWrapper.DecryptFileAsync(BasisPassword, FilePath, progressCallback);
+        byte[] LoadedBundleData = await BasisEncryptionWrapper.DecryptFileAsync(BasisPassword, FilePath, progressCallback, 8388608);
 
         // Start the AssetBundle loading process from memory with CRC check
         AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromMemoryAsync(LoadedBundleData, CRC);
@@ -55,7 +55,7 @@ public static class BasisEncryptionToData
             VP = BasisLoadableBundle.UnlockPassword
         };
         // Debug.Log("BasisLoadableBundle.UnlockPassword" + BasisLoadableBundle.UnlockPassword);
-        byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(BasisPassword, FilePath, progressCallback);
+        byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(BasisPassword, FilePath, progressCallback, 81920);
         Debug.Log("Converting decrypted meta file to BasisBundleInformation...");
         BasisLoadableBundle.BasisBundleInformation = ConvertBytesToJson(LoadedMetaData);
         return BasisLoadableBundle;

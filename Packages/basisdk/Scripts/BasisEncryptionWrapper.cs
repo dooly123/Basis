@@ -10,8 +10,6 @@ public static class BasisEncryptionWrapper
     private const int SaltSize = 16; // Size of the salt in bytes
     private const int KeySize = 32; // Size of the key in bytes (256 bits)
     private const int IvSize = 16; // Size of the IV in bytes (128 bits)
-    private const int chunkSize = 16 * 1024; // 16 KiB
-
     public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, BasisPassword password, ProgressReport reportProgress = null)
     {
         reportProgress?.Invoke(0f);
@@ -122,11 +120,11 @@ public static class BasisEncryptionWrapper
         }
     }
 
-    public static async Task ReadFileAsync(string filePath, Func<byte[], Task> processChunk, ProgressReport reportProgress = null)
+    public static async Task ReadFileAsync(string filePath, Func<byte[], Task> processChunk, ProgressReport reportProgress = null, int bufferSize = 4194304)
     {
         reportProgress?.Invoke(0f);
         var fileSize = new FileInfo(filePath).Length;
-        var buffer = new byte[chunkSize];
+        var buffer = new byte[bufferSize];
         long totalRead = 0;
 
         using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -142,11 +140,9 @@ public static class BasisEncryptionWrapper
         reportProgress?.Invoke(100f);
     }
 
-    public static async Task WriteFileAsync(string filePath, byte[] data, FileMode fileMode, ProgressReport reportProgress = null)
+    public static async Task WriteFileAsync(string filePath, byte[] data, FileMode fileMode, ProgressReport reportProgress = null, int bufferSize = 4194304)
     {
         reportProgress?.Invoke(0f);
-
-        const int bufferSize = 4194304; // 4 MB buffer
         long totalWritten = 0;
 
         using (var fs = new FileStream(filePath, fileMode, FileAccess.Write, FileShare.None, bufferSize, useAsync: true))
@@ -173,14 +169,14 @@ public static class BasisEncryptionWrapper
         public string VP;
     }
 
-    public static async Task EncryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
+    public static async Task EncryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress, int bufferSize = 4194304)
     {
         byte[] dataToEncrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
         var encryptedData = await EncryptDataAsync(dataToEncrypt, password, reportProgress);
-        await WriteFileAsync(outputFilePath, encryptedData, FileMode.Create, reportProgress);
+        await WriteFileAsync(outputFilePath, encryptedData, FileMode.Create, reportProgress, bufferSize);
     }
 
-    public static async Task DecryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress)
+    public static async Task DecryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress, int bufferSize = 4194304)
     {
         byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
         if (dataToDecrypt == null || dataToDecrypt.Length == 0)
@@ -188,12 +184,12 @@ public static class BasisEncryptionWrapper
             throw new Exception("Data requested was null or empty");
         }
         var decryptedData = await DecryptDataAsync(dataToDecrypt, password, reportProgress);
-        await WriteFileAsync(outputFilePath, decryptedData, FileMode.Create, reportProgress);
+        await WriteFileAsync(outputFilePath, decryptedData, FileMode.Create, reportProgress,bufferSize);
     }
 
-    public static async Task<byte[]> DecryptFileAsync(BasisPassword password, string inputFilePath, ProgressReport reportProgress)
+    public static async Task<byte[]> DecryptFileAsync(BasisPassword password, string inputFilePath, ProgressReport reportProgress, int bufferSize = 4194304)
     {
-        byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
+        byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress, bufferSize);
         if (dataToDecrypt == null || dataToDecrypt.Length == 0)
         {
             Debug.LogError("Data requested was null or empty");
@@ -203,15 +199,14 @@ public static class BasisEncryptionWrapper
         return decryptedData;
     }
 
-    private static async Task<byte[]> ReadAllBytesAsync(string filePath, ProgressReport reportProgress)
+    private static async Task<byte[]> ReadAllBytesAsync(string filePath, ProgressReport reportProgress, int bufferSize = 4194304) // Default 4MB buffer size
     {
         reportProgress?.Invoke(0f);
 
-        const int bufferSize = 81920; // Standard buffer size (80 KB)
         var fileInfo = new FileInfo(filePath);
         byte[] data = new byte[fileInfo.Length];
 
-        using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, true))
+        using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
         {
             int totalRead = 0;
             int bytesRead;

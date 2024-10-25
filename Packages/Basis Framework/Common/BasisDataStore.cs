@@ -26,7 +26,7 @@ namespace Basis.Scripts.Common
             }
         }
         // Method to load the avatar (string and byte) from a file using JSON
-        public static BasisSavedAvatar LoadAvatar(string fileNameAndExtension, string defaultName, byte defaultData)
+        public static bool LoadAvatar(string fileNameAndExtension, string defaultName, byte defaultData,out BasisSavedAvatar BasisSavedAvatar)
         {
             string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
             if (File.Exists(filePath))
@@ -39,12 +39,14 @@ namespace Basis.Scripts.Common
                      avatarWrapper.loadmode = defaultData;
                 }
                 Debug.Log("Avatar loaded from " + filePath);
-                return avatarWrapper;
+                BasisSavedAvatar = avatarWrapper;
+                return true;
             }
             else
             {
                 Debug.LogWarning("File not found at " + filePath);
-                return null;
+                BasisSavedAvatar = null;
+                return false;
             }
         }
         // Method to save the string to a file using JSON
