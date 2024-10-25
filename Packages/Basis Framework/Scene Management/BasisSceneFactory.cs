@@ -57,28 +57,21 @@ public class BasisSceneFactory : MonoBehaviour
     public void LoadCameraPropertys(Camera Camera)
     {
         Camera RealCamera = BasisLocalCameraDriver.Instance.Camera;
-      //  RealCamera.useOcclusionCulling = Camera.useOcclusionCulling;
+        RealCamera.useOcclusionCulling = Camera.useOcclusionCulling;
         RealCamera.backgroundColor = Camera.backgroundColor;
         RealCamera.barrelClipping = Camera.barrelClipping;
-      //  RealCamera.usePhysicalProperties = Camera.usePhysicalProperties;
-      //  RealCamera.farClipPlane = Camera.farClipPlane;
-      //  RealCamera.nearClipPlane = Camera.nearClipPlane;
+        RealCamera.usePhysicalProperties = Camera.usePhysicalProperties;
+        RealCamera.farClipPlane = Camera.farClipPlane;
+        RealCamera.nearClipPlane = Camera.nearClipPlane;
 
         if (Camera.TryGetComponent(out UniversalAdditionalCameraData AdditionalCameraData))
         {
             UniversalAdditionalCameraData Data = BasisLocalCameraDriver.Instance.CameraData;
-         //   Data.renderPostProcessing = AdditionalCameraData.renderPostProcessing;
 
-         //   Data.requiresColorOption = AdditionalCameraData.requiresColorOption;
-         //   Data.requiresColorTexture = AdditionalCameraData.requiresColorTexture;
-
-         //   Data.requiresDepthOption = AdditionalCameraData.requiresDepthOption;
-         //   Data.requiresDepthTexture = AdditionalCameraData.requiresDepthTexture;
-
-            Data.stopNaN = AdditionalCameraData.stopNaN;
+           Data.stopNaN = AdditionalCameraData.stopNaN;
             Data.dithering = AdditionalCameraData.dithering;
 
-            Data.volumeTrigger = AdditionalCameraData.volumeTrigger;
+           Data.volumeTrigger = AdditionalCameraData.volumeTrigger;
         }
     }
     public void AttachMixerToAllSceneAudioSources()

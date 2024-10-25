@@ -9,7 +9,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 manager = SettingsManager.Instance;
             }
-
+            /*
             if (NameReturn(0, option))
             {
                 SettingsManagerDropDown.Clear(manager, option.OptionIndex);
@@ -39,6 +39,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                     }
                 }
             }
+            */
         }
     }
 }
