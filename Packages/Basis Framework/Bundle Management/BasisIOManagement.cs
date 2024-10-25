@@ -17,7 +17,7 @@ public static class BasisIOManagement
     /// <param name="progressCallback"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task DownloadFile(string url, string localFilePath, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken = default)
+    public static async Task DownloadFile(string url, string localFilePath, BasisProgressReport progressCallback, CancellationToken cancellationToken = default)
     {
         Debug.Log($"Starting file download from {url}");
 
@@ -62,7 +62,7 @@ public static class BasisIOManagement
                 }
 
                 // Report progress (0% to 100%)
-                progressCallback?.Invoke(asyncOperation.webRequest.downloadProgress * 100);
+                progressCallback.ReportProgress(asyncOperation.webRequest.downloadProgress * 100);
                // Debug.Log("downloading file " + asyncOperation.webRequest.downloadProgress);
                 await Task.Yield();
             }
@@ -84,7 +84,7 @@ public static class BasisIOManagement
             Debug.Log($"Successfully downloaded file from {url} to {localFilePath}");
         }
     }
-    public static async Task<byte[]> LoadLocalFile(string filePath, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken = default)
+    public static async Task<byte[]> LoadLocalFile(string filePath, BasisProgressReport progressCallback, CancellationToken cancellationToken = default)
     {
         Debug.Log($"Starting file load from {filePath}");
 
@@ -125,7 +125,7 @@ public static class BasisIOManagement
         return fileData;
     }
 
-    private static async Task WriteToFileAsync(string filePath, byte[] data, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    private static async Task WriteToFileAsync(string filePath, byte[] data, BasisProgressReport progressCallback, CancellationToken cancellationToken)
     {
         // Ensure the directory exists
         string directory = Path.GetDirectoryName(filePath);
@@ -161,7 +161,7 @@ public static class BasisIOManagement
         });
     }
 
-    public static async Task<bool> CopyFileAsync(string sourceFilePath, string destinationFilePath, BasisProgressReport.ProgressReport Report, CancellationToken cancellationToken = default)
+    public static async Task<bool> CopyFileAsync(string sourceFilePath, string destinationFilePath, BasisProgressReport Report, CancellationToken cancellationToken = default)
     {
         if (!File.Exists(sourceFilePath))
         {
@@ -189,7 +189,7 @@ public static class BasisIOManagement
 
                     // Calculate and report progress
                     float progress = (float)totalBytesCopied / totalBytes;
-                    Report?.Invoke(progress * 100);
+                    Report.ReportProgress(progress * 100);
 
                     // Allow other tasks to run
                     await Task.Yield();

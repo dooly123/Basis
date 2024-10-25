@@ -28,11 +28,11 @@ namespace Basis.Scripts.UI.NamePlate
             MouthTarget = BasisRemotePlayer.MouthControl;
             LocalCameraDriver = BasisLocalCameraDriver.Instance.transform;
             Text.text = BasisRemotePlayer.DisplayName;
-            BasisRemotePlayer.ProgressReportAvatarLoad += ProgresReport;
+            BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressReport += ProgresReport;
         }
         public void OnDestroy()
         {
-            BasisRemotePlayer.ProgressReportAvatarLoad -= ProgresReport;
+            BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressReport -= ProgresReport;
         }
         public void ProgresReport(float progress)
         {

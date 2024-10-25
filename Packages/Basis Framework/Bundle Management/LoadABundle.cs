@@ -2,7 +2,7 @@ using System.Threading;
 using UnityEngine;
 public class LoadABundle : MonoBehaviour
 {
-    public BasisProgressReport.ProgressReport Report;
+    public BasisProgressReport Report = new BasisProgressReport();
     public CancellationToken CancellationToken = new CancellationToken();
     public BasisLoadableBundle BasisLoadableBundle;
     public bool UseCondom = false;

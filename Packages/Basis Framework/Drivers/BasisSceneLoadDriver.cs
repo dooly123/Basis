@@ -5,12 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using static BasisProgressReport;
 namespace Basis.Scripts.Drivers
 {
     public static class BasisSceneLoadDriver
     {
-        public static ProgressReport progressCallback;
+        public static BasisProgressReport progressCallback = new BasisProgressReport();
         /// <summary>
         /// local but can be used remote
         /// </summary>

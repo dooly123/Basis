@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class BasisEncryptionToData
 {
-    public static async Task<AssetBundleCreateRequest> GenerateBundleFromFile(string Password, string FilePath, uint CRC, BasisProgressReport.ProgressReport progressCallback)
+    public static async Task<AssetBundleCreateRequest> GenerateBundleFromFile(string Password, string FilePath, uint CRC, BasisProgressReport progressCallback)
     {
         // Define the password object for decryption
         var BasisPassword = new BasisEncryptionWrapper.BasisPassword
@@ -33,7 +33,7 @@ public static class BasisEncryptionToData
                 lastReportedProgress = progress;
 
                 // Call the progress callback with the current progress
-                progressCallback?.Invoke(progress);
+                progressCallback.ReportProgress(progress);
             }
 
             // Wait a short period before checking again to avoid busy waiting
@@ -41,14 +41,14 @@ public static class BasisEncryptionToData
         }
 
         // Ensure progress reaches 100% after completion
-        progressCallback?.Invoke(100);
+        progressCallback.ReportProgress(100);
 
         // Await the request completion
         await assetBundleCreateRequest;
 
         return assetBundleCreateRequest;
     }
-    public static async Task<BasisLoadableBundle> GenerateMetaFromFile(BasisLoadableBundle BasisLoadableBundle, string FilePath, BasisProgressReport.ProgressReport progressCallback)
+    public static async Task<BasisLoadableBundle> GenerateMetaFromFile(BasisLoadableBundle BasisLoadableBundle, string FilePath, BasisProgressReport progressCallback)
     {
         var BasisPassword = new BasisEncryptionWrapper.BasisPassword
         {

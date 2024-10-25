@@ -23,7 +23,7 @@ public static class BasisLoadHandler
         await EnsureInitializationComplete();
     }
 
-    public static async Task<GameObject> LoadGameObjectBundle(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    public static async Task<GameObject> LoadGameObjectBundle(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken)
     {
         await EnsureInitializationComplete();
 
@@ -45,7 +45,7 @@ public static class BasisLoadHandler
         return await HandleFirstBundleLoad(loadableBundle, useContentRemoval, report, cancellationToken);
     }
 
-    public static async Task LoadSceneBundle(bool makeActiveScene, BasisLoadableBundle loadableBundle, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    public static async Task LoadSceneBundle(bool makeActiveScene, BasisLoadableBundle loadableBundle, BasisProgressReport report, CancellationToken cancellationToken)
     {
         await EnsureInitializationComplete();
 
@@ -59,7 +59,7 @@ public static class BasisLoadHandler
         await HandleFirstSceneLoad(loadableBundle, makeActiveScene, report, cancellationToken);
     }
 
-    private static async Task HandleFirstSceneLoad(BasisLoadableBundle loadableBundle, bool makeActiveScene, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    private static async Task HandleFirstSceneLoad(BasisLoadableBundle loadableBundle, bool makeActiveScene, BasisProgressReport report, CancellationToken cancellationToken)
     {
         BasisTrackedBundleWrapper wrapper = new BasisTrackedBundleWrapper { AssetBundle = null, LoadableBundle = loadableBundle };
 
@@ -73,7 +73,7 @@ public static class BasisLoadHandler
         await BasisBundleLoadAsset.LoadSceneFromBundleAsync(wrapper, makeActiveScene, report);
     }
 
-    private static async Task<GameObject> HandleFirstBundleLoad(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    private static async Task<GameObject> HandleFirstBundleLoad(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken)
     {
         BasisTrackedBundleWrapper wrapper = new BasisTrackedBundleWrapper 
         { 
@@ -102,7 +102,7 @@ public static class BasisLoadHandler
         }
     }
 
-    public static async Task HandleBundleAndMetaLoading(BasisTrackedBundleWrapper wrapper, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    public static async Task HandleBundleAndMetaLoading(BasisTrackedBundleWrapper wrapper, BasisProgressReport report, CancellationToken cancellationToken)
     {
         bool IsMetaOnDisc = IsMetaDataOnDisc(wrapper.LoadableBundle.BasisRemoteBundleEncrypted.MetaURL, out OnDiscInformation MetaInfo);
         bool IsBundleOnDisc = IsBundleDataOnDisc(wrapper.LoadableBundle.BasisRemoteBundleEncrypted.BundleURL, out OnDiscInformation BundleInfo);
@@ -147,7 +147,7 @@ public static class BasisLoadHandler
             await AddDiscInfo(newDiscInfo);
         }
     }
-    public static async Task HandleMetaLoading(BasisTrackedBundleWrapper wrapper, BasisProgressReport.ProgressReport report, CancellationToken cancellationToken)
+    public static async Task HandleMetaLoading(BasisTrackedBundleWrapper wrapper, BasisProgressReport report, CancellationToken cancellationToken)
     {
         bool isOnDisc = IsMetaDataOnDisc(wrapper.LoadableBundle.BasisRemoteBundleEncrypted.MetaURL, out OnDiscInformation discInfo);
 

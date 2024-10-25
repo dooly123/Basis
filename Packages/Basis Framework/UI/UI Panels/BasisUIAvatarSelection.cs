@@ -22,7 +22,7 @@ namespace Basis.Scripts.UI.UI_Panels
         [SerializeField] public TMP_InputField PasswordField;
 
         [SerializeField] public Button AddAvatarApply;
-        [SerializeField] public BasisProgressReport.ProgressReport Report;
+        [SerializeField] public BasisProgressReport Report = new BasisProgressReport();
         [SerializeField]
         public List<BasisLoadableBundle> avatarUrlsRuntime = new List<BasisLoadableBundle>();
         [SerializeField]

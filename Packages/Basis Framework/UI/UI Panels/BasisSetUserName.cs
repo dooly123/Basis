@@ -52,7 +52,7 @@ namespace Basis.Scripts.UI.UI_Panels
                 AdvancedSettings.onClick.AddListener(ToggleAdvancedSettings);
                 UseLocalhost.onClick.AddListener(UseLocalHost);
             }
-            BasisSceneLoadDriver.progressCallback += ProgresReport;
+            BasisSceneLoadDriver.progressCallback.OnProgressReport += ProgresReport;
             BasisNetworkManagement.OnEnableInstanceCreate += LoadCurrentSettings;
         }
 
@@ -75,7 +75,7 @@ namespace Basis.Scripts.UI.UI_Panels
                 AdvancedSettings.onClick.RemoveListener(ToggleAdvancedSettings);
                 UseLocalhost.onClick.RemoveListener(UseLocalHost);
             }
-            BasisSceneLoadDriver.progressCallback -= ProgresReport;
+            BasisSceneLoadDriver.progressCallback.OnProgressReport -= ProgresReport;
         }
 
         private void ProgresReport(float progress)

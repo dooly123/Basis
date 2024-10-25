@@ -122,7 +122,7 @@ public static class AssetBundleBuilder
         public Hash128 bundleHash;
         public uint CRC;
     }
-    private static BasisProgressReport.ProgressReport Report;
+    private static BasisProgressReport Report = new BasisProgressReport();
     // Method to encrypt a file using a password
     public static async Task<string> EncryptBundle(string password, string actualFilePath, BasisAssetBundleObject buildSettings, AssetBundleManifest assetBundleManifest)
     {
@@ -147,10 +147,7 @@ public static class AssetBundleBuilder
         {
             VP = password
         };
-        await BasisEncryptionWrapper.EncryptFileAsync(BasisPassword, actualFilePath, EncryptedPath, (progress) =>
-        {
-            Debug.Log($"Progress: {progress}%");
-        });
+        await BasisEncryptionWrapper.EncryptFileAsync(BasisPassword, actualFilePath, EncryptedPath, Report);
         encryptionTimer.Stop();
         Debug.Log("Encryption took " + encryptionTimer.ElapsedMilliseconds + " ms for " + EncryptedPath);
         return EncryptedPath;

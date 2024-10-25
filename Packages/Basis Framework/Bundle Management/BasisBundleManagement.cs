@@ -12,8 +12,8 @@ public static class BasisBundleManagement
     public static string LockedBundlesFolder = "LockedBundles";
 
     // Dictionary to track ongoing downloads keyed by MetaURL
-    public static BasisProgressReport.ProgressReport FindAllBundlesReport;
-    public static async Task DownloadStoreMetaAndBundle(BasisTrackedBundleWrapper BasisTrackedBundleWrapper, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    public static BasisProgressReport FindAllBundlesReport = new BasisProgressReport();
+    public static async Task DownloadStoreMetaAndBundle(BasisTrackedBundleWrapper BasisTrackedBundleWrapper, BasisProgressReport progressCallback, CancellationToken cancellationToken)
     {
         if (BasisTrackedBundleWrapper == null)
         {
@@ -142,7 +142,7 @@ public static class BasisBundleManagement
             BasisTrackedBundleWrapper.LoadableBundle.BasisBundleInformation.HasError = true;
         }
     }
-    public static async Task DownloadAndSaveMetaFile(BasisTrackedBundleWrapper BasisTrackedBundleWrapper, BasisProgressReport.ProgressReport progressCallback, CancellationToken cancellationToken)
+    public static async Task DownloadAndSaveMetaFile(BasisTrackedBundleWrapper BasisTrackedBundleWrapper, BasisProgressReport progressCallback, CancellationToken cancellationToken)
     {
         if (BasisTrackedBundleWrapper == null)
         {
@@ -240,7 +240,7 @@ public static class BasisBundleManagement
             BasisTrackedBundleWrapper.LoadableBundle.BasisBundleInformation.HasError = true;
         }
     }
-    public static async Task ProcessOnDiscMetaDataAsync(BasisTrackedBundleWrapper basisTrackedBundleWrapper, BasisStoredEncyptedBundle BasisStoredEncyptedBundle,BasisProgressReport.ProgressReport progressCallback,CancellationToken cancellationToken)
+    public static async Task ProcessOnDiscMetaDataAsync(BasisTrackedBundleWrapper basisTrackedBundleWrapper, BasisStoredEncyptedBundle BasisStoredEncyptedBundle,BasisProgressReport progressCallback,CancellationToken cancellationToken)
     {
         // Log entry point
         Debug.Log("Starting DataOnDiscProcessMeta method...");

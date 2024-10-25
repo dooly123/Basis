@@ -10,23 +10,23 @@ public static class BasisEncryptionWrapper
     private const int SaltSize = 16; // Size of the salt in bytes
     private const int KeySize = 32; // Size of the key in bytes (256 bits)
     private const int IvSize = 16; // Size of the IV in bytes (128 bits)
-    public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, BasisPassword password, ProgressReport reportProgress = null)
+    public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, BasisPassword password, BasisProgressReport reportProgress = null)
     {
-        reportProgress?.Invoke(0f);
+        reportProgress.ReportProgress(0f);
         var encryptedData = await Task.Run(() => Encrypt(password, dataToEncrypt, reportProgress)); // Run encryption on a separate thread
-        reportProgress?.Invoke(100f);
+        reportProgress.ReportProgress(100f);
         return encryptedData;
     }
 
-    public static async Task<byte[]> DecryptDataAsync(byte[] dataToDecrypt, BasisPassword password, ProgressReport reportProgress = null)
+    public static async Task<byte[]> DecryptDataAsync(byte[] dataToDecrypt, BasisPassword password, BasisProgressReport reportProgress = null)
     {
-        reportProgress?.Invoke(0f);
+        reportProgress.ReportProgress(0f);
         var decryptedData = await Task.Run(() => Decrypt(password.VP, dataToDecrypt, reportProgress)); // Run decryption on a separate thread
-        reportProgress?.Invoke(100f);
+        reportProgress.ReportProgress(100f);
         return decryptedData.Item1;
     }
 
-    private static byte[] Encrypt(BasisPassword password, byte[] dataToEncrypt, ProgressReport reportProgress = null)
+    private static byte[] Encrypt(BasisPassword password, byte[] dataToEncrypt, BasisProgressReport reportProgress = null)
     {
         byte[] salt = new byte[SaltSize];
         using (var rng = new RNGCryptoServiceProvider())
@@ -34,7 +34,7 @@ public static class BasisEncryptionWrapper
             rng.GetBytes(salt); // Fill the salt with random bytes
         }
 
-        reportProgress?.Invoke(10f);
+        reportProgress.ReportProgress(10f);
 
         using (var key = new Rfc2898DeriveBytes(password.VP, salt, 10000))
         {
@@ -45,7 +45,7 @@ public static class BasisEncryptionWrapper
                 rng.GetBytes(iv); // Generate a random IV
             }
 
-            reportProgress?.Invoke(20f);
+            reportProgress.ReportProgress(20f);
 
             using (var aes = Aes.Create())
             {
@@ -63,7 +63,7 @@ public static class BasisEncryptionWrapper
                         cryptoStream.Write(dataToEncrypt, 0, dataToEncrypt.Length);
                     }
 
-                    reportProgress?.Invoke(90f);
+                    reportProgress.ReportProgress(90f);
 
                     // Get the encrypted data from the memory stream
                     return msEncrypt.ToArray();
@@ -72,7 +72,7 @@ public static class BasisEncryptionWrapper
         }
     }
 
-    private static (byte[], byte[], byte[]) Decrypt(string password, byte[] dataToDecrypt, ProgressReport reportProgress = null)
+    private static (byte[], byte[], byte[]) Decrypt(string password, byte[] dataToDecrypt, BasisProgressReport reportProgress = null)
     {
         if (dataToDecrypt == null || dataToDecrypt.Length == 0)
         {
@@ -80,7 +80,7 @@ public static class BasisEncryptionWrapper
             return new(null, null, null);
         }
 
-        reportProgress?.Invoke(10f);
+        reportProgress.ReportProgress(10f);
 
         using (var msDecrypt = new MemoryStream(dataToDecrypt))
         {
@@ -91,7 +91,7 @@ public static class BasisEncryptionWrapper
             byte[] iv = new byte[IvSize];
             msDecrypt.Read(iv, 0, IvSize);
 
-            reportProgress?.Invoke(20f);
+            reportProgress.ReportProgress(20f);
 
             // Generate the key using the password and salt
             using (var key = new Rfc2898DeriveBytes(password, salt, 10000))
@@ -110,7 +110,7 @@ public static class BasisEncryptionWrapper
                         {
                             cryptoStream.CopyTo(msOutput);
                             byte[] output = msOutput.ToArray();
-                            reportProgress?.Invoke(90f);
+                            reportProgress.ReportProgress(90f);
 
                             return (output, salt, iv);
                         }
@@ -120,9 +120,9 @@ public static class BasisEncryptionWrapper
         }
     }
 
-    public static async Task ReadFileAsync(string filePath, Func<byte[], Task> processChunk, ProgressReport reportProgress = null, int bufferSize = 4194304)
+    public static async Task ReadFileAsync(string filePath, Func<byte[], Task> processChunk, BasisProgressReport reportProgress = null, int bufferSize = 4194304)
     {
-        reportProgress?.Invoke(0f);
+        reportProgress.ReportProgress(0f);
         var fileSize = new FileInfo(filePath).Length;
         var buffer = new byte[bufferSize];
         long totalRead = 0;
@@ -134,15 +134,15 @@ public static class BasisEncryptionWrapper
             {
                 totalRead += bytesRead;
                 await processChunk(buffer[..bytesRead]);
-                reportProgress?.Invoke((float)totalRead / fileSize * 100f);
+                reportProgress.ReportProgress((float)totalRead / fileSize * 100f);
             }
         }
-        reportProgress?.Invoke(100f);
+        reportProgress.ReportProgress(100f);
     }
 
-    public static async Task WriteFileAsync(string filePath, byte[] data, FileMode fileMode, ProgressReport reportProgress = null, int bufferSize = 4194304)
+    public static async Task WriteFileAsync(string filePath, byte[] data, FileMode fileMode, BasisProgressReport reportProgress = null, int bufferSize = 4194304)
     {
-        reportProgress?.Invoke(0f);
+        reportProgress.ReportProgress(0f);
         long totalWritten = 0;
 
         using (var fs = new FileStream(filePath, fileMode, FileAccess.Write, FileShare.None, bufferSize, useAsync: true))
@@ -156,12 +156,12 @@ public static class BasisEncryptionWrapper
                 offset += bytesToWrite;
 
                 // Report progress periodically
-                reportProgress?.Invoke((float)totalWritten / data.Length * 100f);
+                reportProgress.ReportProgress((float)totalWritten / data.Length * 100f);
             }
         }
 
         // Report 100% completion
-        reportProgress?.Invoke(100f);
+        reportProgress.ReportProgress(100f);
     }
 
     public struct BasisPassword
@@ -169,14 +169,14 @@ public static class BasisEncryptionWrapper
         public string VP;
     }
 
-    public static async Task EncryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress, int bufferSize = 4194304)
+    public static async Task EncryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, BasisProgressReport reportProgress, int bufferSize = 4194304)
     {
         byte[] dataToEncrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
         var encryptedData = await EncryptDataAsync(dataToEncrypt, password, reportProgress);
         await WriteFileAsync(outputFilePath, encryptedData, FileMode.Create, reportProgress, bufferSize);
     }
 
-    public static async Task DecryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, ProgressReport reportProgress, int bufferSize = 4194304)
+    public static async Task DecryptFileAsync(BasisPassword password, string inputFilePath, string outputFilePath, BasisProgressReport reportProgress, int bufferSize = 4194304)
     {
         byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress);
         if (dataToDecrypt == null || dataToDecrypt.Length == 0)
@@ -187,7 +187,7 @@ public static class BasisEncryptionWrapper
         await WriteFileAsync(outputFilePath, decryptedData, FileMode.Create, reportProgress,bufferSize);
     }
 
-    public static async Task<byte[]> DecryptFileAsync(BasisPassword password, string inputFilePath, ProgressReport reportProgress, int bufferSize = 4194304)
+    public static async Task<byte[]> DecryptFileAsync(BasisPassword password, string inputFilePath, BasisProgressReport reportProgress, int bufferSize = 4194304)
     {
         byte[] dataToDecrypt = await ReadAllBytesAsync(inputFilePath, reportProgress, bufferSize);
         if (dataToDecrypt == null || dataToDecrypt.Length == 0)
@@ -199,9 +199,9 @@ public static class BasisEncryptionWrapper
         return decryptedData;
     }
 
-    private static async Task<byte[]> ReadAllBytesAsync(string filePath, ProgressReport reportProgress, int bufferSize = 4194304) // Default 4MB buffer size
+    private static async Task<byte[]> ReadAllBytesAsync(string filePath, BasisProgressReport reportProgress, int bufferSize = 4194304) // Default 4MB buffer size
     {
-        reportProgress?.Invoke(0f);
+        reportProgress.ReportProgress(0f);
 
         var fileInfo = new FileInfo(filePath);
         byte[] data = new byte[fileInfo.Length];
@@ -216,11 +216,11 @@ public static class BasisEncryptionWrapper
             {
                 Buffer.BlockCopy(buffer, 0, data, totalRead, bytesRead);
                 totalRead += bytesRead;
-                reportProgress?.Invoke((float)totalRead / fileInfo.Length * 100f);
+                reportProgress.ReportProgress((float)totalRead / fileInfo.Length * 100f);
             }
         }
 
-        reportProgress?.Invoke(100f);
+        reportProgress.ReportProgress(100f);
         return data;
     }
 }

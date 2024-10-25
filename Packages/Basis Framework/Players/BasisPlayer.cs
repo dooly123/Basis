@@ -4,7 +4,6 @@ using Basis.Scripts.Drivers;
 using System;
 using System.Threading;
 using UnityEngine;
-using static BasisProgressReport;
 namespace Basis.Scripts.BasisSdk.Players
 {
     public abstract partial class BasisPlayer : MonoBehaviour
@@ -18,7 +17,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public bool HasAvatarDriver;
         public event Action OnAvatarSwitched;
         public event Action OnAvatarSwitchedFallBack;
-        public ProgressReport ProgressReportAvatarLoad;
+        public BasisProgressReport ProgressReportAvatarLoad = new BasisProgressReport();
         public const byte LoadModeNetworkDownloadable = 0;
         public const byte LoadModeLocal = 1;
         public const byte LoadModeError = 2;
@@ -27,7 +26,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public CancellationToken CurrentAvatarsCancellationToken;
         public byte AvatarLoadMode;//0 downloading 1 local
 
-        public ProgressReport AvatarProgress;
+        public BasisProgressReport AvatarProgress = new BasisProgressReport();
         public CancellationToken CancellationToken;
         public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
         public void InitalizeIKCalibration(BasisAvatarDriver BasisAvatarDriver)

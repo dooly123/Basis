@@ -9,8 +9,6 @@ using UnityEditor;
 
 namespace JigglePhysics
 {
-
-[CreateAssetMenu(fileName = "JiggleSettings", menuName = "JigglePhysics/Settings", order = 1)]
 public class JiggleSettings : JiggleSettingsBase {
     [SerializeField] [Range(0f,2f)] [Tooltip("How much gravity to apply to the simulation, it is a multiplier of the Physics.gravity setting.")]
     private float gravityMultiplier = 1f;
