@@ -8,33 +8,29 @@ namespace Basis.Scripts.UI.UI_Panels
 {
     public static class BasisDataStoreAvatarKeys
     {
-        // The AvatarKey class stores the URL and Pass fields
         [System.Serializable]
         public class AvatarKey
         {
             public string Url;
             public string Pass;
         }
+        public static string FilePath = Path.Combine(Application.persistentDataPath, "VerySafePasswordStore.json");
 
-        // File path to store the keys, now using Unity's persistentDataPath
-        private static string FilePath => Path.Combine(Application.persistentDataPath, "VerySafePasswordStore.json");
-
-        // A list to keep password keys in memory
         [SerializeField]
         private static List<AvatarKey> keys = new List<AvatarKey>();
 
-        // Add a new key to the list and save to disk
         public static async Task AddNewKey(AvatarKey newKey)
         {
-            keys.Add(newKey);
-            await SaveKeysToFile();
-            Debug.Log($"Key added: {newKey}");
+            if (keys.Contains(newKey) == false)
+            {
+                keys.Add(newKey);
+                await SaveKeysToFile();
+                Debug.Log($"Key added: {newKey}");
+            }
         }
 
-        // Remove a key from the list and save changes to disk
         public static async Task RemoveKey(AvatarKey keyToRemove)
         {
-            // Find key by matching Url and Pass
             var key = keys.Find(k => k.Url == keyToRemove.Url && k.Pass == keyToRemove.Pass);
             if (key != null)
             {
@@ -48,15 +44,21 @@ namespace Basis.Scripts.UI.UI_Panels
             }
         }
 
-        // Load keys from the file into memory
         public static async Task LoadKeys()
         {
+            Debug.Log($"Loading keys from file at path: {FilePath}");
             if (File.Exists(FilePath))
             {
-                // Read the JSON from the file and deserialize into the keys list
-                byte[] ByteData = await File.ReadAllBytesAsync(FilePath);
-                keys = SerializationUtility.DeserializeValue<List<AvatarKey>>(ByteData, DataFormat.Binary);
-                Debug.Log("Keys loaded from file. with a count of " + keys.Count);
+                try
+                {
+                    byte[] byteData = await File.ReadAllBytesAsync(FilePath);
+                    keys = SerializationUtility.DeserializeValue<List<AvatarKey>>(byteData, DataFormat.Binary);
+                    Debug.Log("Keys loaded successfully. Count: " + keys.Count);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"Failed to load keys: {e.Message}");
+                }
             }
             else
             {
@@ -64,16 +66,20 @@ namespace Basis.Scripts.UI.UI_Panels
             }
         }
 
-        // Save the current keys to a JSON file
         private static async Task SaveKeysToFile()
         {
-            // Serialize the keys list to a JSON string and write to file
-            byte[] ByteData = SerializationUtility.SerializeValue<List<AvatarKey>>(keys, DataFormat.Binary);
-            await File.WriteAllBytesAsync(FilePath, ByteData);
-            Debug.Log($"Keys saved to file at: {FilePath}");
+            try
+            {
+                byte[] byteData = SerializationUtility.SerializeValue<List<AvatarKey>>(keys, DataFormat.Binary);
+                await File.WriteAllBytesAsync(FilePath, byteData);
+                Debug.Log($"Keys saved to file at: {FilePath}");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to save keys: {e.Message}");
+            }
         }
 
-        // Display all stored keys
         public static List<AvatarKey> DisplayKeys()
         {
             return keys;

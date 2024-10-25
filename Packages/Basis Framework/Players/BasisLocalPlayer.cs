@@ -113,16 +113,16 @@ namespace Basis.Scripts.BasisSdk.Players
                                 UnlockPassword = Key.Pass
                             };
                             Debug.Log("loading previously loaded avatar");
-                            await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
+                            await CreateAvatar(LastUsedAvatar.loadmode, bundle);
                             return;
                         }
                     }
-                    Debug.Log("no key found to load but was found on disc");
+                    Debug.Log("failed to load last used : no key found to load but was found on disc");
                     await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
                 }
                 else
                 {
-                    Debug.Log("url was not found on disc");
+                    Debug.Log("failed to load last used : url was not found on disc");
                     await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
                 }
             }

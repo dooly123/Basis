@@ -2,8 +2,6 @@ using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
-
 namespace Basis.Scripts.Common
 {
     public static class BasisDataStore
@@ -20,9 +18,11 @@ namespace Basis.Scripts.Common
         public class BasisSavedAvatar
         {
             public string UniqueID;//this is associated with a ID on Disc
+            public byte loadmode;
             public BasisSavedAvatar(string name, byte data)
             {
                 UniqueID = name;
+                 loadmode = data;
             }
         }
         // Method to load the avatar (string and byte) from a file using JSON
@@ -36,6 +36,7 @@ namespace Basis.Scripts.Common
                 if (string.IsNullOrEmpty(avatarWrapper.UniqueID))
                 {
                     avatarWrapper.UniqueID = defaultName;
+                     avatarWrapper.loadmode = defaultData;
                 }
                 Debug.Log("Avatar loaded from " + filePath);
                 return avatarWrapper;
@@ -204,10 +205,6 @@ namespace Basis.Scripts.Common
             {
                 return UrlList;
             }
-        }
-        public struct BasisSavedContent
-        {
-
         }
     }
 }

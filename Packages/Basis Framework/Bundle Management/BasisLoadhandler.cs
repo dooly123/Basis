@@ -135,7 +135,7 @@ public static class BasisLoadHandler
 
         wrapper.AssetBundle = bundleRequest.assetBundle;
 
-        if (IsMetaOnDisc == false)
+        if (IsMetaOnDisc == false || IsBundleOnDisc == false)
         {
             OnDiscInformation newDiscInfo = new OnDiscInformation
             {
