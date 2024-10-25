@@ -220,6 +220,17 @@ MonoBehaviour:
   basisLocalPlayer: {fileID: 0}
   Input: {fileID: 4506459589283058818}
   HasEvents: 0
+  IgnoreCrouchToggle: 0
+  InputState:
+    gripButton: 0
+    menuButton: 0
+    primaryButtonGetState: 0
+    secondaryButtonGetState: 0
+    secondary2DAxisClick: 0
+    primary2DAxisClick: 0
+    trigger: 0
+    primary2DAxis: {x: 0, y: 0}
+    secondary2DAxis: {x: 0, y: 0}
 --- !u!114 &2682791463296768347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -611,46 +622,6 @@ MonoBehaviour:
     SelectedValueDefault: ultra
     ValueDefault: ultra
     Explanation: Shadow Quality
-    selectedValue: ultra
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 1
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 0
-    MaxPercentage: 0
-    MinPercentage: 0
-    SliderMaxValue: 0
-    SliderMinValue: 0
-    Name: Shadow Distance
-    ValueDescriptor: Shadow Distance
-    SelectedValueDefault: ultra
-    ValueDefault: ultra
-    Explanation: Shadow Distance
     selectedValue: ultra
     Type: 1
     TextDescription: {fileID: 0}
@@ -1624,7 +1595,7 @@ MonoBehaviour:
       UserValue: Ultra
     Min: 0
     Max: 0
-  - Name: Shadow Distance
+  - Name: Texture Quality
     DefaultValue: ultra
     SelectedValue: ultra
     Index: 6
@@ -1641,27 +1612,10 @@ MonoBehaviour:
       UserValue: Ultra
     Min: 0
     Max: 0
-  - Name: Texture Quality
-    DefaultValue: ultra
-    SelectedValue: ultra
-    Index: 7
-    SelectableValueList:
-    - realValue: very low
-      UserValue: Very Low
-    - realValue: low
-      UserValue: Low
-    - realValue: medium
-      UserValue: Medium
-    - realValue: high
-      UserValue: High
-    - realValue: ultra
-      UserValue: Ultra
-    Min: 0
-    Max: 0
   - Name: Vertical Sync
     DefaultValue: on
     SelectedValue: off
-    Index: 8
+    Index: 7
     SelectableValueList:
     - realValue: on
       UserValue: On
@@ -1674,7 +1628,7 @@ MonoBehaviour:
   - Name: Volumetric Quality
     DefaultValue: ultra
     SelectedValue: ultra
-    Index: 9
+    Index: 8
     SelectableValueList:
     - realValue: very low
       UserValue: Very Low
@@ -1691,7 +1645,7 @@ MonoBehaviour:
   - Name: Memory Allocation
     DefaultValue: dynamic
     SelectedValue: dynamic
-    Index: 10
+    Index: 9
     SelectableValueList:
     - realValue: 256
       UserValue: 256
@@ -1712,7 +1666,7 @@ MonoBehaviour:
   - Name: Close Point Shadows
     DefaultValue: ultra
     SelectedValue: ultra
-    Index: 11
+    Index: 10
     SelectableValueList:
     - realValue: very low
       UserValue: Very Low
@@ -1729,7 +1683,7 @@ MonoBehaviour:
   - Name: HDR Support
     DefaultValue: true
     SelectedValue: true
-    Index: 12
+    Index: 11
     SelectableValueList:
     - realValue: true
       UserValue: true
@@ -1740,7 +1694,7 @@ MonoBehaviour:
   - Name: Terrain Quality
     DefaultValue: ultra
     SelectedValue: ultra
-    Index: 13
+    Index: 12
     SelectableValueList:
     - realValue: very low
       UserValue: Very Low
@@ -1756,8 +1710,8 @@ MonoBehaviour:
     Max: 0
   - Name: Resolution
     DefaultValue: 
-    SelectedValue: 24
-    Index: 14
+    SelectedValue: 2560x1440
+    Index: 13
     SelectableValueList:
     - realValue: 640x480
       UserValue: 640x480
@@ -1813,8 +1767,8 @@ MonoBehaviour:
     Max: 0
   - Name: ScreenMode
     DefaultValue: 
-    SelectedValue: 3
-    Index: 15
+    SelectedValue: windowed
+    Index: 14
     SelectableValueList:
     - realValue: exclusive fullscreen
       UserValue: Exclusive FullScreen
@@ -1829,7 +1783,7 @@ MonoBehaviour:
   - Name: Monitor
     DefaultValue: 
     SelectedValue: 0
-    Index: 16
+    Index: 15
     SelectableValueList:
     - realValue: 0
       UserValue: 0
@@ -1838,42 +1792,42 @@ MonoBehaviour:
   - Name: Main Audio
     DefaultValue: 1
     SelectedValue: 1
+    Index: 16
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  - Name: Menus Volume
+    DefaultValue: 50
+    SelectedValue: 70
     Index: 17
     SelectableValueList: []
     Min: 0
-    Max: 1
-  - Name: Menus Volume
+    Max: 0
+  - Name: World Volume
     DefaultValue: 50
     SelectedValue: 70
     Index: 18
     SelectableValueList: []
     Min: 0
-    Max: 80
-  - Name: World Volume
+    Max: 0
+  - Name: Player Volume
     DefaultValue: 50
     SelectedValue: 70
     Index: 19
     SelectableValueList: []
     Min: 0
-    Max: 80
-  - Name: Player Volume
-    DefaultValue: 50
-    SelectedValue: 70
-    Index: 20
-    SelectableValueList: []
-    Min: 0
-    Max: 80
+    Max: 0
   - Name: Microphone Volume
     DefaultValue: 1
     SelectedValue: 1
-    Index: 21
+    Index: 20
     SelectableValueList: []
     Min: 0
-    Max: 1
+    Max: 0
   - Name: Selected Microphone
     DefaultValue: 
-    SelectedValue: 0
-    Index: 22
+    SelectedValue: digital audio interface (valve vr radio & hmd mic)
+    Index: 21
     SelectableValueList:
     - realValue: digital audio interface (valve vr radio & hmd mic)
       UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
@@ -1894,21 +1848,21 @@ MonoBehaviour:
   - Name: Mcrophone Volume
     DefaultValue: 1
     SelectedValue: 1
-    Index: 23
+    Index: 22
     SelectableValueList: []
     Min: 0
-    Max: 1.5
+    Max: 0
   - Name: Render Resolution
     DefaultValue: 1
     SelectedValue: 1
-    Index: 24
+    Index: 23
     SelectableValueList: []
     Min: 0.25
     Max: 1.5
   - Name: UpScaler
     DefaultValue: False
     SelectedValue: auto
-    Index: 25
+    Index: 24
     SelectableValueList:
     - realValue: auto
       UserValue: Auto
@@ -1925,7 +1879,7 @@ MonoBehaviour:
   - Name: Microphone Denoiser
     DefaultValue: 
     SelectedValue: false
-    Index: 26
+    Index: 25
     SelectableValueList:
     - realValue: true
       UserValue: true
@@ -1936,14 +1890,14 @@ MonoBehaviour:
   - Name: Controller DeadZone
     DefaultValue: 0.05
     SelectedValue: 0.1
-    Index: 27
+    Index: 26
     SelectableValueList: []
     Min: 0
-    Max: 0.5
+    Max: 0
   - Name: Debug Visuals
     DefaultValue: 
     SelectedValue: false
-    Index: 28
+    Index: 27
     SelectableValueList:
     - realValue: true
       UserValue: true
@@ -2181,6 +2135,7 @@ MonoBehaviour:
     Parse: 1
     Type: 2
   Manager: {fileID: 0}
+  OnlySetScreenModeOnce: 1
 --- !u!114 &8638552490007219108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2326,26 +2281,7 @@ MonoBehaviour:
     Explanation: Shadow Quality
     Parse: 1
     Type: 1
-  - OptionName: Shadow Distance
-    Explanation: Shadow Distance
-    Parse: 1
-    Type: 1
   Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
-  VeryLowShadowQualityAdditional: 256
-  VeryLowShadowQuality: 256
-  VeryLowShadowDistance: 150
-  LowShadowQualityAdditional: 256
-  LowShadowQuality: 512
-  LowShadowDistance: 250
-  MediumShadowQualityAdditional: 512
-  mediumShadowQuality: 1024
-  MediumShadowDistance: 350
-  HighShadowQualityAdditional: 1024
-  highShadowQuality: 2048
-  HighShadowDistance: 500
-  ultraShadowQualityAdditional: 2048
-  ultraShadowQuality: 4096
-  UltraShadowDistance: 1000
 --- !u!114 &2467030893667730727
 MonoBehaviour:
   m_ObjectHideFlags: 0

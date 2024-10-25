@@ -186,9 +186,9 @@ MonoBehaviour:
   DefaultScene:
     UnlockPassword: Scene
     BasisRemoteBundleEncrypted:
-      IsLocal: 0
-      MetaURL: https://BasisFramework.b-cdn.net/Worlds/DX11/af7ca6f5-9405-4e31-b975-0d3d71e9d67c_638653237089780101.BasisEncyptedMeta
-      BundleURL: https://BasisFramework.b-cdn.net/Worlds/DX11/af7ca6f5-9405-4e31-b975-0d3d71e9d67c_638653237089780101.BasisEncyptedBundle
+      IsLocal: 1
+      MetaURL: C:\Users\doola\OneDrive\Documents\Github\Basis New World\AssetBundles\9411f2c8-bd53-46e3-bf5a-247fd8996f41_638654508971340227.BasisEncyptedMeta
+      BundleURL: C:\Users\doola\OneDrive\Documents\Github\Basis New World\AssetBundles\9411f2c8-bd53-46e3-bf5a-247fd8996f41_638654508971340227.BasisEncyptedBundle
     BasisLocalEncryptedBundle:
       LocalMetaFile: 
       LocalBundleFile: 
