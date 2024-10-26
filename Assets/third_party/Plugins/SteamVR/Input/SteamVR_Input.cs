@@ -1,12 +1,10 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using UnityEngine;
-using Valve.VR;
 using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 using Valve.Newtonsoft.Json;
 using System.Text;
 
@@ -123,7 +121,8 @@ namespace Valve.VR
         private static void FindPreinitializeMethod()
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            for (int assemblyIndex = 0; assemblyIndex < assemblies.Length; assemblyIndex++)
+            int assemblieslength = assemblies.Length;
+            for (int assemblyIndex = 0; assemblyIndex < assemblieslength; assemblyIndex++)
             {
                 Assembly assembly = assemblies[assemblyIndex];
                 Type type = assembly.GetType(SteamVR_Input_Generator_Names.fullActionsClassName);
@@ -162,14 +161,14 @@ namespace Valve.VR
 
             SteamVR_ActionSet_Manager.Initialize();
             SteamVR_Input_Source.Initialize();
-
-            for (int actionIndex = 0; actionIndex < actions.Length; actionIndex++)
+            int actionsLength = actions.Length;
+            for (int actionIndex = 0; actionIndex < actionsLength; actionIndex++)
             {
                 SteamVR_Action action = actions[actionIndex];
                 action.Initialize(true);
             }
-
-            for (int actionSetIndex = 0; actionSetIndex < actionSets.Length; actionSetIndex++)
+            int actionsetsLength = actionSets.Length;
+            for (int actionSetIndex = 0; actionSetIndex < actionsetsLength; actionSetIndex++)
             {
                 SteamVR_ActionSet set = actionSets[actionSetIndex];
                 set.Initialize(true);
@@ -177,8 +176,10 @@ namespace Valve.VR
 
             if (SteamVR_Settings.instance.activateFirstActionSetOnStart)
             {
-                if (actionSets.Length > 0)
+                if (actionSets.Length != 0)
+                {
                     actionSets[0].Activate();
+                }
                 else
                 {
                     Debug.LogError("<b>[SteamVR]</b> No action sets to activate.");
@@ -194,7 +195,8 @@ namespace Valve.VR
 
         public static void PreinitializeFinishActionSets()
         {
-            for (int actionSetIndex = 0; actionSetIndex < actionSets.Length; actionSetIndex++)
+            int ActionsetLength = actionSets.Length;
+            for (int actionSetIndex = 0; actionSetIndex < ActionsetLength; actionSetIndex++)
             {
                 SteamVR_ActionSet actionSet = actionSets[actionSetIndex];
                 actionSet.FinishPreInitialize();
@@ -206,8 +208,9 @@ namespace Valve.VR
             actionSetsByPath.Clear();
             actionSetsByPathLowered.Clear();
             actionSetsByPathCache.Clear();
+            int ActionsetLength = actionSets.Length;
 
-            for (int actionSetIndex = 0; actionSetIndex < actionSets.Length; actionSetIndex++)
+            for (int actionSetIndex = 0; actionSetIndex < ActionsetLength; actionSetIndex++)
             {
                 SteamVR_ActionSet actionSet = actionSets[actionSetIndex];
                 actionSetsByPath.Add(actionSet.fullPath, actionSet);
@@ -220,8 +223,8 @@ namespace Valve.VR
             actionsByPath.Clear();
             actionsByPathLowered.Clear();
             actionsByPathCache.Clear();
-
-            for (int actionIndex = 0; actionIndex < actions.Length; actionIndex++)
+            int ActionLength = actions.Length;
+            for (int actionIndex = 0; actionIndex < ActionLength; actionIndex++)
             {
                 SteamVR_Action action = actions[actionIndex];
                 actionsByPath.Add(action.fullPath, action);
@@ -264,8 +267,8 @@ namespace Valve.VR
         {
             if (initialized == false)
                 return;
-
-            for (int actionIndex = 0; actionIndex < actionsPose.Length; actionIndex++)
+            int actionsPoseLength = actionsPose.Length;
+            for (int actionIndex = 0; actionIndex < actionsPoseLength; actionIndex++)
             {
                 SteamVR_Action_Pose action = actionsPose[actionIndex];
                 action.UpdateValues(skipSendingEvents);
@@ -285,7 +288,8 @@ namespace Valve.VR
             if (initialized == false)
                 return;
 
-            for (int actionIndex = 0; actionIndex < actionsSkeleton.Length; actionIndex++)
+            int actionsSkeletonLength = actionsSkeleton.Length;
+            for (int actionIndex = 0; actionIndex < actionsSkeletonLength; actionIndex++)
             {
                 SteamVR_Action_Skeleton action = actionsSkeleton[actionIndex];
 
@@ -306,8 +310,8 @@ namespace Valve.VR
                 return;
 
             SteamVR_ActionSet_Manager.UpdateActionStates();
-
-            for (int actionIndex = 0; actionIndex < actionsNonPoseNonSkeletonIn.Length; actionIndex++)
+            int ActionLength = actionsNonPoseNonSkeletonIn.Length;
+            for (int actionIndex = 0; actionIndex < ActionLength; actionIndex++)
             {
                 ISteamVR_Action_In action = actionsNonPoseNonSkeletonIn[actionIndex];
 

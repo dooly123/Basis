@@ -44,9 +44,12 @@ namespace Valve.VR
         }
 
         private EVRScreenshotType[] screenshotTypes = new EVRScreenshotType[] { EVRScreenshotType.StereoPanorama };
-
+        public VREvent_t vrEvent;
+        public uint size;
         private void OnEnable()
         {
+            vrEvent = new VREvent_t();
+            size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VREvent_t));
             StartCoroutine(RenderLoop());
             SteamVR_Events.InputFocus.Listen(OnInputFocus);
             SteamVR_Events.System(EVREventType.VREvent_RequestScreenshot).Listen(OnRequestScreenshot);
@@ -70,18 +73,6 @@ namespace Valve.VR
             if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
                 SteamVR_Events.Initialized.RemoveListener(OnSteamVRInitialized);
         }
-
-        public void UpdatePoses()
-        {
-            var compositor = OpenVR.Compositor;
-            if (compositor != null)
-            {
-                compositor.GetLastPoses(poses, gamePoses);
-                SteamVR_Events.NewPoses.Send(poses);
-                SteamVR_Events.NewPosesApplied.Send();
-            }
-        }
-
         void LateUpdate()
         {
             if (SteamVR.active == false)
@@ -92,10 +83,13 @@ namespace Valve.VR
             if (system == null)
                 return;
 
-            UpdatePoses();
-
-            var vrEvent = new VREvent_t();
-            var size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VREvent_t));
+            var compositor = OpenVR.Compositor;
+            if (compositor != null)
+            {
+                compositor.GetLastPoses(poses, gamePoses);
+                SteamVR_Events.NewPoses.Send(poses);
+                SteamVR_Events.NewPosesApplied.Send();
+            }
             for (int i = 0; i < 64; i++)
             {
                 if (!system.PollNextEvent(ref vrEvent, size))

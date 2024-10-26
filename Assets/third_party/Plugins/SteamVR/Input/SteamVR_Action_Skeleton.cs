@@ -979,12 +979,12 @@ namespace Valve.VR
                 }
             }
 
-            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerIndexes.enumArray.Length; fingerIndex++)
+            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerIndexes.Length; fingerIndex++)
             {
                 lastFingerCurls[fingerIndex] = fingerCurls[fingerIndex];
             }
 
-            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerSplayIndexes.enumArray.Length; fingerIndex++)
+            for (int fingerIndex = 0; fingerIndex < SteamVR_Skeleton_FingerSplayIndexes.Length; fingerIndex++)
             {
                 lastFingerSplays[fingerIndex] = fingerSplays[fingerIndex];
             }
@@ -1007,7 +1007,8 @@ namespace Valve.VR
                     if (error != EVRInputError.None)
                         Debug.LogError("<b>[SteamVR]</b> GetSkeletalBoneData error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
 
-                    for (int boneIndex = 0; boneIndex < tempBoneTransforms.Length; boneIndex++)
+                    int length = tempBoneTransforms.Length;
+                    for (int boneIndex = 0; boneIndex < length; boneIndex++)
                     {
                         if (float.IsNaN(tempBoneTransforms[boneIndex].position.v0))
                                 Debug.LogError("SKELETON NAN. ACTIVE");
@@ -1035,7 +1036,8 @@ namespace Valve.VR
 
             if (changed == false)
             {
-                for (int boneIndex = 0; boneIndex < tempBoneTransforms.Length; boneIndex++)
+                int length = tempBoneTransforms.Length;
+                for (int boneIndex = 0; boneIndex < length; boneIndex++)
                 {
                     if (Vector3.Distance(lastBonePositions[boneIndex], bonePositions[boneIndex]) > changeTolerance)
                     {
@@ -1486,7 +1488,7 @@ namespace Valve.VR
         public const int middle = 2;
         public const int ring = 3;
         public const int pinky = 4;
-
+        public const int Length  =5;
         public static SteamVR_Skeleton_FingerIndexEnum[] enumArray = (SteamVR_Skeleton_FingerIndexEnum[])System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerIndexEnum));
     }
 
@@ -1497,7 +1499,7 @@ namespace Valve.VR
         public const int indexMiddle = 1;
         public const int middleRing = 2;
         public const int ringPinky = 3;
-
+        public const int Length = 4;
         public static SteamVR_Skeleton_FingerSplayIndexEnum[] enumArray = (SteamVR_Skeleton_FingerSplayIndexEnum[])System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerSplayIndexEnum));
     }
 

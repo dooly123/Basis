@@ -57,16 +57,16 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             switch (deviceClass)
             {
                 case ETrackedDeviceClass.HMD:
-                    CreateHMD(GenerateGameobject(uniqueID), openVRDevice, uniqueID, notUniqueID);
+                    CreateHMD(openVRDevice, uniqueID, notUniqueID);
                     break;
                 case ETrackedDeviceClass.Controller:
-                    CreateController(GenerateGameobject(uniqueID), openVRDevice, uniqueID, notUniqueID);
+                    CreateController(openVRDevice, uniqueID, notUniqueID);
                     break;
                 case ETrackedDeviceClass.TrackingReference:
                     Debug.Log("Was Tracked Reference Returning (lighthouse)");
                     break;
                 default:
-                    CreateTracker(GenerateGameobject(uniqueID), openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
+                    CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
                     break;
             }
         }
@@ -78,11 +78,12 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             };
             return gameObject;
         }
-        private void CreateHMD(GameObject gameObject, OpenVRDevice device, string uniqueID, string notUniqueID)
+        private void CreateHMD(OpenVRDevice device, string uniqueID, string notUniqueID)
         {
             if (!TypicalDevices.ContainsKey(uniqueID))
             {
-                var spatial = gameObject.AddComponent<BasisOpenVRInputSpatial>();
+                GameObject Output = GenerateGameobject(uniqueID);
+                var spatial = Output.AddComponent<BasisOpenVRInputSpatial>();
                 spatial.ClassName = nameof(BasisOpenVRInputSpatial);
                 bool foundRole = TryAssignRole(device.deviceClass, device.deviceIndex, out BasisBoneTrackedRole role, out SteamVR_Input_Sources source);
                 spatial.Initialize(UnityEngine.SpatialTracking.TrackedPoseDriver.TrackedPose.Center, uniqueID, notUniqueID, nameof(BasisOpenVRManagement), foundRole, role, source);
@@ -96,11 +97,12 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             }
         }
 
-        public void CreateController(GameObject gameObject, OpenVRDevice device, string uniqueID, string notUniqueID)
+        public void CreateController(OpenVRDevice device, string uniqueID, string notUniqueID)
         {
             if (!TypicalDevices.ContainsKey(uniqueID))
             {
-                var controller = gameObject.AddComponent<BasisOpenVRInputController>();
+                GameObject Output = GenerateGameobject(uniqueID);
+                var controller = Output.AddComponent<BasisOpenVRInputController>();
                 controller.ClassName = nameof(BasisOpenVRInputController);
                 bool foundRole = TryAssignRole(device.deviceClass, device.deviceIndex, out BasisBoneTrackedRole role, out SteamVR_Input_Sources source);
                 controller.Initialize(device, uniqueID, notUniqueID, nameof(BasisOpenVRManagement), foundRole, role, source);
@@ -113,11 +115,12 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             }
         }
 
-        public  void CreateTracker(GameObject gameObject, OpenVRDevice device, string uniqueID, string notUniqueID, bool autoAssignRole, BasisBoneTrackedRole role)
+        public  void CreateTracker(OpenVRDevice device, string uniqueID, string notUniqueID, bool autoAssignRole, BasisBoneTrackedRole role)
         {
             if (!TypicalDevices.ContainsKey(uniqueID))
             {
-                var input = gameObject.AddComponent<BasisOpenVRInput>();
+                GameObject Output = GenerateGameobject(uniqueID);
+                var input = Output.AddComponent<BasisOpenVRInput>();
                 input.ClassName = nameof(BasisOpenVRInput);
                  input.Initialize(device, uniqueID, notUniqueID, nameof(BasisOpenVRManagement), autoAssignRole, role);
                 BasisDeviceManagement.Instance.TryAdd(input);
