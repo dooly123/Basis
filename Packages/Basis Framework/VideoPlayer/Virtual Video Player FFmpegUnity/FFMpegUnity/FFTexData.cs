@@ -4,7 +4,7 @@
     {
         public double time;
         public byte[] data;
-        public int w;
-        public int h;
+        public int width;
+        public int height;
     }
 }

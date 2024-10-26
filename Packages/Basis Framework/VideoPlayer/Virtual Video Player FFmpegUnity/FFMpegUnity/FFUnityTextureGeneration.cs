@@ -35,9 +35,9 @@ namespace FFmpeg.Unity
         {
             if (ActivelyRenderering)
             {
-                if (CachedlastWidth != texData.w || CachedlastHeight != texData.h)
+                if (CachedlastWidth != texData.width || CachedlastHeight != texData.height)
                 {
-                    InitializeTexture(texData.w, texData.h);  // Reinitialize texture if dimensions changed
+                    InitializeTexture(texData.width, texData.height);  // Reinitialize texture if dimensions changed
                 }
 
                 // Load raw byte data (assumes RGB24 format)

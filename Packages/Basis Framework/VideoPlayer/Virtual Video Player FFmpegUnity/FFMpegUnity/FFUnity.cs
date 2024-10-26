@@ -579,8 +579,8 @@ _videoMutex = new Mutex(false); // Or another synchronization method
                 return new FFTexData
                 {
                     data = new byte[FrameWidth * FrameHeight * 3], // Assuming 3 bytes per pixel (RGB)
-                     h = FrameHeight,
-                      w = FrameWidth,
+                     height = FrameHeight,
+                      width = FrameWidth,
                 };
             }
 
@@ -588,23 +588,23 @@ _videoMutex = new Mutex(false); // Or another synchronization method
             {
                 if (_pool.TryDequeue(out FFTexData item))
                 {
+                    int Length = FrameWidth * FrameHeight * 3;
                     if (item.data == null)
                     {
                         item = new FFTexData
                         {
-                            data = new byte[FrameWidth * FrameHeight * 3], // Assuming 3 bytes per pixel (RGB)
-                            h = FrameHeight,
-                            w = FrameWidth,
+                            data = new byte[Length], // Assuming 3 bytes per pixel (RGB)
+                            height = FrameHeight,
+                            width = FrameWidth,
                         };
                     }
                     else
                     {
-                        int Length = FrameWidth * FrameHeight * 3;
                         if (item.data.Length != Length)
                         {
-                            item.data = new byte[FrameWidth * FrameHeight * 3];
-                            item.h = FrameHeight;
-                            item.w = FrameWidth;
+                            item.data = new byte[Length];
+                            item.height = FrameHeight;
+                            item.width = FrameWidth;
                         }
                     }
                     return item;
