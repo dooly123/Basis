@@ -9,8 +9,8 @@ namespace JigglePhysics
         private static T instance;
 
         protected static List<IJiggleAdvancable> jiggleRigs = new();
-        protected static IJiggleAdvancable[] JiggleRigsArray;
-        protected static int JiggleRigsLength;
+        protected static IJiggleAdvancable[] jiggleRigsArray;
+        protected static int JiggleRigCount;
         private static void CreateInstanceIfNeeded()
         {
             if (instance)
@@ -18,7 +18,7 @@ namespace JigglePhysics
                 return;
             }
 
-            GameObject obj = new GameObject("JiggleRigHandler", typeof(T))
+            var obj = new GameObject("JiggleRigHandler", typeof(T))
             {
                 hideFlags = HideFlags.DontSave
             };
@@ -48,8 +48,6 @@ namespace JigglePhysics
         private static void Initialize()
         {
             jiggleRigs.Clear();
-            JiggleRigsArray = new IJiggleAdvancable[] { };
-            JiggleRigsLength = 0;
         }
 
         internal static void AddJiggleRigAdvancable(IJiggleAdvancable advancable)
@@ -60,8 +58,8 @@ namespace JigglePhysics
                 return;
             }
             jiggleRigs.Add(advancable);
-            JiggleRigsArray = jiggleRigs.ToArray();
-            JiggleRigsLength = JiggleRigsArray.Length;
+            jiggleRigsArray = jiggleRigs.ToArray();
+            JiggleRigCount = jiggleRigsArray.Length;
         }
 
         internal static void RemoveJiggleRigAdvancable(IJiggleAdvancable advancable)
@@ -72,8 +70,8 @@ namespace JigglePhysics
                 return;
             }
             jiggleRigs.Remove(advancable);
-            JiggleRigsArray = jiggleRigs.ToArray();
-            JiggleRigsLength = JiggleRigsArray.Length;
+            jiggleRigsArray = jiggleRigs.ToArray();
+            JiggleRigCount = jiggleRigsArray.Length;
             RemoveInstanceIfNeeded();
         }
 
@@ -85,4 +83,5 @@ namespace JigglePhysics
             }
         }
     }
+
 }

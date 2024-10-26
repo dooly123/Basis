@@ -1,88 +1,93 @@
+using System;
 using UnityEngine;
 
-namespace JigglePhysics {
-    public class JiggleRigRendererLOD : JiggleRigLOD
+namespace JigglePhysics
+{
+    public class JiggleRigRendererLOD : JiggleRigSimpleLOD
     {
-
-        [Tooltip("Distance to disable the jiggle rig.")]
-        [SerializeField] float distance = 20f;
-        [Tooltip("Distance past distance from which it blends out rather than instantly disabling.")]
-        [SerializeField] float blend = 5f;
-
-        private float DistancePlus;
-        public static Camera Camera;
-
-        public bool[] Visible;
-        public bool LastVisiblity;
-        public int VisibleCount;
-        protected override void Awake()
+        private class RendererSubscription
         {
-            DistancePlus = distance + blend;
-            base.Awake();
-            MonoBehaviorHider.JiggleRigLODRenderComponent jiggleRigVisibleFlag = null;
-            var renderers = GetComponentsInChildren<Renderer>();
-            VisibleCount = renderers.Length;
-            Visible = new bool[VisibleCount];
-            for (int i = 0; i < VisibleCount; i++)
+            public bool visible;
+            public Action<bool> action;
+            public MonoBehaviorHider.JiggleRigLODRenderComponent rendererSubscription;
+        }
+
+        private RendererSubscription[] subscriptions;
+        private int subscriptionCount;
+        private bool lastVisibility;
+
+        public void ClearRenderers()
+        {
+            for (int i = 0; i < subscriptionCount; i++)
             {
-                if (!renderers[i].TryGetComponent(out jiggleRigVisibleFlag))
+                subscriptions[i].rendererSubscription.VisibilityChange -= subscriptions[i].action;
+            }
+            subscriptions = null;
+            subscriptionCount = 0;
+        }
+        public void SetRenderers(Renderer[] renderers)
+        {
+            ClearRenderers();
+            MonoBehaviorHider.JiggleRigLODRenderComponent jiggleRigVisibleFlag = null;
+            subscriptionCount = renderers.Length;
+            subscriptions = new RendererSubscription[subscriptionCount];
+            for (int i = 0; i < subscriptionCount; i++)
+            {
+                Renderer renderer = renderers[i];
+                if (!renderer) continue;
+                if (!renderer.TryGetComponent(out jiggleRigVisibleFlag))
                 {
-                    jiggleRigVisibleFlag = renderers[i].gameObject.AddComponent<MonoBehaviorHider.JiggleRigLODRenderComponent>();
+                    jiggleRigVisibleFlag = renderer.gameObject.AddComponent<MonoBehaviorHider.JiggleRigLODRenderComponent>();
                 }
-                Visible[i] = renderers[i].isVisible;
+
                 var index = i;
-                jiggleRigVisibleFlag.VisibilityChange += (visible) =>
+                Action<bool> action = (visible) =>
                 {
                     // Check if the index is out of bounds
-                    if (index < 0 || index >= Visible.Length)
+                    if (index < 0 || index >= subscriptionCount)
                     {
-                        Debug.LogError("Index out of bounds: " + index + ". Valid range is 0 to " + (Visible.Length - 1));
+                        Debug.LogError("Index out of bounds: " + index + ". Valid range is 0 to " + (subscriptionCount - 1));
                         return;
                     }
                     // Update the visibility at the specified index
-                    Visible[index] = visible;
+                    subscriptions[index].visible = visible;
                     // Re-evaluate visibility
                     RevalulateVisiblity();
                 };
+                subscriptions[i] = new RendererSubscription()
+                {
+                    visible = renderer.isVisible,
+                    action = action,
+                    rendererSubscription = jiggleRigVisibleFlag
+                };
+                jiggleRigVisibleFlag.VisibilityChange += action;
             }
             RevalulateVisiblity();
         }
+
+        protected override void Awake()
+        {
+            base.Awake();
+        }
         private void RevalulateVisiblity()
         {
-            for (int visibleIndex = 0; visibleIndex < VisibleCount; visibleIndex++)
+            for (int visibleIndex = 0; visibleIndex < subscriptionCount; visibleIndex++)
             {
-                if (Visible[visibleIndex])
+                if (subscriptions[visibleIndex].visible)
                 {
-                    LastVisiblity = true;
+                    lastVisibility = true;
                     return;
                 }
             }
-            LastVisiblity = false;
-        }
-
-        private bool TryGetCamera(out Camera camera)
-        {
-            camera = Camera;
-            return true;
+            lastVisibility = false;
         }
         protected override bool CheckActive()
         {
-            if (LastVisiblity == false)
+            if (lastVisibility == false)
             {
                 return false;
             }
-            if (TryGetCamera(out Camera camera) == false)
-            {
-                return false;
-            }
-            float DistanceToCamera = Vector3.Distance(camera.transform.position, transform.position);
-            var currentBlend = (DistanceToCamera - DistancePlus) / blend;
-            currentBlend = Mathf.Clamp01(1f - currentBlend);
-            for (int Index = 0; Index < jigglesCount; Index++)
-            {
-                jiggles[Index].blend = currentBlend;
-            }
-            return DistanceToCamera < distance;
+            return base.CheckActive();
         }
 
     }

@@ -2,26 +2,35 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JigglePhysics {
+namespace JigglePhysics
+{
     [DisallowMultipleComponent]
-    public abstract class JiggleRigLOD : MonoBehaviour {
-        protected List<IJiggleBlendable> jiggles;
-        protected int jigglesCount;
+    public abstract class JiggleRigLOD : MonoBehaviour
+    {
+        protected IJiggleBlendable[] jiggles;
+        protected List<IJiggleBlendable> JigglesList;
+        protected int JiggleCount;
         protected bool wasActive;
 
-        protected virtual void Awake() {
-            jiggles = new List<IJiggleBlendable>();
+        protected virtual void Awake()
+        {
+            JigglesList = new List<IJiggleBlendable>();
+            jiggles = null;
         }
 
-        public virtual void AddTrackedJiggleRig(IJiggleBlendable blendable) {
-            if (jiggles.Contains(blendable)) return;
-            jiggles.Add(blendable);
-            jigglesCount = jiggles.Count;
+        public virtual void AddTrackedJiggleRig(IJiggleBlendable blendable)
+        {
+            if (JigglesList.Contains(blendable)) return;
+            JigglesList.Add(blendable);
+            jiggles = JigglesList.ToArray();
+            JiggleCount = jiggles.Length;
         }
-        public virtual void RemoveTrackedJiggleRig(IJiggleBlendable blendable) {
-            if (!jiggles.Contains(blendable)) return;
-            jiggles.Remove(blendable);
-            jigglesCount = jiggles.Count;
+        public virtual void RemoveTrackedJiggleRig(IJiggleBlendable blendable)
+        {
+            if (!JigglesList.Contains(blendable)) return;
+            JigglesList.Remove(blendable);
+            jiggles = JigglesList.ToArray();
+            JiggleCount = jiggles.Length;
         }
 
         private void Update()
@@ -30,8 +39,9 @@ namespace JigglePhysics {
             {
                 if (wasActive)
                 {
-                    foreach (var jiggle in jiggles)
+                    for (int Index = 0; Index < JiggleCount; Index++)
                     {
+                        IJiggleBlendable jiggle = jiggles[Index];
                         jiggle.enabled = false;
                     }
                 }
@@ -40,18 +50,22 @@ namespace JigglePhysics {
             }
             if (!wasActive)
             {
-                foreach (var jiggle in jiggles)
+                for (int Index = 0; Index < JiggleCount; Index++)
                 {
+                    IJiggleBlendable jiggle = jiggles[Index];
                     jiggle.enabled = true;
                 }
             }
             wasActive = true;
         }
-        
+
         protected abstract bool CheckActive();
 
-        private void OnDisable() {
-            foreach (var jiggle in jiggles) {
+        private void OnDisable()
+        {
+            for (int Index = 0; Index < JiggleCount; Index++)
+            {
+                IJiggleBlendable jiggle = jiggles[Index];
                 jiggle.enabled = false;
             }
         }

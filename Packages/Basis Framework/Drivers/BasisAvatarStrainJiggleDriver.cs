@@ -23,9 +23,9 @@ namespace Basis.Scripts.Drivers
                 {
                     int Count = player.Avatar.JiggleStrains.Length;
                     JiggleRigRendererLOD JiggleRigRendererLOD = BasisHelpers.GetOrAddComponent<JiggleRigRendererLOD>(player.Avatar.Animator.gameObject);
-                    JiggleRigRendererLOD.Camera = BasisLocalCameraDriver.Instance.Camera;
+                    JiggleRigRendererLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
+                    JiggleRigRendererLOD.SetRenderers(player.Avatar.Renders);
                     Jiggler = player.Avatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
-                    //   Renderer[] Renderer = player.Avatar.Renders;
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
                     for (int StrainIndex = 0; StrainIndex < Count; StrainIndex++)
                     {

@@ -6,20 +6,27 @@ namespace JigglePhysics
 
     internal class JiggleRigLateUpdateHandler : JiggleRigHandler<JiggleRigLateUpdateHandler>
     {
-        public Vector3 gravity;
+        public Vector3 GlobalGravity;
         public void Start()
         {
-            gravity = Physics.gravity;
+            GlobalGravity = Physics.gravity;
         }
         private void LateUpdate()
         {
+            CachedSphereCollider.EnableSphereCollider();
             var deltaTime = Time.deltaTime;
             var timeAsDouble = Time.timeAsDouble;
             var timeAsDoubleOneStepBack = timeAsDouble - JiggleRigBuilder.VERLET_TIME_STEP;
-            for (int Index = 0; Index < JiggleRigsLength; Index++)
+            if (!CachedSphereCollider.TryGet(out SphereCollider sphereCollider))
             {
-                JiggleRigsArray[Index].Advance(deltaTime, gravity, timeAsDouble, timeAsDoubleOneStepBack);
+                throw new UnityException("Failed to create a sphere collider, this should never happen! Is a scene not loaded but a jiggle rig is?");
             }
+            for (int Index = 0; Index < JiggleRigCount; Index++)
+            {
+                jiggleRigsArray[Index].Advance(deltaTime, GlobalGravity, timeAsDouble, timeAsDoubleOneStepBack, sphereCollider);
+            }
+            CachedSphereCollider.DisableSphereCollider();
         }
     }
+
 }

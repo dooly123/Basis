@@ -4,35 +4,40 @@ using UnityEngine;
 
 namespace JigglePhysics
 {
-// This is used to blend other jiggle settings together.
-public class JiggleSettingsBlend : JiggleSettingsBase {
-    [Tooltip("The list of jiggle settings to blend between.")]
-    public List<JiggleSettings> blendSettings;
-    [Range(0f,1f)][Tooltip("A value from 0 to 1 that linearly blends between all of the blendSettings.")]
-    private float normalizedBlend;
+    public class JiggleSettingsBlend : JiggleSettingsBase
+    {
+        [Tooltip("The list of jiggle settings to blend between.")]
+        public List<JiggleSettings> blendSettings;
+        [Range(0f, 1f)]
+        [Tooltip("A value from 0 to 1 that linearly blends between all of the blendSettings.")]
+        private float normalizedBlend;
 
-    public void SetNormalizedBlend(float blend) {
-        if (Mathf.Approximately(blend, normalizedBlend)) {
-            return;
+        public void SetNormalizedBlend(float blend)
+        {
+            if (Mathf.Approximately(blend, normalizedBlend))
+            {
+                return;
+            }
+            normalizedBlend = blend;
+            Cache();
         }
-        normalizedBlend = blend;
-        Cache();
-    }
-    public float GetNormalizedBlend() => normalizedBlend;
+        public float GetNormalizedBlend() => normalizedBlend;
 
-    private JiggleSettingsData cachedData;
+        private JiggleSettingsData cachedData;
 
-    private void Cache() {
-        int settingsCountSpace = blendSettings.Count - 1;
-        float normalizedBlendClamp = Mathf.Clamp01(normalizedBlend);
-        int targetA = Mathf.Clamp(Mathf.FloorToInt(normalizedBlendClamp*settingsCountSpace), 0,settingsCountSpace);
-        int targetB = Mathf.Clamp(Mathf.FloorToInt(normalizedBlendClamp*settingsCountSpace)+1, 0,settingsCountSpace);
-        cachedData = JiggleSettingsData.Lerp( blendSettings[targetA].GetData(), blendSettings[targetB].GetData(), Mathf.Clamp01(normalizedBlendClamp*settingsCountSpace-targetA) );
-    }
-    
-    public override JiggleSettingsData GetData() {
-        return cachedData;
-    }
+        private void Cache()
+        {
+            int settingsCountSpace = blendSettings.Count - 1;
+            float normalizedBlendClamp = Mathf.Clamp01(normalizedBlend);
+            int targetA = Mathf.Clamp(Mathf.FloorToInt(normalizedBlendClamp * settingsCountSpace), 0, settingsCountSpace);
+            int targetB = Mathf.Clamp(Mathf.FloorToInt(normalizedBlendClamp * settingsCountSpace) + 1, 0, settingsCountSpace);
+            cachedData = JiggleSettingsData.Lerp(blendSettings[targetA].GetData(), blendSettings[targetB].GetData(), Mathf.Clamp01(normalizedBlendClamp * settingsCountSpace - targetA));
+        }
+
+        public override JiggleSettingsData GetData()
+        {
+            return cachedData;
+        }
         public override float GetRadius(float normalizedIndex)
         {
             float normalizedBlendClamp = Mathf.Clamp01(normalizedBlend);
@@ -42,13 +47,15 @@ public class JiggleSettingsBlend : JiggleSettingsBase {
                               blendSettings[Mathf.Clamp(targetB, 0, blendSettings.Count - 1)].GetRadius(normalizedIndex), Mathf.Clamp01(normalizedBlendClamp * blendSettings.Count - targetA));
         }
 
-    private void Awake() {
-        Cache();
-    }
+        private void Awake()
+        {
+            Cache();
+        }
 
-    private void OnValidate() {
-        Cache();
+        private void OnValidate()
+        {
+            Cache();
+        }
     }
-}
 
 }
