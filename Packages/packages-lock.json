@@ -45,6 +45,12 @@
         "com.unity.mathematics": "1.2.5"
       }
     },
+    "com.llealloo.audiolink": {
+      "version": "file:com.llealloo.audiolink",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.naelstrof.jigglephysics": {
       "version": "file:JigglePhysics",
       "depth": 0,
