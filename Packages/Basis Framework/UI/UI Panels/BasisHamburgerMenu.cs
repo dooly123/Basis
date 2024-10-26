@@ -17,6 +17,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public Button AvatarButton;
         public Button CloseUI;
         public Button FullBody;
+        public Button Respawn;
         public static string MainMenuAddressableID = "MainMenu";
         public static BasisHamburgerMenu Instance;
         public bool OverrideForceCalibration;
@@ -27,9 +28,17 @@ namespace Basis.Scripts.UI.UI_Panels
             AvatarButton.onClick.AddListener(AvatarButtonPanel);
             CloseUI.onClick.AddListener(CloseThisMenu);
             FullBody.onClick.AddListener(PutIntoCalibrationMode);
+            Respawn.onClick.AddListener(RespawnLocalPlayer);
             BasisCursorManagement.UnlockCursor(nameof(BasisHamburgerMenu));
         }
         private Dictionary<BasisInput, Action> TriggerDelegates = new Dictionary<BasisInput, Action>();
+        public void RespawnLocalPlayer()
+        {
+            if(BasisLocalPlayer.Instance != null && BasisSceneFactory.Instance != null)
+            {
+                BasisSceneFactory.Instance.SpawnPlayer(BasisLocalPlayer.Instance);
+            }
+        }
         public void PutIntoCalibrationMode()
         {
             string BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;

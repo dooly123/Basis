@@ -146,11 +146,7 @@ namespace Basis.Scripts.UI.UI_Panels
             {
                 await BasisSceneLoadDriver.LoadSceneAssetBundle(BundledContentHolder.Instance.DefaultScene);
             }
-            BasisUIComponent[] Components = FindObjectsByType<BasisUIComponent>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            foreach (BasisUIComponent Component in Components)
-            {
-                Destroy(Component.gameObject);
-            }
+            Destroy(this.gameObject);
         }
 
         public void ToggleAdvancedSettings()
