@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -69,9 +70,11 @@ namespace FFmpeg.Unity
 
         // Audio processing
         [SerializeField] public FFUnityAudioProcess AudioProcessing = new FFUnityAudioProcess();
+        public FFTexDataPool _ffTexDataPool;
         private void OnEnable()
         {
-            _paused = false;
+            _ffTexDataPool = new FFTexDataPool();
+        _paused = false;
         }
         private void OnDisable()
         {
@@ -524,31 +527,26 @@ _videoMutex = new Mutex(false); // Or another synchronization method
 
             return false;
         }
-        /// <summary>
-        /// Enqueues the video frame data for background processing.
-        /// </summary>
         private void EnqueueVideoFrame(AVFrame vFrame, double time)
         {
             if (_videoMutex.WaitOne(1))
             {
-                byte[] frameClone = new byte[vFrame.width * vFrame.height * 3];
-                if (!FFUnityFrameHelper.SaveFrame(vFrame, vFrame.width, vFrame.height, frameClone, _videoDecoder.HWPixelFormat))
+                // Retrieve a frame from the pool
+                FFTexData frameData = _ffTexDataPool.Get(vFrame.width, vFrame.height);
+                // Clone the frame data
+                if (!FFUnityFrameHelper.SaveFrame(vFrame, vFrame.width, vFrame.height, frameData.data, _videoDecoder.HWPixelFormat))
                 {
                     UnityEngine.Debug.LogError("Could not save frame");
                     _videoWriteIndex--;
+                    _ffTexDataPool.Return(frameData); // Return it to the pool on failure
                 }
                 else
                 {
                     _streamVideoCtx.TryGetTime(_videoDecoder, vFrame, out time);
                     _lastPts = time;
 
-                    _videoFrameClones.Enqueue(new FFTexData
-                    {
-                        time = time,
-                        data = frameClone,
-                        w = vFrame.width,
-                        h = vFrame.height,
-                    });
+                    frameData.time = time;
+                    _videoFrameClones.Enqueue(frameData); // Enqueue the frame data for processing
                 }
                 _videoMutex.ReleaseMutex();
             }
@@ -561,10 +559,69 @@ _videoMutex = new Mutex(false); // Or another synchronization method
                 Profiler.EndSample();
                 return false;
             }
+
+            // Dequeue the frame data for updating the video
             FFTexData videoFrame = _videoFrameClones.Dequeue();
             _lastTexData = videoFrame;
+
+            // Once done, return it to the pool
+            _ffTexDataPool.Return(videoFrame);
+
             Profiler.EndSample();
             return true;
+        }
+        public class FFTexDataPool
+        {
+            private readonly ConcurrentQueue<FFTexData> _pool = new ConcurrentQueue<FFTexData>();
+
+            private FFTexData CreateNewFFTexData(int FrameWidth, int FrameHeight)
+            {
+                return new FFTexData
+                {
+                    data = new byte[FrameWidth * FrameHeight * 3], // Assuming 3 bytes per pixel (RGB)
+                     h = FrameHeight,
+                      w = FrameWidth,
+                };
+            }
+
+            public FFTexData Get(int FrameWidth,int FrameHeight)
+            {
+                if (_pool.TryDequeue(out FFTexData item))
+                {
+                    if (item.data == null)
+                    {
+                        item = new FFTexData
+                        {
+                            data = new byte[FrameWidth * FrameHeight * 3], // Assuming 3 bytes per pixel (RGB)
+                            h = FrameHeight,
+                            w = FrameWidth,
+                        };
+                    }
+                    else
+                    {
+                        int Length = FrameWidth * FrameHeight * 3;
+                        if (item.data.Length != Length)
+                        {
+                            item.data = new byte[FrameWidth * FrameHeight * 3];
+                            item.h = FrameHeight;
+                            item.w = FrameWidth;
+                        }
+                    }
+                    return item;
+                }
+                else
+                {
+                    // Pool is empty, create a new instance
+                    return CreateNewFFTexData(FrameWidth,FrameHeight);
+                }
+            }
+
+            public void Return(FFTexData item)
+            {
+                // Reset the reusable data object
+                item.time = 0;
+                _pool.Enqueue(item);
+            }
         }
     }
 }
