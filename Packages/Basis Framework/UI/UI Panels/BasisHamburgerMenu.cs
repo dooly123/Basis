@@ -38,6 +38,7 @@ namespace Basis.Scripts.UI.UI_Panels
             {
                 BasisSceneFactory.Instance.SpawnPlayer(BasisLocalPlayer.Instance);
             }
+            BasisHamburgerMenu.Instance.CloseThisMenu();
         }
         public void PutIntoCalibrationMode()
         {
