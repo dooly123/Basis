@@ -702,7 +702,7 @@ MonoBehaviour:
     SelectedValueDefault: on
     ValueDefault: on
     Explanation: Vertical Sync
-    selectedValue: off
+    selectedValue: on
     Type: 1
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -925,6 +925,114 @@ MonoBehaviour:
     - realValue: ultra
       UserValue: Ultra
   - EditorBasedUIToggles:
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 1
+      ExcludePlatform: 1
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: UpScaler
+    ValueDescriptor: UpScaler
+    SelectedValueDefault: False
+    ValueDefault: auto
+    Explanation: UpScaler
+    selectedValue: auto
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: auto
+      UserValue: Auto
+    - realValue: linear upscaling
+      UserValue: Linear Upscaling
+    - realValue: point upscaling
+      UserValue: Point Upscaling
+    - realValue: fsr upscaling
+      UserValue: FSR Upscaling
+    - realValue: spatial temporal upscaling
+      UserValue: Spatial Temporal Upscaling
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 1
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Microphone Denoiser
+    ValueDescriptor: Microphone Denoiser
+    SelectedValueDefault: 
+    ValueDefault: false
+    Explanation: 
+    selectedValue: false
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 1
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Debug Visuals
+    ValueDescriptor: Debug Visuals
+    SelectedValueDefault: 
+    ValueDefault: False
+    Explanation: 
+    selectedValue: false
+    Type: 1
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+  - EditorBasedUIToggles:
       SupportedRenderPipelines: 0
       DefaultPlatform: 0
       ExcludePlatform: 0
@@ -1074,6 +1182,50 @@ MonoBehaviour:
     SelectableValueList:
     - realValue: 0
       UserValue: 0
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 100
+    SliderMinValue: 0
+    Name: Selected Microphone
+    ValueDescriptor: 
+    SelectedValueDefault: 
+    ValueDefault: False
+    Explanation: 
+    selectedValue: microphone (nvidia broadcast)
+    Type: 2
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
+    ReturnedValueTextType: 0
+    SelectableValueList:
+    - realValue: microphone (virtual desktop audio)
+      UserValue: Microphone (Virtual Desktop Audio)
+    - realValue: microphone (antlion wireless microphone)
+      UserValue: Microphone (Antlion Wireless Microphone)
+    - realValue: headset microphone (oculus virtual audio device)
+      UserValue: Headset Microphone (Oculus Virtual Audio Device)
+    - realValue: microphone (logitech streamcam)
+      UserValue: Microphone (Logitech StreamCam)
+    - realValue: microphone (rode nt-usb)
+      UserValue: Microphone (RODE NT-USB)
+    - realValue: microphone (steam streaming microphone)
+      UserValue: Microphone (Steam Streaming Microphone)
+    - realValue: microphone (nvidia broadcast)
+      UserValue: Microphone (NVIDIA Broadcast)
   - EditorBasedUIToggles:
       SupportedRenderPipelines: 0
       DefaultPlatform: 0
@@ -1231,50 +1383,6 @@ MonoBehaviour:
       ValueToggle: 0
       EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: Selected Microphone
-    ValueDescriptor: 
-    SelectedValueDefault: 
-    ValueDefault: False
-    Explanation: 
-    selectedValue: digital audio interface (valve vr radio & hmd mic)
-    Type: 2
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: digital audio interface (valve vr radio & hmd mic)
-      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
-    - realValue: headset microphone (oculus virtual audio device)
-      UserValue: Headset Microphone (Oculus Virtual Audio Device)
-    - realValue: microphone (nvidia broadcast)
-      UserValue: Microphone (NVIDIA Broadcast)
-    - realValue: microphone (steam streaming microphone)
-      UserValue: Microphone (Steam Streaming Microphone)
-    - realValue: microphone (logitech streamcam)
-      UserValue: Microphone (Logitech StreamCam)
-    - realValue: microphone (2- rode nt-usb)
-      UserValue: Microphone (2- RODE NT-USB)
-    - realValue: microphone (2- antlion wireless microphone)
-      UserValue: Microphone (2- Antlion Wireless Microphone)
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
     MaxPercentage: 150
@@ -1316,7 +1424,7 @@ MonoBehaviour:
     SelectedValueDefault: 1
     ValueDefault: 1
     Explanation: 
-    selectedValue: 1
+    selectedValue: 0.9680337
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1328,80 +1436,6 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 1
     SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 1
-      DefaultPlatform: 1
-      ExcludePlatform: 1
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: UpScaler
-    ValueDescriptor: UpScaler
-    SelectedValueDefault: False
-    ValueDefault: auto
-    Explanation: UpScaler
-    selectedValue: auto
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: auto
-      UserValue: Auto
-    - realValue: linear upscaling
-      UserValue: Linear Upscaling
-    - realValue: point upscaling
-      UserValue: Point Upscaling
-    - realValue: fsr upscaling
-      UserValue: FSR Upscaling
-    - realValue: spatial temporal upscaling
-      UserValue: Spatial Temporal Upscaling
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 1
-      ExcludePlatform: 0
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: Microphone Denoiser
-    ValueDescriptor: Microphone Denoiser
-    SelectedValueDefault: 
-    ValueDefault: false
-    Explanation: 
-    selectedValue: false
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: true
-      UserValue: true
-    - realValue: false
-      UserValue: false
   - EditorBasedUIToggles:
       SupportedRenderPipelines: 0
       DefaultPlatform: 0
@@ -1432,40 +1466,6 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 1
     SelectableValueList: []
-  - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
-      ExcludePlatform: 0
-      ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
-    Round: 0
-    RoundTo: 2
-    MaxPercentage: 100
-    MinPercentage: 0
-    SliderMaxValue: 100
-    SliderMinValue: 0
-    Name: Debug Visuals
-    ValueDescriptor: Debug Visuals
-    SelectedValueDefault: 
-    ValueDefault: False
-    Explanation: 
-    selectedValue: false
-    Type: 1
-    TextDescription: {fileID: 0}
-    ObjectInput: {fileID: 0}
-    ApplyInput: {fileID: 0}
-    ResetToDefault: {fileID: 0}
-    PlatFormDefaultState: []
-    ExcludeFromThesePlatforms: []
-    MasterQualityState: 0
-    ParseController: 1
-    ReturnedValueTextType: 0
-    SelectableValueList:
-    - realValue: true
-      UserValue: true
-    - realValue: false
-      UserValue: false
   SaveModules:
   - {fileID: 6482417607131076391}
   - {fileID: 256212325347645450}
@@ -1614,7 +1614,7 @@ MonoBehaviour:
     Max: 0
   - Name: Vertical Sync
     DefaultValue: on
-    SelectedValue: off
+    SelectedValue: on
     Index: 7
     SelectableValueList:
     - realValue: on
@@ -1710,7 +1710,7 @@ MonoBehaviour:
     Max: 0
   - Name: Resolution
     DefaultValue: 
-    SelectedValue: 2560x1440
+    SelectedValue: auto
     Index: 13
     SelectableValueList:
     - realValue: 640x480
@@ -1767,7 +1767,7 @@ MonoBehaviour:
     Max: 0
   - Name: ScreenMode
     DefaultValue: 
-    SelectedValue: windowed
+    SelectedValue: false
     Index: 14
     SelectableValueList:
     - realValue: exclusive fullscreen
@@ -1782,7 +1782,7 @@ MonoBehaviour:
     Max: 0
   - Name: Monitor
     DefaultValue: 
-    SelectedValue: 0
+    SelectedValue: false
     Index: 15
     SelectableValueList:
     - realValue: 0
@@ -1812,7 +1812,7 @@ MonoBehaviour:
     Max: 0
   - Name: Player Volume
     DefaultValue: 50
-    SelectedValue: 70
+    SelectedValue: 6
     Index: 19
     SelectableValueList: []
     Min: 0
@@ -1823,10 +1823,10 @@ MonoBehaviour:
     Index: 20
     SelectableValueList: []
     Min: 0
-    Max: 0
+    Max: 1
   - Name: Selected Microphone
     DefaultValue: 
-    SelectedValue: digital audio interface (valve vr radio & hmd mic)
+    SelectedValue: 70
     Index: 21
     SelectableValueList:
     - realValue: digital audio interface (valve vr radio & hmd mic)
@@ -1844,24 +1844,24 @@ MonoBehaviour:
     - realValue: microphone (2- antlion wireless microphone)
       UserValue: Microphone (2- Antlion Wireless Microphone)
     Min: 0
-    Max: 0
+    Max: 80
   - Name: Mcrophone Volume
     DefaultValue: 1
-    SelectedValue: 1
+    SelectedValue: 70
     Index: 22
     SelectableValueList: []
     Min: 0
-    Max: 0
+    Max: 80
   - Name: Render Resolution
     DefaultValue: 1
-    SelectedValue: 1
+    SelectedValue: 70
     Index: 23
     SelectableValueList: []
-    Min: 0.25
-    Max: 1.5
+    Min: 0
+    Max: 80
   - Name: UpScaler
     DefaultValue: False
-    SelectedValue: auto
+    SelectedValue: 1
     Index: 24
     SelectableValueList:
     - realValue: auto
@@ -1875,10 +1875,10 @@ MonoBehaviour:
     - realValue: spatial temporal upscaling
       UserValue: Spatial Temporal Upscaling
     Min: 0
-    Max: 0
+    Max: 1
   - Name: Microphone Denoiser
     DefaultValue: 
-    SelectedValue: false
+    SelectedValue: 1
     Index: 25
     SelectableValueList:
     - realValue: true
@@ -1886,17 +1886,17 @@ MonoBehaviour:
     - realValue: false
       UserValue: false
     Min: 0
-    Max: 0
+    Max: 1.5
   - Name: Controller DeadZone
     DefaultValue: 0.05
-    SelectedValue: 0.1
+    SelectedValue: 0.9680337
     Index: 26
     SelectableValueList: []
-    Min: 0
-    Max: 0
+    Min: 0.25
+    Max: 1.5
   - Name: Debug Visuals
     DefaultValue: 
-    SelectedValue: false
+    SelectedValue: 0.1
     Index: 27
     SelectableValueList:
     - realValue: true
@@ -1904,7 +1904,7 @@ MonoBehaviour:
     - realValue: false
       UserValue: false
     Min: 0
-    Max: 0
+    Max: 0.5
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -2077,7 +2077,7 @@ MonoBehaviour:
     Explanation: Vertical Sync
     Parse: 1
     Type: 1
-  CurrentMode: 
+  CurrentMode: on
 --- !u!114 &3784412682251115113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2134,7 +2134,7 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 2
-  Manager: {fileID: 0}
+  Manager: {fileID: 6378574261833472064}
   OnlySetScreenModeOnce: 1
 --- !u!114 &8638552490007219108
 MonoBehaviour:
@@ -2195,15 +2195,15 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 1
-  Manager: {fileID: 0}
+  Manager: {fileID: 6378574261833472064}
   MicrophoneDevice:
-  - Digital Audio Interface (Valve VR Radio & HMD Mic)
+  - Microphone (Virtual Desktop Audio)
+  - Microphone (Antlion Wireless Microphone)
   - Headset Microphone (Oculus Virtual Audio Device)
-  - Microphone (NVIDIA Broadcast)
-  - Microphone (Steam Streaming Microphone)
   - Microphone (Logitech StreamCam)
-  - Microphone (2- RODE NT-USB)
-  - Microphone (2- Antlion Wireless Microphone)
+  - Microphone (RODE NT-USB)
+  - Microphone (Steam Streaming Microphone)
+  - Microphone (NVIDIA Broadcast)
 --- !u!114 &734679581483801923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2338,4 +2338,4 @@ MonoBehaviour:
     Parse: 1
     Type: 1
   Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
-  RenderScale: 0
+  RenderScale: 0.9680337

@@ -22,7 +22,12 @@ MonoBehaviour:
   m_Scenes:
   - m_enabled: 1
     m_path: Assets/Scenes/initialization.unity
-  m_ScriptingDefines: []
+  m_ScriptingDefines:
+  - SETTINGS_MANAGER_UNIVERSAL
+  - STEAMAUDIO_ENABLED
+  - USE_INPUT_SYSTEM_POSE_CONTROL
+  - USE_STICK_CONTROL_THUMBSTICKS
+  - BASIS_OPENVR_SUPPORTED
   m_PlayerSettingsYaml:
     m_Settings:
     - line: '| PlayerSettings:'

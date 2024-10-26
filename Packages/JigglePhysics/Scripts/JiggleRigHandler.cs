@@ -18,7 +18,7 @@ namespace JigglePhysics
                 return;
             }
 
-            var obj = new GameObject("JiggleRigHandler", typeof(T))
+            GameObject obj = new GameObject("JiggleRigHandler", typeof(T))
             {
                 hideFlags = HideFlags.DontSave
             };
