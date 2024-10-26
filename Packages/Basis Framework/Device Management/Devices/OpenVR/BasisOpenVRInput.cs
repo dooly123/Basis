@@ -18,10 +18,10 @@ public class BasisOpenVRInput : BasisInput
     public EVRCompositorError result;
     public bool HasInputSource = false;
     public SteamVR_Input_Sources inputSource;
-    public async Task Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
+    public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
     {
         Device = device;
-        await InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
+        InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
     }
     public override void DoPollData()
     {

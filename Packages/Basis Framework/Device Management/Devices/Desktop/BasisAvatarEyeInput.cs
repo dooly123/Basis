@@ -31,7 +31,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public float InjectedZ = 0;
         public bool HasEyeEvents = false;
         public bool PauseLook = false;
-        public async Task Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
+        public void Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
         {
             Debug.Log("Initalizing Avatar Eye");
             if (BasisLocalPlayer.Instance.AvatarDriver != null)
@@ -46,7 +46,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             }
             FinalPosition = LocalRawPosition;
             FinalRotation = LocalRawRotation;
-            await InitalizeTracking(ID, ID, subSystems, true, BasisBoneTrackedRole.CenterEye);
+            InitalizeTracking(ID, ID, subSystems, true, BasisBoneTrackedRole.CenterEye);
             if (BasisHelpers.CheckInstance(Instance))
             {
                 Instance = this;

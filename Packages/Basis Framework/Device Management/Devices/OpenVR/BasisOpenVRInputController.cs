@@ -15,7 +15,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
         public BasisOpenVRInputSkeleton SkeletonHandInput = null;
         public bool HasOnUpate = false;
-        public async Task Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
+        public void Initialize(OpenVRDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
         {
             if (HasOnUpate && poseAction != null)
             {
@@ -24,7 +24,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             }
             inputSource = SteamVR_Input_Sources;
             Device = device;
-            await InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
+            InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
             if (poseAction != null)
             {
                 if (HasOnUpate == false)

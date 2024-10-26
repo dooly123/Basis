@@ -12,13 +12,13 @@ public class SwitchActiveMode : MonoBehaviour
         VRButton.onClick.AddListener(OnVRButton);
         DesktopButton.onClick.AddListener(OnDesktopButton);
     }
-    public async void OnDesktopButton()
+    public void OnDesktopButton()
     {
-      await  BasisDeviceManagement.Instance.SwitchMode("Desktop");
+        BasisDeviceManagement.Instance.SwitchMode("Desktop");
     }
-    public async void OnVRButton()
+    public void OnVRButton()
     {
-      await  BasisDeviceManagement.Instance.SwitchMode("OpenVRLoader");
+        BasisDeviceManagement.Instance.SwitchMode("OpenVRLoader");
     }
 }
 }

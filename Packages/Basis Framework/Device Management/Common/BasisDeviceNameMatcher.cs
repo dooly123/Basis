@@ -16,7 +16,7 @@ namespace Basis.Scripts.Device_Management
     {
         [SerializeField]
         public List<BasisDeviceMatchSettings> BasisDevice = new List<BasisDeviceMatchSettings>();
-        public async Task<BasisDeviceMatchSettings> GetAssociatedDeviceMatchableNames(string nameToMatch, BasisBoneTrackedRole FallBackRole = BasisBoneTrackedRole.CenterEye, bool UseFallbackROle = false)
+        public BasisDeviceMatchSettings GetAssociatedDeviceMatchableNames(string nameToMatch, BasisBoneTrackedRole FallBackRole = BasisBoneTrackedRole.CenterEye, bool UseFallbackROle = false)
         {
             foreach (BasisDeviceMatchSettings DeviceEntry in BasisDevice)
             {
@@ -40,7 +40,7 @@ namespace Basis.Scripts.Device_Management
             };
             BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BasisDevice.Add(Settings);
             Debug.LogError("Unable to find Configuration for device Generating " + nameToMatch);
-            await BasisDeviceManagement.Instance.LoadAndOrSaveDefaultDeviceConfigs();
+            BasisDeviceManagement.Instance.LoadAndOrSaveDefaultDeviceConfigs();
             return Settings;
         }
     }

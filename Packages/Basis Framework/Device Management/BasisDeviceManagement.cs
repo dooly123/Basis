@@ -74,13 +74,13 @@ namespace Basis.Scripts.Device_Management
         public List<StoredPreviousDevice> PreviouslyConnectedDevices = new List<StoredPreviousDevice>();
         [SerializeField]
         public List<BasisDeviceMatchSettings> UseAbleDeviceConfigs = new List<BasisDeviceMatchSettings>();
-        void Start()
+        async void Start()
         {
             if (BasisHelpers.CheckInstance<BasisDeviceManagement>(Instance))
             {
                 Instance = this;
             }
-            Initialize();
+           await Initialize();
         }
         void OnDestroy()
         {
@@ -129,14 +129,14 @@ namespace Basis.Scripts.Device_Management
             }
             return true;
         }
-        public async void Initialize()
+        public async Task Initialize()
         {
             CommandLineArgs.Initialize(BakedInCommandLineArgs);
-            await LoadAndOrSaveDefaultDeviceConfigs();
+            LoadAndOrSaveDefaultDeviceConfigs();
             InstantiationParameters parameters = new InstantiationParameters();
             await BasisPlayerFactory.CreateLocalPlayer(parameters);
 
-            await SwitchMode(DefaultMode());
+            SwitchMode(DefaultMode());
             if (HasEvents == false)
             {
                 BasisXRManagement.CheckForPass += CheckForPass;
@@ -146,9 +146,9 @@ namespace Basis.Scripts.Device_Management
             }
             await OnInitializationCompleted?.Invoke();
         }
-        public async Task LoadAndOrSaveDefaultDeviceConfigs()
+        public void LoadAndOrSaveDefaultDeviceConfigs()
         {
-            await LoadAndOrSaveDefaultDeviceConfigs(Application.persistentDataPath + "/Devices");
+            LoadAndOrSaveDefaultDeviceConfigs(Application.persistentDataPath + "/Devices");
         }
         public async Task RunAfterInitialized()
         {
@@ -157,7 +157,7 @@ namespace Basis.Scripts.Device_Management
                 await LoadGameobject(NetworkManagement, new InstantiationParameters());
             }
         }
-        public async Task SwitchMode(string newMode)
+        public void SwitchMode(string newMode)
         {
             if (CurrentMode != "None")
             {
@@ -194,7 +194,7 @@ namespace Basis.Scripts.Device_Management
                     {
                         foreach (var m in Matched)
                         {
-                          await  m.BeginLoadSDK();
+                            m.BeginLoadSDK();
                         }
                     }
                     break;
@@ -206,7 +206,7 @@ namespace Basis.Scripts.Device_Management
                     {
                         foreach (var m in Matched)
                         {
-                          await  m.BeginLoadSDK();
+                            m.BeginLoadSDK();
                         }
                     }
                     break;
@@ -258,32 +258,28 @@ namespace Basis.Scripts.Device_Management
         {
             SwitchSetMode("Desktop");
         }
-        public static async void SwitchSetMode(string Mode)
+        public static void SwitchSetMode(string Mode)
         {
             if (Instance != null && Mode != Instance.CurrentMode)
             {
-               await Instance.SwitchMode(Mode);
+               Instance.SwitchMode(Mode);
             }
         }
-        public static async void ShowTrackers()
+        public static void ShowTrackers()
         {
-            await ShowTrackersAsync();
+             ShowTrackersAsync();
         }
         public void SetCameraRenderState(bool state)
         {
             BasisLocalCameraDriver.Instance.CameraData.allowXRRendering = state;
         }
-        public static async Task ShowTrackersAsync()
+        public static void ShowTrackersAsync()
         {
             var inputDevices = Instance.AllInputDevices;
-            var showTrackedVisualTasks = new List<Task>();
-
             for (int Index = 0; Index < inputDevices.Count; Index++)
             {
-                showTrackedVisualTasks.Add(inputDevices[Index].ShowTrackedVisual());
+                inputDevices[Index].ShowTrackedVisual();
             }
-
-            await Task.WhenAll(showTrackedVisualTasks);
         }
         public static void HideTrackers()
         {
@@ -310,21 +306,21 @@ namespace Basis.Scripts.Device_Management
 
             AllInputDevices.RemoveAll(item => item == null);
         }
-        private async void CheckForPass(string type)
+        private void CheckForPass(string type)
         {
             Debug.Log("Loading " + type);
             if (TryFindBasisBaseTypeManagement("SimulateXR", out List<BasisBaseTypeManagement> Matched))
             {
                 foreach (var m in Matched)
                 {
-                    await m.StartSDK();
+                    m.StartSDK();
                 }
             }
             if (TryFindBasisBaseTypeManagement(type, out Matched))
             {
                 foreach (var m in Matched)
                 {
-                    await m.StartSDK();
+                    m.StartSDK();
                 }
             }
         }
@@ -432,13 +428,13 @@ namespace Basis.Scripts.Device_Management
             StoredPreviousDevice = null;
             return false;
         }
-        public async Task LoadAndOrSaveDefaultDeviceConfigs(string directoryPath)
+        public void LoadAndOrSaveDefaultDeviceConfigs(string directoryPath)
         {
             var builtInDevices = BasisDeviceNameMatcher.BasisDevice;
             //save to disc any that do not exist
-            await BasisDeviceLoaderAndSaver.SaveDevices(directoryPath, builtInDevices);
+            BasisDeviceLoaderAndSaver.SaveDevices(directoryPath, builtInDevices);
             //now lets load them all and override versions that are outdated.
-            var loadedDevices = await BasisDeviceLoaderAndSaver.LoadDeviceAsync(directoryPath);
+            List<BasisDeviceMatchSettings> loadedDevices = BasisDeviceLoaderAndSaver.LoadDeviceAsync(directoryPath);
 
             // Dictionary to store devices by DeviceID for quick lookup
             var deviceDictionary = builtInDevices.ToDictionary(

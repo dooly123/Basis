@@ -9,7 +9,7 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
     public class BasisSimulateXR : BasisBaseTypeManagement
     {
         public List<BasisInputXRSimulate> Inputs = new List<BasisInputXRSimulate>();
-        public async Task<BasisInputXRSimulate> CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "BasisSimulateXR")
+        public BasisInputXRSimulate CreatePhysicalTrackedDevice(string UniqueID, string UnUniqueID, BasisBoneTrackedRole Role = BasisBoneTrackedRole.LeftHand, bool hasrole = false, string subSystems = "BasisSimulateXR")
         {
             GameObject gameObject = new GameObject(UniqueID);
             gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
@@ -19,7 +19,7 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
 
             BasisInputXRSimulate BasisInput = gameObject.AddComponent<BasisInputXRSimulate>();
             BasisInput.FollowMovement = Moveable.transform;
-            await BasisInput.InitalizeTracking(UniqueID, UnUniqueID, subSystems, hasrole, Role);
+            BasisInput.InitalizeTracking(UniqueID, UnUniqueID, subSystems, hasrole, Role);
             if (Inputs.Contains(BasisInput) == false)
             {
                 Inputs.Add(BasisInput);
@@ -33,13 +33,13 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public override async Task BeginLoadSDK()
+        public override void BeginLoadSDK()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public override async Task StartSDK()
+        public override void StartSDK()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }

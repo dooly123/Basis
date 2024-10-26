@@ -10,6 +10,7 @@ using Basis.Scripts.UI.UI_Panels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using static Basis.Scripts.Drivers.BaseBoneDriver;
 
 namespace Basis.Scripts.Device_Management.Devices
@@ -128,7 +129,7 @@ namespace Basis.Scripts.Device_Management.Devices
         /// <param name="subSystems"></param>
         /// <param name="ForceAssignTrackedRole"></param>
         /// <param name="basisBoneTrackedRole"></param>
-        public async Task InitalizeTracking(string uniqueID, string unUniqueDeviceID, string subSystems, bool ForceAssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
+        public void InitalizeTracking(string uniqueID, string unUniqueDeviceID, string subSystems, bool ForceAssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
         {
             //unassign the old tracker
             UnAssignTracker();
@@ -139,7 +140,7 @@ namespace Basis.Scripts.Device_Management.Devices
             CommonDeviceIdentifier = unUniqueDeviceID;
             UniqueDeviceIdentifier = uniqueID;
             // lets check to see if there is a override from a devices matcher
-            BasisDeviceMatchableNames = await BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, basisBoneTrackedRole, ForceAssignTrackedRole);
+            BasisDeviceMatchableNames = BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, basisBoneTrackedRole, ForceAssignTrackedRole);
             if (BasisDeviceMatchableNames.HasTrackedRole)
             {
                 Debug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID);
@@ -377,30 +378,19 @@ namespace Basis.Scripts.Device_Management.Devices
         {
             InputState.CopyTo(LastState);
         }
-        public async Task ShowTrackedVisual()
+        public void ShowTrackedVisual()
         {
             if (BasisVisualTracker == null && LoadedDeviceRequest == null)
             {
-                BasisDeviceMatchSettings Match = await BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier);
+                BasisDeviceMatchSettings Match = BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier);
                 if (Match.CanDisplayPhysicalTracker)
                 {
-                    (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(Match.DeviceID, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
-                    List<GameObject> gameObjects = data.Item1;
-                    if (gameObjects == null)
+                    var op = Addressables.LoadAssetAsync<GameObject>(Match.DeviceID);
+                    GameObject go = op.WaitForCompletion();
+                    GameObject CreatedCopy = Object.Instantiate(go);
+                    if (CreatedCopy.TryGetComponent(out BasisVisualTracker))
                     {
-                        return;
-                    }
-                    if (gameObjects.Count != 0)
-                    {
-                        foreach (GameObject gameObject in gameObjects)
-                        {
-                            gameObject.name = CommonDeviceIdentifier;
-                            gameObject.transform.parent = this.transform;
-                            if (gameObject.TryGetComponent(out BasisVisualTracker))
-                            {
-                                BasisVisualTracker.Initialization(this);
-                            }
-                        }
+                        BasisVisualTracker.Initialization(this);
                     }
                 }
             }

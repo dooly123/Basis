@@ -14,7 +14,7 @@ public class BasisDeviceLoaderAndSaver
     private const string JsonIdentifier = ".json";
     private static readonly string JsonAllTag = "*" + JsonIdentifier; // Made readonly for optimization
 
-    public static async Task<List<BasisDeviceMatchSettings>> LoadDeviceAsync(string directoryPath)
+    public static List<BasisDeviceMatchSettings> LoadDeviceAsync(string directoryPath)
     {
         var loadedDevices = new List<BasisDeviceMatchSettings>();
 
@@ -22,9 +22,8 @@ public class BasisDeviceLoaderAndSaver
         {
             string[] jsonFiles = Directory.GetFiles(directoryPath, JsonAllTag);
 
-            var loadTasks = jsonFiles.Select(jsonFile => LoadDeviceFromFileAsync(jsonFile));
-            var results = await Task.WhenAll(loadTasks);
-            loadedDevices.AddRange(results.Where(device => device != null));
+            IEnumerable<BasisDeviceMatchSettings> loadTasks = jsonFiles.Select(jsonFile => LoadDeviceFromFileAsync(jsonFile));
+            loadedDevices.AddRange(loadTasks.Where(device => device != null));
         }
         else
         {
@@ -34,7 +33,7 @@ public class BasisDeviceLoaderAndSaver
         return loadedDevices;
     }
 
-    private static async Task<BasisDeviceMatchSettings> LoadDeviceFromFileAsync(string jsonFile)
+    private static BasisDeviceMatchSettings LoadDeviceFromFileAsync(string jsonFile)
     {
         if (!File.Exists(jsonFile))
         {
@@ -51,7 +50,7 @@ public class BasisDeviceLoaderAndSaver
                 char[] buffer = new char[4096];
                 int bytesRead;
 
-                while ((bytesRead = await reader.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                while ((bytesRead = reader.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     jsonContent.Append(buffer, 0, bytesRead);
                 }
@@ -67,7 +66,7 @@ public class BasisDeviceLoaderAndSaver
         }
     }
 
-    public static async Task SaveDevices(string directoryPath, List<BasisDeviceMatchSettings> devices)
+    public static void SaveDevices(string directoryPath, List<BasisDeviceMatchSettings> devices)
     {
         // Safety checks
         if (string.IsNullOrWhiteSpace(directoryPath))
@@ -84,7 +83,6 @@ public class BasisDeviceLoaderAndSaver
         }
         // Use a fixed-size array instead of a List to avoid resizing overhead
         int Count = devices.Count;
-        Task[] tasks = new Task[Count];
         for (int i = 0; i < Count; i++)
         {
             var device = devices[i];
@@ -94,20 +92,11 @@ public class BasisDeviceLoaderAndSaver
             }
 
             string filePath = Path.Combine(directoryPath, device.DeviceID + JsonIdentifier);
-            tasks[i] = Task.Run(() => SaveDeviceAsync(filePath, device));
-        }
-
-        try
-        {
-            await Task.WhenAll(tasks);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"An error occurred while saving devices: {ex.Message}");
+            Task.Run(() => SaveDeviceAsync(filePath, device));
         }
     }
 
-    public static async Task SaveDeviceAsync(string filePath, BasisDeviceMatchSettings device)
+    public static void SaveDeviceAsync(string filePath, BasisDeviceMatchSettings device)
     {
         try
         {
@@ -125,7 +114,7 @@ public class BasisDeviceLoaderAndSaver
                 using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true))
                 using (var reader = new StreamReader(stream, Encoding.UTF8))
                 {
-                    loadedContent = await reader.ReadToEndAsync().ConfigureAwait(false);
+                    loadedContent = reader.ReadToEnd();
                 }
 
                 var existingDevice = JsonUtility.FromJson<BasisDeviceMatchSettings>(loadedContent);
@@ -160,7 +149,7 @@ public class BasisDeviceLoaderAndSaver
             using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
             using (var writer = new StreamWriter(stream, Encoding.UTF8))
             {
-                await writer.WriteAsync(jsonContent).ConfigureAwait(false);
+                writer.Write(jsonContent);
             }
         }
         catch (Exception ex)

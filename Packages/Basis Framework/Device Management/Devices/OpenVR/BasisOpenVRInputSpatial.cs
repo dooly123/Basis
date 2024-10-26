@@ -13,10 +13,10 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
     {
         public TrackedPoseDriver.TrackedPose TrackedPose = TrackedPoseDriver.TrackedPose.Center;
         public BasisOpenVRInputEye BasisOpenVRInputEye;
-        public async Task Initialize(TrackedPoseDriver.TrackedPose trackedPose, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
+        public void Initialize(TrackedPoseDriver.TrackedPose trackedPose, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
         {
             TrackedPose = trackedPose;
-            await InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
+            InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
             if (basisBoneTrackedRole == BasisBoneTrackedRole.CenterEye)
             {
                 BasisOpenVRInputEye = gameObject.AddComponent<BasisOpenVRInputEye>();

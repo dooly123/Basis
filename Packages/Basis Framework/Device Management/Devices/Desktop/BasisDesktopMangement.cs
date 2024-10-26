@@ -10,7 +10,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
     public class BasisDesktopManagement : BasisBaseTypeManagement
     {
         public BasisAvatarEyeInput BasisAvatarEyeInput;
-        public override async Task BeginLoadSDK()
+        public override void BeginLoadSDK()
         {
             if (BasisAvatarEyeInput == null)
             {
@@ -22,13 +22,13 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                     gameObject.transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
                 }
                 BasisAvatarEyeInput = gameObject.AddComponent<BasisAvatarEyeInput>();
-              await  BasisAvatarEyeInput.Initalize("Desktop Eye", nameof(BasisDesktopManagement));
+               BasisAvatarEyeInput.Initalize("Desktop Eye", nameof(BasisDesktopManagement));
                 BasisDeviceManagement.Instance.TryAdd(BasisAvatarEyeInput);
             }
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public override async Task StartSDK()
+        public override void StartSDK()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }

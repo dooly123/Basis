@@ -12,10 +12,10 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
         public UnityEngine.XR.InputDevice Device;
         public FingerPose FingerCurls;
         public BasisOpenXRInputEye BasisOpenXRInputEye;
-        public async Task Initialize(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
+        public void Initialize(UnityEngine.XR.InputDevice device, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole)
         {
             Device = device;
-            await InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
+             InitalizeTracking(UniqueID, UnUniqueID, subSystems, AssignTrackedRole, basisBoneTrackedRole);
             if(basisBoneTrackedRole == BasisBoneTrackedRole.CenterEye)
             {
                 BasisOpenXRInputEye = this.gameObject.AddComponent<BasisOpenXRInputEye>();
