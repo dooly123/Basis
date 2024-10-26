@@ -73,5 +73,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-/Assets/Scenes/Garden doolys scene name that cant be replicated by u wahhaha
-/Assets/third_party/Avatar/doolys avatars that cant be replicated wahahaha
+
+# Basis exclusions
+/[Aa]sset[Bb]undles/
+/[Aa]ssets/_UserContent
