@@ -4,11 +4,13 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering.Universal;
 
 public class BasisSceneFactory : MonoBehaviour
 {
     public BasisScene BasisScene;
+    public AudioMixerGroup WorldDefaultMixer;
     public static BasisSceneFactory Instance;
     public void Awake()
     {
@@ -76,14 +78,27 @@ public class BasisSceneFactory : MonoBehaviour
     }
     public void AttachMixerToAllSceneAudioSources()
     {
-        AudioSource[] Sources = FindObjectsByType<AudioSource>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (AudioSource Source in Sources)
+        // Check if mixerGroup is assigned
+        if (BasisScene.Group == null)
         {
-            if (Source.outputAudioMixerGroup == null)
+            BasisScene.Group = WorldDefaultMixer;
+        }
+
+
+        // Get all active and inactive AudioSources in the scene
+        AudioSource[] sources = FindObjectsByType<AudioSource>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        int AudioSourceCount = sources.Length;
+        // Loop through each AudioSource and assign the mixer group if not already assigned
+        for (int Index = 0; Index < AudioSourceCount; Index++)
+        {
+            AudioSource source = sources[Index];
+            if (source != null && source.outputAudioMixerGroup == null)
             {
-                Source.outputAudioMixerGroup = BasisScene.Group;
+                source.outputAudioMixerGroup = BasisScene.Group;
             }
         }
+
+        Debug.Log("Mixer group assigned to all scene AudioSources.");
     }
     public void SpawnPlayer(BasisLocalPlayer Basis)
     {

@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BasisScene: {fileID: 0}
+  WorldDefaultMixer: {fileID: 6216228358845890117, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
   BasisLocalPlayer: {fileID: 0}
   RespawnCheckTimer: 5
   RespawnHeight: -100

@@ -138,7 +138,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public async Task CreateAssetBundle()
         {
             Debug.Log("connecting to default");
-            if (UseAddressables)
+            if (BundledContentHolder.Instance.UseAddressables)
             {
                 await BasisSceneLoadDriver.LoadSceneAddressables(BundledContentHolder.Instance.DefaultScene.BasisRemoteBundleEncrypted.BundleURL);
             }
