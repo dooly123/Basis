@@ -705,7 +705,7 @@ MonoBehaviour:
       IsLocal: 0
       MetaURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/1a0fe16e-1c5f-4134-a10e-07c6c436bc97_638650053689621810.BasisEncyptedMet
       BundleURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/1a0fe16e-1c5f-4134-a10e-07c6c436bc97_638650053689621810.BasisEncyptedBun
-    BasisStoredEncryptedBundle:
+    BasisLocalEncryptedBundle:
       LocalMetaFile: 
       LocalBundleFile: 
     BasisBundleInformation:

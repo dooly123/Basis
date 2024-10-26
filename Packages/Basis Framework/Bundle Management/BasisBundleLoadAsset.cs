@@ -90,7 +90,7 @@ public static class BasisBundleLoadAsset
             // Track scene loading progress
             while (!asyncLoad.isDone)
             {
-                progressCallback.ReportProgress(50 + asyncLoad.progress * 50); // Progress from 50 to 100 during scene load
+                progressCallback.ReportProgress(50 + asyncLoad.progress * 50, "loading scene"); // Progress from 50 to 100 during scene load
                 await Task.Yield();
             }
 
@@ -105,7 +105,7 @@ public static class BasisBundleLoadAsset
                     SceneManager.SetActiveScene(loadedScene);
                 }
                 Debug.Log("Scene set as active: " + loadedScene.name);
-                progressCallback.ReportProgress(100); // Set progress to 100 when done
+                progressCallback.ReportProgress(100, "loading scene"); // Set progress to 100 when done
             }
             else
             {

@@ -25,6 +25,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField IPaddress;
         public TMP_InputField Port;
         public TMP_InputField Password;
+        public TMP_Text displayloadinginfo;
         public Button UseLocalhost;
         public static string StartingPassword = "basis18072024";
 
@@ -78,7 +79,7 @@ namespace Basis.Scripts.UI.UI_Panels
             BasisSceneLoadDriver.progressCallback.OnProgressReport -= ProgresReport;
         }
 
-        private void ProgresReport(float progress)
+        private void ProgresReport(float progress, string info)
         {
             // Ensure this method is executed on the main thread
             EnqueueOnMainThread(() =>
@@ -87,12 +88,15 @@ namespace Basis.Scripts.UI.UI_Panels
                 {
                     StartProgressBar();
                     UpdateProgressBar(progress);
+                    displayloadinginfo.gameObject.SetActive(true);
+                    displayloadinginfo.text = info;
                 }
                 else
                 {
                     UpdateProgressBar(progress);
                     if (progress == 100)
                     {
+                        displayloadinginfo.gameObject.SetActive(false);
                         StopProgressBar();
                     }
                 }

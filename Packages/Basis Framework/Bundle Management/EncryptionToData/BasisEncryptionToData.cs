@@ -33,7 +33,7 @@ public static class BasisEncryptionToData
                 lastReportedProgress = progress;
 
                 // Call the progress callback with the current progress
-                progressCallback.ReportProgress(progress);
+                progressCallback.ReportProgress(progress, "loading bundle");
             }
 
             // Wait a short period before checking again to avoid busy waiting
@@ -41,7 +41,7 @@ public static class BasisEncryptionToData
         }
 
         // Ensure progress reaches 100% after completion
-        progressCallback.ReportProgress(100);
+        progressCallback.ReportProgress(100, "loading bundle");
 
         // Await the request completion
         await assetBundleCreateRequest;

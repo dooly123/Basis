@@ -62,8 +62,8 @@ public static class BasisIOManagement
                 }
 
                 // Report progress (0% to 100%)
-                progressCallback.ReportProgress(asyncOperation.webRequest.downloadProgress * 100);
-               // Debug.Log("downloading file " + asyncOperation.webRequest.downloadProgress);
+                progressCallback.ReportProgress(asyncOperation.webRequest.downloadProgress * 100, "downloading data");
+                // Debug.Log("downloading file " + asyncOperation.webRequest.downloadProgress);
                 await Task.Yield();
             }
 
@@ -189,7 +189,7 @@ public static class BasisIOManagement
 
                     // Calculate and report progress
                     float progress = (float)totalBytesCopied / totalBytes;
-                    Report.ReportProgress(progress * 100);
+                    Report.ReportProgress(progress * 100, "copying data");
 
                     // Allow other tasks to run
                     await Task.Yield();

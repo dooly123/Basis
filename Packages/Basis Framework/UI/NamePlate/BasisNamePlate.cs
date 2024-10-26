@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static BasisProgressReport;
 namespace Basis.Scripts.UI.NamePlate
 {
     public abstract class BasisNamePlate : MonoBehaviour
@@ -18,6 +19,7 @@ namespace Basis.Scripts.UI.NamePlate
         public BasisBoneControl MouthTarget;
         public TextMeshProUGUI Text;
         public Image Loadingbar;
+        public TextMeshProUGUI Loadingtext;
         public float YHeightMultiplier = 1.25f;
         public bool HasActiveLoadingbar = false;
         public BasisRemotePlayer BasisRemotePlayer;
@@ -29,29 +31,42 @@ namespace Basis.Scripts.UI.NamePlate
             LocalCameraDriver = BasisLocalCameraDriver.Instance.transform;
             Text.text = BasisRemotePlayer.DisplayName;
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressReport += ProgresReport;
+            BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressComplete += OnProgressComplete;
+            BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressStart += OnProgressStart;
         }
         public void OnDestroy()
         {
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressReport -= ProgresReport;
+            BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressComplete -= OnProgressComplete;
+            BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressStart -= OnProgressStart;
         }
-        public void ProgresReport(float progress)
+
+        private void OnProgressStart()
+        {            // Add the action to the queue to be executed on the main thread
+            EnqueueOnMainThread(() =>
+            {
+                if (!HasActiveLoadingbar)
+                {
+                    StartProgressBar();
+                }
+            });
+        }
+
+        private void OnProgressComplete()
+        {            // Add the action to the queue to be executed on the main thread
+            EnqueueOnMainThread(() =>
+            {
+                StopProgressBar();
+            });
+        }
+
+        public void ProgresReport(float progress,string info)
         {
             // Add the action to the queue to be executed on the main thread
             EnqueueOnMainThread(() =>
             {
-                if (progress != 100)
-                {
-                    if (!HasActiveLoadingbar)
-                    {
-                        StartProgressBar();
-                    }
-
-                    UpdateProgressBar(progress);
-                }
-                else
-                {
-                    StopProgressBar();
-                }
+                Loadingtext.text = info;
+                UpdateProgressBar(progress);
             });
         }
         // This method will queue the action to be executed on the main thread
@@ -66,6 +81,7 @@ namespace Basis.Scripts.UI.NamePlate
         public void StartProgressBar()
         {
             Loadingbar.gameObject.SetActive(true);
+            Loadingtext.gameObject.SetActive(true);
             HasActiveLoadingbar = true;
         }
         public void UpdateProgressBar(float progress)
@@ -74,6 +90,7 @@ namespace Basis.Scripts.UI.NamePlate
         }
         public void StopProgressBar()
         {
+            Loadingtext.gameObject.SetActive(false);
             Loadingbar.gameObject.SetActive(false);
             HasActiveLoadingbar = false;
         }
