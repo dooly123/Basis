@@ -21,7 +21,6 @@ namespace Basis.Scripts.UI.NamePlate
         public Image Loadingbar;
         public TextMeshProUGUI Loadingtext;
         public float YHeightMultiplier = 1.25f;
-        public bool HasActiveLoadingbar = false;
         public BasisRemotePlayer BasisRemotePlayer;
         public void Initalize(BasisBoneControl hipTarget, BasisRemotePlayer basisRemotePlayer)
         {
@@ -45,10 +44,9 @@ namespace Basis.Scripts.UI.NamePlate
         {            // Add the action to the queue to be executed on the main thread
             EnqueueOnMainThread(() =>
             {
-                if (!HasActiveLoadingbar)
-                {
-                    StartProgressBar();
-                }
+                Debug.Log("progress bar starting");
+                Loadingbar.gameObject.SetActive(true);
+                Loadingtext.gameObject.SetActive(true);
             });
         }
 
@@ -56,7 +54,9 @@ namespace Basis.Scripts.UI.NamePlate
         {            // Add the action to the queue to be executed on the main thread
             EnqueueOnMainThread(() =>
             {
-                StopProgressBar();
+                Debug.Log("progress bar ending");
+                Loadingtext.gameObject.SetActive(false);
+                Loadingbar.gameObject.SetActive(false);
             });
         }
 
@@ -66,6 +66,7 @@ namespace Basis.Scripts.UI.NamePlate
             EnqueueOnMainThread(() =>
             {
                 Loadingtext.text = info;
+                Debug.Log("updating progress bar " + progress + " | " + info);
                 UpdateProgressBar(progress);
             });
         }
@@ -77,22 +78,9 @@ namespace Basis.Scripts.UI.NamePlate
                 actions.Enqueue(action);
             }
         }
-
-        public void StartProgressBar()
-        {
-            Loadingbar.gameObject.SetActive(true);
-            Loadingtext.gameObject.SetActive(true);
-            HasActiveLoadingbar = true;
-        }
         public void UpdateProgressBar(float progress)
         {
             Loadingbar.rectTransform.localScale = new Vector3(progress/100, 1f, 1f);
-        }
-        public void StopProgressBar()
-        {
-            Loadingtext.gameObject.SetActive(false);
-            Loadingbar.gameObject.SetActive(false);
-            HasActiveLoadingbar = false;
         }
         private static readonly Queue<Action> actions = new Queue<Action>();
         private void Update()

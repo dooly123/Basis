@@ -228,7 +228,6 @@ MonoBehaviour:
   Loadingbar: {fileID: 2027450512927559089}
   Loadingtext: {fileID: 4013479155598010129}
   YHeightMultiplier: 1.25
-  HasActiveLoadingbar: 0
   BasisRemotePlayer: {fileID: 0}
 --- !u!114 &2997356888555999241
 MonoBehaviour:
@@ -275,7 +274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5184453304049788598
 RectTransform:
   m_ObjectHideFlags: 0
@@ -534,7 +533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1095917590344183364
 RectTransform:
   m_ObjectHideFlags: 0
