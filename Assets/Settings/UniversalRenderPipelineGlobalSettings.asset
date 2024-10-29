@@ -158,7 +158,7 @@ MonoBehaviour:
         m_Version: 0
         m_ExportShaderVariants: 1
         m_ShaderVariantLogLevel: 0
-        m_StripRuntimeDebugShaders: 0
+        m_StripRuntimeDebugShaders: 1
     - rid: 2858994164428701717
       type: {class: RenderGraphUtilsResources, ns: UnityEngine.Rendering.RenderGraphModule.Util, asm: Unity.RenderPipelines.Core.Runtime}
       data:
