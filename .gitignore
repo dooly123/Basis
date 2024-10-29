@@ -77,3 +77,4 @@ crashlytics-build.properties
 # Basis exclusions
 /[Aa]sset[Bb]undles/
 /[Aa]ssets/_UserContent
+/[Aa]ssets/_UserContent.meta
