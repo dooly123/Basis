@@ -10,21 +10,21 @@ using Unity.Mathematics;
 
 public class MicrophoneRecorder : MicrophoneRecorderBase
 {
-    public int head = 0;
+    private int head = 0;
     private int bufferLength;
     public bool HasEvents = false;
     public int PacketSize;
     public bool UseDenoiser = false;
     public static Action<bool> OnPausedAction;
-    public bool MicrophoneIsStarted = false;
+    private bool MicrophoneIsStarted = false;
     private Thread processingThread;
-    private bool isRunning = true;
+    public bool isRunning = true;
     private ManualResetEvent processingEvent = new ManualResetEvent(false);
     private object processingLock = new object();
-    public int position;
-    public NativeArray<float> PBA;
-    public VolumeAdjustmentJob VAJ;
-    public JobHandle handle;
+    private int position;
+    private NativeArray<float> PBA;
+    private VolumeAdjustmentJob VAJ;
+    private JobHandle handle;
     public bool TryInitialize()
     {
         if (!IsInitialize)

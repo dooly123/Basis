@@ -84,7 +84,7 @@ namespace Basis.Scripts.BasisCharacterController
             GroundCheck();
 
             // Calculate the rotation amount for this frame
-            float rotationAmount = Rotation.x * RotationSpeed * Time.deltaTime;
+            float rotationAmount = Rotation.x * RotationSpeed * driver.DeltaTime;
 
             // Get the current rotation of the player
             Vector3 currentRotation = BasisLocalPlayer.Instance.transform.eulerAngles;
