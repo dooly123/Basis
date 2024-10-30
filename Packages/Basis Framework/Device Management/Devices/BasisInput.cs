@@ -69,7 +69,7 @@ namespace Basis.Scripts.Device_Management.Devices
                     if (found == Role)
                     {
                         Debug.LogError("Already Found tracker for  " + Role);
-                        return;
+                        //return;
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace Basis.Scripts.Device_Management.Devices
 
             if (hasRoleAssigned)
             {
-                if (HasControl)
+                if (true)
                 {
                     AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
                     AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
