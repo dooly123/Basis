@@ -1,6 +1,5 @@
 using Basis.Scripts.Addressable_Driver;
 using Basis.Scripts.Addressable_Driver.Factory;
-using Basis.Scripts.Addressable_Driver.Resource;
 using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
@@ -8,7 +7,7 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI;
 using Basis.Scripts.UI.UI_Panels;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static Basis.Scripts.Drivers.BaseBoneDriver;
@@ -48,6 +47,7 @@ namespace Basis.Scripts.Device_Management.Devices
         [SerializeField]
         public BasisInputState LastState = new BasisInputState();
         public BasisGeneralLocation GeneralLocation;
+        public static BasisBoneTrackedRole[] CanHaveMultipleRoles = new BasisBoneTrackedRole[] { BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.RightHand };
         public bool TryGetRole(out BasisBoneTrackedRole BasisBoneTrackedRole)
         {
             if (hasRoleAssigned)
@@ -61,15 +61,23 @@ namespace Basis.Scripts.Device_Management.Devices
         public void AssignRoleAndTracker(BasisBoneTrackedRole Role)
         {
             hasRoleAssigned = true;
-            for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
+            int InputsCount = BasisDeviceManagement.Instance.AllInputDevices.Count;
+            for (int Index = 0; Index < InputsCount; Index++)
             {
                 BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
                 if (Input.TryGetRole(out BasisBoneTrackedRole found) && Input != this)
                 {
                     if (found == Role)
                     {
-                        Debug.LogError("Already Found tracker for  " + Role);
-                        return;
+                        if (CanHaveMultipleRoles.Contains(found) == false)
+                        {
+                            Debug.LogError("Already Found tracker for  " + Role);
+                            return;
+                        }
+                        else
+                        {
+                            Debug.Log("Has Multiple Roles assigned for " + found + " most likely ok.");
+                        }
                     }
                 }
             }
@@ -149,20 +157,12 @@ namespace Basis.Scripts.Device_Management.Devices
 
             if (hasRoleAssigned)
             {
-                if (HasControl)
+                AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
+                AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
+                HasUIInputSupport = BasisDeviceMatchableNames.HasRayCastSupport;
+                if (HasUIInputSupport)
                 {
-                    AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
-                    AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
-
-                    HasUIInputSupport = BasisDeviceMatchableNames.HasRayCastSupport;
-                    if (HasUIInputSupport)
-                    {
-                        CreateRayCaster(this);
-                    }
-                }
-                else
-                {
-                    Debug.LogError("Missing Tracked Role " + trackedRole);
+                    CreateRayCaster(this);
                 }
             }
             /*            if (ForceAssignTrackedRole)
