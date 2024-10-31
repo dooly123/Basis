@@ -32,10 +32,9 @@ namespace Basis.Scripts.Drivers
         public void Simulate()
         {
             // sequence all other devices to run at the same time
-            OnSimulate?.Invoke();
-            //make sure to update time only after we invoke (its going to take time)
             ProvidedTime = Time.timeAsDouble;
             DeltaTime = Time.deltaTime;
+            OnSimulate?.Invoke();
             for (int Index = 0; Index < ControlsLength; Index++)
             {
                 Controls[Index].ComputeMovement(ProvidedTime, DeltaTime);
@@ -45,10 +44,9 @@ namespace Basis.Scripts.Drivers
         public void SimulateWithoutLerp()
         {
             // sequence all other devices to run at the same time
-            OnSimulate?.Invoke();
-            //make sure to update time only after we invoke (its going to take time)
             ProvidedTime = Time.timeAsDouble;
             DeltaTime = Time.deltaTime;
+            OnSimulate?.Invoke();
             for (int Index = 0; Index < ControlsLength; Index++)
             {
                 Controls[Index].LastRunData.position = Controls[Index].OutGoingData.position;

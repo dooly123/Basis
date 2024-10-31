@@ -16,7 +16,8 @@ namespace Basis.Scripts.Animator_Driver
         public float LargerThenVelocityCheckRotation = 0.03f;
         private BasisLocalPlayer localPlayer;
         public float ScaleMovementBy = 1;
-        public float dampeningFactor = 30; // Adjust this value to control the dampening effect
+        public float dampeningFactor = 6; // Adjust this value to control the dampening effect
+        public float AngularDampingFactor = 30;
         private Vector3 previousRawVelocity = Vector3.zero;
         private Vector3 previousAngularVelocity = Vector3.zero; // New field for previous angular velocity
         private Quaternion previousHipsRotation;
@@ -30,18 +31,26 @@ namespace Basis.Scripts.Animator_Driver
         public bool HasEvents = false;
         public BasisInput HipsInput;
         public bool HasHipsInput = false;
+
+        // Critically damped spring smoothing
+        public float dampingRatio = 4; // Adjust for desired dampening effect
+        public float angularFrequency = 0.4f; // Adjust for the speed of dampening
         void Simulate()
         {
             if (localPlayer.AvatarDriver.InTPose)
             {
                 return;
             }
-            float DeltaTime = Time.deltaTime;
-            // Calculate the velocity of the character controller taking into account the direction occurring to the hips
-            currentVelocity = Quaternion.Inverse(Hips.OutgoingWorldData.rotation) * (Controller.bottomPoint - Controller.LastbottomPoint) / DeltaTime;
+            float DeltaTime = localPlayer.LocalBoneDriver.DeltaTime;
 
-            // Apply dampening to the velocity
-            dampenedVelocity = Vector3.Lerp(previousRawVelocity, currentVelocity, DeltaTime * dampeningFactor);
+            // Calculate the velocity of the character controller
+            currentVelocity = Quaternion.Inverse(Hips.OutgoingWorldData.rotation) * (Controller.bottomPointLocalspace - Controller.LastbottomPoint) / DeltaTime;
+
+
+            Vector3 velocityDifference = currentVelocity - previousRawVelocity;
+            float dampingFactor = 1f - Mathf.Exp(-dampingRatio * angularFrequency * DeltaTime);
+            dampenedVelocity = previousRawVelocity + dampingFactor * velocityDifference;
+
             basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = dampenedVelocity;
             basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = basisAnimatorVariableApply.BasisAnimatorVariables.Velocity.sqrMagnitude > LargerThenVelocityCheck;
             basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 1;
@@ -66,7 +75,7 @@ namespace Basis.Scripts.Animator_Driver
             angularVelocity = axis * angle / DeltaTime;
 
             // Apply dampening to the angular velocity
-            dampenedAngularVelocity = Vector3.Lerp(previousAngularVelocity, angularVelocity, dampeningFactor);
+            dampenedAngularVelocity = Vector3.Lerp(previousAngularVelocity, angularVelocity, AngularDampingFactor);
 
 
             basisAnimatorVariableApply.BasisAnimatorVariables.AngularVelocity = dampenedAngularVelocity;
