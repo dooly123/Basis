@@ -52,11 +52,30 @@ MonoBehaviour:
   DisplayName: 
   UUID: 
   Avatar: {fileID: 0}
-  AvatarUrl: 
-  AvatarLoadMode: 0
+  AvatarMetaData:
+    UnlockPassword: 
+    BasisRemoteBundleEncrypted:
+      IsLocal: 0
+      MetaURL: 
+      BundleURL: 
+    BasisLocalEncryptedBundle:
+      LocalMetaFile: 
+      LocalBundleFile: 
+    BasisBundleInformation:
+      HasError: 0
+      BasisBundleDescription:
+        AssetBundleName: 
+        AssetBundleDescription: 
+      BasisBundleGenerated:
+        AssetBundleHash: 
+        AssetMode: 
+        AssetToLoadName: 
+        AssetBundleCRC: 0
   HasAvatarDriver: 0
   FaceisVisible: 0
   FaceRenderer: {fileID: 0}
+  AvatarLoadMode: 0
+  BasisAvatarStrainJiggleDriver: {fileID: 0}
   Move: {fileID: 8783102315984964394}
   PlayerEyeHeight: 1.64
   RatioPlayerToAvatarScale: 1
@@ -64,6 +83,79 @@ MonoBehaviour:
   EyeRatioAvatarToAvatarDefaultScale: 1
   LocalBoneDriver: {fileID: 1116109802514353462}
   Hips:
+    Cullable: 0
+    Name: 
+    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
+    HasBone: 0
+    BoneTransform: {fileID: 0}
+    BoneModelTransform: {fileID: 0}
+    HasEvents: 0
+    hasTrackerDriver: 1
+    OnHasRigChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    WeightsChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    hasRigLayer: 1
+    positionWeight: 1
+    rotationWeight: 1
+    GeneralLocation: 0
+    RotationControl:
+      Lerp: 0
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      TaretInterpreter: 0
+      Offset: {x: 0, y: 0, z: 0, w: 0}
+      ClampStats: 0
+      ClampableAxis: 0
+      ClampSize: 0
+      UseAngle: 0
+      AngleBeforeMove: 0
+      AngleBeforeSame: 0
+      ResetAfterTime: 0
+      NextReset: 0
+      HasActiveTimer: 0
+      RotationOverride: 0
+    PositionControl:
+      Offset: {x: 0, y: 0, z: 0}
+      LerpAmount: 0
+      Lerp: 0
+      TaretInterpreter: 0
+    OutGoingData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastRunData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeWorld:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    TposeLocal:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    InverseOffsetFromBone:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    IncomingData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    OutgoingWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+    LastWorldData:
+      Use: 0
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+  CenterEye:
     Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
@@ -144,6 +236,10 @@ MonoBehaviour:
   HasEvents: 0
   MicrophoneRecorder: {fileID: 0}
   SpawnPlayerOnSceneLoad: 1
+  PositionLerp: 0.7
+  RotationLerp: 0.7
+  LastPosition: {x: 0, y: 0, z: 0}
+  LastRotation: {x: 0, y: 0, z: 0, w: 0}
   HasCalibrationEvents: 0
 --- !u!114 &1116109802514353462
 MonoBehaviour:
@@ -241,6 +337,7 @@ MonoBehaviour:
   HasTposeEvent: 0
   Locomotion: Locomotion
   BasisMuscleDriver: {fileID: 0}
+  BasisLocalEyeFollowDriver: {fileID: 0}
 --- !u!114 &277109516044041921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,7 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 5548795088377030369}
-  bottomPoint: {x: 0, y: 0, z: 0}
+  bottomPointLocalspace: {x: 0, y: 0, z: 0}
   LastbottomPoint: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
   RunSpeed: 5

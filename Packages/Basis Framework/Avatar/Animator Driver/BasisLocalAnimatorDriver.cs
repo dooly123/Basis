@@ -130,13 +130,12 @@ namespace Basis.Scripts.Animator_Driver
         {
             HasHipsInput = BasisDeviceManagement.Instance.FindDevice(out HipsInput, BasisBoneTrackedRole.Hips);
         }
-
         private void FindReferences()
         {
             if (localPlayer == null)
             {
                 localPlayer = BasisLocalPlayer.Instance;
-                localPlayer.Move.ReadyToRead += Simulate;
+               localPlayer.Move.ReadyToRead += Simulate;
                 localPlayer.Move.JustJumped += JustJumped;
                 localPlayer.Move.JustLanded += JustLanded;
             }

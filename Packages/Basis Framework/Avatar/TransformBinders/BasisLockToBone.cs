@@ -35,7 +35,7 @@ public class BasisLockToBone : MonoBehaviour
         }
         if (HasEvent == false)
         {
-            CharacterTransformDriver.ReadyToRead += Simulation;
+            CharacterTransformDriver.ReadyToRead.AddAction(99,Simulation);
             HasEvent = true;
         }
     }
@@ -45,7 +45,7 @@ public class BasisLockToBone : MonoBehaviour
         {
             if (HasEvent)
             {
-                CharacterTransformDriver.ReadyToRead -= Simulation;
+                CharacterTransformDriver.ReadyToRead.RemoveAction(99,Simulation);
                 HasEvent = false;
             }
         }

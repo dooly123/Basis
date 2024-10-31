@@ -25,7 +25,7 @@ namespace Basis.Scripts.Drivers
         public delegate void SimulationHandler();
         public event SimulationHandler OnSimulate;
         public event SimulationHandler OnPostSimulate;
-        public event SimulationHandler ReadyToRead;
+        public OrderedDelegate ReadyToRead = new OrderedDelegate();
         /// <summary>
         /// call this after updating the bone data
         /// </summary>
@@ -274,6 +274,43 @@ namespace Basis.Scripts.Drivers
                     {
                         Gizmos.Sphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
                     }
+                }
+            }
+        }
+
+
+        public class OrderedDelegate
+        {
+            private SortedDictionary<int, Action> actions = new SortedDictionary<int, Action>();
+
+            // Add an action with a priority level.
+            public void AddAction(int priority, Action action)
+            {
+                if (actions.ContainsKey(priority))
+                    actions[priority] += action;
+                else
+                    actions[priority] = action;
+            }
+
+            // Remove a specific action from a given priority.
+            public void RemoveAction(int priority, Action action)
+            {
+                if (actions.ContainsKey(priority))
+                {
+                    actions[priority] -= action;
+
+                    // If no delegates remain for this priority, remove the key
+                    if (actions[priority] == null)
+                        actions.Remove(priority);
+                }
+            }
+
+            // Invoke all actions in order of priority.
+            public void Invoke()
+            {
+                foreach (var actionPair in actions)
+                {
+                    actionPair.Value?.Invoke();
                 }
             }
         }

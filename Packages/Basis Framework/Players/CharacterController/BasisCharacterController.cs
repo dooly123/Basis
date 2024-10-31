@@ -44,7 +44,7 @@ namespace Basis.Scripts.BasisCharacterController
         {
             if (HasEvents)
             {
-                driver.ReadyToRead -= Simulate;
+               driver.ReadyToRead.RemoveAction(98,Simulate);
                 HasEvents = false;
             }
         }
@@ -58,7 +58,7 @@ namespace Basis.Scripts.BasisCharacterController
             characterController.skinWidth = 0.01f;
             if (HasEvents == false)
             {
-                driver.ReadyToRead += Simulate;
+                driver.ReadyToRead.AddAction(98, Simulate);
                 HasEvents = true;
             }
         }

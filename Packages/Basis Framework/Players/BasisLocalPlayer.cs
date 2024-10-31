@@ -69,7 +69,7 @@ namespace Basis.Scripts.BasisSdk.Players
             LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
             if (HasEvents == false)
             {
-                LocalBoneDriver.ReadyToRead += SimulateHips;
+                LocalBoneDriver.ReadyToRead.AddAction(97, SimulateHips);
                 OnLocalAvatarChanged += OnCalibration;
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
@@ -194,7 +194,7 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 if (LocalBoneDriver != null)
                 {
-                    LocalBoneDriver.ReadyToRead -= SimulateHips;
+                    LocalBoneDriver.ReadyToRead.RemoveAction(97,SimulateHips);
                 }
                 OnLocalAvatarChanged -= OnCalibration;
                 SceneManager.sceneLoaded -= OnSceneLoadedCallback;
