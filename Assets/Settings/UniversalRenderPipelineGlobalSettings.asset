@@ -185,8 +185,8 @@ MonoBehaviour:
       type: {class: URPShaderStrippingSetting, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.Runtime}
       data:
         m_Version: 0
-        m_StripUnusedPostProcessingVariants: 0
-        m_StripUnusedVariants: 0
+        m_StripUnusedPostProcessingVariants: 1
+        m_StripUnusedVariants: 1
         m_StripScreenCoordOverrideVariants: 1
     - rid: 6127114917306957826
       type: {class: UniversalRenderPipelineEditorMaterials, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.Runtime}
