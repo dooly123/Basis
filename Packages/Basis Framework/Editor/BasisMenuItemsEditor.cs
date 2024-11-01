@@ -216,8 +216,7 @@ public static class BasisMenuItemsEditor
             if (bodyPart != null)
             {
                 Vector3 bodyPartPosition = ModifyVector(bodyPart.position);
-                trackers[Index].FollowMovement.position = bodyPartPosition;
-                trackers[Index].FollowMovement.rotation = Random.rotation;
+                trackers[Index].FollowMovement.SetPositionAndRotation(bodyPartPosition, Random.rotation);
             }
         }
         //   BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();

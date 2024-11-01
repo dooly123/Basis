@@ -387,8 +387,10 @@ namespace Basis.Scripts.Device_Management.Devices
                 {
                     var op = Addressables.LoadAssetAsync<GameObject>(Match.DeviceID);
                     GameObject go = op.WaitForCompletion();
-                    GameObject CreatedCopy = Object.Instantiate(go);
-                    if (CreatedCopy.TryGetComponent(out BasisVisualTracker))
+                    GameObject gameObject = Object.Instantiate(go);
+                    gameObject.name = CommonDeviceIdentifier;
+                    gameObject.transform.parent = this.transform;
+                    if (gameObject.TryGetComponent(out BasisVisualTracker))
                     {
                         BasisVisualTracker.Initialization(this);
                     }
