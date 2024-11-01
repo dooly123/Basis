@@ -19,7 +19,7 @@ namespace BattlePhaze.SettingsManager
             public UnityEngine.Object ObjectInput;
         }
 
-        public void Start()
+        public void Awake()
         {
             SettingsManager Manager = SettingsManager.Instance;
             if (Manager != null)
