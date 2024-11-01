@@ -344,7 +344,7 @@ _videoMutex = new Mutex(false); // Or another synchronization method
         {
             int iterations = 0;
 
-            while (ShouldUpdateVideo() && iterations < synchronizingmaxIterations)
+            while (ShouldUpdateVideo() && iterations < synchronizingmaxIterations && !IsPaused)
             {
                 iterations++;
                 if (_videoMutex.WaitOne(0))
@@ -447,7 +447,7 @@ _videoMutex = new Mutex(false); // Or another synchronization method
             FillVideoBuffersStopWatch.Restart();
 
             // Main loop that runs as long as we are within the target frame time
-            while (FillVideoBuffersStopWatch.ElapsedMilliseconds <= fpsMs)
+            while (FillVideoBuffersStopWatch.ElapsedMilliseconds <= fpsMs && !IsPaused)
             {
                 // Initialize state variables
                 double time = default;
