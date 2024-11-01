@@ -210,39 +210,65 @@ public class JiggleBone {
 
     public Vector3 GetCachedSolvePosition() => extrapolatedPosition;
 
-    /// <summary>
-    /// Brings the transforms back to their last-known valid state. Valid meaning unjiggled. Either sourced from spawn, Animator, or by manual position sets by the user.
-    /// Then samples the current pose for use later in stepping the simulation. This should be called at the beginning of every frame that Pose is called. It creates the desired "target pose" that the simulation tries to match.
-    /// </summary>
-    public void ApplyValidPoseThenSampleTargetPose(JiggleBone[] bones, double timeAsDouble, bool animated) {
-        if (!hasTransform) {
-            cachedPositionForPosing = GetRealTransformPosition(bones);
-            targetAnimatedBoneSignal.SetPosition(cachedPositionForPosing, timeAsDouble);
-            cachedLengthToParent = Vector3.Distance(cachedPositionForPosing, bones[parentID].cachedPositionForPosing);
-            return;
-        }
-
-        if (animated) {
-            transform.GetLocalPositionAndRotation(out var localPosition, out var localRotation);
-            if (boneRotationChangeCheck == localRotation && bonePositionChangeCheck == localPosition) {
-                transform.SetLocalPositionAndRotation(lastValidPoseBoneLocalPosition, lastValidPoseBoneRotation);
-            } else {
-                transform.GetLocalPositionAndRotation(out lastValidPoseBoneLocalPosition, out lastValidPoseBoneRotation);
+        /// <summary>
+        /// Brings the transforms back to their last-known valid state. Valid meaning unjiggled. Either sourced from spawn, Animator, or by manual position sets by the user.
+        /// Then samples the current pose for use later in stepping the simulation. This should be called at the beginning of every frame that Pose is called. It creates the desired "target pose" that the simulation tries to match.
+        /// </summary>
+        public void ApplyValidPoseThenSampleTargetPose(JiggleBone[] bones, double timeAsDouble, bool animated)
+        {
+            if (!hasTransform)
+            {
+                cachedPositionForPosing = GetRealTransformPosition(bones);
+                targetAnimatedBoneSignal.SetPosition(cachedPositionForPosing, timeAsDouble);
+                cachedLengthToParent = Vector3.Distance(cachedPositionForPosing, bones[parentID].cachedPositionForPosing);
+                return;
             }
-        } else {
-            transform.SetLocalPositionAndRotation(lastValidPoseBoneLocalPosition, lastValidPoseBoneRotation);
+
+            if (animated)
+            {
+                transform.GetLocalPositionAndRotation(out var localPosition, out var localRotation);
+                bool rotationChanged = boneRotationChangeCheck != localRotation;
+                bool positionChanged = bonePositionChangeCheck != localPosition;
+                if (!rotationChanged && !positionChanged)
+                {
+                    transform.SetLocalPositionAndRotation(lastValidPoseBoneLocalPosition, lastValidPoseBoneRotation);
+                }
+                else
+                {
+                    if (rotationChanged && positionChanged)
+                    {
+                        transform.GetLocalPositionAndRotation(out lastValidPoseBoneLocalPosition, out lastValidPoseBoneRotation);
+                    }
+                    else if (rotationChanged)
+                    {
+                        lastValidPoseBoneRotation = transform.localRotation;
+                        transform.localPosition = lastValidPoseBoneLocalPosition;
+                    }
+                    else
+                    {
+                        lastValidPoseBoneLocalPosition = transform.localPosition;
+                        transform.localRotation = lastValidPoseBoneRotation;
+                    }
+                }
+            }
+            else
+            {
+                transform.SetLocalPositionAndRotation(lastValidPoseBoneLocalPosition, lastValidPoseBoneRotation);
+            }
+
+            cachedPositionForPosing = transform.position;
+            targetAnimatedBoneSignal.SetPosition(cachedPositionForPosing, timeAsDouble);
+            if (!hasParent)
+            {
+                cachedLengthToParent = 0.1f;
+            }
+            else
+            {
+                cachedLengthToParent = Vector3.Distance(cachedPositionForPosing, bones[parentID].cachedPositionForPosing);
+            }
         }
 
-        cachedPositionForPosing = transform.position;
-        targetAnimatedBoneSignal.SetPosition(cachedPositionForPosing, timeAsDouble);
-        if (!hasParent) {
-            cachedLengthToParent = 0.1f;
-        } else {
-            cachedLengthToParent = Vector3.Distance(cachedPositionForPosing, bones[parentID].cachedPositionForPosing);
-        }
-    }
-    
-    public void OnDrawGizmos(JiggleBone[] bones, JiggleSettingsBase jiggleSettings, bool isRoot = false) {
+        public void OnDrawGizmos(JiggleBone[] bones, JiggleSettingsBase jiggleSettings, bool isRoot = false) {
         var time = Time.timeAsDouble;
         Vector3 pos = (isRoot || !Application.isPlaying) ? (hasTransform ? transform.position : GetRealTransformPosition(bones)) : particleSignal.SamplePosition(time-JiggleRigBuilder.VERLET_TIME_STEP);
         if (hasChild) {
