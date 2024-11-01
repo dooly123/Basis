@@ -13,6 +13,10 @@ public class uLipSync : MonoBehaviour
     public LipSyncUpdateEvent onLipSyncUpdate = new LipSyncUpdateEvent();
     [Range(0f, 1f)] public float outputSoundGain = 1f;
 
+    AudioSource _audioSource;
+    public uLipSyncAudioSource audioSourceProxy;
+    uLipSyncAudioSource _currentAudioSourceProxy;
+
     JobHandle _jobHandle;
     object _lockObject = new object();
     bool _allocated = false;
@@ -72,6 +76,9 @@ public class uLipSync : MonoBehaviour
 
     void Awake()
     {
+        UpdateAudioSource();
+        UpdateAudioSourceProxy();
+
 #if UNITY_WEBGL && !UNITY_EDITOR
         InitializeWebGL();
 #endif
@@ -103,6 +110,8 @@ public class uLipSync : MonoBehaviour
         ScheduleJob();
 
         UpdateBuffers();
+        UpdateAudioSource();
+        UpdateAudioSourceProxy();
     }
 
     void AllocateBuffers()
@@ -327,6 +336,31 @@ public class uLipSync : MonoBehaviour
 
         _requestedCalibrationVowels.Clear();
     }
+
+    void UpdateAudioSource()
+    {
+        if (_audioSource) return;
+
+        _audioSource = GetComponent<AudioSource>();
+    }
+
+    void UpdateAudioSourceProxy()
+    {
+        if (audioSourceProxy == _currentAudioSourceProxy) return;
+
+        if (_currentAudioSourceProxy)
+        {
+            _currentAudioSourceProxy.onAudioFilterRead.RemoveListener(OnDataReceived);
+        }
+
+        if (audioSourceProxy)
+        {
+            audioSourceProxy.onAudioFilterRead.AddListener(OnDataReceived);
+        }
+
+        _currentAudioSourceProxy = audioSourceProxy;
+    }
+
     public void OnDataReceived(float[] input, int channels)
     {
         if (_rawInputData.Length == 0) return;
@@ -351,6 +385,13 @@ public class uLipSync : MonoBehaviour
         }
 
         _isDataReceived = true;
+    }
+
+    void OnAudioFilterRead(float[] input, int channels)
+    {
+        if (audioSourceProxy) return;
+        
+        OnDataReceived(input, channels);
     }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
