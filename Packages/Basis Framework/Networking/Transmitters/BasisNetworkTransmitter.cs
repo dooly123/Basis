@@ -1,11 +1,9 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using BasisSerializer.OdinSerializer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using UnityEngine;
-using static Basis.Scripts.BasisSdk.Players.BasisPlayer;
 using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.Transmitters
@@ -27,7 +25,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 }
             }
         }
-        void LateUpdate()
+        void OnRenderer()
         {
             timer += Time.deltaTime;
             if (timer >= interval)
@@ -48,7 +46,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 InitalizeDataJobs();
                 InitalizeAvatarStoredData(ref Target);
                 InitalizeAvatarStoredData(ref Output);
-                Ready = true;
                 NetworkedPlayer = networkedPlayer;
                 AudioTransmission.OnEnable(networkedPlayer);
                 OnAvatarCalibration();
@@ -57,8 +54,13 @@ namespace Basis.Scripts.Networking.Transmitters
                     NetworkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
                     NetworkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
                     NetworkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
+                    if (NetworkedPlayer.Player.IsLocal)
+                    {
+                        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(102, OnRenderer);
+                    }
                     HasEvents = true;
                 }
+                Ready = true;
             }
             else
             {
@@ -76,6 +78,10 @@ namespace Basis.Scripts.Networking.Transmitters
                 NetworkedPlayer.Player.OnAvatarSwitchedFallBack -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= SendOutLatestAvatar;
+                if (NetworkedPlayer.Player.IsLocal)
+                {
+                    BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.RemoveAction(102, OnRenderer);
+                }
                 HasEvents = false;
             }
         }

@@ -2,8 +2,6 @@ using Basis.Scripts.Avatar;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.NamePlate;
-using BasisSerializer.OdinSerializer;
-using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using static SerializableDarkRift;

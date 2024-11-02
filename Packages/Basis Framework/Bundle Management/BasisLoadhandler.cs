@@ -289,20 +289,27 @@ public static class BasisLoadHandler
         string path = BasisIOManagement.GenerateFolderPath(BasisBundleManagement.AssetBundlesFolder);
         string[] files = Directory.GetFiles(path, $"*{BasisBundleManagement.MetaLinkBasisSuffix}");
 
-        foreach (var file in files)
+        List<Task> loadTasks = new List<Task>();
+
+        foreach (string file in files)
         {
-            Debug.Log($"Loading file: {file}");
-            try
+            loadTasks.Add(Task.Run(async () =>
             {
-                byte[] fileData = await File.ReadAllBytesAsync(file);
-                OnDiscInformation discInfo = SerializationUtility.DeserializeValue<OnDiscInformation>(fileData, DataFormat.Binary);
-                OnDiscData.TryAdd(discInfo.StoredRemote.MetaURL, discInfo);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Failed to load disc info from {file}: {ex.Message}");
-            }
+                Debug.Log($"Loading file: {file}");
+                try
+                {
+                    byte[] fileData = await File.ReadAllBytesAsync(file);
+                    OnDiscInformation discInfo = SerializationUtility.DeserializeValue<OnDiscInformation>(fileData, DataFormat.Binary);
+                    OnDiscData.TryAdd(discInfo.StoredRemote.MetaURL, discInfo);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to load disc info from {file}: {ex.Message}");
+                }
+            }));
         }
+
+        await Task.WhenAll(loadTasks);
 
         Debug.Log("Completed loading all disc data.");
     }
