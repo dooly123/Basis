@@ -734,20 +734,23 @@ namespace AudioLink
 
         private const int MaxLength = 32;
         private int[] codePoints = new int[MaxLength];
-        private Vector4[] vecs = new Vector4[MaxLength / 4];
+        public const int VecsLength = MaxLength / 4;
+        private Vector4[] vecs = new Vector4[VecsLength];
 
         private void UpdateGlobalString(int nameID, string input)
         {
             InitIDs();
-
+            int inputLength = input.Length;
             // Truncate the input if it exceeds the max length
-            if (input.Length > MaxLength)
+            if (inputLength > MaxLength)
+            {
                 input = input.Substring(0, MaxLength);
-
+            }
             // Get unicode codepoints, clearing previous values to prevent leftover data
-            Array.Clear(codePoints, 0, codePoints.Length);
+            Array.Clear(codePoints, 0, MaxLength);
             int codePointsLength = 0;
-            for (int i = 0; i < input.Length; i++)
+
+            for (int i = 0; i < inputLength; i++)
             {
                 codePoints[codePointsLength++] = Char.ConvertToUtf32(input, i);
                 if (Char.IsHighSurrogate(input[i]))
@@ -757,9 +760,9 @@ namespace AudioLink
             }
 
             // Pack them into vectors, clearing previous values in vecs array
-            Array.Clear(vecs, 0, vecs.Length);
+            Array.Clear(vecs, 0, VecsLength);
             int j = 0;
-            for (int i = 0; i < vecs.Length; i++)
+            for (int i = 0; i < VecsLength; i++)
             {
                 if (j < codePointsLength) vecs[i].x = IntToFloatBits24Bit((uint)codePoints[j++]); else break;
                 if (j < codePointsLength) vecs[i].y = IntToFloatBits24Bit((uint)codePoints[j++]); else break;
