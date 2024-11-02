@@ -331,6 +331,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         Volume = volume;
         // Create the job
         VAJ.Volume = Volume;
+        Debug.Log("Set Microphone Volume To "+ Volume);
     }
     public void ApplyDeNoise()
     {

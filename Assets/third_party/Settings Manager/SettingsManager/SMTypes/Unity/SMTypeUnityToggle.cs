@@ -51,7 +51,7 @@ namespace BattlePhaze.SettingsManager
                     {
                         Button.onClick.RemoveListener(Manager.Options[OptionIndex].ApplyAction);
                     }
-                    Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerToggle.ToggleExecution(OptionIndex, Manager, Toggle.isOn, true); };
+                    Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerToggle.ToggleExecution(OptionIndex, Manager, Toggle.isOn); };
                     Button.onClick.AddListener(Manager.Options[OptionIndex].ApplyAction);
                 }
                 else
@@ -60,7 +60,7 @@ namespace BattlePhaze.SettingsManager
                     {
                         Toggle.onValueChanged.RemoveListener(Manager.Options[OptionIndex].BoolAction);
                     }
-                    Manager.Options[OptionIndex].BoolAction = delegate { SettingsManagerToggle.ToggleExecution(OptionIndex, Manager, Toggle.isOn, true); };
+                    Manager.Options[OptionIndex].BoolAction = delegate { SettingsManagerToggle.ToggleExecution(OptionIndex, Manager, Toggle.isOn); };
                     Toggle.onValueChanged.AddListener(Manager.Options[OptionIndex].BoolAction);
                 }
             }

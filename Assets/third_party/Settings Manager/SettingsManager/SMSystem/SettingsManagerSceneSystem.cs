@@ -6,7 +6,7 @@ namespace BattlePhaze.SettingsManager
     {
         public static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            SettingsManager.Instance.Initalize(false);
+            SettingsManager.Instance.Initalize(true);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace BattlePhaze.SettingsManager
         {
             if (ReadFromFile)
             {
+                Manager.SaveSystem.Load();
                 Manager.Options[OptionIndex].SelectedValue = Manager.SaveSystem.Get(Manager.Options[OptionIndex].Name, string.Empty);
             }
             SettingsManagerDebug.Log("Loaded From File " + Manager.Options[OptionIndex].Name + " Loaded Value " + Manager.Options[OptionIndex].SelectedValue);
@@ -49,7 +50,7 @@ namespace BattlePhaze.SettingsManager
 
             if (reevaluate)
             {
-                manager.Initalize(false);
+                manager.Initalize(true);
             }
         }
         public static bool PlatformVendor(SettingsManager manager, SMPlatFormDefault platformDefault)

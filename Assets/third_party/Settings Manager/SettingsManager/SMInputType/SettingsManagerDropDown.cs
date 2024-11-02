@@ -7,7 +7,7 @@ namespace BattlePhaze.SettingsManager
     /// </summary>
     public static class SettingsManagerDropDown
     {
-        public static void DropDownExecution(int OptionIndex, SettingsManager Manager, int CurrentIndex, bool Save)
+        public static void DropDownExecution(int OptionIndex, SettingsManager Manager, int CurrentIndex)
         {
             Manager.Options[OptionIndex].SelectedValue = Manager.Options[OptionIndex].SelectableValueList[CurrentIndex].RealValue;
             SettingsManagerDescriptionSystem.TxtDescriptionSetText(Manager, OptionIndex);
@@ -31,10 +31,7 @@ namespace BattlePhaze.SettingsManager
                     }
                 }
             }
-            if (Save)
-            {
-                SettingsManagerStorageManagement.Save(Manager);
-            }
+            SettingsManagerStorageManagement.Save(Manager);
         }
         public static void DropDownEnabledState(int OptionIndex, bool enabled)
         {

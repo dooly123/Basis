@@ -2,15 +2,12 @@
 {
     public static class SettingsManagerDynamics
     {
-        public static void DynamicExecution(int OptionIndex, SettingsManager Manager, int CurrentIndex, bool Save)
+        public static void DynamicExecution(int OptionIndex, SettingsManager Manager, int CurrentIndex)
         {
 
             Manager.Options[OptionIndex].SelectedValue = Manager.Options[OptionIndex].SelectableValueList[CurrentIndex].RealValue;
             SettingsManagerDescriptionSystem.TxtDescriptionSetText(Manager, OptionIndex);
-            if (Save)
-            {
-                SettingsManagerStorageManagement.Save(Manager);
-            }
+            SettingsManagerStorageManagement.Save(Manager);
             Manager.SendOption(Manager.Options[OptionIndex]);
         }
     }

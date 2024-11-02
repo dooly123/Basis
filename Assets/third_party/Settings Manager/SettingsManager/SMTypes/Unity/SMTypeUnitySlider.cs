@@ -97,7 +97,7 @@ namespace BattlePhaze.SettingsManager
                 if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ApplyInput, typeof(UnityEngine.UI.Button)))
                 {
                     UnityEngine.UI.Button Button = (UnityEngine.UI.Button)Manager.Options[OptionIndex].ApplyInput;
-                    Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerSlider.SliderExecution(OptionIndex, Manager, Slider.value, true); };
+                    Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerSlider.SliderExecution(OptionIndex, Manager, Slider.value); };
 
                     if (Manager.Options[OptionIndex].ApplyAction != null)
                     {
@@ -119,7 +119,7 @@ namespace BattlePhaze.SettingsManager
                     {
                         Slider.onValueChanged.RemoveListener(Manager.Options[OptionIndex].FloatAction);
                     }
-                    Manager.Options[OptionIndex].FloatAction = delegate { SettingsManagerSlider.SliderExecution(OptionIndex, Manager, Slider.value, true); };
+                    Manager.Options[OptionIndex].FloatAction = delegate { SettingsManagerSlider.SliderExecution(OptionIndex, Manager, Slider.value); };
                     Slider.onValueChanged.AddListener(Manager.Options[OptionIndex].FloatAction);
                 }
             }

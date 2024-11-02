@@ -9,7 +9,6 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 manager = SettingsManager.Instance;
             }
-            /*
             if (NameReturn(0, option))
             {
                 SettingsManagerDropDown.Clear(manager, option.OptionIndex);
@@ -18,7 +17,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                 for (int displayIndex = 0; displayIndex < Display.displays.Length; displayIndex++)
                 {
                     string displayId = displayIndex.ToString(manager.ManagerSettings.CInfo);
-                    SMSelectableValues.AddSelection( option.SelectableValueList, displayId, displayId);
+                    SMSelectableValues.AddSelection(option.SelectableValueList, displayId, displayId);
                     SettingsManagerDropDown.AddDropDownOption(manager, option.OptionIndex, displayId);
                 }
 
@@ -39,7 +38,6 @@ namespace BattlePhaze.SettingsManager.Intergrations
                     }
                 }
             }
-            */
         }
     }
 }

@@ -11,7 +11,7 @@
         /// </summary>
         /// <param name="OptionIndex">Option Index</param>
         /// <param name="Manager">Settings Manager</param>
-        public static void ToggleExecution(int OptionIndex, SettingsManager Manager, bool NewValue,bool Save)
+        public static void ToggleExecution(int OptionIndex, SettingsManager Manager, bool NewValue)
         {
             bool On = true;
             bool Off = false;
@@ -22,10 +22,7 @@
                SMSelectableValues.AddSelection(Manager.Options[OptionIndex].SelectableValueList, Off.ToString(Manager.ManagerSettings.CInfo), Off.ToString(Manager.ManagerSettings.CInfo));
             }
             SettingsManagerDescriptionSystem.TxtDescriptionSetText(Manager, OptionIndex);
-            if (Save)
-            {
-                SettingsManagerStorageManagement.Save(Manager);
-            }
+            SettingsManagerStorageManagement.Save(Manager);
             Manager.SendOption(Manager.Options[OptionIndex]);
         }
         /// <summary>

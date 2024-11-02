@@ -6,7 +6,7 @@ namespace BattlePhaze.SettingsManager
 {
     public static class SettingsManagerSlider
     {
-        public static void SliderExecution(int optionIndex, SettingsManager manager, float currentValue, bool save)
+        public static void SliderExecution(int optionIndex, SettingsManager manager, float currentValue)
         {
             if (!IsSliderOption(manager, optionIndex)) return;
 
@@ -21,11 +21,7 @@ namespace BattlePhaze.SettingsManager
             {
                 bool isPercentage = manager.Options[optionIndex].ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage;
                 SetTextDescription(manager, optionIndex, currentValue, sliderMaxValue, manager.Options[optionIndex], isPercentage);
-
-                if (save)
-                {
-                    SettingsManagerStorageManagement.Save(manager);
-                }
+                SettingsManagerStorageManagement.Save(manager);
                 manager.SendOption(manager.Options[optionIndex]);
             }
             else

@@ -37,11 +37,11 @@ namespace BattlePhaze.SettingsManager
                     }
                     if(IsDynamic)
                     {
-                        Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerDynamics.DynamicExecution(OptionIndex, Manager, UnityDropDown.value, true); };
+                        Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerDynamics.DynamicExecution(OptionIndex, Manager, UnityDropDown.value); };
                     }
                     else
                     {
-                        Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerDropDown.DropDownExecution(OptionIndex, Manager, UnityDropDown.value, true); };
+                        Manager.Options[OptionIndex].ApplyAction = delegate { SettingsManagerDropDown.DropDownExecution(OptionIndex, Manager, UnityDropDown.value); };
                     }
                     Button.onClick.AddListener(Manager.Options[OptionIndex].ApplyAction);
                 }
@@ -53,11 +53,11 @@ namespace BattlePhaze.SettingsManager
                     }
                     if (IsDynamic)
                     {
-                        Manager.Options[OptionIndex].IntAction = delegate { SettingsManagerDynamics.DynamicExecution(OptionIndex, Manager, UnityDropDown.value, true); };
+                        Manager.Options[OptionIndex].IntAction = delegate { SettingsManagerDynamics.DynamicExecution(OptionIndex, Manager, UnityDropDown.value); };
                     }
                     else
                     {
-                        Manager.Options[OptionIndex].IntAction = delegate { SettingsManagerDropDown.DropDownExecution(OptionIndex, Manager, UnityDropDown.value, true); };
+                        Manager.Options[OptionIndex].IntAction = delegate { SettingsManagerDropDown.DropDownExecution(OptionIndex, Manager, UnityDropDown.value); };
                     }
                     UnityDropDown.onValueChanged.AddListener(Manager.Options[OptionIndex].IntAction);
                 }
