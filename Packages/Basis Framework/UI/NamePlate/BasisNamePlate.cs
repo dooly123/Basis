@@ -66,7 +66,7 @@ namespace Basis.Scripts.UI.NamePlate
             EnqueueOnMainThread(() =>
             {
                 Loadingtext.text = info;
-                Debug.Log("updating progress bar " + progress + " | " + info);
+               // Debug.Log("updating progress bar " + progress + " | " + info);
                 UpdateProgressBar(progress);
             });
         }

@@ -3,6 +3,7 @@ using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Player;
 using DarkRift;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
@@ -20,10 +21,18 @@ namespace Basis.Scripts.Networking
         {
             reader.Read(out CreateAllRemoteMessage allRemote);
             int RemoteLength = allRemote.serverSidePlayer.Length;
+
+            // Create a list to hold the tasks
+            List<Task> tasks = new List<Task>();
+
+            // Start all tasks without awaiting them
             for (int PlayerIndex = 0; PlayerIndex < RemoteLength; PlayerIndex++)
             {
-                await CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex], Parent);
+                tasks.Add(CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex], Parent));
             }
+
+            // Await all tasks at once
+            await Task.WhenAll(tasks);
         }
         public static async Task<BasisNetworkedPlayer> CreateRemotePlayer(ServerReadyMessage ServerReadyMessage, InstantiationParameters instantiationParameters)
         {
@@ -31,14 +40,31 @@ namespace Basis.Scripts.Networking
 
             if (avatarID.byteArray != null)
             {
-                BasisRemotePlayer remote = await BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.localReadyMessage.playerMetaDataMessage);
-                BasisNetworkedPlayer networkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
+                BasisNetworkManagement.JoiningPlayers.Add(ServerReadyMessage.playerIdMessage.playerID);
+
+                // Start both tasks simultaneously
+                Task<BasisRemotePlayer> createRemotePlayerTask = BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.localReadyMessage.playerMetaDataMessage);
+                Task<BasisNetworkedPlayer> createNetworkedPlayerTask = BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
+
+                // Wait for both tasks to complete
+                await Task.WhenAll(createRemotePlayerTask, createNetworkedPlayerTask);
+
+                // Retrieve the results
+                BasisRemotePlayer remote = await createRemotePlayerTask;
+                BasisNetworkedPlayer networkedPlayer = await createNetworkedPlayerTask;
+
+                // Continue with the rest of the code
                 networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
+
                 if (BasisNetworkManagement.AddPlayer(networkedPlayer))
                 {
                     Debug.Log("Added Player " + ServerReadyMessage.playerIdMessage.playerID);
                     BasisNetworkManagement.OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
                 }
+
+                BasisNetworkManagement.JoiningPlayers.Remove(ServerReadyMessage.playerIdMessage.playerID);
+                await remote.LoadAvatarFromInital(avatarID);
+
                 return networkedPlayer;
             }
             else

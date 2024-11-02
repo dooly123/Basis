@@ -113,7 +113,10 @@ public static class BasisNetworkGenericMessages
         }
         else
         {
-            Debug.Log("Missing Player For Message " + serverAvatarDataMessage_NoRecipients.playerIdMessage.playerID);
+            if (BasisNetworkManagement.JoiningPlayers.Contains(serverAvatarDataMessage_NoRecipients.playerIdMessage.playerID) == false)
+            {
+                Debug.Log("Missing Player For Message " + serverAvatarDataMessage_NoRecipients.playerIdMessage.playerID);
+            }
         }
     }
 

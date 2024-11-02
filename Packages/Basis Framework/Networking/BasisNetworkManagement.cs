@@ -29,6 +29,7 @@ namespace Basis.Scripts.Networking
         /// </summary>
         public static OnNetworkMessageReceiveOwnershipTransfer OnOwnershipTransfer;
         public static Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
+        public static HashSet<ushort> JoiningPlayers = new HashSet<ushort>();
         public static bool AddPlayer(BasisNetworkedPlayer Player)
         {
             if (Instance != null)

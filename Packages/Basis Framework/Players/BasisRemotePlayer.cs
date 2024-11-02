@@ -27,13 +27,16 @@ namespace Basis.Scripts.BasisSdk.Players
                 RemoteAvatarDriver.CalibrationComplete += RemoteCalibration;
                 HasEvents = true;
             }
+            RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
+            await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
+        }
+        public async Task LoadAvatarFromInital(ClientAvatarChangeMessage CACM)
+        {
             if (Avatar == null)
             {
                 BasisLoadableBundle BasisLoadedBundle = BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
                 await BasisAvatarFactory.LoadAvatarRemote(this, CACM.loadMode, BasisLoadedBundle);
             }
-            RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
-            await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
         }
         public void OnDestroy()
         {
