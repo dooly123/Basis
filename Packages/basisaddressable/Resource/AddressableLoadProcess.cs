@@ -87,7 +87,6 @@ namespace Basis.Scripts.Addressable_Driver.Resource
         public static void UpdateProgress(AddressableLoadResourceBase LoadRequest, float totalProgress)
         {
             LoadRequest.LoadPercentage = totalProgress;
-            Debug.Log("progress at " + LoadRequest.LoadPercentage);
         }
     }
 }

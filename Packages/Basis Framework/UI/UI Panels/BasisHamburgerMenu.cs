@@ -42,6 +42,7 @@ namespace Basis.Scripts.UI.UI_Panels
         }
         public void PutIntoCalibrationMode()
         {
+            UnityEngine.Debug.Log("Attempting" + nameof(PutIntoCalibrationMode));
             string BasisBootedMode = BasisDeviceManagement.Instance.CurrentMode;
             if (OverrideForceCalibration || BasisBootedMode == "OpenVRLoader" || BasisBootedMode == "OpenXRLoader")
             {

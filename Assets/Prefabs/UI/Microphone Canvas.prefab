@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2661110359915371684}
   - component: {fileID: 1041922124524423509}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Microphone Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
