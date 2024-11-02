@@ -5,10 +5,6 @@ namespace BattlePhaze.SettingsManager.Intergrations
     {
         public override void ReceiveOption(SettingsMenuInput option, SettingsManager manager = null)
         {
-            if (manager == null)
-            {
-                manager = SettingsManager.Instance;
-            }
             if (NameReturn(0, option))
             {
                 SettingsManagerDropDown.Clear(manager, option.OptionIndex);
@@ -33,6 +29,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                         if (option.SelectableValueList[displayIndex].RealValue == option.SelectedValue)
                         {
                             SettingsManagerDropDown.SetOptionsValue(manager, option.OptionIndex, displayIndex, true);
+                           // Display.displays[displayIndex].Activate(,);
                             return;
                         }
                     }

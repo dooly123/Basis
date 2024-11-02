@@ -8,6 +8,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
         public List<Resolution> AvailableResolution = new List<Resolution>();
         [SerializeField]
         public List<Resolution> SortedResolution = new List<Resolution>();
+        public string LastResolution;
         public override void ReceiveOption(SettingsMenuInput option, SettingsManager manager)
         {
             if (!NameReturn(0, option))
@@ -60,7 +61,11 @@ namespace BattlePhaze.SettingsManager.Intergrations
 
             if (selectedIndex != -1)
             {
-                SetResolution(SortedResolution[selectedIndex].width, SortedResolution[selectedIndex].height, option.OptionIndex, selectedIndex, manager);
+                if (LastResolution != option.SelectedValue)
+                {
+                    LastResolution = option.SelectedValue;
+                    SetResolution(SortedResolution[selectedIndex].width, SortedResolution[selectedIndex].height, option.OptionIndex, selectedIndex, manager);
+                }
             }
             else if (SortedResolution.Count != 0)
             {
@@ -76,6 +81,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
 
             if (Screen.width != Width || Screen.height != Height)
             {
+                Debug.Log("setting res " + Screen.width + " now " + Width + " | " + Screen.height + " now" + Height);
                 Screen.SetResolution(Width, Height, Screen.fullScreenMode);
             }
         }

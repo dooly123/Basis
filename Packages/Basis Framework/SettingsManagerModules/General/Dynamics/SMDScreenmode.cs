@@ -1,37 +1,43 @@
 ﻿using UnityEngine;
+
 namespace BattlePhaze.SettingsManager.Intergrations
 {
     public class SMDScreenmode : SettingsManagerOption
     {
         public SettingsManager Manager;
-        public bool OnlySetScreenModeOnce = true;
+
+        // Define constant strings for screen mode names
+        private const string FullscreenModeName = "Fullscreen";
+        private const string MaximizedWindowModeName = "Maximized Window";
+        private const string WindowedModeName = "Windowed";
+
         public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager = null)
         {
             if (Manager == null)
             {
                 Manager = SettingsManager.Instance;
             }
+
             if (NameReturn(0, Option))
             {
                 SettingsManagerDropDown.Clear(Manager, Option.OptionIndex);
                 Option.SelectableValueList.Clear();
-                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Fullscreen");
-                SMSelectableValues.AddSelection( Option.SelectableValueList, "Fullscreen", "Fullscreen");
 
-                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Maximized Window");
-                SMSelectableValues.AddSelection( Option.SelectableValueList, "Maximized Window", "Maximized Window");
+                // Use constants for dropdown options
+                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, FullscreenModeName);
+                SMSelectableValues.AddSelection(Option.SelectableValueList, FullscreenModeName, FullscreenModeName);
 
-                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, "Windowed");
-                SMSelectableValues.AddSelection( Option.SelectableValueList, "Windowed", "Windowed");
+                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, MaximizedWindowModeName);
+                SMSelectableValues.AddSelection(Option.SelectableValueList, MaximizedWindowModeName, MaximizedWindowModeName);
+
+                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, WindowedModeName);
+                SMSelectableValues.AddSelection(Option.SelectableValueList, WindowedModeName, WindowedModeName);
+
                 if (string.IsNullOrEmpty(Option.SelectedValue))
                 {
                     SettingsManagerDropDown.SetOptionsValue(Manager, 0, 0, true);
                     Option.SelectedValue = Option.SelectableValueList[0].RealValue;
-                    if (OnlySetScreenModeOnce)
-                    {
-                        Screen.fullScreenMode = 0;
-                        OnlySetScreenModeOnce = false;
-                    }
+                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
                 }
                 else
                 {
@@ -40,12 +46,20 @@ namespace BattlePhaze.SettingsManager.Intergrations
                         if (Option.SelectableValueList[RealValuesIndex].RealValue == Option.SelectedValue)
                         {
                             SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
-                            if (OnlySetScreenModeOnce)
+                            Debug.Log("Updating ScreenMode to " + Option.SelectedValue);
+                            // Set screen mode based on the selected value
+                            switch (Option.SelectedValue)
                             {
-                                Screen.fullScreenMode = (FullScreenMode)RealValuesIndex;
-                                OnlySetScreenModeOnce = false;
+                                case FullscreenModeName:
+                                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                                    return;
+                                case MaximizedWindowModeName:
+                                    Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
+                                    return;
+                                case WindowedModeName:
+                                    Screen.fullScreenMode = FullScreenMode.Windowed;
+                                    return;
                             }
-                            return;
                         }
                     }
                 }
