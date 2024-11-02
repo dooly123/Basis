@@ -2,7 +2,6 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Smoothing;
-using BasisSerializer.OdinSerializer;
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -88,6 +87,7 @@ namespace Basis.Scripts.Networking.Recievers
             if (AudioReceiverModule.decoder != null)
             {
                 AudioReceiverModule.decoder.OnEncoded(audioSegment.audioSegmentData.buffer);
+                NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
         }
 
@@ -101,6 +101,7 @@ namespace Basis.Scripts.Networking.Recievers
                     Array.Fill(silentData, 0f);
                 }
                 AudioReceiverModule.OnDecoded(silentData);
+                NetworkedPlayer.Player.AudioReceived?.Invoke(false);
             }
         }
         public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)

@@ -29,6 +29,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisProgressReport AvatarProgress = new BasisProgressReport();
         public CancellationToken CancellationToken;
         public BasisAvatarStrainJiggleDriver BasisAvatarStrainJiggleDriver;
+        public Action<bool> AudioReceived;
         public void InitalizeIKCalibration(BasisAvatarDriver BasisAvatarDriver)
         {
             if (BasisAvatarDriver != null)

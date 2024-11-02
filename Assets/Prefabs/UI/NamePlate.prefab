@@ -229,6 +229,10 @@ MonoBehaviour:
   Loadingtext: {fileID: 4013479155598010129}
   YHeightMultiplier: 1.25
   BasisRemotePlayer: {fileID: 0}
+  NamePlateButton: {fileID: 5659242795811902284}
+  namePlateImage: {fileID: 3515079843213119928}
+  NormalColor: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 0.2}
+  IsTalkingColor: {r: 0.14901961, g: 0.56078434, b: 0.7372549, a: 0.2}
 --- !u!114 &2997356888555999241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,7 +459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 0.2}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -485,15 +489,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
-    m_NormalColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 0.2}
+    m_NormalColor: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 0.2}
     m_HighlightedColor: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 1}
     m_PressedColor: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
     m_SelectedColor: {r: 0.23529413, g: 0.23529413, b: 0.23529413, a: 1}
@@ -650,7 +654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -658,8 +662,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Test Name :)
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 98857fb5827ece748ae5394a1ad8342d, type: 2}
-  m_sharedMaterial: {fileID: 1150190466599654131, guid: 98857fb5827ece748ae5394a1ad8342d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e5115724bef668e428481e9fee6ee7b1, type: 2}
+  m_sharedMaterial: {fileID: 1150190466599654131, guid: e5115724bef668e428481e9fee6ee7b1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -667,7 +671,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
+  m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}

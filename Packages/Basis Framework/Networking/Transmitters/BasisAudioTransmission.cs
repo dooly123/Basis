@@ -120,6 +120,7 @@ namespace Basis.Scripts.Networking.Transmitters
                     BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
                 }
             }
+            Local.AudioReceived?.Invoke(true);
         }
         private void SendSilenceOverNetwork()
         {
@@ -132,6 +133,7 @@ namespace Basis.Scripts.Networking.Transmitters
                     BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
                 }
             }
+            Local.AudioReceived?.Invoke(false);
         }
     }
 }

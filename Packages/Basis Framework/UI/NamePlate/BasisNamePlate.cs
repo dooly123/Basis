@@ -3,11 +3,11 @@ using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.UI_Panels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static BasisProgressReport;
 namespace Basis.Scripts.UI.NamePlate
 {
     public abstract class BasisNamePlate : MonoBehaviour
@@ -22,6 +22,11 @@ namespace Basis.Scripts.UI.NamePlate
         public TextMeshProUGUI Loadingtext;
         public float YHeightMultiplier = 1.25f;
         public BasisRemotePlayer BasisRemotePlayer;
+        public Button NamePlateButton;
+        public Image namePlateImage;
+        public Color NormalColor;
+        public Color IsTalkingColor;
+        [SerializeField] private float transitionDuration = 0.3f;
         public void Initalize(BasisBoneControl hipTarget, BasisRemotePlayer basisRemotePlayer)
         {
             BasisRemotePlayer = basisRemotePlayer;
@@ -32,12 +37,56 @@ namespace Basis.Scripts.UI.NamePlate
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressReport += ProgresReport;
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressComplete += OnProgressComplete;
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressStart += OnProgressStart;
+            BasisRemotePlayer.AudioReceived += OnAudioReceived;
+        } 
+        // Store the current running coroutine to cancel it when needed
+        private Coroutine colorTransitionCoroutine;
+
+        public void OnAudioReceived(bool hasRealAudio)
+        {
+            // Determine the target color based on whether real audio is being received
+            Color targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
+
+            // If a color transition is already running, stop it
+            if (colorTransitionCoroutine != null)
+            {
+                StopCoroutine(colorTransitionCoroutine);
+            }
+
+            // Start a new coroutine for the color transition
+            colorTransitionCoroutine = StartCoroutine(TransitionColor(targetColor));
+        }
+
+        private IEnumerator TransitionColor(Color targetColor)
+        {
+            // Record the initial color at the start of the transition
+            Color initialColor = namePlateImage.color;
+            float elapsedTime = 0f;
+
+            // Perform the transition over the specified duration
+            while (elapsedTime < transitionDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / transitionDuration;
+
+                // Lerp from the initial color to the target color
+                namePlateImage.color = Color.Lerp(initialColor, targetColor, t);
+
+                yield return null; // Wait until the next frame
+            }
+
+            // Ensure the final color is set to the target color
+            namePlateImage.color = targetColor;
+
+            // Clear the coroutine reference as the transition is complete
+            colorTransitionCoroutine = null;
         }
         public void OnDestroy()
         {
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressReport -= ProgresReport;
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressComplete -= OnProgressComplete;
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressStart -= OnProgressStart;
+            BasisRemotePlayer.AudioReceived -= OnAudioReceived;
         }
 
         private void OnProgressStart()
@@ -92,12 +141,15 @@ namespace Basis.Scripts.UI.NamePlate
                 Quaternion.Euler(transform.rotation.eulerAngles.x, Mathf.Atan2(directionToCamera.x, directionToCamera.z)
                 * Mathf.Rad2Deg, transform.rotation.eulerAngles.z));
 
-            // Ensure that actions are executed on the main thread
-            lock (actions)
+            // Only lock and execute actions if there are actions to process
+            if (actions.Count > 0)
             {
-                while (actions.Count > 0)
+                lock (actions)
                 {
-                    actions.Dequeue()?.Invoke();
+                    while (actions.Count > 0)
+                    {
+                        actions.Dequeue()?.Invoke();
+                    }
                 }
             }
         }
