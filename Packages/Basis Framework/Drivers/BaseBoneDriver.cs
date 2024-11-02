@@ -281,38 +281,46 @@ namespace Basis.Scripts.Drivers
 
         public class OrderedDelegate
         {
-            private SortedDictionary<int, Action> actions = new SortedDictionary<int, Action>();
+            private List<KeyValuePair<int, Action>> actions = new List<KeyValuePair<int, Action>>();
+            private bool isSorted = true;
 
             // Add an action with a priority level.
             public void AddAction(int priority, Action action)
             {
-                if (actions.ContainsKey(priority))
-                    actions[priority] += action;
-                else
-                    actions[priority] = action;
+                actions.Add(new KeyValuePair<int, Action>(priority, action));
+                isSorted = false;  // Mark as unsorted to avoid sorting on every add.
             }
 
             // Remove a specific action from a given priority.
             public void RemoveAction(int priority, Action action)
             {
-                if (actions.ContainsKey(priority))
+                for (int i = actions.Count - 1; i >= 0; i--)
                 {
-                    actions[priority] -= action;
-
-                    // If no delegates remain for this priority, remove the key
-                    if (actions[priority] == null)
-                        actions.Remove(priority);
+                    if (actions[i].Key == priority && actions[i].Value == action)
+                    {
+                        actions.RemoveAt(i);
+                        break;
+                    }
                 }
             }
 
             // Invoke all actions in order of priority.
             public void Invoke()
             {
-                foreach (var actionPair in actions)
+                // Sort only if we have added new items since the last invoke.
+                if (!isSorted)
                 {
-                    actionPair.Value?.Invoke();
+                    actions.Sort((a, b) => a.Key.CompareTo(b.Key));
+                    isSorted = true;
+                }
+
+                // Use a for loop instead of foreach to avoid allocations.
+                for (int i = 0; i < actions.Count; i++)
+                {
+                    actions[i].Value?.Invoke();
                 }
             }
+
         }
     }
 }
