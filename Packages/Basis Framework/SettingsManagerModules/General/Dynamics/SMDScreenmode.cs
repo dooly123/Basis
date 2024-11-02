@@ -13,53 +13,55 @@ namespace BattlePhaze.SettingsManager.Intergrations
 
         public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager = null)
         {
-            if (Manager == null)
+            if (!NameReturn(0, Option))
             {
-                Manager = SettingsManager.Instance;
+                return;
             }
+            SettingsManagerDropDown.Clear(Manager, Option.OptionIndex);
+            Option.SelectableValueList.Clear();
 
-            if (NameReturn(0, Option))
+            // Use constants for dropdown options
+            SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, FullscreenModeName);
+            SMSelectableValues.AddSelection(Option.SelectableValueList, FullscreenModeName, FullscreenModeName);
+
+            SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, MaximizedWindowModeName);
+            SMSelectableValues.AddSelection(Option.SelectableValueList, MaximizedWindowModeName, MaximizedWindowModeName);
+
+            SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, WindowedModeName);
+            SMSelectableValues.AddSelection(Option.SelectableValueList, WindowedModeName, WindowedModeName);
+
+            if (string.IsNullOrEmpty(Option.SelectedValue))
             {
-                SettingsManagerDropDown.Clear(Manager, Option.OptionIndex);
-                Option.SelectableValueList.Clear();
-
-                // Use constants for dropdown options
-                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, FullscreenModeName);
-                SMSelectableValues.AddSelection(Option.SelectableValueList, FullscreenModeName, FullscreenModeName);
-
-                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, MaximizedWindowModeName);
-                SMSelectableValues.AddSelection(Option.SelectableValueList, MaximizedWindowModeName, MaximizedWindowModeName);
-
-                SettingsManagerDropDown.AddDropDownOption(Manager, Option.OptionIndex, WindowedModeName);
-                SMSelectableValues.AddSelection(Option.SelectableValueList, WindowedModeName, WindowedModeName);
-
-                if (string.IsNullOrEmpty(Option.SelectedValue))
+                SettingsManagerDropDown.SetOptionsValue(Manager, 0, 0, true);
+                Option.SelectedValue = Option.SelectableValueList[0].RealValue;
+                Debug.Log("Updating ScreenMode to " + Option.SelectedValue);
+                Screen.fullScreenMode = FullScreenMode.Windowed;
+            }
+            else
+            {
+                Debug.Log("Updating ScreenMode to " + Option.SelectedValue);
+                for (int RealValuesIndex = 0; RealValuesIndex < Option.SelectableValueList.Count; RealValuesIndex++)
                 {
-                    SettingsManagerDropDown.SetOptionsValue(Manager, 0, 0, true);
-                    Option.SelectedValue = Option.SelectableValueList[0].RealValue;
-                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                }
-                else
-                {
-                    for (int RealValuesIndex = 0; RealValuesIndex < Option.SelectableValueList.Count; RealValuesIndex++)
+                    if (Option.SelectableValueList[RealValuesIndex].RealValue == Option.SelectedValue)
                     {
-                        if (Option.SelectableValueList[RealValuesIndex].RealValue == Option.SelectedValue)
+                        // Set screen mode based on the selected value
+                        switch (Option.SelectedValue)
                         {
-                            SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
-                            Debug.Log("Updating ScreenMode to " + Option.SelectedValue);
-                            // Set screen mode based on the selected value
-                            switch (Option.SelectedValue)
-                            {
-                                case FullscreenModeName:
-                                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                                    return;
-                                case MaximizedWindowModeName:
-                                    Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
-                                    return;
-                                case WindowedModeName:
-                                    Screen.fullScreenMode = FullScreenMode.Windowed;
-                                    return;
-                            }
+                            case FullscreenModeName:
+                                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                                SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
+                                Debug.Log("set ScreenMode to " + Option.SelectedValue);
+                                return;
+                            case MaximizedWindowModeName:
+                                Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
+                                SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
+                                Debug.Log("set ScreenMode to " + Option.SelectedValue);
+                                return;
+                            case WindowedModeName:
+                                Screen.fullScreenMode = FullScreenMode.Windowed;
+                                SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
+                                Debug.Log("set ScreenMode to " + Option.SelectedValue);
+                                return;
                         }
                     }
                 }

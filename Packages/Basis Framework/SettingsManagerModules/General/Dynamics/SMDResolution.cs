@@ -71,8 +71,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 selectedIndex = option.SelectableValueList.Count - 1;
                 option.SelectedValue = option.SelectableValueList[selectedIndex].RealValue;
-                SetResolution(SortedResolution[SortedResolution.Count - 1].width, SortedResolution[SortedResolution.Count - 1].height,
-                    option.OptionIndex, selectedIndex, manager);
+                SetResolution(SortedResolution[SortedResolution.Count - 1].width, SortedResolution[SortedResolution.Count - 1].height,option.OptionIndex, selectedIndex, manager);
             }
         }
         public void SetResolution(int Width, int Height, int OptionIndex, int SelectableValue, SettingsManager Manager)
