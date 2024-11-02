@@ -23,7 +23,7 @@ public static class BasisLoadHandler
         await EnsureInitializationComplete();
     }
 
-    public static async Task<GameObject> LoadGameObjectBundle(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken)
+    public static async Task<GameObject> LoadGameObjectBundle(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
         await EnsureInitializationComplete();
 
@@ -32,7 +32,7 @@ public static class BasisLoadHandler
             try
             {
                 await wrapper.WaitForBundleLoadAsync();
-                return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval);
+                return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval,Position,Rotation,Parent);
             }
             catch (Exception ex)
             {
@@ -42,7 +42,7 @@ public static class BasisLoadHandler
             }
         }
 
-        return await HandleFirstBundleLoad(loadableBundle, useContentRemoval, report, cancellationToken);
+        return await HandleFirstBundleLoad(loadableBundle, useContentRemoval, report, cancellationToken,Position,Rotation,Parent);
     }
 
     public static async Task LoadSceneBundle(bool makeActiveScene, BasisLoadableBundle loadableBundle, BasisProgressReport report, CancellationToken cancellationToken)
@@ -73,7 +73,7 @@ public static class BasisLoadHandler
         await BasisBundleLoadAsset.LoadSceneFromBundleAsync(wrapper, makeActiveScene, report);
     }
 
-    private static async Task<GameObject> HandleFirstBundleLoad(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken)
+    private static async Task<GameObject> HandleFirstBundleLoad(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
         BasisTrackedBundleWrapper wrapper = new BasisTrackedBundleWrapper 
         { 
@@ -90,7 +90,7 @@ public static class BasisLoadHandler
         try
         {
             await HandleBundleAndMetaLoading(wrapper, report, cancellationToken);
-            return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval);
+            return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval,Position,Rotation,Parent);
         }
         catch (Exception ex)
         {

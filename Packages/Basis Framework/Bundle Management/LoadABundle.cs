@@ -11,24 +11,6 @@ public class LoadABundle : MonoBehaviour
     async void OnEnable()
     {
         // Load the GameObject asynchronously
-        GameObject output = await BasisLoadHandler.LoadGameObjectBundle(BasisLoadableBundle, UseCondom, Report, CancellationToken);
-        if (useRandomizer)
-        {
-            // Set a random position with x, y, z between -50 and 50
-            float randomX = UnityEngine.Random.Range(-50f, 50f);
-            float randomY = UnityEngine.Random.Range(-50f, 50f);
-            float randomZ = UnityEngine.Random.Range(-50f, 50f);
-            output.transform.position = new Vector3(randomX, randomY, randomZ);
-
-            // Set a random rotation in degrees for x, y, and z
-            float randomRotX = UnityEngine.Random.Range(0f, 360f);
-            float randomRotY = UnityEngine.Random.Range(0f, 360f);
-            float randomRotZ = UnityEngine.Random.Range(0f, 360f);
-            output.transform.rotation = Quaternion.Euler(randomRotX, randomRotY, randomRotZ);
-        }
-        else
-        {
-            output.transform.SetPositionAndRotation(this.transform.position, this.transform.rotation);
-        }
+        GameObject output = await BasisLoadHandler.LoadGameObjectBundle(BasisLoadableBundle, UseCondom, Report, CancellationToken, Vector3.zero, Quaternion.identity);
     }
 }

@@ -33,7 +33,7 @@ namespace Basis.Scripts.Animator_Driver
         public bool HasHipsInput = false;
 
         // Critically damped spring smoothing
-        public float dampingRatio = 4; // Adjust for desired dampening effect
+        public float dampingRatio = 7; // Adjust for desired dampening effect
         public float angularFrequency = 0.4f; // Adjust for the speed of dampening
         void Simulate()
         {

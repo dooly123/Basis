@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using static BasisProgressReport;
 public static class BasisBundleLoadAsset
 {
-    public static async Task<GameObject> LoadFromWrapper(BasisTrackedBundleWrapper BasisLoadableBundle, bool UseContentRemoval)
+    public static async Task<GameObject> LoadFromWrapper(BasisTrackedBundleWrapper BasisLoadableBundle, bool UseContentRemoval, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
         if (BasisLoadableBundle.AssetBundle != null)
         {
@@ -24,7 +24,7 @@ public static class BasisBundleLoadAsset
                             await BasisLoadableBundle.AssetBundle.UnloadAsync(true);
                             return null;
                         }
-                        return ContentControlCondom(loadedObject, UseContentRemoval);
+                        return ContentControlCondom(loadedObject, UseContentRemoval,Vector3.positiveInfinity,Rotation,Parent);
                     }
                 default:
                     Debug.LogError("Requested type " + output.BasisBundleInformation.BasisBundleGenerated.AssetMode + " has no handler");
@@ -44,7 +44,7 @@ public static class BasisBundleLoadAsset
     /// <param name="SearchAndDestroy">The original GameObject to copy and clean.</param>
     /// <param name="UseContentRemoval">Whether to remove unapproved MonoBehaviours or not.</param>
     /// <returns>A copy of the GameObject with unapproved scripts removed.</returns>
-    public static GameObject ContentControlCondom(GameObject SearchAndDestroy, bool UseContentRemoval = true)
+    public static GameObject ContentControlCondom(GameObject SearchAndDestroy, bool UseContentRemoval, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
 
         if (UseContentRemoval)
@@ -70,8 +70,15 @@ public static class BasisBundleLoadAsset
                 }
             }
         }
-        // Create a copy of the SearchAndDestroy GameObject
-        return GameObject.Instantiate(SearchAndDestroy);
+        if (Parent == null)
+        {
+            return GameObject.Instantiate(SearchAndDestroy, Position, Rotation);
+        }
+        else
+        {
+            // Create a copy of the SearchAndDestroy GameObject
+            return GameObject.Instantiate(SearchAndDestroy, Position, Rotation, Parent);
+        }
     }
     public static async Task LoadSceneFromBundleAsync(BasisTrackedBundleWrapper bundle, bool MakeActiveScene, BasisProgressReport progressCallback)
     {
