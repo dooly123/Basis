@@ -12,7 +12,7 @@ public class BasisUIShutdown : MonoBehaviour
         Button.onClick.RemoveAllListeners();
         Button.onClick.AddListener(Shutdown);
     }
-    protected void Shutdown()
+    protected private void Shutdown()
     {
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
