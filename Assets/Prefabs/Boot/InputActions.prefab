@@ -1117,8 +1117,8 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 1
-      EditorVisable: 0
-    SupportedRenderPipeline: 030000000400000000000000
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000000000004000000
     Round: 0
     RoundTo: 0
     MaxPercentage: 0
@@ -1142,20 +1142,18 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 0
     SelectableValueList:
-    - realValue: exclusive fullscreen
-      UserValue: Exclusive FullScreen
     - realValue: fullscreen
-      UserValue: Fullscreen
+      UserValue: fullscreen
     - realValue: maximized window
       UserValue: Maximized Window
     - realValue: windowed
-      UserValue: Windowed
+      UserValue: windowed
   - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
+      SupportedRenderPipelines: 1
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 1
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1187,7 +1185,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 2
@@ -2135,7 +2133,6 @@ MonoBehaviour:
     Parse: 1
     Type: 2
   Manager: {fileID: 6378574261833472064}
-  OnlySetScreenModeOnce: 1
 --- !u!114 &8638552490007219108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2170,6 +2167,7 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 2
+  LastResolution: 
 --- !u!114 &1962641699494196431
 MonoBehaviour:
   m_ObjectHideFlags: 0
