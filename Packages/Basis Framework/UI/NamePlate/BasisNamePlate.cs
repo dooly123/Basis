@@ -27,6 +27,8 @@ namespace Basis.Scripts.UI.NamePlate
         public Color NormalColor;
         public Color IsTalkingColor;
         [SerializeField] private float transitionDuration = 0.3f;
+        // Delay before returning to NormalColor
+        [SerializeField] private float returnDelay = 0.4f;
         public void Initalize(BasisBoneControl hipTarget, BasisRemotePlayer basisRemotePlayer)
         {
             BasisRemotePlayer = basisRemotePlayer;
@@ -41,19 +43,19 @@ namespace Basis.Scripts.UI.NamePlate
         } 
         // Store the current running coroutine to cancel it when needed
         private Coroutine colorTransitionCoroutine;
-
+        private Coroutine returnToNormalCoroutine;
         public void OnAudioReceived(bool hasRealAudio)
         {
             // Determine the target color based on whether real audio is being received
             Color targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
 
-            // If a color transition is already running, stop it
+            // Stop any ongoing color transition
             if (colorTransitionCoroutine != null)
             {
                 StopCoroutine(colorTransitionCoroutine);
             }
 
-            // Start a new coroutine for the color transition
+            // Start a new color transition coroutine
             colorTransitionCoroutine = StartCoroutine(TransitionColor(targetColor));
         }
 
@@ -75,11 +77,48 @@ namespace Basis.Scripts.UI.NamePlate
                 yield return null; // Wait until the next frame
             }
 
-            // Ensure the final color is set to the target color
+            // Set the final color to the target color
             namePlateImage.color = targetColor;
 
             // Clear the coroutine reference as the transition is complete
             colorTransitionCoroutine = null;
+
+            // If we reached IsTalkingColor and should transition back, start the delayed return coroutine
+            if (targetColor == IsTalkingColor)
+            {
+                if (returnToNormalCoroutine != null)
+                {
+                    StopCoroutine(returnToNormalCoroutine);
+                }
+                returnToNormalCoroutine = StartCoroutine(DelayedReturnToNormal());
+            }
+        }
+
+        private IEnumerator DelayedReturnToNormal()
+        {
+            // Wait for the specified delay
+            yield return new WaitForSeconds(returnDelay);
+
+            // Smoothly transition back to NormalColor over transitionDuration
+            Color initialColor = namePlateImage.color;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < transitionDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / transitionDuration;
+
+                // Lerp from the initial color back to NormalColor
+                namePlateImage.color = Color.Lerp(initialColor, NormalColor, t);
+
+                yield return null; // Wait until the next frame
+            }
+
+            // Ensure the final color is set to NormalColor
+            namePlateImage.color = NormalColor;
+
+            // Clear the coroutine reference as the pullback is complete
+            returnToNormalCoroutine = null;
         }
         public void OnDestroy()
         {

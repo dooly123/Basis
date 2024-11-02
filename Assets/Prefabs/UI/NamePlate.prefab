@@ -233,6 +233,8 @@ MonoBehaviour:
   namePlateImage: {fileID: 3515079843213119928}
   NormalColor: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 0.2}
   IsTalkingColor: {r: 0.14901961, g: 0.56078434, b: 0.7372549, a: 0.2}
+  transitionDuration: 0.3
+  returnDelay: 0.4
 --- !u!114 &2997356888555999241
 MonoBehaviour:
   m_ObjectHideFlags: 0
