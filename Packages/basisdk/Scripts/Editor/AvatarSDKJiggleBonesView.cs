@@ -35,15 +35,19 @@ public class AvatarSDKJiggleBonesView
         JiggleStrainsList = new ListView
         {
             bindingPath = "basisJiggleStrains",
+            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
             makeItem = MakeListItem,
             bindItem = BindListItem,
             itemsSource = new List<BasisJiggleStrain>(),
-            fixedItemHeight = 1900
         };
 
-        Foldout foldout = new Foldout { text = "Jiggle Strains" };
-        foldout.value = false; // Set the initial value to expanded
-        foldout.style.marginLeft = 10;
+        Foldout foldout = new Foldout {
+            text = "Jiggle Strains",
+            value = false, // Set the initial value to expanded
+            style = {
+                marginLeft = 10,
+            }
+        };
         foldout.Add(JiggleStrainsList);
         AddButtonhere.Add(foldout);
     }
@@ -51,13 +55,19 @@ public class AvatarSDKJiggleBonesView
     {
         var container = new VisualElement
         {
-            style = { flexDirection = FlexDirection.Column }
+            style = {
+                flexDirection = FlexDirection.Column,
+            }
         };
 
         // Add a foldout for each JiggleStrain
-        Foldout foldout = new Foldout { text = "Jiggle Strain" };
-        foldout.value = false; // Set the initial value to expanded
-        foldout.style.marginLeft = 10;
+        Foldout foldout = new Foldout {
+            text = "Jiggle Strain",
+            value = false, // Set the initial value to expanded
+            style = {
+                marginLeft = 10,
+            }
+        };
         foldout.Add(container);
 
         // Inside the foldout, you can add fields specific to each JiggleStrain if needed
