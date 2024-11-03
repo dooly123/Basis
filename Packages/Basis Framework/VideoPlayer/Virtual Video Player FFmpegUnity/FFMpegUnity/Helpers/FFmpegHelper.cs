@@ -17,7 +17,7 @@ internal static class FFmpegHelper
 
     public static int ThrowExceptionIfError(this int error)
     {
-        if (error < 0) throw new ApplicationException(av_strerror(error));
+        if (error < 0) throw new Exception(av_strerror(error));
         return error;
     }
 }
