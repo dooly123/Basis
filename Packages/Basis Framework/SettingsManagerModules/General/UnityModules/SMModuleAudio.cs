@@ -14,7 +14,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
-                    AudioListener.volume = Value;
+                    AudioListener.volume = Value/100;
                 }
             }
             if (NameReturn(1, Option))

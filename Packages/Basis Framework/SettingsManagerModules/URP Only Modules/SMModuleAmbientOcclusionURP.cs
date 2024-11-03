@@ -12,13 +12,14 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
 
     public override void ReceiveOption(SettingsMenuInput option, SettingsManager manager)
     {
-        if (NameReturn(0, option))
-        {
-            Debug.Log($"[SMModuleAmbientOcclusionURP] Received quality option: {option.SelectedValue}");
-            SetQuality(option.SelectedValue);
-        }
+        /*
+                    if (NameReturn(0, option))
+                    {
+                        Debug.Log($"[SMModuleAmbientOcclusionURP] Received quality option: {option.SelectedValue}");
+                        SetQuality(option.SelectedValue);
+                    }
+            */
     }
-
     private void SetQuality(string quality)
     {
         if (AmbientOcclusion == null)
