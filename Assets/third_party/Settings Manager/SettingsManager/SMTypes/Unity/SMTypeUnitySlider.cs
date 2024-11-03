@@ -22,9 +22,9 @@ namespace BattlePhaze.SettingsManager
             if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
-                Slider.value = Value;
                 Slider.minValue = Min;
                 Slider.maxValue = Max;
+                Slider.value = Value;
             }
         }
         public override void SliderOptionReadValue(SettingsManager Manager, int OptionIndex, out bool HasValue, out float Value)
