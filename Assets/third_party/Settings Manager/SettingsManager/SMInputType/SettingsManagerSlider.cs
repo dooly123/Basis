@@ -90,7 +90,7 @@ namespace BattlePhaze.SettingsManager
             {
                 if (slider != null)
                 {
-                   hasValue =  slider.SliderOptionReadValue(manager, optionIndex, out value);
+                    slider.SliderOptionReadValue(manager, optionIndex, out hasValue, out value);
                     if (hasValue) return;
                 }
             }
@@ -112,7 +112,7 @@ namespace BattlePhaze.SettingsManager
             {
                 if (slider != null)
                 {
-                    hasValue = slider.SliderGetOptionsGameobject(manager, optionIndex,  out value);
+                    slider.SliderGetOptionsGameobject(manager, optionIndex, out hasValue, out value);
                     if (hasValue) return;
                 }
             }
@@ -127,17 +127,13 @@ namespace BattlePhaze.SettingsManager
 
             SetTextDescription(manager, optionIndex, sliderValue, sliderMaxValue, option, option.ReturnedValueTextType == SettingsManagerEnums.TextReturn.SliderPercentage);
 
-            for (int Index = 0; Index < manager.SettingsManagerAbstractTypeSlider.Count; Index++)
+            foreach (Types.SettingsManagerAbstractTypeSlider slider in manager.SettingsManagerAbstractTypeSlider)
             {
-                Types.SettingsManagerAbstractTypeSlider slider = manager.SettingsManagerAbstractTypeSlider[Index];
                 if (slider != null)
                 {
                     slider.SliderOptionSetValue(manager, optionIndex, sliderValue, sliderMinValue, sliderMaxValue);
-                    bool requestSuccessful = slider.SliderOnValueChanged(manager, optionIndex);
-                    if (requestSuccessful)
-                    {
-                        return;
-                    }
+                    slider.SliderOnValueChanged(manager, optionIndex, out bool requestSuccessful);
+                    if (requestSuccessful) return;
                 }
             }
         }

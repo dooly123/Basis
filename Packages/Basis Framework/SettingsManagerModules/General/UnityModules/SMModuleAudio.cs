@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Audio;
 
 namespace BattlePhaze.SettingsManager.Intergrations
@@ -13,7 +14,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
-                    AudioListener.volume = Value / 100f;
+                    AudioListener.volume = Value;
                 }
             }
             if (NameReturn(1, Option))

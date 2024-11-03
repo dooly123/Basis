@@ -17,76 +17,74 @@ namespace BattlePhaze.SettingsManager
                 Button.onClick.AddListener(Manager.Options[OptionIndex].ResetAction);
             }
         }
-        public override bool SliderOptionSetValue(SettingsManager Manager, int OptionIndex, float Value, float Min, float Max)
+        public override void SliderOptionSetValue(SettingsManager Manager, int OptionIndex, float Value, float Min, float Max)
         {
             if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
+                Slider.value = Value;
                 Slider.minValue = Min;
                 Slider.maxValue = Max;
-                Slider.value = Value;
-                return true;
             }
-            return false;
         }
-        public override bool SliderOptionReadValue(SettingsManager Manager, int OptionIndex, out float Value)
+        public override void SliderOptionReadValue(SettingsManager Manager, int OptionIndex, out bool HasValue, out float Value)
         {
             Value = 0;
+            HasValue = false;
             if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
                 Value = Slider.value;
-                return true;
+                HasValue = true;
             }
-            return false;
         }
-        public override bool SliderOptionReadMaxValue(SettingsManager Manager, int OptionIndex, out float Value)
+        public override void SliderOptionReadMaxValue(SettingsManager Manager, int OptionIndex, out bool HasValue, out float Value)
         {
             Value = 0;
+            HasValue = false;
             if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
                 Value = Slider.maxValue;
-                return true;
+                HasValue = true;
             }
-            return false;
         }
-        public override bool SliderOptionReadMinValue(SettingsManager Manager, int OptionIndex, out float Value)
+        public override void SliderOptionReadMinValue(SettingsManager Manager, int OptionIndex, out bool HasValue, out float Value)
         {
+            HasValue = false;
             Value = 0;
             if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
                 Value = Slider.minValue;
-                return true;
+                HasValue = true;
             }
-            return false; ;
         }
-        public override bool SliderGetOptionsGameobject(SettingsManager Manager, int OptionIndex, out GameObject GameObject)
+        public override void SliderGetOptionsGameobject(SettingsManager Manager, int OptionIndex, out bool HasValue, out GameObject GameObject)
         {
+            HasValue = false;
             GameObject = null;
             if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
                 GameObject = Slider.gameObject;
-                return true;
+                HasValue = true;
             }
-            return false;
         }
-        public override bool SliderEnabledState(SettingsManager Manager, int OptionIndex, bool outcome)
+        public override void SliderEnabledState(SettingsManager Manager, int OptionIndex, bool outcome)
         {
             if (SettingsManagerTypesHelper.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
                 Slider.gameObject.SetActive(outcome);
-                return true;
             }
-            return false;
         }
-        public override bool SliderOnValueChanged(SettingsManager Manager, int OptionIndex)
+        public override void SliderOnValueChanged(SettingsManager Manager, int OptionIndex, out bool HasValue)
         {
+            HasValue = false;
             if (SettingsManager.TypeCompare(Manager.Options[OptionIndex].ObjectInput, typeof(UnityEngine.UI.Slider)))
             {
+                HasValue = true;
                 UnityEngine.UI.Slider Slider = (UnityEngine.UI.Slider)Manager.Options[OptionIndex].ObjectInput;
                 if (Manager.Options[OptionIndex].ParseController == SettingsManagerEnums.ItemParse.NormalValue)
                 {
@@ -126,7 +124,6 @@ namespace BattlePhaze.SettingsManager
                 }
             }
             SetResetAction(Manager, OptionIndex);
-            return true;
         }
         public override SettingsManagerEnums.IsTypeInterpreter GetActiveType()
         {
