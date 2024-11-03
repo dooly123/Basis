@@ -485,7 +485,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -499,7 +499,7 @@ MonoBehaviour:
     ValueDefault: ultra
     Explanation: Ambient Occlusion
     selectedValue: ultra
-    Type: 1
+    Type: 4
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
     ApplyInput: {fileID: 0}
@@ -1117,7 +1117,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 1
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000000000004000000
     Round: 0
     RoundTo: 0
@@ -1153,7 +1153,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 1
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1185,7 +1185,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 2
@@ -1232,17 +1232,17 @@ MonoBehaviour:
       EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
-    RoundTo: 1
+    RoundTo: 0
     MaxPercentage: 100
     MinPercentage: 0
-    SliderMaxValue: 1
+    SliderMaxValue: 100
     SliderMinValue: 0
     Name: Main Audio
     ValueDescriptor: 62%
-    SelectedValueDefault: 1
-    ValueDefault: 1
+    SelectedValueDefault: 100
+    ValueDefault: 100
     Explanation: Main Audio
-    selectedValue: 1
+    selectedValue: 100
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1251,7 +1251,7 @@ MonoBehaviour:
     PlatFormDefaultState: []
     ExcludeFromThesePlatforms: []
     MasterQualityState: 0
-    ParseController: 1
+    ParseController: 0
     ReturnedValueTextType: 0
     SelectableValueList: []
   - EditorBasedUIToggles:
@@ -1300,7 +1300,7 @@ MonoBehaviour:
     Name: World Volume
     ValueDescriptor: 62%
     SelectedValueDefault: 50
-    ValueDefault: 70
+    ValueDefault: 80
     Explanation: Player Volume
     selectedValue: 70
     Type: 3
@@ -1409,7 +1409,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 1
@@ -1821,7 +1821,7 @@ MonoBehaviour:
     Index: 20
     SelectableValueList: []
     Min: 0
-    Max: 1
+    Max: 100
   - Name: Selected Microphone
     DefaultValue: 
     SelectedValue: 70
@@ -1976,7 +1976,7 @@ MonoBehaviour:
   ManagerModuleOptions:
   - OptionName: Main Audio
     Explanation: Main Audio
-    Parse: 1
+    Parse: 0
     Type: 3
   - OptionName: Menus Volume
     Explanation: UI Sounds
@@ -2219,7 +2219,7 @@ MonoBehaviour:
     Explanation: Ambient Occlusion
     Parse: 1
     Type: 1
-  AmbientOcclusion: {fileID: -1878332245247344467, guid: c40be3174f62c4acf8c1216858c64956, type: 2}
+  AmbientOcclusion: {fileID: 0}
 --- !u!114 &7074081770173294057
 MonoBehaviour:
   m_ObjectHideFlags: 0
