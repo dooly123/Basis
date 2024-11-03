@@ -188,8 +188,8 @@ MonoBehaviour:
     UnlockPassword: Scene
     BasisRemoteBundleEncrypted:
       IsLocal: 0
-      MetaURL: https://BasisFramework.b-cdn.net/Worlds/DX11/67c032f6-546b-431f-8ed1-86f105b36124_638661006309992904.BasisEncyptedMeta
-      BundleURL: https://BasisFramework.b-cdn.net/Worlds/DX11/67c032f6-546b-431f-8ed1-86f105b36124_638661006309992904.BasisEncyptedBundle
+      MetaURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/a774658e-05b7-46e0-b4d1-0841989c9883_638661956278207222.BasisEncyptedMeta
+      BundleURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/a774658e-05b7-46e0-b4d1-0841989c9883_638661956278207222.BasisEncyptedBundle
     BasisLocalEncryptedBundle:
       LocalMetaFile: 
       LocalBundleFile: 

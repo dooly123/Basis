@@ -658,7 +658,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3843996678262047675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,6 +705,24 @@ MonoBehaviour:
       IsLocal: 0
       MetaURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/1a0fe16e-1c5f-4134-a10e-07c6c436bc97_638650053689621810.BasisEncyptedMet
       BundleURL: https://basisframework.b-cdn.net/Avatars/DX11/ThirdParty/1a0fe16e-1c5f-4134-a10e-07c6c436bc97_638650053689621810.BasisEncyptedBun
+    BasisLocalEncryptedBundle:
+      LocalMetaFile: 
+      LocalBundleFile: 
+    BasisBundleInformation:
+      HasError: 0
+      BasisBundleDescription:
+        AssetBundleName: 
+        AssetBundleDescription: 
+      BasisBundleGenerated:
+        AssetBundleHash: 
+        AssetMode: 
+        AssetToLoadName: 
+        AssetBundleCRC: 0
+  - UnlockPassword: Aurellia
+    BasisRemoteBundleEncrypted:
+      IsLocal: 0
+      MetaURL: https://BasisFramework.b-cdn.net/Avatars/DX11/ThirdParty/84df873f-4857-47da-88ea-c7b604793489_638661962010243564.BasisEncyptedMeta
+      BundleURL: https://BasisFramework.b-cdn.net/Avatars/DX11/ThirdParty/84df873f-4857-47da-88ea-c7b604793489_638661962010243564.BasisEncyptedBundle
     BasisLocalEncryptedBundle:
       LocalMetaFile: 
       LocalBundleFile: 
