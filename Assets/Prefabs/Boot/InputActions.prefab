@@ -164,8 +164,6 @@ GameObject:
   - component: {fileID: 2682791463296768347}
   - component: {fileID: 6858255495859468344}
   - component: {fileID: 4506459589283058818}
-  - component: {fileID: 3753039974563469601}
-  - component: {fileID: 8271215996735340422}
   - component: {fileID: 256212325347645450}
   - component: {fileID: 6482417607131076391}
   - component: {fileID: 6378574261833472064}
@@ -276,7 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 5e4c3601c6a155f43af19da3bdd35a64, type: 3}
+  m_Actions: {fileID: 0}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -294,30 +292,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3753039974563469601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286943206467795689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82bdf5e34837d4c469ade8d39276e8b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8271215996735340422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286943206467795689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ae8ec4604032aa43add9ddf96000535, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &256212325347645450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,7 +1091,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 1
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000000000004000000
     Round: 0
     RoundTo: 0
@@ -1130,7 +1104,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: windowed
     Explanation: 
-    selectedValue: windowed
+    selectedValue: fullscreen
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1143,17 +1117,17 @@ MonoBehaviour:
     ReturnedValueTextType: 0
     SelectableValueList:
     - realValue: fullscreen
-      UserValue: fullscreen
+      UserValue: Fullscreen
     - realValue: maximized window
       UserValue: Maximized Window
     - realValue: windowed
-      UserValue: windowed
+      UserValue: Windowed
   - EditorBasedUIToggles:
       SupportedRenderPipelines: 1
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 1
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1185,7 +1159,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 2
@@ -1198,7 +1172,7 @@ MonoBehaviour:
     SelectedValueDefault: 
     ValueDefault: False
     Explanation: 
-    selectedValue: microphone (nvidia broadcast)
+    selectedValue: microphone (virtual desktop audio)
     Type: 2
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1225,24 +1199,24 @@ MonoBehaviour:
     - realValue: microphone (nvidia broadcast)
       UserValue: Microphone (NVIDIA Broadcast)
   - EditorBasedUIToggles:
-      SupportedRenderPipelines: 0
-      DefaultPlatform: 0
+      SupportedRenderPipelines: 1
+      DefaultPlatform: 1
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
-    RoundTo: 1
+    RoundTo: 0
     MaxPercentage: 100
     MinPercentage: 0
-    SliderMaxValue: 1
+    SliderMaxValue: 100
     SliderMinValue: 0
     Name: Main Audio
-    ValueDescriptor: 62%
-    SelectedValueDefault: 1
-    ValueDefault: 1
+    ValueDescriptor: 
+    SelectedValueDefault: 100
+    ValueDefault: 100
     Explanation: Main Audio
-    selectedValue: 1
+    selectedValue: 100
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1251,7 +1225,7 @@ MonoBehaviour:
     PlatFormDefaultState: []
     ExcludeFromThesePlatforms: []
     MasterQualityState: 0
-    ParseController: 1
+    ParseController: 0
     ReturnedValueTextType: 0
     SelectableValueList: []
   - EditorBasedUIToggles:
@@ -1272,7 +1246,7 @@ MonoBehaviour:
     SelectedValueDefault: 50
     ValueDefault: 70
     Explanation: UI Sounds
-    selectedValue: 70
+    selectedValue: 80
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1289,7 +1263,7 @@ MonoBehaviour:
       DefaultPlatform: 1
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 1
     RoundTo: 0
@@ -1422,7 +1396,7 @@ MonoBehaviour:
     SelectedValueDefault: 1
     ValueDefault: 1
     Explanation: 
-    selectedValue: 0.9680337
+    selectedValue: 1
     Type: 3
     TextDescription: {fileID: 0}
     ObjectInput: {fileID: 0}
@@ -1467,8 +1441,6 @@ MonoBehaviour:
   SaveModules:
   - {fileID: 6482417607131076391}
   - {fileID: 256212325347645450}
-  - {fileID: 8271215996735340422}
-  - {fileID: 3753039974563469601}
   SettingsManagerAbstractTypeDropdown:
   - {fileID: 5443067033238234296}
   - {fileID: 1469491627460388504}
@@ -1789,7 +1761,7 @@ MonoBehaviour:
     Max: 0
   - Name: Main Audio
     DefaultValue: 1
-    SelectedValue: 1
+    SelectedValue: 24
     Index: 16
     SelectableValueList: []
     Min: 0
@@ -1803,28 +1775,28 @@ MonoBehaviour:
     Max: 0
   - Name: World Volume
     DefaultValue: 50
-    SelectedValue: 70
+    SelectedValue: 0
     Index: 18
     SelectableValueList: []
     Min: 0
     Max: 0
   - Name: Player Volume
     DefaultValue: 50
-    SelectedValue: 6
+    SelectedValue: 0
     Index: 19
     SelectableValueList: []
     Min: 0
     Max: 0
   - Name: Microphone Volume
     DefaultValue: 1
-    SelectedValue: 1
+    SelectedValue: 100
     Index: 20
     SelectableValueList: []
     Min: 0
-    Max: 1
+    Max: 100
   - Name: Selected Microphone
     DefaultValue: 
-    SelectedValue: 70
+    SelectedValue: 80
     Index: 21
     SelectableValueList:
     - realValue: digital audio interface (valve vr radio & hmd mic)
@@ -1887,7 +1859,7 @@ MonoBehaviour:
     Max: 1.5
   - Name: Controller DeadZone
     DefaultValue: 0.05
-    SelectedValue: 0.9680337
+    SelectedValue: 1
     Index: 26
     SelectableValueList: []
     Min: 0.25
@@ -1976,7 +1948,7 @@ MonoBehaviour:
   ManagerModuleOptions:
   - OptionName: Main Audio
     Explanation: Main Audio
-    Parse: 1
+    Parse: 0
     Type: 3
   - OptionName: Menus Volume
     Explanation: UI Sounds
@@ -2167,7 +2139,7 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 2
-  LastResolution: 
+  LastResolution: 2560x1440
 --- !u!114 &1962641699494196431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2336,4 +2308,4 @@ MonoBehaviour:
     Parse: 1
     Type: 1
   Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
-  RenderScale: 0.9680337
+  RenderScale: 1
