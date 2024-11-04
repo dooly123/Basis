@@ -29,13 +29,11 @@ public struct UpdateAvatarPositionJob : IJob
         {
             positions[0] = targetPositions[0];
             positions[1] = targetPositions[1];
-            positions[2] = targetPositions[2];
         }
         else
         {
             positions[0] = Vector3.Lerp(positions[0], targetPositions[0], LerpTime);
             positions[1] = Vector3.Lerp(positions[1], targetPositions[1], LerpTime);
-            positions[2] = Vector3.Lerp(positions[2], targetPositions[2], LerpTime);
         }
     }
 }

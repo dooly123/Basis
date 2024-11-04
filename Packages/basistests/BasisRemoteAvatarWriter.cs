@@ -29,7 +29,7 @@ namespace Basis.Scripts.Tests
             BasisNetworkSendBase.InitalizeAvatarStoredData(ref Target);
             PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
             ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
-            LocalAvatarSyncMessage.array = new byte[224];
+            LocalAvatarSyncMessage.array = new byte[212];
         }
         private void LateUpdate()
         {

@@ -34,7 +34,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             LASM = new LocalAvatarSyncMessage()
             {
-                array = new byte[224],
+                array = new byte[212],
             };
             if (Target.Muscles.IsCreated == false)
             {
@@ -49,7 +49,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
             ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
         }
-        public static void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
+        public static void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 2, int QuaternionCount = 1, int MuscleCount = 95)
         {
             data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
             data.Quaternions = new NativeArray<Quaternion>(QuaternionCount, Allocator.Persistent);

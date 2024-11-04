@@ -13,9 +13,6 @@ namespace Basis.Scripts.Networking.Recievers
     [System.Serializable]
     public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
-        public Vector3 ScaleOffset;
-        public Vector3 PlayerPosition;
-
         private float lerpTimeSpeedMovement = 0;
         private float lerpTimeSpeedRotation = 0;
         private float lerpTimeSpeedMuscles = 0;
@@ -59,6 +56,9 @@ namespace Basis.Scripts.Networking.Recievers
         {
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
+        public Vector3 Scaling;
+        public Vector3 ScaledPosition;
+        public bool SuppledScaler;
         /// <summary>
         /// lyuma here :) 
         /// </summary>
@@ -67,7 +67,15 @@ namespace Basis.Scripts.Networking.Recievers
         /// <param name="pose"></param>
         public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
         {
-            pose.bodyPosition = output.Vectors[1];
+            if (SuppledScaler == false)
+            {
+                Vector3 Scale = new Vector3(animator.humanScale, animator.humanScale, animator.humanScale);
+                Scaling = Divide(Vector3.one, Scale);
+            }
+            ScaledPosition = output.Vectors[1];
+            ScaledPosition.Scale(Scaling);
+
+            pose.bodyPosition = ScaledPosition;
             pose.bodyRotation = output.Quaternions[0];
             if (pose.muscles == null || pose.muscles.Length != output.Muscles.Length)
             {
@@ -77,16 +85,11 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 output.Muscles.CopyTo(pose.muscles);
             }
-
-            PlayerPosition = Output.Vectors[0];//world position
-            animator.transform.localScale = Output.Vectors[2];//scale
-
-            //we scale the position by the scale
-            ScaleOffset = Output.Vectors[2] - Vector3.one;
-
-            PlayerPosition.Scale(ScaleOffset);
-           // animator.humanScale
-            animator.transform.position = -PlayerPosition;
+            animator.transform.localScale = Output.Vectors[0];//scale
+        }
+        public static Vector3 Divide(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
         }
         public void ReceiveNetworkAudio(AudioSegmentMessage audioSegment)
         {

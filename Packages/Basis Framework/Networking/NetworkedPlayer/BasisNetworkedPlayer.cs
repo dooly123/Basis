@@ -42,7 +42,7 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
         {
             LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage
             {
-                array = new byte[224]
+                array = new byte[212]
             };
             ReInitialize(player, PlayerID, Stub);
         }
