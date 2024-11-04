@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
-[System.Serializable]
-public struct BasisAvatarData
-{
-    public NativeArray<Vector3> Vectors;
-    public NativeArray<Quaternion> Quaternions;
-    public NativeArray<float> Muscles;
-    public float[] floatArray;
-}
+    [System.Serializable]
+    public struct BasisAvatarData
+    {
+        public NativeArray<Vector3> Vectors;//hips positon,players position, scale. (3 length)
+        public NativeArray<Quaternion> Quaternions;//hip rotation rotation (1 length)
+        public NativeArray<float> Muscles;//95 floats for each muscle. (95 length)
+        public float[] floatArray;
+    }
 [BurstCompile]
 public struct UpdateAvatarPositionJob : IJob
 {

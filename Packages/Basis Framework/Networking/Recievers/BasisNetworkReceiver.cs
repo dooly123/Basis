@@ -59,6 +59,12 @@ namespace Basis.Scripts.Networking.Recievers
         {
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
+        /// <summary>
+        /// lyuma here :) 
+        /// </summary>
+        /// <param name="animator"></param>
+        /// <param name="output"></param>
+        /// <param name="pose"></param>
         public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
         {
             pose.bodyPosition = output.Vectors[1];
@@ -118,7 +124,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (!Ready)
             {
-                InitalizeDataJobs();
+                InitalizeDataJobs(ref AvatarJobs);
                 InitalizeAvatarStoredData(ref Target);
                 InitalizeAvatarStoredData(ref Output);
                 UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisAvatarLerpDataSettings> handle = Addressables.LoadAssetAsync<BasisAvatarLerpDataSettings>(BasisAvatarLerp.Settings);

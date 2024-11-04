@@ -24,7 +24,6 @@ public static partial class BasisAvatarIKStageCalibration
             TargetControl = Bone;
             BasisBoneControlRole = Role;
             Candidates = new List<CalibrationConnector>();
-            BasisLocalPlayer.Instance.SimulateHips();
             for (int Index = 0; Index < calibration.Count; Index++)
             {
                 Vector3 Input = calibration[Index].BasisInput.transform.position;

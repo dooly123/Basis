@@ -69,7 +69,6 @@ namespace Basis.Scripts.BasisSdk.Players
             LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
             if (HasEvents == false)
             {
-                LocalBoneDriver.ReadyToRead.AddAction(97, SimulateHips);
                 OnLocalAvatarChanged += OnCalibration;
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
@@ -147,26 +146,6 @@ namespace Basis.Scripts.BasisSdk.Players
                 BasisSceneFactory.Instance.SpawnPlayer(this);
             }
         }
-        public void SimulateHips()
-        {
-            if (Hips.HasBone)
-            {
-                if (Avatar != null)
-                {
-                    // Get the current rotation of the hips bone
-                    Quaternion currentRotation = Hips.OutgoingWorldData.rotation;
-
-                    // Calculate the rotated T-pose position using the current rotation
-                    Vector3 rotatedTposePosition = currentRotation * Hips.TposeLocal.position;
-                    Vector3 positionDifference = Hips.OutgoingWorldData.position - rotatedTposePosition;
-
-                    //    Avatar.Animator.transform.localRotation = rotationDifference;
-                    Avatar.transform.position = positionDifference;
-                    // Apply the calculated position and rotation to the Avatar's animator transform
-                    Avatar.transform.localRotation = currentRotation;
-                }
-            }
-        }
         public async Task CreateAvatar(byte mode, BasisLoadableBundle BasisLoadableBundle)
         {
             await BasisAvatarFactory.LoadAvatarLocal(this, mode, BasisLoadableBundle);
@@ -192,10 +171,6 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             if (HasEvents)
             {
-                if (LocalBoneDriver != null)
-                {
-                    LocalBoneDriver.ReadyToRead.RemoveAction(97,SimulateHips);
-                }
                 OnLocalAvatarChanged -= OnCalibration;
                 SceneManager.sceneLoaded -= OnSceneLoadedCallback;
                 HasEvents = false;

@@ -11,6 +11,7 @@ namespace Basis.Scripts.Networking.Transmitters
     [DefaultExecutionOrder(15001)]
     public partial class BasisNetworkTransmitter : BasisNetworkSendBase
     {
+        public bool HasEvents = false;
         public float timer = 0f;
         public float interval = 0.05f;
         [SerializeField]
@@ -28,7 +29,7 @@ namespace Basis.Scripts.Networking.Transmitters
         void OnRenderer()
         {
             timer += Time.deltaTime;
-            if (timer >= interval)
+            if (timer >= interval)//24 fps
             {
                 Compute();
                 timer = 0f;
@@ -38,12 +39,11 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             DeInitialize();
         }
-        public bool HasEvents = false;
         public override void Initialize(BasisNetworkedPlayer networkedPlayer)
         {
             if (Ready == false)
             {
-                InitalizeDataJobs();
+                InitalizeDataJobs(ref AvatarJobs);
                 InitalizeAvatarStoredData(ref Target);
                 InitalizeAvatarStoredData(ref Output);
                 NetworkedPlayer = networkedPlayer;

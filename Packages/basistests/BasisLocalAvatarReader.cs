@@ -1,3 +1,4 @@
+using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.Smoothing;
@@ -29,10 +30,20 @@ namespace Basis.Scripts.Tests
         public async void OnEnable()
         {
             InitalizeDataJobs();
-            ReceiverPoseHandler = new HumanPoseHandler(Receiver.avatar, Receiver.transform);
-            Receiver.enabled = false;
             InitalizeAvatarStoredData(Target);
             InitalizeAvatarStoredData(Output);
+            if (Target.Muscles.IsCreated == false)
+            {
+                Target.Muscles.ResizeArray(95);
+                Target.floatArray = new float[95];
+            }
+            if (Output.Muscles.IsCreated == false)
+            {
+                Output.floatArray = new float[95];
+                Output.Muscles.ResizeArray(95);
+            }
+            ReceiverPoseHandler = new HumanPoseHandler(Receiver.avatar, Receiver.transform);
+            Receiver.enabled = false;
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisAvatarLerpDataSettings> Handle = Addressables.LoadAssetAsync<BasisAvatarLerpDataSettings>(BasisAvatarLerp.Settings);
             await Handle.Task;
             Settings = Handle.Result;

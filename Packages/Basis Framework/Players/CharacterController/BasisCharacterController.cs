@@ -2,9 +2,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static Basis.Scripts.Drivers.BaseBoneDriver;
-using Gizmos = Popcron.Gizmos;
 namespace Basis.Scripts.BasisCharacterController
 {
     public class BasisCharacterController : MonoBehaviour

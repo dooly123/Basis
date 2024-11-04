@@ -49,18 +49,18 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
             ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
         }
-        public void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
+        public static void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
         {
             data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
             data.Quaternions = new NativeArray<Quaternion>(QuaternionCount, Allocator.Persistent);
             data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);
         }
-        public void InitalizeDataJobs()
+        public static void InitalizeDataJobs(ref BasisDataJobs BasisDataJobs)
         {
             //jobs
-            AvatarJobs.rotationJob = new UpdateAvatarRotationJob();
-            AvatarJobs.positionJob = new UpdateAvatarPositionJob();
-            AvatarJobs.muscleJob = new UpdateAvatarMusclesJob();
+            BasisDataJobs.rotationJob = new UpdateAvatarRotationJob();
+            BasisDataJobs.positionJob = new UpdateAvatarPositionJob();
+            BasisDataJobs.muscleJob = new UpdateAvatarMusclesJob();
         }
         public abstract void Compute();
         public abstract void Initialize(BasisNetworkedPlayer NetworkedPlayer);
