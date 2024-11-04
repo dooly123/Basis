@@ -71,6 +71,7 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 Vector3 Scale = new Vector3(animator.humanScale, animator.humanScale, animator.humanScale);
                 Scaling = Divide(Vector3.one, Scale);
+                Scaling = Divide(Scaling, Output.Vectors[0]);
             }
             ScaledPosition = output.Vectors[1];
             ScaledPosition.Scale(Scaling);
