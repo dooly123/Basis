@@ -121,10 +121,6 @@ public class BasisVideoPlayer : MonoBehaviour
     // Play a video stream from a URL
     public async Task PlayStreamAsync(string url)
     {
-        if(url == "https://stream.vrcdn.live/live/waterwolf.live.ts")
-        {
-            url = "https://stream.vrcdn.live/live/vrcdn.live.ts";
-        }
         Log("Playing stream from URL: " + url);
         await ffmpeg.PlayAsync(url, url);
     }
