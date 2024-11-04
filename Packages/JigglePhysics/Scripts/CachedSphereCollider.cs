@@ -58,10 +58,7 @@ namespace JigglePhysics
             GameObject obj = null;
             try
             {
-                obj = new GameObject("JiggleBoneSphereCollider", typeof(SphereCollider), typeof(DestroyListener))
-                {
-                    hideFlags = HideFlags.DontSave
-                };
+                obj = new GameObject("JiggleBoneSphereCollider", typeof(SphereCollider), typeof(DestroyListener));
                 Object.DontDestroyOnLoad(obj);
 
                 if (!obj.TryGetComponent(out _sphereCollider))

@@ -33,8 +33,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             AvatarData.Vectors[0] = Sender.GetBoneTransform(HumanBodyBones.Hips).position; //Sender.transform.position + CachedPose.bodyPosition;  //Sender.GetBoneTransform(HumanBodyBones.Hips).position;//hips
             AvatarData.Vectors[1] = Sender.transform.localScale;//scale
             AvatarData.Muscles.CopyFrom(CachedPose.muscles);//muscles
-            AvatarData.Quaternions[0] = Sender.GetBoneTransform(HumanBodyBones.Hips).rotation;//hips rotation
-            CompressAvatarUpdate(ref Bytes, AvatarData.Vectors[1], AvatarData.Vectors[0], AvatarData.Quaternions[0], CachedPose.muscles, PositionRanged, ScaleRanged);
+            AvatarData.Rotation = Sender.GetBoneTransform(HumanBodyBones.Hips).rotation;//hips rotation
+            CompressAvatarUpdate(ref Bytes, AvatarData.Vectors[1], AvatarData.Vectors[0], AvatarData.Rotation, CachedPose.muscles, PositionRanged, ScaleRanged);
         }
         /// <summary>
         /// 212
@@ -52,7 +52,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             {
                 syncmessage.array = new byte[212];
             }
-            using (var Packer = DarkRiftWriter.Create(212))
+            using (var Packer = DarkRiftWriter.Create(216))
             {
                 CompressScaleAndPosition(Packer, HipsPosition, Scale, PositionRanged, ScaleRanged);//18
 

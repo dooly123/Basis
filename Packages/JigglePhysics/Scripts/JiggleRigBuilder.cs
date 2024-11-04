@@ -108,7 +108,7 @@ namespace JigglePhysics
             /// <param name="jiggleRigLOD">The JiggleRigLOD object used for disabling the rig if its too far. Can be null.</param>
             /// <param name="wind">How much wind to apply to every particle.</param>
             /// <param name="time">How much time to simulate forward by.</param>
-            public void StepSimulation(JiggleSettingsData data, double time, Vector3 acceleration, SphereCollider sphereCollider)
+            public void StepSimulation(JiggleSettingsData data, double time, Vector3 acceleration)
             {
                 Assert.IsTrue(initialized, "JiggleRig was never initialized. Please call JiggleRig.Initialize() if you're going to manually timestep.");
 
@@ -170,49 +170,10 @@ namespace JigglePhysics
                     }
                     #endregion
 
-                    #region Collisions
-                    if (needsCollisions)
-                    {
-                        Vector3 diff = simulatedPoint.workingPosition - parentSimulatedPoint.workingPosition;
-                        Vector3 dir = diff.normalized;
-                        var constraintResolution = Vector3.LerpUnclamped(simulatedPoint.workingPosition,
-                            parentSimulatedPoint.workingPosition + dir * lengthToParent, data.squaredLengthElasticity);
-                        if (simulatedPoint.hasChild)
-                        { // HAS CHILD POINT
-                            var childSimulatedPoint = simulatedPoints[simulatedPoint.childID];
-                            Vector3 cdiff = simulatedPoint.workingPosition - childSimulatedPoint.workingPosition;
-                            Vector3 cdir = cdiff.normalized;
-                            var backConstraintResolution = Vector3.LerpUnclamped(simulatedPoint.workingPosition,
-                                childSimulatedPoint.workingPosition + cdir * childSimulatedPoint.cachedLengthToParent, data.squaredLengthElasticity);
-                            constraintResolution = (constraintResolution + backConstraintResolution) / 2f;
-                        }
-                        simulatedPoint.workingPosition = constraintResolution;
-                        for (var j = 0; j < colliderCount; j++)
-                        {
-                            var collider = colliders[j];
-                            sphereCollider.radius = jiggleSettings.GetRadius(simulatedPoint.normalizedIndex);
-                            if (sphereCollider.radius <= 0)
-                            {
-                                continue;
-                            }
 
-                            collider.transform.GetPositionAndRotation(out var colliderPosition, out var colliderRotation);
-                            if (Physics.ComputePenetration(sphereCollider, simulatedPoint.workingPosition,
-                                    Quaternion.identity, collider, colliderPosition, colliderRotation,
-                                    out Vector3 penetrationDir, out float dist))
-                            {
-                                simulatedPoint.workingPosition += penetrationDir * dist;
-                            }
-                        }
-                    }
-                    else
-                    {
                         Vector3 diff = simulatedPoint.workingPosition - parentSimulatedPoint.workingPosition;
                         Vector3 dir = diff.normalized;
                         simulatedPoint.workingPosition = Vector3.LerpUnclamped(simulatedPoint.workingPosition, parentSimulatedPoint.workingPosition + dir * lengthToParent, data.squaredLengthElasticity);
-                    }
-
-                    #endregion
 
                 }
             }
@@ -468,7 +429,7 @@ namespace JigglePhysics
             return jiggleUpdateMode;
         }
 
-        public virtual void Advance(float deltaTime, Vector3 gravity, double timeAsDouble, double timeAsDoubleOneStepBack, SphereCollider sphereCollider)
+        public virtual void Advance(float deltaTime, Vector3 gravity, double timeAsDouble, double timeAsDoubleOneStepBack)
         {
             #region Settling on spawn, to prevent instant posing jiggles.
 
@@ -498,7 +459,7 @@ namespace JigglePhysics
                     var data = rig.jiggleSettings.GetData();
                     data.blend *= blend;
                     Vector3 acceleration = gravity * (data.gravityMultiplier * SQUARED_VERLET_TIME_STEP) + wind * (VERLET_TIME_STEP * data.airDrag);
-                    rig.StepSimulation(data, time, acceleration, sphereCollider);
+                    rig.StepSimulation(data, time, acceleration);
                 }
                 foreach (JiggleRig rig in jiggleRigs)
                 {

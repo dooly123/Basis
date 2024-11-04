@@ -23,7 +23,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             DecompressAvatarUpdate(AvatarUpdate, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref AvatarData, PositionRanged, ScaleRanged);
             AvatarData.Vectors[1] = BodyPosition;
             AvatarData.Vectors[0] = Scale;
-            AvatarData.Quaternions[0] = Rotation;
+            AvatarData.Rotation = Rotation;
         }
         public static void DecompressAvatarUpdate(byte[] compressedData, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {

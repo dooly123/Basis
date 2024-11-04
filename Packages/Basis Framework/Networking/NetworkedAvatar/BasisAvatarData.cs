@@ -9,7 +9,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     public struct BasisAvatarData
     {
         public NativeArray<Vector3> Vectors;//hips positon,players position, scale. (3 length)
-        public NativeArray<Quaternion> Quaternions;//hip rotation rotation (1 length)
+        public Quaternion Rotation;//hip rotation rotation (1 length)
         public NativeArray<float> Muscles;//95 floats for each muscle. (95 length)
         public float[] floatArray;
     }
@@ -37,20 +37,6 @@ public struct UpdateAvatarPositionJob : IJob
         }
     }
 }
-
-[BurstCompile]
-public struct UpdateAvatarRotationJob : IJob
-{
-    public NativeArray<Quaternion> rotations;
-    public NativeArray<Quaternion> targetRotations;
-    public float LerpTime;
-
-    public void Execute()
-    {
-        rotations[0] = Quaternion.Slerp(rotations[0], targetRotations[0], LerpTime);
-    }
-}
-
 [BurstCompile]
 public struct UpdateAvatarMusclesJob : IJobParallelFor
 {

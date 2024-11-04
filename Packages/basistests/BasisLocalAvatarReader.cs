@@ -3,10 +3,8 @@ using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.Smoothing;
 using Unity.Collections;
-using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-
 namespace Basis.Scripts.Tests
 {
     public class BasisLocalAvatarReader : MonoBehaviour
@@ -54,24 +52,21 @@ namespace Basis.Scripts.Tests
         public void OnDestroy()
         {
             Target.Vectors.Dispose();
-            Target.Quaternions.Dispose();
             Target.Muscles.Dispose();
 
             Output.Vectors.Dispose();
-            Output.Quaternions.Dispose();
             Output.Muscles.Dispose();
         }
-        public void InitalizeAvatarStoredData(BasisAvatarData data, int VectorCount = 3, int QuaternionCount = 1, int MuscleCount = 95)
+        public void InitalizeAvatarStoredData(BasisAvatarData data, int VectorCount = 3,  int MuscleCount = 95)
         {
             //data
             data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
-            data.Quaternions = new NativeArray<Quaternion>(QuaternionCount, Allocator.Persistent);
+            data.Rotation = Quaternion.identity;
             data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);
         }
         public void InitalizeDataJobs()
         {
             //jobs
-            AvatarJobs.rotationJob = new UpdateAvatarRotationJob();
             AvatarJobs.positionJob = new UpdateAvatarPositionJob();
             AvatarJobs.muscleJob = new UpdateAvatarMusclesJob();
         }
@@ -96,7 +91,7 @@ namespace Basis.Scripts.Tests
         public void ApplyPoseData(Animator Animator, BasisAvatarData Output, ref HumanPose Pose)
         {
             Pose.bodyPosition = Output.Vectors[1];
-            Pose.bodyRotation = Output.Quaternions[0];
+            Pose.bodyRotation = Output.Rotation;
             Output.Muscles.CopyTo(Pose.muscles);
             PlayerPosition = Output.Vectors[0];
 

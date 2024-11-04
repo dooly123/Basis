@@ -56,24 +56,17 @@ namespace Basis.Scripts.Networking.Recievers
         {
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
-        public Vector3 Scaling;
-        public Vector3 ScaledPosition;
-        /// <summary>
-        /// lyuma here :) 
-        /// </summary>
-        /// <param name="animator"></param>
-        /// <param name="output"></param>
-        /// <param name="pose"></param>
         public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
         {
-            Vector3 Scale = new Vector3(animator.humanScale, animator.humanScale, animator.humanScale);
-            Scaling = Divide(Vector3.one, Scale);
+            float AvatarHumanScale = animator.humanScale;
+            Vector3 scale = Vector3.one * animator.humanScale;
+            Vector3 Scaling = Divide(Vector3.one, scale);
             Scaling = Divide(Scaling, Output.Vectors[0]);
-            ScaledPosition = output.Vectors[1];
+            Vector3 ScaledPosition = output.Vectors[1];
             ScaledPosition.Scale(Scaling);
 
             pose.bodyPosition = ScaledPosition;
-            pose.bodyRotation = output.Quaternions[0];
+            pose.bodyRotation = output.Rotation;
             if (pose.muscles == null || pose.muscles.Length != output.Muscles.Length)
             {
                 pose.muscles = output.Muscles.ToArray();
@@ -152,11 +145,9 @@ namespace Basis.Scripts.Networking.Recievers
         public void OnDestroy()
         {
             Target.Vectors.Dispose();
-            Target.Quaternions.Dispose();
             Target.Muscles.Dispose();
 
             Output.Vectors.Dispose();
-            Output.Quaternions.Dispose();
             Output.Muscles.Dispose();
 
             if (HasEvents && RemotePlayer != null && RemotePlayer.RemoteAvatarDriver != null)
