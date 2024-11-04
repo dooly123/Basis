@@ -58,7 +58,6 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public Vector3 Scaling;
         public Vector3 ScaledPosition;
-        public bool SuppledScaler;
         /// <summary>
         /// lyuma here :) 
         /// </summary>
@@ -67,12 +66,9 @@ namespace Basis.Scripts.Networking.Recievers
         /// <param name="pose"></param>
         public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
         {
-            if (SuppledScaler == false)
-            {
-                Vector3 Scale = new Vector3(animator.humanScale, animator.humanScale, animator.humanScale);
-                Scaling = Divide(Vector3.one, Scale);
-                Scaling = Divide(Scaling, Output.Vectors[0]);
-            }
+            Vector3 Scale = new Vector3(animator.humanScale, animator.humanScale, animator.humanScale);
+            Scaling = Divide(Vector3.one, Scale);
+            Scaling = Divide(Scaling, Output.Vectors[0]);
             ScaledPosition = output.Vectors[1];
             ScaledPosition.Scale(Scaling);
 
@@ -90,7 +86,14 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public static Vector3 Divide(Vector3 a, Vector3 b)
         {
-            return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
+            // Define a small epsilon to avoid division by zero
+            const float epsilon = 1e-5f;
+
+            return new Vector3(
+                b.x != 0 ? a.x / b.x : a.x / epsilon,
+                b.y != 0 ? a.y / b.y : a.y / epsilon,
+                b.z != 0 ? a.z / b.z : a.z / epsilon
+            );
         }
         public void ReceiveNetworkAudio(AudioSegmentMessage audioSegment)
         {
