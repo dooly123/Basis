@@ -125,7 +125,27 @@ public static class BasisLoadHandler
         {
             Debug.Log("Bundle was already on disc proceeding");
         }
+        IEnumerable<AssetBundle> AssetBundles =  AssetBundle.GetAllLoadedAssetBundles();
+        foreach (AssetBundle assetBundle in AssetBundles)
+        {
+            if (assetBundle != null && assetBundle.Contains(wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName))
+            {
+                wrapper.AssetBundle = assetBundle;
+                Debug.Log("we already have this AssetToLoadName in our loaded bundles using that instead!");
+                if (IsMetaOnDisc == false || IsBundleOnDisc == false)
+                {
+                    OnDiscInformation newDiscInfo = new OnDiscInformation
+                    {
+                        StoredRemote = wrapper.LoadableBundle.BasisRemoteBundleEncrypted,
+                        StoredLocal = wrapper.LoadableBundle.BasisLocalEncryptedBundle,
+                        AssetIDToLoad = wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName,
+                    };
 
+                    await AddDiscInfo(newDiscInfo);
+                }
+                return;
+            }
+        }
         AssetBundleCreateRequest bundleRequest = await BasisEncryptionToData.GenerateBundleFromFile(
             wrapper.LoadableBundle.UnlockPassword,
             wrapper.LoadableBundle.BasisLocalEncryptedBundle.LocalBundleFile,
