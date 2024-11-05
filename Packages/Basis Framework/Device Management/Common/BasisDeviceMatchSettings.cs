@@ -15,12 +15,11 @@ namespace Basis.Scripts.Device_Management
 
         [Header("Match with Ids")]
         [SerializeField]
-        public string[] matchableDeviceIds = Array.Empty<string>(); // Use a private backing field
-        public ReadOnlySpan<string> MatchableDeviceIds => matchableDeviceIds; // Expose as ReadOnlySpan
+        public string[] matchableDeviceIds = Array.Empty<string>();
+        public ReadOnlySpan<string> MatchableDeviceIds => matchableDeviceIds;
 
         public IEnumerable<string> MatchableDeviceIdsLowered()
         {
-            // Use yield to avoid allocation of a new list
             foreach (var id in matchableDeviceIds)
             {
                 yield return id.ToLower();
@@ -48,5 +47,26 @@ namespace Basis.Scripts.Device_Management
         [Header("Tracked Role Override")]
         public bool HasTrackedRole = false;
         public BasisBoneTrackedRole TrackedRole;
+
+        // Clone method for deep copy
+        public BasisDeviceMatchSettings Clone()
+        {
+            return new BasisDeviceMatchSettings
+            {
+                DeviceID = this.DeviceID,
+                VersionNumber = this.VersionNumber,
+                matchableDeviceIds = (string[])this.matchableDeviceIds.Clone(),
+                HasRayCastSupport = this.HasRayCastSupport,
+                CanDisplayPhysicalTracker = this.CanDisplayPhysicalTracker,
+                HasRayCastVisual = this.HasRayCastVisual,
+                HasRayCastRedical = this.HasRayCastRedical,
+                PositionRayCastOffset = this.PositionRayCastOffset,
+                RotationRaycastOffset = this.RotationRaycastOffset,
+                AvatarPositionOffset = this.AvatarPositionOffset,
+                AvatarRotationOffset = this.AvatarRotationOffset,
+                HasTrackedRole = this.HasTrackedRole,
+                TrackedRole = this.TrackedRole
+            };
+        }
     }
 }

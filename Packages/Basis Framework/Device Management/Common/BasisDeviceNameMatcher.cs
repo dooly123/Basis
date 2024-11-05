@@ -10,6 +10,9 @@ namespace Basis.Scripts.Device_Management
     {
         [SerializeField]
         public List<BasisDeviceMatchSettings> BasisDevice = new List<BasisDeviceMatchSettings>();
+
+        [SerializeField]
+        public List<BasisDeviceMatchSettings> BackedUpDevices = new List<BasisDeviceMatchSettings>();
         public BasisDeviceMatchSettings GetAssociatedDeviceMatchableNames(string nameToMatch, BasisBoneTrackedRole FallBackRole = BasisBoneTrackedRole.CenterEye, bool UseFallbackROle = false)
         {
             foreach (BasisDeviceMatchSettings DeviceEntry in BasisDevice)

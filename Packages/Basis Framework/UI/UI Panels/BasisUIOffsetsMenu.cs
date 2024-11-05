@@ -53,7 +53,9 @@ public class BasisUIOffsetsMenu : BasisUIBase
     private const float IncrementValue = 0.01f;
     private BasisDeviceNameMatcher Matched;
     private int currentIndex = 0;
+    public Button Reset;
 
+    public TMP_Dropdown JsonDump;
     public override void DestroyEvent() { }
 
     public override void InitalizeEvent()
@@ -115,6 +117,7 @@ public class BasisUIOffsetsMenu : BasisUIBase
         {
             onValueChangedDropdown(0);
         }
+        Reset.onClick.AddListener(NukeConfigAndReload);
     }
 
     public void ApplyBack()
@@ -161,11 +164,33 @@ public class BasisUIOffsetsMenu : BasisUIBase
             //2 = this
             //3 and up is manual config
             BasisDeviceManagement.Instance.LoadAndOrSaveDefaultDeviceConfigs();
+            onValueChangedDropdown(currentIndex);
         }
     }
     public void NukeConfigAndReload()
     {
+        // Clear and reload BasisDevice list with deep copies
+        BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BasisDevice.Clear();
+        foreach (var device in BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BackedUpDevices)
+        {
+            BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BasisDevice.Add(device.Clone());
+        }
 
+        // Update all input devices with matched settings using deep copies
+        foreach (BasisDeviceMatchSettings match in BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BasisDevice)
+        {
+            foreach (BasisInput input in BasisDeviceManagement.Instance.AllInputDevices)
+            {
+                if (input.BasisDeviceMatchableNames.DeviceID == match.DeviceID)
+                {
+                    input.AvatarPositionOffset = match.AvatarPositionOffset;
+                    input.AvatarRotationOffset = Quaternion.Euler(match.AvatarRotationOffset);
+                    Debug.Log("Loaded for " + input.UniqueDeviceIdentifier);
+                    input.BasisDeviceMatchableNames = match; // Use deep clone here
+                }
+            }
+        }
+        onValueChangedDropdown(currentIndex);
     }
     private void onValueChangedDropdown(int arg0)
     {
