@@ -30,8 +30,16 @@ namespace Basis.Scripts.Networking
             }
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
-              byte[] Information =  BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-                BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
+                byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
+                if (BasisLocalPlayer.Instance.AvatarDriver.References.HasHips)
+                {
+                    BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.Hips);
+                }
+                else
+                {
+                    BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.AnimatorRoot);
+                }
+
                 BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = NetworkedPlayer.NetworkSend.LASM;
                 BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
