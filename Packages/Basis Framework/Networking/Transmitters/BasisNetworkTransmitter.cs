@@ -22,7 +22,14 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 if (NetworkedPlayer.Player.Avatar != null)
                 {
-                    BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
+                    if (BasisLocalPlayer.Instance.AvatarDriver.References.HasHips)
+                    {
+                        BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.Hips);
+                    }
+                    else
+                    {
+                        BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.AnimatorRoot);
+                    }
                 }
             }
         }
@@ -93,7 +100,7 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
-                     byteArray = LAI,
+                    byteArray = LAI,
                     loadMode = NetworkedPlayer.Player.AvatarLoadMode,
                 };
                 writer.Write(ClientAvatarChangeMessage);

@@ -19,7 +19,7 @@ namespace Basis.Scripts.Networking.Smoothing
             DataJobs.muscleJob.LerpTime = MuscleLerp;
             DataJobs.positionHandle = DataJobs.positionJob.Schedule();
             DataJobs.muscleHandle = DataJobs.muscleJob.Schedule(95, 1, DataJobs.positionHandle);
-
+            Debug.Log(Output.Rotation + " " + Target.Rotation);
             DataJobs.Rotation = Quaternion.Slerp(Output.Rotation, Target.Rotation, RotationLerp);
 
             DataJobs.muscleHandle.Complete();

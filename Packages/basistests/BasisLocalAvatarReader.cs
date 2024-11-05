@@ -61,7 +61,6 @@ namespace Basis.Scripts.Tests
         {
             //data
             data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
-            data.Rotation = Quaternion.identity;
             data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);
         }
         public void InitalizeDataJobs()
