@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Avatar Lerp Data
   m_EditorClassIdentifier: 
   TeleportDistance: 15
-  LerpSpeedMovement: 15
+  LerpSpeedMovement: 12
   LerpSpeedRotation: 15
   LerpSpeedMuscles: 15

@@ -145,11 +145,8 @@ namespace Basis.Scripts.Drivers
                 TposeStateChange += OnTpose;
                 HasTposeEvent = true;
             }
-            if (Player.Avatar.transform.parent == null)
-            {
-                Player.Avatar.transform.parent = Hips.BoneTransform;
-                Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position, Quaternion.Inverse(Hips.TposeLocal.rotation));
-            }
+            Player.Avatar.transform.parent = Hips.BoneTransform;
+            Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position, Quaternion.identity);
             if (Builder.enabled == false)
             {
                 Builder.enabled = true;
