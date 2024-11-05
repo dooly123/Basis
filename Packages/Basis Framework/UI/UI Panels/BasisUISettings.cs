@@ -19,5 +19,11 @@ namespace Basis.Scripts.UI.UI_Panels
             AddressableGenericResource resource = new AddressableGenericResource("LoggerUI", AddressableExpectedResult.SingleItem);
             OpenMenuNow(resource);
         }
+        public void OpenControllerConfig()
+        {
+            BasisUIManagement.Instance.CloseAllMenus();
+            AddressableGenericResource resource = new AddressableGenericResource("Assets/Prefabs/UI/BasisUIOffsetsManager.prefab", AddressableExpectedResult.SingleItem);
+            OpenMenuNow(resource);
+        }
     }
 }

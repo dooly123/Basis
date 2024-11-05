@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0683149f10472d744b6ec64e91db9dd9
+    m_Address: Assets/Prefabs/UI/BasisUIOffsetsManager.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0beeb56a431ea1646bb55ff6c6fc5a62
     m_Address: Packages/com.hecomi.ulipsync/Assets/Profiles/uLipSync-Profile-Sample.asset
     m_ReadOnly: 0

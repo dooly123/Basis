@@ -1,12 +1,6 @@
 using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
-
-
-//using UnityEditor;
-
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management
@@ -42,6 +36,36 @@ namespace Basis.Scripts.Device_Management
             Debug.LogError("Unable to find Configuration for device Generating " + nameToMatch);
             BasisDeviceManagement.Instance.LoadAndOrSaveDefaultDeviceConfigs();
             return Settings;
+        }
+        public BasisDeviceMatchSettings GetAssociatedDeviceMatchableNamesNoCreate(string nameToMatch)
+        {
+            foreach (BasisDeviceMatchSettings deviceEntry in BasisDevice)
+            {
+                string[] matched = deviceEntry.MatchableDeviceIdsLowered().ToArray();
+                if (matched.Contains(nameToMatch.ToLower()))
+                {
+                    return deviceEntry;
+                }
+            }
+
+            // No matching device found, return null instead of creating or saving
+            Debug.LogWarning("Configuration for device not found: " + nameToMatch);
+            return null;
+        }
+        public BasisDeviceMatchSettings GetAssociatedDeviceMatchableNamesNoCreate(string nameToMatch, BasisDeviceMatchSettings CheckAgainst)
+        {
+            foreach (BasisDeviceMatchSettings deviceEntry in BasisDevice)
+            {
+                string[] matched = deviceEntry.MatchableDeviceIdsLowered().ToArray();
+                if (matched.Contains(nameToMatch.ToLower()))
+                {
+                    return deviceEntry;
+                }
+            }
+
+            // No matching device found, return null instead of creating or saving
+            Debug.LogWarning("Configuration for device not found: " + nameToMatch);
+            return null;
         }
     }
     /*
