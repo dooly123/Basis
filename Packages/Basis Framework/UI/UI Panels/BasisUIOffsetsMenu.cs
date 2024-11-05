@@ -54,13 +54,24 @@ public class BasisUIOffsetsMenu : BasisUIBase
     private BasisDeviceNameMatcher Matched;
     private int currentIndex = 0;
 
-    public override void DestroyEvent()
-    {
-    }
+    public override void DestroyEvent() { }
 
     public override void InitalizeEvent()
     {
-        // Set up callback events for each button
+        XPosRayCast.contentType = TMP_InputField.ContentType.DecimalNumber;
+        YPosRayCast.contentType = TMP_InputField.ContentType.DecimalNumber;
+        ZPosRayCast.contentType = TMP_InputField.ContentType.DecimalNumber;
+        XRotRayCast.contentType = TMP_InputField.ContentType.DecimalNumber;
+        YRotRayCast.contentType = TMP_InputField.ContentType.DecimalNumber;
+        ZRotRayCast.contentType = TMP_InputField.ContentType.DecimalNumber;
+
+        XPosAvatar.contentType = TMP_InputField.ContentType.DecimalNumber;
+        YPosAvatar.contentType = TMP_InputField.ContentType.DecimalNumber;
+        ZPosAvatar.contentType = TMP_InputField.ContentType.DecimalNumber;
+        XRotAvatar.contentType = TMP_InputField.ContentType.DecimalNumber;
+        YRotAvatar.contentType = TMP_InputField.ContentType.DecimalNumber;
+        ZRotAvatar.contentType = TMP_InputField.ContentType.DecimalNumber;
+
         XPosRayCastAddButton.onClick.AddListener(() => IncrementValueInField(XPosRayCast));
         XPosRayCastSubtractButton.onClick.AddListener(() => DecrementValueInField(XPosRayCast));
         YPosRayCastAddButton.onClick.AddListener(() => IncrementValueInField(YPosRayCast));
@@ -87,7 +98,6 @@ public class BasisUIOffsetsMenu : BasisUIBase
         ZRotAvatarAddButton.onClick.AddListener(() => IncrementValueInField(ZRotAvatar));
         ZRotAvatarSubtractButton.onClick.AddListener(() => DecrementValueInField(ZRotAvatar));
 
-        // Initialize dropdown options and set default
         SelectableConfigs.ClearOptions();
         List<string> Options = new List<string>();
         Matched = BasisDeviceManagement.Instance.BasisDeviceNameMatcher;
@@ -101,7 +111,6 @@ public class BasisUIOffsetsMenu : BasisUIBase
         SelectableConfigs.onValueChanged.AddListener(onValueChangedDropdown);
         Apply.onClick.AddListener(ApplyBack);
 
-        // Display the first device config by default
         if (Options.Count > 0)
         {
             onValueChangedDropdown(0);
@@ -112,54 +121,58 @@ public class BasisUIOffsetsMenu : BasisUIBase
     {
         if (currentIndex >= 0 && currentIndex < Matched.BasisDevice.Count)
         {
-            BasisDeviceMatchSettings currentSettings = Matched.BasisDevice[currentIndex];
+            BasisDeviceMatchSettings BasisDeviceMatchableNames = Matched.BasisDevice[currentIndex];
 
-            // Parse and apply the updated values from input fields
-            currentSettings.AvatarPositionOffset = new Vector3(
-                float.Parse(XPosRayCast.text),
-                float.Parse(YPosRayCast.text),
-                float.Parse(ZPosRayCast.text)
+            BasisDeviceMatchableNames.PositionRayCastOffset = new Vector3(
+                ParseOrZero(XPosRayCast.text),
+                ParseOrZero(YPosRayCast.text),
+                ParseOrZero(ZPosRayCast.text)
             );
 
-            currentSettings.AvatarRotationOffset = new Vector3(
-                float.Parse(XRotRayCast.text),
-                float.Parse(YRotRayCast.text),
-                float.Parse(ZRotRayCast.text)
+            BasisDeviceMatchableNames.RotationRaycastOffset = new Vector3(
+                ParseOrZero(XRotRayCast.text),
+                ParseOrZero(YRotRayCast.text),
+                ParseOrZero(ZRotRayCast.text)
             );
 
-            currentSettings.PositionRayCastOffset = new Vector3(
-                float.Parse(XPosAvatar.text),
-                float.Parse(YPosAvatar.text),
-                float.Parse(ZPosAvatar.text)
+            BasisDeviceMatchableNames.AvatarPositionOffset= new Vector3(
+                ParseOrZero(XPosAvatar.text),
+                ParseOrZero(YPosAvatar.text),
+                ParseOrZero(ZPosAvatar.text)
             );
 
-            currentSettings.RotationRaycastOffset = new Vector3(
-                float.Parse(XRotAvatar.text),
-                float.Parse(YRotAvatar.text),
-                float.Parse(ZRotAvatar.text)
+            BasisDeviceMatchableNames.AvatarRotationOffset = new Vector3(
+                ParseOrZero(XRotAvatar.text),
+                ParseOrZero(YRotAvatar.text),
+                ParseOrZero(ZRotAvatar.text)
             );
-            /*
-            BasisDeviceMatchSettings Match = BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNamesNoCreate(CommonDeviceIdentifier,);
+
             foreach (BasisInput Input in BasisDeviceManagement.Instance.AllInputDevices)
             {
-                if (Input.CommonDeviceIdentifier == currentSettings.DeviceID)
+                if (Input.BasisDeviceMatchableNames.DeviceID == BasisDeviceMatchableNames.DeviceID)
                 {
-                    Input.AvatarPositionOffset = currentSettings.AvatarPositionOffset;
-                    Input.AvatarRotationOffset = Quaternion.Euler(currentSettings.AvatarRotationOffset);
+                    Input.AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
+                    Input.AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
+                    Debug.Log("loaded for " + Input.UniqueDeviceIdentifier);
                 }
             }
-            */
+            BasisDeviceMatchableNames.VersionNumber = 2;//we always just say 2.
+            //1 = default
+            //2 = this
+            //3 and up is manual config
+            BasisDeviceManagement.Instance.LoadAndOrSaveDefaultDeviceConfigs();
         }
     }
+    public void NukeConfigAndReload()
+    {
 
+    }
     private void onValueChangedDropdown(int arg0)
     {
         currentIndex = arg0;
 
-        // Fetch settings for the selected device
         BasisDeviceMatchSettings settings = Matched.BasisDevice[arg0];
 
-        // Populate the input fields with current settings
         XPosRayCast.text = settings.AvatarPositionOffset.x.ToString();
         YPosRayCast.text = settings.AvatarPositionOffset.y.ToString();
         ZPosRayCast.text = settings.AvatarPositionOffset.z.ToString();
@@ -191,5 +204,10 @@ public class BasisUIOffsetsMenu : BasisUIBase
         {
             inputField.text = (currentValue - IncrementValue).ToString();
         }
+    }
+
+    private float ParseOrZero(string text)
+    {
+        return float.TryParse(string.IsNullOrEmpty(text) ? "0" : text, out float result) ? result : 0f;
     }
 }
