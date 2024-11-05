@@ -7,6 +7,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static SerializableDarkRift;
+using Unity.Mathematics;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
@@ -51,7 +52,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         public static void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 2, int QuaternionCount = 1, int MuscleCount = 95)
         {
-            data.Vectors = new NativeArray<Vector3>(VectorCount, Allocator.Persistent);
+            data.Vectors = new NativeArray<float3>(VectorCount, Allocator.Persistent);
             data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);
         }
         public static void InitalizeDataJobs(ref BasisDataJobs BasisDataJobs)

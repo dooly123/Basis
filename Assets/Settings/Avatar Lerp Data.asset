@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TeleportDistance: 15
   LerpSpeedMovement: 15
-  LerpSpeedRotation: 7
+  LerpSpeedRotation: 15
   LerpSpeedMuscles: 15

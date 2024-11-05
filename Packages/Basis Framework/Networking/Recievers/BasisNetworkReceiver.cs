@@ -13,7 +13,6 @@ namespace Basis.Scripts.Networking.Recievers
     [System.Serializable]
     public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
-        private float lerpTimeSpeedMovement = 0;
         private float lerpTimeSpeedRotation = 0;
         private float lerpTimeSpeedMuscles = 0;
         public float[] silentData;
@@ -30,11 +29,10 @@ namespace Basis.Scripts.Networking.Recievers
                 return;
 
             float deltaTime = Time.deltaTime;
-            lerpTimeSpeedMovement = deltaTime * Settings.LerpSpeedMovement;
             lerpTimeSpeedRotation = deltaTime * Settings.LerpSpeedRotation;
             lerpTimeSpeedMuscles = deltaTime * Settings.LerpSpeedMuscles;
 
-            BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, lerpTimeSpeedMovement, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
+            BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, Settings.LerpSpeedMovement, deltaTime, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
 
             ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, Output, ref HumanPose);
             PoseHandler.SetHumanPose(ref HumanPose);

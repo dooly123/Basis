@@ -8,7 +8,6 @@ namespace Basis.Scripts.Tests
     {
         public JobHandle positionHandle;
         public JobHandle muscleHandle;
-        public Quaternion Rotation;
         public float DeltaTime;
         public UpdateAvatarPositionJob positionJob;
         public UpdateAvatarMusclesJob muscleJob;
