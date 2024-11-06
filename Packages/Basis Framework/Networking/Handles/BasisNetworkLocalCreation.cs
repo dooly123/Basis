@@ -1,4 +1,5 @@
 ﻿using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
@@ -31,6 +32,10 @@ namespace Basis.Scripts.Networking
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
+                if (NetworkedPlayer.NetworkSend.CompressionArraysRangedUshort == null)
+                {
+                    NetworkedPlayer.NetworkSend.CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
+                }
                 if (BasisLocalPlayer.Instance.AvatarDriver.References.HasHips)
                 {
                     BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.Hips);

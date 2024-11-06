@@ -9,7 +9,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     public static class BasisNetworkAvatarCompressor
     {
-        public static BasisRangedUshortFloatData CF = new BasisRangedUshortFloatData(-180, 180, BasisNetworkConstants.MusclePrecision);
         public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim,Transform Hips)
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())

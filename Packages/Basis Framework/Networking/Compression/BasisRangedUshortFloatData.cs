@@ -9,17 +9,14 @@ namespace Basis.Scripts.Networking.Compression
     [Serializable]
     public class BasisRangedUshortFloatData
     {
-        public readonly float Precision;
-        public readonly float InversePrecision;
-        public readonly float MinValue;
-        public readonly float MaxValue;
-        public readonly int RequiredBits;
-        public readonly ushort Mask;
+        public  float Precision;
+        public  float InversePrecision;
+        public  float MinValue;
+        public  float MaxValue;
+        public  int RequiredBits;
+        public  ushort Mask;
         public BasisRangedUshortFloatData(float minValue, float maxValue, float precision)
         {
-            if (precision <= 0) throw new ArgumentException("Precision must be greater than zero.", nameof(precision));
-            if (minValue >= maxValue) throw new ArgumentException("MinValue must be less than MaxValue.");
-
             MinValue = minValue;
             MaxValue = maxValue;
             Precision = precision;
@@ -42,20 +39,36 @@ namespace Basis.Scripts.Networking.Compression
         {
             float range = MaxValue - MinValue;
             float maxValueInRange = range * InversePrecision;
-            return math.ceilpow2((int)(maxValueInRange + 0.5f));
+            return FastLog2((uint)(maxValueInRange + 0.5f)) + 1;
         }
+        public static int FastLog2(uint value)
+        {
+            value |= value >> 1;
+            value |= value >> 2;
+            value |= value >> 4;
+            value |= value >> 8;
+            value |= value >> 16;
+            return deBruijnLookup[(value * 0x07C4ACDDU) >> 27];
+        }
+
+        private static readonly int[] deBruijnLookup = new int[32]
+        {
+            0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
+            8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31
+        };
     }
 }
-public class CompressionArraysRangedUshort : IDisposable
+[System.Serializable]
+public class CompressionArraysRangedUshort
 {
     public NativeArray<float> Floats;
     public NativeArray<ushort> Ushorts;
-    public readonly float Precision;
-    public readonly float InversePrecision;
-    public readonly float MinValue;
-    public readonly float MaxValue;
-    public readonly int RequiredBits;
-    public readonly ushort Mask;
+    public float Precision;
+    public float InversePrecision;
+    public float MinValue;
+    public float MaxValue;
+    public int RequiredBits;
+    public ushort Mask;
     public DecompressJob Decompression;
     public CompressJob Compression;
     public JobHandle handle;
@@ -100,9 +113,23 @@ public class CompressionArraysRangedUshort : IDisposable
     {
         float range = MaxValue - MinValue;
         float maxValueInRange = range * InversePrecision;
-        return math.ceilpow2((int)(maxValueInRange + 0.5f));
+        return FastLog2((uint)(maxValueInRange + 0.5f)) + 1;
+    }
+    public static int FastLog2(uint value)
+    {
+        value |= value >> 1;
+        value |= value >> 2;
+        value |= value >> 4;
+        value |= value >> 8;
+        value |= value >> 16;
+        return deBruijnLookup[(value * 0x07C4ACDDU) >> 27];
     }
 
+    private static readonly int[] deBruijnLookup = new int[32]
+    {
+            0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
+            8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31
+    };
     public ushort[] CompressArray(float[] values)
     {
         Compression.InputValues.CopyFrom(values);
@@ -114,7 +141,6 @@ public class CompressionArraysRangedUshort : IDisposable
 
     public float[] DecompressArray(ushort[] compressedValues)
     {
-        Debug.Log("Size Check " + Decompression.InputValues.Length  + " " + compressedValues.Length);
         Decompression.InputValues.CopyFrom(compressedValues);
         handle = Decompression.Schedule(compressedValues.Length, InnerBatchCount);
         handle.Complete();
