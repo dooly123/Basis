@@ -36,14 +36,7 @@ namespace Basis.Scripts.Networking
                 {
                     NetworkedPlayer.NetworkSend.CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
                 }
-                if (BasisLocalPlayer.Instance.AvatarDriver.References.HasHips)
-                {
-                    BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.Hips);
-                }
-                else
-                {
-                    BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.AnimatorRoot);
-                }
+                BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
 
                 BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = NetworkedPlayer.NetworkSend.LASM;
                 BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage

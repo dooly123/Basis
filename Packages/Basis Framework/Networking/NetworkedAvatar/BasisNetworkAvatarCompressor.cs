@@ -9,11 +9,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     public static class BasisNetworkAvatarCompressor
     {
-        public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim,Transform Hips)
+        public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
-                CompressIntoSendBase(NetworkSendBase, Anim,Hips);
+                CompressIntoSendBase(NetworkSendBase, Anim);
                 writer.Write(NetworkSendBase.LASM);
                 BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
                 using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
@@ -22,18 +22,17 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
         }
-        public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim,Transform Hips)
+        public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
-            CompressAvatar(NetworkSendBase.CompressionArraysRangedUshort, ref NetworkSendBase.Target, ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged, Hips);
+            CompressAvatar(NetworkSendBase.CompressionArraysRangedUshort, ref NetworkSendBase.Target, ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
         }
-        public static void CompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, ref HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender, ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged,Transform Hips)
+        public static void CompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, ref HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator Sender, ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
             SenderPoseHandler.GetHumanPose(ref CachedPose);
-            Hips.GetPositionAndRotation(out Vector3 position, out Quaternion rotation);
-            AvatarData.Vectors[0] = position; //Sender.transform.position + CachedPose.bodyPosition;  //Sender.GetBoneTransform(HumanBodyBones.Hips).position;//hips
+            AvatarData.Vectors[0] = Sender.bodyPosition;
             AvatarData.Vectors[1] = Sender.transform.localScale;//scale
             AvatarData.Muscles.CopyFrom(CachedPose.muscles);//muscles
-            AvatarData.Rotation = rotation;//hips rotation
+            AvatarData.Rotation = Sender.bodyRotation;//hips rotation
             CompressAvatarUpdate(CompressionArraysRangedUshort,ref Bytes, AvatarData.Vectors[1], AvatarData.Vectors[0], AvatarData.Rotation, CachedPose.muscles, PositionRanged, ScaleRanged);
         }
         /// <summary>

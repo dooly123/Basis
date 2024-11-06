@@ -60,22 +60,20 @@ namespace Basis.Scripts.Networking.Recievers
         {
             float AvatarHumanScale = animator.humanScale;
 
-            // Adjust scaling
-            Vector3 scale = Vector3.one * AvatarHumanScale;
-
-            // First, we adjust scaling factors
-            Vector3 Scaling = Divide(Vector3.one, scale);
+            // Directly adjust scaling by applying the inverse of the AvatarHumanScale
+            Vector3 Scaling = Vector3.one / AvatarHumanScale;  // Initial scaling with human scale inverse
+         //   Debug.Log("Initial Scaling: " + Scaling);
 
             // Now adjust scaling with the output scaling vector
-            Scaling = Divide(Scaling, Output.Vectors[0]);
+            Scaling = Divide(Scaling, output.Vectors[0]);  // Apply custom scaling logic
+         //   Debug.Log("Adjusted Scaling: " + Scaling);
 
             // Apply scaling to position
-            Vector3 ScaledPosition = Vector3.Scale(output.Vectors[1], Scaling); // Apply the scaling
+            Vector3 ScaledPosition = Vector3.Scale(output.Vectors[1], Scaling);  // Apply the scaling
 
             // Apply pose data
             pose.bodyPosition = ScaledPosition;
             pose.bodyRotation = output.Rotation;
-
 
             // Ensure muscles array is correctly sized
             if (pose.muscles == null || pose.muscles.Length != output.Muscles.Length)
@@ -88,18 +86,18 @@ namespace Basis.Scripts.Networking.Recievers
             }
 
             // Adjust the local scale of the animator's transform
-            animator.transform.localScale = Output.Vectors[0]; // Adjust the scale directly
+            animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling
         }
 
         public static Vector3 Divide(Vector3 a, Vector3 b)
         {
-            // Define a small epsilon to avoid division by zero
-            const float epsilon = math.EPSILON;
+            // Define a small epsilon to avoid division by zero, using a flexible value based on magnitude
+            const float epsilon = 0.00001f;
 
             return new Vector3(
-                Mathf.Abs(b.x) > epsilon ? a.x / b.x : a.x / epsilon,
-                Mathf.Abs(b.y) > epsilon ? a.y / b.y : a.y / epsilon,
-                Mathf.Abs(b.z) > epsilon ? a.z / b.z : a.z / epsilon
+                Mathf.Abs(b.x) > epsilon ? a.x / b.x : a.x,  // Avoid scaling if b is too small
+                Mathf.Abs(b.y) > epsilon ? a.y / b.y : a.y,  // Same for y-axis
+                Mathf.Abs(b.z) > epsilon ? a.z / b.z : a.z   // Same for z-axis
             );
         }
         public void ReceiveNetworkAudio(AudioSegmentMessage audioSegment)

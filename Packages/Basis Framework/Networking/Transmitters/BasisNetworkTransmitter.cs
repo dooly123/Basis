@@ -27,14 +27,8 @@ namespace Basis.Scripts.Networking.Transmitters
                     {
                         CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
                     }
-                    if (BasisLocalPlayer.Instance.AvatarDriver.References.HasHips)
-                    {
-                        BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.Hips);
-                    }
-                    else
-                    {
-                        BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.AnimatorRoot);
-                    }
+                    NetworkedPlayer.Player.Avatar.Animator.logWarnings = false;
+                    BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
                 }
             }
         }
