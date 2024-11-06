@@ -242,24 +242,42 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
         }
         UpdateFingerPoses(Map.RightLittleProximal, Map.RightLittleIntermediate, Map.RightLittleDistal, RightLittleAdditional.PoseData.RightLittle, ref Current.RightLittle, Map.HasRightLittleProximal, Map.HasRightLittleIntermediate, Map.HasRightLittleDistal, Rotation);
     }
-    public void UpdateFingerPoses(Transform proximal, Transform intermediate, Transform distal, MuscleLocalPose[] Poses, ref MuscleLocalPose[] currentPoses, bool hasProximal, bool hasIntermediate, bool hasDistal, float Rotation)
+    public void UpdateFingerPoses(Transform proximal, Transform intermediate, Transform distal,MuscleLocalPose[] poses, ref MuscleLocalPose[] currentPoses,bool hasProximal, bool hasIntermediate, bool hasDistal, float rotation)
     {
-        UpdatePose(proximal, ref currentPoses[0], Poses[0], hasProximal, Rotation);
-        UpdatePose(intermediate, ref currentPoses[1], Poses[1], hasIntermediate, Rotation);
-        UpdatePose(distal, ref currentPoses[2], Poses[2], hasDistal, Rotation);
-    }
-    public void UpdatePose(Transform trans, ref MuscleLocalPose currentPose, MuscleLocalPose First, bool hasTransform, float Rotation)
-    {
-        if (hasTransform)
+        // Update proximal pose if available
+        if (hasProximal)
         {
-            // Lerp the position and slerp the rotation
-            Vector3 newPosition = Vector3.Lerp(currentPose.position, First.position, Rotation);
-            Quaternion newRotation = Quaternion.Slerp(currentPose.rotation, First.rotation, Rotation);
-            // Update the current pose
-            currentPose.position = newPosition;
-            currentPose.rotation = newRotation;
+            Vector3 newProximalPosition = Vector3.Lerp(currentPoses[0].position, poses[0].position, rotation);
+            Quaternion newProximalRotation = Quaternion.Slerp(currentPoses[0].rotation, poses[0].rotation, rotation);
 
-            trans.SetLocalPositionAndRotation(newPosition, newRotation);
+            currentPoses[0].position = newProximalPosition;
+            currentPoses[0].rotation = newProximalRotation;
+
+            proximal.SetLocalPositionAndRotation(newProximalPosition, newProximalRotation);
+        }
+
+        // Update intermediate pose if available
+        if (hasIntermediate)
+        {
+            Vector3 newIntermediatePosition = Vector3.Lerp(currentPoses[1].position, poses[1].position, rotation);
+            Quaternion newIntermediateRotation = Quaternion.Slerp(currentPoses[1].rotation, poses[1].rotation, rotation);
+
+            currentPoses[1].position = newIntermediatePosition;
+            currentPoses[1].rotation = newIntermediateRotation;
+
+            intermediate.SetLocalPositionAndRotation(newIntermediatePosition, newIntermediateRotation);
+        }
+
+        // Update distal pose if available
+        if (hasDistal)
+        {
+            Vector3 newDistalPosition = Vector3.Lerp(currentPoses[2].position, poses[2].position, rotation);
+            Quaternion newDistalRotation = Quaternion.Slerp(currentPoses[2].rotation, poses[2].rotation, rotation);
+
+            currentPoses[2].position = newDistalPosition;
+            currentPoses[2].rotation = newDistalRotation;
+
+            distal.SetLocalPositionAndRotation(newDistalPosition, newDistalRotation);
         }
     }
     public bool GetClosestValue(Vector2 percentage, out PoseDataAdditional first)
