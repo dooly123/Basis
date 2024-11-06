@@ -1,5 +1,7 @@
 ﻿using Basis.Scripts.Networking.NetworkedAvatar;
 using DarkRift;
+using System;
+using System.IO;
 using Unity.Burst;
 using UnityEngine;
 
@@ -16,28 +18,61 @@ namespace Basis.Scripts.Networking.Compression
             bitPacker.Read(out ushort data);
             return compressor.Decompress(data);
         }
-        public static void WriteUshortArrayFloat(DarkRiftWriter bitPacker, float[] values, BasisRangedUshortFloatData compressor, int ArrayLength = 95)
+        [BurstCompile]
+        public static void WriteUshortArrayFloat(DarkRiftWriter bitPacker, float[] values, CompressionArraysRangedUshort compressor, int arrayLength = 95)
         {
-            for (int Index = 0; Index < ArrayLength; Index++)
+            // Compress the float array into a ushort array
+            ushort[] compressedValues = compressor.CompressArray(values);
+
+            // Allocate a byte array to hold the compressed ushort values
+            byte[] byteArray = new byte[compressedValues.Length * 2];
+
+            // Efficiently copy ushort values to the byte array
+            for (int i = 0; i < compressedValues.Length; i++)
             {
-                ushort Ushorts = compressor.Compress(values[Index]);
-                bitPacker.Write(Ushorts);
+                // Manually convert each ushort to 2 bytes (little-endian)
+                byteArray[i * 2] = (byte)(compressedValues[i] & 0xFF);
+                byteArray[i * 2 + 1] = (byte)((compressedValues[i] >> 8) & 0xFF);
             }
+
+            // Write the byte array to the DarkRiftWriter
+            bitPacker.WriteRaw(byteArray, 0, byteArray.Length);
         }
         [BurstCompile]
-        public static void ReadUshortArrayFloat(this DarkRiftReader bitPacker, BasisRangedUshortFloatData compressor, ref BasisAvatarData BasisAvatarData, int ArrayLength = 95)
+        public static void ReadUshortArrayFloat(this DarkRiftReader bitPacker, CompressionArraysRangedUshort compressor, ref BasisAvatarData BasisAvatarData, int ArrayLength = 95)
         {
-            // Read each ushort value from the bitPacker into the array
-            for (int Index = 0; Index < ArrayLength; Index++)
-            {
-                bitPacker.Read(out ushort ushortdecompression);
+            // Calculate the number of bytes required to store ArrayLength number of ushorts
+            int ByteCount = ArrayLength * 2;
 
-                // Decompress the ushort array into a float array
-                BasisAvatarData.floatArray[Index] = compressor.Decompress(ushortdecompression);
+            // Read the raw byte array from the DarkRiftReader
+            byte[] byteArray = bitPacker.ReadRaw(ByteCount);
+
+            // Use Span to avoid array allocation overhead
+            Span<byte> span = byteArray.AsSpan();
+
+            // Create a Span for the ushort array
+            Span<ushort> ushortSpan = new Span<ushort>(new ushort[ArrayLength]);
+
+            // Use an unsafe context to efficiently convert bytes to ushorts in bulk
+            unsafe
+            {
+                fixed (byte* bytePtr = span)
+                fixed (ushort* ushortPtr = ushortSpan)
+                {
+                    for (int i = 0; i < ArrayLength; i++)
+                    {
+                        ushortPtr[i] = (ushort)(bytePtr[i * 2] | (bytePtr[i * 2 + 1] << 8));
+                    }
+                }
             }
+
+            // Decompress the ushort array (assuming the decompression method works this way)
+            BasisAvatarData.floatArray = compressor.DecompressArray(ushortSpan.ToArray());
+
+            // Assuming that BasisAvatarData.Muscles is some structure that can copy from the float array
             BasisAvatarData.Muscles.CopyFrom(BasisAvatarData.floatArray);
         }
-        public static void WriteUshortVectorFloat(DarkRiftWriter bitPacker, Vector3 values, BasisRangedUshortFloatData compressor)
+    public static void WriteUshortVectorFloat(DarkRiftWriter bitPacker, Vector3 values, BasisRangedUshortFloatData compressor)
         {
             ushort Compressx = compressor.Compress(values.x);
             ushort Compressy = compressor.Compress(values.y);

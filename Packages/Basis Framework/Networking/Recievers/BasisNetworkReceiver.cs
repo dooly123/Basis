@@ -1,4 +1,5 @@
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Smoothing;
@@ -131,6 +132,7 @@ namespace Basis.Scripts.Networking.Recievers
                 Ready = true;
                 NetworkedPlayer = networkedPlayer;
                 RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
+                CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
                 AudioReceiverModule.OnEnable(networkedPlayer, gameObject);
                 OnAvatarCalibration();
                 if (HasEvents == false)
@@ -157,6 +159,10 @@ namespace Basis.Scripts.Networking.Recievers
             if (AudioReceiverModule != null)
             {
                 AudioReceiverModule.OnDestroy();
+            }
+            if (CompressionArraysRangedUshort != null)
+            {
+                CompressionArraysRangedUshort.Dispose();
             }
         }
         public void OnCalibration()

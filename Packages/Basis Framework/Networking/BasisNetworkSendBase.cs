@@ -31,6 +31,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public BasisRangedUshortFloatData PositionRanged;
         [SerializeField]
         public BasisRangedUshortFloatData ScaleRanged;
+        [SerializeField]
+        public CompressionArraysRangedUshort CompressionArraysRangedUshort;
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()

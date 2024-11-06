@@ -1,4 +1,5 @@
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
@@ -54,6 +55,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 InitalizeAvatarStoredData(ref Target);
                 InitalizeAvatarStoredData(ref Output);
                 NetworkedPlayer = networkedPlayer;
+                CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
                 AudioTransmission.OnEnable(networkedPlayer);
                 OnAvatarCalibration();
                 if (HasEvents == false)
@@ -90,6 +92,10 @@ namespace Basis.Scripts.Networking.Transmitters
                     BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.RemoveAction(102, OnRenderer);
                 }
                 HasEvents = false;
+            }
+            if (CompressionArraysRangedUshort != null)
+            {
+                CompressionArraysRangedUshort.Dispose();
             }
         }
         public void SendOutLatestAvatar()
