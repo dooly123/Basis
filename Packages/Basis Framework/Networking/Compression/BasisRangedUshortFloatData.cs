@@ -73,10 +73,15 @@ public class CompressionArraysRangedUshort
     public CompressJob Compression;
     public JobHandle handle;
     public int InnerBatchCount = 64;
+
+    public byte[] byteArray;
+    public ushort[] ushortArray;
+    public int ByteCount;
+    public float[] FloatArray;
     public CompressionArraysRangedUshort(int length, float minValue, float maxValue, float precision, bool isDecompression)
     {
-        float[] FloatArray = new float[length];
-        ushort[] ushortArray = new ushort[length];
+        FloatArray = new float[length];
+        ushortArray = new ushort[length];
         Floats = new NativeArray<float>(FloatArray, Allocator.Persistent);
         Ushorts = new NativeArray<ushort>(ushortArray, Allocator.Persistent);
         MinValue = minValue;
@@ -85,7 +90,8 @@ public class CompressionArraysRangedUshort
         InversePrecision = 1.0f / precision;
         RequiredBits = CalculateRequiredBits();
         Mask = (ushort)((1 << RequiredBits) - 1);
-
+        ByteCount = length * 2;
+        byteArray  = new byte[ByteCount];
         if (isDecompression)
         {
             Decompression = new DecompressJob
@@ -130,22 +136,22 @@ public class CompressionArraysRangedUshort
             0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
             8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31
     };
-    public ushort[] CompressArray(float[] values)
+    public void CompressArray(float[] values,int length, ref ushort[] Output)
     {
         Compression.InputValues.CopyFrom(values);
-        handle = Compression.Schedule(values.Length, InnerBatchCount);
+        handle = Compression.Schedule(length, InnerBatchCount);
         handle.Complete();
 
-        return Compression.OutputValues.ToArray();
+         Compression.OutputValues.CopyTo(Output);
     }
 
-    public float[] DecompressArray(ushort[] compressedValues)
+    public void DecompressArray(ushort[] compressedValues, int length,ref float[] Output)
     {
         Decompression.InputValues.CopyFrom(compressedValues);
-        handle = Decompression.Schedule(compressedValues.Length, InnerBatchCount);
+        handle = Decompression.Schedule(length, InnerBatchCount);
         handle.Complete();
 
-        return Decompression.OutputValues.ToArray();
+        Decompression.OutputValues.CopyTo(Output);
     }
 
     public void Dispose()

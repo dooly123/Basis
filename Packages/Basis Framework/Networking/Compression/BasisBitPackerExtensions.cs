@@ -22,56 +22,38 @@ namespace Basis.Scripts.Networking.Compression
         public static void WriteUshortArrayFloat(DarkRiftWriter bitPacker, float[] values, CompressionArraysRangedUshort compressor, int arrayLength = 95)
         {
             // Compress the float array into a ushort array
-            ushort[] compressedValues = compressor.CompressArray(values);
-
-            // Allocate a byte array to hold the compressed ushort values
-            byte[] byteArray = new byte[compressedValues.Length * 2];
+           compressor.CompressArray(values,arrayLength,ref compressor.ushortArray);
 
             // Efficiently copy ushort values to the byte array
-            for (int i = 0; i < compressedValues.Length; i++)
+            for (int Index = 0; Index < arrayLength; Index++)
             {
                 // Manually convert each ushort to 2 bytes (little-endian)
-                byteArray[i * 2] = (byte)(compressedValues[i] & 0xFF);
-                byteArray[i * 2 + 1] = (byte)((compressedValues[i] >> 8) & 0xFF);
+                compressor.byteArray[Index * 2] = (byte)(compressor.ushortArray[Index] & 0xFF);
+                compressor.byteArray[Index * 2 + 1] = (byte)((compressor.ushortArray[Index] >> 8) & 0xFF);
             }
 
             // Write the byte array to the DarkRiftWriter
-            bitPacker.WriteRaw(byteArray, 0, byteArray.Length);
+            bitPacker.WriteRaw(compressor.byteArray, 0, compressor.ByteCount);
         }
         [BurstCompile]
         public static void ReadUshortArrayFloat(this DarkRiftReader bitPacker, CompressionArraysRangedUshort compressor, ref BasisAvatarData BasisAvatarData, int ArrayLength = 95)
         {
-            // Calculate the number of bytes required to store ArrayLength number of ushorts
-            int ByteCount = ArrayLength * 2;
 
             // Read the raw byte array from the DarkRiftReader
-            byte[] byteArray = bitPacker.ReadRaw(ByteCount);
-
-            // Use Span to avoid array allocation overhead
-            Span<byte> span = byteArray.AsSpan();
-
-            // Create a Span for the ushort array
-            Span<ushort> ushortSpan = new Span<ushort>(new ushort[ArrayLength]);
-
-            // Use an unsafe context to efficiently convert bytes to ushorts in bulk
-            unsafe
+            byte[] byteArray = bitPacker.ReadRaw(compressor.ByteCount);
+            // Convert bytes to ushorts
+            for (int Index = 0; Index < ArrayLength; Index++)
             {
-                fixed (byte* bytePtr = span)
-                fixed (ushort* ushortPtr = ushortSpan)
-                {
-                    for (int i = 0; i < ArrayLength; i++)
-                    {
-                        ushortPtr[i] = (ushort)(bytePtr[i * 2] | (bytePtr[i * 2 + 1] << 8));
-                    }
-                }
+                compressor.ushortArray[Index] = (ushort)(byteArray[Index * 2] | (byteArray[Index * 2 + 1] << 8));
             }
-            // Decompress the ushort array (assuming the decompression method works this way)
-            BasisAvatarData.floatArray = compressor.DecompressArray(ushortSpan.ToArray());
 
-            // Assuming that BasisAvatarData.Muscles is some structure that can copy from the float array
+            // Decompress the ushort array to obtain a float array
+            compressor.DecompressArray(compressor.ushortArray, ArrayLength, ref BasisAvatarData.floatArray);
+
+            // Copy the decompressed float array into the Muscles structure
             BasisAvatarData.Muscles.CopyFrom(BasisAvatarData.floatArray);
         }
-    public static void WriteUshortVectorFloat(DarkRiftWriter bitPacker, Vector3 values, BasisRangedUshortFloatData compressor)
+        public static void WriteUshortVectorFloat(DarkRiftWriter bitPacker, Vector3 values, BasisRangedUshortFloatData compressor)
         {
             ushort Compressx = compressor.Compress(values.x);
             ushort Compressy = compressor.Compress(values.y);
