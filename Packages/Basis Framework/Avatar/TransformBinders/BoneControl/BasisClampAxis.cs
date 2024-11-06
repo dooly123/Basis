@@ -1,7 +1,7 @@
 ﻿namespace Basis.Scripts.TransformBinders.BoneControl
 {
-public enum BasisClampAxis
-{
-    x, y, z, xz
-}
+    public enum BasisClampAxis
+    {
+        xz
+    }
 }

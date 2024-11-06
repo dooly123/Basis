@@ -4,10 +4,10 @@ using System;
 using UnityEngine;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Avatar;
-using Basis.Scripts.Common.Enums;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Gizmos = Popcron.Gizmos;
+using static UnityEngine.GraphicsBuffer;
 
 namespace Basis.Scripts.Drivers
 {
@@ -37,7 +37,7 @@ namespace Basis.Scripts.Drivers
             OnSimulate?.Invoke();
             for (int Index = 0; Index < ControlsLength; Index++)
             {
-                Controls[Index].ComputeMovement(ProvidedTime, DeltaTime);
+                Controls[Index].ComputeMovement(DeltaTime);
             }
             OnPostSimulate?.Invoke();
         }
@@ -51,9 +51,7 @@ namespace Basis.Scripts.Drivers
             {
                 Controls[Index].LastRunData.position = Controls[Index].OutGoingData.position;
                 Controls[Index].LastRunData.rotation = Controls[Index].OutGoingData.rotation;
-                Controls[Index].LastWorldData.position = Controls[Index].OutgoingWorldData.position;
-                Controls[Index].LastWorldData.rotation = Controls[Index].OutgoingWorldData.rotation;
-                Controls[Index].ComputeMovement(ProvidedTime, DeltaTime);
+                Controls[Index].ComputeMovement(DeltaTime);
             }
             OnPostSimulate?.Invoke();
         }
@@ -179,35 +177,26 @@ namespace Basis.Scripts.Drivers
 
             return rainbowColors;
         }
-        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl lockToBone, BasisClampAxis axisLock, BasisClampData clampData, float maxClamp, float lerpAmount, Quaternion offset, BasisTargetController targetController, bool useAngle, float angleBeforeMove)
+        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl Target, float lerpAmount)
         {
             BasisRotationalControl rotation = new BasisRotationalControl
             {
-                ClampableAxis = axisLock,
-                Target = lockToBone,
-                ClampSize = maxClamp,
-                ClampStats = clampData,
+                Target = Target,
                 LerpAmountNormal = lerpAmount,
                 LerpAmountFastMovement = lerpAmount * 4,
-                Offset = offset,
-                TaretInterpreter = targetController,
-                AngleBeforeMove = angleBeforeMove,
-                UseAngle = useAngle,
-                AngleBeforeSame = 1f,
                 AngleBeforeSpeedup = 25f,
-                ResetAfterTime = 1,
-                HasActiveTimer = false,
+                HasTarget = Target != null,
             };
             addToBone.RotationControl = rotation;
         }
-        public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, BasisTargetController BasisTargetController = BasisTargetController.TargetDirectional, float Positional = 40)
+        public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, float Positional = 40)
         {
             BasisPositionControl Position = new BasisPositionControl
             {
-                TaretInterpreter = BasisTargetController,
                 Offset = Bone.TposeLocal.position - Target.TposeLocal.position,
                 Target = Target,
-                LerpAmount = Positional
+                LerpAmount = Positional,
+                HasTarget = Target != null,
             };
             Bone.PositionControl = Position;
         }
@@ -251,7 +240,7 @@ namespace Basis.Scripts.Drivers
             if (Control.HasBone)
             {
                 Vector3 BonePosition = Control.OutgoingWorldData.position;
-                if (Control.PositionControl.TaretInterpreter != BasisTargetController.None)
+                if (Control.PositionControl.HasTarget)
                 {
                     Gizmos.Line(BonePosition, Control.PositionControl.Target.OutgoingWorldData.position, Control.Color);
                 }

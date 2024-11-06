@@ -2,9 +2,7 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Common;
-using Basis.Scripts.Common.Enums;
 using Basis.Scripts.Device_Management;
-using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEngine;
@@ -263,21 +261,21 @@ namespace Basis.Scripts.Drivers
                 bone.TposeLocal.position = bone.OutGoingData.position;
             }
         }
-        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisTargetController PositionTargetController, float PositionLerpAmount, BasisClampData clampData, float MaxClamp, float QuaternionLerpAmount, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis AxisLock = BasisClampAxis.x, bool CreateRotationalLock = true)
+        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, float PositionLerpAmount, float QuaternionLerpAmount, bool CreateLocks = true)
         {
+            if (CreateLocks)
+            {
 
-            if (BaseBoneDriver.FindBone(out BasisBoneControl AddToBone, AssignedTo) == false)
-            {
-                Debug.LogError("Cant Find Bone " + AssignedTo);
-            }
-            if (BaseBoneDriver.FindBone(out BasisBoneControl LockToBone, TargetBone) == false)
-            {
-                Debug.LogError("Cant Find Bone " + TargetBone);
-            }
-            BaseBoneDriver.CreatePositionalLock(AddToBone, LockToBone, PositionTargetController, PositionLerpAmount);
-            if (CreateRotationalLock)
-            {
-                BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, AxisLock, clampData, MaxClamp, QuaternionLerpAmount, Quaternion.identity, targetController, UseAngle, AngleBeforeMove);
+                if (BaseBoneDriver.FindBone(out BasisBoneControl AddToBone, AssignedTo) == false)
+                {
+                    Debug.LogError("Cant Find Bone " + AssignedTo);
+                }
+                if (BaseBoneDriver.FindBone(out BasisBoneControl LockToBone, TargetBone) == false)
+                {
+                    Debug.LogError("Cant Find Bone " + TargetBone);
+                }
+                BaseBoneDriver.CreatePositionalLock(AddToBone, LockToBone, PositionLerpAmount);
+                BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, QuaternionLerpAmount);
             }
         }
         public void FindSkinnedMeshRenders()
