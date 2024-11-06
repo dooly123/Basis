@@ -7,7 +7,6 @@ namespace Basis.Scripts.TransformBinders.BoneControl
 [System.Serializable]
 public struct BasisRotationalControl
 {
-    public BasisAxisLerp Lerp;
     public float LerpAmountNormal;
     public float LerpAmountFastMovement;
     public float AngleBeforeSpeedup;

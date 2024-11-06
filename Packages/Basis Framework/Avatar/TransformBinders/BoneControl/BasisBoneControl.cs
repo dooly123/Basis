@@ -297,23 +297,31 @@ public bool AngleCheck(quaternion AngleA, quaternion AngleB, float MaximumTolera
         [BurstCompile]
         private void ApplyLerpToQuaternion(float deltaTime)
         {
-            if (RotationControl.Lerp == BasisAxisLerp.None)
+            // Calculate the dot product once
+            float dotProduct = math.dot(LastRunData.rotation, OutGoingData.rotation);
+
+            // If the dot product is close to 1, then the quaternions are nearly identical
+            if (dotProduct > 0.9999999999f)
             {
-                return;
+                return;  // No need for interpolation
             }
 
-            // Calculate the angle difference between the quaternions in radians (using math.dot)
-            float angleDifference = math.acos(math.dot(LastRunData.rotation, OutGoingData.rotation));
+            // Calculate the angle difference (avoid acos for very small differences)
+            float angleDifference = math.acos(math.clamp(dotProduct, -1f, 1f));
 
-            // If angle is small enough, no need to interpolate
+            // If the angle difference is small enough, skip interpolation
             if (angleDifference < math.EPSILON)
             {
                 return;
             }
 
-            // Calculate the lerp factor using angleDifference and deltaTime
+            // Use a cached version of the LerpAmount values to avoid repeated accesses
+            float lerpAmountNormal = RotationControl.LerpAmountNormal;
+            float lerpAmountFastMovement = RotationControl.LerpAmountFastMovement;
+
+            // Calculate the lerp factor
             float timing = math.clamp(angleDifference / RotationControl.AngleBeforeSpeedup, 0f, 1f);
-            float lerpAmount = math.lerp(RotationControl.LerpAmountNormal, RotationControl.LerpAmountFastMovement, timing);
+            float lerpAmount = math.lerp(lerpAmountNormal, lerpAmountFastMovement, timing);
             float lerpFactor = lerpAmount * deltaTime;
 
             // Apply spherical interpolation (slerp)
@@ -322,23 +330,12 @@ public bool AngleCheck(quaternion AngleA, quaternion AngleB, float MaximumTolera
         [BurstCompile]
         private void ApplyLerpToVector(float DeltaTime)
         {
-            switch (PositionControl.Lerp)
-            {
-                case BasisVectorLerp.None:
-                    break;
-                case BasisVectorLerp.Lerp:
-                    OutGoingData.position = Vector3.Lerp(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
-                    break;
-                case BasisVectorLerp.SphericalLerp:
-                    OutGoingData.position = Vector3.Slerp(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
-                    break;
-                case BasisVectorLerp.LerpUnclamped:
-                    OutGoingData.position = Vector3.LerpUnclamped(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
-                    break;
-                case BasisVectorLerp.SphericalLerpUnclamped:
-                    OutGoingData.position = Vector3.SlerpUnclamped(LastRunData.position, OutGoingData.position, PositionControl.LerpAmount * DeltaTime);
-                    break;
-            }
+
+            // Calculate the interpolation factor
+            float lerpFactor = math.clamp(PositionControl.LerpAmount * DeltaTime, 0f, 1f);
+
+            // Use math.lerp for interpolation with float3 (which is the equivalent of Vector3 in Unity.Mathematics)
+            OutGoingData.position = math.lerp(LastRunData.position, OutGoingData.position, lerpFactor);
         }
     }
 }

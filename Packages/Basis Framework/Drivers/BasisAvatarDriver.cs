@@ -263,7 +263,7 @@ namespace Basis.Scripts.Drivers
                 bone.TposeLocal.position = bone.OutGoingData.position;
             }
         }
-        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisTargetController PositionTargetController, float PositionLerpAmount, BasisClampData clampData, float MaxClamp, float LerpAmount, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis AxisLock = BasisClampAxis.x, bool CreateRotationalLock = true)
+        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisTargetController PositionTargetController, float PositionLerpAmount, BasisClampData clampData, float MaxClamp, float QuaternionLerpAmount, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis AxisLock = BasisClampAxis.x, bool CreateRotationalLock = true)
         {
 
             if (BaseBoneDriver.FindBone(out BasisBoneControl AddToBone, AssignedTo) == false)
@@ -274,10 +274,10 @@ namespace Basis.Scripts.Drivers
             {
                 Debug.LogError("Cant Find Bone " + TargetBone);
             }
-            BaseBoneDriver.CreatePositionalLock(AddToBone, LockToBone, PositionTargetController, PositionLerpAmount, BasisVectorLerp.Lerp);
+            BaseBoneDriver.CreatePositionalLock(AddToBone, LockToBone, PositionTargetController, PositionLerpAmount);
             if (CreateRotationalLock)
             {
-                BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, AxisLock, clampData, MaxClamp, BasisAxisLerp.SphericalLerp, LerpAmount, Quaternion.identity, targetController, UseAngle, AngleBeforeMove);
+                BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, AxisLock, clampData, MaxClamp, QuaternionLerpAmount, Quaternion.identity, targetController, UseAngle, AngleBeforeMove);
             }
         }
         public void FindSkinnedMeshRenders()

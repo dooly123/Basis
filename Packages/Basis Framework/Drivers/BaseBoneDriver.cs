@@ -179,7 +179,7 @@ namespace Basis.Scripts.Drivers
 
             return rainbowColors;
         }
-        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl lockToBone, BasisClampAxis axisLock, BasisClampData clampData, float maxClamp, BasisAxisLerp axisLerp, float lerpAmount, Quaternion offset, BasisTargetController targetController, bool useAngle, float angleBeforeMove)
+        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl lockToBone, BasisClampAxis axisLock, BasisClampData clampData, float maxClamp, float lerpAmount, Quaternion offset, BasisTargetController targetController, bool useAngle, float angleBeforeMove)
         {
             BasisRotationalControl rotation = new BasisRotationalControl
             {
@@ -187,7 +187,6 @@ namespace Basis.Scripts.Drivers
                 Target = lockToBone,
                 ClampSize = maxClamp,
                 ClampStats = clampData,
-                Lerp = axisLerp,
                 LerpAmountNormal = lerpAmount,
                 LerpAmountFastMovement = lerpAmount * 4,
                 Offset = offset,
@@ -201,11 +200,10 @@ namespace Basis.Scripts.Drivers
             };
             addToBone.RotationControl = rotation;
         }
-        public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, BasisTargetController BasisTargetController = BasisTargetController.TargetDirectional, float Positional = 40, BasisVectorLerp BasisVectorLerp = BasisVectorLerp.Lerp)
+        public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, BasisTargetController BasisTargetController = BasisTargetController.TargetDirectional, float Positional = 40)
         {
             BasisPositionControl Position = new BasisPositionControl
             {
-                Lerp = BasisVectorLerp,
                 TaretInterpreter = BasisTargetController,
                 Offset = Bone.TposeLocal.position - Target.TposeLocal.position,
                 Target = Target,
