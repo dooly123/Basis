@@ -263,21 +263,21 @@ namespace Basis.Scripts.Drivers
                 bone.TposeLocal.position = bone.OutGoingData.position;
             }
         }
-        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisTargetController PositionTargetController, float PositionLerpAmount, BasisClampData clampData, int positionalLockValue, int rotationalLockValue, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis clampAxis = BasisClampAxis.x, bool CreateRotationalLock = true)
+        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, BasisTargetController PositionTargetController, float PositionLerpAmount, BasisClampData clampData, float MaxClamp, float LerpAmount, bool UseAngle, float AngleBeforeMove, BasisTargetController targetController = BasisTargetController.Target, BasisClampAxis AxisLock = BasisClampAxis.x, bool CreateRotationalLock = true)
         {
 
-            if (BaseBoneDriver.FindBone(out BasisBoneControl Bone, AssignedTo) == false)
+            if (BaseBoneDriver.FindBone(out BasisBoneControl AddToBone, AssignedTo) == false)
             {
                 Debug.LogError("Cant Find Bone " + AssignedTo);
             }
-            if (BaseBoneDriver.FindBone(out BasisBoneControl Target, TargetBone) == false)
+            if (BaseBoneDriver.FindBone(out BasisBoneControl LockToBone, TargetBone) == false)
             {
                 Debug.LogError("Cant Find Bone " + TargetBone);
             }
-            BaseBoneDriver.CreatePositionalLock(Bone, Target, PositionTargetController, PositionLerpAmount, BasisVectorLerp.Lerp);
+            BaseBoneDriver.CreatePositionalLock(AddToBone, LockToBone, PositionTargetController, PositionLerpAmount, BasisVectorLerp.Lerp);
             if (CreateRotationalLock)
             {
-                BaseBoneDriver.CreateRotationalLock(Bone, Target, clampAxis, clampData, positionalLockValue, BasisAxisLerp.SphericalLerp, rotationalLockValue, Quaternion.identity, targetController, UseAngle, AngleBeforeMove);
+                BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, AxisLock, clampData, MaxClamp, BasisAxisLerp.SphericalLerp, LerpAmount, Quaternion.identity, targetController, UseAngle, AngleBeforeMove);
             }
         }
         public void FindSkinnedMeshRenders()

@@ -2,6 +2,7 @@
 using Basis.Scripts.Common;
 using Basis.Scripts.Common.Enums;
 using Unity.Burst;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -205,12 +206,23 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             ApplyLerpToQuaternion(DeltaTime);
         }
         [BurstCompile]
-        public bool AngleCheck(Quaternion AngleA, Quaternion AngleB, float MaximumTolerance = 0.005f)
-        {
-            float Angle = Quaternion.Angle(AngleA, AngleB);
-            bool AngleLargeEnough = Angle > MaximumTolerance;
-            return AngleLargeEnough;
-        }
+public bool AngleCheck(quaternion AngleA, quaternion AngleB, float MaximumTolerance = 0.005f)
+{
+    // Calculate the dot product between the quaternions
+    float dotProduct = math.dot(AngleA, AngleB);
+
+    // Clamp the dot product to avoid numerical errors leading to invalid acos input
+    dotProduct = math.clamp(dotProduct, -1f, 1f);
+
+    // Calculate the angle between the quaternions in radians using acos
+    float angle = math.acos(dotProduct) * 2f; // Multiply by 2 because the dot product returns half of the angle
+
+    // Convert angle to degrees (if needed, can be omitted if using radians is fine)
+    float angleInDegrees = math.degrees(angle);
+
+    // Check if the angle exceeds the tolerance
+    return angleInDegrees > MaximumTolerance;
+}
         public void ApplyMovement()
         {
             if (!HasBone)
@@ -290,30 +302,22 @@ namespace Basis.Scripts.TransformBinders.BoneControl
                 return;
             }
 
-            float angleDifference = Quaternion.Angle(LastRunData.rotation, OutGoingData.rotation);
-            float timing = Mathf.Clamp01(angleDifference / RotationControl.AngleBeforeSpeedup);
-            float lerpAmount = Mathf.Lerp(RotationControl.LerpAmountNormal, RotationControl.LerpAmountFastMovement, timing);
+            // Calculate the angle difference between the quaternions in radians (using math.dot)
+            float angleDifference = math.acos(math.dot(LastRunData.rotation, OutGoingData.rotation));
 
+            // If angle is small enough, no need to interpolate
+            if (angleDifference < math.EPSILON)
+            {
+                return;
+            }
+
+            // Calculate the lerp factor using angleDifference and deltaTime
+            float timing = math.clamp(angleDifference / RotationControl.AngleBeforeSpeedup, 0f, 1f);
+            float lerpAmount = math.lerp(RotationControl.LerpAmountNormal, RotationControl.LerpAmountFastMovement, timing);
             float lerpFactor = lerpAmount * deltaTime;
 
-            Quaternion lastRotation = LastRunData.rotation;
-            Quaternion outgoingRotation = OutGoingData.rotation;
-
-            switch (RotationControl.Lerp)
-            {
-                case BasisAxisLerp.Lerp:
-                    OutGoingData.rotation = Quaternion.Lerp(lastRotation, outgoingRotation, lerpFactor);
-                    break;
-                case BasisAxisLerp.SphericalLerp:
-                    OutGoingData.rotation = Quaternion.Slerp(lastRotation, outgoingRotation, lerpFactor);
-                    break;
-                case BasisAxisLerp.LerpUnclamped:
-                    OutGoingData.rotation = Quaternion.LerpUnclamped(lastRotation, outgoingRotation, lerpFactor);
-                    break;
-                case BasisAxisLerp.SphericalLerpUnclamped:
-                    OutGoingData.rotation = Quaternion.SlerpUnclamped(lastRotation, outgoingRotation, lerpFactor);
-                    break;
-            }
+            // Apply spherical interpolation (slerp)
+            OutGoingData.rotation = math.slerp(LastRunData.rotation, OutGoingData.rotation, lerpFactor);
         }
         [BurstCompile]
         private void ApplyLerpToVector(float DeltaTime)
