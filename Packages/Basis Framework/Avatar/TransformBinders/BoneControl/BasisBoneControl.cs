@@ -177,21 +177,18 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             }
             else
             {
-                if (HasTracked == BasisHasTracked.HasTracker)
+                if (InverseOffsetFromBone.Use)
                 {
-                    if (InverseOffsetFromBone.Use)
-                    {
-                        // Update the position of the secondary transform to maintain the initial offset
-                        OutGoingData.position = IncomingData.position + IncomingData.rotation * InverseOffsetFromBone.position;
+                    // Update the position of the secondary transform to maintain the initial offset
+                    OutGoingData.position = IncomingData.position + IncomingData.rotation * InverseOffsetFromBone.position;
 
-                        // Update the rotation of the secondary transform to maintain the initial offset
-                        OutGoingData.rotation = IncomingData.rotation * InverseOffsetFromBone.rotation;
-                    }
-                    else
-                    {
-                        OutGoingData.rotation = IncomingData.rotation;
-                        OutGoingData.position = IncomingData.position;
-                    }
+                    // Update the rotation of the secondary transform to maintain the initial offset
+                    OutGoingData.rotation = IncomingData.rotation * InverseOffsetFromBone.rotation;
+                }
+                else
+                {
+                    OutGoingData.rotation = IncomingData.rotation;
+                    OutGoingData.position = IncomingData.position;
                 }
             }
         }
@@ -206,23 +203,23 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             ApplyLerpToQuaternion(DeltaTime);
         }
         [BurstCompile]
-public bool AngleCheck(quaternion AngleA, quaternion AngleB, float MaximumTolerance = 0.005f)
-{
-    // Calculate the dot product between the quaternions
-    float dotProduct = math.dot(AngleA, AngleB);
+        public bool AngleCheck(quaternion AngleA, quaternion AngleB, float MaximumTolerance = 0.005f)
+        {
+            // Calculate the dot product between the quaternions
+            float dotProduct = math.dot(AngleA, AngleB);
 
-    // Clamp the dot product to avoid numerical errors leading to invalid acos input
-    dotProduct = math.clamp(dotProduct, -1f, 1f);
+            // Clamp the dot product to avoid numerical errors leading to invalid acos input
+            dotProduct = math.clamp(dotProduct, -1f, 1f);
 
-    // Calculate the angle between the quaternions in radians using acos
-    float angle = math.acos(dotProduct) * 2f; // Multiply by 2 because the dot product returns half of the angle
+            // Calculate the angle between the quaternions in radians using acos
+            float angle = math.acos(dotProduct) * 2f; // Multiply by 2 because the dot product returns half of the angle
 
-    // Convert angle to degrees (if needed, can be omitted if using radians is fine)
-    float angleInDegrees = math.degrees(angle);
+            // Convert angle to degrees (if needed, can be omitted if using radians is fine)
+            float angleInDegrees = math.degrees(angle);
 
-    // Check if the angle exceeds the tolerance
-    return angleInDegrees > MaximumTolerance;
-}
+            // Check if the angle exceeds the tolerance
+            return angleInDegrees > MaximumTolerance;
+        }
         public void ApplyMovement()
         {
             if (!HasBone)

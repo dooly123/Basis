@@ -18,11 +18,11 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
         FindBone(out Hips, BasisBoneTrackedRole.Hips);
         if (Head != null)
         {
-            Head.HasTracked = BasisHasTracked.HasNoTracker;
+            Head.HasTracked = BasisHasTracked.HasTracker;
         }
         if (Hips != null)
         {
-            Hips.HasTracked = BasisHasTracked.HasNoTracker;
+            Hips.HasTracked = BasisHasTracked.HasTracker;
         }
         if (HasEvent == false)
         {
@@ -42,13 +42,13 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
     {
         if (Head.HasBone && HeadAvatar != null)
         {
-            Head.OutGoingData.position = HeadAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
-            Head.OutGoingData.rotation = HeadAvatar.rotation;
+            Head.IncomingData.position = HeadAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
+            Head.IncomingData.rotation = HeadAvatar.rotation;
         }
         if (Hips.HasBone && HipsAvatar != null)
         {
-            Hips.OutGoingData.position = HipsAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
-            Hips.OutGoingData.rotation = HipsAvatar.rotation;
+            Hips.IncomingData.position = HipsAvatar.position - RemotePlayer.RemoteBoneDriver.transform.position;
+            Hips.IncomingData.rotation = HipsAvatar.rotation;
         }
     }
     public void OnCalibration(BasisRemotePlayer remotePlayer)
