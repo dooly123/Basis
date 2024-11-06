@@ -4,6 +4,7 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Smoothing;
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
@@ -58,14 +59,25 @@ namespace Basis.Scripts.Networking.Recievers
         public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
         {
             float AvatarHumanScale = animator.humanScale;
-            Vector3 scale = Vector3.one * animator.humanScale;
-            Vector3 Scaling = Divide(Vector3.one, scale);
-            Scaling = Divide(Scaling, Output.Vectors[0]);
-            Vector3 ScaledPosition = output.Vectors[1];
-            ScaledPosition.Scale(Scaling);
 
+            // Adjust scaling
+            Vector3 scale = Vector3.one * AvatarHumanScale;
+
+            // First, we adjust scaling factors
+            Vector3 Scaling = Divide(Vector3.one, scale);
+
+            // Now adjust scaling with the output scaling vector
+            Scaling = Divide(Scaling, Output.Vectors[0]);
+
+            // Apply scaling to position
+            Vector3 ScaledPosition = Vector3.Scale(output.Vectors[1], Scaling); // Apply the scaling
+
+            // Apply pose data
             pose.bodyPosition = ScaledPosition;
             pose.bodyRotation = output.Rotation;
+
+
+            // Ensure muscles array is correctly sized
             if (pose.muscles == null || pose.muscles.Length != output.Muscles.Length)
             {
                 pose.muscles = output.Muscles.ToArray();
@@ -74,17 +86,20 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 output.Muscles.CopyTo(pose.muscles);
             }
-            animator.transform.localScale = Output.Vectors[0];//scale
+
+            // Adjust the local scale of the animator's transform
+            animator.transform.localScale = Output.Vectors[0]; // Adjust the scale directly
         }
+
         public static Vector3 Divide(Vector3 a, Vector3 b)
         {
             // Define a small epsilon to avoid division by zero
-            const float epsilon = 1e-5f;
+            const float epsilon = math.EPSILON;
 
             return new Vector3(
-                b.x != 0 ? a.x / b.x : a.x / epsilon,
-                b.y != 0 ? a.y / b.y : a.y / epsilon,
-                b.z != 0 ? a.z / b.z : a.z / epsilon
+                Mathf.Abs(b.x) > epsilon ? a.x / b.x : a.x / epsilon,
+                Mathf.Abs(b.y) > epsilon ? a.y / b.y : a.y / epsilon,
+                Mathf.Abs(b.z) > epsilon ? a.z / b.z : a.z / epsilon
             );
         }
         public void ReceiveNetworkAudio(AudioSegmentMessage audioSegment)
