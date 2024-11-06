@@ -23,6 +23,10 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 if (NetworkedPlayer.Player.Avatar != null)
                 {
+                    if (CompressionArraysRangedUshort == null)
+                    {
+                        CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
+                    }
                     if (BasisLocalPlayer.Instance.AvatarDriver.References.HasHips)
                     {
                         BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator, BasisLocalPlayer.Instance.AvatarDriver.References.Hips);
@@ -55,7 +59,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 InitalizeAvatarStoredData(ref Target);
                 InitalizeAvatarStoredData(ref Output);
                 NetworkedPlayer = networkedPlayer;
-                CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
                 AudioTransmission.OnEnable(networkedPlayer);
                 OnAvatarCalibration();
                 if (HasEvents == false)

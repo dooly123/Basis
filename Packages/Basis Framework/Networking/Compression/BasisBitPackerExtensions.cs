@@ -65,7 +65,6 @@ namespace Basis.Scripts.Networking.Compression
                     }
                 }
             }
-
             // Decompress the ushort array (assuming the decompression method works this way)
             BasisAvatarData.floatArray = compressor.DecompressArray(ushortSpan.ToArray());
 

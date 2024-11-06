@@ -111,6 +111,10 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)
         {
+            if(CompressionArraysRangedUshort == null)
+            {
+                CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, true);
+            }
             BasisNetworkAvatarDecompressor.DeCompress(this, serverSideSyncPlayerMessage);
         }
         public void ReceiveAvatarChangeRequest(ServerAvatarChangeMessage ServerAvatarChangeMessage)
@@ -132,7 +136,6 @@ namespace Basis.Scripts.Networking.Recievers
                 Ready = true;
                 NetworkedPlayer = networkedPlayer;
                 RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
-                CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
                 AudioReceiverModule.OnEnable(networkedPlayer, gameObject);
                 OnAvatarCalibration();
                 if (HasEvents == false)

@@ -62,8 +62,10 @@ public class CompressionArraysRangedUshort : IDisposable
     public int InnerBatchCount = 64;
     public CompressionArraysRangedUshort(int length, float minValue, float maxValue, float precision, bool isDecompression)
     {
-        Floats = new NativeArray<float>(length, Allocator.Persistent, NativeArrayOptions.ClearMemory);
-        Ushorts = new NativeArray<ushort>(length, Allocator.Persistent, NativeArrayOptions.ClearMemory);
+        float[] FloatArray = new float[length];
+        ushort[] ushortArray = new ushort[length];
+        Floats = new NativeArray<float>(FloatArray, Allocator.Persistent);
+        Ushorts = new NativeArray<ushort>(ushortArray, Allocator.Persistent);
         MinValue = minValue;
         MaxValue = maxValue;
         Precision = precision;
@@ -112,6 +114,7 @@ public class CompressionArraysRangedUshort : IDisposable
 
     public float[] DecompressArray(ushort[] compressedValues)
     {
+        Debug.Log("Size Check " + Decompression.InputValues.Length  + " " + compressedValues.Length);
         Decompression.InputValues.CopyFrom(compressedValues);
         handle = Decompression.Schedule(compressedValues.Length, InnerBatchCount);
         handle.Complete();
