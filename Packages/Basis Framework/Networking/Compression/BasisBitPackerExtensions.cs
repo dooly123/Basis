@@ -40,11 +40,11 @@ namespace Basis.Scripts.Networking.Compression
         {
 
             // Read the raw byte array from the DarkRiftReader
-            byte[] byteArray = bitPacker.ReadRaw(compressor.ByteCount);
+            bitPacker.ReadRaw(compressor.ByteCount,ref compressor.byteArray);
             // Convert bytes to ushorts
             for (int Index = 0; Index < ArrayLength; Index++)
             {
-                compressor.ushortArray[Index] = (ushort)(byteArray[Index * 2] | (byteArray[Index * 2 + 1] << 8));
+                compressor.ushortArray[Index] = (ushort)(compressor.byteArray[Index * 2] | (compressor.byteArray[Index * 2 + 1] << 8));
             }
 
             // Decompress the ushort array to obtain a float array
