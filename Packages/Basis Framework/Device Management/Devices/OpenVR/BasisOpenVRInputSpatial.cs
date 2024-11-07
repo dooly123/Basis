@@ -1,7 +1,6 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.OpenVR;
 using Basis.Scripts.TransformBinders.BoneControl;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using Valve.VR;
@@ -13,6 +12,7 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
     {
         public TrackedPoseDriver.TrackedPose TrackedPose = TrackedPoseDriver.TrackedPose.Center;
         public BasisOpenVRInputEye BasisOpenVRInputEye;
+        public BasisVirtualSpineDriver BasisVirtualSpine = new BasisVirtualSpineDriver();
         public void Initialize(TrackedPoseDriver.TrackedPose trackedPose, string UniqueID, string UnUniqueID, string subSystems, bool AssignTrackedRole, BasisBoneTrackedRole basisBoneTrackedRole, SteamVR_Input_Sources SteamVR_Input_Sources)
         {
             TrackedPose = trackedPose;
@@ -21,10 +21,12 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
             {
                 BasisOpenVRInputEye = gameObject.AddComponent<BasisOpenVRInputEye>();
                 BasisOpenVRInputEye.Initalize();
+                BasisVirtualSpine.Initialize();
             }
         }
         public new void OnDestroy()
         {
+            BasisVirtualSpine.DeInitialize();
             base.OnDestroy();
         }
         public override void DoPollData()

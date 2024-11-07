@@ -13,7 +13,7 @@ namespace Basis.Scripts.Drivers
 {
     public abstract class BasisAvatarDriver : MonoBehaviour
     {
-        public float ActiveEyeHeight()
+        public float ActiveAvatarEyeHeight()
         {
             if (BasisLocalPlayer.Instance.Avatar != null)
             {
@@ -175,7 +175,7 @@ namespace Basis.Scripts.Drivers
 
                     }
                     // Position = new Vector3(0, Position.y, 0);
-                    Position += CalculateFallbackOffset(bone, ActiveEyeHeight(), heightPercentage);
+                    Position += CalculateFallbackOffset(bone, ActiveAvatarEyeHeight(), heightPercentage);
                     //Position = new Vector3(0, Position.y, 0);
                     UsedFallback = true;
                 }
@@ -193,7 +193,7 @@ namespace Basis.Scripts.Drivers
 
                 }
                 Position = new Vector3(0, Position.y, 0);
-                Position += CalculateFallbackOffset(bone, ActiveEyeHeight(), heightPercentage);
+                Position += CalculateFallbackOffset(bone, ActiveAvatarEyeHeight(), heightPercentage);
                 Position = new Vector3(0, Position.y, 0);
                 UsedFallback = true;
             }
@@ -276,6 +276,10 @@ namespace Basis.Scripts.Drivers
                 }
                 BaseBoneDriver.CreatePositionalLock(AddToBone, LockToBone, PositionLerpAmount);
                 BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, QuaternionLerpAmount);
+                if (AssignedTo == BasisBoneTrackedRole.Neck)
+                {
+                    AddToBone.PositionControl.Offset += AddToBone.PositionControl.Offset / 3;
+                }
             }
         }
         public void FindSkinnedMeshRenders()

@@ -2,10 +2,8 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 namespace Basis.Scripts.Device_Management.Devices.Desktop
 {
     public class BasisAvatarEyeInput : BasisInput
@@ -14,17 +12,13 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public BasisLocalAvatarDriver AvatarDriver;
         public BasisLocalInputActions characterInputActions;
         public static BasisAvatarEyeInput Instance;
-        public float RangeOfMotionBeforeTurn = 13;
-        public float headDownwardForce = 0.003f;
-        public float headUpwardForce = 0.001f;
-        public float adjustment;
         public float crouchPercentage = 0.5f;
         public float rotationSpeed = 0.1f;
         public float rotationY;
         public float rotationX;
         public float minimumY = -80f;
         public float maximumY = 80f;
-        public float DelayedResponseForRotation = 0.6f;
+        [HideInInspector]
         public float FallBackHeight = 1.73f;
         public bool BlockCrouching;
         public float InjectedX = 0;
@@ -59,6 +53,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 BasisLocalPlayer.Instance.OnPlayersHeightChanged += BasisLocalPlayer_OnPlayersHeightChanged;
                 BasisCursorManagement.OnCursorStateChange += OnCursorStateChange;
                 BasisPointRaycaster.UseWorldPosition = false;
+                BasisVirtualSpine.Initialize();
                 HasEyeEvents = true;
             }
         }
@@ -82,12 +77,14 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 BasisLocalPlayer.Instance.OnPlayersHeightChanged -= BasisLocalPlayer_OnPlayersHeightChanged;
                 BasisCursorManagement.OnCursorStateChange -= OnCursorStateChange;
                 HasEyeEvents = false;
+
+                BasisVirtualSpine.DeInitialize();
             }
             base.OnDestroy();
         }
         private void BasisLocalPlayer_OnPlayersHeightChanged()
         {
-            BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight();
+            BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarDriver.ActiveAvatarEyeHeight();
         }
         public void PlayerInitialized()
         {
@@ -125,7 +122,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             if (hasRoleAssigned)
             {
                 characterInputActions.InputState.CopyTo(InputState);
-               // InputState.CopyTo(characterInputActions.InputState);
+                // InputState.CopyTo(characterInputActions.InputState);
                 // Apply modulo operation to keep rotation within 0 to 360 range
                 rotationX %= 360f;
                 rotationY %= 360f;
@@ -137,9 +134,6 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 {
                     adjustedHeadPosition.y -= Control.TposeLocal.position.y * crouchPercentage;
                 }
-
-                CalculateAdjustment();
-                adjustedHeadPosition.y -= adjustment;
                 LocalRawPosition = adjustedHeadPosition;
                 Control.IncomingData.position = LocalRawPosition;
                 Control.IncomingData.rotation = LocalRawRotation;
@@ -148,18 +142,6 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             FinalRotation = LocalRawRotation;
             UpdatePlayerControl();
         }
-        public void CalculateAdjustment()
-        {
-            if (rotationY > 0)
-            {
-                // Positive rotation
-                adjustment = Mathf.Abs(rotationY) * (headDownwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight() / Control.TposeLocal.position.y);
-            }
-            else
-            {
-                // Negative rotation
-                adjustment = Mathf.Abs(rotationY) * (headUpwardForce * BasisLocalPlayer.Instance.AvatarDriver.ActiveEyeHeight() / Control.TposeLocal.position.y);
-            }
-        }
+        public BasisVirtualSpineDriver BasisVirtualSpine = new BasisVirtualSpineDriver();
     }
 }

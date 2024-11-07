@@ -112,6 +112,7 @@ namespace Basis.Scripts.Drivers
             SetBodySettings(LocalDriver);
             CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
             ComputeOffsets(LocalDriver);
+
             Builder.Build();
             CalibrationComplete?.Invoke();
 
@@ -224,6 +225,9 @@ namespace Basis.Scripts.Drivers
 
 
             SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.Neck, BasisBoneTrackedRole.Chest, 40, 30, true);
+
+
+
             SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.Chest, BasisBoneTrackedRole.Spine, 40, 14, true);
             SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Hips, 40, 14, true);
 

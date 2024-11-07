@@ -21,7 +21,7 @@ public static class BasisHeightDriver
         // Retrieve the player's eye height from the input device
         CapturePlayerHeight();
         // Retrieve the active avatar's eye height
-        float avatarHeight = basisPlayer.AvatarDriver?.ActiveEyeHeight() ?? 0;
+        float avatarHeight = basisPlayer.AvatarDriver?.ActiveAvatarEyeHeight() ?? 0;
         Debug.Log($"Avatar eye height: {avatarHeight}, Player eye height: {basisPlayer.PlayerEyeHeight}");
 
         // Handle potential issues with height data

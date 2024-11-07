@@ -18,6 +18,8 @@ namespace Basis.Scripts.TransformBinders.BoneControl
         [SerializeField]
         public BasisCalibratedCoords OutGoingData = new BasisCalibratedCoords();
         [SerializeField]
+        public BasisCalibratedCoords LastOutGoingData = new BasisCalibratedCoords();
+        [SerializeField]
         public BasisCalibratedCoords LastRunData = new BasisCalibratedCoords();
         [SerializeField]
         public BasisCalibratedCoords TposeWorld = new BasisCalibratedCoords();
@@ -30,19 +32,8 @@ namespace Basis.Scripts.TransformBinders.BoneControl
         [SerializeField]
         public BasisCalibratedCoords OutgoingWorldData = new BasisCalibratedCoords();
 
-        private Action _virtualRun;
-
-        public bool HasVirtualOverride { get; private set; }
-
-        public Action VirtualRun
-        {
-            get => _virtualRun;
-            set
-            {
-                _virtualRun = value;
-                HasVirtualOverride = _virtualRun != null;
-            }
-        }
+        public Action VirtualRun;
+        public bool HasVirtualOverride;
         public void ComputeMovement(float DeltaTime)
         {
             NotProcessing = !HasBone || Cullable;
@@ -50,7 +41,8 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             {
                 return;
             }
-
+            LastOutGoingData.position = OutGoingData.position;
+            LastOutGoingData.rotation = OutGoingData.rotation;
             if (HasTracked == BasisHasTracked.HasTracker)
             {
                 if (InverseOffsetFromBone.Use)
@@ -96,7 +88,7 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             }
         }
         [BurstCompile]
-        private void ApplyLerpToQuaternion(float LerpAmount)
+        public void ApplyLerpToQuaternion(float LerpAmount)
         {
             // Calculate the dot product once
             float dotProduct = math.dot(LastRunData.rotation, OutGoingData.rotation);

@@ -37,8 +37,6 @@ namespace Basis.Scripts.BasisSdk.Players
         /// </summary>
         public Action OnPlayersHeightChanged;
         public BasisLocalBoneDriver LocalBoneDriver;
-        public BasisBoneControl Hips;
-        public BasisBoneControl CenterEye;
         public BasisLocalAvatarDriver AvatarDriver;
     //   public BasisFootPlacementDriver FootPlacementDriver;
         public BasisVisemeDriver VisemeDriver;
@@ -65,8 +63,6 @@ namespace Basis.Scripts.BasisSdk.Players
             //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
             //  FootPlacementDriver.Initialize();
             Move.Initialize();
-            LocalBoneDriver.FindBone(out Hips, BasisBoneTrackedRole.Hips);
-            LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.Neck);
             if (HasEvents == false)
             {
                 OnLocalAvatarChanged += OnCalibration;
