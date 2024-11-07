@@ -278,7 +278,7 @@ namespace Basis.Scripts.Drivers
                 BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, QuaternionLerpAmount);
                 if (AssignedTo == BasisBoneTrackedRole.Neck)
                 {
-                    AddToBone.PositionControl.Offset += AddToBone.PositionControl.Offset / 3;
+                    AddToBone.PositionControl.Offset += AddToBone.PositionControl.Offset / 2;
                 }
             }
         }
