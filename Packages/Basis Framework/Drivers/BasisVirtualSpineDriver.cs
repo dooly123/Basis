@@ -13,8 +13,12 @@ public class BasisVirtualSpineDriver
 
     public void Initialize()
     {
-        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.CenterEye)) { }
-        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Head, BasisBoneTrackedRole.Head)) { }
+        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.CenterEye))
+        {
+        }
+        if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Head, BasisBoneTrackedRole.Head))
+        {
+        }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Neck, BasisBoneTrackedRole.Neck))
         {
             Neck.HasVirtualOverride = true;
@@ -39,18 +43,23 @@ public class BasisVirtualSpineDriver
     }
 
     // Define influence values (from 0 to 1)
-    public float NeckRotationSpeed = 18;
-    public float ChestRotationSpeed = 20;
+    public float NeckRotationSpeed = 4;
+    public float ChestRotationSpeed = 4;
+    public float HipsRotationSpeed = 10;
     public float MaxNeckAngle = 0; // Limit the neck's rotation range to avoid extreme twisting
     public float MaxChestAngle = 0; // Limit the chest's rotation range
     public float MaxHipsAngle = 0; // Limit the hips' rotation range
+    public float HipsInfluence = 0.5f;
     public void OnSimulate()
     {
         float time = BasisLocalPlayer.Instance.LocalBoneDriver.DeltaTime;
 
         // Lock pelvis Y rotation to head Y rotation, but keep the X and Z rotations of pelvis intact
         Vector3 pelvisRotationYOnly = Hips.OutGoingData.rotation.eulerAngles;
-        Hips.OutGoingData.rotation = Quaternion.Euler(pelvisRotationYOnly.x, Head.OutGoingData.rotation.eulerAngles.y, pelvisRotationYOnly.z);
+
+        Quaternion HipsRotation = Quaternion.Euler(pelvisRotationYOnly.x, Head.OutGoingData.rotation.eulerAngles.y, pelvisRotationYOnly.z);
+
+        Hips.OutGoingData.rotation = Quaternion.Slerp(Hips.OutGoingData.rotation, HipsRotation, time * HipsRotationSpeed);
 
         // Calculate the desired rotation for the neck, with limits
         float headPitch = Head.OutGoingData.rotation.eulerAngles.x;
@@ -84,10 +93,7 @@ public class BasisVirtualSpineDriver
         Chest.OutGoingData.rotation = Quaternion.Euler(clampedChestPitch, chestYaw, 0);
 
         // The hips should stay upright, using chest rotation as a reference
-        Quaternion targetHipsRotation = Quaternion.Slerp(
-            Hips.OutGoingData.rotation,
-            Chest.OutGoingData.rotation,
-            time * 0.5f // Lesser influence for hips to remain more upright
+        Quaternion targetHipsRotation = Quaternion.Slerp( Hips.OutGoingData.rotation,Chest.OutGoingData.rotation,time * HipsInfluence // Lesser influence for hips to remain more upright
         );
 
         // Clamp the hips' rotation to prevent flipping

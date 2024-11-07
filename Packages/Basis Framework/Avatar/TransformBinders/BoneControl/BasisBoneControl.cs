@@ -55,6 +55,7 @@ namespace Basis.Scripts.TransformBinders.BoneControl
                 }
                 else
                 {
+                    ///this is going to the generic always accurate fake skeleton
                     OutGoingData.rotation = IncomingData.rotation;
                     OutGoingData.position = IncomingData.position;
                 }

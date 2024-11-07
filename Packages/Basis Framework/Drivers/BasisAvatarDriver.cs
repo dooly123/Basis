@@ -278,7 +278,7 @@ namespace Basis.Scripts.Drivers
                 BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, QuaternionLerpAmount);
                 if (AssignedTo == BasisBoneTrackedRole.Neck)
                 {
-                    AddToBone.PositionControl.Offset += AddToBone.PositionControl.Offset / 2;
+                    AddToBone.PositionControl.Offset += AddToBone.PositionControl.Offset / 2;//replace later! -LD
                 }
             }
         }
@@ -366,6 +366,23 @@ namespace Basis.Scripts.Drivers
             DT.data.aimAxis = MultiAimConstraintData.Axis.Z;
             DT.data.upAxis = MultiAimConstraintData.Axis.Y;
             DT.data.limits = new Vector2(-180, 180);
+            DT.data.constrainedXAxis = true;
+            DT.data.constrainedYAxis = true;
+            DT.data.constrainedZAxis = true;
+
+            GeneratedRequiredTransforms(Source, References.Hips);
+        }
+        public void MultiPositional(BaseBoneDriver driver, GameObject Parent, Transform Source, BasisBoneTrackedRole Role, float positionWeight = 1)
+        {
+            driver.FindBone(out BasisBoneControl Target, Role);
+            GameObject DTData = CreateAndSetParent(Parent.transform, "Bone Role " + Role.ToString());
+            MultiPositionConstraint DT = BasisHelpers.GetOrAddComponent<MultiPositionConstraint>(DTData);
+            DT.data.constrainedObject = Source;
+            WeightedTransformArray Array = new WeightedTransformArray(0);
+            WeightedTransform Weighted = new WeightedTransform(Target.BoneModelTransform, positionWeight);
+            Array.Add(Weighted);
+            DT.data.sourceObjects = Array;
+            DT.data.maintainOffset = false;
             DT.data.constrainedXAxis = true;
             DT.data.constrainedYAxis = true;
             DT.data.constrainedZAxis = true;
