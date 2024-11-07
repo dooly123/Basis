@@ -79,6 +79,10 @@ namespace Basis.Scripts.Drivers
             {
                 Controls[Index].SetOffset(trackedRoles[Index]);
             }
+            FindBone(out BasisBoneControl CenterEye, BasisBoneTrackedRole.CenterEye);
+            FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head);
+            Head.BoneModelTransform.localRotation = Quaternion.Inverse(Head.BoneTransform.rotation);
+            CenterEye.BoneModelTransform.localRotation = Quaternion.identity;
         }
         public void RemoveAllListeners()
         {

@@ -117,6 +117,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             rotationX += lookVector.x * rotationSpeed;
             rotationY -= lookVector.y * rotationSpeed;
         }
+        public Quaternion Rotation;
         public override void DoPollData()
         {
             if (hasRoleAssigned)
@@ -137,10 +138,10 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 LocalRawPosition = adjustedHeadPosition;
                 Control.IncomingData.position = LocalRawPosition;
                 Control.IncomingData.rotation = LocalRawRotation;
+                FinalPosition = LocalRawPosition;
+                FinalRotation = LocalRawRotation;
+                UpdatePlayerControl();
             }
-            FinalPosition = LocalRawPosition;
-            FinalRotation = LocalRawRotation;
-            UpdatePlayerControl();
         }
         public BasisVirtualSpineDriver BasisVirtualSpine = new BasisVirtualSpineDriver();
     }

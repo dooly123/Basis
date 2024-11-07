@@ -151,6 +151,7 @@ namespace Basis.Scripts.Drivers
             {
                 Builder.enabled = true;
             }
+            Head.BoneModelTransform.localRotation = Quaternion.identity;
         }
         public void OnTpose()
         {

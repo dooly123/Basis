@@ -121,8 +121,6 @@ public class BasisVirtualSpineDriver
         Neck.HasVirtualOverride = false;
         Chest.HasVirtualOverride = false;
         Hips.HasVirtualOverride = false;
-        // BasisLocalPlayer.Instance.LocalBoneDriver.OnPostSimulate -= LowerLeftLeg;
-        // BasisLocalPlayer.Instance.LocalBoneDriver.OnPostSimulate -= LowerRightleg;
     }
     public void OnSimulateNeck()
     {

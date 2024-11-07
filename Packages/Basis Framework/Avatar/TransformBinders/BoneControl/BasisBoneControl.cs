@@ -1,4 +1,5 @@
 ﻿using Basis.Scripts.Avatar;
+using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Common;
 using System;
 using Unity.Burst;
@@ -226,12 +227,14 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             }
             LastRunData.position = OutGoingData.position;
             LastRunData.rotation = OutGoingData.rotation;
-            BoneTransform.SetLocalPositionAndRotation(OutGoingData.position, OutGoingData.rotation);
+            BoneTransform.localPosition = OutGoingData.position;
+            BoneTransform.localRotation = OutGoingData.rotation;
+            // (OutGoingData.position, OutGoingData.rotation);
             BoneTransform.GetPositionAndRotation(out OutgoingWorldData.position, out OutgoingWorldData.rotation);
         }
         public void SetOffset(BasisBoneTrackedRole BasisBoneTrackedRole)
         {
-            BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, TposeWorld.rotation);
+            BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, TposeLocal.rotation);
         }
     }
 }
