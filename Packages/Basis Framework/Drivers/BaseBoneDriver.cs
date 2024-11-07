@@ -77,11 +77,7 @@ namespace Basis.Scripts.Drivers
         {
             for (int Index = 0; Index < ControlsLength; Index++)
             {
-                if (trackedRoles[Index] != BasisBoneTrackedRole.Head)
-                {
-                    Controls[Index].SetOffset();
-                }
-
+                Controls[Index].SetOffset(trackedRoles[Index]);
             }
         }
         public void RemoveAllListeners()

@@ -80,7 +80,7 @@ namespace Basis.Scripts.Drivers
             CleanupBeforeContinue();
             AdditionalTransforms.Clear();
             Rigs.Clear();
-            if(Player.Avatar.Animator.runtimeAnimatorController == null)
+            if (Player.Avatar.Animator.runtimeAnimatorController == null)
             {
                 UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Locomotion);
                 RuntimeAnimatorController RAC = op.WaitForCompletion();
@@ -117,7 +117,7 @@ namespace Basis.Scripts.Drivers
             CalibrationComplete?.Invoke();
 
             BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.Avatar.Animator.gameObject);
-            BasisMuscleDriver.Initialize(this,Player.Avatar.Animator);
+            BasisMuscleDriver.Initialize(this, Player.Avatar.Animator);
 
             AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
             AnimatorDriver.Initialize(Player.Avatar.Animator);
@@ -254,51 +254,51 @@ namespace Basis.Scripts.Drivers
             SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightLowerLeg, BasisBoneTrackedRole.RightFoot, 40, 14, true);
 
             SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftToes, 40, 14, true);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightToes, 4 ,14, true);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightToes, 4, 14, true);
 
 
 
             // Setting up locks for Left Hand
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftThumbProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftThumbProximal, BasisBoneTrackedRole.LeftThumbIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftThumbIntermediate, BasisBoneTrackedRole.LeftThumbDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftThumbProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftThumbProximal, BasisBoneTrackedRole.LeftThumbIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftThumbIntermediate, BasisBoneTrackedRole.LeftThumbDistal, 40, 7, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftIndexProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftIndexProximal, BasisBoneTrackedRole.LeftIndexIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftIndexIntermediate, BasisBoneTrackedRole.LeftIndexDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftIndexProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftIndexProximal, BasisBoneTrackedRole.LeftIndexIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftIndexIntermediate, BasisBoneTrackedRole.LeftIndexDistal, 40, 7, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftMiddleProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftMiddleProximal, BasisBoneTrackedRole.LeftMiddleIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftMiddleIntermediate, BasisBoneTrackedRole.LeftMiddleDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftMiddleProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftMiddleProximal, BasisBoneTrackedRole.LeftMiddleIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftMiddleIntermediate, BasisBoneTrackedRole.LeftMiddleDistal, 40, 7, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftRingProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftRingProximal, BasisBoneTrackedRole.LeftRingIntermediate,  40, 12, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftRingIntermediate, BasisBoneTrackedRole.LeftRingDistal,  40, 12, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftRingProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftRingProximal, BasisBoneTrackedRole.LeftRingIntermediate, 40, 12, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftRingIntermediate, BasisBoneTrackedRole.LeftRingDistal, 40, 12, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftLittleProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftLittleProximal, BasisBoneTrackedRole.LeftLittleIntermediate,  40, 12, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftLittleIntermediate, BasisBoneTrackedRole.LeftLittleDistal,  40, 12, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftLittleProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftLittleProximal, BasisBoneTrackedRole.LeftLittleIntermediate, 40, 12, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.LeftLittleIntermediate, BasisBoneTrackedRole.LeftLittleDistal, 40, 12, false);
 
             // Setting up locks for Right Hand
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightThumbProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightThumbProximal, BasisBoneTrackedRole.RightThumbIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightThumbIntermediate, BasisBoneTrackedRole.RightThumbDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightThumbProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightThumbProximal, BasisBoneTrackedRole.RightThumbIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightThumbIntermediate, BasisBoneTrackedRole.RightThumbDistal, 40, 7, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightIndexProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightIndexProximal, BasisBoneTrackedRole.RightIndexIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightIndexIntermediate, BasisBoneTrackedRole.RightIndexDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightIndexProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightIndexProximal, BasisBoneTrackedRole.RightIndexIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightIndexIntermediate, BasisBoneTrackedRole.RightIndexDistal, 40, 7, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightMiddleProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightMiddleProximal, BasisBoneTrackedRole.RightMiddleIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightMiddleIntermediate, BasisBoneTrackedRole.RightMiddleDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightMiddleProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightMiddleProximal, BasisBoneTrackedRole.RightMiddleIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightMiddleIntermediate, BasisBoneTrackedRole.RightMiddleDistal, 40, 7, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightRingProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightRingProximal, BasisBoneTrackedRole.RightRingIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightRingIntermediate, BasisBoneTrackedRole.RightRingDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightRingProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightRingProximal, BasisBoneTrackedRole.RightRingIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightRingIntermediate, BasisBoneTrackedRole.RightRingDistal, 40, 7, false);
 
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLittleProximal,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightLittleProximal, BasisBoneTrackedRole.RightLittleIntermediate,  40, 7, false);
-            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightLittleIntermediate, BasisBoneTrackedRole.RightLittleDistal,  40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLittleProximal, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightLittleProximal, BasisBoneTrackedRole.RightLittleIntermediate, 40, 7, false);
+            SetAndCreateLock(BaseBoneDriver, BasisBoneTrackedRole.RightLittleIntermediate, BasisBoneTrackedRole.RightLittleDistal, 40, 7, false);
         }
         public bool IsAble()
         {
@@ -323,28 +323,28 @@ namespace Basis.Scripts.Drivers
         public void SetBodySettings(BasisLocalBoneDriver driver)
         {
             GameObject HeadRig = CreateRig("Chest, Neck, Head", true, out RigHeadRig, out RigHeadLayer);
-            CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Neck, true, out HeadTwoBoneIK, false, false);
+            CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Neck, true, out HeadTwoBoneIK, false, true);
             if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.Head))
             {
                 WriteUpEvents(Control, RigHeadLayer);
             }
 
             GameObject RightShoulder = CreateRig("UpperChest, RightShoulder, RightUpperArm", true, out RightShoulderRig, out RightShoulderLayer);
-            CreateTwoBone(driver, RightShoulder, References.chest, References.RightShoulder, References.RightUpperArm, BasisBoneTrackedRole.RightUpperArm, BasisBoneTrackedRole.RightShoulder, true, out RightShoulderTwoBoneIK, false, false);
+            CreateTwoBone(driver, RightShoulder, References.chest, References.RightShoulder, References.RightUpperArm, BasisBoneTrackedRole.RightUpperArm, BasisBoneTrackedRole.RightShoulder, true, out RightShoulderTwoBoneIK, false, true);
             if (driver.FindBone(out Control, BasisBoneTrackedRole.RightShoulder))
             {
                 WriteUpEvents(Control, RightShoulderLayer);
             }
 
             GameObject LeftShoulder = CreateRig("UpperChest, LeftShoulder, LeftUpperArm", true, out LeftShoulderRig, out LeftShoulderLayer);
-            CreateTwoBone(driver, LeftShoulder, References.chest, References.leftShoulder, References.leftUpperArm, BasisBoneTrackedRole.LeftUpperArm, BasisBoneTrackedRole.LeftShoulder, true, out LeftShoulderTwoBoneIK, false, false);
+            CreateTwoBone(driver, LeftShoulder, References.chest, References.leftShoulder, References.leftUpperArm, BasisBoneTrackedRole.LeftUpperArm, BasisBoneTrackedRole.LeftShoulder, true, out LeftShoulderTwoBoneIK, false, true);
             if (driver.FindBone(out Control, BasisBoneTrackedRole.LeftShoulder))
             {
                 WriteUpEvents(Control, LeftShoulderLayer);
             }
 
             GameObject Body = CreateRig("Spine", true, out ChestSpineRig, out ChestSpineLayer);
-            CreateTwoBone(driver, Body, References.spine, null, null, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Neck, true, out UpperChestTwoBoneIK, false, false);
+            CreateTwoBone(driver, Body, References.spine, null, null, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Neck, true, out UpperChestTwoBoneIK, false, true);
             if (driver.FindBone(out Control, BasisBoneTrackedRole.Chest))
             {
                 WriteUpEvents(Control, ChestSpineLayer);
@@ -363,7 +363,7 @@ namespace Basis.Scripts.Drivers
             {
                 WriteUpEvents(Control, LeftHandLayer);
             }
-            CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftLowerArm, true, out LeftHandTwoBoneIK, false, false);
+            CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftLowerArm, true, out LeftHandTwoBoneIK, false, true);
         }
         public void RightHand(BasisLocalBoneDriver driver)
         {
@@ -372,7 +372,7 @@ namespace Basis.Scripts.Drivers
             {
                 WriteUpEvents(Control, RightHandLayer);
             }
-            CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLowerArm, true, out RightHandTwoBoneIK, false, false);
+            CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLowerArm, true, out RightHandTwoBoneIK, false, true);
         }
         public void LeftFoot(BasisLocalBoneDriver driver)
         {
@@ -381,7 +381,7 @@ namespace Basis.Scripts.Drivers
             {
                 WriteUpEvents(Control, LeftFootLayer);
             }
-            CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, true, out LeftFootTwoBoneIK, false, false);
+            CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, true, out LeftFootTwoBoneIK, false, true);
         }
         public void RightFoot(BasisLocalBoneDriver driver)
         {
@@ -390,7 +390,7 @@ namespace Basis.Scripts.Drivers
             {
                 WriteUpEvents(Control, RightFootLayer);
             }
-            CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, false);
+            CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, true);
         }
         public void LeftToe(BasisLocalBoneDriver driver)
         {
@@ -415,15 +415,7 @@ namespace Basis.Scripts.Drivers
             for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles.Length; Index++)
             {
                 BasisBoneTrackedRole role = BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles[Index];
-                BasisBoneControl BoneControl = BasisLocalPlayer.Instance.LocalBoneDriver.Controls[Index];
-                if (BoneControl.HasRigLayer == BasisHasRigLayer.HasRigLayer)
-                {
-                    ApplyHint(role, 1);
-                }
-                else
-                {
-                    ApplyHint(role, 0);
-                }
+                ApplyHint(role, 1);
             }
         }
         public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)
