@@ -93,9 +93,13 @@ namespace Basis.Scripts.Drivers
                 }
                 else
                 {
-                    Controls[Index].BoneModelTransform.localRotation = Quaternion.identity;
+                    Controls[Index].BoneModelTransform.localRotation = Quaternion.Inverse(Controls[Index].BoneTransform.rotation);
                 }
             }
+            FindBone(out BasisBoneControl CenterEye, BasisBoneTrackedRole.CenterEye);
+            FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head);
+            Head.BoneModelTransform.localRotation = Quaternion.Inverse(Head.BoneTransform.rotation);
+            CenterEye.BoneModelTransform.localRotation = Quaternion.identity;
         }
         public void RemoveAllListeners()
         {
