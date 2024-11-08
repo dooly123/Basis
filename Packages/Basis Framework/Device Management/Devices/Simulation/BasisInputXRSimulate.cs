@@ -35,13 +35,10 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
                 {
                     AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
                     Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
-                }
-                if (Control.HasTracked != BasisHasTracked.HasNoTracker)
-                {
+
                     AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
                     Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
                 }
-
 
             }
             UpdatePlayerControl();

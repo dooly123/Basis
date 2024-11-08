@@ -232,9 +232,5 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             // (OutGoingData.position, OutGoingData.rotation);
             BoneTransform.GetPositionAndRotation(out OutgoingWorldData.position, out OutgoingWorldData.rotation);
         }
-        public void SetOffset(BasisBoneTrackedRole BasisBoneTrackedRole)
-        {
-            BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, TposeLocal.rotation);
-        }
     }
 }

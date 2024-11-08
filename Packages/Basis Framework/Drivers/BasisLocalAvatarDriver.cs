@@ -60,10 +60,6 @@ namespace Basis.Scripts.Drivers
         public string Locomotion = "Locomotion";
         public BasisMuscleDriver BasisMuscleDriver;
         public BasisLocalEyeFollowDriver BasisLocalEyeFollowDriver;
-        public void LocalCalibration()
-        {
-            InitialLocalCalibration(BasisLocalPlayer.Instance);
-        }
         public void InitialLocalCalibration(BasisLocalPlayer Player)
         {
             Debug.Log("InitialLocalCalibration");
@@ -140,6 +136,12 @@ namespace Basis.Scripts.Drivers
             {
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
+            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl LeftHand, BasisBoneTrackedRole.LeftHand))
+            {
+            }
+            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl RightHand, BasisBoneTrackedRole.RightHand))
+            {
+            }
             if (HasTposeEvent == false)
             {
                 TposeStateChange += OnTpose;
@@ -152,6 +154,8 @@ namespace Basis.Scripts.Drivers
                 Builder.enabled = true;
             }
             Head.BoneModelTransform.localRotation = Quaternion.identity;
+            LeftHand.BoneModelTransform.localRotation = Quaternion.identity;
+            RightHand.BoneModelTransform.localRotation = Quaternion.identity;
         }
         public void OnTpose()
         {
@@ -159,13 +163,15 @@ namespace Basis.Scripts.Drivers
             {
                 if (InTPose)
                 {
-                    Builder.enabled = false;
                 }
                 else
                 {
-                    Builder.enabled = true;
                 }
             }
+        }
+        public void GlobalWeight()
+        {
+
         }
         public void CleanupBeforeContinue()
         {

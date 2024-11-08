@@ -77,12 +77,24 @@ namespace Basis.Scripts.Drivers
         {
             for (int Index = 0; Index < ControlsLength; Index++)
             {
-                Controls[Index].SetOffset(trackedRoles[Index]);
+                Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Controls[Index].TposeLocal.rotation);
             }
             FindBone(out BasisBoneControl CenterEye, BasisBoneTrackedRole.CenterEye);
             FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head);
             Head.BoneModelTransform.localRotation = Quaternion.Inverse(Head.BoneTransform.rotation);
             CenterEye.BoneModelTransform.localRotation = Quaternion.identity;
+            for (int Index = 0; Index < ControlsLength; Index++)
+            {
+                if (trackedRoles[Index] == BasisBoneTrackedRole.LeftHand)
+                {
+                    Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
+                }
+                if (trackedRoles[Index] == BasisBoneTrackedRole.RightHand)
+                {
+                    Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                }
+            }
         }
         public void RemoveAllListeners()
         {

@@ -30,7 +30,7 @@ namespace Basis.Scripts.Drivers
         public Action CalibrationComplete;
         public Action TposeStateChange;
         public BasisTransformMapping References = new BasisTransformMapping();
-        public RuntimeAnimatorController runtimeAnimatorController;
+        public RuntimeAnimatorController SavedruntimeAnimatorController;
         public SkinnedMeshRenderer[] SkinnedMeshRenderer;
         public BasisPlayer Player;
         public bool InTPose = false;
@@ -49,9 +49,9 @@ namespace Basis.Scripts.Drivers
         public void PutAvatarIntoTPose()
         {
             InTPose = true;
-            if (runtimeAnimatorController == null)
+            if (SavedruntimeAnimatorController == null)
             {
-                runtimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
+                SavedruntimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
             }
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
             RuntimeAnimatorController RAC = op.WaitForCompletion();
@@ -62,8 +62,8 @@ namespace Basis.Scripts.Drivers
         }
         public void ResetAvatarAnimator()
         {
-            Player.Avatar.Animator.runtimeAnimatorController = runtimeAnimatorController;
-            runtimeAnimatorController = null;
+            Player.Avatar.Animator.runtimeAnimatorController = SavedruntimeAnimatorController;
+            SavedruntimeAnimatorController = null;
             InTPose = false;
             TposeStateChange?.Invoke();
         }
