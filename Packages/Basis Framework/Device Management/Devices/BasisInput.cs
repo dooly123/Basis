@@ -91,7 +91,7 @@ namespace Basis.Scripts.Device_Management.Devices
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(trackedRole))//we dont want to offset these ones
                 {
                     Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.OutgoingWorldData.position - transform.position);
-                    Control.InverseOffsetFromBone.rotation = (Quaternion.Inverse(transform.rotation) * Control.BoneTransform.rotation);
+                    Control.InverseOffsetFromBone.rotation = (Quaternion.Inverse(transform.rotation) * Control.BoneTransform.localRotation);
                     Control.InverseOffsetFromBone.Use = true;
                 }
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
