@@ -391,8 +391,8 @@ MonoBehaviour:
       SupportedRenderPipelines: 0
       DefaultPlatform: 0
       ExcludePlatform: 0
-      ValueToggle: 0
-      EditorVisable: 0
+      ValueToggle: 1
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -403,7 +403,7 @@ MonoBehaviour:
     Name: Antialiasing
     ValueDescriptor: Antialiasing
     SelectedValueDefault: smaa
-    ValueDefault: smaa
+    ValueDefault: ultra
     Explanation: Antialiasing
     selectedValue: smaa
     Type: 1
@@ -420,14 +420,16 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 1
     SelectableValueList:
-    - realValue: taa
-      UserValue: TAA
-    - realValue: fxaa
-      UserValue: FXAA
-    - realValue: smaa
-      UserValue: SMAA
-    - realValue: noaa
-      UserValue: NOAA
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
   - EditorBasedUIToggles:
       SupportedRenderPipelines: 0
       DefaultPlatform: 0
