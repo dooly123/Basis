@@ -91,6 +91,10 @@ namespace Basis.Scripts.Drivers
         }
         public void CalibrateOffsets()
         {
+            for (int Index = 0; Index < ControlsLength; Index++)
+            {
+                Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero,Quaternion.identity);
+            }
         }
         public void RemoveAllListeners()
         {

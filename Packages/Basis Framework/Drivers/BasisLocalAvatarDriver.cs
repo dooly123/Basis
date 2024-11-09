@@ -141,6 +141,7 @@ namespace Basis.Scripts.Drivers
             }
             Player.Avatar.transform.parent = Hips.BoneTransform;
             Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position, Quaternion.identity);
+            BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
             BuildBuilder();
             if (Builder.enabled == false)
             {

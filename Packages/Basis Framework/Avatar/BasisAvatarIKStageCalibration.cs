@@ -126,6 +126,7 @@ namespace Basis.Scripts.Avatar
             BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
             BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();//not needed but still doing just incase
             BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
+          //  BasisLocalPlayer.Instance.AvatarDriver.BuildBuilder();
 
         }
         public static void RunThroughConnectors(BasisTrackerMapping mapping, ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles)
