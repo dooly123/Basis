@@ -411,7 +411,7 @@ namespace Basis.Scripts.Drivers
         private void SetupSpineRig(BasisLocalBoneDriver driver)
         {
             GameObject Body = CreateRig("Spine, Chest", true, out ChestSpineRig, out ChestSpineLayer);
-            CreateTwoBone(driver, Body, References.spine, null, References.chest, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Chest, true, out UpperChestTwoBoneIK, false, true);
+            CreateTwoBone(driver, Body, References.spine, References.chest, References.Upperchest, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Chest, true, out UpperChestTwoBoneIK, false, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl Spine, BasisBoneTrackedRole.Spine))

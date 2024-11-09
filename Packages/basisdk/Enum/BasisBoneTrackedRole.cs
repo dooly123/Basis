@@ -65,6 +65,7 @@ public static class BasisBoneTrackedRoleCommonCheck
     public static bool CheckItsFBTracker(BasisBoneTrackedRole role)
     {
         return role != BasisBoneTrackedRole.CenterEye &&
+                role != BasisBoneTrackedRole.Head &&
                role != BasisBoneTrackedRole.LeftHand &&
                role != BasisBoneTrackedRole.RightHand &&
                CheckIfLeftHand(role)== false &&
