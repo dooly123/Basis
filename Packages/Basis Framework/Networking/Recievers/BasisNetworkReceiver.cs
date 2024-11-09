@@ -28,13 +28,15 @@ namespace Basis.Scripts.Networking.Recievers
         public override void Compute()
         {
             if (!IsAbleToUpdate())
+            {
                 return;
+            }
 
             float deltaTime = Time.deltaTime;
             lerpTimeSpeedRotation = deltaTime * Settings.LerpSpeedRotation;
             lerpTimeSpeedMuscles = deltaTime * Settings.LerpSpeedMuscles;
 
-            BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, Settings.LerpSpeedMovement, deltaTime, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistance);
+            BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, Settings.LerpSpeedMovement, deltaTime, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistanceSquared);
 
             ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, Output, ref HumanPose);
             PoseHandler.SetHumanPose(ref HumanPose);

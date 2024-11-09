@@ -36,7 +36,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             float distanceSq = math.lengthsq(pos0 - targetPos0);
 
             // Check if we should teleport
-            if (distanceSq > teleportThreshold * teleportThreshold)
+            if (distanceSq > teleportThreshold)
             {
                 // Teleport directly to the target position
                 positions[0] = targetPos0;
