@@ -98,19 +98,19 @@ public class BasisVirtualSpineDriver
     }
     public void LowerLeftLeg()
     {
-        LeftLowerLeg.BoneModelTransform.position = LeftFoot.BoneModelTransform.position;
+        LeftLowerLeg.BoneTransform.position = LeftFoot.BoneTransform.position;
     }
     public void LowerRightleg()
     {
-        RightLowerLeg.BoneModelTransform.position = RightFoot.BoneModelTransform.position;
+        RightLowerLeg.BoneTransform.position = RightFoot.BoneTransform.position;
     }
     public void LowerLeftArm()
     {
-        LeftLowerArm.BoneModelTransform.position = LeftHand.BoneModelTransform.position;
+        LeftLowerArm.BoneTransform.position = LeftHand.BoneTransform.position;
     }
     public void LowerRightArm()
     {
-        RightLowerArm.BoneModelTransform.position = RightHand.BoneModelTransform.position;
+        RightLowerArm.BoneTransform.position = RightHand.BoneTransform.position;
     }
     public float JointSpeedup = 10f;
     public float SmoothTime = 0.1f; // Adjust for smoother damping

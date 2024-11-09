@@ -134,8 +134,6 @@ namespace Basis.Scripts.TransformBinders.BoneControl
         public bool HasBone = false;
         [SerializeField]
         public Transform BoneTransform;
-        [SerializeField]
-        public Transform BoneModelTransform;
         [HideInInspector]
         public bool HasEvents = false;
         // Events for property changes

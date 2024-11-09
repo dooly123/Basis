@@ -13,7 +13,7 @@ public class BasisLocalBoneDriver : BaseBoneDriver
 
     private void OnBootModeChanged(string mode)
     {
-        for (int Index = 0; Index < Controls.Length; Index++)
+        for (int Index = 0; Index < ControlsLength; Index++)
         {
             BasisBoneControl Control = Controls[Index];
             BasisBoneTrackedRole role = trackedRoles[Index];

@@ -359,7 +359,7 @@ namespace Basis.Scripts.Drivers
             MultiAimConstraint DT = BasisHelpers.GetOrAddComponent<MultiAimConstraint>(DTData);
             DT.data.constrainedObject = Source;
             WeightedTransformArray Array = new WeightedTransformArray(0);
-            WeightedTransform Weighted = new WeightedTransform(Target.BoneModelTransform, rotationWeight);
+            WeightedTransform Weighted = new WeightedTransform(Target.BoneTransform, rotationWeight);
             Array.Add(Weighted);
             DT.data.sourceObjects = Array;
             DT.data.maintainOffset = false;
@@ -379,7 +379,7 @@ namespace Basis.Scripts.Drivers
             MultiPositionConstraint DT = BasisHelpers.GetOrAddComponent<MultiPositionConstraint>(DTData);
             DT.data.constrainedObject = Source;
             WeightedTransformArray Array = new WeightedTransformArray(0);
-            WeightedTransform Weighted = new WeightedTransform(Target.BoneModelTransform, positionWeight);
+            WeightedTransform Weighted = new WeightedTransform(Target.BoneTransform, positionWeight);
             Array.Add(Weighted);
             DT.data.sourceObjects = Array;
             DT.data.maintainOffset = false;
@@ -395,7 +395,7 @@ namespace Basis.Scripts.Drivers
             GameObject DTData = CreateAndSetParent(Parent.transform, "Bone Role " + Role.ToString());
             OverrideTransform DT = BasisHelpers.GetOrAddComponent<OverrideTransform>(DTData);
             DT.data.constrainedObject = Source;
-            DT.data.sourceObject = Target.BoneModelTransform;
+            DT.data.sourceObject = Target.BoneTransform;
             DT.data.rotationWeight = rotationWeight;
             DT.data.positionWeight = positionWeight;
             DT.data.space = Space;
@@ -409,7 +409,7 @@ namespace Basis.Scripts.Drivers
             DT.data.root = Source;
             DT.data.tip = Source;
             // DT.data.curve = new AnimationCurve(new Keyframe[2] {);
-            DT.data.tipTarget = Target.BoneModelTransform;
+            DT.data.tipTarget = Target.BoneTransform;
             GeneratedRequiredTransforms(Source, References.Hips);
         }
         public void CreateTwoBone(BaseBoneDriver driver, GameObject Parent, Transform root, Transform mid, Transform tip, BasisBoneTrackedRole TargetRole, BasisBoneTrackedRole BendRole, bool UseBoneRole, out TwoBoneIKConstraint TwoBoneIKConstraint, bool maintainTargetPositionOffset, bool maintainTargetRotationOffset)
@@ -418,12 +418,12 @@ namespace Basis.Scripts.Drivers
             GameObject BoneRole = CreateAndSetParent(Parent.transform, "Bone Role " + TargetRole.ToString());
             TwoBoneIKConstraint = BasisHelpers.GetOrAddComponent<TwoBoneIKConstraint>(BoneRole);
             EnableTwoBoneIk(TwoBoneIKConstraint, maintainTargetPositionOffset, maintainTargetRotationOffset);
-            TwoBoneIKConstraint.data.target = BoneControl.BoneModelTransform;
+            TwoBoneIKConstraint.data.target = BoneControl.BoneTransform;
             if (UseBoneRole)
             {
                 if (driver.FindBone(out BasisBoneControl BendBoneControl, BendRole))
                 {
-                    TwoBoneIKConstraint.data.hint = BendBoneControl.BoneModelTransform;
+                    TwoBoneIKConstraint.data.hint = BendBoneControl.BoneTransform;
                 }
             }
             TwoBoneIKConstraint.data.root = root;

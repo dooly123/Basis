@@ -7,7 +7,6 @@ using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Gizmos = Popcron.Gizmos;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Basis.Scripts.Drivers
 {
@@ -104,13 +103,6 @@ namespace Basis.Scripts.Drivers
                 Controls[Index].WeightsChanged.RemoveAllListeners();
             }
         }
-        public void ResetBoneModel()
-        {
-            for (int Index = 0; Index < ControlsLength; Index++)
-            {
-                Controls[Index].BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            }
-        }
         public void AddRange(BasisBoneControl[] newControls, BasisBoneTrackedRole[] newRoles)
         {
             Controls = Controls.Concat(newControls).ToArray();
@@ -157,11 +149,7 @@ namespace Basis.Scripts.Drivers
                 BasisBoneControl Control = new BasisBoneControl();
                 GameObject TrackedBone = new GameObject(role.ToString());
                 TrackedBone.transform.parent = Parent;
-                GameObject BoneModelOffset = new GameObject(role.ToString() + "_AvatarRotationOffset");
-                BoneModelOffset.transform.parent = TrackedBone.transform;
                 Control.BoneTransform = TrackedBone.transform;
-                Control.BoneModelTransform = BoneModelOffset.transform;
-                Control.BoneModelTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
                 Control.HasBone = true;
                 Control.GeneralLocation = BasisAvatarIKStageCalibration.FindGeneralLocation(role);
                 Control.Initialize();
