@@ -21,18 +21,23 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 case "very low":
                     QualitySettings.anisotropicFiltering = VeryLow;
+                    QualitySettings.SetQualityLevel(2);
                     break;
                 case "low":
                     QualitySettings.anisotropicFiltering = low;
+                    QualitySettings.SetQualityLevel(2);
                     break;
                 case "medium":
                     QualitySettings.anisotropicFiltering = medium;
+                    QualitySettings.SetQualityLevel(1);
                     break;
                 case "high":
                     QualitySettings.anisotropicFiltering = high;
+                    QualitySettings.SetQualityLevel(0);
                     break;
                 case "ultra":
                     QualitySettings.anisotropicFiltering = ultra;
+                    QualitySettings.SetQualityLevel(0);
                     break;
             }
         }

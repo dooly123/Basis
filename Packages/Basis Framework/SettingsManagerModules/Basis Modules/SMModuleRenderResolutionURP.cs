@@ -6,7 +6,6 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.XR;
 public class SMModuleRenderResolutionURP : SettingsManagerOption
 {
-    public UniversalRenderPipelineAsset Asset;
     public void Start()
     {
         BasisDeviceManagement.Instance.OnBootModeChanged += OnBootModeChanged;
@@ -26,10 +25,7 @@ public class SMModuleRenderResolutionURP : SettingsManagerOption
         if (NameReturn(0, Option))
         {
             Debug.Log("Render Resolution");
-            if (Asset == null)
-            {
-                Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
-            }
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (SliderReadOption(Option, Manager, out float Value))
             {
                 SetRenderResolution(Value);
@@ -49,6 +45,7 @@ public class SMModuleRenderResolutionURP : SettingsManagerOption
         RenderScale = renderScale;
         if (BasisDeviceManagement.Instance.CurrentMode == BasisDeviceManagement.Desktop)
         {
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (Asset.renderScale != RenderScale)
             {
                 Asset.renderScale = RenderScale;
@@ -60,6 +57,7 @@ public class SMModuleRenderResolutionURP : SettingsManagerOption
             {
                 XRSettings.useOcclusionMesh = true;
             }
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (Asset.renderScale != 1)
             {
                 Asset.renderScale = 1;
@@ -76,6 +74,7 @@ public class SMModuleRenderResolutionURP : SettingsManagerOption
     }
     public void SetUpscaler(string Using)
     {
+        UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
         switch (Using)
         {
             case "Auto":

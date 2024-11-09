@@ -7,21 +7,16 @@ using ShadowResolution = UnityEngine.Rendering.Universal.ShadowResolution;
 
 public class SMModuleShadowQualityURP : SettingsManagerOption
 {
-    public UniversalRenderPipelineAsset Asset;
-
     public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager)
     {
         if (NameReturn(0, Option))
         {
-            if (Asset == null)
-            {
-                Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
-            }
             ChangeShadowQuality(Option.SelectedValue);
         }
     }
     public void ChangeShadowQuality(string Quality)
     {
+        UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
         Asset.shadowCascadeCount = 4;               // Four cascades for shadow quality
         // Set cascade splits based on intended distances as a fraction of shadowDistance
         Asset.cascade2Split = 0.12f;                // 12% for 2-cascade setting
@@ -62,6 +57,7 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
     private FieldInfo additionalLightsRenderingMode;
     private void InitializeShadowMapFieldInfo()
     {
+        UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
         universalRenderPipelineAssetType = Asset.GetType();
         mainLightShadowmapResolutionFieldInfo = universalRenderPipelineAssetType.GetField("m_MainLightShadowmapResolution", BindingFlags.Instance | BindingFlags.NonPublic);
         additionalLightsRenderingMode = universalRenderPipelineAssetType.GetField("m_AdditionalLightsShadowmapResolution", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -69,8 +65,10 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
 
     public ShadowResolution MainLightShadowResolution
     {
+
         get
         {
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (mainLightShadowmapResolutionFieldInfo == null)
             {
                 InitializeShadowMapFieldInfo();
@@ -79,6 +77,7 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
         }
         set
         {
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (mainLightShadowmapResolutionFieldInfo == null)
             {
                 InitializeShadowMapFieldInfo();
@@ -90,6 +89,7 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
     {
         get
         {
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (additionalLightsRenderingMode == null)
             {
                 InitializeShadowMapFieldInfo();
@@ -98,6 +98,7 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
         }
         set
         {
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline; 
             if (additionalLightsRenderingMode == null)
             {
                 InitializeShadowMapFieldInfo();

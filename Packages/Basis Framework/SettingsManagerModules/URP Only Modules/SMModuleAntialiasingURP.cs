@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 public class SMModuleAntialiasingURP : SettingsManagerOption
 {
-    public UniversalRenderPipelineAsset Asset;
     public Camera Camera;
     public UniversalAdditionalCameraData Data;
     public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager)
@@ -14,17 +13,13 @@ public class SMModuleAntialiasingURP : SettingsManagerOption
             SetMSAAQuality(Option.SelectedValue);
         }
     }
-    public int veryLowmsaaSampleCount = 1;
     public int LowmsaaSampleCount = 2;
     public int MediumLowmsaaSampleCount = 4;
     public int HighmsaaSampleCount = 8;
     public void SetMSAAQuality(string Quality)
     {
-        if(Asset == null)
-        {
-            Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
-        }
-        if(Camera == null)
+        UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
+        if (Camera == null)
         {
             Camera = Camera.main;
             Data = Camera.GetComponent<UniversalAdditionalCameraData>();
@@ -36,7 +31,7 @@ public class SMModuleAntialiasingURP : SettingsManagerOption
         switch (Quality)
         {
             case "very low":
-                Asset.msaaSampleCount = veryLowmsaaSampleCount;
+                Asset.msaaSampleCount = 0;
                 Camera.allowMSAA = false;
                 Data.antialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
                 Data.antialiasingQuality = AntialiasingQuality.Low;

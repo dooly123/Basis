@@ -2218,7 +2218,7 @@ MonoBehaviour:
   - OptionName: Ambient Occlusion
     Explanation: Ambient Occlusion
     Parse: 1
-    Type: 1
+    Type: 4
   AmbientOcclusion: {fileID: 0}
 --- !u!114 &7074081770173294057
 MonoBehaviour:
@@ -2237,10 +2237,8 @@ MonoBehaviour:
     Explanation: Antialiasing
     Parse: 1
     Type: 1
-  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
   Camera: {fileID: 0}
   Data: {fileID: 0}
-  veryLowmsaaSampleCount: 1
   LowmsaaSampleCount: 2
   MediumLowmsaaSampleCount: 4
   HighmsaaSampleCount: 8
@@ -2261,7 +2259,6 @@ MonoBehaviour:
     Explanation: HDR Support
     Parse: 1
     Type: 1
-  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
 --- !u!114 &1027479742639559022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2279,7 +2276,6 @@ MonoBehaviour:
     Explanation: Shadow Quality
     Parse: 1
     Type: 1
-  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
 --- !u!114 &2467030893667730727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2335,5 +2331,4 @@ MonoBehaviour:
     Explanation: UpScaler
     Parse: 1
     Type: 1
-  Asset: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
   RenderScale: 0.9680337

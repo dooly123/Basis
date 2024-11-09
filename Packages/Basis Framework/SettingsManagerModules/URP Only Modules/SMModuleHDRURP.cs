@@ -5,7 +5,6 @@ using UnityEngine.Rendering.Universal;
 
 public class SMModuleHDRURP : SettingsManagerOption
 {
-    public UniversalRenderPipelineAsset Asset;
     public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager)
     {
         if (NameReturn(0, Option))
@@ -15,10 +14,7 @@ public class SMModuleHDRURP : SettingsManagerOption
     }
     public void SetHDR(string SelectedValue)
     {
-        if (Asset == null)
-        {
-            Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
-        }
+        UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
         Asset.supportsHDR = CheckIsOn(SelectedValue);
     }
 }
