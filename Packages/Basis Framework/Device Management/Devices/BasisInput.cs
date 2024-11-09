@@ -90,8 +90,10 @@ namespace Basis.Scripts.Device_Management.Devices
             {
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(trackedRole))//we dont want to offset these ones
                 {
+                    InitalRotation = Quaternion.Inverse(transform.rotation);
+                    InitalBoneRotation = Control.OutgoingWorldData.rotation;
                     Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.OutgoingWorldData.position - transform.position);
-                    Control.InverseOffsetFromBone.rotation = (Quaternion.Inverse(transform.rotation) * Control.BoneTransform.localRotation);
+                    Control.InverseOffsetFromBone.rotation = InitalRotation * InitalBoneRotation;
                     Control.InverseOffsetFromBone.Use = true;
                 }
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
@@ -101,6 +103,8 @@ namespace Basis.Scripts.Device_Management.Devices
                 Debug.LogError("Attempted to find " + Role + " but it did not exist");
             }
         }
+        public Quaternion InitalRotation;
+        public Quaternion InitalBoneRotation;
         public void UnAssignRoleAndTracker()
         {
             if(Control != null)
