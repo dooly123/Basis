@@ -93,10 +93,6 @@ namespace Basis.Scripts.Device_Management.Devices
                     Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.OutgoingWorldData.position - transform.position);
                     Control.InverseOffsetFromBone.rotation = (Quaternion.Inverse(transform.rotation) * Control.BoneTransform.localRotation);
                     Control.InverseOffsetFromBone.Use = true;
-                    if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head))
-                    {
-                        Control.BoneModelTransform.rotation = Head.BoneTransform.localRotation;
-                    }
                 }
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
             }

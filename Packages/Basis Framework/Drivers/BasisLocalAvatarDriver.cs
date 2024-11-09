@@ -91,7 +91,7 @@ namespace Basis.Scripts.Drivers
             Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
             Calibration(Player.Avatar);
             BasisLocalPlayer.Instance.LocalBoneDriver.RemoveAllListeners();
-            BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
+            BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
             BasisLocalEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
             BasisLocalEyeFollowDriver.Initalize(this);
             HeadScaledDown = Vector3.zero;
@@ -108,8 +108,6 @@ namespace Basis.Scripts.Drivers
             SetBodySettings(LocalDriver);
             CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
             ComputeOffsets(LocalDriver);
-
-            Builder.Build();
             CalibrationComplete?.Invoke();
 
             BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.Avatar.Animator.gameObject);
@@ -136,12 +134,6 @@ namespace Basis.Scripts.Drivers
             {
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
-            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl LeftHand, BasisBoneTrackedRole.LeftHand))
-            {
-            }
-            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl RightHand, BasisBoneTrackedRole.RightHand))
-            {
-            }
             if (HasTposeEvent == false)
             {
                 TposeStateChange += OnTpose;
@@ -149,13 +141,22 @@ namespace Basis.Scripts.Drivers
             }
             Player.Avatar.transform.parent = Hips.BoneTransform;
             Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position, Quaternion.identity);
+            BuildBuilder();
             if (Builder.enabled == false)
             {
                 Builder.enabled = true;
             }
-            Head.BoneModelTransform.localRotation = Quaternion.identity;
-            LeftHand.BoneModelTransform.localRotation = Quaternion.identity;
-            RightHand.BoneModelTransform.localRotation = Quaternion.identity;
+        }
+        public void BuildBuilder()
+        {
+            if (Builder.Build())
+            {
+
+            }
+            else
+            {
+                Debug.LogError("Unable to Build Builder for IK!!! major issue");
+            }
         }
         public void OnTpose()
         {

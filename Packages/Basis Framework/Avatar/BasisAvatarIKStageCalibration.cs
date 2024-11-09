@@ -123,6 +123,7 @@ namespace Basis.Scripts.Avatar
             }
             BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
             //do the roles after to stop the animator switch issue
+            BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
             BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();//not needed but still doing just incase
             BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
 

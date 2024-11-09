@@ -26,6 +26,10 @@ namespace Basis.Scripts.Drivers
         public event SimulationHandler OnSimulate;
         public event SimulationHandler OnPostSimulate;
         public OrderedDelegate ReadyToRead = new OrderedDelegate();
+
+        public Quaternion QatCalibrationHeading;
+        public Vector3 CalibrationHeading;
+        public float CalibrationHeadingY;
         /// <summary>
         /// call this after updating the bone data
         /// </summary>
@@ -73,33 +77,20 @@ namespace Basis.Scripts.Drivers
             SimulateWithoutLerp();
             ApplyMovement();
         }
+        public void CalculateHeading()
+        {
+            if (FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head))
+            {
+                CalibrationHeadingY = Head.BoneTransform.localRotation.eulerAngles.y;
+                CalibrationHeading = new Vector3(0, CalibrationHeadingY, 0);
+                QatCalibrationHeading = Quaternion.Euler(CalibrationHeading);
+                Debug.DrawLine(Head.BoneTransform.position, Head.BoneTransform.position + (QatCalibrationHeading * new Vector3(0, 0, 1)), Color.black, 5f);
+                //  Head.BoneModelTransform.position = Head.BoneTransform.position;
+                //   Head.BoneModelTransform.rotation = Head.BoneTransform.rotation;
+            }
+        }
         public void CalibrateOffsets()
         {
-            for (int Index = 0; Index < ControlsLength; Index++)
-            {
-                Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Controls[Index].TposeLocal.rotation);
-            }
-            for (int Index = 0; Index < ControlsLength; Index++)
-            {
-                if (trackedRoles[Index] == BasisBoneTrackedRole.LeftHand)
-                {
-                    Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-
-                }
-                else
-                if (trackedRoles[Index] == BasisBoneTrackedRole.RightHand)
-                {
-                    Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                }
-                else
-                {
-                    Controls[Index].BoneModelTransform.localRotation = Quaternion.Inverse(Controls[Index].BoneTransform.rotation);
-                }
-            }
-            FindBone(out BasisBoneControl CenterEye, BasisBoneTrackedRole.CenterEye);
-            FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head);
-            Head.BoneModelTransform.localRotation = Quaternion.Inverse(Head.BoneTransform.rotation);
-            CenterEye.BoneModelTransform.localRotation = Quaternion.identity;
         }
         public void RemoveAllListeners()
         {
