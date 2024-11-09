@@ -4,6 +4,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Eye_Follow;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
@@ -331,33 +332,12 @@ namespace Basis.Scripts.Drivers
         }
         public void SetBodySettings(BasisLocalBoneDriver driver)
         {
-            GameObject HeadRig = CreateRig("Chest, Neck, Head", true, out RigHeadRig, out RigHeadLayer);
-            CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Neck, true, out HeadTwoBoneIK, false, true);
-            if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.Head))
-            {
-                WriteUpEvents(Control, RigHeadLayer);
-            }
+            SetupHeadRig(driver);
+            SetupRightShoulderRig(driver);
+            SetupLeftShoulderRig(driver);
+            SetupSpineRig(driver);
 
-            GameObject RightShoulder = CreateRig("UpperChest, RightShoulder, RightUpperArm", true, out RightShoulderRig, out RightShoulderLayer);
-            CreateTwoBone(driver, RightShoulder, References.chest, References.RightShoulder, References.RightUpperArm, BasisBoneTrackedRole.RightUpperArm, BasisBoneTrackedRole.RightShoulder, true, out RightShoulderTwoBoneIK, false, true);
-            if (driver.FindBone(out Control, BasisBoneTrackedRole.RightShoulder))
-            {
-                WriteUpEvents(Control, RightShoulderLayer);
-            }
-
-            GameObject LeftShoulder = CreateRig("UpperChest, LeftShoulder, LeftUpperArm", true, out LeftShoulderRig, out LeftShoulderLayer);
-            CreateTwoBone(driver, LeftShoulder, References.chest, References.leftShoulder, References.leftUpperArm, BasisBoneTrackedRole.LeftUpperArm, BasisBoneTrackedRole.LeftShoulder, true, out LeftShoulderTwoBoneIK, false, true);
-            if (driver.FindBone(out Control, BasisBoneTrackedRole.LeftShoulder))
-            {
-                WriteUpEvents(Control, LeftShoulderLayer);
-            }
-
-            GameObject Body = CreateRig("Spine", true, out ChestSpineRig, out ChestSpineLayer);
-            CreateTwoBone(driver, Body, References.spine, null, null, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Neck, true, out UpperChestTwoBoneIK, false, true);
-            if (driver.FindBone(out Control, BasisBoneTrackedRole.Chest))
-            {
-                WriteUpEvents(Control, ChestSpineLayer);
-            }
+            // Additional body parts
             LeftHand(driver);
             RightHand(driver);
             LeftFoot(driver);
@@ -365,40 +345,141 @@ namespace Basis.Scripts.Drivers
             LeftToe(driver);
             RightToe(driver);
         }
+        /// <summary>
+        /// Sets up the Head rig, including chest, neck, and head bones.
+        /// </summary>
+        private void SetupHeadRig(BasisLocalBoneDriver driver)
+        {
+            GameObject HeadRig = CreateRig("Chest, Neck, Head", true, out RigHeadRig, out RigHeadLayer);
+            CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Neck, true, out HeadTwoBoneIK, false, true);
+
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Head))
+            {
+                controls.Add(Chest);
+            }
+            if (driver.FindBone(out BasisBoneControl Neck, BasisBoneTrackedRole.Neck))
+            {
+                controls.Add(Neck);
+            }
+            WriteUpEvents(controls, RigHeadLayer);
+        }
+
+        /// <summary>
+        /// Sets up the Right Shoulder rig, including chest, right shoulder, and right upper arm bones.
+        /// </summary>
+        private void SetupRightShoulderRig(BasisLocalBoneDriver driver)
+        {
+            GameObject RightShoulder = CreateRig("Chest, RightShoulder, RightUpperArm", true, out RightShoulderRig, out RightShoulderLayer);
+            CreateTwoBone(driver, RightShoulder, References.chest, References.RightShoulder, References.RightUpperArm, BasisBoneTrackedRole.RightUpperArm, BasisBoneTrackedRole.RightShoulder, true, out RightShoulderTwoBoneIK, false, true);
+
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl RightShoulderRole, BasisBoneTrackedRole.RightShoulder))
+            {
+                controls.Add(RightShoulderRole);
+            }
+            if (driver.FindBone(out BasisBoneControl RightUpperArm, BasisBoneTrackedRole.RightUpperArm))
+            {
+                controls.Add(RightUpperArm);
+            }
+            WriteUpEvents(controls, RightShoulderLayer);
+        }
+
+        /// <summary>
+        /// Sets up the Left Shoulder rig, including chest, left shoulder, and left upper arm bones.
+        /// </summary>
+        private void SetupLeftShoulderRig(BasisLocalBoneDriver driver)
+        {
+            GameObject LeftShoulder = CreateRig("Chest, LeftShoulder, LeftUpperArm", true, out LeftShoulderRig, out LeftShoulderLayer);
+            CreateTwoBone(driver, LeftShoulder, References.chest, References.leftShoulder, References.leftUpperArm, BasisBoneTrackedRole.LeftUpperArm, BasisBoneTrackedRole.LeftShoulder, true, out LeftShoulderTwoBoneIK, false, true);
+
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl LeftShoulderRole, BasisBoneTrackedRole.LeftShoulder))
+            {
+                controls.Add(LeftShoulderRole);
+            }
+            if (driver.FindBone(out BasisBoneControl LeftUpperArm, BasisBoneTrackedRole.LeftUpperArm))
+            {
+                controls.Add(LeftUpperArm);
+            }
+            WriteUpEvents(controls, LeftShoulderLayer);
+        }
+
+        /// <summary>
+        /// Sets up the Spine rig, including the chest and spine bones.
+        /// </summary>
+        private void SetupSpineRig(BasisLocalBoneDriver driver)
+        {
+            GameObject Body = CreateRig("Spine, Chest", true, out ChestSpineRig, out ChestSpineLayer);
+            CreateTwoBone(driver, Body, References.spine, null, References, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Chest, true, out UpperChestTwoBoneIK, false, true);
+
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl Spine, BasisBoneTrackedRole.Spine))
+            {
+                controls.Add(Spine);
+            }
+            if (driver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Chest))
+            {
+                controls.Add(Chest);
+            }
+            WriteUpEvents(controls, ChestSpineLayer);
+        }
         public void LeftHand(BasisLocalBoneDriver driver)
         {
             GameObject Hands = CreateRig("LeftUpperArm, LeftLowerArm, LeftHand", false, out LeftHandRig, out LeftHandLayer);
-            if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftHand))
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl LeftHand, BasisBoneTrackedRole.LeftHand))
             {
-                WriteUpEvents(Control, LeftHandLayer);
+                controls.Add(LeftHand);
             }
+            if (driver.FindBone(out BasisBoneControl LeftLowerArm, BasisBoneTrackedRole.LeftLowerArm))
+            {
+                controls.Add(LeftLowerArm);
+            }
+            WriteUpEvents(controls, LeftHandLayer);
             CreateTwoBone(driver, Hands, References.leftUpperArm, References.leftLowerArm, References.leftHand, BasisBoneTrackedRole.LeftHand, BasisBoneTrackedRole.LeftLowerArm, true, out LeftHandTwoBoneIK, false, true);
         }
         public void RightHand(BasisLocalBoneDriver driver)
         {
             GameObject Hands = CreateRig("RightUpperArm, RightLowerArm, RightHand", false, out RightHandRig, out RightHandLayer);
-            if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightHand))
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl RightHand, BasisBoneTrackedRole.RightHand))
             {
-                WriteUpEvents(Control, RightHandLayer);
+                controls.Add(RightHand);
             }
+            if (driver.FindBone(out BasisBoneControl RightLowerArm, BasisBoneTrackedRole.RightLowerArm))
+            {
+                controls.Add(RightLowerArm);
+            }
+            WriteUpEvents(controls, RightHandLayer);
             CreateTwoBone(driver, Hands, References.RightUpperArm, References.RightLowerArm, References.rightHand, BasisBoneTrackedRole.RightHand, BasisBoneTrackedRole.RightLowerArm, true, out RightHandTwoBoneIK, false, true);
         }
         public void LeftFoot(BasisLocalBoneDriver driver)
         {
             GameObject feet = CreateRig("LeftUpperLeg, LeftLowerLeg, LeftFoot", false, out LeftFootRig, out LeftFootLayer);
-            if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftFoot))
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl LeftFoot, BasisBoneTrackedRole.LeftFoot))
             {
-                WriteUpEvents(Control, LeftFootLayer);
+                controls.Add(LeftFoot);
             }
+            WriteUpEvents(controls, LeftFootLayer);
             CreateTwoBone(driver, feet, References.LeftUpperLeg, References.LeftLowerLeg, References.leftFoot, BasisBoneTrackedRole.LeftFoot, BasisBoneTrackedRole.LeftLowerLeg, true, out LeftFootTwoBoneIK, false, true);
         }
         public void RightFoot(BasisLocalBoneDriver driver)
         {
             GameObject feet = CreateRig("RightUpperLeg, RightLowerLeg, RightFoot", false, out RightFootRig, out RightFootLayer);
-            if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightFoot))
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl RightFoot, BasisBoneTrackedRole.RightFoot))
             {
-                WriteUpEvents(Control, RightFootLayer);
+                controls.Add(RightFoot);
             }
+            if (driver.FindBone(out BasisBoneControl RightLowerLeg, BasisBoneTrackedRole.RightLowerLeg))
+            {
+                controls.Add(RightLowerLeg);
+            }
+
+            WriteUpEvents(controls, RightFootLayer);
+
             CreateTwoBone(driver, feet, References.RightUpperLeg, References.RightLowerLeg, References.rightFoot, BasisBoneTrackedRole.RightFoot, BasisBoneTrackedRole.RightLowerLeg, true, out RightFootTwoBoneIK, false, true);
         }
         public void LeftToe(BasisLocalBoneDriver driver)
@@ -406,7 +487,7 @@ namespace Basis.Scripts.Drivers
             GameObject LeftToe = CreateRig("LeftToe", false, out LeftToeRig, out LeftToeLayer);
             if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.LeftToes))
             {
-                WriteUpEvents(Control, LeftToeLayer);
+                WriteUpEvents(new List<BasisBoneControl>() { Control }, LeftToeLayer);
             }
             Damp(driver, LeftToe, References.leftToes, BasisBoneTrackedRole.LeftToes, 0, 0);
         }
@@ -415,7 +496,7 @@ namespace Basis.Scripts.Drivers
             GameObject RightToe = CreateRig("RightToe", false, out RightToeRig, out RightToeLayer);
             if (driver.FindBone(out BasisBoneControl Control, BasisBoneTrackedRole.RightToes))
             {
-                WriteUpEvents(Control, RightToeLayer);
+                WriteUpEvents(new List<BasisBoneControl>() { Control }, RightToeLayer);
             }
             Damp(driver, RightToe, References.rightToes, BasisBoneTrackedRole.RightToes, 0, 0);
         }
@@ -473,22 +554,28 @@ namespace Basis.Scripts.Drivers
             }
         }
         /// <summary>
-        /// this gets cleared on a calibration
+        /// Clears on a calibration, setting up event listeners for a list of controls.
         /// </summary>
-        /// <param name="Control"></param>
-        /// <param name="Layer"></param>
-        public void WriteUpEvents(BasisBoneControl Control, RigLayer Layer)
+        /// <param name="Controls">List of BasisBoneControl objects</param>
+        /// <param name="Layer">The RigLayer to update</param>
+        public void WriteUpEvents(List<BasisBoneControl> Controls, RigLayer Layer)
         {
-            Control.OnHasRigChanged.AddListener(delegate { UpdateLayerActiveState(Control, Layer); });
-            Control.HasEvents = true;
-            // Set the initial state
-            UpdateLayerActiveState(Control, Layer);
+            foreach (var control in Controls)
+            {
+                // Add event listener for each control to update Layer's active state when HasRigLayer changes
+                control.OnHasRigChanged.AddListener(delegate { UpdateLayerActiveState(Controls, Layer); });
+                control.HasEvents = true;
+            }
+
+            // Set the initial state based on the current controls' states
+            UpdateLayerActiveState(Controls, Layer);
         }
-        // Define a method to update the active state of the Layer
-        void UpdateLayerActiveState(BasisBoneControl Control, RigLayer Layer)
+
+        // Define a method to update the active state of the Layer based on the list of controls
+        void UpdateLayerActiveState(List<BasisBoneControl> Controls, RigLayer Layer)
         {
-            // Debug.Log("setting Layer State to " + Control.HasRigLayer == BasisHasRigLayer.HasRigLayer + " for " + Control.Name);
-            Layer.active = Control.HasRigLayer == BasisHasRigLayer.HasRigLayer;
+            // Check if any control in the list has HasRigLayer set to true
+            Layer.active = Controls.Any(control => control.HasRigLayer == BasisHasRigLayer.HasRigLayer);
         }
         public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
         {
