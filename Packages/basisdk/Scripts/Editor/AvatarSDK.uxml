@@ -26,7 +26,6 @@
         <engine:Foldout text="jiggle configuration" name="jiggles">
             <engine:VisualElement name="JiggleStrains" style="flex-grow: 1;" />
         </engine:Foldout>
-        <engine:TextField label="Unlock Password" name="avatarpassword" hide-placeholder-on-focus="false" auto-correction="false" password="true" />
         <engine:Button text="Create Avatar Bundle" name="AvatarBundleButton" />
     </engine:VisualElement>
 </engine:UXML>

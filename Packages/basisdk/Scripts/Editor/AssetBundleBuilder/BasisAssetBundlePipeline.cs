@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -49,7 +50,7 @@ public static class BasisAssetBundlePipeline
 
         Debug.Log("All AssetBundle names cleared from Importer settings.");
     }
-    public static async void BuildAssetBundle(GameObject originalPrefab, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
+    public static async Task BuildAssetBundle(GameObject originalPrefab, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)
     {
         ClearOutExistingSets();
         TemporaryStorageHandler.ClearTemporaryStorage(settings.AssetBundleDirectory);
@@ -66,6 +67,7 @@ public static class BasisAssetBundlePipeline
             string prefabPath = TemporaryStorageHandler.SavePrefabToTemporaryStorage(prefab, settings, ref wasModified, out string uniqueID);
             string assetBundleName = AssetBundleBuilder.SetAssetBundleName(prefabPath, uniqueID, settings);
 
+
             await AssetBundleBuilder.BuildAssetBundle(settings, assetBundleName, BasisBundleInformation, "GameObject", Password);
             AssetBundleBuilder.ResetAssetBundleName(prefabPath);
             TemporaryStorageHandler.ClearTemporaryStorage(settings.TemporaryStorage);
@@ -73,6 +75,7 @@ public static class BasisAssetBundlePipeline
 
             // Invoke the delegate after building the asset bundle
             OnAfterBuildPrefab?.Invoke(assetBundleName);
+            EditorUtility.DisplayDialog("Completed Build", "successfully built asset bundles for assets, Will be found in ./AssetBundles", "ok");
         }
         catch (Exception ex)
         {
@@ -85,7 +88,6 @@ public static class BasisAssetBundlePipeline
         {
             Object.DestroyImmediate(prefab);
         }
-        EditorUtility.DisplayDialog("Completed Build", "successfully built asset bundles for assets, Will be found in ./AssetBundles", "ok");
     }
 
     public static async void BuildAssetBundle(Scene scene, BasisAssetBundleObject settings, BasisBundleInformation BasisBundleInformation, string Password)

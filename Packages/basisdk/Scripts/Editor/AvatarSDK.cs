@@ -1,7 +1,10 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers.Editor;
 using Basis.Scripts.Editor;
+using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -100,7 +103,7 @@ public partial class BasisAvatarSDKInspector : Editor
 
     public void EventCallbackAnimator(ChangeEvent<UnityEngine.Object> evt, ref Animator Renderer)
     {
-        Debug.Log(nameof(EventCallbackAnimator));
+     //  Debug.Log(nameof(EventCallbackAnimator));
         Undo.RecordObject(Avatar, "Change Animator");
         Renderer = (Animator)evt.newValue;
         // Check if the Avatar is part of a prefab
@@ -114,7 +117,7 @@ public partial class BasisAvatarSDKInspector : Editor
 
     public void EventCallbackFaceVisemeMesh(ChangeEvent<UnityEngine.Object> evt, ref SkinnedMeshRenderer Renderer)
     {
-        Debug.Log(nameof(EventCallbackFaceVisemeMesh));
+       // Debug.Log(nameof(EventCallbackFaceVisemeMesh));
         Undo.RecordObject(Avatar, "Change Face Viseme Mesh");
         Renderer = (SkinnedMeshRenderer)evt.newValue;
 
@@ -187,7 +190,6 @@ public partial class BasisAvatarSDKInspector : Editor
 
         AvatarNameField.RegisterCallback<ChangeEvent<string>>(AvatarName);
         AvatarDescriptionField.RegisterCallback<ChangeEvent<string>>(AvatarDescription);
-        AvatarpasswordField.RegisterCallback<ChangeEvent<string>>(AvatarPassword);
 
         AvatarIconField.RegisterCallback<ChangeEvent<UnityEngine.Object>>(OnAssignTexture2D);
 
@@ -218,11 +220,6 @@ public partial class BasisAvatarSDKInspector : Editor
     {
         Texture = (Texture2D)Texture2D.newValue;
     }
-    public string Password;
-    public void AvatarPassword(ChangeEvent<string> evt)
-    {
-        Password = evt.newValue;
-    }
     public void AvatarDescription(ChangeEvent<string> evt)
     {
         Avatar.BasisBundleDescription.AssetBundleDescription = evt.newValue;
@@ -235,36 +232,59 @@ public partial class BasisAvatarSDKInspector : Editor
         EditorUtility.SetDirty(Avatar);
         AssetDatabase.Refresh();
     }
-    private void EventCallbackAvatarBundle()
+    private async void EventCallbackAvatarBundle()
     {
-        if (string.IsNullOrEmpty(Password))
-        {
-            Debug.LogError("IsNullOrEmpty " + Password);
+        BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
 
+        if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
+        {
+            BasisBundleInformation basisBundleInformation = new BasisBundleInformation
+            {
+                BasisBundleDescription = basisContentBase.BasisBundleDescription
+            };
+            // Generate a random byte array
+            byte[] randomBytes = GenerateRandomBytes(32);
+
+            // Convert to Base64 string
+            string base64String = ByteArrayToBase64String(randomBytes);
+            Debug.Log("Base64 String: " + base64String);
+
+            // Convert to Hex string
+            string hexString = ByteArrayToHexString(randomBytes);
+            Debug.Log("Hex String: " + hexString);
+            await BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, basisBundleInformation, hexString);
         }
         else
         {
-            if (Password.Length < 5)
-            {
-                Debug.LogError("Password needs to be longer then 5 characters long.");
-            }
-            else
-            {
-                BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
-
-                if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
-                {
-                    BasisBundleInformation basisBundleInformation = new BasisBundleInformation
-                    {
-                        BasisBundleDescription = basisContentBase.BasisBundleDescription
-                    };
-                    BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, basisBundleInformation, Password);
-                }
-                else
-                {
-                    Debug.LogError("Missing the Avatar");
-                }
-            }
+            Debug.LogError("Missing the Avatar");
         }
     }
+    // Generates a random byte array of specified length
+    public byte[] GenerateRandomBytes(int length)
+    {
+        byte[] randomBytes = new byte[length];
+        using (var rng = new RNGCryptoServiceProvider())
+        {
+            rng.GetBytes(randomBytes);
+        }
+        return randomBytes;
+    }
+
+    // Converts a byte array to a Base64 encoded string
+    public string ByteArrayToBase64String(byte[] byteArray)
+    {
+        return Convert.ToBase64String(byteArray);
+    }
+
+    // Converts a byte array to a hexadecimal string
+    public string ByteArrayToHexString(byte[] byteArray)
+    {
+        StringBuilder hex = new StringBuilder(byteArray.Length * 2);
+        foreach (byte b in byteArray)
+        {
+            hex.AppendFormat("{0:x2}", b);
+        }
+        return hex.ToString();
+    }
+
 }

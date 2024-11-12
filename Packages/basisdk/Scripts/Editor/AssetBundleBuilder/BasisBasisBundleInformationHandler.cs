@@ -1,4 +1,5 @@
 using BasisSerializer.OdinSerializer;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -25,6 +26,11 @@ public static class BasisBasisBundleInformationHandler
             File.Delete(filePath);
         }
         ValidateBasisBundleInformation(ref BasisBundleInformation);
+        if(BasisBundleInformation.HasError)
+        {
+            new Exception("BasisBundleInformation Had Error!");
+            return null;
+        }
         // Serialize and save the BasisBundleInformation to disk
         await SaveBasisBundleInformation(BasisBundleInformation, filePath, BuildSettings, Password);
         return BasisBundleInformation;

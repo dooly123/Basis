@@ -10,23 +10,23 @@ public static class BasisEncryptionWrapper
     private const int SaltSize = 16; // Size of the salt in bytes
     private const int KeySize = 32; // Size of the key in bytes (256 bits)
     private const int IvSize = 16; // Size of the IV in bytes (128 bits)
-    public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, BasisPassword password, BasisProgressReport reportProgress = null)
+    public static async Task<byte[]> EncryptDataAsync(byte[] dataToEncrypt, BasisPassword RandomizedPassword, BasisProgressReport reportProgress = null)
     {
         reportProgress.ReportProgress(0f, "Encrypting Data");
-        var encryptedData = await Task.Run(() => Encrypt(password, dataToEncrypt, reportProgress)); // Run encryption on a separate thread
+        var encryptedData = await Task.Run(async () => await Encrypt(RandomizedPassword, dataToEncrypt, reportProgress)); // Run encryption on a separate thread
         reportProgress.ReportProgress(100f, "Encrypting Data");
         return encryptedData;
     }
 
-    public static async Task<byte[]> DecryptDataAsync(byte[] dataToDecrypt, BasisPassword password, BasisProgressReport reportProgress = null)
+    public static async Task<byte[]> DecryptDataAsync(byte[] dataToDecrypt, BasisPassword Randomizedpassword, BasisProgressReport reportProgress = null)
     {
         reportProgress.ReportProgress(0f, "Decrypting Data");
-        var decryptedData = await Task.Run(() => Decrypt(password.VP, dataToDecrypt, reportProgress)); // Run decryption on a separate thread
+        var decryptedData = await Task.Run(async () => await Decrypt(Randomizedpassword.VP, dataToDecrypt, reportProgress)); // Run decryption on a separate thread
         reportProgress.ReportProgress(100f, "Decrypting Data");
         return decryptedData.Item1;
     }
 
-    private static byte[] Encrypt(BasisPassword password, byte[] dataToEncrypt, BasisProgressReport reportProgress = null)
+    private static async Task<byte[]> Encrypt(BasisPassword password, byte[] dataToEncrypt, BasisProgressReport reportProgress = null)
     {
         byte[] salt = new byte[SaltSize];
         using (var rng = new RNGCryptoServiceProvider())
@@ -55,12 +55,12 @@ public static class BasisEncryptionWrapper
                 using (var msEncrypt = new MemoryStream())
                 {
                     // Write the salt and IV to the memory stream
-                    msEncrypt.Write(salt, 0, salt.Length);
-                    msEncrypt.Write(iv, 0, iv.Length);
+                  await  msEncrypt.WriteAsync(salt, 0, salt.Length);
+                  await  msEncrypt.WriteAsync(iv, 0, iv.Length);
 
                     using (var cryptoStream = new CryptoStream(msEncrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
                     {
-                        cryptoStream.Write(dataToEncrypt, 0, dataToEncrypt.Length);
+                      await  cryptoStream.WriteAsync(dataToEncrypt, 0, dataToEncrypt.Length);
                     }
 
                     reportProgress.ReportProgress(90f, "Encrypting Data");
@@ -72,7 +72,7 @@ public static class BasisEncryptionWrapper
         }
     }
 
-    private static (byte[], byte[], byte[]) Decrypt(string password, byte[] dataToDecrypt, BasisProgressReport reportProgress = null)
+    private static async Task<(byte[], byte[], byte[])> Decrypt(string RandomizedString, byte[] dataToDecrypt, BasisProgressReport reportProgress = null)
     {
         if (dataToDecrypt == null || dataToDecrypt.Length == 0)
         {
@@ -86,15 +86,15 @@ public static class BasisEncryptionWrapper
         {
             // Read the salt and IV from the memory stream
             byte[] salt = new byte[SaltSize];
-            msDecrypt.Read(salt, 0, SaltSize);
+           await msDecrypt.ReadAsync(salt, 0, SaltSize);
 
             byte[] iv = new byte[IvSize];
-            msDecrypt.Read(iv, 0, IvSize);
+           await msDecrypt.ReadAsync(iv, 0, IvSize);
 
             reportProgress.ReportProgress(20f, "Decrypting Data");
 
             // Generate the key using the password and salt
-            using (var key = new Rfc2898DeriveBytes(password, salt, 10000))
+            using (var key = new Rfc2898DeriveBytes(RandomizedString, salt, 10000))
             {
                 var keyBytes = key.GetBytes(KeySize);
 

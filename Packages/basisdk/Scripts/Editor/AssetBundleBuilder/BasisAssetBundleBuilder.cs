@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using System.IO;
@@ -23,7 +24,7 @@ public static class AssetBundleBuilder
                 string FileOutput = Files[Index];
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(FileOutput);
                 Hash128 bundleHash = manifest.GetAssetBundleHash(FileOutput);
-                BuildPipeline.GetCRCForAssetBundle(FileOutput,out uint CRC);
+                BuildPipeline.GetCRCForAssetBundle(FileOutput, out uint CRC);
                 InformationHash informationHash = new InformationHash
                 {
                     File = fileNameWithoutExtension,//excludes extension
@@ -34,17 +35,23 @@ public static class AssetBundleBuilder
                 actualFilePath += ".bundle";
                 // Create bundle information and add it to the list
                 BasisBundleInformation Output = await BasisBasisBundleInformationHandler.CreateInformation(settings, BasisBundleInformation, informationHash, Mode, assetBundleName, settings.AssetBundleDirectory, Password);
+                if(Output == null)
+                {
+                    new Exception("Check Console for Error Message!");
+                }
                 basisBundleInformation.Add(Output);
 
                 // Encrypt the bundle asynchronously
-               string EncryptedFilePath = await EncryptBundle(Password, actualFilePath, settings, manifest);
+                string EncryptedFilePath = await EncryptBundle(Password, actualFilePath, settings, manifest);
 
                 // Delete the bundle file if it exists
                 if (File.Exists(actualFilePath))
                 {
                     File.Delete(actualFilePath);
                 }
-              string Pathout =  Path.GetDirectoryName(actualFilePath);
+                string Pathout = Path.GetDirectoryName(actualFilePath);
+
+                await SaveFileAsync(Pathout, "dontuploadmepassword", ".txt", Password);
 
                 OpenRelativePath(Pathout);
             }
@@ -79,6 +86,20 @@ public static class AssetBundleBuilder
         }
         return basisBundleInformation;
     }
+    public static async Task SaveFileAsync(string directoryPath, string fileName, string fileExtension, string fileContent)
+    {
+        // Combine directory path, file name, and extension
+        string fullPath = Path.Combine(directoryPath, $"{fileName}.{fileExtension}");
+        // Use asynchronous file writing
+        using (FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 256, true))
+        using (StreamWriter writer = new StreamWriter(fileStream))
+        {
+            await writer.WriteAsync(fileContent);
+        }
+
+        Debug.Log($"File saved asynchronously at: {fullPath}");
+    }
+
     // Convert a Unity path to a Windows-compatible path and open it in File Explorer
     public static void OpenFolderInExplorer(string folderPath)
     {
