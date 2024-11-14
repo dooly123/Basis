@@ -1,3 +1,6 @@
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
+using Unity.Mathematics;
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 namespace Basis.Scripts.Eye_Follow
@@ -6,72 +9,77 @@ namespace Basis.Scripts.Eye_Follow
     {
         public void LateUpdate()
         {
-            if (IsAble())
-            {
-                Simulate();
-            }
+            Simulate();
         }
+
+        public float3 AppliedOffset;
+        public float3 EyeFowards = new float3(0, 0, 1);
+
+        public float CurrentlookAroundInterval;
+        public float timer; // Timer to track look-around interval
+        public float DistanceBeforeTeleport = 30;
+
         public override void Simulate()
         {
-            if (Eye.HasBone)
+            if (IsAble())
             {
-                // Update timer
-                timer += Time.deltaTime;
-                FowardsLookPoint = Eye.OutgoingWorldData.position + Eye.OutgoingWorldData.rotation * EyeFowards;
-                // Check if it's time to look around
-                if (timer >= CurrentlookAroundInterval)
+                if (HasHead)
                 {
-                    CurrentlookAroundInterval = Random.Range(MinlookAroundInterval, MaxlookAroundInterval);
-                    AppliedOffset = Random.insideUnitSphere * MaximumLookDistance;
+                    // Update timer using DeltaTime
+                    timer += BasisLocalPlayer.Instance.LocalBoneDriver.DeltaTime;
 
-                    // Reset timer
-                    timer = 0f;
+                    // Check if it's time to look around
+                    if (timer > CurrentlookAroundInterval)
+                    {
+                        CurrentlookAroundInterval = UnityEngine.Random.Range(MinlookAroundInterval, MaxlookAroundInterval);
+                        AppliedOffset = UnityEngine.Random.insideUnitSphere * MaximumLookDistance;
 
-                    // Randomize look speed
-                    lookSpeed = Random.Range(minLookSpeed, maxLookSpeed);
-                }
-                // Randomize target position within maxOffset
-                RandomizedPosition = FowardsLookPoint + AppliedOffset;
-                // Smoothly interpolate towards the target position with randomized speed
+                        // Reset timer and randomize look speed
+                        timer = 0f;
+                        lookSpeed = UnityEngine.Random.Range(minLookSpeed, maxLookSpeed);
+                    }
 
-                if (Vector3.Distance(RandomizedPosition, GeneralEyeTarget.position) > DistanceBeforeTeleport)
-                {
-                    GeneralEyeTarget.position = RandomizedPosition;
-                }
-                else
-                {
-                    GeneralEyeTarget.position = Vector3.MoveTowards(GeneralEyeTarget.position, RandomizedPosition, lookSpeed);
-                }
-                if (leftEyeTransform != null)
-                {
-                    LookAtTarget(leftEyeTransform, leftEyeInitialRotation);
-                }
-                if (rightEyeTransform != null)
-                {
-                    LookAtTarget(rightEyeTransform, rightEyeInitialRotation);
+                    HeadTransform.GetPositionAndRotation(out Vector3 headPosition, out Quaternion headRotation);
+                    float3 float3headPosition = headPosition;
+                    quaternion QheadRotation = headRotation;
+                    // Calculate the randomized target position using float3 for optimized math operations
+                    float3 targetPosition = float3headPosition + math.mul(QheadRotation, EyeFowards) + AppliedOffset;
+
+                    // Check distance for teleporting, otherwise smooth move
+                    if (math.distance(targetPosition, CenterTargetWorld) > DistanceBeforeTeleport)
+                    {
+                        CenterTargetWorld = targetPosition;
+                    }
+                    else
+                    {
+                        CenterTargetWorld = Vector3.MoveTowards(CenterTargetWorld, targetPosition, lookSpeed);
+                    }
+
+                    // Set eye rotations using optimized float3 and quaternion operations
+                    if (HasLeftEye)
+                    {
+                        LeftEyeTargetWorld = CenterTargetWorld + LeftEyeInitallocalSpace.position;
+                        leftEyeTransform.rotation = LookAtTarget(leftEyeTransform.position, LeftEyeTargetWorld, LeftEyeInitallocalSpace.rotation);
+                    }
+                    if (HasRightEye)
+                    {
+                        RightEyeTargetWorld = CenterTargetWorld + RightEyeInitallocalSpace.position;
+                        rightEyeTransform.rotation = LookAtTarget(rightEyeTransform.position, RightEyeTargetWorld, RightEyeInitallocalSpace.rotation);
+                    }
                 }
             }
         }
-        private void LookAtTarget(Transform eyeTransform, Quaternion initialRotation)
-        {
-            Vector3 directionToTarget = GeneralEyeTarget.position - eyeTransform.position;
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
 
-            // Adjust the rotation based on the initial rotation of the eye
-            Quaternion finalRotation = targetRotation * Quaternion.Inverse(eyeTransform.parent.rotation) * initialRotation;
-
-            // Ensure we are only rotating the eye around the Y and Z axes.
-            Vector3 finalEulerAngles = finalRotation.eulerAngles;
-            finalRotation = Quaternion.Euler(finalEulerAngles);
-            eyeTransform.localRotation = finalRotation;
-        }
-        public new void OnRenderObject()
+        private quaternion LookAtTarget(float3 observerPosition, float3 targetPosition, quaternion initialRotation)
         {
-            if (Gizmos.Enabled)
-            {
-                Gizmos.Sphere(RandomizedPosition, 0.1f, Color.yellow);
-                base.OnRenderObject();
-            }
+            // Calculate direction to target
+            float3 direction = math.normalize(targetPosition - observerPosition);
+
+            // Calculate look rotation
+            Quaternion lookRotation = quaternion.LookRotationSafe(direction, math.up());
+
+            // Combine with initial rotation for maintained orientation
+            return math.mul(initialRotation, math.inverse(initialRotation) * lookRotation);
         }
     }
 }

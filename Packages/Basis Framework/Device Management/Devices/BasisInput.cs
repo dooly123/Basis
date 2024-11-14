@@ -8,6 +8,7 @@ using Basis.Scripts.UI;
 using Basis.Scripts.UI.UI_Panels;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static Basis.Scripts.Drivers.BaseBoneDriver;
@@ -25,14 +26,14 @@ namespace Basis.Scripts.Device_Management.Devices
         public string UniqueDeviceIdentifier;
         public string ClassName;
         [Header("Raw data from tracker unmodified")]
-        public Vector3 LocalRawPosition;
-        public Quaternion LocalRawRotation;
+        public float3 LocalRawPosition;
+        public quaternion LocalRawRotation;
         [Header("Final Data normally just modified by EyeHeight/AvatarEyeHeight)")]
-        public Vector3 FinalPosition;
-        public Quaternion FinalRotation;
+        public float3 FinalPosition;
+        public quaternion FinalRotation;
         [Header("Avatar Offset Applied Per Frame")]
-        public Vector3 AvatarPositionOffset = Vector3.zero;
-        public Quaternion AvatarRotationOffset = Quaternion.identity;
+        public float3 AvatarPositionOffset = Vector3.zero;
+        public quaternion AvatarRotationOffset = Quaternion.identity;
 
         public bool HasUIInputSupport = false;
         public string CommonDeviceIdentifier;
@@ -92,7 +93,7 @@ namespace Basis.Scripts.Device_Management.Devices
                 {
                     InitalRotation = Quaternion.Inverse(transform.rotation);
                     InitalBoneRotation = Control.OutgoingWorldData.rotation;
-                    Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * (Control.OutgoingWorldData.position - transform.position);
+                    Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * ((Vector3)Control.OutgoingWorldData.position - transform.position);
                     Control.InverseOffsetFromBone.rotation = InitalRotation * InitalBoneRotation;
                     Control.InverseOffsetFromBone.Use = true;
                 }

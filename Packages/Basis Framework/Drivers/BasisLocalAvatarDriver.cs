@@ -64,6 +64,11 @@ namespace Basis.Scripts.Drivers
         public void InitialLocalCalibration(BasisLocalPlayer Player)
         {
             Debug.Log("InitialLocalCalibration");
+            if (HasTposeEvent == false)
+            {
+                TposeStateChange += OnTpose;
+                HasTposeEvent = true;
+            }
             LocalPlayer = Player;
             this.LocalDriver = LocalPlayer.LocalBoneDriver;
             if (IsAble())
@@ -135,22 +140,24 @@ namespace Basis.Scripts.Drivers
             {
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
-            if (HasTposeEvent == false)
-            {
-                TposeStateChange += OnTpose;
-                HasTposeEvent = true;
-            }
             Player.Avatar.transform.parent = Hips.BoneTransform;
             Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position, Quaternion.identity);
-            BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
+            CalibrateOffsets();
             BuildBuilder();
-            if (Builder.enabled == false)
+        }
+        public void CalibrateOffsets()
+        {
+            for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.ControlsLength; Index++)
             {
-                Builder.enabled = true;
+                BasisLocalPlayer.Instance.LocalBoneDriver.Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             }
         }
         public void BuildBuilder()
         {
+            if (Builder.enabled == false)
+            {
+                Builder.enabled = true;
+            }
             if (Builder.Build())
             {
 
@@ -164,7 +171,7 @@ namespace Basis.Scripts.Drivers
         {
             if (Builder != null)
             {
-                if (InTPose)
+                if (CurrentlyTposing)
                 {
                 }
                 else

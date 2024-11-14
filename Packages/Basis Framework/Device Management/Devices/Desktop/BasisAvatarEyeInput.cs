@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 namespace Basis.Scripts.Device_Management.Devices.Desktop
@@ -30,11 +31,13 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             Debug.Log("Initalizing Avatar Eye");
             if (BasisLocalPlayer.Instance.AvatarDriver != null)
             {
+                Debug.Log("Using Configured Height " + BasisLocalPlayer.Instance.PlayerEyeHeight);
                 LocalRawPosition = new Vector3(InjectedX, BasisLocalPlayer.Instance.PlayerEyeHeight, InjectedZ);
                 LocalRawRotation = Quaternion.identity;
             }
             else
             {
+                Debug.Log("Using Fallback Height " + FallBackHeight);
                 LocalRawPosition = new Vector3(InjectedX, FallBackHeight, InjectedZ);
                 LocalRawRotation = Quaternion.identity;
             }
@@ -51,6 +54,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             {
                 BasisLocalPlayer.Instance.OnLocalAvatarChanged += PlayerInitialized;
                 BasisLocalPlayer.Instance.OnPlayersHeightChanged += BasisLocalPlayer_OnPlayersHeightChanged;
+                BasisLocalPlayer_OnPlayersHeightChanged();
                 BasisCursorManagement.OnCursorStateChange += OnCursorStateChange;
                 BasisPointRaycaster.UseWorldPosition = false;
                 BasisVirtualSpine.Initialize();
@@ -84,7 +88,11 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         private void BasisLocalPlayer_OnPlayersHeightChanged()
         {
-            BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarDriver.ActiveAvatarEyeHeight();
+            //   Vector3 Pos = new Vector3(0, BasisLocalPlayer.Instance.AvatarDriver.ActiveAvatarEyeHeight(), 0);
+            //  BasisLocalPlayer.Instance.AvatarDriver.GetWorldSpaceRotAndPos(() => Pos, out quaternion rot, out float3 position);
+            //  BasisLocalPlayer.Instance.PlayerEyeHeight = -position.y;
+          // float avatarHeight = BasisLocalPlayer.Instance.AvatarDriver?.ActiveAvatarEyeHeight() ?? 0;
+            BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.Instance.AvatarEyeHeight;
         }
         public void PlayerInitialized()
         {

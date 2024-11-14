@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 
 namespace Basis.Scripts.BasisSdk.Helpers
 {
@@ -47,17 +48,17 @@ namespace Basis.Scripts.BasisSdk.Helpers
             return boneTransform != null;
         }
 
-        public static Vector3 ConvertToLocalSpace(Vector3 notFloorPosition, Vector3 floorPosition)
+        public static Vector3 ConvertToLocalSpace(float3 notFloorPosition, float3 floorPosition)
         {
             return notFloorPosition - floorPosition;
         }
 
-        public static Vector3 ConvertFromLocalSpace(Vector3 notFloorPosition, Vector3 floorPosition)
+        public static Vector3 ConvertFromLocalSpace(float3 notFloorPosition, float3 floorPosition)
         {
             return notFloorPosition + floorPosition;
         }
 
-        public static bool TryGetFloor(Animator animator, out Vector3 bottom)
+        public static bool TryGetFloor(Animator animator, out float3 bottom)
         {
             if (TryGetVector3Bone(animator, HumanBodyBones.LeftFoot, out Vector3 leftFoot) && TryGetVector3Bone(animator, HumanBodyBones.RightFoot, out Vector3 rightFoot))
             {

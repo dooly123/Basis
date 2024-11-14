@@ -1,6 +1,7 @@
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Common;
 using Basis.Scripts.Drivers;
-using Basis.Scripts.TransformBinders.BoneControl;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Basis.Scripts.Eye_Follow
@@ -8,14 +9,10 @@ namespace Basis.Scripts.Eye_Follow
     using Gizmos = Popcron.Gizmos;
     public abstract class BasisEyeFollowBase : MonoBehaviour
     {
-        public Vector3 EyeFowards = new Vector3(0, 0, 1);
-        public Transform GeneralEyeTarget;
-        public bool Override = false;
-        public Transform leftEyeTransform;
-        public Transform rightEyeTransform;
         public Quaternion leftEyeInitialRotation;
         public Quaternion rightEyeInitialRotation;
-        public BasisBoneControl Eye;
+        public bool HasEvents = false;
+        public bool Override = false;
         public float lookSpeed; // Speed of looking
                                 // Adjustable parameters
         public float MinlookAroundInterval = 1; // Interval between each look around in seconds
@@ -23,14 +20,12 @@ namespace Basis.Scripts.Eye_Follow
         public float MaximumLookDistance = 0.25f; // Maximum offset from the target position
         public float minLookSpeed = 0.03f; // Minimum speed of looking
         public float maxLookSpeed = 0.1f; // Maximum speed of looking
-
-        public float CurrentlookAroundInterval;
-        public float timer; // Timer to track look around interval
+        public Transform leftEyeTransform;
+        public Transform rightEyeTransform;
+        public Transform HeadTransform;
+        public BasisCalibratedCoords LeftEyeInitallocalSpace;
+        public BasisCalibratedCoords RightEyeInitallocalSpace;
         public Vector3 RandomizedPosition; // Target position to look at
-        public Vector3 FowardsLookPoint;
-        public Vector3 AppliedOffset;
-        public float DistanceBeforeTeleport = 30;
-        public bool HasEvents = false;
         public bool IsAble()
         {
             if (Override)
@@ -41,10 +36,6 @@ namespace Basis.Scripts.Eye_Follow
         }
         public void OnDestroy()
         {
-            if (GeneralEyeTarget != null)
-            {
-                GameObject.Destroy(GeneralEyeTarget.gameObject);
-            }
             if (HasEvents)
             {
                 BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
@@ -55,53 +46,55 @@ namespace Basis.Scripts.Eye_Follow
         public void Initalize(BasisAvatarDriver CharacterAvatarDriver)
         {
             // Initialize look speed
-            lookSpeed = Random.Range(minLookSpeed, maxLookSpeed);
+            lookSpeed = UnityEngine.Random.Range(minLookSpeed, maxLookSpeed);
             if (HasEvents == false)
             {
                 BasisLocalPlayer.Instance.OnSpawnedEvent += AfterTeleport;
                 HasEvents = true;
             }
-            BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Eye, BasisBoneTrackedRole.CenterEye);
-            //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged += AfterTeleport;
-            if (GeneralEyeTarget == null)
-            {
-                // GameObject EyeIK = CharacterAvatarDriver.CreateRig("Eye", true, out EyeRig, out EyeLayer);
-                GeneralEyeTarget = new GameObject("Eye Target " + CharacterAvatarDriver.Player.DisplayName).transform;
-                CharacterAvatarDriver.transform.GetPositionAndRotation(out Vector3 position, out Quaternion rotation);
-                GeneralEyeTarget.SetPositionAndRotation(position, rotation);
-                //  CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.LeftEye, GeneralEyeTarget);
-                //CharacterAvatarDriver.MultiRotation(EyeIK, CharacterAvatarDriver.References.RightEye, GeneralEyeTarget);
-            }
-
             rightEyeTransform = CharacterAvatarDriver.References.RightEye;
             leftEyeTransform = CharacterAvatarDriver.References.LeftEye;
+            HeadTransform = CharacterAvatarDriver.References.head;
 
-            if (leftEyeTransform != null)
+            HasLeftEye = CharacterAvatarDriver.References.HasLeftEye;
+            HasRightEye = CharacterAvatarDriver.References.HasRightEye;
+            HasHead = CharacterAvatarDriver.References.Hashead;
+
+            if (HasLeftEye)
             {
+                LeftEyeInitallocalSpace.rotation = leftEyeTransform.rotation * Quaternion.Inverse(BasisLocalPlayer.Instance.AvatarDriver.References.head.rotation);
+                LeftEyeInitallocalSpace.position = leftEyeTransform.position - BasisLocalPlayer.Instance.AvatarDriver.References.head.position;
+
                 leftEyeInitialRotation = leftEyeTransform.localRotation;
             }
 
-            if (rightEyeTransform != null)
+            if (HasRightEye)
             {
+                RightEyeInitallocalSpace.rotation = rightEyeTransform.rotation * Quaternion.Inverse(BasisLocalPlayer.Instance.AvatarDriver.References.head.rotation);
+                RightEyeInitallocalSpace.position = rightEyeTransform.position - BasisLocalPlayer.Instance.AvatarDriver.References.head.position;
+
                 rightEyeInitialRotation = rightEyeTransform.localRotation;
             }
         }
-
+        public bool HasLeftEye = false;
+        public bool HasRightEye = false;
+        public bool HasHead = false;
         public void OnRenderObject()
         {
             if (Gizmos.Enabled)
             {
-                if (GeneralEyeTarget != null)
-                {
-                    Gizmos.Sphere(GeneralEyeTarget.position, 0.1f, Color.green);
-                }
+                Gizmos.Sphere(LeftEyeTargetWorld, 0.1f, Color.cyan);
+                Gizmos.Sphere(RightEyeTargetWorld, 0.1f, Color.magenta);
             }
         }
+        public Vector3 LeftEyeTargetWorld;
+        public Vector3 RightEyeTargetWorld;
+        public float3 CenterTargetWorld;
         public abstract void Simulate();
         public void AfterTeleport()
         {
             Simulate();
-            GeneralEyeTarget.position = RandomizedPosition;//will be caught up
+            CenterTargetWorld = RandomizedPosition;//will be caught up
 
         }
     }

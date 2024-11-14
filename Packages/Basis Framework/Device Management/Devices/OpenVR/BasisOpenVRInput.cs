@@ -1,6 +1,7 @@
 ﻿using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.OpenVR.Structs;
 using Basis.Scripts.TransformBinders.BoneControl;
+using Unity.Mathematics;
 using UnityEngine;
 using Valve.VR;
 
@@ -41,11 +42,11 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                         {
                             if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                             {
-                                Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
-                            }
-                            if (Control.HasTracked != BasisHasTracked.HasNoTracker)
-                            {
-                                Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
+                                // Apply the position offset using math.mul for quaternion-vector multiplication
+                                Control.IncomingData.position = FinalPosition - math.mul(FinalRotation, AvatarPositionOffset);
+
+                                // Apply the rotation offset using math.mul for quaternion multiplication
+                                Control.IncomingData.rotation = math.mul(FinalRotation, AvatarRotationOffset);
                             }
                         }
                         if (HasInputSource)

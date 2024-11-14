@@ -1,5 +1,6 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.TransformBinders.BoneControl;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using Gizmos = Popcron.Gizmos;
@@ -60,7 +61,7 @@ namespace Basis.Scripts.Drivers
         }
         private void Simulate()
         {
-            if (Localplayer.AvatarDriver.InTPose == false && Localplayer.AvatarDriver.AnimatorDriver != null)
+            if (Localplayer.AvatarDriver.CurrentlyTposing == false && Localplayer.AvatarDriver.AnimatorDriver != null)
             {
                 UpdateMovementData();
 
@@ -69,8 +70,11 @@ namespace Basis.Scripts.Drivers
 
                 bool hasLayerActive = SquareVel <= MaxBeforeDisableIK;
 
-                leftFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
-                rightFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, Hips.OutGoingData.rotation.eulerAngles);
+                float3 HipsEuler = math.Euler(Hips.OutGoingData.rotation);
+                HipsEuler = math.degrees(HipsEuler); // Convert to degrees
+
+                leftFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, HipsEuler);
+                rightFootSolver.Simulate(hasLayerActive, localTposeHips, hipsPosLocal, HipsEuler);
             }
             else
             {
@@ -169,8 +173,8 @@ namespace Basis.Scripts.Drivers
             public Quaternion rotation;
             public Vector3 position;
 
-            public Vector3 offset;
-            public Vector3 rotatedOffset;
+            public float3 offset;
+            public float3 rotatedOffset;
             public Vector3 footExtendedPositionWorld;
             public Vector3 hipHeightFootVector;
 
@@ -201,7 +205,10 @@ namespace Basis.Scripts.Drivers
                 CalculateFootPositions(localTposeHips, hipsPosLocal);
 
                 IsFeetFarApart = Vector3.Distance(foot.OutGoingData.position, LastFootPosition) > driver.FootDistanceBetweeneachOther;
-                RotationDifference = Mathf.Abs(hipsRotation.y - foot.OutGoingData.rotation.eulerAngles.y);
+
+                float3 HipsEuler = math.Euler(foot.OutGoingData.rotation);
+                HipsEuler = math.degrees(HipsEuler); // Convert to degrees
+                RotationDifference = Mathf.Abs(hipsRotation.y - HipsEuler.y);
 
                 if (ShouldMoveFoot())
                 {
@@ -221,7 +228,7 @@ namespace Basis.Scripts.Drivers
                 return (IsFeetFarApart || RotationDifference > RotationBeforeMove) && !otherFoot.IsMoving() && lerp >= 1;
             }
 
-            private void CalculateFootPositions(Vector3 localTposeHips, Vector3 hipsPosLocal)
+            private void CalculateFootPositions(float3 localTposeHips, float3 hipsPosLocal)
             {
                 offset = foot.TposeLocal.position - localTposeHips;
                 rotatedOffset = driver.transform.rotation * driver.Hips.OutgoingWorldData.rotation * offset;

@@ -126,7 +126,7 @@ namespace Basis.Scripts.Avatar
             BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
             BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();//not needed but still doing just incase
             BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
-            BasisLocalPlayer.Instance.LocalBoneDriver.CalibrateOffsets();
+            BasisLocalPlayer.Instance.AvatarDriver.CalibrateOffsets();
             BasisLocalPlayer.Instance.AvatarDriver.BuildBuilder();
 
         }

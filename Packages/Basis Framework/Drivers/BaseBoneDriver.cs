@@ -7,6 +7,7 @@ using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Gizmos = Popcron.Gizmos;
+using Unity.Mathematics;
 
 namespace Basis.Scripts.Drivers
 {
@@ -37,6 +38,12 @@ namespace Basis.Scripts.Drivers
             // sequence all other devices to run at the same time
             ProvidedTime = Time.timeAsDouble;
             DeltaTime = Time.deltaTime;
+            if (float.IsNaN(DeltaTime) || DeltaTime <= 0f)
+            {
+                DeltaTime = 0f;
+                return; // Skip simulation if DeltaTime is invalid or zero
+            }
+
             OnSimulate?.Invoke();
             for (int Index = 0; Index < ControlsLength; Index++)
             {
@@ -86,13 +93,6 @@ namespace Basis.Scripts.Drivers
                 Debug.DrawLine(Head.BoneTransform.position, Head.BoneTransform.position + (QatCalibrationHeading * new Vector3(0, 0, 1)), Color.black, 5f);
                 //  Head.BoneModelTransform.position = Head.BoneTransform.position;
                 //   Head.BoneModelTransform.rotation = Head.BoneTransform.rotation;
-            }
-        }
-        public void CalibrateOffsets()
-        {
-            for (int Index = 0; Index < ControlsLength; Index++)
-            {
-                Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero,Quaternion.identity);
             }
         }
         public void RemoveAllListeners()
@@ -189,11 +189,16 @@ namespace Basis.Scripts.Drivers
             };
             addToBone.RotationControl = rotation;
         }
-        public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, float Positional = 40)
+        public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, float Positional = 40, bool CaresAboutX = false)
         {
+            Vector3 Offset = Bone.TposeLocal.position - Target.TposeLocal.position;
+            if (CaresAboutX == false)
+            {
+                Offset.x = 0;
+            }
             BasisPositionControl Position = new BasisPositionControl
             {
-                Offset = Bone.TposeLocal.position - Target.TposeLocal.position,
+                Offset = Offset,
                 Target = Target,
                 LerpAmount = Positional,
                 HasTarget = Target != null,
@@ -202,7 +207,7 @@ namespace Basis.Scripts.Drivers
         }
         public static Vector3 ConvertToAvatarSpaceInital(Animator animator, Vector3 WorldSpace, float AvatarHeightOffset)// out Vector3 FloorPosition
         {
-            if (BasisHelpers.TryGetFloor(animator, out Vector3 Bottom))
+            if (BasisHelpers.TryGetFloor(animator, out float3 Bottom))
             {
                 //FloorPosition = Bottom;
                 return BasisHelpers.ConvertToLocalSpace(WorldSpace + new Vector3(0f, AvatarHeightOffset, 0f), Bottom);
@@ -255,7 +260,7 @@ namespace Basis.Scripts.Drivers
                         Gizmos.Sphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
                     }
                 }
-                if (BasisLocalPlayer.Instance.AvatarDriver.InTPose)
+                if (BasisLocalPlayer.Instance.AvatarDriver.CurrentlyTposing)
                 {
                     if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(Control, out BasisBoneTrackedRole role))
                     {

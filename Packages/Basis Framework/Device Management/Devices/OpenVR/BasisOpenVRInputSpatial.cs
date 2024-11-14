@@ -1,6 +1,7 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.OpenVR;
 using Basis.Scripts.TransformBinders.BoneControl;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using Valve.VR;
@@ -33,20 +34,14 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
         {
             if (PoseDataSource.TryGetDataFromSource(TrackedPose, out Pose resultPose))
             {
-                LocalRawPosition = resultPose.position;
+                LocalRawPosition = (float3)resultPose.position;
                 LocalRawRotation = resultPose.rotation;
-
-                FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
-                FinalRotation = LocalRawRotation;
                 if (hasRoleAssigned)
                 {
                     if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
-                        Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
-                    }
-                    if (Control.HasTracked != BasisHasTracked.HasNoTracker)
-                    {
-                        Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
+                        Control.IncomingData.position = FinalPosition - math.mul(FinalRotation, AvatarPositionOffset);
+                        Control.IncomingData.rotation = math.mul(FinalRotation, AvatarRotationOffset);
                     }
                 }
                 if (TryGetRole(out var CurrentRole))
@@ -57,6 +52,8 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
                     }
                 }
             }
+            FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
+            FinalRotation = LocalRawRotation;
             UpdatePlayerControl();
         }
     }

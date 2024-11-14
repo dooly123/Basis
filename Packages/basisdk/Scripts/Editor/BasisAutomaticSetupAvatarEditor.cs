@@ -1,5 +1,6 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -107,7 +108,7 @@ namespace Basis.Scripts.Editor
                 return;
             }
             Vector3 EyePosition = Vector3.Lerp(LeftEye, RightEye, 0.5f);
-            if (BasisHelpers.TryGetFloor(avatar.Animator, out Vector3 Bottom))
+            if (BasisHelpers.TryGetFloor(avatar.Animator, out float3 Bottom))
             {
                 Vector3 Space = BasisHelpers.ConvertToLocalSpace(EyePosition, Bottom);
                 avatar.AvatarEyePosition = BasisHelpers.AvatarPositionConversion(Space);

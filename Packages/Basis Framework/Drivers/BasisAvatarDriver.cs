@@ -5,6 +5,7 @@ using Basis.Scripts.Common;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
@@ -26,18 +27,16 @@ namespace Basis.Scripts.Drivers
         }
         private static string TPose = "Assets/Animator/Animated TPose.controller";
         public static string BoneData = "Assets/ScriptableObjects/BoneData.asset";
-        public Action BeginningCalibration;
         public Action CalibrationComplete;
         public Action TposeStateChange;
         public BasisTransformMapping References = new BasisTransformMapping();
         public RuntimeAnimatorController SavedruntimeAnimatorController;
         public SkinnedMeshRenderer[] SkinnedMeshRenderer;
         public BasisPlayer Player;
-        public bool InTPose = false;
+        public bool CurrentlyTposing = false;
         public bool HasEvents = false;
         public void Calibration(BasisAvatar Avatar)
         {
-            BeginningCalibration?.Invoke();
             FindSkinnedMeshRenders();
             BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
             if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
@@ -48,7 +47,7 @@ namespace Basis.Scripts.Drivers
         }
         public void PutAvatarIntoTPose()
         {
-            InTPose = true;
+            CurrentlyTposing = true;
             if (SavedruntimeAnimatorController == null)
             {
                 SavedruntimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
@@ -64,7 +63,7 @@ namespace Basis.Scripts.Drivers
         {
             Player.Avatar.Animator.runtimeAnimatorController = SavedruntimeAnimatorController;
             SavedruntimeAnimatorController = null;
-            InTPose = false;
+            CurrentlyTposing = false;
             TposeStateChange?.Invoke();
         }
         public Bounds GetBounds(Transform animatorParent)
@@ -124,7 +123,7 @@ namespace Basis.Scripts.Drivers
         {
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
             BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
-            for (int Index = 0; Index < driver.Controls.Length; Index++)
+            for (int Index = 0; Index < driver.ControlsLength; Index++)
             {
                 BasisBoneControl Control = driver.Controls[Index];
                 if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
@@ -162,7 +161,7 @@ namespace Basis.Scripts.Drivers
             }
             Addressables.Release(BasisFallBackBoneDataAsync);
         }
-        public void GetBoneRotAndPos(BaseBoneDriver driver, Animator anim, HumanBodyBones bone, Vector3 heightPercentage, out Quaternion Rotation, out Vector3 Position, out bool UsedFallback)
+        public void GetBoneRotAndPos(BaseBoneDriver driver, Animator anim, HumanBodyBones bone, Vector3 heightPercentage, out quaternion Rotation, out float3 Position, out bool UsedFallback)
         {
             if (anim.avatar != null && anim.avatar.isHuman)
             {
@@ -182,7 +181,9 @@ namespace Basis.Scripts.Drivers
                 else
                 {
                     UsedFallback = false;
-                    boneTransform.GetPositionAndRotation(out Position, out Rotation);
+                    boneTransform.GetPositionAndRotation(out Vector3 VPosition, out Quaternion QRotation);
+                    Position = VPosition;
+                    Rotation = QRotation;
                 }
             }
             else
@@ -198,7 +199,7 @@ namespace Basis.Scripts.Drivers
                 UsedFallback = true;
             }
         }
-        public Vector3 CalculateFallbackOffset(HumanBodyBones bone, float fallbackHeight, Vector3 heightPercentage)
+        public float3 CalculateFallbackOffset(HumanBodyBones bone, float fallbackHeight, float3 heightPercentage)
         {
             Vector3 height = fallbackHeight * heightPercentage;
             return bone == HumanBodyBones.Hips ? Multiply(height, -Vector3.up) : Multiply(height, Vector3.up);
@@ -207,11 +208,11 @@ namespace Basis.Scripts.Drivers
         {
             return new Vector3(value.x * scale.x, value.y * scale.y, value.z * scale.z);
         }
-        public void GetWorldSpaceRotAndPos(Func<Vector2> positionSelector, out Quaternion rotation, out Vector3 position)
+        public void GetWorldSpaceRotAndPos(Func<Vector2> positionSelector, out quaternion rotation, out float3 position)
         {
             rotation = Quaternion.identity;
             position = Vector3.zero;
-            if (BasisHelpers.TryGetFloor(Player.Avatar.Animator, out Vector3 bottom))
+            if (BasisHelpers.TryGetFloor(Player.Avatar.Animator, out float3 bottom))
             {
                 Vector3 convertedToVector3 = BasisHelpers.AvatarPositionConversion(positionSelector());
                 position = BasisHelpers.ConvertFromLocalSpace(convertedToVector3, bottom);
@@ -261,25 +262,21 @@ namespace Basis.Scripts.Drivers
                 bone.TposeLocal.position = bone.OutGoingData.position;
             }
         }
-        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole TargetBone, BasisBoneTrackedRole AssignedTo, float PositionLerpAmount, float QuaternionLerpAmount, bool CreateLocks = true)
+        public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole LockToBoneRole, BasisBoneTrackedRole AssignedTo, float PositionLerpAmount, float QuaternionLerpAmount, bool CreateLocks = true, bool CaresAboutX = false)
         {
             if (CreateLocks)
             {
 
-                if (BaseBoneDriver.FindBone(out BasisBoneControl AddToBone, AssignedTo) == false)
+                if (BaseBoneDriver.FindBone(out BasisBoneControl AssignedToAddToBone, AssignedTo) == false)
                 {
                     Debug.LogError("Cant Find Bone " + AssignedTo);
                 }
-                if (BaseBoneDriver.FindBone(out BasisBoneControl LockToBone, TargetBone) == false)
+                if (BaseBoneDriver.FindBone(out BasisBoneControl LockToBone, LockToBoneRole) == false)
                 {
-                    Debug.LogError("Cant Find Bone " + TargetBone);
+                    Debug.LogError("Cant Find Bone " + LockToBoneRole);
                 }
-                BaseBoneDriver.CreatePositionalLock(AddToBone, LockToBone, PositionLerpAmount);
-                BaseBoneDriver.CreateRotationalLock(AddToBone, LockToBone, QuaternionLerpAmount);
-                if (AssignedTo == BasisBoneTrackedRole.Neck)
-                {
-                    AddToBone.PositionControl.Offset += AddToBone.PositionControl.Offset / 2;//replace later! -LD
-                }
+                BaseBoneDriver.CreatePositionalLock(AssignedToAddToBone, LockToBone, PositionLerpAmount, CaresAboutX);
+                BaseBoneDriver.CreateRotationalLock(AssignedToAddToBone, LockToBone, QuaternionLerpAmount);
             }
         }
         public void FindSkinnedMeshRenders()

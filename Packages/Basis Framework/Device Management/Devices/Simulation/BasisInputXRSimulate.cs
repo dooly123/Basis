@@ -1,5 +1,6 @@
 ﻿using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.TransformBinders.BoneControl;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Basis.Scripts.Device_Management.Devices.Simulation
@@ -14,9 +15,9 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
         {
             if (AddSomeRandomizedInput)
             {
-                Vector3 randomOffset = new Vector3(Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset), Random.Range(-MinMaxOffset, MinMaxOffset));
+                Vector3 randomOffset = new Vector3(UnityEngine.Random.Range(-MinMaxOffset, MinMaxOffset), UnityEngine.Random.Range(-MinMaxOffset, MinMaxOffset), UnityEngine.Random.Range(-MinMaxOffset, MinMaxOffset));
 
-                Quaternion randomRotation = Random.rotation;
+                Quaternion randomRotation = UnityEngine.Random.rotation;
                 Quaternion lerpedRotation = Quaternion.Lerp(FollowMovement.localRotation, randomRotation, LerpAmount * Time.deltaTime);
 
                 Vector3 originalPosition = FollowMovement.localPosition;
@@ -24,7 +25,11 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
 
                 FollowMovement.SetLocalPositionAndRotation(newPosition, lerpedRotation);
             }
-            FollowMovement.GetLocalPositionAndRotation(out LocalRawPosition, out LocalRawRotation);
+            Quaternion QOut;
+            FollowMovement.GetLocalPositionAndRotation(out Vector3 VOut, out QOut);
+            LocalRawPosition = VOut;
+            LocalRawRotation = QOut;
+
             LocalRawPosition /= BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale;
 
             FinalPosition = LocalRawPosition * BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale;
@@ -33,13 +38,14 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
             {
                 if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                 {
-                    AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
-                    Control.IncomingData.position = FinalPosition - FinalRotation * AvatarPositionOffset;
+                    // Apply position offset using math operations for Unity.Mathematics
+                    float3 AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset; // Assuming it's float3
+                    Control.IncomingData.position = FinalPosition - math.mul(FinalRotation, AvatarPositionOffset);
 
-                    AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
-                    Control.IncomingData.rotation = FinalRotation * AvatarRotationOffset;
+                    // Apply rotation offset using math.Euler to convert to quaternion, then multiply
+                    quaternion AvatarRotationOffset = quaternion.Euler(math.radians(BasisDeviceMatchableNames.AvatarRotationOffset)); // Convert degrees to radians
+                    Control.IncomingData.rotation = math.mul(FinalRotation, AvatarRotationOffset);
                 }
-
             }
             UpdatePlayerControl();
         }

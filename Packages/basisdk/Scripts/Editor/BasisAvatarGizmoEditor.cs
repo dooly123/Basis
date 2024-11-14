@@ -1,6 +1,7 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Helpers.Editor;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -26,7 +27,7 @@ namespace Basis.Scripts.Editor
                 return;
             }
 
-            if (BasisHelpers.TryGetFloor(avatar.Animator, out Vector3 bottom))
+            if (BasisHelpers.TryGetFloor(avatar.Animator, out float3 bottom))
             {
                 Vector2 previousAvatarEyePosition = avatar.AvatarEyePosition;
                 Vector2 previousAvatarMouthPosition = avatar.AvatarMouthPosition;

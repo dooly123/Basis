@@ -1,5 +1,4 @@
 ﻿using Basis.Scripts.Avatar;
-using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Common;
 using System;
 using Unity.Burst;
@@ -18,8 +17,6 @@ namespace Basis.Scripts.TransformBinders.BoneControl
         public BasisPositionControl PositionControl = new BasisPositionControl();
         [SerializeField]
         public BasisCalibratedCoords OutGoingData = new BasisCalibratedCoords();
-        [SerializeField]
-        public BasisCalibratedCoords LastOutGoingData = new BasisCalibratedCoords();
         [SerializeField]
         public BasisCalibratedCoords LastRunData = new BasisCalibratedCoords();
         [SerializeField]
@@ -42,17 +39,15 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             {
                 return;
             }
-            LastOutGoingData.position = OutGoingData.position;
-            LastOutGoingData.rotation = OutGoingData.rotation;
             if (HasTracked == BasisHasTracked.HasTracker)
             {
                 if (InverseOffsetFromBone.Use)
                 {
                     // Update the position of the secondary transform to maintain the initial offset
-                    OutGoingData.position = IncomingData.position + IncomingData.rotation * InverseOffsetFromBone.position;
+                    OutGoingData.position = IncomingData.position + math.mul(IncomingData.rotation, InverseOffsetFromBone.position);
 
                     // Update the rotation of the secondary transform to maintain the initial offset
-                    OutGoingData.rotation = IncomingData.rotation * InverseOffsetFromBone.rotation;
+                    OutGoingData.rotation = math.mul(IncomingData.rotation, InverseOffsetFromBone.rotation);
                 }
                 else
                 {
@@ -69,58 +64,66 @@ namespace Basis.Scripts.TransformBinders.BoneControl
                 }
                 else
                 {
-                    //just basic lerp with some speedup
-                    if (RotationControl.Target != null)
+                    //this is essentially the default behaviour, most of it is normally Virtually Overriden
+                    //relying on a one size fits all shoe is wrong and as of such we barely use this anymore.
+                    if (RotationControl.HasTarget)
                     {
-                        OutGoingData.rotation = RotationControl.Target.OutGoingData.rotation;
+                        OutGoingData.rotation = ApplyLerpToQuaternion(DeltaTime, LastRunData.rotation, RotationControl.Target.OutGoingData.rotation);
                     }
-                    ApplyLerpToQuaternion(DeltaTime);
 
                     if (PositionControl.HasTarget)
                     {
-                        Vector3 customDirection = PositionControl.Target.OutGoingData.rotation * PositionControl.Offset;
-                        OutGoingData.position = PositionControl.Target.OutGoingData.position + customDirection;
-                    }
-                    // Calculate the interpolation factor
-                    float lerpFactor = math.clamp(PositionControl.LerpAmount * DeltaTime, 0f, 1f);
+                        // Apply the rotation offset using math.mul
+                        float3 customDirection = math.mul(PositionControl.Target.OutGoingData.rotation, PositionControl.Offset);
 
-                    // Use math.lerp for interpolation with float3 (which is the equivalent of Vector3 in Unity.Mathematics)
-                    OutGoingData.position = math.lerp(LastRunData.position, OutGoingData.position, lerpFactor);
+                        // Calculate the target outgoing position with the rotated offset
+                        float3 targetPosition = PositionControl.Target.OutGoingData.position + customDirection;
+
+                        // Clamp the interpolation factor to ensure it stays between 0 and 1
+                        float lerpFactor = math.clamp(PositionControl.LerpAmount * DeltaTime, 0f, 1f);
+
+                        // Interpolate between the last position and the target position
+                        OutGoingData.position = math.lerp(LastRunData.position, targetPosition, lerpFactor);
+                    }
                 }
             }
         }
         [BurstCompile]
-        public void ApplyLerpToQuaternion(float LerpAmount)
+        public Quaternion ApplyLerpToQuaternion(float DeltaTime, Quaternion CurrentRotation, Quaternion FutureRotation)
         {
-            // Calculate the dot product once
-            float dotProduct = math.dot(LastRunData.rotation, OutGoingData.rotation);
+            // Calculate the dot product once to check similarity between rotations
+            float dotProduct = math.dot(CurrentRotation, FutureRotation);
 
-            // If the dot product is close to 1, then the quaternions are nearly identical
+            // If quaternions are nearly identical, skip interpolation
             if (dotProduct > 0.9999999999f)
             {
-                return;  // No need for interpolation
+                return FutureRotation;
             }
 
-            // Calculate the angle difference (avoid acos for very small differences)
+            // Calculate angle difference (avoid acos for very small differences)
             float angleDifference = math.acos(math.clamp(dotProduct, -1f, 1f));
 
-            // If the angle difference is small enough, skip interpolation
+            // If the angle difference is too small, skip interpolation
             if (angleDifference < math.EPSILON)
             {
-                return;
+                return FutureRotation;
             }
 
-            // Use a cached version of the LerpAmount values to avoid repeated accesses
+            // Access cached LerpAmount values for normal and fast movement
             float lerpAmountNormal = RotationControl.LerpAmountNormal;
             float lerpAmountFastMovement = RotationControl.LerpAmountFastMovement;
 
-            // Calculate the lerp factor
+            // Calculate timing factor based on angle threshold for speedup
             float timing = math.clamp(angleDifference / RotationControl.AngleBeforeSpeedup, 0f, 1f);
-            float lerpAmount = math.lerp(lerpAmountNormal, lerpAmountFastMovement, timing);
-            float lerpFactor = lerpAmount * LerpAmount;
 
-            // Apply spherical interpolation (slerp)
-            OutGoingData.rotation = math.slerp(LastRunData.rotation, OutGoingData.rotation, lerpFactor);
+            // Interpolate between normal and fast movement rates based on angle
+            float lerpAmount = math.lerp(lerpAmountNormal, lerpAmountFastMovement, timing);
+
+            // Apply frame-rate-independent lerp factor
+            float lerpFactor = lerpAmount * DeltaTime;
+
+            // Perform the slerp (spherical interpolation) using the calculated factor
+            return math.slerp(CurrentRotation, FutureRotation, lerpFactor);
         }
         [HideInInspector]
         public bool Cullable = false;
@@ -214,7 +217,9 @@ namespace Basis.Scripts.TransformBinders.BoneControl
         {
             if (HasBone)
             {
-                BoneTransform.GetLocalPositionAndRotation(out LastRunData.position, out LastRunData.rotation);
+                BoneTransform.GetLocalPositionAndRotation(out Vector3 position, out Quaternion Rotation);
+                LastRunData.position = position;
+                LastRunData.rotation = Rotation;
             }
         }
         public void ApplyMovement()
@@ -225,10 +230,11 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             }
             LastRunData.position = OutGoingData.position;
             LastRunData.rotation = OutGoingData.rotation;
-            BoneTransform.localPosition = OutGoingData.position;
-            BoneTransform.localRotation = OutGoingData.rotation;
-            // (OutGoingData.position, OutGoingData.rotation);
-            BoneTransform.GetPositionAndRotation(out OutgoingWorldData.position, out OutgoingWorldData.rotation);
+            BoneTransform.SetLocalPositionAndRotation(OutGoingData.position, OutGoingData.rotation);
+            BoneTransform.GetPositionAndRotation(out Vector3 position, out Quaternion Rotation);
+
+            OutgoingWorldData.position = position;
+            OutgoingWorldData.rotation = Rotation;
         }
     }
 }
