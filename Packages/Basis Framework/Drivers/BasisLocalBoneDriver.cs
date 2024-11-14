@@ -19,8 +19,8 @@ public class BasisLocalBoneDriver : BaseBoneDriver
             BasisBoneTrackedRole role = trackedRoles[Index];
             if (BasisBoneTrackedRoleCommonCheck.CheckIfLeftHand(role) || BasisBoneTrackedRoleCommonCheck.CheckIfRightHand(role))
             {
-                Control.Cullable = mode == "Desktop";
-            }
+                Control.Cullable = mode == BasisDeviceManagement.Desktop;
+                }
             else
             {
                 Control.Cullable = false;

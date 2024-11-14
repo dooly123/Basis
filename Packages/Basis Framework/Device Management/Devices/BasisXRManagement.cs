@@ -51,7 +51,7 @@ namespace Basis.Scripts.Device_Management.Devices
         {
             // Initialize the XR loader
             yield return xRManagerSettings.InitializeLoader();
-            string result = "Desktop";
+            string result = BasisDeviceManagement.Desktop;
             // Check the result
             if (xRManagerSettings.activeLoader != null)
             {
@@ -76,7 +76,7 @@ namespace Basis.Scripts.Device_Management.Devices
             }
             else
             {
-                CheckForPass?.Invoke("Desktop");
+                CheckForPass?.Invoke(BasisDeviceManagement.Desktop);
             }
         }
     }

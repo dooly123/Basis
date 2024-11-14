@@ -15,7 +15,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             if (BasisAvatarEyeInput == null)
             {
                 BasisDeviceManagement.Instance.SetCameraRenderState(false);
-                BasisDeviceManagement.Instance.CurrentMode = "Desktop";
+                BasisDeviceManagement.Instance.CurrentMode = BasisDeviceManagement.Desktop;
                 GameObject gameObject = new GameObject("Desktop Eye");
                 if (BasisLocalPlayer.Instance != null)
                 {
@@ -46,7 +46,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
 
         public override string Type()
         {
-            return "Desktop";
+            return BasisDeviceManagement.Desktop;
         }
     }
 }

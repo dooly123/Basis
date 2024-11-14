@@ -36,7 +36,6 @@ public class BasisVirtualSpineDriver
     public float MaxHipsAngle = 0; // Limit the hips' rotation range
     public float HipsInfluence = 0.5f;
 
-    public float MiddlePointsLerpFactor = 0.5f;
     public void Initialize()
     {
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out CenterEye, BasisBoneTrackedRole.CenterEye))
@@ -59,22 +58,24 @@ public class BasisVirtualSpineDriver
         {
             Hips.HasVirtualOverride = true;
         }
-
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftLowerArm, BasisBoneTrackedRole.LeftLowerArm))
         {
             // LeftUpperArm.HasVirtualOverride = true;
-            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(28, LowerLeftLeg);
+            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(28, LowerLeftArm);
         }
+
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out RightLowerArm, BasisBoneTrackedRole.RightLowerArm))
         {
             //   RightUpperArm.HasVirtualOverride = true;
-            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(29, LowerLeftLeg);
+            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(29, LowerRightArm);
         }
+
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftLowerLeg, BasisBoneTrackedRole.LeftLowerLeg))
         {
             //  LeftLowerLeg.HasVirtualOverride = true;
             BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(30, LowerLeftLeg);
         }
+
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out RightLowerLeg, BasisBoneTrackedRole.RightLowerLeg))
         {
             //  RightLowerLeg.HasVirtualOverride = true;
@@ -115,7 +116,6 @@ public class BasisVirtualSpineDriver
     }
     public float JointSpeedup = 10f;
     public float SmoothTime = 0.1f; // Adjust for smoother damping
-    private Vector3 velocity = Vector3.zero;
     public void DeInitialize()
     {
         Neck.VirtualRun -= OnSimulateNeck;

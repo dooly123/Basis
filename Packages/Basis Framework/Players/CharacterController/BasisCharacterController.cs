@@ -86,7 +86,7 @@ namespace Basis.Scripts.BasisCharacterController
             // Calculate the rotation amount for this frame
             float rotationAmount = Rotation.x * RotationSpeed * driver.DeltaTime;
 
-            transform.GetPositionAndRotation(out Vector3 CurrentPosition, out Quaternion CurrentRotation);
+            Vector3 CurrentPosition =  transform.position;
             // Get the current rotation and position of the player
             Vector3 pivot = Eye.OutgoingWorldData.position;
             Vector3 upAxis = Vector3.up;
@@ -102,7 +102,7 @@ namespace Basis.Scripts.BasisCharacterController
 
             Vector3 FinalRotation = pivot + rotatedDirection;
 
-            transform.SetPositionAndRotation(FinalRotation, rotation * CurrentRotation);
+           // transform.SetPositionAndRotation(FinalRotation, rotation * CurrentRotation);
 
             float HeightOffset = (characterController.height / 2) - characterController.radius;
             bottomPointLocalspace = FinalRotation + (characterController.center - new Vector3(0, HeightOffset, 0));

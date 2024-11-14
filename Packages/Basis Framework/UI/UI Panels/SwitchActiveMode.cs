@@ -14,7 +14,7 @@ public class SwitchActiveMode : MonoBehaviour
     }
     public void OnDesktopButton()
     {
-        BasisDeviceManagement.Instance.SwitchMode("Desktop");
+        BasisDeviceManagement.Instance.SwitchMode(BasisDeviceManagement.Desktop);
     }
     public void OnVRButton()
     {
