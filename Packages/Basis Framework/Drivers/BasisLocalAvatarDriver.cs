@@ -5,6 +5,7 @@ using Basis.Scripts.Eye_Follow;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
@@ -140,8 +141,11 @@ namespace Basis.Scripts.Drivers
             {
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
-            Player.Avatar.transform.parent = Hips.BoneTransform;
-            Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position, Quaternion.identity);
+            Player.Avatar.transform.parent = Player.transform;
+
+            Vector3 HipsPos = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
+
+           Player.Avatar.transform.SetLocalPositionAndRotation(HipsPos, Hips.OutGoingData.rotation);
             CalibrateOffsets();
             BuildBuilder();
         }

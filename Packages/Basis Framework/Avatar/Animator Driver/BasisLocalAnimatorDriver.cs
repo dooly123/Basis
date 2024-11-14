@@ -151,43 +151,19 @@ namespace Basis.Scripts.Animator_Driver
             }
             AssignHipsFBTracker();
         }
-        public Vector3 PositionOfAvatarLocal;
-        public float3 differenceHead;
         public float3 hipsDifference;
-        public Vector3 outputPosition;
         public Quaternion hipsDifferenceQ = Quaternion.identity;
         /// <summary>
         /// once i fix the eye offset come back here -LD
         /// </summary>
         public void SimulateAvatarRotation()
         {
-            /*
-            if (BasisLocalPlayer.Instance.AvatarDriver.CurrentlyTposing)
-            {
-                differenceHead = Head.OutGoingData.position - new float3(Head.TposeLocal.position.x, Head.TposeLocal.position.y, 0);
-                hipsDifferenceQ = Hips.OutGoingData.rotation;
-                Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
-                HipsEuler.z = 0;
-                HipsEuler.x = 0;
-                Quaternion Rot = Quaternion.Euler(HipsEuler);
-                animator.transform.SetLocalPositionAndRotation(differenceHead, Rot);
-            }
-            else
-            {
-                // Calculate position differences relative to the T-pose
-                differenceHead = Head.OutGoingData.position - new float3(Head.TposeLocal.position.x, Head.TposeLocal.position.y, 0);
-                hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
-                // Interpolate between the two positions
-                outputPosition = Vector3.Lerp(differenceHead, hipsDifference, 0.5f);
-
-                hipsDifferenceQ = Hips.OutGoingData.rotation;
-                Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
-                HipsEuler.z = 0;
-                HipsEuler.x = 0;
-                Quaternion Rot = Quaternion.Euler(HipsEuler);
-                animator.transform.SetLocalPositionAndRotation(hipsDifference, Rot);
-            }
-            */
+            hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
+            Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
+            HipsEuler.z = 0;
+            HipsEuler.x = 0;
+            Quaternion Rot = Quaternion.Euler(HipsEuler);
+            animator.transform.SetLocalPositionAndRotation(hipsDifference, Rot);
         }
         public void AssignHipsFBTracker()
         {
