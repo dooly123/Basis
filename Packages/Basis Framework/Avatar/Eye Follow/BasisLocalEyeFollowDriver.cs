@@ -59,12 +59,12 @@ namespace Basis.Scripts.Eye_Follow
                     if (HasLeftEye)
                     {
                         LeftEyeTargetWorld = CenterTargetWorld + LeftEyeInitallocalSpace.position;
-                        leftEyeTransform.rotation = LookAtTarget(leftEyeTransform.position, LeftEyeTargetWorld, LeftEyeInitallocalSpace.rotation);
+                        leftEyeTransform.localRotation = LookAtTarget(leftEyeTransform.position, LeftEyeTargetWorld, LeftEyeInitallocalSpace.rotation);
                     }
                     if (HasRightEye)
                     {
                         RightEyeTargetWorld = CenterTargetWorld + RightEyeInitallocalSpace.position;
-                        rightEyeTransform.rotation = LookAtTarget(rightEyeTransform.position, RightEyeTargetWorld, RightEyeInitallocalSpace.rotation);
+                        rightEyeTransform.localRotation = LookAtTarget(rightEyeTransform.position, RightEyeTargetWorld, RightEyeInitallocalSpace.rotation);
                     }
                 }
             }

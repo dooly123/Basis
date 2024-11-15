@@ -42,7 +42,10 @@ namespace Basis.Scripts.Animator_Driver
         {
             if (localPlayer.AvatarDriver.CurrentlyTposing || BasisAvatarIKStageCalibration.HasFBIKTrackers)
             {
-                basisAnimatorVariableApply.StopAll();
+                if (basisAnimatorVariableApply.IsStopped == false)
+                {
+                    basisAnimatorVariableApply.StopAll();
+                }
                 return;
             }
 

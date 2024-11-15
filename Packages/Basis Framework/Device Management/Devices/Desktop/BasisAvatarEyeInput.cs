@@ -125,6 +125,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
             rotationX += lookVector.x * rotationSpeed;
             rotationY -= lookVector.y * rotationSpeed;
         }
+        public float InjectedZRot = 0;
         public override void DoPollData()
         {
             if (hasRoleAssigned)
@@ -136,7 +137,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 rotationY %= 360f;
                 // Clamp rotationY to stay within the specified range
                 rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
-                LocalRawRotation = Quaternion.Euler(rotationY, rotationX, 0);
+                LocalRawRotation = Quaternion.Euler(rotationY, rotationX, InjectedZRot);
                 Vector3 adjustedHeadPosition = new Vector3(InjectedX, BasisLocalPlayer.Instance.PlayerEyeHeight, InjectedZ);
                 if (BasisLocalInputActions.Crouching)
                 {

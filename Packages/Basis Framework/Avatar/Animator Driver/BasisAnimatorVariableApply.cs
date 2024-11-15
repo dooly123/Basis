@@ -49,7 +49,9 @@ namespace Basis.Scripts.Animator_Driver
                 BasisAnimatorVariables.cachedVerticalMovement = verticalMovement;
             }
             UpdateJumpState();
+            IsStopped = false;
         }
+        public bool IsStopped = false;
         public void StopAll()
         {
             // Set all animator boolean parameters to false
@@ -80,6 +82,7 @@ namespace Basis.Scripts.Animator_Driver
             BasisAnimatorVariables.cachedVerticalMovement = 0f;
 
             BasisAnimatorVariables.Velocity = Vector3.zero; // Assuming Velocity is a Vector3
+            IsStopped = true;
         }
         public void LoadCachedAnimatorHashes(Animator Anim)
         {
