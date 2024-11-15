@@ -161,22 +161,36 @@ namespace Basis.Scripts.Animator_Driver
         public void SimulateAvatarRotation()
         {
             float Delta = Time.deltaTime;
-            // Calculate hips difference in position
-            hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
+            if (localPlayer.AvatarDriver.CurrentlyTposing)
+            {
+                // Calculate hips difference in position
+                hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
 
-            // Calculate hips rotation difference
-            hipsDifferenceQ = Hips.OutGoingData.rotation;
-            Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
-            HipsEuler.z = 0;
-            HipsEuler.x = 0;
-            Quaternion targetRotation = Quaternion.Euler(HipsEuler);
-            float SmoothedMultipliedDelta = Delta * smoothFactor;
-            // Smoothly interpolate position and rotation
-            Vector3 smoothedPosition = Vector3.Lerp(animator.transform.localPosition, hipsDifference, SmoothedMultipliedDelta);
-            Quaternion smoothedRotation = Quaternion.Slerp(animator.transform.localRotation, targetRotation, SmoothedMultipliedDelta);
+                // Calculate hips rotation difference
+                hipsDifferenceQ = Hips.OutGoingData.rotation;
+                Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
+                HipsEuler.z = 0;
+                HipsEuler.x = 0;
+                Quaternion targetRotation = Quaternion.Euler(HipsEuler);
+                // Apply smoothed position and rotation
+                animator.transform.SetLocalPositionAndRotation(hipsDifference, targetRotation);
+            }
+            else
+            {
+                // Calculate hips difference in position
+                hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
 
-            // Apply smoothed position and rotation
-            animator.transform.SetLocalPositionAndRotation(smoothedPosition, smoothedRotation);
+                // Calculate hips rotation difference
+                hipsDifferenceQ = Hips.OutGoingData.rotation;
+ 
+                float SmoothedMultipliedDelta = Delta * smoothFactor;
+                // Smoothly interpolate position and rotation
+                Vector3 smoothedPosition = Vector3.Lerp(animator.transform.localPosition, hipsDifference, SmoothedMultipliedDelta);
+                Quaternion smoothedRotation = Quaternion.Slerp(animator.transform.localRotation, hipsDifferenceQ, SmoothedMultipliedDelta);
+
+                // Apply smoothed position and rotation
+                animator.transform.SetLocalPositionAndRotation(smoothedPosition, smoothedRotation);
+            }
         }
         public void AssignHipsFBTracker()
         {
