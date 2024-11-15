@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Playables;
 
 namespace Basis.Scripts.Drivers
 {
@@ -157,13 +158,13 @@ namespace Basis.Scripts.Drivers
         }
         public void BuildBuilder()
         {
+           // Builder.graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
             if (Builder.enabled == false)
             {
                 Builder.enabled = true;
             }
             if (Builder.Build())
             {
-
             }
             else
             {
@@ -174,17 +175,28 @@ namespace Basis.Scripts.Drivers
         {
             if (Builder != null)
             {
-                if (CurrentlyTposing)
+                foreach (RigLayer Layer in Builder.layers)
                 {
+                    if (CurrentlyTposing)
+                    {
+                        Layer.active = false;
+                    }
+                    else
+                    {
+                    }
                 }
-                else
+                if (CurrentlyTposing == false)
                 {
+                    foreach (BasisBoneControl control in BasisLocalPlayer.Instance.LocalBoneDriver.Controls)
+                    {
+                        control.OnHasRigChanged?.Invoke();
+                    }
                 }
             }
         }
         public void GlobalWeight()
         {
-
+            Builder.graph.Evaluate(Time.deltaTime);
         }
         public void CleanupBeforeContinue()
         {

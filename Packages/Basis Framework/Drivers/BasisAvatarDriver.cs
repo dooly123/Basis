@@ -47,6 +47,7 @@ namespace Basis.Scripts.Drivers
         }
         public void PutAvatarIntoTPose()
         {
+            Debug.Log("PutAvatarIntoTPose");
             CurrentlyTposing = true;
             if (SavedruntimeAnimatorController == null)
             {
@@ -61,6 +62,7 @@ namespace Basis.Scripts.Drivers
         }
         public void ResetAvatarAnimator()
         {
+            Debug.Log("ResetAvatarAnimator");
             Player.Avatar.Animator.runtimeAnimatorController = SavedruntimeAnimatorController;
             SavedruntimeAnimatorController = null;
             CurrentlyTposing = false;

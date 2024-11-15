@@ -4,7 +4,9 @@ using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace Basis.Scripts.Avatar
 {
@@ -41,16 +43,16 @@ namespace Basis.Scripts.Avatar
         {
             BasisHeightDriver.SetPlayersEyeHeight(BasisLocalPlayer.Instance);
             BasisDeviceManagement.UnassignFBTrackers();
-            //disable builder and it will be updated when the animator updates
-            //now lets grab and apply the height
             BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApplyWithoutLerp();
-            //now that we have latest * scale we can run calibration
 
+            //now that we have latest * scale we can run calibration
             BasisLocalPlayer.Instance.AvatarDriver.PutAvatarIntoTPose();
             List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
             List<BasisBoneTrackedRole> trackInputRoles = new List<BasisBoneTrackedRole>();
             int count = rolesToDiscover.Count;
-            for (int Index = 0; Index < count; Index++)
+          //  BasisLocalPlayer.Instance.Avatar.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Hips,  BasisBoneTrackedRole.Hips))
+                for (int Index = 0; Index < count; Index++)
             {
                 BasisBoneTrackedRole Role = rolesToDiscover[Index];
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(Role))
@@ -90,6 +92,7 @@ namespace Basis.Scripts.Avatar
             }
             List<BasisTrackerMapping> boneTransformMappings = new List<BasisTrackerMapping>();
             int Count = trackInputRoles.Count;
+            Dictionary<BasisBoneTrackedRole, Transform> StoredRolesTransforms = GetAllRolesAsTransform();
             for (int Index = 0; Index < Count; Index++)
             {
                 BasisBoneTrackedRole role = trackInputRoles[Index];
@@ -97,8 +100,11 @@ namespace Basis.Scripts.Avatar
                 {
                     float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
                     Debug.Log("Using a scaler of  " + BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale + " leading to a scaled Distance of " + ScaledDistance);
-                    BasisTrackerMapping mapping = new BasisTrackerMapping(control, role, connectors, ScaledDistance);
-                    boneTransformMappings.Add(mapping);
+                    if (StoredRolesTransforms.TryGetValue(role, out Transform Transform))
+                    {
+                        BasisTrackerMapping mapping = new BasisTrackerMapping(control, Transform, role, connectors, ScaledDistance);
+                        boneTransformMappings.Add(mapping);
+                    }
                 }
                 else
                 {
@@ -121,13 +127,12 @@ namespace Basis.Scripts.Avatar
                     Debug.LogError("Missing Tracker for index " + Index + " with ID " + mapping);
                 }
             }
-            BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
             //do the roles after to stop the animator switch issue
             BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
+
+            BasisLocalPlayer.Instance.AvatarDriver.ResetAvatarAnimator();
             BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();//not needed but still doing just incase
             BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
-          //everything works but the rotation is wrong, this will be due the player being roated or something?
-
         }
         public static void RunThroughConnectors(BasisTrackerMapping mapping, ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles)
         {
@@ -170,6 +175,83 @@ namespace Basis.Scripts.Avatar
                 Action action = calibrationActions[Index];
                 action();
             }
+        }
+        public static Dictionary<BasisBoneTrackedRole, Transform> GetAllRolesAsTransform()
+        {
+            Common.BasisTransformMapping Mapping = BasisLocalPlayer.Instance.AvatarDriver.References;
+            Dictionary<BasisBoneTrackedRole, Transform> transforms = new Dictionary<BasisBoneTrackedRole, Transform>
+    {
+        { BasisBoneTrackedRole.Hips,Mapping.Hips },
+        { BasisBoneTrackedRole.Spine, Mapping.spine },
+        { BasisBoneTrackedRole.Chest, Mapping.chest },
+    //    { BasisBoneTrackedRole.Upperchest, BasisLocalPlayer.Instance.AvatarDriver.References.Upperchest },
+        { BasisBoneTrackedRole.Neck, Mapping.neck },
+        { BasisBoneTrackedRole.Head, Mapping.head },
+       // { BasisBoneTrackedRole.CenterEye, LeftEye },  // Assuming "CenterEye" means LeftEye; adjust as needed
+       // { BasisBoneTrackedRole.RightEye, RightEye },   // Add these based on your actual structure
+
+        { BasisBoneTrackedRole.LeftShoulder, Mapping.leftShoulder },
+        { BasisBoneTrackedRole.LeftUpperArm, Mapping.leftUpperArm },
+        { BasisBoneTrackedRole.LeftLowerArm, Mapping.leftLowerArm },
+        { BasisBoneTrackedRole.LeftHand, Mapping.leftHand },
+
+        { BasisBoneTrackedRole.RightShoulder, Mapping.RightShoulder },
+        { BasisBoneTrackedRole.RightUpperArm,Mapping. RightUpperArm },
+        { BasisBoneTrackedRole.RightLowerArm, Mapping.RightLowerArm },
+        { BasisBoneTrackedRole.RightHand, Mapping.rightHand },
+
+        { BasisBoneTrackedRole.LeftUpperLeg,Mapping.LeftUpperLeg },
+        { BasisBoneTrackedRole.LeftLowerLeg,Mapping. LeftLowerLeg },
+        { BasisBoneTrackedRole.LeftFoot, Mapping.leftFoot },
+        { BasisBoneTrackedRole.LeftToes,Mapping. leftToes },
+
+        { BasisBoneTrackedRole.RightUpperLeg, Mapping.RightUpperLeg },
+        { BasisBoneTrackedRole.RightLowerLeg,Mapping. RightLowerLeg },
+        { BasisBoneTrackedRole.RightFoot, Mapping.rightFoot },
+        { BasisBoneTrackedRole.RightToes,Mapping. rightToes },
+
+        { BasisBoneTrackedRole.LeftThumbProximal, Mapping.LeftThumbProximal },
+        { BasisBoneTrackedRole.LeftThumbIntermediate,Mapping. LeftThumbIntermediate },
+        { BasisBoneTrackedRole.LeftThumbDistal,Mapping. LeftThumbDistal },
+
+        { BasisBoneTrackedRole.LeftIndexProximal, Mapping.LeftIndexProximal },
+        { BasisBoneTrackedRole.LeftIndexIntermediate,Mapping. LeftIndexIntermediate },
+        { BasisBoneTrackedRole.LeftIndexDistal, Mapping.LeftIndexDistal },
+
+        { BasisBoneTrackedRole.LeftMiddleProximal,Mapping. LeftMiddleProximal },
+        { BasisBoneTrackedRole.LeftMiddleIntermediate,Mapping. LeftMiddleIntermediate },
+        { BasisBoneTrackedRole.LeftMiddleDistal, Mapping.LeftMiddleDistal },
+
+        { BasisBoneTrackedRole.LeftRingProximal, Mapping.LeftRingProximal },
+        { BasisBoneTrackedRole.LeftRingIntermediate,Mapping. LeftRingIntermediate },
+        { BasisBoneTrackedRole.LeftRingDistal, Mapping.LeftRingDistal },
+
+        { BasisBoneTrackedRole.LeftLittleProximal, Mapping.LeftLittleProximal },
+        { BasisBoneTrackedRole.LeftLittleIntermediate,Mapping. LeftLittleIntermediate },
+        { BasisBoneTrackedRole.LeftLittleDistal, Mapping.LeftLittleDistal },
+
+        { BasisBoneTrackedRole.RightThumbProximal, Mapping.RightThumbProximal },
+        { BasisBoneTrackedRole.RightThumbIntermediate,Mapping. RightThumbIntermediate },
+        { BasisBoneTrackedRole.RightThumbDistal,Mapping. RightThumbDistal },
+
+        { BasisBoneTrackedRole.RightIndexProximal,Mapping. RightIndexProximal },
+        { BasisBoneTrackedRole.RightIndexIntermediate,Mapping. RightIndexIntermediate },
+        { BasisBoneTrackedRole.RightIndexDistal, Mapping.RightIndexDistal },
+
+        { BasisBoneTrackedRole.RightMiddleProximal,Mapping. RightMiddleProximal },
+        { BasisBoneTrackedRole.RightMiddleIntermediate,Mapping. RightMiddleIntermediate },
+        { BasisBoneTrackedRole.RightMiddleDistal,Mapping. RightMiddleDistal },
+
+        { BasisBoneTrackedRole.RightRingProximal,Mapping.RightRingProximal },
+        { BasisBoneTrackedRole.RightRingIntermediate,Mapping. RightRingIntermediate },
+        { BasisBoneTrackedRole.RightRingDistal, Mapping.RightRingDistal },
+
+        { BasisBoneTrackedRole.RightLittleProximal, Mapping.RightLittleProximal },
+        { BasisBoneTrackedRole.RightLittleIntermediate,Mapping. RightLittleIntermediate },
+        { BasisBoneTrackedRole.RightLittleDistal,Mapping. RightLittleDistal }
+            };
+
+            return transforms;
         }
         /// <summary>
         ///  = 0.4f;

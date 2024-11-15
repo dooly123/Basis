@@ -158,10 +158,6 @@ namespace Basis.Scripts.Animator_Driver
         /// </summary>
         public void SimulateAvatarRotation()
         {
-            if(BasisLocalPlayer.Instance.AvatarDriver.CurrentlyTposing)
-            {
-                animator.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            }
             hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
             hipsDifferenceQ = Hips.OutGoingData.rotation;
             Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
