@@ -126,8 +126,7 @@ namespace Basis.Scripts.Avatar
             BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
             BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();//not needed but still doing just incase
             BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
-            BasisLocalPlayer.Instance.AvatarDriver.CalibrateOffsets();
-            BasisLocalPlayer.Instance.AvatarDriver.BuildBuilder();
+          //everything works but the rotation is wrong, this will be due the player being roated or something?
 
         }
         public static void RunThroughConnectors(BasisTrackerMapping mapping, ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles)

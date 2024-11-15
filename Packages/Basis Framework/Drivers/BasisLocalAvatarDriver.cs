@@ -142,19 +142,18 @@ namespace Basis.Scripts.Drivers
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
             Player.Avatar.transform.parent = Player.transform;
-
-            Vector3 HipsPos = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
-
-           Player.Avatar.transform.SetLocalPositionAndRotation(HipsPos, Hips.OutGoingData.rotation);
             CalibrateOffsets();
             BuildBuilder();
         }
         public void CalibrateOffsets()
         {
-            for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.ControlsLength; Index++)
+            BasisLocalBoneDriver Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
+            for (int Index = 0; Index < Driver.ControlsLength; Index++)
             {
-                BasisLocalPlayer.Instance.LocalBoneDriver.Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                Driver.Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             }
+            Player.Avatar.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            //this works great however it means ca
         }
         public void BuildBuilder()
         {
