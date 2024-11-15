@@ -30,9 +30,9 @@ public class BasisVirtualSpineDriver
 
     // Define influence values (from 0 to 1)
     public float NeckRotationSpeed = 12;
-    public float ChestRotationSpeed = 12;
-    public float SpineRotationSpeed = 12;
-    public float HipsRotationSpeed = 12;
+    public float ChestRotationSpeed = 25;
+    public float SpineRotationSpeed = 30;
+    public float HipsRotationSpeed = 40;
     public float MaxNeckAngle = 0; // Limit the neck's rotation range to avoid extreme twisting
     public float MaxChestAngle = 0; // Limit the chest's rotation range
     public float MaxHipsAngle = 0; // Limit the hips' rotation range
