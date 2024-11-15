@@ -12,6 +12,7 @@ namespace Basis.Scripts.Device_Management
         public Quaternion ModelRotationOffset = Quaternion.identity;
         public Vector3 ModelPositionOffset = Vector3.zero;
         public bool HasEvents = false;
+        public Vector3 ScaleOfModel = Vector3.one;
         public void Initialization(BasisInput basisInput)
         {
             if (basisInput != null)
@@ -42,7 +43,7 @@ namespace Basis.Scripts.Device_Management
         }
         public void UpdateVisualSizeAndOffset()
         {
-            gameObject.transform.localScale = Vector3.one * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
+            gameObject.transform.localScale = ScaleOfModel * BasisLocalPlayer.Instance.RatioPlayerToAvatarScale;
             gameObject.transform.SetLocalPositionAndRotation(ModelPositionOffset * BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale, ModelRotationOffset);
         }
     }

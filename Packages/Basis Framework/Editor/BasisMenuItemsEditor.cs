@@ -100,6 +100,15 @@ public static class BasisMenuItemsEditor
         LeftTracker.FollowMovement.rotation = Quaternion.identity;
         BasisDeviceManagement.ShowTrackers();
     }
+    [MenuItem("Basis/Trackers/Create Unknown Tracker")]
+    public static void CreateUnknowonTracker()
+    {
+        BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl LeftHand, BasisBoneTrackedRole.LeftHand);
+        BasisInputXRSimulate LeftTracker = FindSimulate().CreatePhysicalTrackedDevice("Unknown" + Random.Range(-9999999999999, 999999999999), "Unknown", BasisBoneTrackedRole.CenterEye, false);
+        LeftTracker.FollowMovement.position = LeftHand.BoneTransform.position;
+        LeftTracker.FollowMovement.rotation = Quaternion.identity;
+        BasisDeviceManagement.ShowTrackers();
+    }
     [MenuItem("Basis/Trackers/Create Left And Right Hands")]
     public static void CreateLRTracker()
     {

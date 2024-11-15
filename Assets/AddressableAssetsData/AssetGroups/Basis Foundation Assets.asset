@@ -150,6 +150,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98f7128bebf3e374eb8cab55434e4f7e
+    m_Address: FallbackSphere
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b1578359dddd0245b76d3ccd9dcc2d3
     m_Address: Assets/ScriptableObjects/BoneData.asset
     m_ReadOnly: 0

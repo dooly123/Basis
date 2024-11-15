@@ -400,8 +400,42 @@ namespace Basis.Scripts.Device_Management.Devices
                         BasisVisualTracker.Initialization(this);
                     }
                 }
+                else
+                {
+                    if (UseFallbackModel())
+                    {
+                        UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> op = Addressables.LoadAssetAsync<GameObject>(FallbackDeviceID);
+                        GameObject go = op.WaitForCompletion();
+                        GameObject gameObject = Object.Instantiate(go);
+                        gameObject.name = CommonDeviceIdentifier;
+                        gameObject.transform.parent = this.transform;
+                        if (gameObject.TryGetComponent(out BasisVisualTracker))
+                        {
+                            BasisVisualTracker.Initialization(this);
+                        }
+                    }
+                }
             }
         }
+        public bool UseFallbackModel()
+        {
+            if (hasRoleAssigned == false)
+            {
+                return true;
+            }
+            else
+            {
+                if (TryGetRole(out BasisBoneTrackedRole Role))
+                {
+                    if (Role == BasisBoneTrackedRole.Head || Role == BasisBoneTrackedRole.CenterEye || Role == BasisBoneTrackedRole.Neck)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        public static string FallbackDeviceID = "FallbackSphere";
         public void HideTrackedVisual()
         {
             Debug.Log("HideTrackedVisual");
