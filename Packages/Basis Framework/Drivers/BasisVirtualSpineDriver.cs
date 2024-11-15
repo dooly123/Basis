@@ -65,24 +65,24 @@ public class BasisVirtualSpineDriver
         }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftLowerArm, BasisBoneTrackedRole.LeftLowerArm))
         {
-            LeftLowerArm.HasVirtualOverride = true;
+          //  LeftLowerArm.HasVirtualOverride = true;
             BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(28, LowerLeftArm);
         }
 
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out RightLowerArm, BasisBoneTrackedRole.RightLowerArm))
         {
-            RightLowerArm.HasVirtualOverride = true;
+           // RightLowerArm.HasVirtualOverride = true;
             BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(29, LowerRightArm);
         }
 
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftLowerLeg, BasisBoneTrackedRole.LeftLowerLeg))
         {
-            LeftLowerLeg.HasVirtualOverride = true;
+           // LeftLowerLeg.HasVirtualOverride = true;
             BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(30, LowerLeftLeg);
         }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out RightLowerLeg, BasisBoneTrackedRole.RightLowerLeg))
         {
-            RightLowerLeg.HasVirtualOverride = true;
+         //   RightLowerLeg.HasVirtualOverride = true;
             BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(31, LowerRightleg);
         }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftHand, BasisBoneTrackedRole.LeftHand))
@@ -106,28 +106,28 @@ public class BasisVirtualSpineDriver
     {
         if (LeftLowerLeg.HasTracked != BasisHasTracked.HasTracker)
         {
-            LeftLowerLeg.BoneTransform.position = LeftFoot.BoneTransform.position;
+          //  LeftLowerLeg.BoneTransform.position = LeftFoot.BoneTransform.position;
         }
     }
     public void LowerRightleg()
     {
         if (RightLowerLeg.HasTracked != BasisHasTracked.HasTracker)
         {
-            RightLowerLeg.BoneTransform.position = RightFoot.BoneTransform.position;
+          //  RightLowerLeg.BoneTransform.position = RightFoot.BoneTransform.position;
         }
     }
     public void LowerLeftArm()
     {
         if (LeftLowerArm.HasTracked != BasisHasTracked.HasTracker)
         {
-            LeftLowerArm.BoneTransform.position = LeftHand.BoneTransform.position;
+           // LeftLowerArm.BoneTransform.position = LeftHand.BoneTransform.position;
         }
     }
     public void LowerRightArm()
     {
         if (RightLowerArm.HasTracked != BasisHasTracked.HasTracker)
         {
-            RightLowerArm.BoneTransform.position = RightHand.BoneTransform.position;
+          //  RightLowerArm.BoneTransform.position = RightHand.BoneTransform.position;
         }
     }
     public void DeInitialize()

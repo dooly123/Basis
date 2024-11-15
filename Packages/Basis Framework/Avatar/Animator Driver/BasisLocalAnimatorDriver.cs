@@ -42,6 +42,14 @@ namespace Basis.Scripts.Animator_Driver
         {
             if (localPlayer.AvatarDriver.CurrentlyTposing || BasisAvatarIKStageCalibration.HasFBIKTrackers)
             {
+                basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = false;
+                basisAnimatorVariableApply.BasisAnimatorVariables.AngularVelocity = Vector3.zero;
+                basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = false;
+                basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
+                basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = false;
+                basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 0;
+                basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = Vector3.zero;
+                basisAnimatorVariableApply.UpdateAnimator(0);
                 return;
             }
 
