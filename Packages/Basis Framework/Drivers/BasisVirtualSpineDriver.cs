@@ -1,7 +1,10 @@
+using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.TransformBinders.BoneControl;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [System.Serializable]
 public class BasisVirtualSpineDriver
@@ -50,6 +53,7 @@ public class BasisVirtualSpineDriver
         {
             Neck.HasVirtualOverride = true;
             Neck.VirtualRun += OnSimulateNeck;
+            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(30, Hint);
         }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out Chest, BasisBoneTrackedRole.Chest))
         {
@@ -65,25 +69,21 @@ public class BasisVirtualSpineDriver
         }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftLowerArm, BasisBoneTrackedRole.LeftLowerArm))
         {
-          //  LeftLowerArm.HasVirtualOverride = true;
-            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(28, LowerLeftArm);
+         //  LeftLowerArm.HasVirtualOverride = true;
         }
 
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out RightLowerArm, BasisBoneTrackedRole.RightLowerArm))
         {
-           // RightLowerArm.HasVirtualOverride = true;
-            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(29, LowerRightArm);
+         //  RightLowerArm.HasVirtualOverride = true;
         }
 
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftLowerLeg, BasisBoneTrackedRole.LeftLowerLeg))
         {
-           // LeftLowerLeg.HasVirtualOverride = true;
-            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(30, LowerLeftLeg);
+         //  LeftLowerLeg.HasVirtualOverride = true;
         }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out RightLowerLeg, BasisBoneTrackedRole.RightLowerLeg))
         {
-         //   RightLowerLeg.HasVirtualOverride = true;
-            BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(31, LowerRightleg);
+            //RightLowerLeg.HasVirtualOverride = true;
         }
         if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out LeftHand, BasisBoneTrackedRole.LeftHand))
         {
@@ -102,33 +102,31 @@ public class BasisVirtualSpineDriver
             //   RightHand.HasVirtualOverride = true;
         }
     }
-    public void LowerLeftLeg()
+    public void Hint()
     {
+        /*
         if (LeftLowerLeg.HasTracked != BasisHasTracked.HasTracker)
         {
-          //  LeftLowerLeg.BoneTransform.position = LeftFoot.BoneTransform.position;
+        //    LeftLowerLeg.BoneTransform.position = GenerateHintPosition();
+       //     Vector3 hintPosition = GenerateHintPosition(root.position, mid.position, target.position);
         }
-    }
-    public void LowerRightleg()
-    {
         if (RightLowerLeg.HasTracked != BasisHasTracked.HasTracker)
         {
-          //  RightLowerLeg.BoneTransform.position = RightFoot.BoneTransform.position;
+            RightLowerLeg.BoneTransform.position = RightFoot.BoneTransform.position;
         }
-    }
-    public void LowerLeftArm()
-    {
         if (LeftLowerArm.HasTracked != BasisHasTracked.HasTracker)
         {
-           // LeftLowerArm.BoneTransform.position = LeftHand.BoneTransform.position;
+            LeftLowerArm.BoneTransform.position = LeftHand.BoneTransform.position;
         }
-    }
-    public void LowerRightArm()
-    {
+        if (LeftLowerArm.HasTracked != BasisHasTracked.HasTracker)
+        {
+            LeftLowerArm.BoneTransform.position = LeftHand.BoneTransform.position;
+        }
         if (RightLowerArm.HasTracked != BasisHasTracked.HasTracker)
         {
-          //  RightLowerArm.BoneTransform.position = RightHand.BoneTransform.position;
+            RightLowerArm.BoneTransform.position = RightHand.BoneTransform.position;
         }
+        */
     }
     public void DeInitialize()
     {

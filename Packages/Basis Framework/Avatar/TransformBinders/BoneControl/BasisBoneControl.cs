@@ -32,6 +32,7 @@ namespace Basis.Scripts.TransformBinders.BoneControl
 
         public Action VirtualRun;
         public bool HasVirtualOverride;
+        public float trackersmooth = 25;
         public void ComputeMovement(float DeltaTime)
         {
             NotProcessing = !HasBone || Cullable;
@@ -44,10 +45,10 @@ namespace Basis.Scripts.TransformBinders.BoneControl
                 if (InverseOffsetFromBone.Use)
                 {
                     // Update the position of the secondary transform to maintain the initial offset
-                    OutGoingData.position = IncomingData.position + math.mul(IncomingData.rotation, InverseOffsetFromBone.position);
+                    OutGoingData.position = Vector3.Lerp(OutGoingData.position,IncomingData.position + math.mul(IncomingData.rotation, InverseOffsetFromBone.position), trackersmooth);
 
                     // Update the rotation of the secondary transform to maintain the initial offset
-                    OutGoingData.rotation = math.mul(IncomingData.rotation, InverseOffsetFromBone.rotation);
+                    OutGoingData.rotation = Quaternion.Slerp(OutGoingData.rotation, math.mul(IncomingData.rotation, InverseOffsetFromBone.rotation), trackersmooth);
                 }
                 else
                 {

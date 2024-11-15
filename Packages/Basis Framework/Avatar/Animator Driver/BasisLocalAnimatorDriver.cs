@@ -42,14 +42,7 @@ namespace Basis.Scripts.Animator_Driver
         {
             if (localPlayer.AvatarDriver.CurrentlyTposing || BasisAvatarIKStageCalibration.HasFBIKTrackers)
             {
-                basisAnimatorVariableApply.BasisAnimatorVariables.isMoving = false;
-                basisAnimatorVariableApply.BasisAnimatorVariables.AngularVelocity = Vector3.zero;
-                basisAnimatorVariableApply.BasisAnimatorVariables.IsCrouching = false;
-                basisAnimatorVariableApply.BasisAnimatorVariables.IsJumping = false;
-                basisAnimatorVariableApply.BasisAnimatorVariables.IsFalling = false;
-                basisAnimatorVariableApply.BasisAnimatorVariables.AnimationsCurrentSpeed = 0;
-                basisAnimatorVariableApply.BasisAnimatorVariables.Velocity = Vector3.zero;
-                basisAnimatorVariableApply.UpdateAnimator(0);
+                basisAnimatorVariableApply.StopAll();
                 return;
             }
 
@@ -155,7 +148,6 @@ namespace Basis.Scripts.Animator_Driver
             if (HasEvents == false)
             {
                 BasisDeviceManagement.Instance.AllInputDevices.OnListChanged += AssignHipsFBTracker;
-                BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(1, SimulateAvatarRotation);
                 HasEvents = true;
             }
             AssignHipsFBTracker();
@@ -163,43 +155,7 @@ namespace Basis.Scripts.Animator_Driver
         public float3 hipsDifference;
         public Quaternion hipsDifferenceQ = Quaternion.identity;
         public float smoothFactor = 30f;
-        /// <summary>
-        /// once i fix the eye offset come back here -LD
-        /// </summary>
-        public void SimulateAvatarRotation()
-        {
-            float Delta = Time.deltaTime;
-            if (localPlayer.AvatarDriver.CurrentlyTposing)
-            {
-                // Calculate hips difference in position
-                hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
-
-                // Calculate hips rotation difference
-                hipsDifferenceQ = Hips.OutGoingData.rotation;
-                Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
-                HipsEuler.z = 0;
-                HipsEuler.x = 0;
-                Quaternion targetRotation = Quaternion.Euler(HipsEuler);
-                // Apply smoothed position and rotation
-                animator.transform.SetLocalPositionAndRotation(hipsDifference, targetRotation);
-            }
-            else
-            {
-                // Calculate hips difference in position
-                hipsDifference = Hips.OutGoingData.position - new float3(Hips.TposeLocal.position.x, Hips.TposeLocal.position.y, 0);
-
-                // Calculate hips rotation difference
-                hipsDifferenceQ = Hips.OutGoingData.rotation;
- 
-                float SmoothedMultipliedDelta = Delta * smoothFactor;
-                // Smoothly interpolate position and rotation
-                Vector3 smoothedPosition = Vector3.Lerp(animator.transform.localPosition, hipsDifference, SmoothedMultipliedDelta);
-                Quaternion smoothedRotation = Quaternion.Slerp(animator.transform.localRotation, hipsDifferenceQ, SmoothedMultipliedDelta);
-
-                // Apply smoothed position and rotation
-                animator.transform.SetLocalPositionAndRotation(smoothedPosition, smoothedRotation);
-            }
-        }
+        public Quaternion smoothedRotation;
         public void AssignHipsFBTracker()
         {
             HasHipsInput = BasisDeviceManagement.Instance.FindDevice(out HipsInput, BasisBoneTrackedRole.Hips);
@@ -233,7 +189,6 @@ namespace Basis.Scripts.Animator_Driver
             if (HasEvents)
             {
                 BasisDeviceManagement.Instance.AllInputDevices.OnListChanged -= AssignHipsFBTracker;
-                BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.RemoveAction(1, SimulateAvatarRotation);
             }
         }
     }

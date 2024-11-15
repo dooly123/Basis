@@ -2,9 +2,12 @@ using Basis.Scripts.Animator_Driver;
 using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Device_Management;
 using Basis.Scripts.Eye_Follow;
 using Basis.Scripts.TransformBinders.BoneControl;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -143,10 +146,13 @@ namespace Basis.Scripts.Drivers
             {
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
-            Player.Avatar.transform.parent = Player.transform;
+            StoredRolesTransforms = BasisAvatarIKStageCalibration.GetAllRolesAsTransform();
+            Player.Avatar.transform.parent = Hips.BoneTransform;
+            Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position,Quaternion.identity);
             CalibrateOffsets();
             BuildBuilder();
         }
+        public Dictionary<BasisBoneTrackedRole, Transform> StoredRolesTransforms;
         public void CalibrateOffsets()
         {
             BasisLocalBoneDriver Driver = BasisLocalPlayer.Instance.LocalBoneDriver;
@@ -154,8 +160,7 @@ namespace Basis.Scripts.Drivers
             {
                 Driver.Controls[Index].BoneTransform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             }
-            Player.Avatar.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            //this works great however it means ca
+
         }
         public void BuildBuilder()
         {
@@ -521,10 +526,17 @@ namespace Basis.Scripts.Drivers
         }
         public void CalibrateRoles()
         {
-            for (int Index = 0; Index < BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles.Length; Index++)
+            foreach (BasisBoneTrackedRole Role in Enum.GetValues(typeof(BasisBoneTrackedRole)))
             {
-                BasisBoneTrackedRole role = BasisLocalPlayer.Instance.LocalBoneDriver.trackedRoles[Index];
-                ApplyHint(role, 1);
+                ApplyHint(Role, 0);
+            }
+            for (int Index = 0; Index < BasisDeviceManagement.Instance.AllInputDevices.Count; Index++)
+            {
+                Device_Management.Devices.BasisInput BasisInput = BasisDeviceManagement.Instance.AllInputDevices[Index];
+                if (BasisInput.TryGetRole(out BasisBoneTrackedRole Role))
+                {
+                    ApplyHint(Role, 1);
+                }
             }
         }
         public void ApplyHint(BasisBoneTrackedRole RoleWithHint, int weight)

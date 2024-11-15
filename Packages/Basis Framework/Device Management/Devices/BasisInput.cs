@@ -264,7 +264,7 @@ namespace Basis.Scripts.Device_Management.Devices
                     hasRoleAssigned = false;
                     if (TryGetRole(out BasisBoneTrackedRole Role))
                     {
-                        BasisLocalPlayer.Instance.AvatarDriver.ApplyHint(Role, 1);
+                        BasisLocalPlayer.Instance.AvatarDriver.ApplyHint(Role, 0);
                     }
                 }
                 else

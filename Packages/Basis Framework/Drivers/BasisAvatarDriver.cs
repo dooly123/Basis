@@ -5,6 +5,7 @@ using Basis.Scripts.Common;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
+using System.Data;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -123,11 +124,16 @@ namespace Basis.Scripts.Drivers
         }
         public void CalculateTransformPositions(Animator anim, BaseBoneDriver driver)
         {
+            Debug.Log("CalculateTransformPositions");
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
             BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
             for (int Index = 0; Index < driver.ControlsLength; Index++)
             {
                 BasisBoneControl Control = driver.Controls[Index];
+                if ((driver.trackedRoles[Index]  == BasisBoneTrackedRole.Hips))
+                {
+                    Debug.Log("hips!");
+                }
                 if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
                 {
                     GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out Control.TposeWorld.rotation, out Control.TposeWorld.position);
@@ -262,6 +268,10 @@ namespace Basis.Scripts.Drivers
             {
                 bone.OutGoingData.position = new Vector3(0, bone.OutGoingData.position.y, bone.OutGoingData.position.z);
                 bone.TposeLocal.position = bone.OutGoingData.position;
+            }
+            if (Role == BasisBoneTrackedRole.Hips)
+            {
+                bone.TposeLocal.rotation = quaternion.identity;
             }
         }
         public void SetAndCreateLock(BaseBoneDriver BaseBoneDriver, BasisBoneTrackedRole LockToBoneRole, BasisBoneTrackedRole AssignedTo, float PositionLerpAmount, float QuaternionLerpAmount, bool CreateLocks = true)
@@ -440,8 +450,7 @@ namespace Basis.Scripts.Drivers
 
         void UpdateIKRig(float PositionWeight, float RotationWeight, DampedTransform Constraint)
         {
-            //  Constraint.weight = PositionWeight;
-            //  Constraint.data.dampRotation = RotationWeight;
+            // Constraint.weight = PositionWeight;
         }
         public void GeneratedRequiredTransforms(Transform BaseLevel, Transform TopLevelParent)
         {
