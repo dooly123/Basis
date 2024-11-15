@@ -1,8 +1,6 @@
 using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Common;
 using Unity.Mathematics;
 using UnityEngine;
-using Gizmos = Popcron.Gizmos;
 namespace Basis.Scripts.Eye_Follow
 {
     public class BasisLocalEyeFollowDriver : BasisEyeFollowBase
@@ -42,6 +40,7 @@ namespace Basis.Scripts.Eye_Follow
                     HeadTransform.GetPositionAndRotation(out Vector3 headPosition, out Quaternion headRotation);
                     float3 float3headPosition = headPosition;
                     quaternion QheadRotation = headRotation;
+
                     // Calculate the randomized target position using float3 for optimized math operations
                     float3 targetPosition = float3headPosition + math.mul(QheadRotation, EyeFowards) + AppliedOffset;
 
@@ -59,27 +58,27 @@ namespace Basis.Scripts.Eye_Follow
                     if (HasLeftEye)
                     {
                         LeftEyeTargetWorld = CenterTargetWorld + LeftEyeInitallocalSpace.position;
-                        leftEyeTransform.rotation = LookAtTarget(leftEyeTransform.position, LeftEyeTargetWorld, LeftEyeInitallocalSpace.rotation);
+                        leftEyeTransform.rotation = LookAtTarget(leftEyeTransform.position, LeftEyeTargetWorld, LeftEyeInitallocalSpace.rotation * Quaternion.Inverse(BasisLocalPlayer.Instance.AvatarDriver.References.head.rotation));
                     }
                     if (HasRightEye)
                     {
                         RightEyeTargetWorld = CenterTargetWorld + RightEyeInitallocalSpace.position;
-                        rightEyeTransform.rotation = LookAtTarget(rightEyeTransform.position, RightEyeTargetWorld, RightEyeInitallocalSpace.rotation);
+                        rightEyeTransform.rotation = LookAtTarget(rightEyeTransform.position, RightEyeTargetWorld, RightEyeInitallocalSpace.rotation * Quaternion.Inverse(BasisLocalPlayer.Instance.AvatarDriver.References.head.rotation));
                     }
                 }
             }
         }
 
-        private quaternion LookAtTarget(float3 observerPosition, float3 targetPosition, quaternion initialRotation)
+        private quaternion LookAtTarget(Vector3 observerPosition, Vector3 targetPosition, Quaternion initialRotation)
         {
             // Calculate direction to target
-            float3 direction = math.normalize(targetPosition - observerPosition);
+            Vector3 direction = (targetPosition - observerPosition).normalized;
 
             // Calculate look rotation
-            Quaternion lookRotation = quaternion.LookRotationSafe(direction, math.up());
+            Quaternion lookRotation = Quaternion.LookRotation(direction, BasisLocalPlayer.Instance.AvatarDriver.References.head.up);
 
             // Combine with initial rotation for maintained orientation
-            return math.mul(initialRotation, math.inverse(initialRotation) * lookRotation);
+            return initialRotation * Quaternion.Inverse(initialRotation) * lookRotation;
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Basis.Scripts.Eye_Follow
 
             if (HasLeftEye)
             {
-                LeftEyeInitallocalSpace.rotation = leftEyeTransform.rotation * Quaternion.Inverse(BasisLocalPlayer.Instance.AvatarDriver.References.head.rotation);
+                LeftEyeInitallocalSpace.rotation = leftEyeTransform.rotation;
                 LeftEyeInitallocalSpace.position = leftEyeTransform.position - BasisLocalPlayer.Instance.AvatarDriver.References.head.position;
 
                 leftEyeInitialRotation = leftEyeTransform.localRotation;
@@ -70,7 +70,7 @@ namespace Basis.Scripts.Eye_Follow
 
             if (HasRightEye)
             {
-                RightEyeInitallocalSpace.rotation = rightEyeTransform.rotation * Quaternion.Inverse(BasisLocalPlayer.Instance.AvatarDriver.References.head.rotation);
+                RightEyeInitallocalSpace.rotation = rightEyeTransform.rotation;
                 RightEyeInitallocalSpace.position = rightEyeTransform.position - BasisLocalPlayer.Instance.AvatarDriver.References.head.position;
 
                 rightEyeInitialRotation = rightEyeTransform.localRotation;
