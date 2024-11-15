@@ -184,9 +184,14 @@ namespace Basis.Scripts.Animator_Driver
                 hipsDifferenceQ = Hips.OutGoingData.rotation;
  
                 float SmoothedMultipliedDelta = Delta * smoothFactor;
+
+                Vector3 HipsEuler = hipsDifferenceQ.eulerAngles;
+                HipsEuler.z = 0;
+                HipsEuler.x = 0;
+                Quaternion targetRotation = Quaternion.Euler(HipsEuler);
                 // Smoothly interpolate position and rotation
                 Vector3 smoothedPosition = Vector3.Lerp(animator.transform.localPosition, hipsDifference, SmoothedMultipliedDelta);
-                Quaternion smoothedRotation = Quaternion.Slerp(animator.transform.localRotation, hipsDifferenceQ, SmoothedMultipliedDelta);
+                Quaternion smoothedRotation = Quaternion.Slerp(animator.transform.localRotation, targetRotation, SmoothedMultipliedDelta);
 
                 // Apply smoothed position and rotation
                 animator.transform.SetLocalPositionAndRotation(smoothedPosition, smoothedRotation);
