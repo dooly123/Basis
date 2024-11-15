@@ -41,6 +41,7 @@ namespace Basis.Scripts.Avatar
         }
         public static void FullBodyCalibration()
         {
+            HasFBIKTrackers = false;
             BasisHeightDriver.SetPlayersEyeHeight(BasisLocalPlayer.Instance);
             BasisDeviceManagement.UnassignFBTrackers();
             BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApplyWithoutLerp();
@@ -134,6 +135,7 @@ namespace Basis.Scripts.Avatar
             BasisLocalPlayer.Instance.AvatarDriver.CalibrateRoles();//not needed but still doing just incase
             BasisLocalPlayer.Instance.AvatarDriver.AnimatorDriver.AssignHipsFBTracker();
         }
+        public static bool HasFBIKTrackers = false;
         public static void RunThroughConnectors(BasisTrackerMapping mapping, ref List<BasisInput> BasisInputs, ref List<BasisBoneTrackedRole> roles)
         {
             // List to store the calibration actions
@@ -152,6 +154,8 @@ namespace Basis.Scripts.Avatar
                         // Store the calibration action instead of executing it directly
                         calibrationActions.Add(() =>
                         {
+
+                            HasFBIKTrackers = true;
                             Connector.BasisInput.ApplyTrackerCalibration(mapping.BasisBoneControlRole);
                         });
 

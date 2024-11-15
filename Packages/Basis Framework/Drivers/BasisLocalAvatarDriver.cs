@@ -1,4 +1,5 @@
 using Basis.Scripts.Animator_Driver;
+using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Eye_Follow;
@@ -125,7 +126,7 @@ namespace Basis.Scripts.Drivers
             AnimatorDriver.Initialize(Player.Avatar.Animator);
 
             ResetAvatarAnimator();
-
+            BasisAvatarIKStageCalibration.HasFBIKTrackers = false;
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head))
             {
                 Head.HasRigLayer = BasisHasRigLayer.HasRigLayer;

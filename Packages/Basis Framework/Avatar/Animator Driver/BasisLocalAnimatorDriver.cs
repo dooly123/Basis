@@ -5,6 +5,7 @@ using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using Unity.Mathematics;
+using Basis.Scripts.Avatar;
 namespace Basis.Scripts.Animator_Driver
 {
     public class BasisLocalAnimatorDriver : MonoBehaviour
@@ -39,7 +40,7 @@ namespace Basis.Scripts.Animator_Driver
         public float angularFrequency = 0.4f; // Adjust for the speed of dampening
         void Simulate()
         {
-            if (localPlayer.AvatarDriver.CurrentlyTposing)
+            if (localPlayer.AvatarDriver.CurrentlyTposing || BasisAvatarIKStageCalibration.HasFBIKTrackers)
             {
                 return;
             }
