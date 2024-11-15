@@ -433,7 +433,7 @@ namespace Basis.Scripts.Drivers
         /// </summary>
         private void SetupSpineRig(BasisLocalBoneDriver driver)
         {
-            GameObject Body = CreateRig("Spine, Chest", true, out ChestSpineRig, out ChestSpineLayer);
+            GameObject Body = CreateRig("spine,chest,Upperchest", true, out ChestSpineRig, out ChestSpineLayer);
             CreateTwoBone(driver, Body, References.spine, References.chest, References.Upperchest, BasisBoneTrackedRole.Spine, BasisBoneTrackedRole.Chest, true, out UpperChestTwoBoneIK, false, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
@@ -535,6 +535,10 @@ namespace Basis.Scripts.Drivers
         {
             switch (RoleWithHint)
             {
+                case BasisBoneTrackedRole.Chest:
+                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    UpperChestTwoBoneIK.data.hintWeight = weight;
+                    break;
                 case BasisBoneTrackedRole.Neck:
                     // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     HeadTwoBoneIK.data.hintWeight = weight;

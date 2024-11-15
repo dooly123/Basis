@@ -4,9 +4,7 @@ using Basis.Scripts.Device_Management.Devices;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
-using UnityEngine.Playables;
 
 namespace Basis.Scripts.Avatar
 {

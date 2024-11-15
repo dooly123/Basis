@@ -19,19 +19,29 @@ public static partial class BasisAvatarIKStageCalibration
             [SerializeField]
             public List<CalibrationConnector> Candidates = new List<CalibrationConnector>();
             public List<Vector3> Stored = new List<Vector3>();
+            public Vector3 CalibrationPoint;
             public BasisTrackerMapping(BasisBoneControl Bone,Transform AvatarTransform, BasisBoneTrackedRole Role, List<CalibrationConnector> calibration, float calibrationMaxDistance)
             {
+                if(AvatarTransform == null)
+                {
+                    Debug.LogWarning("Missing Avatar Transform");
+                    CalibrationPoint = Bone.BoneTransform.position;
+                }
+                else
+                {
+                    CalibrationPoint = AvatarTransform.position;
+                }
                 TargetControl = Bone;
                 BasisBoneControlRole = Role;
                 Candidates = new List<CalibrationConnector>();
                 for (int Index = 0; Index < calibration.Count; Index++)
                 {
                     Vector3 Input = calibration[Index].BasisInput.transform.position;
-                    calibration[Index].Distance = Vector3.Distance(AvatarTransform.position, Input);
+                    calibration[Index].Distance = Vector3.Distance(CalibrationPoint, Input);
 
                     if (calibration[Index].Distance < calibrationMaxDistance)
                     {
-                        Debug.DrawLine(AvatarTransform.position, Input, TargetControl.Color, 40f);
+                        Debug.DrawLine(CalibrationPoint, Input, TargetControl.Color, 40f);
                         Candidates.Add(calibration[Index]);
                     }
                     else
