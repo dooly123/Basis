@@ -42,11 +42,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         /// </summary>
         [SerializeField]
         public BasisAvatarData CurrentData = new BasisAvatarData();
-        /// <summary>
-        /// represents the most recently applied data at the network inbound
-        /// /// </summary>
-        [SerializeField]
-        public BasisAvatarData LastData = new BasisAvatarData();
 
         public HumanPose HumanPose = new HumanPose();
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
@@ -77,11 +72,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 CurrentData.floatArray = new float[95];
                 CurrentData.Muscles.ResizeArray(95);
             }
-            if (LastData.Muscles.IsCreated == false)
-            {
-                LastData.floatArray = new float[95];
-                LastData.Muscles.ResizeArray(95);
-            }
             PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
             ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
         }
@@ -92,7 +82,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         public static void InitalizeDataJobs(ref BasisDataJobs BasisDataJobs)
         {
-            BasisDataJobs.positionJob = new UpdateAvatarPositionJob();
+            BasisDataJobs.AvatarJob = new UpdateAvatarRotationJob();
             BasisDataJobs.muscleJob = new UpdateAvatarMusclesJob();
         }
         public abstract void Compute();

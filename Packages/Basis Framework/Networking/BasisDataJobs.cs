@@ -6,10 +6,10 @@ namespace Basis.Scripts.Tests
 {
     public struct BasisDataJobs
     {
-        public JobHandle positionHandle;
+        public JobHandle AvatarHandle;
         public JobHandle muscleHandle;
         public float DeltaTime;
-        public UpdateAvatarPositionJob positionJob;
         public UpdateAvatarMusclesJob muscleJob;
+        public UpdateAvatarRotationJob AvatarJob;
     }
 }

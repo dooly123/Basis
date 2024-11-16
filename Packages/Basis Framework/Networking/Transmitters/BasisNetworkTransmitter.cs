@@ -53,7 +53,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 InitalizeDataJobs(ref AvatarJobs);
                 InitalizeAvatarStoredData(ref TargetData);
                 InitalizeAvatarStoredData(ref CurrentData);
-                InitalizeAvatarStoredData(ref LastData);
                 NetworkedPlayer = networkedPlayer;
                 AudioTransmission.OnEnable(networkedPlayer);
                 OnAvatarCalibration();

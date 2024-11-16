@@ -12,7 +12,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
             DecompressAvatar( ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
-            Base.LastData = Base.CurrentData.DeepCopy();
             Base.LastAvatarDelta = (float)(Time.realtimeSinceStartupAsDouble - Base.TimeAsDoubleWhenLastSync);
             Base.LastCollectedDeltas.Add(Base.LastAvatarDelta);
             Base.AvatarMedian = Base.LastCollectedDeltas.Median();

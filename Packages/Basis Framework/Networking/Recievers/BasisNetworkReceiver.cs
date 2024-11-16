@@ -1,10 +1,9 @@
 using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using Basis.Scripts.Networking.Smoothing;
 using System;
-using Unity.Mathematics;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
@@ -16,7 +15,6 @@ namespace Basis.Scripts.Networking.Recievers
     public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         public float[] silentData;
-        public BasisAvatarLerpDataSettings Settings;
 
         [SerializeField]
         public BasisAudioReceiver AudioReceiverModule = new BasisAudioReceiver();
@@ -40,6 +38,7 @@ AvatarJobs.muscleHandle.Complete();
         /// <summary>
         /// CurrentData equals final
         /// TargetData is the networks most recent info
+        /// continue tomorrow -LD
         /// </summary>
         public override void Compute()
         {
@@ -47,6 +46,7 @@ AvatarJobs.muscleHandle.Complete();
             {
                 return;
             }
+
             double currentTime = Time.realtimeSinceStartupAsDouble;
 
             // Remove outdated rotations
@@ -55,7 +55,7 @@ AvatarJobs.muscleHandle.Complete();
                 AvatarDataBuffer.RemoveAt(0);
             }
 
-            // Interpolate between the two most recent buffered rotations
+            // Only run job if there are enough data points
             if (AvatarDataBuffer.Count >= 2)
             {
                 double startTime = AvatarDataBuffer[0].timestamp;
@@ -65,41 +65,80 @@ AvatarJobs.muscleHandle.Complete();
                 // Calculate normalized interpolation factor t
                 float t = (float)((targetTime - startTime) / (endTime - startTime));
                 t = Mathf.Clamp01(t);
-                if (t == 1)
-                {
-                    Debug.Log("End!");
-                    CurrentData.Rotation = AvatarDataBuffer[1].rotation;
-                    CurrentData.Vectors[1] = AvatarDataBuffer[1].Position;
-                    CurrentData.Vectors[0] = AvatarDataBuffer[1].Scale;
 
-                    // Interpolate muscle data
-                    for (int Index = 0; Index < AvatarDataBuffer[1].Muscles.Length; Index++)
-                    {
-                        CurrentData.Muscles[Index] = AvatarDataBuffer[1].Muscles[Index];
-                    }
-                }
-                else
-                {
-                    CurrentData.Rotation = Quaternion.Slerp(AvatarDataBuffer[0].rotation, AvatarDataBuffer[1].rotation, t);
-                    CurrentData.Vectors[1] = Vector3.Lerp(AvatarDataBuffer[0].Position, AvatarDataBuffer[1].Position, t);
-                    CurrentData.Vectors[0] = Vector3.Lerp(AvatarDataBuffer[0].Scale, AvatarDataBuffer[1].Scale, t);
+                NativeArray<Quaternion> rotations = new NativeArray<Quaternion>(1, Allocator.TempJob);
+                NativeArray<Quaternion> targetRotations = new NativeArray<Quaternion>(1, Allocator.TempJob);
+                NativeArray<Vector3> positions = new NativeArray<Vector3>(1, Allocator.TempJob);
+                NativeArray<Vector3> targetPositions = new NativeArray<Vector3>(1, Allocator.TempJob);
+                NativeArray<Vector3> scales = new NativeArray<Vector3>(1, Allocator.TempJob);
+                NativeArray<Vector3> targetScales = new NativeArray<Vector3>(1, Allocator.TempJob);
 
-                    // Interpolate muscle data
-                    for (int Index = 0; Index < AvatarDataBuffer[0].Muscles.Length; Index++)
-                    {
-                        CurrentData.Muscles[Index] = math.lerp(AvatarDataBuffer[0].Muscles[Index], AvatarDataBuffer[1].Muscles[Index], t);
-                    }
+                // Copy data from AvatarDataBuffer into the NativeArrays
+                rotations[0] = AvatarDataBuffer[0].rotation;
+                targetRotations[0] = AvatarDataBuffer[1].rotation;
+                positions[0] = AvatarDataBuffer[0].Position;
+                targetPositions[0] = AvatarDataBuffer[1].Position;
+                scales[0] = AvatarDataBuffer[0].Scale;
+                targetScales[0] = AvatarDataBuffer[1].Scale;
+
+                // Schedule the job to interpolate positions, rotations, and scales
+                AvatarJobs.AvatarJob = new UpdateAvatarRotationJob
+                {
+                    rotations = rotations,
+                    targetRotations = targetRotations,
+                    positions = positions,
+                    targetPositions = targetPositions,
+                    scales = scales,
+                    targetScales = targetScales,
+                    t = t
+                };
+
+                AvatarJobs.AvatarHandle = AvatarJobs.AvatarJob.Schedule();
+
+                // Muscle interpolation job
+                NativeArray<float> muscles = new NativeArray<float>(AvatarDataBuffer[0].Muscles, Allocator.TempJob);
+                NativeArray<float> targetMuscles = new NativeArray<float>(AvatarDataBuffer[1].Muscles, Allocator.TempJob);
+
+                UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob
+                {
+                    muscles = muscles,
+                    targetMuscles = targetMuscles,
+                    t = t
+                };
+
+                JobHandle musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarJobs.AvatarHandle);
+
+                // Complete the jobs and apply the results
+                musclesHandle.Complete();
+
+                // After jobs are done, apply the resulting values
+                CurrentData.Rotation = rotations[0];
+                CurrentData.Vectors[1] = positions[0];
+                CurrentData.Vectors[0] = scales[0];
+
+                // Apply muscle data
+                for (int i = 0; i < muscles.Length; i++)
+                {
+                    CurrentData.Muscles[i] = muscles[i];
                 }
+
+                // Dispose of NativeArrays after use
+                rotations.Dispose();
+                targetRotations.Dispose();
+                positions.Dispose();
+                targetPositions.Dispose();
+                scales.Dispose();
+                targetScales.Dispose();
+                muscles.Dispose();
+                targetMuscles.Dispose();
+
+                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData, ref HumanPose);
+                PoseHandler.SetHumanPose(ref HumanPose);
+
+                RemotePlayer.RemoteBoneDriver.SimulateAndApply();
+                RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
             }
-
-
-            ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData, ref HumanPose);
-            PoseHandler.SetHumanPose(ref HumanPose);
-
-            RemotePlayer.RemoteBoneDriver.SimulateAndApply();
-            RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
         }
-
         public void LateUpdate()
         {
             if (Ready)
@@ -108,7 +147,6 @@ AvatarJobs.muscleHandle.Complete();
                 AudioReceiverModule.LateUpdate();
             }
         }
-
         public bool IsAbleToUpdate()
         {
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
@@ -145,7 +183,6 @@ AvatarJobs.muscleHandle.Complete();
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling
         }
-
         public static Vector3 Divide(Vector3 a, Vector3 b)
         {
             // Define a small epsilon to avoid division by zero, using a flexible value based on magnitude
@@ -165,7 +202,6 @@ AvatarJobs.muscleHandle.Complete();
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
         }
-
         public void ReceiveSilentNetworkAudio(AudioSilentSegmentDataMessage audioSilentSegment)
         {
             if (AudioReceiverModule.decoder != null)
@@ -189,17 +225,13 @@ AvatarJobs.muscleHandle.Complete();
 
             RemotePlayer.CreateAvatar(ServerAvatarChangeMessage.clientAvatarChangeMessage.loadMode, BasisLoadableBundle);
         }
-        public override async void Initialize(BasisNetworkedPlayer networkedPlayer)
+        public override void Initialize(BasisNetworkedPlayer networkedPlayer)
         {
             if (!Ready)
             {
                 InitalizeDataJobs(ref AvatarJobs);
                 InitalizeAvatarStoredData(ref TargetData);
                 InitalizeAvatarStoredData(ref CurrentData);
-                InitalizeAvatarStoredData(ref LastData);
-                UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisAvatarLerpDataSettings> handle = Addressables.LoadAssetAsync<BasisAvatarLerpDataSettings>(BasisAvatarLerp.Settings);
-                await handle.Task;
-                Settings = handle.Result;
                 Ready = true;
                 NetworkedPlayer = networkedPlayer;
                 RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
@@ -214,9 +246,6 @@ AvatarJobs.muscleHandle.Complete();
         }
         public void OnDestroy()
         {
-            LastData.Vectors.Dispose();
-            LastData.Muscles.Dispose();
-
             TargetData.Vectors.Dispose();
             TargetData.Muscles.Dispose();
 
@@ -238,7 +267,6 @@ AvatarJobs.muscleHandle.Complete();
         {
             AudioReceiverModule.OnCalibration(NetworkedPlayer);
         }
-
         public override void DeInitialize()
         {
             AudioReceiverModule.OnDisable();

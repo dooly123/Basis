@@ -38,53 +38,37 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             return copy;
         }
     }
-
     [BurstCompile]
-    public struct UpdateAvatarPositionJob : IJob
+    public struct UpdateAvatarRotationJob : IJob
     {
-        public NativeArray<float3> positions;
-        public NativeArray<float3> targetPositions;
-        public float deltaTime;
-        public float teleportThreshold;
-        public float smoothingSpeed;
+        public NativeArray<Quaternion> rotations;
+        public NativeArray<Quaternion> targetRotations;
+        public NativeArray<Vector3> positions;
+        public NativeArray<Vector3> targetPositions;
+        public NativeArray<Vector3> scales;
+        public NativeArray<Vector3> targetScales;
+        public float t;
 
         public void Execute()
         {
-            // Cache frequently used values
-            float3 pos0 = positions[0];
-            float3 pos1 = positions[1];
-            float3 targetPos0 = targetPositions[0];
-            float3 targetPos1 = targetPositions[1];
-
-            // Calculate squared distance to avoid expensive sqrt operation
-            float distanceSq = math.lengthsq(pos0 - targetPos0);
-
-            // Check if we should teleport
-            if (distanceSq > teleportThreshold)
-            {
-                // Teleport directly to the target position
-                positions[0] = targetPos0;
-                positions[1] = targetPos1;
-                return; // Early exit to avoid unnecessary calculations
-            }
-
-            // Smoothly move towards target positions based on deltaTime and smoothing speed
-            positions[0] = math.lerp(pos0, targetPos0, 1f - math.exp(-smoothingSpeed * deltaTime));
-            positions[1] = math.lerp(pos1, targetPos1, 1f - math.exp(-smoothingSpeed * deltaTime));
+            // Interpolate rotations
+            rotations[0] = Quaternion.Slerp(rotations[0], targetRotations[0], t);
+            // Interpolate positions
+            positions[0] = Vector3.Lerp(positions[0], targetPositions[0], t);
+            // Interpolate scales
+            scales[0] = Vector3.Lerp(scales[0], targetScales[0], t);
         }
     }
-
     [BurstCompile]
     public struct UpdateAvatarMusclesJob : IJobParallelFor
     {
         public NativeArray<float> muscles;
         public NativeArray<float> targetMuscles;
-        public float lerpTime;
+        public float t;
 
         public void Execute(int index)
         {
-            // Use math.lerp instead of Mathf.Lerp for Burst optimization
-            muscles[index] = lerp(muscles[index], targetMuscles[index], lerpTime);
+            muscles[index] = math.lerp(muscles[index], targetMuscles[index], t);
         }
     }
 }
