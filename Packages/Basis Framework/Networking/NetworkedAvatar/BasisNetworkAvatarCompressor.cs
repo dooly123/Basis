@@ -24,7 +24,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
-            CompressAvatar(NetworkSendBase.CompressionArraysRangedUshort, ref NetworkSendBase.Target, ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
+            CompressAvatar(NetworkSendBase.CompressionArraysRangedUshort, ref NetworkSendBase.TargetData, ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
         }
         public static void CompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, ref HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator LocalPlayersAnimator, ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {

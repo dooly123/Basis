@@ -4,7 +4,6 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Smoothing;
 using System;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
@@ -15,8 +14,6 @@ namespace Basis.Scripts.Networking.Recievers
     [System.Serializable]
     public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
-        private float lerpTimeSpeedRotation = 0;
-        private float lerpTimeSpeedMuscles = 0;
         public float[] silentData;
         public BasisAvatarLerpDataSettings Settings;
 
@@ -25,6 +22,10 @@ namespace Basis.Scripts.Networking.Recievers
 
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
+        /// <summary>
+        /// CurrentData equals final
+        /// TargetData is the networks most recent info
+        /// </summary>
         public override void Compute()
         {
             if (!IsAbleToUpdate())
@@ -33,12 +34,10 @@ namespace Basis.Scripts.Networking.Recievers
             }
 
             float deltaTime = Time.deltaTime;
-            lerpTimeSpeedRotation = deltaTime * Settings.LerpSpeedRotation;
-            lerpTimeSpeedMuscles = deltaTime * Settings.LerpSpeedMuscles;
 
-            BasisAvatarLerp.UpdateAvatar(ref Output, Target, AvatarJobs, Settings.LerpSpeedMovement, deltaTime, lerpTimeSpeedRotation, lerpTimeSpeedMuscles, Settings.TeleportDistanceSquared);
+            BasisAvatarLerp.UpdateAvatar(ref CurrentData, LastData, TargetData, AvatarJobs, TimeAsDoubleWhenLastSync, Settings.LerpSpeedMovement, deltaTime, deltaTime * Settings.LerpSpeedMuscles, Settings.TeleportDistanceSquared);
 
-            ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, Output, ref HumanPose);
+            ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData, ref HumanPose);
             PoseHandler.SetHumanPose(ref HumanPose);
 
             RemotePlayer.RemoteBoneDriver.SimulateAndApply();
@@ -143,8 +142,9 @@ namespace Basis.Scripts.Networking.Recievers
             if (!Ready)
             {
                 InitalizeDataJobs(ref AvatarJobs);
-                InitalizeAvatarStoredData(ref Target);
-                InitalizeAvatarStoredData(ref Output);
+                InitalizeAvatarStoredData(ref TargetData);
+                InitalizeAvatarStoredData(ref CurrentData);
+                InitalizeAvatarStoredData(ref LastData);
                 UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisAvatarLerpDataSettings> handle = Addressables.LoadAssetAsync<BasisAvatarLerpDataSettings>(BasisAvatarLerp.Settings);
                 await handle.Task;
                 Settings = handle.Result;
@@ -162,11 +162,14 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void OnDestroy()
         {
-            Target.Vectors.Dispose();
-            Target.Muscles.Dispose();
+            LastData.Vectors.Dispose();
+            LastData.Muscles.Dispose();
 
-            Output.Vectors.Dispose();
-            Output.Muscles.Dispose();
+            TargetData.Vectors.Dispose();
+            TargetData.Muscles.Dispose();
+
+            CurrentData.Vectors.Dispose();
+            CurrentData.Muscles.Dispose();
 
             if (HasEvents && RemotePlayer != null && RemotePlayer.RemoteAvatarDriver != null)
             {

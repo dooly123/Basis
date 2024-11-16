@@ -1,5 +1,4 @@
 using DarkRift;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Basis.Scripts.Networking.Compression

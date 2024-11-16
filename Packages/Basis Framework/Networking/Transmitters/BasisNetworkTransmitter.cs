@@ -50,8 +50,9 @@ namespace Basis.Scripts.Networking.Transmitters
             if (Ready == false)
             {
                 InitalizeDataJobs(ref AvatarJobs);
-                InitalizeAvatarStoredData(ref Target);
-                InitalizeAvatarStoredData(ref Output);
+                InitalizeAvatarStoredData(ref TargetData);
+                InitalizeAvatarStoredData(ref CurrentData);
+                InitalizeAvatarStoredData(ref LastData);
                 NetworkedPlayer = networkedPlayer;
                 AudioTransmission.OnEnable(networkedPlayer);
                 OnAvatarCalibration();

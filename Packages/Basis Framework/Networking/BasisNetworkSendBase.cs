@@ -18,10 +18,23 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     {
         public bool Ready;
         public BasisNetworkedPlayer NetworkedPlayer;
+
+        /// <summary>
+        /// represents the final position that we are goign to
+        /// </summary>
         [SerializeField]
-        public BasisAvatarData Target = new BasisAvatarData();
+        public BasisAvatarData TargetData = new BasisAvatarData();
+        /// <summary>
+        /// represents the most recently applied data
+        /// </summary>
         [SerializeField]
-        public BasisAvatarData Output = new BasisAvatarData();
+        public BasisAvatarData CurrentData = new BasisAvatarData();
+        /// <summary>
+        /// represents the most recently applied data at the network inbound
+        /// /// </summary>
+        [SerializeField]
+        public BasisAvatarData LastData = new BasisAvatarData();
+
         public HumanPose HumanPose = new HumanPose();
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
         public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
@@ -33,21 +46,27 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public BasisRangedUshortFloatData ScaleRanged;
         [SerializeField]
         public CompressionArraysRangedUshort CompressionArraysRangedUshort;
+        public double TimeAsDoubleWhenLastSync;
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()
             {
                 array = new byte[212],
             };
-            if (Target.Muscles.IsCreated == false)
+            if (TargetData.Muscles.IsCreated == false)
             {
-                Target.Muscles.ResizeArray(95);
-                Target.floatArray = new float[95];
+                TargetData.Muscles.ResizeArray(95);
+                TargetData.floatArray = new float[95];
             }
-            if (Output.Muscles.IsCreated == false)
+            if (CurrentData.Muscles.IsCreated == false)
             {
-                Output.floatArray = new float[95];
-                Output.Muscles.ResizeArray(95);
+                CurrentData.floatArray = new float[95];
+                CurrentData.Muscles.ResizeArray(95);
+            }
+            if (LastData.Muscles.IsCreated == false)
+            {
+                LastData.floatArray = new float[95];
+                LastData.Muscles.ResizeArray(95);
             }
             PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
             ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);

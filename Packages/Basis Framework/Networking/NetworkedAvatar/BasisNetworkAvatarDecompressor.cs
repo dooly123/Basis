@@ -1,6 +1,5 @@
 using Basis.Scripts.Networking.Compression;
 using DarkRift;
-using Unity.Mathematics;
 using UnityEngine;
 using static SerializableDarkRift;
 
@@ -11,12 +10,9 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public static void DeCompress(BasisNetworkSendBase Base, ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage)
         {
             Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
-            DecompressAvatar(Base.CompressionArraysRangedUshort, ref Base.Target, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
-        }
-        public static void DeCompress(BasisNetworkSendBase Base, LocalAvatarSyncMessage ServerSideSyncPlayerMessage)
-        {
-            Base.LASM = ServerSideSyncPlayerMessage;
-            DecompressAvatar(Base.CompressionArraysRangedUshort,ref Base.Target, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
+            DecompressAvatar(Base.CompressionArraysRangedUshort, ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
+            Base.LastData = Base.CurrentData.DeepCopy();
+            Base.TimeAsDoubleWhenLastSync = Time.realtimeSinceStartupAsDouble;
         }
         public static void DecompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
