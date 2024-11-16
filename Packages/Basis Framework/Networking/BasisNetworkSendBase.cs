@@ -8,17 +8,30 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static SerializableDarkRift;
 using Unity.Mathematics;
+using System.Collections.Generic;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     /// <summary>
     /// the goal of this script is to be the glue of consistent data between remote and local
     /// </summary>
-    public abstract class BasisNetworkSendBase : MonoBehaviour
+    public abstract partial class BasisNetworkSendBase : MonoBehaviour
     {
         public bool Ready;
         public BasisNetworkedPlayer NetworkedPlayer;
-
+        [System.Serializable]
+        public struct AvatarBuffer
+        {
+            public quaternion rotation;
+            public Vector3 Scale;
+            public Vector3 Position;
+            public float[] Muscles;
+            public double timestamp;
+        }
+        [Header("Interpolation Settings")]
+        public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
+        [SerializeField]
+        public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
         /// <summary>
         /// represents the final position that we are goign to
         /// </summary>
@@ -47,7 +60,9 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         [SerializeField]
         public CompressionArraysRangedUshort CompressionArraysRangedUshort;
         public double TimeAsDoubleWhenLastSync;
-        public float NetworkAvatarSyncDelta = 0.1f;
+        public float AvatarMedian = 0.1f;
+        public float LastAvatarDelta = 0.1f;
+        public FloatQueue LastCollectedDeltas = new FloatQueue(5);
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()
@@ -175,5 +190,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.AvatarChannel, deliveryMethod);
             }
         }
+
     }
 }

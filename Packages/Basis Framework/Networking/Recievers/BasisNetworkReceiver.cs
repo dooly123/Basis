@@ -4,6 +4,7 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Smoothing;
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
@@ -22,6 +23,20 @@ namespace Basis.Scripts.Networking.Recievers
 
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
+        /*
+AvatarJobs.positionJob.targetPositions = TargetData.Vectors;
+AvatarJobs.positionJob.positions = CurrentData.Vectors;
+AvatarJobs.positionJob.deltaTime = deltaTime;
+AvatarJobs.positionJob.smoothingSpeed = Settings.LerpSpeedMovement;
+AvatarJobs.positionJob.teleportThreshold = Settings.TeleportDistanceSquared;
+AvatarJobs.muscleJob.targetMuscles = TargetData.Muscles;
+AvatarJobs.muscleJob.muscles = CurrentData.Muscles;
+AvatarJobs.muscleJob.lerpTime = deltaTime * Settings.LerpSpeedMuscles;
+AvatarJobs.positionHandle = AvatarJobs.positionJob.Schedule();
+AvatarJobs.muscleHandle = AvatarJobs.muscleJob.Schedule(95, 1, AvatarJobs.positionHandle);
+AvatarJobs.muscleHandle.Complete();
+*/
+
         /// <summary>
         /// CurrentData equals final
         /// TargetData is the networks most recent info
@@ -32,9 +47,51 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 return;
             }
+            double currentTime = Time.realtimeSinceStartupAsDouble;
 
-            float deltaTime = Time.deltaTime;
-            BasisAvatarLerp.UpdateAvatar(NetworkAvatarSyncDelta, ref CurrentData, LastData, TargetData, AvatarJobs, TimeAsDoubleWhenLastSync, Settings.LerpSpeedMovement, deltaTime, deltaTime * Settings.LerpSpeedMuscles, Settings.TeleportDistanceSquared);
+            // Remove outdated rotations
+            while (AvatarDataBuffer.Count > 1 && currentTime - delayTime > AvatarDataBuffer[1].timestamp)
+            {
+                AvatarDataBuffer.RemoveAt(0);
+            }
+
+            // Interpolate between the two most recent buffered rotations
+            if (AvatarDataBuffer.Count >= 2)
+            {
+                double startTime = AvatarDataBuffer[0].timestamp;
+                double endTime = AvatarDataBuffer[1].timestamp;
+                double targetTime = currentTime - delayTime;
+
+                // Calculate normalized interpolation factor t
+                float t = (float)((targetTime - startTime) / (endTime - startTime));
+                t = Mathf.Clamp01(t);
+                if (t == 1)
+                {
+                    Debug.Log("End!");
+                    CurrentData.Rotation = AvatarDataBuffer[1].rotation;
+                    CurrentData.Vectors[1] = AvatarDataBuffer[1].Position;
+                    CurrentData.Vectors[0] = AvatarDataBuffer[1].Scale;
+
+                    // Interpolate muscle data
+                    for (int Index = 0; Index < AvatarDataBuffer[1].Muscles.Length; Index++)
+                    {
+                        CurrentData.Muscles[Index] = AvatarDataBuffer[1].Muscles[Index];
+                    }
+                }
+                else
+                {
+                    CurrentData.Rotation = Quaternion.Slerp(AvatarDataBuffer[0].rotation, AvatarDataBuffer[1].rotation, t);
+                    CurrentData.Vectors[1] = Vector3.Lerp(AvatarDataBuffer[0].Position, AvatarDataBuffer[1].Position, t);
+                    CurrentData.Vectors[0] = Vector3.Lerp(AvatarDataBuffer[0].Scale, AvatarDataBuffer[1].Scale, t);
+
+                    // Interpolate muscle data
+                    for (int Index = 0; Index < AvatarDataBuffer[0].Muscles.Length; Index++)
+                    {
+                        CurrentData.Muscles[Index] = math.lerp(AvatarDataBuffer[0].Muscles[Index], AvatarDataBuffer[1].Muscles[Index], t);
+                    }
+                }
+            }
+
 
             ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData, ref HumanPose);
             PoseHandler.SetHumanPose(ref HumanPose);

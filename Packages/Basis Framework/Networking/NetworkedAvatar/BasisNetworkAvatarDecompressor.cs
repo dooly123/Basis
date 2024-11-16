@@ -1,6 +1,7 @@
 using Basis.Scripts.Networking.Compression;
 using DarkRift;
 using UnityEngine;
+using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
@@ -12,8 +13,22 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
             DecompressAvatar(Base.CompressionArraysRangedUshort, ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
             Base.LastData = Base.CurrentData.DeepCopy();
-            Base.NetworkAvatarSyncDelta = (float)(Time.realtimeSinceStartupAsDouble - Base.TimeAsDoubleWhenLastSync);
+            Base.LastAvatarDelta = (float)(Time.realtimeSinceStartupAsDouble - Base.TimeAsDoubleWhenLastSync);
+            Base.LastCollectedDeltas.Add(Base.LastAvatarDelta);
+            Base.AvatarMedian = Base.LastCollectedDeltas.Median();
             Base.TimeAsDoubleWhenLastSync = Time.realtimeSinceStartupAsDouble;
+            // Add new rotation data to the buffer
+            Base.AvatarDataBuffer.Add(new AvatarBuffer
+            {
+                rotation = Base.TargetData.Rotation,
+                timestamp = Base.TimeAsDoubleWhenLastSync,
+                Muscles = Base.TargetData.Muscles.ToArray(),
+                Position = Base.TargetData.Vectors[1],
+                Scale = Base.TargetData.Vectors[0]
+            });
+
+            // Sort buffer by timestamp
+            Base.AvatarDataBuffer.Sort((a, b) => a.timestamp.CompareTo(b.timestamp));
         }
         public static void DecompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {

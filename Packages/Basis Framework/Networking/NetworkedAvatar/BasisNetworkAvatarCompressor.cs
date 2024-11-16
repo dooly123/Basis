@@ -18,7 +18,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
                 using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
                 {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.MovementChannel, DeliveryMethod.Unreliable);
+                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.MovementChannel, DeliveryMethod.Sequenced);
                 }
             }
         }

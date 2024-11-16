@@ -14,7 +14,7 @@ namespace Basis.Scripts.Networking.Transmitters
     {
         public bool HasEvents = false;
         public float timer = 0f;
-        public float interval = 0.05f;
+        public float interval = 0.08f;
         [SerializeField]
         public BasisAudioTransmission AudioTransmission = new BasisAudioTransmission();
         public override void Compute()
@@ -32,13 +32,18 @@ namespace Basis.Scripts.Networking.Transmitters
                 }
             }
         }
-        void OnRenderer()
+        public void LateUpdate()
+        {
+            SendOutLatest();
+        }
+
+        void SendOutLatest()
         {
             timer += Time.deltaTime;
-            if (timer >= interval)//24 fps
+            if (timer >= interval) // Trigger Compute at specified intervals
             {
                 Compute();
-                timer = 0f;
+                timer -= interval; // Retain any leftover time
             }
         }
         public void OnDestroy()
@@ -61,10 +66,6 @@ namespace Basis.Scripts.Networking.Transmitters
                     NetworkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
                     NetworkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
                     NetworkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
-                    if (NetworkedPlayer.Player.IsLocal)
-                    {
-                        BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.AddAction(102, OnRenderer);
-                    }
                     HasEvents = true;
                 }
                 Ready = true;
@@ -85,10 +86,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 NetworkedPlayer.Player.OnAvatarSwitchedFallBack -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= SendOutLatestAvatar;
-                if (NetworkedPlayer.Player.IsLocal)
-                {
-                    BasisLocalPlayer.Instance.LocalBoneDriver.ReadyToRead.RemoveAction(102, OnRenderer);
-                }
                 HasEvents = false;
             }
             if (CompressionArraysRangedUshort != null)
