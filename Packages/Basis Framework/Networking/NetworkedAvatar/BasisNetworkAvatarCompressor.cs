@@ -57,6 +57,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 
                 BasisCompressionOfRotation.CompressQuaternion(Packer, Rotation);//4
                 BasisCompressionOfMuscles.CompressMuscles(Packer, muscles, CompressionArraysRangedUshort);//190
+                //disable in production
+                if (Packer.Length != syncmessage.array.Length)
+                {
+                    syncmessage.array = new byte[Packer.Length];
+                }
                 Packer.CopyTo(syncmessage.array, 0);
             }
         }

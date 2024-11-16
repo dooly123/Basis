@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f9691060bea1794fb3b0c18494187c6, type: 3}
   m_Name: Avatar Lerp Data
   m_EditorClassIdentifier: 
-  TeleportDistance: 15
-  LerpSpeedMovement: 12
+  TeleportDistanceSquared: 15
+  LerpSpeedMovement: 15
   LerpSpeedRotation: 15
   LerpSpeedMuscles: 15
