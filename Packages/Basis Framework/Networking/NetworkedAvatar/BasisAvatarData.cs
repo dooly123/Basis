@@ -2,6 +2,7 @@
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics; // Using Unity.Mathematics for math operations
+using UnityEngine;
 using static Unity.Mathematics.math;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
@@ -10,7 +11,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     public struct BasisAvatarData
     {
         public NativeArray<float3> Vectors; // hips position, player's position, scale (3 length)
-        public quaternion Rotation; // hip rotation
+        public Quaternion Rotation; // hip rotation
         public NativeArray<float> Muscles; // 95 floats for each muscle (95 length)
         public float[] floatArray;
     }

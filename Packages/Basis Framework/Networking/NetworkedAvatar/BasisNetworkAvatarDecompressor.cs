@@ -1,5 +1,6 @@
 using Basis.Scripts.Networking.Compression;
 using DarkRift;
+using Unity.Mathematics;
 using UnityEngine;
 using static SerializableDarkRift;
 
@@ -19,19 +20,18 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         public static void DecompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
-            DecompressAvatarUpdate(CompressionArraysRangedUshort, AvatarUpdate, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref AvatarData, PositionRanged, ScaleRanged);
+            DecompressAvatarUpdate(CompressionArraysRangedUshort, AvatarUpdate, out Vector3 Scale, out Vector3 BodyPosition, ref AvatarData.Rotation, ref AvatarData, PositionRanged, ScaleRanged);
             AvatarData.Vectors[1] = BodyPosition;
             AvatarData.Vectors[0] = Scale;
-            AvatarData.Rotation = Rotation;
         }
-        public static void DecompressAvatarUpdate(CompressionArraysRangedUshort CompressionArraysRangedUshort, byte[] compressedData, out Vector3 Scale, out Vector3 BodyPosition, out Quaternion Rotation, ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
+        public static void DecompressAvatarUpdate(CompressionArraysRangedUshort CompressionArraysRangedUshort, byte[] compressedData, out Vector3 Scale, out Vector3 BodyPosition, ref Quaternion Rotation, ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
             if (compressedData != null && compressedData.Length != 0)
             {
                 using (var bitPacker = DarkRiftReader.CreateFromArray(compressedData, 0, compressedData.Length))
                 {
                     DecompressScaleAndPosition(bitPacker, out BodyPosition, out Scale, PositionRanged, ScaleRanged);
-                    BasisCompressionOfRotation.DecompressQuaternion(bitPacker, out Rotation);
+                    BasisCompressionOfRotation.DecompressQuaternion(bitPacker, ref Rotation);
                     BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref BasisAvatarData, CompressionArraysRangedUshort);
                 }
             }
