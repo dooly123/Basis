@@ -57,8 +57,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public BasisRangedUshortFloatData PositionRanged;
         [SerializeField]
         public BasisRangedUshortFloatData ScaleRanged;
-        [SerializeField]
-        public CompressionArraysRangedUshort CompressionArraysRangedUshort;
         public double TimeAsDoubleWhenLastSync;
         public float AvatarMedian = 0.1f;
         public float LastAvatarDelta = 0.1f;

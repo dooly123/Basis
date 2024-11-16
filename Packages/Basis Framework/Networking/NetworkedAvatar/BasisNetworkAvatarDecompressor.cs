@@ -11,7 +11,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public static void DeCompress(BasisNetworkSendBase Base, ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage)
         {
             Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
-            DecompressAvatar(Base.CompressionArraysRangedUshort, ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
+            DecompressAvatar( ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
             Base.LastData = Base.CurrentData.DeepCopy();
             Base.LastAvatarDelta = (float)(Time.realtimeSinceStartupAsDouble - Base.TimeAsDoubleWhenLastSync);
             Base.LastCollectedDeltas.Add(Base.LastAvatarDelta);
@@ -30,13 +30,13 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             // Sort buffer by timestamp
             Base.AvatarDataBuffer.Sort((a, b) => a.timestamp.CompareTo(b.timestamp));
         }
-        public static void DecompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
+        public static void DecompressAvatar( ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
-            DecompressAvatarUpdate(CompressionArraysRangedUshort, AvatarUpdate, out Vector3 Scale, out Vector3 BodyPosition, ref AvatarData.Rotation, ref AvatarData, PositionRanged, ScaleRanged);
+            DecompressAvatarUpdate(AvatarUpdate, out Vector3 Scale, out Vector3 BodyPosition, ref AvatarData.Rotation, ref AvatarData, PositionRanged, ScaleRanged);
             AvatarData.Vectors[1] = BodyPosition;
             AvatarData.Vectors[0] = Scale;
         }
-        public static void DecompressAvatarUpdate(CompressionArraysRangedUshort CompressionArraysRangedUshort, byte[] compressedData, out Vector3 Scale, out Vector3 BodyPosition, ref Quaternion Rotation, ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
+        public static void DecompressAvatarUpdate( byte[] compressedData, out Vector3 Scale, out Vector3 BodyPosition, ref Quaternion Rotation, ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
             if (compressedData != null && compressedData.Length != 0)
             {
@@ -44,7 +44,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 {
                     DecompressScaleAndPosition(bitPacker, out BodyPosition, out Scale, PositionRanged, ScaleRanged);
                     BasisCompressionOfRotation.DecompressQuaternion(bitPacker, ref Rotation);
-                    BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref BasisAvatarData, CompressionArraysRangedUshort);
+                    BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref BasisAvatarData);
                 }
             }
             else

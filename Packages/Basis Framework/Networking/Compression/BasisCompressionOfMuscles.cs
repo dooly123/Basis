@@ -1,26 +1,38 @@
 using Basis.Scripts.Networking.NetworkedAvatar;
 using DarkRift;
+using System;
 
 namespace Basis.Scripts.Networking.Compression
 {
     public class BasisCompressionOfMuscles
     {
-        public static void CompressMuscles(DarkRiftWriter Packer, float[] muscles, CompressionArraysRangedUshort CF)
+        public static byte[] StoredBytes = new byte[95 * 4];  // 95 floats, 4 bytes per float
+        public static int Size = 95 * 4;
+
+        // Compress the muscle data into the byte array
+        public static void CompressMuscles(DarkRiftWriter Packer, float[] muscles)
         {
-            for (int Index = 0; Index < 95; Index++)
-            {
-                float Muscle = muscles[Index];
-                Packer.Write(Muscle);
-            }
-            //     BasisBitPackerExtensions.WriteUshortArrayFloat(Packer, muscles, CF);
+            // Convert the float array to bytes using Buffer.BlockCopy
+            Buffer.BlockCopy(muscles, 0, StoredBytes, 0, Size);
+
+            // Write the raw byte array to the Packer
+            Packer.WriteRaw(StoredBytes, 0, Size);
         }
-        public static void DecompressMuscles(DarkRiftReader Packer, ref BasisAvatarData BasisAvatarData, CompressionArraysRangedUshort CF)
+
+        // Decompress the byte array back into the muscle data
+        public static void DecompressMuscles(DarkRiftReader Packer, ref BasisAvatarData BasisAvatarData)
         {
-            //    BasisBitPackerExtensions.ReadUshortArrayFloat(Packer, CF, ref BasisAvatarData);
+            // Read the raw byte array from the Packer
+            Packer.ReadRaw(Size, ref StoredBytes);
+
+            // Convert the byte array back to the float array using Buffer.BlockCopy
+            float[] decompressedMuscles = new float[95];
+            Buffer.BlockCopy(StoredBytes, 0, decompressedMuscles, 0, Size);
+
+            // Assign the decompressed muscles data to the BasisAvatarData object
             for (int Index = 0; Index < 95; Index++)
             {
-                Packer.Read(out float Value);
-                BasisAvatarData.Muscles[Index] = Value;
+                BasisAvatarData.Muscles[Index] = decompressedMuscles[Index];
             }
         }
     }

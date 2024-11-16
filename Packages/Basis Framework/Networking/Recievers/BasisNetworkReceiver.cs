@@ -181,10 +181,6 @@ AvatarJobs.muscleHandle.Complete();
         }
         public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)
         {
-            if(CompressionArraysRangedUshort == null)
-            {
-                CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, true);
-            }
             BasisNetworkAvatarDecompressor.DeCompress(this, serverSideSyncPlayerMessage);
         }
         public void ReceiveAvatarChangeRequest(ServerAvatarChangeMessage ServerAvatarChangeMessage)
@@ -236,10 +232,6 @@ AvatarJobs.muscleHandle.Complete();
             if (AudioReceiverModule != null)
             {
                 AudioReceiverModule.OnDestroy();
-            }
-            if (CompressionArraysRangedUshort != null)
-            {
-                CompressionArraysRangedUshort.Dispose();
             }
         }
         public void OnCalibration()

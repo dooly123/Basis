@@ -23,10 +23,6 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 if (NetworkedPlayer.Player.Avatar != null)
                 {
-                    if (CompressionArraysRangedUshort == null)
-                    {
-                        CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
-                    }
                     NetworkedPlayer.Player.Avatar.Animator.logWarnings = false;
                     BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
                 }
@@ -87,10 +83,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 NetworkedPlayer.Player.OnAvatarSwitched -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= SendOutLatestAvatar;
                 HasEvents = false;
-            }
-            if (CompressionArraysRangedUshort != null)
-            {
-                CompressionArraysRangedUshort.Dispose();
             }
         }
         public void SendOutLatestAvatar()

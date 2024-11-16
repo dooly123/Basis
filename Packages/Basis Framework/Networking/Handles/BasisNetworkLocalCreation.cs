@@ -32,10 +32,6 @@ namespace Basis.Scripts.Networking
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-                if (NetworkedPlayer.NetworkSend.CompressionArraysRangedUshort == null)
-                {
-                    NetworkedPlayer.NetworkSend.CompressionArraysRangedUshort = new CompressionArraysRangedUshort(95, -180, 180, BasisNetworkConstants.MusclePrecision, false);
-                }
                 BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
 
                 BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = NetworkedPlayer.NetworkSend.LASM;
