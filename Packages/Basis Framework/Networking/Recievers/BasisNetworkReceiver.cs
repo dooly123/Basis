@@ -34,8 +34,7 @@ namespace Basis.Scripts.Networking.Recievers
             }
 
             float deltaTime = Time.deltaTime;
-
-            BasisAvatarLerp.UpdateAvatar(ref CurrentData, LastData, TargetData, AvatarJobs, TimeAsDoubleWhenLastSync, Settings.LerpSpeedMovement, deltaTime, deltaTime * Settings.LerpSpeedMuscles, Settings.TeleportDistanceSquared);
+            BasisAvatarLerp.UpdateAvatar(NetworkAvatarSyncDelta, ref CurrentData, LastData, TargetData, AvatarJobs, TimeAsDoubleWhenLastSync, Settings.LerpSpeedMovement, deltaTime, deltaTime * Settings.LerpSpeedMuscles, Settings.TeleportDistanceSquared);
 
             ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData, ref HumanPose);
             PoseHandler.SetHumanPose(ref HumanPose);

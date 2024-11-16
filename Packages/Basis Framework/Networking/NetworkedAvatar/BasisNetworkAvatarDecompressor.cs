@@ -12,6 +12,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
             DecompressAvatar(Base.CompressionArraysRangedUshort, ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
             Base.LastData = Base.CurrentData.DeepCopy();
+            Base.NetworkAvatarSyncDelta = (float)(Time.realtimeSinceStartupAsDouble - Base.TimeAsDoubleWhenLastSync);
             Base.TimeAsDoubleWhenLastSync = Time.realtimeSinceStartupAsDouble;
         }
         public static void DecompressAvatar(CompressionArraysRangedUshort CompressionArraysRangedUshort, ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)

@@ -47,6 +47,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         [SerializeField]
         public CompressionArraysRangedUshort CompressionArraysRangedUshort;
         public double TimeAsDoubleWhenLastSync;
+        public float NetworkAvatarSyncDelta = 0.1f;
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()

@@ -1,7 +1,6 @@
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Tests;
 using Unity.Jobs;
-using Unity.Mathematics;
 using UnityEngine;
 namespace Basis.Scripts.Networking.Smoothing
 {
@@ -9,7 +8,7 @@ namespace Basis.Scripts.Networking.Smoothing
     {
         public static string Settings = "Assets/ScriptableObjects/Avatar Lerp Data.asset";
 
-        public static void UpdateAvatar(ref BasisAvatarData Output, BasisAvatarData LastData, BasisAvatarData Target, BasisDataJobs DataJobs, double LastSyncTime, float SmoothingSpeedPosition, float PositiondeltaTime, float MuscleLerp, float teleportThreshold)
+        public static void UpdateAvatar(float SyncTiming,ref BasisAvatarData Output, BasisAvatarData LastData, BasisAvatarData Target, BasisDataJobs DataJobs, double LastSyncTime, float SmoothingSpeedPosition, float PositiondeltaTime, float MuscleLerp, float teleportThreshold)
         {
             DataJobs.positionJob.targetPositions = Target.Vectors;
             DataJobs.positionJob.positions = Output.Vectors;
@@ -26,7 +25,7 @@ namespace Basis.Scripts.Networking.Smoothing
             float timeElapsed = (float)(TimeAsDouble - LastSyncTime);  // Elapsed time since last update
 
             // Interpolate the rotation smoothly
-            SmoothStep(ref Output, timeElapsed, 0.1f, LastData, Target);
+            SmoothStep(ref Output, timeElapsed, SyncTiming, LastData, Target);
             DataJobs.muscleHandle.Complete();
         }
 
