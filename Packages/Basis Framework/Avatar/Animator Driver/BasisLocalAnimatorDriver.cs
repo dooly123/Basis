@@ -161,6 +161,7 @@ namespace Basis.Scripts.Animator_Driver
         public Quaternion smoothedRotation;
         public void AssignHipsFBTracker()
         {
+            basisAnimatorVariableApply.StopAll();
             HasHipsInput = BasisDeviceManagement.Instance.FindDevice(out HipsInput, BasisBoneTrackedRole.Hips);
         }
         private void FindReferences()

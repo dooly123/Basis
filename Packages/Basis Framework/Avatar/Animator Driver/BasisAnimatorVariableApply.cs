@@ -49,11 +49,16 @@ namespace Basis.Scripts.Animator_Driver
                 BasisAnimatorVariables.cachedVerticalMovement = verticalMovement;
             }
             UpdateJumpState();
-            IsStopped = false;
+            if (IsStopped != false)
+            {
+                IsStopped = false;
+                Animator.SetBool(BasisAvatarAnimatorHash.IsPaused, false);
+            }
         }
         public bool IsStopped = false;
         public void StopAll()
         {
+            Debug.Log("Stopping all");
             // Set all animator boolean parameters to false
             Animator.SetBool(BasisAvatarAnimatorHash.HashMovingState, false);
             Animator.SetBool(BasisAvatarAnimatorHash.HashCrouchedState, false);
@@ -83,6 +88,7 @@ namespace Basis.Scripts.Animator_Driver
 
             BasisAnimatorVariables.Velocity = Vector3.zero; // Assuming Velocity is a Vector3
             IsStopped = true;
+            Animator.SetBool(BasisAvatarAnimatorHash.IsPaused, true);
         }
         public void LoadCachedAnimatorHashes(Animator Anim)
         {
@@ -92,6 +98,8 @@ namespace Basis.Scripts.Animator_Driver
             BasisAvatarAnimatorHash.HashCurrentSpeed = Animator.StringToHash("CurrentSpeed");
             BasisAvatarAnimatorHash.HashCrouchedState = Animator.StringToHash("CrouchedState");
             BasisAvatarAnimatorHash.HashMovingState = Animator.StringToHash("MovingState");
+
+            BasisAvatarAnimatorHash.IsPaused = Animator.StringToHash("IsPaused");
 
             BasisAvatarAnimatorHash.HashIsFalling = Animator.StringToHash("IsFalling");
             BasisAvatarAnimatorHash.HashIsLanding = Animator.StringToHash("IsLanding");

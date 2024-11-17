@@ -9,6 +9,8 @@ public struct BasisAvatarAnimatorHash
     public int HashCrouchedState;
     public int HashMovingState;
 
+        public int IsPaused;
+
     public int HashIsJumping;
     public int HashIsFalling;
     public int HashIsLanding;
