@@ -269,7 +269,8 @@ namespace Basis.Scripts.Networking
                 playerIdMessage = new PlayerIdMessage
                 {
                     playerID = NewOwner
-                }
+                },
+                ownershipID = UniqueNetworkId
             };
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
