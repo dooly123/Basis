@@ -145,11 +145,13 @@ public class BasisTransformMapping
 
         references.Hips = Anim.GetBoneTransform(HumanBodyBones.Hips);
         references.HasHips = BoolState(references.Hips);
+
         references.spine = Anim.GetBoneTransform(HumanBodyBones.Spine);
         references.Hasspine = BoolState(references.spine);
 
         references.chest = Anim.GetBoneTransform(HumanBodyBones.Chest);
         references.Haschest = BoolState(references.chest);
+
         references.Upperchest = Anim.GetBoneTransform(HumanBodyBones.UpperChest);
         references.HasUpperchest = BoolState(references.Upperchest);
 

@@ -49,9 +49,7 @@ namespace Basis.Scripts.Avatar
             List<BasisBoneTrackedRole> rolesToDiscover = GetAllRoles();
             List<BasisBoneTrackedRole> trackInputRoles = new List<BasisBoneTrackedRole>();
             int count = rolesToDiscover.Count;
-          //  BasisLocalPlayer.Instance.Avatar.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Hips,  BasisBoneTrackedRole.Hips))
-                for (int Index = 0; Index < count; Index++)
+            for (int Index = 0; Index < count; Index++)
             {
                 BasisBoneTrackedRole Role = rolesToDiscover[Index];
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(Role))
@@ -263,64 +261,63 @@ namespace Basis.Scripts.Avatar
 
             switch (role)
             {
-                case BasisBoneTrackedRole.CenterEye:
-                    return 0.6f;
-                case BasisBoneTrackedRole.Head:
-                    return 0.6f;
-                case BasisBoneTrackedRole.Neck:
-                    return 0.6f;
+                //    case BasisBoneTrackedRole.CenterEye:
+                //     return 0.1f;
+                //   case BasisBoneTrackedRole.Head:
+                //       return 0.1f;
+                //   case BasisBoneTrackedRole.Mouth:
+                //     return 0.1f;
+                //  case BasisBoneTrackedRole.Neck:
+                //     return 0.2f;
                 case BasisBoneTrackedRole.Chest:
-                    return 0.8f;
+                    return 0.45f;
                 case BasisBoneTrackedRole.Hips:
-                    return 0.8f;
-                case BasisBoneTrackedRole.Spine:
-                    return 0.8f;
+                    return 0.45f;
+                //case BasisBoneTrackedRole.Spine:
+                //    return 0.45f;
 
                 case BasisBoneTrackedRole.LeftUpperLeg:
-                    return 0.8f;
+                    return 0.4f;
                 case BasisBoneTrackedRole.RightUpperLeg:
-                    return 0.8f;
+                    return 0.4f;
 
                 case BasisBoneTrackedRole.LeftLowerLeg:
-                    return 0.8f;
+                    return 0.5f;
                 case BasisBoneTrackedRole.RightLowerLeg:
-                    return 0.8f;
+                    return 0.5f;
 
                 case BasisBoneTrackedRole.LeftFoot:
-                    return 0.6f;
+                    return 0.5f;
                 case BasisBoneTrackedRole.RightFoot:
-                    return 0.6f;
+                    return 0.5f;
 
                 case BasisBoneTrackedRole.LeftShoulder:
-                    return 0.6f;
+                    return 0.4f;
                 case BasisBoneTrackedRole.RightShoulder:
-                    return 0.6f;
+                    return 0.4f;
 
                 case BasisBoneTrackedRole.LeftUpperArm:
-                    return 0.8f;
+                    return 0.6f;
                 case BasisBoneTrackedRole.RightUpperArm:
-                    return 0.8f;
+                    return 0.6f;
 
                 case BasisBoneTrackedRole.LeftLowerArm:
-                    return 0.8f;
+                    return 0.6f;
                 case BasisBoneTrackedRole.RightLowerArm:
-                    return 0.8f;
+                    return 0.6f;
 
                 case BasisBoneTrackedRole.LeftHand:
-                    return 0.6f;
+                    return 0.4f;
                 case BasisBoneTrackedRole.RightHand:
-                    return 0.6f;
+                    return 0.4f;
 
                 case BasisBoneTrackedRole.LeftToes:
-                    return 0.6f;
+                    return 0.4f;
                 case BasisBoneTrackedRole.RightToes:
-                    return 0.6f;
-
-                case BasisBoneTrackedRole.Mouth:
-                    return 0.6f;
+                    return 0.4f;
                 default:
                     Console.WriteLine("Unknown role " + role);
-                    return 0.8f;
+                    return 0;
             }
         }
     }

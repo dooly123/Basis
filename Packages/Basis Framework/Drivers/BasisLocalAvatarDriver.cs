@@ -29,7 +29,7 @@ namespace Basis.Scripts.Drivers
         public TwoBoneIKConstraint RightFootTwoBoneIK;
         public TwoBoneIKConstraint LeftHandTwoBoneIK;
         public TwoBoneIKConstraint RightHandTwoBoneIK;
-        public TwoBoneIKConstraint UpperChestTwoBoneIK;
+       // public TwoBoneIKConstraint UpperChestTwoBoneIK;
         public TwoBoneIKConstraint LeftShoulderTwoBoneIK;
         public TwoBoneIKConstraint RightShoulderTwoBoneIK;
         [SerializeField]
@@ -44,7 +44,7 @@ namespace Basis.Scripts.Drivers
         public Rig RightHandRig;
         public Rig LeftFootRig;
         public Rig RightFootRig;
-        public Rig ChestSpineRig;
+      //  public Rig ChestSpineRig;
         public Rig LeftShoulderRig;
         public Rig RightShoulderRig;
 
@@ -56,7 +56,7 @@ namespace Basis.Scripts.Drivers
         public RigLayer RightToeLayer;
 
         public RigLayer RigHeadLayer;
-        public RigLayer ChestSpineLayer;
+       // public RigLayer ChestSpineLayer;
 
         public RigLayer LeftShoulderLayer;
         public RigLayer RightShoulderLayer;
@@ -227,10 +227,10 @@ namespace Basis.Scripts.Drivers
             {
                 Destroy(RightFootRig.gameObject);
             }
-            if (ChestSpineRig != null)
-            {
-                Destroy(ChestSpineRig.gameObject);
-            }
+            //if (ChestSpineRig != null)
+           // {
+            //    Destroy(ChestSpineRig.gameObject);
+            //}
             if (LeftShoulderRig != null)
             {
                 Destroy(LeftShoulderRig.gameObject);
@@ -356,18 +356,21 @@ namespace Basis.Scripts.Drivers
         }
         public void SetBodySettings(BasisLocalBoneDriver driver)
         {
-            SetupSpineRig(driver);
-            SetupHeadRig(driver);
-            SetupRightShoulderRig(driver);
-            SetupLeftShoulderRig(driver);
+          //  SetupSpineRig(driver);
 
             // Additional body parts
             LeftHand(driver);
             RightHand(driver);
             LeftFoot(driver);
             RightFoot(driver);
+
             LeftToe(driver);
             RightToe(driver);
+
+            SetupRightShoulderRig(driver);
+            SetupLeftShoulderRig(driver);
+
+            SetupHeadRig(driver);
         }
         /// <summary>
         /// Sets up the Head rig, including chest, neck, and head bones.
@@ -375,16 +378,16 @@ namespace Basis.Scripts.Drivers
         private void SetupHeadRig(BasisLocalBoneDriver driver)
         {
             GameObject HeadRig = CreateRig("Chest, Neck, Head", true, out RigHeadRig, out RigHeadLayer);
-            CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Neck, true, out HeadTwoBoneIK, true, true);
+            CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Chest, true, out HeadTwoBoneIK, true, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
-            if (driver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Head))
+            if (driver.FindBone(out BasisBoneControl Head, BasisBoneTrackedRole.Head))
+            {
+                controls.Add(Head);
+            }
+            if (driver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Chest))
             {
                 controls.Add(Chest);
-            }
-            if (driver.FindBone(out BasisBoneControl Neck, BasisBoneTrackedRole.Neck))
-            {
-                controls.Add(Neck);
             }
             WriteUpEvents(controls, RigHeadLayer);
         }
@@ -395,7 +398,16 @@ namespace Basis.Scripts.Drivers
         private void SetupRightShoulderRig(BasisLocalBoneDriver driver)
         {
             GameObject RightShoulder = CreateRig("Chest, RightShoulder, RightUpperArm", true, out RightShoulderRig, out RightShoulderLayer);
-            CreateTwoBone(driver, RightShoulder, References.chest, References.RightShoulder, References.RightUpperArm, BasisBoneTrackedRole.RightUpperArm, BasisBoneTrackedRole.RightShoulder, true, out RightShoulderTwoBoneIK, false, true);
+            Transform Chest;
+            if(References.HasUpperchest)
+            {
+                Chest = References.Upperchest;
+            }
+            else
+            {
+                Chest = References.chest;
+            }
+            CreateTwoBone(driver, RightShoulder, Chest, References.RightShoulder, References.RightUpperArm, BasisBoneTrackedRole.RightUpperArm, BasisBoneTrackedRole.RightShoulder, true, out RightShoulderTwoBoneIK, false, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl RightShoulderRole, BasisBoneTrackedRole.RightShoulder))
@@ -415,7 +427,16 @@ namespace Basis.Scripts.Drivers
         private void SetupLeftShoulderRig(BasisLocalBoneDriver driver)
         {
             GameObject LeftShoulder = CreateRig("Chest, LeftShoulder, LeftUpperArm", true, out LeftShoulderRig, out LeftShoulderLayer);
-            CreateTwoBone(driver, LeftShoulder, References.chest, References.leftShoulder, References.leftUpperArm, BasisBoneTrackedRole.LeftUpperArm, BasisBoneTrackedRole.LeftShoulder, true, out LeftShoulderTwoBoneIK, false, true);
+            Transform Chest;
+            if (References.HasUpperchest)
+            {
+                Chest = References.Upperchest;
+            }
+            else
+            {
+                Chest = References.chest;
+            }
+            CreateTwoBone(driver, LeftShoulder, Chest, References.leftShoulder, References.leftUpperArm, BasisBoneTrackedRole.LeftUpperArm, BasisBoneTrackedRole.LeftShoulder, true, out LeftShoulderTwoBoneIK, false, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl LeftShoulderRole, BasisBoneTrackedRole.LeftShoulder))
@@ -428,26 +449,27 @@ namespace Basis.Scripts.Drivers
             }
             WriteUpEvents(controls, LeftShoulderLayer);
         }
-
+        /*
         /// <summary>
         /// Sets up the Spine rig, including the chest and spine bones.
         /// </summary>
         private void SetupSpineRig(BasisLocalBoneDriver driver)
         {
             GameObject Body = CreateRig("spine,chest,Upperchest", true, out ChestSpineRig, out ChestSpineLayer);
-            CreateTwoBone(driver, Body, References.spine, References.chest, References.Upperchest, BasisBoneTrackedRole.Chest, BasisBoneTrackedRole.Chest, true, out UpperChestTwoBoneIK, true, true);
+            CreateTwoBone(driver, Body, References.spine, References.chest, References.Upperchest, BasisBoneTrackedRole.Chest, BasisBoneTrackedRole.Spine, true, out UpperChestTwoBoneIK, true, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
-            if (driver.FindBone(out BasisBoneControl Spine, BasisBoneTrackedRole.Spine))
-            {
-                controls.Add(Spine);
-            }
             if (driver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Chest))
             {
                 controls.Add(Chest);
             }
+            if (driver.FindBone(out BasisBoneControl Spine, BasisBoneTrackedRole.Spine))
+            {
+                controls.Add(Spine);
+            }
             WriteUpEvents(controls, ChestSpineLayer);
         }
+        */
         public void LeftHand(BasisLocalBoneDriver driver)
         {
             GameObject Hands = CreateRig("LeftUpperArm, LeftLowerArm, LeftHand", false, out LeftHandRig, out LeftHandLayer);
@@ -545,10 +567,6 @@ namespace Basis.Scripts.Drivers
             {
                 case BasisBoneTrackedRole.Chest:
                     // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
-                    UpperChestTwoBoneIK.data.hintWeight = weight;
-                    break;
-                case BasisBoneTrackedRole.Neck:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     HeadTwoBoneIK.data.hintWeight = weight;
                     break;
 
@@ -568,6 +586,15 @@ namespace Basis.Scripts.Drivers
                     break;
 
                 case BasisBoneTrackedRole.LeftUpperArm:
+                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    LeftHandTwoBoneIK.data.hintWeight = weight;
+                    break;
+                case BasisBoneTrackedRole.LeftLowerArm:
+                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    RightHandTwoBoneIK.data.hintWeight = weight;
+                    break;
+
+                case BasisBoneTrackedRole.RightLowerArm:
                     // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     LeftHandTwoBoneIK.data.hintWeight = weight;
                     break;

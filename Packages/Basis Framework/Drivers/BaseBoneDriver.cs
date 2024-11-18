@@ -8,6 +8,7 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Gizmos = Popcron.Gizmos;
 using Unity.Mathematics;
+using System.Data;
 
 namespace Basis.Scripts.Drivers
 {
@@ -260,13 +261,14 @@ namespace Basis.Scripts.Drivers
                 {
                     if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(Control, out BasisBoneTrackedRole role))
                     {
-                        Gizmos.Sphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
+                        if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(role))
+                        {
+                            Gizmos.Sphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
+                        }
                     }
                 }
             }
         }
-
-
         public class OrderedDelegate
         {
             private List<KeyValuePair<int, Action>> actions = new List<KeyValuePair<int, Action>>();

@@ -64,14 +64,13 @@
     {
         public static bool CheckItsFBTracker(BasisBoneTrackedRole role)
         {
-            return role != BasisBoneTrackedRole.CenterEye &&
-                    role != BasisBoneTrackedRole.Head &&
+            return CheckIfHeadAreaTracker(role) == false &&
                    role != BasisBoneTrackedRole.LeftHand &&
                    role != BasisBoneTrackedRole.RightHand &&
+                   role != BasisBoneTrackedRole.Spine &&
                    CheckIfLeftHand(role) == false &&
                    CheckIfRightHand(role) == false;
         }
-
         public static bool CheckIfLeftHand(BasisBoneTrackedRole role)
         {
             switch (role)
@@ -96,7 +95,6 @@
                     return false;
             }
         }
-
         public static bool CheckIfRightHand(BasisBoneTrackedRole role)
         {
             switch (role)
@@ -120,6 +118,10 @@
                 default:
                     return false;
             }
+        }
+        public static bool CheckIfHeadAreaTracker(BasisBoneTrackedRole role)
+        {
+            return role == BasisBoneTrackedRole.CenterEye || role == BasisBoneTrackedRole.Head || role == BasisBoneTrackedRole.Neck || role == BasisBoneTrackedRole.Mouth;
         }
     }
 }
