@@ -7,7 +7,6 @@ using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Unity.Mathematics;
-using System.Data;
 
 namespace Basis.Scripts.Drivers
 {
@@ -200,11 +199,11 @@ namespace Basis.Scripts.Drivers
                     }
                     else
                     {
-                        if (Control.PositionControl.HasTarget)
+                        if (Control.TargetControl.HasTarget)
                         {
-                            if (BasisGizmoManager.CreateLineGizmo(out Control.PositionControl.LineDrawIndex, BonePosition, Control.PositionControl.Target.OutgoingWorldData.position, 0.03f, Control.Color))
+                            if (BasisGizmoManager.CreateLineGizmo(out Control.TargetControl.LineDrawIndex, BonePosition, Control.TargetControl.Target.OutgoingWorldData.position, 0.03f, Control.Color))
                             {
-                                Control.PositionControl.HasLineDraw = true;
+                                Control.TargetControl.HasLineDraw = true;
                             }
                         }
                         if (BasisGizmoManager.CreateSphereGizmo(out Control.GizmoReference, BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color))
@@ -237,27 +236,17 @@ namespace Basis.Scripts.Drivers
 
             return rainbowColors;
         }
-        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl target, float lerpAmount)
+        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl target, float lerpAmount, float positional = 40)
         {
-            BasisRotationalControl rotation = addToBone.RotationControl;
-            rotation.Target = target;
-            rotation.LerpAmountNormal = lerpAmount;
-            rotation.LerpAmountFastMovement = lerpAmount * 4;
-            rotation.AngleBeforeSpeedup = 25f;
-            rotation.HasTarget = target != null;
-
-            addToBone.RotationControl = rotation;
-        }
-        public void CreatePositionalLock(BasisBoneControl bone, BasisBoneControl target, float positional = 40)
-        {
-            Vector3 offset = bone.TposeLocal.position - target.TposeLocal.position;
-            BasisPositionControl position = bone.PositionControl;
-            position.Offset = offset;
-            position.Target = target;
-            position.LerpAmount = positional;
-            position.HasTarget = target != null;
-
-            bone.PositionControl = position;
+            addToBone.TargetControl.Target = target;
+            addToBone.TargetControl.LerpAmountNormal = lerpAmount;
+            addToBone.TargetControl.LerpAmountFastMovement = lerpAmount * 4;
+            addToBone.TargetControl.AngleBeforeSpeedup = 25f;
+            addToBone.TargetControl.HasRotationalTarget = target != null;
+            addToBone.TargetControl.Offset = addToBone.TposeLocal.position - target.TposeLocal.position;
+            addToBone.TargetControl.Target = target;
+            addToBone.TargetControl.LerpAmount = positional;
+            addToBone.TargetControl.HasTarget = target != null;
         }
         public static Vector3 ConvertToAvatarSpaceInital(Animator animator, Vector3 WorldSpace, float AvatarHeightOffset)// out Vector3 FloorPosition
         {
@@ -288,11 +277,11 @@ namespace Basis.Scripts.Drivers
             if (Control.HasBone)
             {
                 Vector3 BonePosition = Control.OutgoingWorldData.position;
-                if (Control.PositionControl.HasTarget)
+                if (Control.TargetControl.HasTarget)
                 {
-                    if (Control.PositionControl.HasLineDraw)
+                    if (Control.TargetControl.HasLineDraw)
                     {
-                        BasisGizmoManager.UpdateLineGizmo(Control.PositionControl.LineDrawIndex, BonePosition, Control.PositionControl.Target.OutgoingWorldData.position);
+                        BasisGizmoManager.UpdateLineGizmo(Control.TargetControl.LineDrawIndex, BonePosition, Control.TargetControl.Target.OutgoingWorldData.position);
                     }
                 }
                 if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(Control, out BasisBoneTrackedRole Role))

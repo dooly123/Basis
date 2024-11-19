@@ -173,10 +173,10 @@ public class BasisVirtualSpineDriver
 
     private void ApplyPositionControl(BasisBoneControl boneControl)
     {
-        if (boneControl.PositionControl.HasTarget)
+        if (boneControl.TargetControl.HasTarget)
         {
-            float3 customDirection = math.mul(boneControl.PositionControl.Target.OutGoingData.rotation, boneControl.PositionControl.Offset);
-            boneControl.OutGoingData.position = boneControl.PositionControl.Target.OutGoingData.position + customDirection;
+            float3 customDirection = math.mul(boneControl.TargetControl.Target.OutGoingData.rotation, boneControl.TargetControl.Offset);
+            boneControl.OutGoingData.position = boneControl.TargetControl.Target.OutGoingData.position + customDirection;
         }
     }
 }

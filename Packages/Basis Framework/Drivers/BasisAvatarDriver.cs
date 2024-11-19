@@ -232,7 +232,7 @@ namespace Basis.Scripts.Drivers
         public void ForceUpdateAnimator(Animator Anim)
         {
             // Specify the time you want the Animator to update to (in seconds)
-            float desiredTime = Time.time;
+            float desiredTime = Time.deltaTime;
 
             // Call the Update method to force the Animator to update to the desired time
             Anim.Update(desiredTime);
@@ -286,8 +286,7 @@ namespace Basis.Scripts.Drivers
                 {
                     Debug.LogError("Cant Find Bone " + LockToBoneRole);
                 }
-                BaseBoneDriver.CreatePositionalLock(AssignedToAddToBone, LockToBone, QuaternionLerpAmount);
-                BaseBoneDriver.CreateRotationalLock(AssignedToAddToBone, LockToBone, PositionLerpAmount);
+                BaseBoneDriver.CreateRotationalLock(AssignedToAddToBone, LockToBone, PositionLerpAmount, QuaternionLerpAmount);
             }
         }
         public void FindSkinnedMeshRenders()

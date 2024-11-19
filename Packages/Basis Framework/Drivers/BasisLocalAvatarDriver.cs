@@ -7,13 +7,10 @@ using Basis.Scripts.Eye_Follow;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.Playables;
 
 namespace Basis.Scripts.Drivers
 {
@@ -86,6 +83,7 @@ namespace Basis.Scripts.Drivers
             CleanupBeforeContinue();
             AdditionalTransforms.Clear();
             Rigs.Clear();
+          //  Player.Avatar.Animator.enabled = false;
             if (Player.Avatar.Animator.runtimeAnimatorController == null)
             {
                 UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Locomotion);

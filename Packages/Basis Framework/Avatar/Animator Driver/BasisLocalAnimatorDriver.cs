@@ -172,9 +172,13 @@ namespace Basis.Scripts.Animator_Driver
                 localPlayer.Move.ReadyToRead += Simulate;
                 localPlayer.Move.JustJumped += JustJumped;
                 localPlayer.Move.JustLanded += JustLanded;
+             //   localPlayer.LocalBoneDriver.ReadyToRead.AddAction(,Run);
             }
         }
+        public void Run()
+        {
 
+        }
         public void HandleTeleport()
         {
             currentVelocity = Vector3.zero;
