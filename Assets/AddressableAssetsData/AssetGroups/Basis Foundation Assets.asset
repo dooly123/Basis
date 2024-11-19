@@ -80,6 +80,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c89e9ae91882974f8334191aa8f704f
+    m_Address: Packages/com.basis.gizmos/Gizmo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d0b5834872dc2e49bcc10f8b0d13e9c
     m_Address: Assets/UI/Material/RayCastMaterial.mat
     m_ReadOnly: 0
@@ -162,6 +167,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b8e3db83cb310c40afaa430d0071a18
     m_Address: Assets/ScriptableObjects/Basis Devices Matcher.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a67751b7d392b924e89b90084f01a19b
+    m_Address: Packages/com.basis.gizmos/GizmoLine.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb4eb766250cf0b4d9e2dc0a7d939808
+    m_Address: GizmoMaterial
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

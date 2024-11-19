@@ -182,6 +182,7 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 GameObject.Destroy(VisemeDriver);
             }
+          LocalBoneDriver.DeInitalzeGizmos();
         }
         public void DriveAudioToViseme()
         {

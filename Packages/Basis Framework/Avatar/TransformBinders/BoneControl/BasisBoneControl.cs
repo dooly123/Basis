@@ -29,7 +29,11 @@ namespace Basis.Scripts.TransformBinders.BoneControl
         public BasisCalibratedCoords IncomingData = new BasisCalibratedCoords();
         [SerializeField]
         public BasisCalibratedCoords OutgoingWorldData = new BasisCalibratedCoords();
+        public int GizmoReference = -1;
+        public bool HasGizmo = false;
 
+        public int TposeGizmoReference = -1;
+        public bool TposeHasGizmo = false;
         public Action VirtualRun;
         public bool HasVirtualOverride;
         public float trackersmooth = 25;

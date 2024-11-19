@@ -3,7 +3,6 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using Gizmos = Popcron.Gizmos;
 namespace Basis.Scripts.Drivers
 {
     public class BasisFootPlacementDriver : MonoBehaviour
@@ -80,6 +79,11 @@ namespace Basis.Scripts.Drivers
             {
 
             }
+            if (BasisGizmoManager.UseGizmos)
+            {
+                leftFootSolver.DrawGizmos();
+                rightFootSolver.DrawGizmos();
+            }
         }
 
         private void UpdateMovementData()
@@ -136,15 +140,6 @@ namespace Basis.Scripts.Drivers
                 Localplayer.LocalBoneDriver.OnPostSimulate -= Simulate;
                 Localplayer.AvatarDriver.TposeStateChange -= OnTpose;
                 HasEvents = false;
-            }
-        }
-
-        private void OnRenderObject()
-        {
-            if (Gizmos.Enabled)
-            {
-                leftFootSolver.DrawGizmos();
-                rightFootSolver.DrawGizmos();
             }
         }
 
@@ -267,7 +262,7 @@ namespace Basis.Scripts.Drivers
 
             public void DrawGizmos()
             {
-                Gizmos.Line(lowerLeg.OutgoingWorldData.position, worldBottomPoint);
+              //  BasisGizmoManager.CreateLineGizmo(lowerLeg.OutgoingWorldData.position, worldBottomPoint);
             }
         }
     }

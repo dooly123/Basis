@@ -37,6 +37,7 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
             OnSimulate -= CalculateHeadBoneData;
             HasEvent = false;
         }
+        DeInitalzeGizmos();
     }
     public void CalculateHeadBoneData()
     {

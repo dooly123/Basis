@@ -16,7 +16,6 @@ namespace Basis.Scripts.Eye_Follow
         public float CurrentlookAroundInterval;
         public float timer; // Timer to track look-around interval
         public float DistanceBeforeTeleport = 30;
-
         public override void Simulate()
         {
             if (IsAble())
@@ -64,6 +63,23 @@ namespace Basis.Scripts.Eye_Follow
                     {
                         RightEyeTargetWorld = CenterTargetWorld + RightEyeInitallocalSpace.position;
                         rightEyeTransform.rotation = LookAtTarget(rightEyeTransform.position, RightEyeTargetWorld, RightEyeInitallocalSpace.rotation * Quaternion.Inverse(BasisLocalPlayer.Instance.AvatarDriver.References.head.rotation));
+                    }
+                    if (BasisGizmoManager.UseGizmos)
+                    {
+                        if (RightEyeHasGizmo)
+                        {
+                            if (BasisGizmoManager.UpdateSphereGizmo(RightEyeGizmoIndex, RightEyeTargetWorld) == false)
+                            {
+                                RightEyeHasGizmo = false;
+                            }
+                        }
+                        if (LeftEyeHasGizmo)
+                        {
+                            if (BasisGizmoManager.UpdateSphereGizmo(LeftEyeGizmoIndex, LeftEyeTargetWorld) == false)
+                            {
+                                LeftEyeHasGizmo = false;
+                            }
+                        }
                     }
                 }
             }

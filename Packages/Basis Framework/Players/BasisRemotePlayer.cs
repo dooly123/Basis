@@ -48,6 +48,7 @@ namespace Basis.Scripts.BasisSdk.Players
                     HasEvents = false;
                 }
             }
+
         }
         public void UpdateTransform(Vector3 position, Quaternion rotation)
         {

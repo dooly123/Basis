@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Basis.Scripts.Eye_Follow
 {
-    using Gizmos = Popcron.Gizmos;
     public abstract class BasisEyeFollowBase : MonoBehaviour
     {
         public Quaternion leftEyeInitialRotation;
@@ -41,6 +40,7 @@ namespace Basis.Scripts.Eye_Follow
                 BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
                 HasEvents = false;
             }
+            BasisGizmoManager.OnUseGizmosChanged -= UpdatGizmoUsage;
             //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged -= AfterTeleport;
         }
         public void Initalize(BasisAvatarDriver CharacterAvatarDriver)
@@ -75,18 +75,37 @@ namespace Basis.Scripts.Eye_Follow
 
                 rightEyeInitialRotation = rightEyeTransform.localRotation;
             }
+            BasisGizmoManager.OnUseGizmosChanged += UpdatGizmoUsage;
+        }
+        public void UpdatGizmoUsage(bool State)
+        {
+            Debug.Log("Running Bone EyeFollow Gizmos");
+            if (State)
+            {
+                if (LeftEyeHasGizmo == false)
+                {
+                    BasisGizmoManager.CreateSphereGizmo(out LeftEyeGizmoIndex, LeftEyeTargetWorld, 0.1f, Color.cyan);
+                    LeftEyeHasGizmo = true;
+                }
+                if (RightEyeHasGizmo == false)
+                {
+                    BasisGizmoManager.CreateSphereGizmo(out RightEyeGizmoIndex, RightEyeTargetWorld, 0.1f, Color.magenta);
+                    RightEyeHasGizmo = true;
+                }
+            }
+            else
+            {
+                LeftEyeHasGizmo = false;
+                RightEyeHasGizmo = false;
+            }
         }
         public bool HasLeftEye = false;
         public bool HasRightEye = false;
         public bool HasHead = false;
-        public void OnRenderObject()
-        {
-            if (Gizmos.Enabled)
-            {
-                Gizmos.Sphere(LeftEyeTargetWorld, 0.1f, Color.cyan);
-                Gizmos.Sphere(RightEyeTargetWorld, 0.1f, Color.magenta);
-            }
-        }
+        public bool LeftEyeHasGizmo;
+        public bool RightEyeHasGizmo;
+        public int LeftEyeGizmoIndex;
+        public int RightEyeGizmoIndex;
         public Vector3 LeftEyeTargetWorld;
         public Vector3 RightEyeTargetWorld;
         public float3 CenterTargetWorld;

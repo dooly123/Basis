@@ -6,6 +6,8 @@ namespace Basis.Scripts.TransformBinders.BoneControl
     [System.Serializable]
     public struct BasisPositionControl
     {
+        public bool HasLineDraw;
+        public int LineDrawIndex;
         public bool HasTarget;
         public Vector3 Offset;
         public float LerpAmount;

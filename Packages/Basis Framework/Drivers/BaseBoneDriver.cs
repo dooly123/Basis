@@ -6,7 +6,6 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
-using Gizmos = Popcron.Gizmos;
 using Unity.Mathematics;
 using System.Data;
 
@@ -73,6 +72,13 @@ namespace Basis.Scripts.Drivers
                 Controls[Index].ApplyMovement();
             }
             ReadyToRead?.Invoke();
+            if (BasisGizmoManager.UseGizmos)
+            {
+                for (int Index = 0; Index < ControlsLength; Index++)
+                {
+                    DrawGizmos(Controls[Index]);
+                }
+            }
         }
         public void SimulateAndApply()
         {
@@ -160,6 +166,59 @@ namespace Basis.Scripts.Drivers
             }
             AddRange(newControls.ToArray(), Roles.ToArray());
             HasControls = true;
+            InitalzeGizmos();
+        }
+        public void InitalzeGizmos()
+        {
+           BasisGizmoManager.OnUseGizmosChanged += UpdatGizmoUsage;
+        }
+        public void DeInitalzeGizmos()
+        {
+           BasisGizmoManager.OnUseGizmosChanged -= UpdatGizmoUsage;
+        }
+        public void UpdatGizmoUsage(bool State)
+        {
+            Debug.Log("Running Bone Driver Gizmos");
+           // Debug.Log("updating State!");
+            for (int Index = 0; Index < ControlsLength; Index++)
+            {
+                BasisBoneControl Control = Controls[Index];
+                BasisBoneTrackedRole Role = trackedRoles[Index];
+                if (State)
+                {
+                    if(Role == BasisBoneTrackedRole.CenterEye)
+                    {
+                        continue;
+                    }
+                    Vector3 BonePosition = Control.OutgoingWorldData.position;
+                    if (BasisBoneTrackedRoleCommonCheck.CheckIfRightHand(Role) || BasisBoneTrackedRoleCommonCheck.CheckIfLeftHand(Role))
+                    {
+                        if (BasisGizmoManager.CreateSphereGizmo(out Control.GizmoReference, BonePosition, HandGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color))
+                        {
+                            Control.HasGizmo = true;
+                        }
+                    }
+                    else
+                    {
+                        if (Control.PositionControl.HasTarget)
+                        {
+                            if (BasisGizmoManager.CreateLineGizmo(out Control.PositionControl.LineDrawIndex, BonePosition, Control.PositionControl.Target.OutgoingWorldData.position, 0.03f, Control.Color))
+                            {
+                                Control.PositionControl.HasLineDraw = true;
+                            }
+                        }
+                        if (BasisGizmoManager.CreateSphereGizmo(out Control.GizmoReference, BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color))
+                        {
+                            Control.HasGizmo = true;
+                        }
+                    }
+                }
+                else
+                {
+                    Control.HasGizmo = false;
+                    Control.TposeHasGizmo = false;
+                }
+            }
         }
         public void FillOutBasicInformation(BasisBoneControl Control, string Name, Color Color)
         {
@@ -178,29 +237,27 @@ namespace Basis.Scripts.Drivers
 
             return rainbowColors;
         }
-        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl Target, float lerpAmount)
+        public void CreateRotationalLock(BasisBoneControl addToBone, BasisBoneControl target, float lerpAmount)
         {
-            BasisRotationalControl rotation = new BasisRotationalControl
-            {
-                Target = Target,
-                LerpAmountNormal = lerpAmount,
-                LerpAmountFastMovement = lerpAmount * 4,
-                AngleBeforeSpeedup = 25f,
-                HasTarget = Target != null,
-            };
+            BasisRotationalControl rotation = addToBone.RotationControl;
+            rotation.Target = target;
+            rotation.LerpAmountNormal = lerpAmount;
+            rotation.LerpAmountFastMovement = lerpAmount * 4;
+            rotation.AngleBeforeSpeedup = 25f;
+            rotation.HasTarget = target != null;
+
             addToBone.RotationControl = rotation;
         }
-        public void CreatePositionalLock(BasisBoneControl Bone, BasisBoneControl Target, float Positional = 40)
+        public void CreatePositionalLock(BasisBoneControl bone, BasisBoneControl target, float positional = 40)
         {
-            Vector3 Offset = Bone.TposeLocal.position - Target.TposeLocal.position;
-            BasisPositionControl Position = new BasisPositionControl
-            {
-                Offset = Offset,
-                Target = Target,
-                LerpAmount = Positional,
-                HasTarget = Target != null,
-            };
-            Bone.PositionControl = Position;
+            Vector3 offset = bone.TposeLocal.position - target.TposeLocal.position;
+            BasisPositionControl position = bone.PositionControl;
+            position.Offset = offset;
+            position.Target = target;
+            position.LerpAmount = positional;
+            position.HasTarget = target != null;
+
+            bone.PositionControl = position;
         }
         public static Vector3 ConvertToAvatarSpaceInital(Animator animator, Vector3 WorldSpace, float AvatarHeightOffset)// out Vector3 FloorPosition
         {
@@ -222,17 +279,6 @@ namespace Basis.Scripts.Drivers
         }
         public static float DefaultGizmoSize = 0.05f;
         public static float HandGizmoSize = 0.015f;
-        public void OnRenderObject()
-        {
-            if (HasControls && Gizmos.Enabled)
-            {
-                for (int Index = 0; Index < ControlsLength; Index++)
-                {
-                    BasisBoneControl Control = Controls[Index];
-                    DrawGizmos(Control);
-                }
-            }
-        }
         public void DrawGizmos(BasisBoneControl Control)
         {
             if (Control.Cullable)
@@ -244,26 +290,51 @@ namespace Basis.Scripts.Drivers
                 Vector3 BonePosition = Control.OutgoingWorldData.position;
                 if (Control.PositionControl.HasTarget)
                 {
-                    Gizmos.Line(BonePosition, Control.PositionControl.Target.OutgoingWorldData.position, Control.Color);
-                }
-                if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(Control, out BasisBoneTrackedRole Frole))
-                {
-                    if (BasisBoneTrackedRoleCommonCheck.CheckIfRightHand(Frole) || BasisBoneTrackedRoleCommonCheck.CheckIfLeftHand(Frole))
+                    if (Control.PositionControl.HasLineDraw)
                     {
-                        Gizmos.Sphere(BonePosition, HandGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
+                        BasisGizmoManager.UpdateLineGizmo(Control.PositionControl.LineDrawIndex, BonePosition, Control.PositionControl.Target.OutgoingWorldData.position);
                     }
-                    else
+                }
+                if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(Control, out BasisBoneTrackedRole Role))
+                {
+                    if(Role == BasisBoneTrackedRole.CenterEye)
                     {
-                        Gizmos.Sphere(BonePosition, DefaultGizmoSize * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
+                        //ignoring center eye to stop you having issues in vr
+                        return;
+                    }
+                    if (Control.HasGizmo)
+                    {
+                        if (BasisGizmoManager.UpdateSphereGizmo(Control.GizmoReference, BonePosition) == false)
+                        {
+                            Control.HasGizmo = false;
+                        }
                     }
                 }
                 if (BasisLocalPlayer.Instance.AvatarDriver.CurrentlyTposing)
                 {
                     if (BasisLocalPlayer.Instance.LocalBoneDriver.FindTrackedRole(Control, out BasisBoneTrackedRole role))
                     {
+                        if (Role == BasisBoneTrackedRole.CenterEye)
+                        {
+                            //ignoring center eye to stop you having issues in vr
+                            return;
+                        }
                         if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(role))
                         {
-                            Gizmos.Sphere(BonePosition, (BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) / 2) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color);
+                            if (Control.TposeHasGizmo)
+                            {
+                                if (BasisGizmoManager.UpdateSphereGizmo(Control.TposeGizmoReference, BonePosition) == false)
+                                {
+                                    Control.TposeHasGizmo = false;
+                                }
+                            }
+                            else
+                            {
+                                if (BasisGizmoManager.CreateSphereGizmo(out Control.TposeGizmoReference, BonePosition, BasisAvatarIKStageCalibration.MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale, Control.Color))
+                                {
+                                    Control.TposeHasGizmo = true;
+                                }
+                            }
                         }
                     }
                 }
