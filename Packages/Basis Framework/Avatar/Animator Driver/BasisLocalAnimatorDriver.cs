@@ -6,6 +6,7 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 using Unity.Mathematics;
 using Basis.Scripts.Avatar;
+using UnityEngine.Playables;
 namespace Basis.Scripts.Animator_Driver
 {
     public class BasisLocalAnimatorDriver : MonoBehaviour
@@ -172,12 +173,17 @@ namespace Basis.Scripts.Animator_Driver
                 localPlayer.Move.ReadyToRead += Simulate;
                 localPlayer.Move.JustJumped += JustJumped;
                 localPlayer.Move.JustLanded += JustLanded;
-             //   localPlayer.LocalBoneDriver.ReadyToRead.AddAction(,Run);
+               localPlayer.LocalBoneDriver.ReadyToRead.AddAction(100,Run);
             }
         }
         public void Run()
         {
+            float DeltaTime = Time.deltaTime;
 
+            localPlayer.AvatarDriver.Builder.Evaluate(DeltaTime);
+
+            localPlayer.AvatarDriver.Builder.SyncLayers();
+            localPlayer.AvatarDriver.PlayableGraph.Evaluate(DeltaTime);
         }
         public void HandleTeleport()
         {
@@ -193,6 +199,7 @@ namespace Basis.Scripts.Animator_Driver
                 localPlayer.Move.ReadyToRead -= Simulate;
                 localPlayer.Move.JustJumped -= JustJumped;
                 localPlayer.Move.JustLanded -= JustLanded;
+                localPlayer.LocalBoneDriver.ReadyToRead.RemoveAction(100, Run);
             }
             if (HasEvents)
             {

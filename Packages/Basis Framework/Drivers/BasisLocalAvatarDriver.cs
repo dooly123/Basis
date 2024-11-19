@@ -11,6 +11,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Playables;
 
 namespace Basis.Scripts.Drivers
 {
@@ -62,6 +63,7 @@ namespace Basis.Scripts.Drivers
         public string Locomotion = "Locomotion";
         public BasisMuscleDriver BasisMuscleDriver;
         public BasisLocalEyeFollowDriver BasisLocalEyeFollowDriver;
+        public PlayableGraph PlayableGraph;
         public void InitialLocalCalibration(BasisLocalPlayer Player)
         {
             Debug.Log("InitialLocalCalibration");
@@ -83,7 +85,7 @@ namespace Basis.Scripts.Drivers
             CleanupBeforeContinue();
             AdditionalTransforms.Clear();
             Rigs.Clear();
-          //  Player.Avatar.Animator.enabled = false;
+            Player.Avatar.Animator.updateMode = AnimatorUpdateMode.Normal;
             if (Player.Avatar.Animator.runtimeAnimatorController == null)
             {
                 UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Locomotion);
@@ -97,6 +99,7 @@ namespace Basis.Scripts.Drivers
                 GameObject.Destroy(Builder);
             }
             Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
+            Builder.enabled = false;
             Calibration(Player.Avatar);
             BasisLocalPlayer.Instance.LocalBoneDriver.RemoveAllListeners();
             BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
@@ -160,18 +163,9 @@ namespace Basis.Scripts.Drivers
         }
         public void BuildBuilder()
         {
-           // Builder.graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
-            if (Builder.enabled == false)
-            {
-                Builder.enabled = true;
-            }
-            if (Builder.Build())
-            {
-            }
-            else
-            {
-                Debug.LogError("Unable to Build Builder for IK!!! major issue");
-            }
+            PlayableGraph = Player.Avatar.Animator.playableGraph;
+            PlayableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
+            Builder.Build(PlayableGraph);
         }
         public void OnTpose()
         {
