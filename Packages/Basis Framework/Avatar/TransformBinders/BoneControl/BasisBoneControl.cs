@@ -20,8 +20,6 @@ namespace Basis.Scripts.TransformBinders.BoneControl
         [SerializeField]
         public BasisCalibratedCoords LastRunData = new BasisCalibratedCoords();
         [SerializeField]
-        public BasisCalibratedCoords TposeWorld = new BasisCalibratedCoords();
-        [SerializeField]
         public BasisCalibratedCoords TposeLocal = new BasisCalibratedCoords();
         [SerializeField]
         public BasisCalibratedOffsetData InverseOffsetFromBone = new BasisCalibratedOffsetData();

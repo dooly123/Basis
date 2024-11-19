@@ -135,15 +135,15 @@ namespace Basis.Scripts.Drivers
                 }
                 if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
                 {
-                    GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out Control.TposeWorld.rotation, out Control.TposeWorld.position);
-                    SetInitialData(anim, Control, driver.trackedRoles[Index]);
+                    GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out quaternion Rotation, out float3 TposeWorld);
+                    SetInitialData(anim, Control, driver.trackedRoles[Index], TposeWorld);
                 }
                 else
                 {
                     if (driver.trackedRoles[Index] == BasisBoneTrackedRole.Mouth)
                     {
-                        GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out Control.TposeWorld.rotation, out Control.TposeWorld.position);
-                        SetInitialData(anim, Control, driver.trackedRoles[Index]);
+                        GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out quaternion Rotation, out float3 TposeWorld);
+                        SetInitialData(anim, Control, driver.trackedRoles[Index], TposeWorld);
                     }
                     else
                     {
@@ -151,8 +151,8 @@ namespace Basis.Scripts.Drivers
                         {
                             if (TryConvertToHumanoidRole(driver.trackedRoles[Index], out HumanBodyBones HumanBones))
                             {
-                                GetBoneRotAndPos(driver, anim, HumanBones, FallBackBone.PositionPercentage, out Control.TposeWorld.rotation, out Control.TposeWorld.position, out bool UsedFallback);
-                                SetInitialData(anim, Control, driver.trackedRoles[Index]);
+                                GetBoneRotAndPos(driver, anim, HumanBones, FallBackBone.PositionPercentage, out quaternion Rotation, out float3 TposeWorld, out bool UsedFallback);
+                                SetInitialData(anim, Control, driver.trackedRoles[Index], TposeWorld);
                             }
                             else
                             {
@@ -258,9 +258,9 @@ namespace Basis.Scripts.Drivers
                 return false;
             }
         }
-        public void SetInitialData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role)
+        public void SetInitialData(Animator animator, BasisBoneControl bone, BasisBoneTrackedRole Role,Vector3 WorldTpose)
         {
-            bone.OutGoingData.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, bone.TposeWorld.position, 0.1f * animator.transform.localScale.y);//out Vector3 WorldSpaceFloor
+            bone.OutGoingData.position = BasisLocalBoneDriver.ConvertToAvatarSpaceInital(animator, WorldTpose, 0.1f * animator.transform.localScale.y);//out Vector3 WorldSpaceFloor
             bone.TposeLocal.position = bone.OutGoingData.position;
             bone.TposeLocal.rotation = bone.OutGoingData.rotation;
             if (IsApartOfSpineVertical(Role))
@@ -286,8 +286,8 @@ namespace Basis.Scripts.Drivers
                 {
                     Debug.LogError("Cant Find Bone " + LockToBoneRole);
                 }
-                BaseBoneDriver.CreatePositionalLock(AssignedToAddToBone, LockToBone, PositionLerpAmount);
-                BaseBoneDriver.CreateRotationalLock(AssignedToAddToBone, LockToBone, QuaternionLerpAmount);
+                BaseBoneDriver.CreatePositionalLock(AssignedToAddToBone, LockToBone, QuaternionLerpAmount);
+                BaseBoneDriver.CreateRotationalLock(AssignedToAddToBone, LockToBone, PositionLerpAmount);
             }
         }
         public void FindSkinnedMeshRenders()
