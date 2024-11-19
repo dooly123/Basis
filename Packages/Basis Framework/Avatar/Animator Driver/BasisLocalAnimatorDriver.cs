@@ -173,15 +173,12 @@ namespace Basis.Scripts.Animator_Driver
                 localPlayer.Move.ReadyToRead += Simulate;
                 localPlayer.Move.JustJumped += JustJumped;
                 localPlayer.Move.JustLanded += JustLanded;
-               localPlayer.LocalBoneDriver.ReadyToRead.AddAction(100,Run);
+               localPlayer.LocalBoneDriver.ReadyToRead.AddAction(100, RunIKRig);
             }
         }
-        public void Run()
+        public void RunIKRig()
         {
             float DeltaTime = Time.deltaTime;
-
-            localPlayer.AvatarDriver.Builder.Evaluate(DeltaTime);
-
             localPlayer.AvatarDriver.Builder.SyncLayers();
             localPlayer.AvatarDriver.PlayableGraph.Evaluate(DeltaTime);
         }
@@ -192,14 +189,14 @@ namespace Basis.Scripts.Animator_Driver
             previousAngularVelocity = Vector3.zero; // Reset angular velocity dampening on teleport
         }
 
-        private void OnDestroy()
+        public void OnDestroy()
         {
             if (localPlayer != null)
             {
                 localPlayer.Move.ReadyToRead -= Simulate;
                 localPlayer.Move.JustJumped -= JustJumped;
                 localPlayer.Move.JustLanded -= JustLanded;
-                localPlayer.LocalBoneDriver.ReadyToRead.RemoveAction(100, Run);
+                localPlayer.LocalBoneDriver.ReadyToRead.RemoveAction(100, RunIKRig);
             }
             if (HasEvents)
             {
