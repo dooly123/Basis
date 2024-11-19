@@ -67,6 +67,10 @@
             return CheckIfHeadAreaTracker(role) == false &&
                    role != BasisBoneTrackedRole.LeftHand &&
                    role != BasisBoneTrackedRole.RightHand &&
+                   role != BasisBoneTrackedRole.LeftUpperLeg &&
+                   role != BasisBoneTrackedRole.RightUpperLeg &&
+                   role != BasisBoneTrackedRole.LeftUpperArm &&
+                   role != BasisBoneTrackedRole.RightUpperArm &&
                    role != BasisBoneTrackedRole.Spine &&
                    CheckIfLeftHand(role) == false &&
                    CheckIfRightHand(role) == false;

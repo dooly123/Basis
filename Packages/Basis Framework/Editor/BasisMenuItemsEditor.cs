@@ -157,11 +157,11 @@ public static class BasisMenuItemsEditor
         Transform[] bodyParts = new Transform[]
         {
             avatarDriver.Hips, avatarDriver.chest,
-            avatarDriver.leftShoulder, avatarDriver.leftUpperArm,
-            avatarDriver.leftLowerArm, avatarDriver.RightShoulder, avatarDriver.RightUpperArm,
-            avatarDriver.RightLowerArm, avatarDriver.LeftUpperLeg, avatarDriver.LeftLowerLeg,
-            avatarDriver.leftFoot, avatarDriver.leftToes, avatarDriver.RightUpperLeg, avatarDriver.RightLowerLeg,
-            avatarDriver.rightFoot, avatarDriver.rightToes // avatarDriver.rightHand, avatarDriver.leftHand,  avatarDriver.LeftEye, avatarDriver.RightEye,avatarDriver.spine
+            avatarDriver.leftShoulder, avatarDriver.RightShoulder,
+            avatarDriver.leftLowerArm,avatarDriver.RightLowerArm,
+            avatarDriver.LeftLowerLeg, avatarDriver.RightLowerLeg,
+            avatarDriver.leftFoot, avatarDriver.leftToes,
+            avatarDriver.rightFoot, avatarDriver.rightToes
         };
         int bodyPartsCount = bodyParts.Length;
         // Create an array of the BasisInputXRSimulate instances
@@ -192,11 +192,11 @@ public static class BasisMenuItemsEditor
         Transform[] bodyParts = new Transform[]
         {
             avatarDriver.Hips, avatarDriver.chest,
-            avatarDriver.leftShoulder, avatarDriver.leftUpperArm,
-            avatarDriver.leftLowerArm, avatarDriver.RightShoulder, avatarDriver.RightUpperArm,
-            avatarDriver.RightLowerArm, avatarDriver.LeftUpperLeg, avatarDriver.LeftLowerLeg,
-            avatarDriver.leftFoot, avatarDriver.leftToes, avatarDriver.RightUpperLeg, avatarDriver.RightLowerLeg,
-            avatarDriver.rightFoot, avatarDriver.rightToes // avatarDriver.rightHand, avatarDriver.leftHand,  avatarDriver.LeftEye, avatarDriver.RightEye,avatarDriver.spine
+            avatarDriver.leftShoulder, avatarDriver.RightShoulder,
+            avatarDriver.leftLowerArm,avatarDriver.RightLowerArm,
+            avatarDriver.LeftLowerLeg, avatarDriver.RightLowerLeg,
+            avatarDriver.leftFoot, avatarDriver.leftToes,
+            avatarDriver.rightFoot, avatarDriver.rightToes
         };
         int bodyPartsCount = bodyParts.Length;
         // Create an array of the BasisInputXRSimulate instances
