@@ -170,13 +170,17 @@ AvatarJobs.muscleHandle.Complete();
             pose.bodyPosition = ScaledPosition;
             pose.bodyRotation = output.Rotation;
 
+            if(pose.muscles == null || pose.muscles.Length == 0)
+            {
+                pose.muscles = new float[95];
+            }
             //copy from job to stageOutput
             output.Muscles.CopyFrom(MuscleFinalStageOutput);
             // Copy muscles [0..14]
             Buffer.BlockCopy(MuscleFinalStageOutput, 0, pose.muscles, 0, BasisNetworkSendBase.FirstBuffer);
 
             // Copy muscles [21..end]
-            Buffer.BlockCopy(MuscleFinalStageOutput, BasisNetworkSendBase.SecondBuffer, pose.muscles, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
+            Buffer.BlockCopy(MuscleFinalStageOutput, BasisNetworkSendBase.SecondBuffer,pose.muscles,BasisNetworkSendBase.SecondBuffer, BasisNetworkSendBase.SizeAfterGap);
 
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling
