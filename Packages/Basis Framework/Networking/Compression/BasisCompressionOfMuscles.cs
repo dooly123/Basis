@@ -6,16 +6,18 @@ namespace Basis.Scripts.Networking.Compression
 {
     public class BasisCompressionOfMuscles
     {
-        public static byte[] StoredBytes = new byte[LengthBytes]; // 90 floats * 4 bytes
-        public static int LengthBytes = 90 * 4;
         public static int LengthSize = 90;
+        public static int LengthBytes = LengthSize * 4; // Initialize LengthBytes first
+        public static byte[] StoredBytes = new byte[LengthBytes];
         // Compress the muscle data into the byte array
         public static void CompressMuscles(DarkRiftWriter Packer, float[] muscles)
         {
-            if (muscles.Length != LengthSize)
+            if (muscles.Length * sizeof(float) > StoredBytes.Length)
             {
-                throw new ArgumentException("The 'muscles' array must contain exactly 90 elements.");
+                UnityEngine.Debug.Log(muscles.Length * sizeof(float) + " " + StoredBytes.Length);
+                throw new ArgumentException("The 'muscles' array size exceeds the allocated 'StoredBytes' buffer.");
             }
+            else
             // Convert the float array to bytes using Buffer.BlockCopy
             Buffer.BlockCopy(muscles, 0, StoredBytes, 0, LengthBytes);
 
