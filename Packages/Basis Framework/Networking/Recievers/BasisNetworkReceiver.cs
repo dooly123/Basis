@@ -31,7 +31,7 @@ AvatarJobs.muscleJob.targetMuscles = TargetData.Muscles;
 AvatarJobs.muscleJob.muscles = CurrentData.Muscles;
 AvatarJobs.muscleJob.lerpTime = deltaTime * Settings.LerpSpeedMuscles;
 AvatarJobs.positionHandle = AvatarJobs.positionJob.Schedule();
-AvatarJobs.muscleHandle = AvatarJobs.muscleJob.Schedule(95, 1, AvatarJobs.positionHandle);
+AvatarJobs.muscleHandle = AvatarJobs.muscleJob.Schedule(90, 1, AvatarJobs.positionHandle);
 AvatarJobs.muscleHandle.Complete();
 */
 

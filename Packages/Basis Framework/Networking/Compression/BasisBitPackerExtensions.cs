@@ -19,7 +19,7 @@ namespace Basis.Scripts.Networking.Compression
             return compressor.Decompress(data);
         }
         [BurstCompile]
-        public static void WriteUshortArrayFloat(DarkRiftWriter bitPacker, float[] values, CompressionArraysRangedUshort compressor, int arrayLength = 95)
+        public static void WriteUshortArrayFloat(DarkRiftWriter bitPacker, float[] values, CompressionArraysRangedUshort compressor, int arrayLength = 90)
         {
             // Compress the float array into a ushort array
            compressor.CompressArray(values,arrayLength,ref compressor.ushortArray);
@@ -36,7 +36,7 @@ namespace Basis.Scripts.Networking.Compression
             bitPacker.WriteRaw(compressor.byteArray, 0, compressor.ByteCount);
         }
         [BurstCompile]
-        public static void ReadUshortArrayFloat(this DarkRiftReader bitPacker, CompressionArraysRangedUshort compressor, ref BasisAvatarData BasisAvatarData, int ArrayLength = 95)
+        public static void ReadUshortArrayFloat(this DarkRiftReader bitPacker, CompressionArraysRangedUshort compressor, ref BasisAvatarData BasisAvatarData, int ArrayLength = 90)
         {
 
             // Read the raw byte array from the DarkRiftReader

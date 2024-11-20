@@ -6,8 +6,8 @@ namespace Basis.Scripts.Networking.Compression
 {
     public class BasisCompressionOfMuscles
     {
-        public static byte[] StoredBytes = new byte[95 * 4];  // 95 floats, 4 bytes per float
-        public static int Size = 95 * 4;
+        public static byte[] StoredBytes = new byte[90 * 4];  // 95 floats, 4 bytes per float
+        public static int Size = 90 * 4;
 
         // Compress the muscle data into the byte array
         public static void CompressMuscles(DarkRiftWriter Packer, float[] muscles)
@@ -26,11 +26,11 @@ namespace Basis.Scripts.Networking.Compression
             Packer.ReadRaw(Size, ref StoredBytes);
 
             // Convert the byte array back to the float array using Buffer.BlockCopy
-            float[] decompressedMuscles = new float[95];
+            float[] decompressedMuscles = new float[90];
             Buffer.BlockCopy(StoredBytes, 0, decompressedMuscles, 0, Size);
 
             // Assign the decompressed muscles data to the BasisAvatarData object
-            for (int Index = 0; Index < 95; Index++)
+            for (int Index = 0; Index < 90; Index++)
             {
                 BasisAvatarData.Muscles[Index] = decompressedMuscles[Index];
             }
