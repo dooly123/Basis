@@ -3,6 +3,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
@@ -18,7 +19,10 @@ namespace Basis.Scripts.Networking.Recievers
 
         [SerializeField]
         public BasisAudioReceiver AudioReceiverModule = new BasisAudioReceiver();
-
+        [Header("Interpolation Settings")]
+        public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
+        [SerializeField]
+        public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
         /// <summary>

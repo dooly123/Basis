@@ -28,10 +28,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             public float[] Muscles;
             public double timestamp;
         }
-        [Header("Interpolation Settings")]
-        public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
-        [SerializeField]
-        public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
         [SerializeField]
         public HumanPose HumanPose = new HumanPose();
         [SerializeField]
