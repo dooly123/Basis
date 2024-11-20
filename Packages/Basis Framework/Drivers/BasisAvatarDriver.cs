@@ -129,10 +129,6 @@ namespace Basis.Scripts.Drivers
             for (int Index = 0; Index < driver.ControlsLength; Index++)
             {
                 BasisBoneControl Control = driver.Controls[Index];
-                if ((driver.trackedRoles[Index]  == BasisBoneTrackedRole.Hips))
-                {
-                    Debug.Log("hips!");
-                }
                 if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
                 {
                     GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out quaternion Rotation, out float3 TposeWorld);

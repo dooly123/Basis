@@ -35,7 +35,7 @@ namespace Basis.Scripts.Networking.Recievers
         public JobHandle AvatarHandle;
         public JobHandle muscleHandle;
         public float DeltaTime;
-        public UpdateAvatarRotationJob AvatarJob = new UpdateAvatarRotationJob();
+        public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -43,12 +43,12 @@ namespace Basis.Scripts.Networking.Recievers
             muscles = new NativeArray<float>(90, Allocator.Persistent);
             targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
             musclesJob = new UpdateAvatarMusclesJob();
-            AvatarJob = new UpdateAvatarRotationJob();
+            AvatarJob = new UpdateAvatarJob();
 
-            musclesJob.muscles = muscles;
+            musclesJob.Outputmuscles = muscles;
             musclesJob.targetMuscles = targetMuscles;
-            AvatarJob.TransformationalOutput = OuputVectors;
-            AvatarJob.TransformationalInput = TargetVectors;
+            AvatarJob.OutputVector = OuputVectors;
+            AvatarJob.TargetVector = TargetVectors;
         }
         /// <summary>
         /// Clean up resources used in the compute process.
@@ -99,10 +99,7 @@ namespace Basis.Scripts.Networking.Recievers
 
                 muscles.CopyFrom(Inital.Muscles);
                 targetMuscles.CopyFrom(Target.Muscles);
-
-                // Schedule the job to interpolate positions, rotations, and scales
-                AvatarJob.rotations = Inital.rotation;
-                AvatarJob.targetRotations = Target.rotation;
+               quaternion rotaton  = math.slerp(Inital.rotation,Target.rotation, normalizedTime);
                 AvatarJob.Time = normalizedTime;
 
                 AvatarHandle = AvatarJob.Schedule();
@@ -114,7 +111,7 @@ namespace Basis.Scripts.Networking.Recievers
                 // Complete the jobs and apply the results
                 musclesHandle.Complete();
 
-                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], AvatarJob.rotations, muscles);
+                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], rotaton, muscles);
                 PoseHandler.SetHumanPose(ref HumanPose);
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply();
