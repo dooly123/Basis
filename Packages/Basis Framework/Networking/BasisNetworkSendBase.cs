@@ -48,7 +48,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public double TimeAsDoubleWhenLastSync;
         public float LastAvatarDelta = 0.1f;
         public const int SizeAfterGap = 95 - SecondBuffer;
-        public const int FirstBuffer = 14;
+        public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;
         protected BasisNetworkSendBase()
         {
