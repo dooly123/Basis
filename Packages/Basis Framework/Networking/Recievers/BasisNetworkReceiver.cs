@@ -35,13 +35,20 @@ namespace Basis.Scripts.Networking.Recievers
         public JobHandle AvatarHandle;
         public JobHandle muscleHandle;
         public float DeltaTime;
-        public UpdateAvatarRotationJob AvatarJob;
+        public UpdateAvatarRotationJob AvatarJob = new UpdateAvatarRotationJob();
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
             TargetVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = target position, Index 1 = target scale
             muscles = new NativeArray<float>(90, Allocator.Persistent);
             targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
+            musclesJob = new UpdateAvatarMusclesJob();
+            AvatarJob = new UpdateAvatarRotationJob();
+
+            musclesJob.muscles = muscles;
+            musclesJob.targetMuscles = targetMuscles;
+            AvatarJob.TransformationalOutput = OuputVectors;
+            AvatarJob.TransformationalInput = TargetVectors;
         }
         /// <summary>
         /// Clean up resources used in the compute process.
@@ -67,7 +74,7 @@ namespace Basis.Scripts.Networking.Recievers
             double currentTime = Time.realtimeSinceStartupAsDouble;
 
             // Remove outdated rotations
-            while (AvatarDataQueue.Count > 1 && currentTime - delayTime > AvatarDataQueue.Peek().timestamp)
+            while (AvatarDataQueue.Count > 2)
             {
                 AvatarDataQueue.Dequeue();
             }
@@ -75,32 +82,28 @@ namespace Basis.Scripts.Networking.Recievers
             // Only run job if there are enough data points
             if (AvatarDataQueue.Count >= 2)
             {
-                AvatarBuffer Buffer = AvatarDataQueue.Dequeue();
-                AvatarBuffer NextBuffer = AvatarDataQueue.Dequeue();
-                double startTime = Buffer.timestamp;
+                AvatarBuffer Firstbuffer = AvatarDataQueue.Dequeue();
+                AvatarBuffer SecondBuffer = AvatarDataQueue.Dequeue();
+                double startTime = Firstbuffer.timestamp;
                 double targetTime = currentTime - delayTime;
 
                 // Calculate normalized interpolation factor t
-                float Time = Mathf.Clamp01((float)((targetTime - startTime) / (NextBuffer.timestamp - startTime)));
-                OuputVectors[0] = Buffer.Position; // Position at index 0
-                OuputVectors[1] = Buffer.Scale;    // Scale at index 1
-                TargetVectors[0] = NextBuffer.Position; // Target position at index 0
-                TargetVectors[1] = NextBuffer.Scale;    // Target scale at index 1
+                float Time = Mathf.Clamp01((float)((targetTime - startTime) / (SecondBuffer.timestamp - startTime)));
+                OuputVectors[0] = Firstbuffer.Position; // Position at index 0
+                OuputVectors[1] = Firstbuffer.Scale;    // Scale at index 1
+                TargetVectors[0] = SecondBuffer.Position; // Target position at index 0
+                TargetVectors[1] = SecondBuffer.Scale;    // Target scale at index 1
 
-                muscles.CopyFrom(Buffer.Muscles);
-                targetMuscles.CopyFrom(Buffer.Muscles);
+                muscles.CopyFrom(Firstbuffer.Muscles);
+                targetMuscles.CopyFrom(SecondBuffer.Muscles);
                 // Schedule the job to interpolate positions, rotations, and scales
-                AvatarJob.rotations = Buffer.rotation;
-                AvatarJob.targetRotations = NextBuffer.rotation;
-                AvatarJob.TransformationalOutput = OuputVectors;         // Merged positions
-                AvatarJob.TransformationalInput = TargetVectors; // Merged target positions
+                AvatarJob.rotations = Firstbuffer.rotation;
+                AvatarJob.targetRotations = SecondBuffer.rotation;
                 AvatarJob.Time = Time;
 
                 AvatarHandle = AvatarJob.Schedule();
 
                 // Muscle interpolation job
-                musclesJob.muscles = muscles;
-                musclesJob.targetMuscles = targetMuscles;
                 musclesJob.Time = Time;
 
                 musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
