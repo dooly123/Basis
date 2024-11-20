@@ -4,7 +4,6 @@ using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using System;
 using UnityEngine;
-using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
@@ -14,7 +13,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
-                CompressIntoSendBase(NetworkSendBase, Anim);
+                CompressAvatarData(NetworkSendBase, Anim);
                 writer.Write(NetworkSendBase.LASM);
                 BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
                 using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
@@ -23,55 +22,30 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
         }
-        public static float[] FloatArray = new float[90];
-        public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim)
+        public static void CompressAvatarData(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
-            // Extract the necessary components
-            HumanPoseHandler SenderPoseHandler = NetworkSendBase.PoseHandler;
-
             // Retrieve the human pose from the Animator
-            SenderPoseHandler.GetHumanPose(ref NetworkSendBase.HumanPose);
+            NetworkSendBase.PoseHandler.GetHumanPose(ref NetworkSendBase.HumanPose);
 
             // Copy muscles [0..14]
-            Array.Copy(NetworkSendBase.HumanPose.muscles, 0, FloatArray, 0, BasisNetworkSendBase.FirstBuffer);
+            Array.Copy(NetworkSendBase.HumanPose.muscles, 0, NetworkSendBase.FloatArray, 0, BasisNetworkSendBase.FirstBuffer);
 
             // Copy muscles [21..end]
-            Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
-
-            // Compress the avatar data
-            CompressAvatarUpdate(ref NetworkSendBase.LASM, Anim.transform.localScale, Anim.bodyPosition, Anim.bodyRotation, FloatArray, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
-        }
-        /// <summary>
-        /// 212
-        /// </summary>
-        /// <param name="syncmessage"></param>
-        /// <param name="Scale"></param>
-        /// <param name="HipsPosition"></param>
-        /// <param name="Rotation"></param>
-        /// <param name="muscles"></param>
-        /// <param name="PositionRanged"></param>
-        /// <param name="ScaleRanged"></param>
-        public static void CompressAvatarUpdate(ref LocalAvatarSyncMessage syncmessage, Vector3 Scale, Vector3 HipsPosition, Quaternion Rotation, float[] muscles, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
-        {
-            using (var Packer = DarkRiftWriter.Create(216))
+            Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, NetworkSendBase.FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
+            using (DarkRiftWriter Packer = DarkRiftWriter.Create(386))
             {
-                CompressScaleAndPosition(Packer, HipsPosition, Scale, PositionRanged, ScaleRanged);//18
+                BasisCompressionOfPosition.CompressVector3(Anim.bodyPosition, Packer);
+                BasisCompressionOfPosition.CompressUShortVector3(Anim.transform.localScale, Packer, NetworkSendBase.ScaleRanged);
+                BasisCompressionOfRotation.CompressQuaternion(Packer, Anim.bodyRotation);
+                BasisCompressionOfMuscles.CompressMuscles(Packer, NetworkSendBase.FloatArray);
 
-                BasisCompressionOfRotation.CompressQuaternion(Packer, Rotation);//4
-                BasisCompressionOfMuscles.CompressMuscles(Packer, muscles);//190
-                //disable in production
-                if (syncmessage.array == null || Packer.Length != syncmessage.array.Length)
+                // Allocate sync message array if needed and copy packed data into it
+                if (NetworkSendBase.LASM.array == null || Packer.Length != NetworkSendBase.LASM.array.Length)
                 {
-                    syncmessage.array = new byte[Packer.Length];
+                    NetworkSendBase.LASM.array = new byte[Packer.Length];
                 }
-                Packer.CopyTo(syncmessage.array, 0);
+                Packer.CopyTo(NetworkSendBase.LASM.array, 0);
             }
-        }
-        public static void CompressScaleAndPosition(DarkRiftWriter packer, Vector3 bodyPosition, Vector3 scale, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
-        {
-            BasisCompressionOfPosition.CompressVector3(bodyPosition, packer); //4+4+4 = 12
-
-            BasisCompressionOfPosition.CompressUShortVector3(scale, packer, ScaleRanged);//2+2+2 6
         }
     }
 }

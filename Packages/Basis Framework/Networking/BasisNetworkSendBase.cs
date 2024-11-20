@@ -46,6 +46,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public const int SizeAfterGap = 95 - SecondBuffer;
         public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;
+        public float[] FloatArray = new float[90];
+
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()
