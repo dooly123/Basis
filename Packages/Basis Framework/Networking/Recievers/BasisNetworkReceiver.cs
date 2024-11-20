@@ -113,7 +113,7 @@ namespace Basis.Scripts.Networking.Recievers
                 CurrentData.Vectors[0] = scales[0];
 
                 // Apply muscle data
-                for (int Index = 0; Index < 95; Index++)
+                for (int Index = 0; Index < 90; Index++)
                 {
                     CurrentData.Muscles[Index] = muscles[Index];
                 }
@@ -128,7 +128,7 @@ namespace Basis.Scripts.Networking.Recievers
                 muscles.Dispose();
                 targetMuscles.Dispose();
 
-                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData, ref HumanPose);
+                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData);
                 PoseHandler.SetHumanPose(ref HumanPose);
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply();
@@ -148,7 +148,7 @@ namespace Basis.Scripts.Networking.Recievers
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
         public float[] MuscleFinalStageOutput = new float[90];
-        public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
+        public void ApplyPoseData(Animator animator, BasisAvatarData output)
         {
             float AvatarHumanScale = animator.humanScale;
 
@@ -162,42 +162,16 @@ namespace Basis.Scripts.Networking.Recievers
             Vector3 ScaledPosition = Vector3.Scale(output.Vectors[1], Scaling);  // Apply the scaling
 
             // Apply pose data
-            pose.bodyPosition = ScaledPosition;
-            pose.bodyRotation = output.Rotation;
-
-            // Ensure muscles array is initialized properly
-            if (pose.muscles == null || pose.muscles.Length == 0)
-            {
-                pose.muscles = new float[95];
-            }
-
-            // Check the size of MuscleFinalStageOutput array
-            if (MuscleFinalStageOutput.Length < 90)
-            {
-                Debug.LogError("MuscleFinalStageOutput array size is smaller than expected.");
-                return; // Exit if the size is incorrect
-            }
+            HumanPose.bodyPosition = ScaledPosition;
+            HumanPose.bodyRotation = output.Rotation;
 
             // Copy from job to MuscleFinalStageOutput
-            output.Muscles.CopyFrom(MuscleFinalStageOutput);
+            output.Muscles.CopyTo(MuscleFinalStageOutput);
+            // First, copy the first 14 elements directly
+            Array.Copy(MuscleFinalStageOutput, 0, HumanPose.muscles, 0, 14);
 
-            // Ensure proper array sizes for the blocks being copied
-            if (BasisNetworkSendBase.FirstBufferBytes > MuscleFinalStageOutput.Length || BasisNetworkSendBase.FirstBufferBytes > pose.muscles.Length)
-            {
-                Debug.LogError("FirstBuffer size exceeds array bounds.");
-                return;
-            }
-
-            // Copy muscles [0..14]
-            Buffer.BlockCopy(MuscleFinalStageOutput, 0, pose.muscles, 0, BasisNetworkSendBase.FirstBufferBytes);
-
-
-            // Assuming MuscleFinalStageOutput and pose.muscles are arrays and BasisNetworkSendBase contains the proper indexes and size
-            for (int i = 0; i < BasisNetworkSendBase.SizeAfterGap; i++)
-            {
-                // Copy each element from MuscleFinalStageOutput to pose.muscles manually
-                pose.muscles[BasisNetworkSendBase.SecondBuffer + i] = MuscleFinalStageOutput[BasisNetworkSendBase.SecondBuffer + i];
-            }
+            // Then, copy the remaining elements from index 15 onwards into the pose.muscles array, starting from index 21
+            Array.Copy(MuscleFinalStageOutput, 15, HumanPose.muscles, 21, BasisNetworkSendBase.SizeAfterGap);
 
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling
@@ -257,6 +231,10 @@ namespace Basis.Scripts.Networking.Recievers
                 {
                     CurrentData.floatArray = new float[90];
                     CurrentData.Muscles.ResizeArray(90);
+                }            // Ensure muscles array is initialized properly
+                if (HumanPose.muscles == null || HumanPose.muscles.Length == 0)
+                {
+                    HumanPose.muscles = new float[95];
                 }
                 InitalizeDataJobs(ref AvatarJobs);
                 InitalizeAvatarStoredData(ref TargetData);

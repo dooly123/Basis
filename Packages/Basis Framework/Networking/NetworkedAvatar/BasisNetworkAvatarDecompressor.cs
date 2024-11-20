@@ -13,10 +13,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
             DecompressAvatar( ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
-            Base.LastAvatarDelta = (float)(Time.realtimeSinceStartupAsDouble - Base.TimeAsDoubleWhenLastSync);
-            Base.LastCollectedDeltas.Add(Base.LastAvatarDelta);
-            Base.AvatarMedian = Base.LastCollectedDeltas.Median();
             Base.TimeAsDoubleWhenLastSync = Time.realtimeSinceStartupAsDouble;
+            Base.LastAvatarDelta = (float)(Base.TimeAsDoubleWhenLastSync - Base.TimeAsDoubleWhenLastSync);
             // Add new rotation data to the buffer
             Base.AvatarDataBuffer.Add(new AvatarBuffer
             {

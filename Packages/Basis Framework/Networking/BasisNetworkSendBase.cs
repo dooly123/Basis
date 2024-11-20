@@ -32,10 +32,13 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
         [SerializeField]
         public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
-
+        [SerializeField]
         public HumanPose HumanPose = new HumanPose();
+        [SerializeField]
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
+        [SerializeField]
         public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
+        [SerializeField]
         public BasisDataJobs AvatarJobs;
         public HumanPoseHandler PoseHandler;
         [SerializeField]
@@ -43,9 +46,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         [SerializeField]
         public BasisRangedUshortFloatData ScaleRanged;
         public double TimeAsDoubleWhenLastSync;
-        public float AvatarMedian = 0.1f;
         public float LastAvatarDelta = 0.1f;
-        public FloatQueue LastCollectedDeltas = new FloatQueue(5);
         public const int FirstBufferBytes = FirstBuffer * sizeof(float);
         public const int SecondBufferBytes = SecondBuffer * sizeof(float);
         public const int SizeAfterGapBytes = SizeAfterGap * sizeof(float);
