@@ -24,6 +24,10 @@ namespace Basis.Scripts.Networking.Compression
             // Read the raw byte array from the Packer
             Packer.ReadRaw(LengthBytes, ref StoredBytes);
 
+            if(BasisAvatarData.Muscles == null)
+            {
+                BasisAvatarData.Muscles = new float[LengthSize];
+            }
             // Convert the byte array back to the float array using Buffer.BlockCopy
             Buffer.BlockCopy(StoredBytes, 0, BasisAvatarData.Muscles, 0, LengthBytes);
         }
