@@ -31,11 +31,12 @@ namespace Basis.Scripts.Networking.Recievers
         private NativeArray<float> muscles;
         private NativeArray<float> targetMuscles;
         public JobHandle musclesHandle;
-        public UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob();
         public JobHandle AvatarHandle;
-        public JobHandle muscleHandle;
+        public UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob();
         public float DeltaTime;
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
+        public float[] MuscleFinalStageOutput = new float[90];
+        public quaternion OutputRotation;
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -99,7 +100,6 @@ namespace Basis.Scripts.Networking.Recievers
 
                 muscles.CopyFrom(Inital.Muscles);
                 targetMuscles.CopyFrom(Target.Muscles);
-               quaternion rotaton  = math.slerp(Inital.rotation,Target.rotation, normalizedTime);
                 AvatarJob.Time = normalizedTime;
 
                 AvatarHandle = AvatarJob.Schedule();
@@ -107,11 +107,11 @@ namespace Basis.Scripts.Networking.Recievers
                 // Muscle interpolation job
                 musclesJob.Time = normalizedTime;
                 musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
-
+                OutputRotation = math.slerp(Inital.rotation, Target.rotation, normalizedTime);
                 // Complete the jobs and apply the results
                 musclesHandle.Complete();
 
-                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], rotaton, muscles);
+                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], OutputRotation, muscles);
                 PoseHandler.SetHumanPose(ref HumanPose);
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply();
@@ -156,7 +156,6 @@ namespace Basis.Scripts.Networking.Recievers
         {
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
-        public float[] MuscleFinalStageOutput = new float[90];
         public static Vector3 Divide(Vector3 a, Vector3 b)
         {
             // Define a small epsilon to avoid division by zero, using a flexible value based on magnitude
