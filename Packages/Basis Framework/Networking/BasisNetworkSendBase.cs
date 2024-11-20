@@ -56,9 +56,12 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public float AvatarMedian = 0.1f;
         public float LastAvatarDelta = 0.1f;
         public FloatQueue LastCollectedDeltas = new FloatQueue(5);
-        public const int FirstBuffer = 15 * sizeof(float);
-        public const int SecondBuffer = 21 * sizeof(float);
-        public const int SizeAfterGap = (95 - 21) * sizeof(float);
+        public const int FirstBufferBytes = FirstBuffer * sizeof(float);
+        public const int SecondBufferBytes = SecondBuffer * sizeof(float);
+        public const int SizeAfterGapBytes = SizeAfterGap * sizeof(float);
+        public const int SizeAfterGap = (95 - SecondBuffer);
+        public const int FirstBuffer = 15;
+        public const int SecondBuffer = 21;
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()

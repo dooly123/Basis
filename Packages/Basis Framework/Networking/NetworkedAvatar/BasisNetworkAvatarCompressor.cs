@@ -43,10 +43,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             AvatarData.Vectors[0] = LocalPlayersAnimator.bodyPosition;
             AvatarData.Vectors[1] = LocalPlayersAnimator.transform.localScale; // scale
             // Copy muscles [0..14]
-            Buffer.BlockCopy(CachedPose.muscles, 0, AvatarData.floatArray, 0,BasisNetworkSendBase.FirstBuffer);
+            Buffer.BlockCopy(CachedPose.muscles, 0, AvatarData.floatArray, 0,BasisNetworkSendBase.FirstBufferBytes);
 
             // Copy muscles [21..end]
-            Buffer.BlockCopy(CachedPose.muscles, BasisNetworkSendBase.SecondBuffer, AvatarData.floatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
+            Buffer.BlockCopy(CachedPose.muscles, BasisNetworkSendBase.SecondBufferBytes, AvatarData.floatArray, BasisNetworkSendBase.FirstBufferBytes, BasisNetworkSendBase.SizeAfterGapBytes);
 
             // Update the muscles in AvatarData
             AvatarData.Muscles.CopyFrom(AvatarData.floatArray); // muscles

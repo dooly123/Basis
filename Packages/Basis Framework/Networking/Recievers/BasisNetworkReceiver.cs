@@ -157,11 +157,9 @@ AvatarJobs.muscleHandle.Complete();
 
             // Directly adjust scaling by applying the inverse of the AvatarHumanScale
             Vector3 Scaling = Vector3.one / AvatarHumanScale;  // Initial scaling with human scale inverse
-         //   Debug.Log("Initial Scaling: " + Scaling);
 
             // Now adjust scaling with the output scaling vector
             Scaling = Divide(Scaling, output.Vectors[0]);  // Apply custom scaling logic
-         //   Debug.Log("Adjusted Scaling: " + Scaling);
 
             // Apply scaling to position
             Vector3 ScaledPosition = Vector3.Scale(output.Vectors[1], Scaling);  // Apply the scaling
@@ -170,17 +168,35 @@ AvatarJobs.muscleHandle.Complete();
             pose.bodyPosition = ScaledPosition;
             pose.bodyRotation = output.Rotation;
 
-            if(pose.muscles == null || pose.muscles.Length == 0)
+            // Ensure muscles array is initialized properly
+            if (pose.muscles == null || pose.muscles.Length == 0)
             {
                 pose.muscles = new float[95];
             }
-            //copy from job to stageOutput
-            output.Muscles.CopyFrom(MuscleFinalStageOutput);
-            // Copy muscles [0..14]
-            Buffer.BlockCopy(MuscleFinalStageOutput, 0, pose.muscles, 0, BasisNetworkSendBase.FirstBuffer);
 
-            // Copy muscles [21..end]
-            Buffer.BlockCopy(MuscleFinalStageOutput, BasisNetworkSendBase.SecondBuffer,pose.muscles,BasisNetworkSendBase.SecondBuffer, BasisNetworkSendBase.SizeAfterGap);
+            // Check the size of MuscleFinalStageOutput array
+            if (MuscleFinalStageOutput.Length < 90)
+            {
+                Debug.LogError("MuscleFinalStageOutput array size is smaller than expected.");
+                return; // Exit if the size is incorrect
+            }
+
+            // Copy from job to MuscleFinalStageOutput
+            output.Muscles.CopyFrom(MuscleFinalStageOutput);
+
+            // Ensure proper array sizes for the blocks being copied
+            if (BasisNetworkSendBase.FirstBufferBytes > MuscleFinalStageOutput.Length || BasisNetworkSendBase.FirstBufferBytes > pose.muscles.Length)
+            {
+                Debug.LogError("FirstBuffer size exceeds array bounds.");
+                return;
+            }
+
+            // Copy muscles [0..14]
+            Buffer.BlockCopy(MuscleFinalStageOutput, 0, pose.muscles, 0, BasisNetworkSendBase.FirstBufferBytes);
+
+
+            // Assuming the size to copy is determined by BasisNetworkSendBase.SizeAfterGap
+            Buffer.BlockCopy(MuscleFinalStageOutput, BasisNetworkSendBase.SecondBuffer, pose.muscles, BasisNetworkSendBase.SecondBuffer, BasisNetworkSendBase.SizeAfterGap);
 
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling
