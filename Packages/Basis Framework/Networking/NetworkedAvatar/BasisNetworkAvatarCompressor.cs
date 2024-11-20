@@ -52,7 +52,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             AvatarData.Muscles.CopyFrom(AvatarData.floatArray); // muscles
 
             AvatarData.Rotation = LocalPlayersAnimator.bodyRotation; // hips rotation
-            CompressAvatarUpdate(ref Bytes, AvatarData.Vectors[1], AvatarData.Vectors[0], AvatarData.Rotation, CachedPose.muscles, PositionRanged, ScaleRanged);
+            CompressAvatarUpdate(ref Bytes, AvatarData.Vectors[1], AvatarData.Vectors[0], AvatarData.Rotation, AvatarData.floatArray, PositionRanged, ScaleRanged);
         }
         /// <summary>
         /// 212
