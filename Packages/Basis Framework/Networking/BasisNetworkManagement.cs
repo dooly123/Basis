@@ -85,7 +85,8 @@ namespace Basis.Scripts.Networking
             if (BasisHelpers.CheckInstance(Instance))
             {
                 Instance = this;
-            }
+            }            // Initialize AvatarBuffer
+            BasisAvatarBufferPool.AvatarBufferPool();
             OwnershipPairing.Clear();
             if (BasisScene.Instance != null)
             {
@@ -102,6 +103,7 @@ namespace Basis.Scripts.Networking
         public void OnDestroy()
         {
             Players.Clear();
+            BasisAvatarBufferPool.Clear();
         }
         public static bool TryGetLocalPlayerID(out ushort LocalID)
         {

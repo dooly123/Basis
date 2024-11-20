@@ -35,10 +35,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
             using (DarkRiftWriter Packer = DarkRiftWriter.Create(386))
             {
-                BasisCompressionOfPosition.CompressVector3(Anim.bodyPosition, Packer);
-                BasisCompressionOfPosition.CompressUShortVector3(Anim.transform.localScale, Packer, BasisNetworkSendBase.ScaleRanged);
-                BasisCompressionOfRotation.CompressQuaternion(Packer, Anim.bodyRotation);
-                BasisCompressionOfMuscles.CompressMuscles(Packer, FloatArray);
+                BasisBitPackerExtensions.CompressVector3(Anim.bodyPosition, Packer);
+                BasisBitPackerExtensions.CompressUShortVector3(Anim.transform.localScale, Packer, BasisNetworkSendBase.ScaleRanged);
+                BasisBitPackerExtensions.CompressQuaternion(Packer, Anim.bodyRotation);
+                BasisBitPackerExtensions.CompressMuscles(Packer, FloatArray);
 
                 // Allocate sync message array if needed and copy packed data into it
                 if (NetworkSendBase.LASM.array == null || Packer.Length != NetworkSendBase.LASM.array.Length)

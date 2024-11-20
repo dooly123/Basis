@@ -77,6 +77,7 @@ namespace Basis.Scripts.Networking.Recievers
             // Remove outdated rotations, keeping at least 2 data points
             while (AvatarDataBuffer.Count > 1 && currentTime - delayTime > AvatarDataBuffer[1].timestamp)
             {
+                BasisAvatarBufferPool.Return(AvatarDataBuffer[0]);
                 AvatarDataBuffer.RemoveAt(0);
             }
             // Ensure there are enough data points
