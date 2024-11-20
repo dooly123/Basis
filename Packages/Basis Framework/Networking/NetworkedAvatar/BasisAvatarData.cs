@@ -6,14 +6,6 @@ using UnityEngine;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
-    [System.Serializable]
-    public struct BasisAvatarData
-    {
-        public NativeArray<float3> Vectors; // hips position, player's position, scale (3 length)
-        public Quaternion Rotation; // hip rotation
-        public NativeArray<float> Muscles; // 90 floats for each muscle (90 length)
-        public float[] floatArray;
-    }
     [BurstCompile]
     public struct UpdateAvatarRotationJob : IJob
     {

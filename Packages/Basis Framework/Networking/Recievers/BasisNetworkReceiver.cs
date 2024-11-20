@@ -81,8 +81,8 @@ namespace Basis.Scripts.Networking.Recievers
             // Ensure there are enough data points
             if (AvatarDataBuffer.Count >= 2)
             {
-                AvatarBuffer firstDequeued = AvatarDataBuffer[0];
-                AvatarBuffer secondDequeued = AvatarDataBuffer[1];
+                AvatarBuffer Inital = AvatarDataBuffer[0];
+                AvatarBuffer Target = AvatarDataBuffer[1];
                 double startTime = AvatarDataBuffer[0].timestamp;
                 double endTime = AvatarDataBuffer[1].timestamp;
                 double targetTime = currentTime - delayTime;
@@ -91,17 +91,18 @@ namespace Basis.Scripts.Networking.Recievers
                 float normalizedTime = (float)((targetTime - startTime) / (endTime - startTime));
                 normalizedTime = Mathf.Clamp01(normalizedTime);
 
-                OuputVectors[0] = firstDequeued.Position; // Position at index 0
-                OuputVectors[1] = firstDequeued.Scale;    // Scale at index 1
-                TargetVectors[0] = secondDequeued.Position; // Target position at index 0
-                TargetVectors[1] = secondDequeued.Scale;    // Target scale at index 1
+                TargetVectors[0] = Target.Position; // Target position at index 0
+                OuputVectors[0] = Inital.Position; // Position at index 0
 
-                muscles.CopyFrom(firstDequeued.Muscles);
-                targetMuscles.CopyFrom(secondDequeued.Muscles);
+                OuputVectors[1] = Inital.Scale;    // Scale at index 1
+                TargetVectors[1] = Target.Scale;    // Target scale at index 1
+
+                muscles.CopyFrom(Inital.Muscles);
+                targetMuscles.CopyFrom(Target.Muscles);
 
                 // Schedule the job to interpolate positions, rotations, and scales
-                AvatarJob.rotations = firstDequeued.rotation;
-                AvatarJob.targetRotations = secondDequeued.rotation;
+                AvatarJob.rotations = Inital.rotation;
+                AvatarJob.targetRotations = Target.rotation;
                 AvatarJob.Time = normalizedTime;
 
                 AvatarHandle = AvatarJob.Schedule();

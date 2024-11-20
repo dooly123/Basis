@@ -21,41 +21,6 @@ namespace Basis.Scripts.Networking.Compression
             bitPacker.Read(out ushort data);
             Value = compressor.Decompress(data);
         }
-        [BurstCompile]
-        public static void WriteUshortArrayFloat(DarkRiftWriter bitPacker, float[] values, CompressionArraysRangedUshort compressor, int arrayLength = 90)
-        {
-            // Compress the float array into a ushort array
-           compressor.CompressArray(values,arrayLength,ref compressor.ushortArray);
-
-            // Efficiently copy ushort values to the byte array
-            for (int Index = 0; Index < arrayLength; Index++)
-            {
-                // Manually convert each ushort to 2 bytes (little-endian)
-                compressor.byteArray[Index * 2] = (byte)(compressor.ushortArray[Index] & 0xFF);
-                compressor.byteArray[Index * 2 + 1] = (byte)((compressor.ushortArray[Index] >> 8) & 0xFF);
-            }
-
-            // Write the byte array to the DarkRiftWriter
-            bitPacker.WriteRaw(compressor.byteArray, 0, compressor.ByteCount);
-        }
-        [BurstCompile]
-        public static void ReadUshortArrayFloat(this DarkRiftReader bitPacker, CompressionArraysRangedUshort compressor, ref BasisAvatarData BasisAvatarData, int ArrayLength = 90)
-        {
-
-            // Read the raw byte array from the DarkRiftReader
-            bitPacker.ReadRaw(compressor.ByteCount,ref compressor.byteArray);
-            // Convert bytes to ushorts
-            for (int Index = 0; Index < ArrayLength; Index++)
-            {
-                compressor.ushortArray[Index] = (ushort)(compressor.byteArray[Index * 2] | (compressor.byteArray[Index * 2 + 1] << 8));
-            }
-
-            // Decompress the ushort array to obtain a float array
-            compressor.DecompressArray(compressor.ushortArray, ArrayLength, ref BasisAvatarData.floatArray);
-
-            // Copy the decompressed float array into the Muscles structure
-            BasisAvatarData.Muscles.CopyFrom(BasisAvatarData.floatArray);
-        }
         public static void WriteUshortVectorFloat(DarkRiftWriter bitPacker, Vector3 values, BasisRangedUshortFloatData compressor)
         {
             ushort Compressx = compressor.Compress(values.x);
