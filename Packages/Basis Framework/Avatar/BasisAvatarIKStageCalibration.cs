@@ -209,46 +209,6 @@ namespace Basis.Scripts.Avatar
         { BasisBoneTrackedRole.RightLowerLeg,Mapping. RightLowerLeg },
         { BasisBoneTrackedRole.RightFoot, Mapping.rightFoot },
         { BasisBoneTrackedRole.RightToes,Mapping. rightToes },
-
-        { BasisBoneTrackedRole.LeftThumbProximal, Mapping.LeftThumb },
-        { BasisBoneTrackedRole.LeftThumbIntermediate,Mapping. LeftThumbIntermediate },
-        { BasisBoneTrackedRole.LeftThumbDistal,Mapping. LeftThumbDistal },
-
-        { BasisBoneTrackedRole.LeftIndexProximal, Mapping.LeftIndexProximal },
-        { BasisBoneTrackedRole.LeftIndexIntermediate,Mapping. LeftIndexIntermediate },
-        { BasisBoneTrackedRole.LeftIndexDistal, Mapping.LeftIndexDistal },
-
-        { BasisBoneTrackedRole.LeftMiddleProximal,Mapping. LeftMiddleProximal },
-        { BasisBoneTrackedRole.LeftMiddleIntermediate,Mapping. LeftMiddleIntermediate },
-        { BasisBoneTrackedRole.LeftMiddleDistal, Mapping.LeftMiddleDistal },
-
-        { BasisBoneTrackedRole.LeftRingProximal, Mapping.LeftRingProximal },
-        { BasisBoneTrackedRole.LeftRingIntermediate,Mapping. LeftRingIntermediate },
-        { BasisBoneTrackedRole.LeftRingDistal, Mapping.LeftRingDistal },
-
-        { BasisBoneTrackedRole.LeftLittleProximal, Mapping.LeftLittleProximal },
-        { BasisBoneTrackedRole.LeftLittleIntermediate,Mapping. LeftLittleIntermediate },
-        { BasisBoneTrackedRole.LeftLittleDistal, Mapping.LeftLittleDistal },
-
-        { BasisBoneTrackedRole.RightThumbProximal, Mapping.RightThumbProximal },
-        { BasisBoneTrackedRole.RightThumbIntermediate,Mapping. RightThumbIntermediate },
-        { BasisBoneTrackedRole.RightThumbDistal,Mapping. RightThumbDistal },
-
-        { BasisBoneTrackedRole.RightIndexProximal,Mapping. RightIndexProximal },
-        { BasisBoneTrackedRole.RightIndexIntermediate,Mapping. RightIndexIntermediate },
-        { BasisBoneTrackedRole.RightIndexDistal, Mapping.RightIndexDistal },
-
-        { BasisBoneTrackedRole.RightMiddleProximal,Mapping. RightMiddleProximal },
-        { BasisBoneTrackedRole.RightMiddleIntermediate,Mapping. RightMiddleIntermediate },
-        { BasisBoneTrackedRole.RightMiddleDistal,Mapping. RightMiddleDistal },
-
-        { BasisBoneTrackedRole.RightRingProximal,Mapping.RightRingProximal },
-        { BasisBoneTrackedRole.RightRingIntermediate,Mapping. RightRingIntermediate },
-        { BasisBoneTrackedRole.RightRingDistal, Mapping.RightRingDistal },
-
-        { BasisBoneTrackedRole.RightLittleProximal, Mapping.RightLittleProximal },
-        { BasisBoneTrackedRole.RightLittleIntermediate,Mapping. RightLittleIntermediate },
-        { BasisBoneTrackedRole.RightLittleDistal,Mapping. RightLittleDistal }
             };
 
             return transforms;
