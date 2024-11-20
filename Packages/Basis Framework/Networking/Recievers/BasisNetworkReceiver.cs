@@ -30,6 +30,12 @@ namespace Basis.Scripts.Networking.Recievers
         private NativeArray<float3> targetTransforms; // Merged target positions and scales
         private NativeArray<float> muscles;
         private NativeArray<float> targetMuscles;
+        public JobHandle musclesHandle;
+        public UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob();
+        public JobHandle AvatarHandle;
+        public JobHandle muscleHandle;
+        public float DeltaTime;
+        public UpdateAvatarRotationJob AvatarJob;
         public void Initialize()
         {
             transforms = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -74,61 +80,70 @@ namespace Basis.Scripts.Networking.Recievers
                 double targetTime = currentTime - delayTime;
 
                 // Calculate normalized interpolation factor t
-                float t = (float)((targetTime - startTime) / (endTime - startTime));
-                t = Mathf.Clamp01(t);
+                float Time = (float)((targetTime - startTime) / (endTime - startTime));
+                Time = Mathf.Clamp01(Time);
                 transforms[0] = AvatarDataBuffer[0].Position; // Position at index 0
                 transforms[1] = AvatarDataBuffer[0].Scale;    // Scale at index 1
                 targetTransforms[0] = AvatarDataBuffer[1].Position; // Target position at index 0
                 targetTransforms[1] = AvatarDataBuffer[1].Scale;    // Target scale at index 1
 
-                for (int i = 0; i < 90; i++)
+                for (int Index = 0; Index < 90; Index++)
                 {
-                    muscles[i] = AvatarDataBuffer[0].Muscles[i];
-                    targetMuscles[i] = AvatarDataBuffer[1].Muscles[i];
+                    muscles[Index] = AvatarDataBuffer[0].Muscles[Index];
+                    targetMuscles[Index] = AvatarDataBuffer[1].Muscles[Index];
                 }
 
                 // Schedule the job to interpolate positions, rotations, and scales
-                AvatarJobs.AvatarJob = new UpdateAvatarRotationJob
-                {
-                    rotations = AvatarDataBuffer[0].rotation,
-                    targetRotations = AvatarDataBuffer[1].rotation,
-                    TransformationalOutput = transforms,         // Merged positions
-                    TransformationalInput = targetTransforms, // Merged target positions
-                    t = t
-                };
+                AvatarJob.rotations = AvatarDataBuffer[0].rotation;
+                AvatarJob.targetRotations = AvatarDataBuffer[1].rotation;
+                AvatarJob.TransformationalOutput = transforms;         // Merged positions
+                AvatarJob.TransformationalInput = targetTransforms; // Merged target positions
+                AvatarJob.Time = Time;
 
-                AvatarJobs.AvatarHandle = AvatarJobs.AvatarJob.Schedule();
+                AvatarHandle = AvatarJob.Schedule();
 
                 // Muscle interpolation job
-                UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob
-                {
-                    muscles = muscles,
-                    targetMuscles = targetMuscles,
-                    t = t
-                };
+                musclesJob.muscles = muscles;
+                musclesJob.targetMuscles = targetMuscles;
+                musclesJob.Time = Time;
 
-                JobHandle musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarJobs.AvatarHandle);
+                musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
 
                 // Complete the jobs and apply the results
                 musclesHandle.Complete();
 
-                // After jobs are done, apply the resulting values
-                CurrentData.Rotation = AvatarJobs.AvatarJob.rotations;
-                CurrentData.Vectors[1] = transforms[0]; // Position
-                CurrentData.Vectors[0] = transforms[1]; // Scale
-
-                // Apply muscle data
-                for (int i = 0; i < 90; i++)
-                {
-                    CurrentData.Muscles[i] = muscles[i];
-                }
-
-                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData);
+                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, transforms[1], transforms[0], AvatarJob.rotations, musclesJob.muscles);
                 PoseHandler.SetHumanPose(ref HumanPose);
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply();
                 RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
             }
+        }
+        public void ApplyPoseData(Animator animator, float3 Scale, float3 Position, quaternion Rotation, NativeArray<float> Muscles)
+        {
+            // Directly adjust scaling by applying the inverse of the AvatarHumanScale
+            Vector3 Scaling = Vector3.one / animator.humanScale;  // Initial scaling with human scale inverse
+
+            // Now adjust scaling with the output scaling vector
+            Scaling = Divide(Scaling, Scale);  // Apply custom scaling logic
+
+            // Apply scaling to position
+            Vector3 ScaledPosition = Vector3.Scale(Position, Scaling);  // Apply the scaling
+
+            // Apply pose data
+            HumanPose.bodyPosition = ScaledPosition;
+            HumanPose.bodyRotation = Rotation;
+
+            // Copy from job to MuscleFinalStageOutput
+            Muscles.CopyTo(MuscleFinalStageOutput);
+            // First, copy the first 14 elements directly
+            Array.Copy(MuscleFinalStageOutput, 0, HumanPose.muscles, 0, FirstBuffer);
+
+            // Then, copy the remaining elements from index 15 onwards into the pose.muscles array, starting from index 21
+            Array.Copy(MuscleFinalStageOutput, FirstBuffer, HumanPose.muscles, SecondBuffer, SizeAfterGap);
+
+            // Adjust the local scale of the animator's transform
+            animator.transform.localScale = Scale;  // Directly adjust scale with output scaling
         }
         public void LateUpdate()
         {
@@ -143,34 +158,6 @@ namespace Basis.Scripts.Networking.Recievers
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
         public float[] MuscleFinalStageOutput = new float[90];
-        public void ApplyPoseData(Animator animator, BasisAvatarData output)
-        {
-            float AvatarHumanScale = animator.humanScale;
-
-            // Directly adjust scaling by applying the inverse of the AvatarHumanScale
-            Vector3 Scaling = Vector3.one / AvatarHumanScale;  // Initial scaling with human scale inverse
-
-            // Now adjust scaling with the output scaling vector
-            Scaling = Divide(Scaling, output.Vectors[0]);  // Apply custom scaling logic
-
-            // Apply scaling to position
-            Vector3 ScaledPosition = Vector3.Scale(output.Vectors[1], Scaling);  // Apply the scaling
-
-            // Apply pose data
-            HumanPose.bodyPosition = ScaledPosition;
-            HumanPose.bodyRotation = output.Rotation;
-
-            // Copy from job to MuscleFinalStageOutput
-            output.Muscles.CopyTo(MuscleFinalStageOutput);
-            // First, copy the first 14 elements directly
-            Array.Copy(MuscleFinalStageOutput, 0, HumanPose.muscles, 0, FirstBuffer);
-
-            // Then, copy the remaining elements from index 15 onwards into the pose.muscles array, starting from index 21
-            Array.Copy(MuscleFinalStageOutput, FirstBuffer, HumanPose.muscles, SecondBuffer, SizeAfterGap);
-
-            // Adjust the local scale of the animator's transform
-            animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling
-        }
         public static Vector3 Divide(Vector3 a, Vector3 b)
         {
             // Define a small epsilon to avoid division by zero, using a flexible value based on magnitude
@@ -221,7 +208,6 @@ namespace Basis.Scripts.Networking.Recievers
                 {
                     HumanPose.muscles = new float[95];
                 }
-                InitalizeDataJobs(ref AvatarJobs);
                 Initialize();
                 Ready = true;
                 NetworkedPlayer = networkedPlayer;

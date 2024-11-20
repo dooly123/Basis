@@ -21,16 +21,16 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public Quaternion targetRotations;
         public NativeArray<float3> TransformationalOutput;
         public NativeArray<float3> TransformationalInput;
-        public float t;
+        public float Time;
 
         public void Execute()
         {
             // Interpolate rotations
-            rotations = math.slerp(rotations, targetRotations, t);
+            rotations = math.slerp(rotations, targetRotations, Time);
             // Interpolate positions
-            TransformationalOutput[0] = math.lerp(TransformationalOutput[0], TransformationalInput[0], t);
+            TransformationalOutput[0] = math.lerp(TransformationalOutput[0], TransformationalInput[0], Time);
 
-            TransformationalOutput[1] = math.lerp(TransformationalOutput[1], TransformationalInput[1], t);
+            TransformationalOutput[1] = math.lerp(TransformationalOutput[1], TransformationalInput[1], Time);
         }
     }
     [BurstCompile]
@@ -38,11 +38,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     {
         public NativeArray<float> muscles;
         public NativeArray<float> targetMuscles;
-        public float t;
+        public float Time;
 
         public void Execute(int index)
         {
-            muscles[index] = math.lerp(muscles[index], targetMuscles[index], t);
+            muscles[index] = math.lerp(muscles[index], targetMuscles[index], Time);
         }
     }
 }

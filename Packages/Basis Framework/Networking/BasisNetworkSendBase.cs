@@ -31,8 +31,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
         [SerializeField]
         public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
-        [SerializeField]
-        public BasisDataJobs AvatarJobs;
         public HumanPoseHandler PoseHandler;
         [SerializeField]
         public BasisRangedUshortFloatData PositionRanged;
@@ -56,11 +54,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             data.Vectors = new NativeArray<float3>(2, Allocator.Persistent);
             data.Muscles = new NativeArray<float>(90, Allocator.Persistent);
-        }
-        public static void InitalizeDataJobs(ref BasisDataJobs BasisDataJobs)
-        {
-            BasisDataJobs.AvatarJob = new UpdateAvatarRotationJob();
-            BasisDataJobs.muscleJob = new UpdateAvatarMusclesJob();
         }
         public abstract void Compute();
         public abstract void Initialize(BasisNetworkedPlayer NetworkedPlayer);
