@@ -37,7 +37,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public static string InputActions = "InputActions";
         public bool HasEvents = false;
         public bool IgnoreCrouchToggle = false;
-        public static Action LateUpdateEvent;
+        public static Action AfterAvatarChanges;
         [SerializeField]
         public BasisInputState InputState = new BasisInputState();
         public void OnEnable()
@@ -66,16 +66,12 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         private void OnBeforeRender()
         {
             BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
+            AfterAvatarChanges?.Invoke();
         }
 
         public void Update()
         {
             InputSystem.Update();
-        }
-        public void LateUpdate()
-        {
-            LateUpdateEvent?.Invoke();
-          //  BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
         }
         public static async Task CreateInputAction(BasisLocalPlayer Local)
         {

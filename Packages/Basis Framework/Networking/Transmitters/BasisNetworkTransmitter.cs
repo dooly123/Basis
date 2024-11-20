@@ -1,5 +1,4 @@
-using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
@@ -28,11 +27,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 }
             }
         }
-        public void LateUpdate()
-        {
-            SendOutLatest();
-        }
-
         void SendOutLatest()
         {
             timer += Time.deltaTime;
@@ -61,6 +55,7 @@ namespace Basis.Scripts.Networking.Transmitters
                     NetworkedPlayer.Player.OnAvatarSwitchedFallBack += OnAvatarCalibration;
                     NetworkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
                     NetworkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
+                    BasisLocalInputActions.AfterAvatarChanges += SendOutLatest;
                     HasEvents = true;
                 }
                 Ready = true;
@@ -81,6 +76,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 NetworkedPlayer.Player.OnAvatarSwitchedFallBack -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= SendOutLatestAvatar;
+                BasisLocalInputActions.AfterAvatarChanges -= SendOutLatest;
                 HasEvents = false;
             }
         }

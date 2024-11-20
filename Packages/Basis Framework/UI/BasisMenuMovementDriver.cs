@@ -38,7 +38,7 @@ namespace Basis.Scripts.UI.UI_Panels
                     hasGeneratedAction = true;
                 }
             }
-            LocalPlayer.LocalBoneDriver.ReadyToRead.AddAction(101, UpdateUI);
+            LocalPlayer.LocalBoneDriver.ReadyToRead.AddAction(105, UpdateUI);
         }
         private void OnDisable()
         {

@@ -122,7 +122,7 @@ namespace Basis.Scripts.Drivers
             CalibrationComplete?.Invoke();
 
             BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.Avatar.Animator.gameObject);
-            BasisMuscleDriver.Initialize(this, Player.Avatar.Animator);
+            BasisMuscleDriver.Initialize(Player, Player.Avatar.Animator);
 
             AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
             AnimatorDriver.Initialize(Player.Avatar.Animator);
