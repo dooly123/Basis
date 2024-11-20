@@ -119,11 +119,11 @@ namespace Basis.Scripts.Drivers
             SetBodySettings(LocalDriver);
             CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
             ComputeOffsets(LocalDriver);
-            CalibrationComplete?.Invoke();
-
             BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.Avatar.Animator.gameObject);
             BasisMuscleDriver.DisposeAllJobsData();
             BasisMuscleDriver.Initialize(Player, Player.Avatar.Animator);
+
+            CalibrationComplete?.Invoke();
 
             AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
             AnimatorDriver.Initialize(Player.Avatar.Animator);
