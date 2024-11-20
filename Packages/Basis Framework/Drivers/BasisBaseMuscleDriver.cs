@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Jobs;
 using static BasisMuscleDriver;
@@ -98,16 +99,16 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
 
         // Distribute poses to individual fingers
         int offset = 0;
-        ExtractFingerPoses(ref poseData.LeftThumb, allFingerPoses, ref offset, Mapping.LeftThumb.Length);
-        ExtractFingerPoses(ref poseData.LeftIndex, allFingerPoses, ref offset, Mapping.LeftIndex.Length);
-        ExtractFingerPoses(ref poseData.LeftMiddle, allFingerPoses, ref offset, Mapping.LeftMiddle.Length);
-        ExtractFingerPoses(ref poseData.LeftRing, allFingerPoses, ref offset, Mapping.LeftRing.Length);
-        ExtractFingerPoses(ref poseData.LeftLittle, allFingerPoses, ref offset, Mapping.LeftLittle.Length);
-        ExtractFingerPoses(ref poseData.RightThumb, allFingerPoses, ref offset, Mapping.RightThumb.Length);
-        ExtractFingerPoses(ref poseData.RightIndex, allFingerPoses, ref offset, Mapping.RightIndex.Length);
-        ExtractFingerPoses(ref poseData.RightMiddle, allFingerPoses, ref offset, Mapping.RightMiddle.Length);
-        ExtractFingerPoses(ref poseData.RightRing, allFingerPoses, ref offset, Mapping.RightRing.Length);
-        ExtractFingerPoses(ref poseData.RightLittle, allFingerPoses, ref offset, Mapping.RightLittle.Length);
+        ExtractFingerPoses(ref poseData.LeftThumb, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.LeftIndex, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.LeftMiddle, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.LeftRing, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.LeftLittle, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.RightThumb, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.RightIndex, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.RightMiddle, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.RightRing, allFingerPoses, ref offset, 3);
+        ExtractFingerPoses(ref poseData.RightLittle, allFingerPoses, ref offset, 3);
 
         allFingerPoses.Dispose();
     }
@@ -149,17 +150,17 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
     public void SetAndRecordPose(float fillValue, ref PoseData poseData, float Splane)
     {
         // Apply muscle data to both hands
-        SetMuscleData(LeftThumb, fillValue, Splane);
-        SetMuscleData(LeftIndex, fillValue, Splane);
-        SetMuscleData(LeftMiddle, fillValue, Splane);
-        SetMuscleData(LeftRing, fillValue, Splane);
-        SetMuscleData(LeftLittle, fillValue, Splane);
+        SetMuscleData(ref LeftThumb, fillValue, Splane);
+        SetMuscleData(ref LeftIndex, fillValue, Splane);
+        SetMuscleData(ref LeftMiddle, fillValue, Splane);
+        SetMuscleData(ref LeftRing, fillValue, Splane);
+        SetMuscleData(ref LeftLittle, fillValue, Splane);
 
-        SetMuscleData(RightThumb, fillValue, Splane);
-        SetMuscleData(RightIndex, fillValue, Splane);
-        SetMuscleData(RightMiddle, fillValue, Splane);
-        SetMuscleData(RightRing, fillValue, Splane);
-        SetMuscleData(RightLittle, fillValue, Splane);
+        SetMuscleData(ref RightThumb, fillValue, Splane);
+        SetMuscleData(ref RightIndex, fillValue, Splane);
+        SetMuscleData(ref RightMiddle, fillValue, Splane);
+        SetMuscleData(ref RightRing, fillValue, Splane);
+        SetMuscleData(ref RightLittle, fillValue, Splane);
 
         ApplyMuscleData();
         poseHandler.SetHumanPose(ref pose);
@@ -180,7 +181,7 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
         System.Array.Copy(RightRing, 0, pose.muscles, 87, 4);
         System.Array.Copy(RightLittle, 0, pose.muscles, 91, 4);
     }
-    public void SetMuscleData(float[] muscleArray, float fillValue, float specificValue)
+    public void SetMuscleData(ref float[] muscleArray, float fillValue, float specificValue)
     {
         Array.Fill(muscleArray, fillValue);
         muscleArray[1] = specificValue;
@@ -274,8 +275,8 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
         // Update proximal pose if available
         if (hasProximal[0])
         {
-            Vector3 newProximalPosition = Vector3.Lerp(currentPoses[0].position, poses[0].position, rotation);
-            Quaternion newProximalRotation = Quaternion.Slerp(currentPoses[0].rotation, poses[0].rotation, rotation);
+            float3 newProximalPosition = math.lerp(currentPoses[0].position, poses[0].position, rotation);
+            quaternion newProximalRotation = math.slerp(currentPoses[0].rotation, poses[0].rotation, rotation);
 
             currentPoses[0].position = newProximalPosition;
             currentPoses[0].rotation = newProximalRotation;
@@ -286,8 +287,8 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
         // Update intermediate pose if available
         if (hasProximal[1])
         {
-            Vector3 newIntermediatePosition = Vector3.Lerp(currentPoses[1].position, poses[1].position, rotation);
-            Quaternion newIntermediateRotation = Quaternion.Slerp(currentPoses[1].rotation, poses[1].rotation, rotation);
+            float3 newIntermediatePosition = math.lerp(currentPoses[1].position, poses[1].position, rotation);
+            quaternion newIntermediateRotation = math.slerp(currentPoses[1].rotation, poses[1].rotation, rotation);
 
             currentPoses[1].position = newIntermediatePosition;
             currentPoses[1].rotation = newIntermediateRotation;
@@ -298,8 +299,8 @@ public abstract class BasisBaseMuscleDriver : MonoBehaviour
         // Update distal pose if available
         if (hasProximal[2])
         {
-            Vector3 newDistalPosition = Vector3.Lerp(currentPoses[2].position, poses[2].position, rotation);
-            Quaternion newDistalRotation = Quaternion.Slerp(currentPoses[2].rotation, poses[2].rotation, rotation);
+            float3 newDistalPosition = math.lerp(currentPoses[2].position, poses[2].position, rotation);
+            quaternion newDistalRotation = math.slerp(currentPoses[2].rotation, poses[2].rotation, rotation);
 
             currentPoses[2].position = newDistalPosition;
             currentPoses[2].rotation = newDistalRotation;
