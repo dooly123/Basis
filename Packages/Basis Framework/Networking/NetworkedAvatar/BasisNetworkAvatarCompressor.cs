@@ -3,7 +3,6 @@ using Basis.Scripts.Profiler;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using System;
-using UnityEditor.Sprites;
 using UnityEngine;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
