@@ -96,6 +96,14 @@ namespace Basis.Scripts.Device_Management.Devices
                     Control.InverseOffsetFromBone.position = Quaternion.Inverse(transform.rotation) * ((Vector3)Control.OutgoingWorldData.position - transform.position);
                     Control.InverseOffsetFromBone.rotation = InitalRotation * InitalBoneRotation;
                     Control.InverseOffsetFromBone.Use = true;
+                    if (BasisBoneTrackedRoleCommonCheck.CheckIfHintRole(trackedRole))//we dont want to offset these ones
+                    {
+                        Control.IsHintRoleIgnoreRotation = true;
+                    }
+                    else
+                    {
+                        Control.IsHintRoleIgnoreRotation = false;
+                    }
                 }
                 SetRealTrackers(BasisHasTracked.HasTracker, BasisHasRigLayer.HasRigLayer);
             }
@@ -198,6 +206,7 @@ namespace Basis.Scripts.Device_Management.Devices
             {
                 if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(trackedRole))
                 {
+                    Control.IsHintRoleIgnoreRotation = false;
                     UnAssignTracker();
                 }
             }
@@ -206,6 +215,7 @@ namespace Basis.Scripts.Device_Management.Devices
         {
             if (BasisBoneTrackedRoleCommonCheck.CheckItsFBTracker(trackedRole))
             {
+                Control.IsHintRoleIgnoreRotation = false;
                 UnAssignTracker();
             }
         }

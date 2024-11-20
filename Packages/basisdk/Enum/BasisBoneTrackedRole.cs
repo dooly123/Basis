@@ -75,6 +75,11 @@
                    CheckIfLeftHand(role) == false &&
                    CheckIfRightHand(role) == false;
         }
+        public static bool CheckIfHintRole(BasisBoneTrackedRole role)
+        {
+            bool IsHintRole = (role == BasisBoneTrackedRole.LeftLowerArm || role == BasisBoneTrackedRole.RightLowerArm || role == BasisBoneTrackedRole.LeftLowerLeg || role == BasisBoneTrackedRole.RightLowerLeg);
+            return IsHintRole;
+        }
         public static bool CheckIfLeftHand(BasisBoneTrackedRole role)
         {
             switch (role)
