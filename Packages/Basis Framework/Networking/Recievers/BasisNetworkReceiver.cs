@@ -5,7 +5,6 @@ using System;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using static SerializableDarkRift;
 
 namespace Basis.Scripts.Networking.Recievers
