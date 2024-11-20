@@ -14,6 +14,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     {
         public bool Ready;
         public BasisNetworkedPlayer NetworkedPlayer;
+        public static BasisRangedUshortFloatData RotationCompression = new BasisRangedUshortFloatData(-1f, 1f, 0.001f);
         [System.Serializable]
         public struct AvatarBuffer
         {

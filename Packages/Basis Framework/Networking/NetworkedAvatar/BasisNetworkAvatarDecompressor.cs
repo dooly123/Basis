@@ -16,13 +16,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             // Update receiver state
             baseReceiver.LASM = syncMessage.avatarSerialization;
             AvatarBuffer avatarBuffer = BasisAvatarBufferPool.Rent();
-            using (var bitPacker = DarkRiftReader.CreateFromArray(syncMessage.avatarSerialization.array, 0, baseReceiver.LASM.array.Length))
-            {
-                BasisBitPackerExtensions.DecompressVector3(bitPacker, ref avatarBuffer.Position);
-                BasisBitPackerExtensions.DecompressUShortVector3(bitPacker, BasisNetworkReceiver.ScaleRanged, ref avatarBuffer.Scale);
-                BasisBitPackerExtensions.DecompressQuaternion(bitPacker, ref avatarBuffer.rotation);
-                BasisBitPackerExtensions.DecompressMuscles(bitPacker, ref avatarBuffer);
-            }
+            int Offset = 0;
+            avatarBuffer.Position = BasisBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref Offset);
+            avatarBuffer.Scale = BasisBitPackerExtensions.ReadUshortVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkReceiver.ScaleRanged, ref Offset);
+            avatarBuffer.rotation = BasisBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);
+            BasisBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref Offset);
             avatarBuffer.timestamp = Time.realtimeSinceStartupAsDouble;
             baseReceiver.AvatarDataBuffer.Add(avatarBuffer);
         }

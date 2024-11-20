@@ -3,6 +3,7 @@ using Basis.Scripts.Profiler;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
 using System;
+using UnityEditor.Sprites;
 using UnityEngine;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
@@ -33,20 +34,12 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 
             // Copy muscles [21..end]
             Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
-            using (DarkRiftWriter Packer = DarkRiftWriter.Create(386))
-            {
-                BasisBitPackerExtensions.CompressVector3(Anim.bodyPosition, Packer);
-                BasisBitPackerExtensions.CompressUShortVector3(Anim.transform.localScale, Packer, BasisNetworkSendBase.ScaleRanged);
-                BasisBitPackerExtensions.CompressQuaternion(Packer, Anim.bodyRotation);
-                BasisBitPackerExtensions.CompressMuscles(Packer, FloatArray);
 
-                // Allocate sync message array if needed and copy packed data into it
-                if (NetworkSendBase.LASM.array == null || Packer.Length != NetworkSendBase.LASM.array.Length)
-                {
-                    NetworkSendBase.LASM.array = new byte[Packer.Length];
-                }
-                Packer.CopyTo(NetworkSendBase.LASM.array, 0);
-            }
+            int Offset = 0;
+            BasisBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition,ref NetworkSendBase.LASM.array,ref Offset);
+            BasisBitPackerExtensions.WriteUshortVectorFloatToBytes(Anim.transform.localScale, BasisNetworkSendBase.ScaleRanged,ref NetworkSendBase.LASM.array, ref Offset);
+            BasisBitPackerExtensions.WriteQuaternionToBytes(Anim.bodyRotation, ref NetworkSendBase.LASM.array, ref Offset, BasisNetworkSendBase.RotationCompression);
+            BasisBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref NetworkSendBase.LASM.array,ref Offset);
         }
     }
 }
