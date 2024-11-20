@@ -210,7 +210,7 @@ namespace Basis.Scripts.Avatar
         { BasisBoneTrackedRole.RightFoot, Mapping.rightFoot },
         { BasisBoneTrackedRole.RightToes,Mapping. rightToes },
 
-        { BasisBoneTrackedRole.LeftThumbProximal, Mapping.LeftThumbProximal },
+        { BasisBoneTrackedRole.LeftThumbProximal, Mapping.LeftThumb },
         { BasisBoneTrackedRole.LeftThumbIntermediate,Mapping. LeftThumbIntermediate },
         { BasisBoneTrackedRole.LeftThumbDistal,Mapping. LeftThumbDistal },
 

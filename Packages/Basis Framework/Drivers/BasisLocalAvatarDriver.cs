@@ -122,6 +122,7 @@ namespace Basis.Scripts.Drivers
             CalibrationComplete?.Invoke();
 
             BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.Avatar.Animator.gameObject);
+            BasisMuscleDriver.DisposeAllJobsData();
             BasisMuscleDriver.Initialize(Player, Player.Avatar.Animator);
 
             AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
@@ -150,6 +151,13 @@ namespace Basis.Scripts.Drivers
             Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position,Quaternion.identity);
             CalibrateOffsets();
             BuildBuilder();
+        }
+        public void OnDestroy()
+        {
+            if (BasisMuscleDriver != null)
+            {
+                BasisMuscleDriver.DisposeAllJobsData();
+            }
         }
         public Dictionary<BasisBoneTrackedRole, Transform> StoredRolesTransforms;
         public void CalibrateOffsets()

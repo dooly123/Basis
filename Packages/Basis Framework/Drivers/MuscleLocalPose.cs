@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
 
 [System.Serializable]
 public struct MuscleLocalPose
 {
-    public Vector3 position;
-    public Quaternion rotation;
+    public float3 position;
+    public quaternion rotation;
 }
