@@ -23,7 +23,7 @@ namespace Basis.Scripts.Networking.Recievers
         [Header("Interpolation Settings")]
         public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
         [SerializeField]
-        public Queue<AvatarBuffer> AvatarDataQueue = new Queue<AvatarBuffer>();
+        public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
         private NativeArray<float3> OuputVectors;      // Merged positions and scales
@@ -73,45 +73,47 @@ namespace Basis.Scripts.Networking.Recievers
 
             double currentTime = Time.realtimeSinceStartupAsDouble;
 
-            // Remove outdated rotations
-            while (AvatarDataQueue.Count > 2)
+            // Remove outdated rotations, keeping at least 2 data points
+            while (AvatarDataBuffer.Count > 1 && currentTime - delayTime > AvatarDataBuffer[1].timestamp)
             {
-                AvatarDataQueue.Dequeue();
+                AvatarDataBuffer.RemoveAt(0);
             }
-
-            // Only run job if there are enough data points
-            if (AvatarDataQueue.Count >= 2)
+            // Ensure there are enough data points
+            if (AvatarDataBuffer.Count >= 2)
             {
-                AvatarBuffer Firstbuffer = AvatarDataQueue.Dequeue();
-                AvatarBuffer SecondBuffer = AvatarDataQueue.Dequeue();
-                double startTime = Firstbuffer.timestamp;
+                AvatarBuffer firstDequeued = AvatarDataBuffer[0];
+                AvatarBuffer secondDequeued = AvatarDataBuffer[1];
+                double startTime = AvatarDataBuffer[0].timestamp;
+                double endTime = AvatarDataBuffer[1].timestamp;
                 double targetTime = currentTime - delayTime;
 
                 // Calculate normalized interpolation factor t
-                float Time = Mathf.Clamp01((float)((targetTime - startTime) / (SecondBuffer.timestamp - startTime)));
-                OuputVectors[0] = Firstbuffer.Position; // Position at index 0
-                OuputVectors[1] = Firstbuffer.Scale;    // Scale at index 1
-                TargetVectors[0] = SecondBuffer.Position; // Target position at index 0
-                TargetVectors[1] = SecondBuffer.Scale;    // Target scale at index 1
+                float normalizedTime = (float)((targetTime - startTime) / (endTime - startTime));
+                normalizedTime = Mathf.Clamp01(normalizedTime);
 
-                muscles.CopyFrom(Firstbuffer.Muscles);
-                targetMuscles.CopyFrom(SecondBuffer.Muscles);
+                OuputVectors[0] = firstDequeued.Position; // Position at index 0
+                OuputVectors[1] = firstDequeued.Scale;    // Scale at index 1
+                TargetVectors[0] = secondDequeued.Position; // Target position at index 0
+                TargetVectors[1] = secondDequeued.Scale;    // Target scale at index 1
+
+                muscles.CopyFrom(firstDequeued.Muscles);
+                targetMuscles.CopyFrom(secondDequeued.Muscles);
+
                 // Schedule the job to interpolate positions, rotations, and scales
-                AvatarJob.rotations = Firstbuffer.rotation;
-                AvatarJob.targetRotations = SecondBuffer.rotation;
-                AvatarJob.Time = Time;
+                AvatarJob.rotations = firstDequeued.rotation;
+                AvatarJob.targetRotations = secondDequeued.rotation;
+                AvatarJob.Time = normalizedTime;
 
                 AvatarHandle = AvatarJob.Schedule();
 
                 // Muscle interpolation job
-                musclesJob.Time = Time;
-
+                musclesJob.Time = normalizedTime;
                 musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
 
                 // Complete the jobs and apply the results
                 musclesHandle.Complete();
 
-                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], AvatarJob.rotations, musclesJob.muscles);
+                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], AvatarJob.rotations, muscles);
                 PoseHandler.SetHumanPose(ref HumanPose);
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply();

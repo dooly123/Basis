@@ -26,7 +26,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref avatarBuffer);
             }
             avatarBuffer.timestamp = Time.realtimeSinceStartupAsDouble;
-            baseReceiver.AvatarDataQueue.Enqueue(avatarBuffer);
+            baseReceiver.AvatarDataBuffer.Add(avatarBuffer);
         }
     }
 }
