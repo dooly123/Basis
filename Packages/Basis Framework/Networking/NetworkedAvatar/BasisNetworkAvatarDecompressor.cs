@@ -1,7 +1,10 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
 using DarkRift;
+using Unity.Mathematics;
+using UnityEditor.Sprites;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 using static SerializableDarkRift;
 
@@ -9,55 +12,30 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     public static class BasisNetworkAvatarDecompressor
     {
-        public static void DeCompress(BasisNetworkReceiver Base, ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage)
+        /// <summary>
+        /// Single API to handle all avatar decompression tasks.
+        /// </summary>
+        public static void DecompressAndProcessAvatar(BasisNetworkReceiver baseReceiver, ServerSideSyncPlayerMessage syncMessage)
         {
-            Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
-            DecompressAvatar( ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
-            Base.TimeAsDoubleWhenLastSync = Time.realtimeSinceStartupAsDouble;
-            Base.LastAvatarDelta = (float)(Base.TimeAsDoubleWhenLastSync - Base.TimeAsDoubleWhenLastSync);
-            // Add new rotation data to the buffer
-            Base.AvatarDataBuffer.Add(new AvatarBuffer
+            // Update receiver state
+            baseReceiver.LASM = syncMessage.avatarSerialization;
+
+            // Initialize AvatarBuffer
+            AvatarBuffer avatarBuffer = new AvatarBuffer();
+            using (var bitPacker = DarkRiftReader.CreateFromArray(syncMessage.avatarSerialization.array, 0, syncMessage.avatarSerialization.array.Length))
             {
-                rotation = Base.TargetData.Rotation,
-                timestamp = Base.TimeAsDoubleWhenLastSync,
-                Muscles = Base.TargetData.Muscles.ToArray(),
-                Position = Base.TargetData.Vectors[1],
-                Scale = Base.TargetData.Vectors[0]
-            });
+
+                avatarBuffer.Position = BasisCompressionOfPosition.DecompressVector3(bitPacker);
+                avatarBuffer.Scale = BasisCompressionOfPosition.DecompressUShortVector3(bitPacker, baseReceiver.ScaleRanged);
+                BasisCompressionOfRotation.DecompressQuaternion(bitPacker, ref avatarBuffer.rotation);
+                BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref avatarBuffer);
+            }
+            baseReceiver.TimeAsDoubleWhenLastSync = Time.realtimeSinceStartupAsDouble;
+            avatarBuffer.timestamp = baseReceiver.TimeAsDoubleWhenLastSync;
+            baseReceiver.AvatarDataBuffer.Add(avatarBuffer);
 
             // Sort buffer by timestamp
-            Base.AvatarDataBuffer.Sort((a, b) => a.timestamp.CompareTo(b.timestamp));
-        }
-        public static void DecompressAvatar( ref BasisAvatarData AvatarData, byte[] AvatarUpdate, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
-        {
-            DecompressAvatarUpdate(AvatarUpdate, out Vector3 Scale, out Vector3 BodyPosition, ref AvatarData.Rotation, ref AvatarData, PositionRanged, ScaleRanged);
-            AvatarData.Vectors[1] = BodyPosition;
-            AvatarData.Vectors[0] = Scale;
-        }
-        public static void DecompressAvatarUpdate( byte[] compressedData, out Vector3 Scale, out Vector3 BodyPosition, ref Quaternion Rotation, ref BasisAvatarData BasisAvatarData, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
-        {
-            if (compressedData != null && compressedData.Length != 0)
-            {
-                using (var bitPacker = DarkRiftReader.CreateFromArray(compressedData, 0, compressedData.Length))
-                {
-                    DecompressScaleAndPosition(bitPacker, out BodyPosition, out Scale, PositionRanged, ScaleRanged);
-                    BasisCompressionOfRotation.DecompressQuaternion(bitPacker, ref Rotation);
-                    BasisCompressionOfMuscles.DecompressMuscles(bitPacker, ref BasisAvatarData);
-                }
-            }
-            else
-            {
-                Debug.LogError("Array was null or empty!");
-                Scale = new Vector3();
-                BodyPosition = new Vector3();
-                Rotation = new Quaternion();
-            }
-        }
-        public static void DecompressScaleAndPosition(DarkRiftReader Packer, out Vector3 BodyPosition, out Vector3 Scale, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
-        {
-            BodyPosition = BasisCompressionOfPosition.DecompressVector3(Packer);
-
-            Scale = BasisCompressionOfPosition.DecompressUShortVector3(Packer, ScaleRanged);
+            baseReceiver.AvatarDataBuffer.Sort((a, b) => a.timestamp.CompareTo(b.timestamp));
         }
     }
 }

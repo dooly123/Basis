@@ -28,11 +28,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public void Execute()
         {
             // Interpolate rotations
-            rotations[0] = Quaternion.Slerp(rotations[0], targetRotations[0], t);
+            rotations[0] = math.slerp(rotations[0], targetRotations[0], t);
             // Interpolate positions
-            positions[0] = Vector3.Lerp(positions[0], targetPositions[0], t);
+            positions[0] = math.lerp(positions[0], targetPositions[0], t);
             // Interpolate scales
-            scales[0] = Vector3.Lerp(scales[0], targetScales[0], t);
+            scales[0] = math.lerp(scales[0], targetScales[0], t);
         }
     }
     [BurstCompile]

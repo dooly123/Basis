@@ -26,11 +26,6 @@ namespace Basis.Scripts.Networking.Recievers
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
         /// <summary>
-        /// represents the final position that we are goign to
-        /// </summary>
-        [SerializeField]
-        public BasisAvatarData TargetData = new BasisAvatarData();
-        /// <summary>
         /// represents the most recently applied data
         /// </summary>
         [SerializeField]
@@ -214,7 +209,7 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)
         {
-            BasisNetworkAvatarDecompressor.DeCompress(this, serverSideSyncPlayerMessage);
+            BasisNetworkAvatarDecompressor.DecompressAndProcessAvatar(this, serverSideSyncPlayerMessage);
         }
         public void ReceiveAvatarChangeRequest(ServerAvatarChangeMessage ServerAvatarChangeMessage)
         {
@@ -226,11 +221,6 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (!Ready)
             {
-                if (TargetData.Muscles.IsCreated == false)
-                {
-                    TargetData.Muscles.ResizeArray(90);
-                    TargetData.floatArray = new float[90];
-                }
                 if (CurrentData.Muscles.IsCreated == false)
                 {
                     CurrentData.floatArray = new float[90];
@@ -241,7 +231,6 @@ namespace Basis.Scripts.Networking.Recievers
                     HumanPose.muscles = new float[95];
                 }
                 InitalizeDataJobs(ref AvatarJobs);
-                InitalizeAvatarStoredData(ref TargetData);
                 InitalizeAvatarStoredData(ref CurrentData);
                 Ready = true;
                 NetworkedPlayer = networkedPlayer;
@@ -257,9 +246,6 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void OnDestroy()
         {
-            TargetData.Vectors.Dispose();
-            TargetData.Muscles.Dispose();
-
             CurrentData.Vectors.Dispose();
             CurrentData.Muscles.Dispose();
 

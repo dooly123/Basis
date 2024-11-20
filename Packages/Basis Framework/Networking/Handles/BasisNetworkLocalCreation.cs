@@ -32,7 +32,7 @@ namespace Basis.Scripts.Networking
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
                 byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-                BasisNetworkAvatarCompressor.CompressIntoSendBase(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
+                BasisNetworkAvatarCompressor.CompressAvatarData(NetworkedPlayer.NetworkSend, BasisLocalPlayer.Avatar.Animator);
 
                 BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = NetworkedPlayer.NetworkSend.LASM;
                 BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage

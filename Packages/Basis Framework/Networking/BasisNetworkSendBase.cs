@@ -5,11 +5,8 @@ using DarkRift.Server.Plugins.Commands;
 using DarkRift;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
 using static SerializableDarkRift;
 using Unity.Mathematics;
-using System.Collections.Generic;
-
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     /// <summary>
@@ -23,8 +20,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public struct AvatarBuffer
         {
             public quaternion rotation;
-            public Vector3 Scale;
-            public Vector3 Position;
+            public float3 Scale;
+            public float3 Position;
             public float[] Muscles;
             public double timestamp;
         }
@@ -42,7 +39,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         [SerializeField]
         public BasisRangedUshortFloatData ScaleRanged;
         public double TimeAsDoubleWhenLastSync;
-        public float LastAvatarDelta = 0.1f;
         public const int SizeAfterGap = 95 - SecondBuffer;
         public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;
