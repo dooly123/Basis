@@ -32,16 +32,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
         [SerializeField]
         public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
-        /// <summary>
-        /// represents the final position that we are goign to
-        /// </summary>
-        [SerializeField]
-        public BasisAvatarData TargetData = new BasisAvatarData();
-        /// <summary>
-        /// represents the most recently applied data
-        /// </summary>
-        [SerializeField]
-        public BasisAvatarData CurrentData = new BasisAvatarData();
 
         public HumanPose HumanPose = new HumanPose();
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
@@ -68,16 +58,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             {
                 array = new byte[212],
             };
-            if (TargetData.Muscles.IsCreated == false)
-            {
-                TargetData.Muscles.ResizeArray(90);
-                TargetData.floatArray = new float[90];
-            }
-            if (CurrentData.Muscles.IsCreated == false)
-            {
-                CurrentData.floatArray = new float[90];
-                CurrentData.Muscles.ResizeArray(90);
-            }
             PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
             ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
         }

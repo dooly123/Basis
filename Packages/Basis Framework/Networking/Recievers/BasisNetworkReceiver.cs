@@ -1,3 +1,4 @@
+using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
@@ -20,20 +21,16 @@ namespace Basis.Scripts.Networking.Recievers
 
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
-        /*
-AvatarJobs.positionJob.targetPositions = TargetData.Vectors;
-AvatarJobs.positionJob.positions = CurrentData.Vectors;
-AvatarJobs.positionJob.deltaTime = deltaTime;
-AvatarJobs.positionJob.smoothingSpeed = Settings.LerpSpeedMovement;
-AvatarJobs.positionJob.teleportThreshold = Settings.TeleportDistanceSquared;
-AvatarJobs.muscleJob.targetMuscles = TargetData.Muscles;
-AvatarJobs.muscleJob.muscles = CurrentData.Muscles;
-AvatarJobs.muscleJob.lerpTime = deltaTime * Settings.LerpSpeedMuscles;
-AvatarJobs.positionHandle = AvatarJobs.positionJob.Schedule();
-AvatarJobs.muscleHandle = AvatarJobs.muscleJob.Schedule(90, 1, AvatarJobs.positionHandle);
-AvatarJobs.muscleHandle.Complete();
-*/
-
+        /// <summary>
+        /// represents the final position that we are goign to
+        /// </summary>
+        [SerializeField]
+        public BasisAvatarData TargetData = new BasisAvatarData();
+        /// <summary>
+        /// represents the most recently applied data
+        /// </summary>
+        [SerializeField]
+        public BasisAvatarData CurrentData = new BasisAvatarData();
         /// <summary>
         /// CurrentData equals final
         /// TargetData is the networks most recent info
@@ -116,9 +113,9 @@ AvatarJobs.muscleHandle.Complete();
                 CurrentData.Vectors[0] = scales[0];
 
                 // Apply muscle data
-                for (int i = 0; i < muscles.Length; i++)
+                for (int Index = 0; Index < 95; Index++)
                 {
-                    CurrentData.Muscles[i] = muscles[i];
+                    CurrentData.Muscles[Index] = muscles[Index];
                 }
 
                 // Dispose of NativeArrays after use
@@ -195,8 +192,12 @@ AvatarJobs.muscleHandle.Complete();
             Buffer.BlockCopy(MuscleFinalStageOutput, 0, pose.muscles, 0, BasisNetworkSendBase.FirstBufferBytes);
 
 
-            // Assuming the size to copy is determined by BasisNetworkSendBase.SizeAfterGap
-            Buffer.BlockCopy(MuscleFinalStageOutput, BasisNetworkSendBase.SecondBuffer, pose.muscles, BasisNetworkSendBase.SecondBuffer, BasisNetworkSendBase.SizeAfterGap);
+            // Assuming MuscleFinalStageOutput and pose.muscles are arrays and BasisNetworkSendBase contains the proper indexes and size
+            for (int i = 0; i < BasisNetworkSendBase.SizeAfterGap; i++)
+            {
+                // Copy each element from MuscleFinalStageOutput to pose.muscles manually
+                pose.muscles[BasisNetworkSendBase.SecondBuffer + i] = MuscleFinalStageOutput[BasisNetworkSendBase.SecondBuffer + i];
+            }
 
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling
@@ -247,6 +248,16 @@ AvatarJobs.muscleHandle.Complete();
         {
             if (!Ready)
             {
+                if (TargetData.Muscles.IsCreated == false)
+                {
+                    TargetData.Muscles.ResizeArray(90);
+                    TargetData.floatArray = new float[90];
+                }
+                if (CurrentData.Muscles.IsCreated == false)
+                {
+                    CurrentData.floatArray = new float[90];
+                    CurrentData.Muscles.ResizeArray(90);
+                }
                 InitalizeDataJobs(ref AvatarJobs);
                 InitalizeAvatarStoredData(ref TargetData);
                 InitalizeAvatarStoredData(ref CurrentData);

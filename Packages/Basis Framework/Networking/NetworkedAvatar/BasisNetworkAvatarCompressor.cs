@@ -23,36 +23,23 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
         }
+        public static float[] FloatArray = new float[90];
         public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
-            CompressAvatar(ref NetworkSendBase.TargetData, ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
-        }
-        /// <summary>
-        /// 5
-        /// </summary>
-        /// <param name="AvatarData"></param>
-        /// <param name="CachedPose"></param>
-        /// <param name="SenderPoseHandler"></param>
-        /// <param name="LocalPlayersAnimator"></param>
-        /// <param name="Bytes"></param>
-        /// <param name="PositionRanged"></param>
-        /// <param name="ScaleRanged"></param>
-        public static void CompressAvatar(ref BasisAvatarData AvatarData, ref HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator LocalPlayersAnimator, ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
-        {
-            SenderPoseHandler.GetHumanPose(ref CachedPose);
-            AvatarData.Vectors[0] = LocalPlayersAnimator.bodyPosition;
-            AvatarData.Vectors[1] = LocalPlayersAnimator.transform.localScale; // scale
+            // Extract the necessary components
+            HumanPoseHandler SenderPoseHandler = NetworkSendBase.PoseHandler;
+
+            // Retrieve the human pose from the Animator
+            SenderPoseHandler.GetHumanPose(ref NetworkSendBase.HumanPose);
+
             // Copy muscles [0..14]
-            Buffer.BlockCopy(CachedPose.muscles, 0, AvatarData.floatArray, 0,BasisNetworkSendBase.FirstBufferBytes);
+            Buffer.BlockCopy(NetworkSendBase.HumanPose.muscles, 0, FloatArray, 0, BasisNetworkSendBase.FirstBufferBytes);
 
             // Copy muscles [21..end]
-            Buffer.BlockCopy(CachedPose.muscles, BasisNetworkSendBase.SecondBufferBytes, AvatarData.floatArray, BasisNetworkSendBase.FirstBufferBytes, BasisNetworkSendBase.SizeAfterGapBytes);
+            Buffer.BlockCopy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBufferBytes, FloatArray, BasisNetworkSendBase.FirstBufferBytes, BasisNetworkSendBase.SizeAfterGapBytes);
 
-            // Update the muscles in AvatarData
-            AvatarData.Muscles.CopyFrom(AvatarData.floatArray); // muscles
-
-            AvatarData.Rotation = LocalPlayersAnimator.bodyRotation; // hips rotation
-            CompressAvatarUpdate(ref Bytes, AvatarData.Vectors[1], AvatarData.Vectors[0], AvatarData.Rotation, AvatarData.floatArray, PositionRanged, ScaleRanged);
+            // Compress the avatar data
+            CompressAvatarUpdate(ref NetworkSendBase.LASM, Anim.transform.localScale, Anim.bodyPosition, Anim.bodyRotation, FloatArray, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
         }
         /// <summary>
         /// 212
@@ -66,10 +53,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         /// <param name="ScaleRanged"></param>
         public static void CompressAvatarUpdate(ref LocalAvatarSyncMessage syncmessage, Vector3 Scale, Vector3 HipsPosition, Quaternion Rotation, float[] muscles, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
-            if (syncmessage.array == null)
-            {
-                syncmessage.array = new byte[212];
-            }
             using (var Packer = DarkRiftWriter.Create(216))
             {
                 CompressScaleAndPosition(Packer, HipsPosition, Scale, PositionRanged, ScaleRanged);//18
@@ -77,7 +60,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 BasisCompressionOfRotation.CompressQuaternion(Packer, Rotation);//4
                 BasisCompressionOfMuscles.CompressMuscles(Packer, muscles);//190
                 //disable in production
-                if (Packer.Length != syncmessage.array.Length)
+                if (syncmessage.array == null || Packer.Length != syncmessage.array.Length)
                 {
                     syncmessage.array = new byte[Packer.Length];
                 }

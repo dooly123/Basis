@@ -1,4 +1,5 @@
 using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Networking.Recievers;
 using DarkRift;
 using UnityEngine;
 using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
@@ -8,7 +9,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     public static class BasisNetworkAvatarDecompressor
     {
-        public static void DeCompress(BasisNetworkSendBase Base, ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage)
+        public static void DeCompress(BasisNetworkReceiver Base, ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage)
         {
             Base.LASM = ServerSideSyncPlayerMessage.avatarSerialization;
             DecompressAvatar( ref Base.TargetData, Base.LASM.array, Base.PositionRanged, Base.ScaleRanged);
