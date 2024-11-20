@@ -171,7 +171,7 @@ namespace Basis.Scripts.Networking.Recievers
             Array.Copy(MuscleFinalStageOutput, 0, HumanPose.muscles, 0, FirstBuffer);
 
             // Then, copy the remaining elements from index 15 onwards into the pose.muscles array, starting from index 21
-            Array.Copy(MuscleFinalStageOutput, FirstBuffer +1, HumanPose.muscles, SecondBuffer, BasisNetworkSendBase.SizeAfterGap);
+            Array.Copy(MuscleFinalStageOutput, FirstBuffer +1, HumanPose.muscles, SecondBuffer, SizeAfterGap);
 
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling

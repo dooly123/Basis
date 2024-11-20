@@ -47,12 +47,9 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public BasisRangedUshortFloatData ScaleRanged;
         public double TimeAsDoubleWhenLastSync;
         public float LastAvatarDelta = 0.1f;
-        public const int FirstBufferBytes = FirstBuffer * sizeof(float);
-        public const int SecondBufferBytes = SecondBuffer * sizeof(float);
-        public const int SizeAfterGapBytes = SizeAfterGap * sizeof(float);
-        public const int SizeAfterGap = (95 - SecondBuffer);
-        public const int FirstBuffer = 15;
-        public const int SecondBuffer = 22;
+        public const int SizeAfterGap = 95 - SecondBuffer;
+        public const int FirstBuffer = 14;
+        public const int SecondBuffer = 21;
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()

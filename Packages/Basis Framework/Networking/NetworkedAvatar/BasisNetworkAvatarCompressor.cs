@@ -33,10 +33,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             SenderPoseHandler.GetHumanPose(ref NetworkSendBase.HumanPose);
 
             // Copy muscles [0..14]
-            Buffer.BlockCopy(NetworkSendBase.HumanPose.muscles, 0, FloatArray, 0, BasisNetworkSendBase.FirstBufferBytes);
+            Array.Copy(NetworkSendBase.HumanPose.muscles, 0, FloatArray, 0, BasisNetworkSendBase.FirstBuffer);
 
             // Copy muscles [21..end]
-            Buffer.BlockCopy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBufferBytes, FloatArray, BasisNetworkSendBase.FirstBufferBytes, BasisNetworkSendBase.SizeAfterGapBytes);
+            Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
 
             // Compress the avatar data
             CompressAvatarUpdate(ref NetworkSendBase.LASM, Anim.transform.localScale, Anim.bodyPosition, Anim.bodyRotation, FloatArray, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
