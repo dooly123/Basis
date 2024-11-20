@@ -1,7 +1,5 @@
 ﻿using Basis.Scripts.Networking.NetworkedAvatar;
 using DarkRift;
-using System;
-using System.IO;
 using Unity.Burst;
 using UnityEngine;
 
@@ -17,6 +15,11 @@ namespace Basis.Scripts.Networking.Compression
         {
             bitPacker.Read(out ushort data);
             return compressor.Decompress(data);
+        }
+        public static void ReadUshortFloat(this DarkRiftReader bitPacker, BasisRangedUshortFloatData compressor,ref float Value)
+        {
+            bitPacker.Read(out ushort data);
+            Value = compressor.Decompress(data);
         }
         [BurstCompile]
         public static void WriteUshortArrayFloat(DarkRiftWriter bitPacker, float[] values, CompressionArraysRangedUshort compressor, int arrayLength = 90)

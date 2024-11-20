@@ -38,7 +38,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public BasisRangedUshortFloatData PositionRanged;
         [SerializeField]
         public BasisRangedUshortFloatData ScaleRanged;
-        public double TimeAsDoubleWhenLastSync;
         public const int SizeAfterGap = 95 - SecondBuffer;
         public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;

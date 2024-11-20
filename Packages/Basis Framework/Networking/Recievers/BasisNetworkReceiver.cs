@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 using static SerializableDarkRift;
 
@@ -25,15 +26,30 @@ namespace Basis.Scripts.Networking.Recievers
         public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
+        private NativeArray<float3> transforms;      // Merged positions and scales
+        private NativeArray<float3> targetTransforms; // Merged target positions and scales
+        private NativeArray<float> muscles;
+        private NativeArray<float> targetMuscles;
+        public void Initialize()
+        {
+            transforms = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
+            targetTransforms = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = target position, Index 1 = target scale
+            muscles = new NativeArray<float>(90, Allocator.Persistent);
+            targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
+        }
         /// <summary>
-        /// represents the most recently applied data
+        /// Clean up resources used in the compute process.
         /// </summary>
-        [SerializeField]
-        public BasisAvatarData CurrentData = new BasisAvatarData();
+        public void Destroy()
+        {
+            if (transforms.IsCreated) transforms.Dispose();
+            if (targetTransforms.IsCreated) targetTransforms.Dispose();
+            if (muscles.IsCreated) muscles.Dispose();
+            if (targetMuscles.IsCreated) targetMuscles.Dispose();
+        }
+
         /// <summary>
-        /// CurrentData equals final
-        /// TargetData is the networks most recent info
-        /// continue tomorrow -LD
+        /// Perform computations to interpolate and update avatar state.
         /// </summary>
         public override void Compute()
         {
@@ -60,40 +76,30 @@ namespace Basis.Scripts.Networking.Recievers
                 // Calculate normalized interpolation factor t
                 float t = (float)((targetTime - startTime) / (endTime - startTime));
                 t = Mathf.Clamp01(t);
+                transforms[0] = AvatarDataBuffer[0].Position; // Position at index 0
+                transforms[1] = AvatarDataBuffer[0].Scale;    // Scale at index 1
+                targetTransforms[0] = AvatarDataBuffer[1].Position; // Target position at index 0
+                targetTransforms[1] = AvatarDataBuffer[1].Scale;    // Target scale at index 1
 
-                NativeArray<Quaternion> rotations = new NativeArray<Quaternion>(1, Allocator.TempJob);
-                NativeArray<Quaternion> targetRotations = new NativeArray<Quaternion>(1, Allocator.TempJob);
-                NativeArray<Vector3> positions = new NativeArray<Vector3>(1, Allocator.TempJob);
-                NativeArray<Vector3> targetPositions = new NativeArray<Vector3>(1, Allocator.TempJob);
-                NativeArray<Vector3> scales = new NativeArray<Vector3>(1, Allocator.TempJob);
-                NativeArray<Vector3> targetScales = new NativeArray<Vector3>(1, Allocator.TempJob);
-
-                // Copy data from AvatarDataBuffer into the NativeArrays
-                rotations[0] = AvatarDataBuffer[0].rotation;
-                targetRotations[0] = AvatarDataBuffer[1].rotation;
-                positions[0] = AvatarDataBuffer[0].Position;
-                targetPositions[0] = AvatarDataBuffer[1].Position;
-                scales[0] = AvatarDataBuffer[0].Scale;
-                targetScales[0] = AvatarDataBuffer[1].Scale;
+                for (int i = 0; i < 90; i++)
+                {
+                    muscles[i] = AvatarDataBuffer[0].Muscles[i];
+                    targetMuscles[i] = AvatarDataBuffer[1].Muscles[i];
+                }
 
                 // Schedule the job to interpolate positions, rotations, and scales
                 AvatarJobs.AvatarJob = new UpdateAvatarRotationJob
                 {
-                    rotations = rotations,
-                    targetRotations = targetRotations,
-                    positions = positions,
-                    targetPositions = targetPositions,
-                    scales = scales,
-                    targetScales = targetScales,
+                    rotations = AvatarDataBuffer[0].rotation,
+                    targetRotations = AvatarDataBuffer[1].rotation,
+                    TransformationalOutput = transforms,         // Merged positions
+                    TransformationalInput = targetTransforms, // Merged target positions
                     t = t
                 };
 
                 AvatarJobs.AvatarHandle = AvatarJobs.AvatarJob.Schedule();
 
                 // Muscle interpolation job
-                NativeArray<float> muscles = new NativeArray<float>(AvatarDataBuffer[0].Muscles, Allocator.TempJob);
-                NativeArray<float> targetMuscles = new NativeArray<float>(AvatarDataBuffer[1].Muscles, Allocator.TempJob);
-
                 UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob
                 {
                     muscles = muscles,
@@ -107,25 +113,15 @@ namespace Basis.Scripts.Networking.Recievers
                 musclesHandle.Complete();
 
                 // After jobs are done, apply the resulting values
-                CurrentData.Rotation = rotations[0];
-                CurrentData.Vectors[1] = positions[0];
-                CurrentData.Vectors[0] = scales[0];
+                CurrentData.Rotation = AvatarJobs.AvatarJob.rotations;
+                CurrentData.Vectors[1] = transforms[0]; // Position
+                CurrentData.Vectors[0] = transforms[1]; // Scale
 
                 // Apply muscle data
-                for (int Index = 0; Index < 90; Index++)
+                for (int i = 0; i < 90; i++)
                 {
-                    CurrentData.Muscles[Index] = muscles[Index];
+                    CurrentData.Muscles[i] = muscles[i];
                 }
-
-                // Dispose of NativeArrays after use
-                rotations.Dispose();
-                targetRotations.Dispose();
-                positions.Dispose();
-                targetPositions.Dispose();
-                scales.Dispose();
-                targetScales.Dispose();
-                muscles.Dispose();
-                targetMuscles.Dispose();
 
                 ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, CurrentData);
                 PoseHandler.SetHumanPose(ref HumanPose);
@@ -221,17 +217,12 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (!Ready)
             {
-                if (CurrentData.Muscles.IsCreated == false)
-                {
-                    CurrentData.floatArray = new float[90];
-                    CurrentData.Muscles.ResizeArray(90);
-                }            // Ensure muscles array is initialized properly
                 if (HumanPose.muscles == null || HumanPose.muscles.Length == 0)
                 {
                     HumanPose.muscles = new float[95];
                 }
                 InitalizeDataJobs(ref AvatarJobs);
-                InitalizeAvatarStoredData(ref CurrentData);
+                Initialize();
                 Ready = true;
                 NetworkedPlayer = networkedPlayer;
                 RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
@@ -246,9 +237,7 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void OnDestroy()
         {
-            CurrentData.Vectors.Dispose();
-            CurrentData.Muscles.Dispose();
-
+            Destroy();
             if (HasEvents && RemotePlayer != null && RemotePlayer.RemoteAvatarDriver != null)
             {
                 RemotePlayer.RemoteAvatarDriver.CalibrationComplete -= OnCalibration;

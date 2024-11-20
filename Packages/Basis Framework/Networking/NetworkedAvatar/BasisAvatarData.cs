@@ -17,22 +17,20 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     [BurstCompile]
     public struct UpdateAvatarRotationJob : IJob
     {
-        public NativeArray<Quaternion> rotations;
-        public NativeArray<Quaternion> targetRotations;
-        public NativeArray<Vector3> positions;
-        public NativeArray<Vector3> targetPositions;
-        public NativeArray<Vector3> scales;
-        public NativeArray<Vector3> targetScales;
+        public Quaternion rotations;
+        public Quaternion targetRotations;
+        public NativeArray<float3> TransformationalOutput;
+        public NativeArray<float3> TransformationalInput;
         public float t;
 
         public void Execute()
         {
             // Interpolate rotations
-            rotations[0] = math.slerp(rotations[0], targetRotations[0], t);
+            rotations = math.slerp(rotations, targetRotations, t);
             // Interpolate positions
-            positions[0] = math.lerp(positions[0], targetPositions[0], t);
-            // Interpolate scales
-            scales[0] = math.lerp(scales[0], targetScales[0], t);
+            TransformationalOutput[0] = math.lerp(TransformationalOutput[0], TransformationalInput[0], t);
+
+            TransformationalOutput[1] = math.lerp(TransformationalOutput[1], TransformationalInput[1], t);
         }
     }
     [BurstCompile]
