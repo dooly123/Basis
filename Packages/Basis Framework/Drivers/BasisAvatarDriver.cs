@@ -396,7 +396,7 @@ namespace Basis.Scripts.Drivers
 
             GeneratedRequiredTransforms(Source, References.Hips);
         }
-        public void OverrideTransform(BaseBoneDriver driver, GameObject Parent, Transform Source, BasisBoneTrackedRole Role, float rotationWeight = 1, float positionWeight = 1, OverrideTransformData.Space Space = OverrideTransformData.Space.Pivot)
+        public void OverrideTransform(BaseBoneDriver driver, GameObject Parent, Transform Source, BasisBoneTrackedRole Role, float rotationWeight = 1, float positionWeight = 1, OverrideTransformData.Space Space = OverrideTransformData.Space.World)
         {
             driver.FindBone(out BasisBoneControl Target, Role);
             GameObject DTData = CreateAndSetParent(Parent.transform, "Bone Role " + Role.ToString());

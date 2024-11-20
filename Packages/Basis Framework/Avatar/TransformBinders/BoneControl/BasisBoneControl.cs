@@ -105,34 +105,34 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             float dotProduct = math.dot(CurrentRotation, FutureRotation);
 
             // If quaternions are nearly identical, skip interpolation
-            if (dotProduct > 0.9999999999f)
+            if (dotProduct > 0.999999f)
             {
                 return FutureRotation;
             }
 
-            // Calculate angle difference (avoid acos for very small differences)
+            // Calculate angle difference, avoid acos for very small differences
             float angleDifference = math.acos(math.clamp(dotProduct, -1f, 1f));
 
-            // If the angle difference is too small, skip interpolation
+            // If the angle difference is very small, skip interpolation
             if (angleDifference < math.EPSILON)
             {
                 return FutureRotation;
             }
 
-            // Access cached LerpAmount values for normal and fast movement
+            // Cached LerpAmount values for normal and fast movement
             float lerpAmountNormal = TargetControl.LerpAmountNormal;
             float lerpAmountFastMovement = TargetControl.LerpAmountFastMovement;
 
-            // Calculate timing factor based on angle threshold for speedup
-            float timing = math.clamp(angleDifference / TargetControl.AngleBeforeSpeedup, 0f, 1f);
+            // Timing factor for speed-up
+            float timing = math.min(angleDifference / TargetControl.AngleBeforeSpeedup, 1f);
 
             // Interpolate between normal and fast movement rates based on angle
-            float lerpAmount = math.lerp(lerpAmountNormal, lerpAmountFastMovement, timing);
+            float lerpAmount = lerpAmountNormal + (lerpAmountFastMovement - lerpAmountNormal) * timing;
 
             // Apply frame-rate-independent lerp factor
             float lerpFactor = lerpAmount * DeltaTime;
 
-            // Perform the slerp (spherical interpolation) using the calculated factor
+            // Perform spherical interpolation (slerp) with the optimized factor
             return math.slerp(CurrentRotation, FutureRotation, lerpFactor);
         }
         [HideInInspector]

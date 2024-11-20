@@ -371,7 +371,7 @@ namespace Basis.Scripts.Drivers
         private void SetupHeadRig(BasisLocalBoneDriver driver)
         {
             GameObject HeadRig = CreateRig("Chest, Neck, Head", true, out RigHeadRig, out RigHeadLayer);
-            Damp(driver, HeadRig, References.chest, BasisBoneTrackedRole.Chest, 0, 0);
+            OverrideTransform(driver, HeadRig, References.chest, BasisBoneTrackedRole.Chest, 1, 1);
             CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Chest, true, out HeadTwoBoneIK, true, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
@@ -392,7 +392,7 @@ namespace Basis.Scripts.Drivers
         private void SetupRightShoulderRig(BasisLocalBoneDriver driver)
         {
             GameObject RightShoulder = CreateRig("RightShoulder", true, out RightShoulderRig, out RightShoulderLayer);
-            Damp(driver, RightShoulder, References.RightShoulder, BasisBoneTrackedRole.RightShoulder, 0, 0);
+            OverrideTransform(driver, RightShoulder, References.RightShoulder, BasisBoneTrackedRole.RightShoulder, 1, 1);
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl RightShoulderRole, BasisBoneTrackedRole.RightShoulder))
             {
@@ -407,7 +407,7 @@ namespace Basis.Scripts.Drivers
         private void SetupLeftShoulderRig(BasisLocalBoneDriver driver)
         {
             GameObject LeftShoulder = CreateRig("LeftShoulder", true, out LeftShoulderRig, out LeftShoulderLayer);
-            Damp(driver, LeftShoulder, References.leftShoulder, BasisBoneTrackedRole.LeftShoulder, 0, 0);
+            OverrideTransform(driver, LeftShoulder, References.leftShoulder, BasisBoneTrackedRole.LeftShoulder, 1, 1);
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl LeftShoulderRole, BasisBoneTrackedRole.LeftShoulder))
             {
