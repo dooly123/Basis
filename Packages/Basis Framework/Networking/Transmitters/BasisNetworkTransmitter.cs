@@ -40,7 +40,6 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (Ready == false)
             {
-                InitalizeDataJobs(ref AvatarJobs);
                 NetworkedPlayer = networkedPlayer;
                 AudioTransmission.OnEnable(networkedPlayer);
                 OnAvatarCalibration();

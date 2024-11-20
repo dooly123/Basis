@@ -1,9 +1,7 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using Basis.Scripts.Tests;
 using DarkRift.Server.Plugins.Commands;
 using DarkRift;
-using Unity.Collections;
 using UnityEngine;
 using static SerializableDarkRift;
 using Unity.Mathematics;
@@ -31,30 +29,16 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
         [SerializeField]
         public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
+        [SerializeField]
         public HumanPoseHandler PoseHandler;
         [SerializeField]
-        public BasisRangedUshortFloatData PositionRanged;
+        public static BasisRangedUshortFloatData PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
         [SerializeField]
-        public BasisRangedUshortFloatData ScaleRanged;
+        public static BasisRangedUshortFloatData ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
+
         public const int SizeAfterGap = 95 - SecondBuffer;
         public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;
-        public float[] FloatArray = new float[90];
-
-        protected BasisNetworkSendBase()
-        {
-            LASM = new LocalAvatarSyncMessage()
-            {
-                array = new byte[212],
-            };
-            PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
-            ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
-        }
-        public static void InitalizeAvatarStoredData(ref BasisAvatarData data)
-        {
-            data.Vectors = new NativeArray<float3>(2, Allocator.Persistent);
-            data.Muscles = new NativeArray<float>(90, Allocator.Persistent);
-        }
         public abstract void Compute();
         public abstract void Initialize(BasisNetworkedPlayer NetworkedPlayer);
         public abstract void DeInitialize();

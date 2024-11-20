@@ -22,22 +22,23 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
         }
+        public static float[] FloatArray = new float[90];
         public static void CompressAvatarData(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
             // Retrieve the human pose from the Animator
             NetworkSendBase.PoseHandler.GetHumanPose(ref NetworkSendBase.HumanPose);
 
             // Copy muscles [0..14]
-            Array.Copy(NetworkSendBase.HumanPose.muscles, 0, NetworkSendBase.FloatArray, 0, BasisNetworkSendBase.FirstBuffer);
+            Array.Copy(NetworkSendBase.HumanPose.muscles, 0, FloatArray, 0, BasisNetworkSendBase.FirstBuffer);
 
             // Copy muscles [21..end]
-            Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, NetworkSendBase.FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
+            Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
             using (DarkRiftWriter Packer = DarkRiftWriter.Create(386))
             {
                 BasisCompressionOfPosition.CompressVector3(Anim.bodyPosition, Packer);
-                BasisCompressionOfPosition.CompressUShortVector3(Anim.transform.localScale, Packer, NetworkSendBase.ScaleRanged);
+                BasisCompressionOfPosition.CompressUShortVector3(Anim.transform.localScale, Packer, BasisNetworkSendBase.ScaleRanged);
                 BasisCompressionOfRotation.CompressQuaternion(Packer, Anim.bodyRotation);
-                BasisCompressionOfMuscles.CompressMuscles(Packer, NetworkSendBase.FloatArray);
+                BasisCompressionOfMuscles.CompressMuscles(Packer, FloatArray);
 
                 // Allocate sync message array if needed and copy packed data into it
                 if (NetworkSendBase.LASM.array == null || Packer.Length != NetworkSendBase.LASM.array.Length)

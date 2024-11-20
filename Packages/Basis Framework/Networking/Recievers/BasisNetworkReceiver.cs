@@ -23,11 +23,11 @@ namespace Basis.Scripts.Networking.Recievers
         [Header("Interpolation Settings")]
         public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
         [SerializeField]
-        public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
+        public Queue<AvatarBuffer> AvatarDataQueue = new Queue<AvatarBuffer>();
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
-        private NativeArray<float3> transforms;      // Merged positions and scales
-        private NativeArray<float3> targetTransforms; // Merged target positions and scales
+        private NativeArray<float3> OuputVectors;      // Merged positions and scales
+        private NativeArray<float3> TargetVectors; // Merged target positions and scales
         private NativeArray<float> muscles;
         private NativeArray<float> targetMuscles;
         public JobHandle musclesHandle;
@@ -38,8 +38,8 @@ namespace Basis.Scripts.Networking.Recievers
         public UpdateAvatarRotationJob AvatarJob;
         public void Initialize()
         {
-            transforms = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
-            targetTransforms = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = target position, Index 1 = target scale
+            OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
+            TargetVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = target position, Index 1 = target scale
             muscles = new NativeArray<float>(90, Allocator.Persistent);
             targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
         }
@@ -48,8 +48,8 @@ namespace Basis.Scripts.Networking.Recievers
         /// </summary>
         public void Destroy()
         {
-            if (transforms.IsCreated) transforms.Dispose();
-            if (targetTransforms.IsCreated) targetTransforms.Dispose();
+            if (OuputVectors.IsCreated) OuputVectors.Dispose();
+            if (TargetVectors.IsCreated) TargetVectors.Dispose();
             if (muscles.IsCreated) muscles.Dispose();
             if (targetMuscles.IsCreated) targetMuscles.Dispose();
         }
@@ -67,37 +67,33 @@ namespace Basis.Scripts.Networking.Recievers
             double currentTime = Time.realtimeSinceStartupAsDouble;
 
             // Remove outdated rotations
-            while (AvatarDataBuffer.Count > 1 && currentTime - delayTime > AvatarDataBuffer[1].timestamp)
+            while (AvatarDataQueue.Count > 1 && currentTime - delayTime > AvatarDataQueue.Peek().timestamp)
             {
-                AvatarDataBuffer.RemoveAt(0);
+                AvatarDataQueue.Dequeue();
             }
 
             // Only run job if there are enough data points
-            if (AvatarDataBuffer.Count >= 2)
+            if (AvatarDataQueue.Count >= 2)
             {
-                double startTime = AvatarDataBuffer[0].timestamp;
-                double endTime = AvatarDataBuffer[1].timestamp;
+                AvatarBuffer Buffer = AvatarDataQueue.Dequeue();
+                AvatarBuffer NextBuffer = AvatarDataQueue.Dequeue();
+                double startTime = Buffer.timestamp;
                 double targetTime = currentTime - delayTime;
 
                 // Calculate normalized interpolation factor t
-                float Time = (float)((targetTime - startTime) / (endTime - startTime));
-                Time = Mathf.Clamp01(Time);
-                transforms[0] = AvatarDataBuffer[0].Position; // Position at index 0
-                transforms[1] = AvatarDataBuffer[0].Scale;    // Scale at index 1
-                targetTransforms[0] = AvatarDataBuffer[1].Position; // Target position at index 0
-                targetTransforms[1] = AvatarDataBuffer[1].Scale;    // Target scale at index 1
+                float Time = Mathf.Clamp01((float)((targetTime - startTime) / (NextBuffer.timestamp - startTime)));
+                OuputVectors[0] = Buffer.Position; // Position at index 0
+                OuputVectors[1] = Buffer.Scale;    // Scale at index 1
+                TargetVectors[0] = NextBuffer.Position; // Target position at index 0
+                TargetVectors[1] = NextBuffer.Scale;    // Target scale at index 1
 
-                for (int Index = 0; Index < 90; Index++)
-                {
-                    muscles[Index] = AvatarDataBuffer[0].Muscles[Index];
-                    targetMuscles[Index] = AvatarDataBuffer[1].Muscles[Index];
-                }
-
+                muscles.CopyFrom(Buffer.Muscles);
+                targetMuscles.CopyFrom(Buffer.Muscles);
                 // Schedule the job to interpolate positions, rotations, and scales
-                AvatarJob.rotations = AvatarDataBuffer[0].rotation;
-                AvatarJob.targetRotations = AvatarDataBuffer[1].rotation;
-                AvatarJob.TransformationalOutput = transforms;         // Merged positions
-                AvatarJob.TransformationalInput = targetTransforms; // Merged target positions
+                AvatarJob.rotations = Buffer.rotation;
+                AvatarJob.targetRotations = NextBuffer.rotation;
+                AvatarJob.TransformationalOutput = OuputVectors;         // Merged positions
+                AvatarJob.TransformationalInput = TargetVectors; // Merged target positions
                 AvatarJob.Time = Time;
 
                 AvatarHandle = AvatarJob.Schedule();
@@ -112,7 +108,7 @@ namespace Basis.Scripts.Networking.Recievers
                 // Complete the jobs and apply the results
                 musclesHandle.Complete();
 
-                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, transforms[1], transforms[0], AvatarJob.rotations, musclesJob.muscles);
+                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], AvatarJob.rotations, musclesJob.muscles);
                 PoseHandler.SetHumanPose(ref HumanPose);
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply();
