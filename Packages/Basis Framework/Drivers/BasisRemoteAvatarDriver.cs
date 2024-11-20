@@ -21,6 +21,7 @@ namespace Basis.Scripts.Drivers
             Calibration(RemotePlayer.Avatar);
             SetAllMatrixRecalculation(false);
             updateWhenOffscreen(false);
+            RemotePlayer.Avatar.Animator.logWarnings = false;
             for (int Index = 0; Index < SkinnedMeshRenderer.Length; Index++)
             {
                 SkinnedMeshRenderer[Index].forceMatrixRecalculationPerRender = false;

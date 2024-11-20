@@ -2,6 +2,7 @@ using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Profiler;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
+using System;
 using UnityEngine;
 using static SerializableDarkRift;
 
@@ -24,15 +25,33 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         public static void CompressIntoSendBase(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
-            CompressAvatar( ref NetworkSendBase.TargetData, ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
+            CompressAvatar(ref NetworkSendBase.TargetData, ref NetworkSendBase.HumanPose, NetworkSendBase.PoseHandler, Anim, ref NetworkSendBase.LASM, NetworkSendBase.PositionRanged, NetworkSendBase.ScaleRanged);
         }
+        /// <summary>
+        /// 5
+        /// </summary>
+        /// <param name="AvatarData"></param>
+        /// <param name="CachedPose"></param>
+        /// <param name="SenderPoseHandler"></param>
+        /// <param name="LocalPlayersAnimator"></param>
+        /// <param name="Bytes"></param>
+        /// <param name="PositionRanged"></param>
+        /// <param name="ScaleRanged"></param>
         public static void CompressAvatar(ref BasisAvatarData AvatarData, ref HumanPose CachedPose, HumanPoseHandler SenderPoseHandler, Animator LocalPlayersAnimator, ref LocalAvatarSyncMessage Bytes, BasisRangedUshortFloatData PositionRanged, BasisRangedUshortFloatData ScaleRanged)
         {
             SenderPoseHandler.GetHumanPose(ref CachedPose);
             AvatarData.Vectors[0] = LocalPlayersAnimator.bodyPosition;
-            AvatarData.Vectors[1] = LocalPlayersAnimator.transform.localScale;//scale
-            AvatarData.Muscles.CopyFrom(CachedPose.muscles);//muscles
-            AvatarData.Rotation = LocalPlayersAnimator.bodyRotation;//hips rotation
+            AvatarData.Vectors[1] = LocalPlayersAnimator.transform.localScale; // scale
+            // Copy muscles [0..14]
+            Buffer.BlockCopy(CachedPose.muscles, 0, AvatarData.floatArray, 0,BasisNetworkSendBase.FirstBuffer);
+
+            // Copy muscles [21..end]
+            Buffer.BlockCopy(CachedPose.muscles, BasisNetworkSendBase.SecondBuffer, AvatarData.floatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
+
+            // Update the muscles in AvatarData
+            AvatarData.Muscles.CopyFrom(AvatarData.floatArray); // muscles
+
+            AvatarData.Rotation = LocalPlayersAnimator.bodyRotation; // hips rotation
             CompressAvatarUpdate(ref Bytes, AvatarData.Vectors[1], AvatarData.Vectors[0], AvatarData.Rotation, CachedPose.muscles, PositionRanged, ScaleRanged);
         }
         /// <summary>

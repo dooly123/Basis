@@ -151,6 +151,7 @@ AvatarJobs.muscleHandle.Complete();
         {
             return NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null;
         }
+        public float[] MuscleFinalStageOutput = new float[90];
         public void ApplyPoseData(Animator animator, BasisAvatarData output, ref HumanPose pose)
         {
             float AvatarHumanScale = animator.humanScale;
@@ -170,15 +171,13 @@ AvatarJobs.muscleHandle.Complete();
             pose.bodyPosition = ScaledPosition;
             pose.bodyRotation = output.Rotation;
 
-            // Ensure muscles array is correctly sized
-            if (pose.muscles == null || pose.muscles.Length != output.Muscles.Length)
-            {
-                pose.muscles = output.Muscles.ToArray();
-            }
-            else
-            {
-                output.Muscles.CopyTo(pose.muscles);
-            }
+            //copy from job to stageOutput
+            output.Muscles.CopyFrom(MuscleFinalStageOutput);
+            // Copy muscles [0..14]
+            Buffer.BlockCopy(MuscleFinalStageOutput, 0, pose.muscles, 0, BasisNetworkSendBase.FirstBuffer);
+
+            // Copy muscles [21..end]
+            Buffer.BlockCopy(MuscleFinalStageOutput, BasisNetworkSendBase.SecondBuffer, pose.muscles, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
 
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = output.Vectors[0];  // Directly adjust scale with output scaling

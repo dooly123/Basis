@@ -10,6 +10,7 @@ public partial class BasisMuscleDriver : BasisBaseMuscleDriver
     public PoseData RestingOnePoseData;
     [SerializeField]
     public PoseData CurrentOnPoseData;
+     public string[] Muscles;
     public void Initialize(BasisLocalPlayer BasisLocalPlayer, Animator animator)
     {
         Animator = animator;
@@ -18,7 +19,7 @@ public partial class BasisMuscleDriver : BasisBaseMuscleDriver
         poseHandler = new HumanPoseHandler(Animator.avatar, Animator.transform);
         // Initialize the HumanPose
         pose = new HumanPose();
-
+           Muscles = HumanTrait.MuscleName;
         SetMusclesAndRecordPoses();
 
         BasisLocalPlayer.LocalBoneDriver.ReadyToRead.AddAction(101, UpdateFingers);

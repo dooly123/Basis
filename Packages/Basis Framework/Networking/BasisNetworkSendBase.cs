@@ -56,6 +56,9 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public float AvatarMedian = 0.1f;
         public float LastAvatarDelta = 0.1f;
         public FloatQueue LastCollectedDeltas = new FloatQueue(5);
+        public const int FirstBuffer = 15 * sizeof(float);
+        public const int SecondBuffer = 21 * sizeof(float);
+        public const int SizeAfterGap = (95 - 21) * sizeof(float);
         protected BasisNetworkSendBase()
         {
             LASM = new LocalAvatarSyncMessage()
@@ -64,21 +67,21 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             };
             if (TargetData.Muscles.IsCreated == false)
             {
-                TargetData.Muscles.ResizeArray(95);
-                TargetData.floatArray = new float[95];
+                TargetData.Muscles.ResizeArray(90);
+                TargetData.floatArray = new float[90];
             }
             if (CurrentData.Muscles.IsCreated == false)
             {
-                CurrentData.floatArray = new float[95];
-                CurrentData.Muscles.ResizeArray(95);
+                CurrentData.floatArray = new float[90];
+                CurrentData.Muscles.ResizeArray(90);
             }
             PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
             ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
         }
-        public static void InitalizeAvatarStoredData(ref BasisAvatarData data, int VectorCount = 2, int QuaternionCount = 1, int MuscleCount = 95)
+        public static void InitalizeAvatarStoredData(ref BasisAvatarData data)
         {
-            data.Vectors = new NativeArray<float3>(VectorCount, Allocator.Persistent);
-            data.Muscles = new NativeArray<float>(MuscleCount, Allocator.Persistent);
+            data.Vectors = new NativeArray<float3>(2, Allocator.Persistent);
+            data.Muscles = new NativeArray<float>(90, Allocator.Persistent);
         }
         public static void InitalizeDataJobs(ref BasisDataJobs BasisDataJobs)
         {

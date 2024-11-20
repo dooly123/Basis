@@ -86,6 +86,7 @@ namespace Basis.Scripts.Drivers
             AdditionalTransforms.Clear();
             Rigs.Clear();
             Player.Avatar.Animator.updateMode = AnimatorUpdateMode.Normal;
+            Player.Avatar.Animator.logWarnings = false;
             if (Player.Avatar.Animator.runtimeAnimatorController == null)
             {
                 UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Locomotion);

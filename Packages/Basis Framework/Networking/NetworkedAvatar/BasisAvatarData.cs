@@ -3,7 +3,6 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics; // Using Unity.Mathematics for math operations
 using UnityEngine;
-using static Unity.Mathematics.math;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
@@ -14,29 +13,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public Quaternion Rotation; // hip rotation
         public NativeArray<float> Muscles; // 95 floats for each muscle (95 length)
         public float[] floatArray;
-        // Method to deep copy the BasisAvatarData struct
-        public BasisAvatarData DeepCopy(Allocator Allocator = Allocator.Persistent)
-        {
-            // Create a new BasisAvatarData struct for the deep copy
-            BasisAvatarData copy = new BasisAvatarData
-            {
-                // Deep copy the NativeArrays using the appropriate methods
-                Vectors = new NativeArray<float3>(Vectors.Length, Allocator)
-            };
-            Vectors.CopyTo(copy.Vectors);
-
-            copy.Muscles = new NativeArray<float>(Muscles.Length, Allocator);
-            Muscles.CopyTo(copy.Muscles);
-
-            // Deep copy the float[] array (this is a simple array, so a new array is sufficient)
-            copy.floatArray = new float[floatArray.Length];
-            floatArray.CopyTo(copy.floatArray, 0);
-
-            // Deep copy the rotation
-            copy.Rotation = Rotation;
-
-            return copy;
-        }
     }
     [BurstCompile]
     public struct UpdateAvatarRotationJob : IJob

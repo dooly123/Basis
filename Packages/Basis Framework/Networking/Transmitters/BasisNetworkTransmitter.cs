@@ -18,13 +18,9 @@ namespace Basis.Scripts.Networking.Transmitters
         public BasisAudioTransmission AudioTransmission = new BasisAudioTransmission();
         public override void Compute()
         {
-            if (Ready)
+            if (Ready && NetworkedPlayer.Player.Avatar != null)
             {
-                if (NetworkedPlayer.Player.Avatar != null)
-                {
-                    NetworkedPlayer.Player.Avatar.Animator.logWarnings = false;
-                    BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
-                }
+                BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
             }
         }
         void SendOutLatest()
@@ -82,7 +78,6 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void SendOutLatestAvatar()
         {
-
             byte[] LAI = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData);
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
