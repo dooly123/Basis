@@ -141,10 +141,6 @@ namespace Basis.Scripts.Drivers
             {
                 Hips.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
-            if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Chest))
-            {
-                Chest.HasRigLayer = BasisHasRigLayer.HasRigLayer;
-            }
             if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl Spine, BasisBoneTrackedRole.Spine))
             {
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
@@ -414,7 +410,7 @@ namespace Basis.Scripts.Drivers
         /// </summary>
         private void SetupRightShoulderRig(BasisLocalBoneDriver driver)
         {
-            GameObject RightShoulder = CreateRig("RightShoulder", true, out RightShoulderRig, out RightShoulderLayer);
+            GameObject RightShoulder = CreateRig("RightShoulder", false, out RightShoulderRig, out RightShoulderLayer);
             OverrideTransform(driver, RightShoulder, References.RightShoulder, BasisBoneTrackedRole.RightShoulder, 1, 1);
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl RightShoulderRole, BasisBoneTrackedRole.RightShoulder))
@@ -429,7 +425,7 @@ namespace Basis.Scripts.Drivers
         /// </summary>
         private void SetupLeftShoulderRig(BasisLocalBoneDriver driver)
         {
-            GameObject LeftShoulder = CreateRig("LeftShoulder", true, out LeftShoulderRig, out LeftShoulderLayer);
+            GameObject LeftShoulder = CreateRig("LeftShoulder", false, out LeftShoulderRig, out LeftShoulderLayer);
             OverrideTransform(driver, LeftShoulder, References.leftShoulder, BasisBoneTrackedRole.LeftShoulder, 1, 1);
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl LeftShoulderRole, BasisBoneTrackedRole.LeftShoulder))
@@ -595,6 +591,7 @@ namespace Basis.Scripts.Drivers
         {
             // Check if any control in the list has HasRigLayer set to true
             Layer.active = Controls.Any(control => control.HasRigLayer == BasisHasRigLayer.HasRigLayer);
+           // Debug.Log("Update Layer to State " + Layer.active + " for layer " + Layer);
         }
         public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
         {
