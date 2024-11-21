@@ -268,20 +268,29 @@ public class uLipSync : MonoBehaviour
         onLipSyncUpdate.Invoke(result);
     }
 
-    void UpdatePhonemes()
-    {
-        int index = 0;
-        foreach (var data in profile.mfccs)
+        void UpdatePhonemes()
         {
-            foreach (var value in data.mfccNativeArray)
+            int index = 0;
+            int phonemeLength = _phonemes.Length;
+            int count = profile.mfccs.Count;
+
+            for (int i = 0; i < count && index < phonemeLength; i++)
             {
-                if (index >= _phonemes.Length) break;
-                _phonemes[index++] = value;
+                NativeArray<float> mfccNativeArray = profile.mfccs[i].mfccNativeArray;
+
+                // Determine how many elements to copy
+                int remainingLength = phonemeLength - index;
+                int copyLength = math.min(12, remainingLength);
+
+                // Use NativeArray.CopyTo for batch copying
+                NativeArray<float>.Copy(mfccNativeArray, 0, _phonemes, index, copyLength);
+
+                index += copyLength;
             }
         }
-    }
 
-    void ScheduleJob()
+
+        void ScheduleJob()
     {
         if (!_isDataReceived) return;
         _isDataReceived = false;
