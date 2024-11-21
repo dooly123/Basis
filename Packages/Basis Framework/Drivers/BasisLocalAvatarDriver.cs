@@ -35,6 +35,7 @@ namespace Basis.Scripts.Drivers
         public Rig LeftToeRig;
         public Rig RightToeRig;
 
+        public Rig RigChestRig;
         public Rig RigHeadRig;
         public Rig LeftHandRig;
         public Rig RightHandRig;
@@ -52,6 +53,7 @@ namespace Basis.Scripts.Drivers
         public RigLayer RightToeLayer;
 
         public RigLayer RigHeadLayer;
+        public RigLayer RigChestLayer;
        // public RigLayer ChestSpineLayer;
 
         public RigLayer LeftShoulderLayer;
@@ -206,6 +208,11 @@ namespace Basis.Scripts.Drivers
                 Destroy(Builder);
             }
             Builder = null;
+
+            if (RigChestRig != null)
+            {
+                Destroy(RigChestRig.gameObject);
+            }
             if (RigHeadRig != null)
             {
                 Destroy(RigHeadRig.gameObject);
@@ -355,6 +362,7 @@ namespace Basis.Scripts.Drivers
         }
         public void SetBodySettings(BasisLocalBoneDriver driver)
         {
+            SetupChestRig(driver);
             SetupHeadRig(driver);
             SetupRightShoulderRig(driver);
             SetupLeftShoulderRig(driver);
@@ -369,10 +377,24 @@ namespace Basis.Scripts.Drivers
         /// <summary>
         /// Sets up the Head rig, including chest, neck, and head bones.
         /// </summary>
+        private void SetupChestRig(BasisLocalBoneDriver driver)
+        {
+            GameObject ChestRig = CreateRig("Chest", true, out RigChestRig, out RigChestLayer);
+            OverrideTransform(driver, ChestRig, References.chest, BasisBoneTrackedRole.Chest, 1, 1);
+
+            List<BasisBoneControl> controls = new List<BasisBoneControl>();
+            if (driver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Chest))
+            {
+                controls.Add(Chest);
+            } 
+            WriteUpEvents(controls, RigChestLayer);
+        }
+        /// <summary>
+        /// Sets up the Head rig, including chest, neck, and head bones.
+        /// </summary>
         private void SetupHeadRig(BasisLocalBoneDriver driver)
         {
             GameObject HeadRig = CreateRig("Chest, Neck, Head", true, out RigHeadRig, out RigHeadLayer);
-            OverrideTransform(driver, HeadRig, References.chest, BasisBoneTrackedRole.Chest, 1, 1);
             CreateTwoBone(driver, HeadRig, References.chest, References.neck, References.head, BasisBoneTrackedRole.Head, BasisBoneTrackedRole.Chest, true, out HeadTwoBoneIK, true, true);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
