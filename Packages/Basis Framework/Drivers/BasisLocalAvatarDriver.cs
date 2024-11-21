@@ -411,7 +411,7 @@ namespace Basis.Scripts.Drivers
         private void SetupRightShoulderRig(BasisLocalBoneDriver driver)
         {
             GameObject RightShoulder = CreateRig("RightShoulder", false, out RightShoulderRig, out RightShoulderLayer);
-            OverrideTransform(driver, RightShoulder, References.RightShoulder, BasisBoneTrackedRole.RightShoulder, 1, 1);
+            Damp(driver, RightShoulder, References.RightShoulder, BasisBoneTrackedRole.RightShoulder, 1, 1);
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl RightShoulderRole, BasisBoneTrackedRole.RightShoulder))
             {
@@ -426,7 +426,7 @@ namespace Basis.Scripts.Drivers
         private void SetupLeftShoulderRig(BasisLocalBoneDriver driver)
         {
             GameObject LeftShoulder = CreateRig("LeftShoulder", false, out LeftShoulderRig, out LeftShoulderLayer);
-            OverrideTransform(driver, LeftShoulder, References.leftShoulder, BasisBoneTrackedRole.LeftShoulder, 1, 1);
+            Damp(driver, LeftShoulder, References.leftShoulder, BasisBoneTrackedRole.LeftShoulder, 1, 1);
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl LeftShoulderRole, BasisBoneTrackedRole.LeftShoulder))
             {
