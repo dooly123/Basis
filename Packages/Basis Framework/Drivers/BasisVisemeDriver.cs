@@ -162,16 +162,40 @@ namespace Basis.Scripts.Drivers
             {
                 uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
             }
+            if (HasRendererCheckWiredUp == false)
+            {
+                if (Player != null && Player.FaceRenderer != null)
+                {
+                    Debug.Log("Wired up Renderer Check For Blinking");
+                    Player.FaceRenderer.Check += UpdateFaceVisibility;
+                    UpdateFaceVisibility(Player.FaceisVisible);
+                    HasRendererCheckWiredUp = true;
+                }
+            }
             WasSuccessful = true;
             return true;
         }
+        public bool HasRendererCheckWiredUp = false;
+        public bool uLipSyncEnabledState = true;
+        private void UpdateFaceVisibility(bool State)
+        {
+            uLipSyncEnabledState = State;
+            uLipSync.enabled = State;
+        }
+        public void OnDestroy()
+        {
+            if (HasRendererCheckWiredUp && Player != null && Player.FaceRenderer != null)
+            {
+                Player.FaceRenderer.Check -= UpdateFaceVisibility;
+            }
+        }
         public void ProcessAudioSamples(float[] data)
         {
-            if (WasSuccessful == false)
+            if (uLipSyncEnabledState == false)
             {
                 return;
             }
-            if (Player.FaceisVisible == false)
+            if (WasSuccessful == false)
             {
                 return;
             }
