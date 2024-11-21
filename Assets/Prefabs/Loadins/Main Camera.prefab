@@ -394,7 +394,7 @@ MonoBehaviour:
   CameraData: {fileID: 8350818596157214651}
   SteamAudioListener: {fileID: 3211173287841905640}
   LocalPlayer: {fileID: 0}
-  DefaultCameraFov: 90
+  DefaultCameraFov: 80
   BasisLockToInput: {fileID: 5985133177976618905}
   HasEvents: 0
   MicrophoneCanvas: {fileID: 3373432966423603715}
