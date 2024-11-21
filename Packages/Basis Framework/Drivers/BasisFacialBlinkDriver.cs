@@ -1,5 +1,6 @@
 using Basis.Scripts.BasisSdk;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Basis.Scripts.Drivers
@@ -64,7 +65,7 @@ public class BasisFacialBlinkDriver : MonoBehaviour
         else if (isBlinking)
         {
             float Time = (UnityEngine.Time.time - blinkStartTime) / blinkDuration;
-            float blendWeight = Mathf.Lerp(0, 100, Time);
+            float blendWeight = math.lerp(0, 100, Time);
             for (int Index = 0; Index < blendShapeCount; Index++)
             {
                 meshRenderer.SetBlendShapeWeight(blendShapeIndex[Index], blendWeight);
@@ -91,7 +92,7 @@ public class BasisFacialBlinkDriver : MonoBehaviour
 
     void SetNextBlinkTime()
     {
-        nextBlinkTime = Time.time + Random.Range(minBlinkInterval, maxBlinkInterval);
+        nextBlinkTime = Time.time + UnityEngine.Random.Range(minBlinkInterval, maxBlinkInterval);
     }
 
     void StartBlink()

@@ -58,7 +58,7 @@ namespace Basis.Scripts.BasisSdk.Players
             Instance = this;
             OnLocalPlayerCreated?.Invoke();
             IsLocal = true;
-            LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform);
+            LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform, true);
             await BasisLocalInputActions.CreateInputAction(this);
             await BasisDeviceManagement.LoadGameobject(MainCamera, new InstantiationParameters());
             //  FootPlacementDriver = BasisHelpers.GetOrAddComponent<BasisFootPlacementDriver>(this.gameObject);
