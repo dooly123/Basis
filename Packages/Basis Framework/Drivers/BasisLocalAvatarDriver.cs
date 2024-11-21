@@ -358,8 +358,8 @@ namespace Basis.Scripts.Drivers
         }
         public void SetBodySettings(BasisLocalBoneDriver driver)
         {
-            SetupChestRig(driver);
             SetupHeadRig(driver);
+            SetupChestRig(driver);
             SetupRightShoulderRig(driver);
             SetupLeftShoulderRig(driver);
             LeftHand(driver);
