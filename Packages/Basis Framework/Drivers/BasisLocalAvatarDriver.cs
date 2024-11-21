@@ -376,7 +376,7 @@ namespace Basis.Scripts.Drivers
         private void SetupChestRig(BasisLocalBoneDriver driver)
         {
             GameObject ChestRig = CreateRig("Chest", false, out RigChestRig, out RigChestLayer);
-            OverrideTransform(driver, ChestRig, References.chest, BasisBoneTrackedRole.Chest, 1, 1);
+            Damp(driver, ChestRig, References.chest, BasisBoneTrackedRole.Chest, 1, 1);
 
             List<BasisBoneControl> controls = new List<BasisBoneControl>();
             if (driver.FindBone(out BasisBoneControl Chest, BasisBoneTrackedRole.Chest))
