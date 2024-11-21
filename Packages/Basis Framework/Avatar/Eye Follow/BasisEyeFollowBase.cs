@@ -194,11 +194,16 @@ namespace Basis.Scripts.Eye_Follow
                 }
             }
         }
-        private quaternion LookAtTarget(float3 observerPosition, float3 targetPosition, quaternion initialRotation, float3 up)
+        private quaternion LookAtTarget(Vector3 observerPosition, Vector3 targetPosition, Quaternion initialRotation, Vector3 UP)
         {
-            float3 direction = math.normalize(targetPosition - observerPosition);
-            quaternion lookRotation = quaternion.LookRotationSafe(direction, up);
-            return math.mul(math.inverse(initialRotation), lookRotation);
+            // Calculate direction to target
+            float3 direction = (targetPosition - observerPosition).normalized;
+
+            // Calculate look rotation
+            quaternion lookRotation = Quaternion.LookRotation(direction, UP);
+
+            // Combine with initial rotation for maintained orientation
+            return initialRotation * math.inverse(initialRotation) * lookRotation;
         }
     }
 }
