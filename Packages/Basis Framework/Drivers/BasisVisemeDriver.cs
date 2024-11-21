@@ -71,7 +71,6 @@ namespace Basis.Scripts.Drivers
             uLipSyncBlendShape = BasisHelpers.GetOrAddComponent<uLipSyncBlendShape>(this.gameObject);
 
             uLipSyncBlendShape.skinnedMeshRenderer = Avatar.FaceVisemeMesh;
-            uLipSyncBlendShape.updateMethod = UpdateMethod.External;
             BlendShapeCount = Avatar.FaceVisemeMovement.Length;
             HasViseme = new bool[BlendShapeCount];
             for (int Index = 0; Index < BlendShapeCount; Index++)
@@ -159,7 +158,6 @@ namespace Basis.Scripts.Drivers
                 PhonemeBlendShapeInfo info = phonemeBlendShapeTable[Index];
                 uLipSyncBlendShape.AddBlendShape(info.phoneme, info.blendShape);
             }
-            uLipSyncBlendShape.updateMethod = UpdateMethod.LipSyncUpdateEvent;
             if (FirstTime)
             {
                 uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);

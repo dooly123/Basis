@@ -16,14 +16,7 @@ public class uLipSyncBlendShapeEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        
-        if (EditorUtil.Foldout("LipSync Update Method", true))
-        {
-            ++EditorGUI.indentLevel;
-            EditorUtil.DrawProperty(serializedObject, nameof(blendShape.updateMethod));
-            --EditorGUI.indentLevel;
-            EditorGUILayout.Separator();
-        }
+       
 
         if (EditorUtil.Foldout("Skinned Mesh Renderer", true))
         {
