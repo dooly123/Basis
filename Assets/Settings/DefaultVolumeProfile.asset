@@ -181,7 +181,7 @@ MonoBehaviour:
     m_Value: 0
   maxIterations:
     m_OverrideState: 1
-    m_Value: 6
+    m_Value: 8
   dirtTexture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
@@ -299,7 +299,6 @@ MonoBehaviour:
   - {fileID: 7799089092438665834}
   - {fileID: -5447088460976690848}
   - {fileID: 7891408730865177171}
-  - {fileID: 2952650297693238118}
 --- !u!114 &764296954430757058
 MonoBehaviour:
   m_ObjectHideFlags: 3
