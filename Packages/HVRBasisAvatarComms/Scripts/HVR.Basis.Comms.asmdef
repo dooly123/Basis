@@ -4,7 +4,8 @@
     "references": [
         "BasisSDK",
         "Basis",
-        "DarkRiftIntergration"
+        "DarkRiftIntergration",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,4 +1,6 @@
+using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Eye_Follow;
 using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
 
@@ -7,6 +9,7 @@ namespace Basis.Scripts.Drivers
     public class BasisRemoteAvatarDriver : BasisAvatarDriver
     {
         public BasisRemotePlayer RemotePlayer;
+        public BasisEyeFollowBase BasisEyeFollowDriver;
         public void RemoteCalibration(BasisRemotePlayer remotePlayer)
         {
             RemotePlayer = remotePlayer;
@@ -19,6 +22,8 @@ namespace Basis.Scripts.Drivers
                 return;
             }
             Calibration(RemotePlayer.Avatar);
+            BasisEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisEyeFollowBase>(Player.Avatar.gameObject);
+            BasisEyeFollowDriver.Initalize(this, Player);
             SetAllMatrixRecalculation(false);
             updateWhenOffscreen(false);
             RemotePlayer.Avatar.Animator.logWarnings = false;

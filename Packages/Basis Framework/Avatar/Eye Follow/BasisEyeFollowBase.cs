@@ -6,10 +6,11 @@ using UnityEngine;
 
 namespace Basis.Scripts.Eye_Follow
 {
-    public abstract class BasisEyeFollowBase : MonoBehaviour
+    [DefaultExecutionOrder(15002)]
+    public class BasisEyeFollowBase : MonoBehaviour
     {
-        public Quaternion leftEyeInitialRotation;
-        public Quaternion rightEyeInitialRotation;
+        public quaternion leftEyeInitialRotation;
+        public quaternion rightEyeInitialRotation;
         public bool HasEvents = false;
         public bool Override = false;
         public float lookSpeed; // Speed of looking
@@ -19,51 +20,71 @@ namespace Basis.Scripts.Eye_Follow
         public float MaximumLookDistance = 0.25f; // Maximum offset from the target position
         public float minLookSpeed = 0.03f; // Minimum speed of looking
         public float maxLookSpeed = 0.1f; // Maximum speed of looking
+
+        public BasisPlayer BasisPlayer;
+        public BasisAvatarDriver BasisAvatarDriver;
         public Transform leftEyeTransform;
         public Transform rightEyeTransform;
         public Transform HeadTransform;
         public BasisCalibratedCoords LeftEyeInitallocalSpace;
         public BasisCalibratedCoords RightEyeInitallocalSpace;
-        public Vector3 RandomizedPosition; // Target position to look at
-        public bool IsAble()
-        {
-            if (Override)
-            {
-                return false;
-            }
-            return true;
-        }
+        public float3 RandomizedPosition; // Target position to look at
+
+        public bool HasLeftEye = false;
+        public bool HasRightEye = false;
+        public bool HasHead = false;
+        public bool LeftEyeHasGizmo;
+        public bool RightEyeHasGizmo;
+        public int LeftEyeGizmoIndex;
+        public int RightEyeGizmoIndex;
+        public float3 LeftEyeTargetWorld;
+        public float3 RightEyeTargetWorld;
+        public float3 CenterTargetWorld;
+        public float3 AppliedOffset;
+        public float3 EyeFowards = new float3(0, 0, 1);
+
+        public float CurrentlookAroundInterval;
+        public float timer; // Timer to track look-around interval
+        public float DistanceBeforeTeleport = 30;
         public void OnDestroy()
         {
             if (HasEvents)
             {
-                BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
+                if (BasisPlayer.IsLocal)
+                {
+                    BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
+                }
                 HasEvents = false;
             }
             BasisGizmoManager.OnUseGizmosChanged -= UpdatGizmoUsage;
             //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged -= AfterTeleport;
         }
-        public void Initalize(BasisAvatarDriver CharacterAvatarDriver)
+        public void Initalize(BasisAvatarDriver CAD, BasisPlayer Player)
         {
+            BasisAvatarDriver = CAD;
+            BasisPlayer = Player;
             // Initialize look speed
             lookSpeed = UnityEngine.Random.Range(minLookSpeed, maxLookSpeed);
             if (HasEvents == false)
             {
-                BasisLocalPlayer.Instance.OnSpawnedEvent += AfterTeleport;
+                if (Player.IsLocal)
+                {
+                    BasisLocalPlayer.Instance.OnSpawnedEvent += AfterTeleport;
+                }
                 HasEvents = true;
             }
-            rightEyeTransform = CharacterAvatarDriver.References.RightEye;
-            leftEyeTransform = CharacterAvatarDriver.References.LeftEye;
-            HeadTransform = CharacterAvatarDriver.References.head;
+            rightEyeTransform = BasisAvatarDriver.References.RightEye;
+            leftEyeTransform = BasisAvatarDriver.References.LeftEye;
+            HeadTransform = BasisAvatarDriver.References.head;
 
-            HasLeftEye = CharacterAvatarDriver.References.HasLeftEye;
-            HasRightEye = CharacterAvatarDriver.References.HasRightEye;
-            HasHead = CharacterAvatarDriver.References.Hashead;
-
+            HasLeftEye = BasisAvatarDriver.References.HasLeftEye;
+            HasRightEye = BasisAvatarDriver.References.HasRightEye;
+            HasHead = BasisAvatarDriver.References.Hashead;
+            Vector3 HeadPosition = BasisAvatarDriver.References.head.position;
             if (HasLeftEye)
             {
                 LeftEyeInitallocalSpace.rotation = leftEyeTransform.rotation;
-                LeftEyeInitallocalSpace.position = leftEyeTransform.position - BasisLocalPlayer.Instance.AvatarDriver.References.head.position;
+                LeftEyeInitallocalSpace.position = leftEyeTransform.position - HeadPosition;
 
                 leftEyeInitialRotation = leftEyeTransform.localRotation;
             }
@@ -71,7 +92,7 @@ namespace Basis.Scripts.Eye_Follow
             if (HasRightEye)
             {
                 RightEyeInitallocalSpace.rotation = rightEyeTransform.rotation;
-                RightEyeInitallocalSpace.position = rightEyeTransform.position - BasisLocalPlayer.Instance.AvatarDriver.References.head.position;
+                RightEyeInitallocalSpace.position = rightEyeTransform.position - HeadPosition;
 
                 rightEyeInitialRotation = rightEyeTransform.localRotation;
             }
@@ -99,22 +120,85 @@ namespace Basis.Scripts.Eye_Follow
                 RightEyeHasGizmo = false;
             }
         }
-        public bool HasLeftEye = false;
-        public bool HasRightEye = false;
-        public bool HasHead = false;
-        public bool LeftEyeHasGizmo;
-        public bool RightEyeHasGizmo;
-        public int LeftEyeGizmoIndex;
-        public int RightEyeGizmoIndex;
-        public Vector3 LeftEyeTargetWorld;
-        public Vector3 RightEyeTargetWorld;
-        public float3 CenterTargetWorld;
-        public abstract void Simulate();
         public void AfterTeleport()
         {
             Simulate();
             CenterTargetWorld = RandomizedPosition;//will be caught up
 
+        }
+        public void LateUpdate()
+        {
+            Simulate();
+        }
+        public void Simulate()
+        {
+            if (Override == false && HasHead)
+            {
+                // Update timer using DeltaTime
+                timer += Time.deltaTime;
+
+                // Check if it's time to look around
+                if (timer > CurrentlookAroundInterval)
+                {
+                    CurrentlookAroundInterval = UnityEngine.Random.Range(MinlookAroundInterval, MaxlookAroundInterval);
+                    AppliedOffset = UnityEngine.Random.insideUnitSphere * MaximumLookDistance;
+
+                    // Reset timer and randomize look speed
+                    timer = 0f;
+                    lookSpeed = UnityEngine.Random.Range(minLookSpeed, maxLookSpeed);
+                }
+
+                HeadTransform.GetPositionAndRotation(out Vector3 headPosition, out Quaternion headRotation);
+                float3 float3headPosition = headPosition;
+                quaternion QheadRotation = headRotation;
+                quaternion InversedHeadRotation = math.inverse(headRotation);
+                // Calculate the randomized target position using float3 for optimized math operations
+                float3 targetPosition = float3headPosition + math.mul(QheadRotation, EyeFowards) + AppliedOffset;
+
+                // Check distance for teleporting, otherwise smooth move
+                if (math.distance(targetPosition, CenterTargetWorld) > DistanceBeforeTeleport)
+                {
+                    CenterTargetWorld = targetPosition;
+                }
+                else
+                {
+                    CenterTargetWorld = Vector3.MoveTowards(CenterTargetWorld, targetPosition, lookSpeed);
+                }
+                // Set eye rotations using optimized float3 and quaternion operations
+                if (HasLeftEye)
+                {
+                    LeftEyeTargetWorld = CenterTargetWorld + LeftEyeInitallocalSpace.position;
+                    leftEyeTransform.rotation = LookAtTarget(leftEyeTransform.position, LeftEyeTargetWorld, math.mul(LeftEyeInitallocalSpace.rotation, InversedHeadRotation), HeadTransform.up);
+                }
+                if (HasRightEye)
+                {
+                    RightEyeTargetWorld = CenterTargetWorld + RightEyeInitallocalSpace.position;
+                    rightEyeTransform.rotation = LookAtTarget(rightEyeTransform.position, RightEyeTargetWorld, math.mul(RightEyeInitallocalSpace.rotation, InversedHeadRotation), HeadTransform.up);
+                }
+                if (BasisGizmoManager.UseGizmos)
+                {
+                    if (RightEyeHasGizmo)
+                    {
+                        if (BasisGizmoManager.UpdateSphereGizmo(RightEyeGizmoIndex, RightEyeTargetWorld) == false)
+                        {
+                            RightEyeHasGizmo = false;
+                        }
+                    }
+                    if (LeftEyeHasGizmo)
+                    {
+                        if (BasisGizmoManager.UpdateSphereGizmo(LeftEyeGizmoIndex, LeftEyeTargetWorld) == false)
+                        {
+                            LeftEyeHasGizmo = false;
+                        }
+                    }
+                }
+            }
+        }
+        private quaternion LookAtTarget(float3 observerPosition, float3 targetPosition, quaternion initialRotation, float3 up)
+        {
+            float3 direction = math.normalize(targetPosition - observerPosition);
+            quaternion lookRotation = quaternion.LookRotationSafe(direction, up);
+            return math.mul(math.inverse(initialRotation), lookRotation);
         }
     }
 }

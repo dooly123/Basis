@@ -64,7 +64,7 @@ namespace Basis.Scripts.Drivers
         public bool HasTposeEvent = false;
         public string Locomotion = "Locomotion";
         public BasisMuscleDriver BasisMuscleDriver;
-        public BasisLocalEyeFollowDriver BasisLocalEyeFollowDriver;
+        public BasisEyeFollowBase BasisLocalEyeFollowDriver;
         public PlayableGraph PlayableGraph;
         public void InitialLocalCalibration(BasisLocalPlayer Player)
         {
@@ -106,8 +106,8 @@ namespace Basis.Scripts.Drivers
             Calibration(Player.Avatar);
             BasisLocalPlayer.Instance.LocalBoneDriver.RemoveAllListeners();
             BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
-            BasisLocalEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisLocalEyeFollowDriver>(Player.Avatar.gameObject);
-            BasisLocalEyeFollowDriver.Initalize(this);
+            BasisLocalEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisEyeFollowBase>(Player.Avatar.gameObject);
+            BasisLocalEyeFollowDriver.Initalize(this,Player);
             HeadScaledDown = Vector3.zero;
             SetAllMatrixRecalculation(true);
             updateWhenOffscreen(true);

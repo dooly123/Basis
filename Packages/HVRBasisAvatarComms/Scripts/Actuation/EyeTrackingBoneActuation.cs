@@ -1,6 +1,7 @@
 ﻿using System;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Eye_Follow;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace HVR.Basis.Comms
@@ -89,9 +90,9 @@ namespace HVR.Basis.Comms
             {
                 // FIXME: This wrongly assumes that eye bone transforms are oriented the same.
                 // This needs to be fixed later by using the work-in-progress normalized muscle system instead.
-                case EyeSide.Left: ;EyeFollowDriver.leftEyeTransform.localRotation = EyeFollowDriver.leftEyeInitialRotation * euler;
+                case EyeSide.Left: ;EyeFollowDriver.leftEyeTransform.localRotation = math.mul(EyeFollowDriver.leftEyeInitialRotation , euler);
                     break;
-                case EyeSide.Right: ;EyeFollowDriver.rightEyeTransform.localRotation = EyeFollowDriver.rightEyeInitialRotation * euler;
+                case EyeSide.Right: ;EyeFollowDriver.rightEyeTransform.localRotation = math.mul(EyeFollowDriver.rightEyeInitialRotation , euler);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(side), side, null);
@@ -103,7 +104,7 @@ namespace HVR.Basis.Comms
             EyeFollowDriver.Override = value;
         }
 
-        private static BasisLocalEyeFollowDriver EyeFollowDriver => BasisLocalPlayer.Instance.AvatarDriver.BasisLocalEyeFollowDriver;
+        private static BasisEyeFollowBase EyeFollowDriver => BasisLocalPlayer.Instance.AvatarDriver.BasisLocalEyeFollowDriver;
 
         private enum EyeSide
         {
