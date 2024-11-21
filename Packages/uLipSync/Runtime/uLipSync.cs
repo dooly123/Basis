@@ -198,32 +198,34 @@ namespace uLipSync
         void UpdateResult()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        if (!_isWebGLProcessed)
+    if (!_isWebGLProcessed)
+    {
+        result = new LipSyncInfo()
         {
-            result = new LipSyncInfo()
-            {
-                phoneme = result.phoneme,
-                volume = 0f,
-                rawVolume = 0f,
-                phonemeRatios = _ratios,
-            };
-            return;
-        }
+            phoneme = result.phoneme,
+            volume = 0f,
+            rawVolume = 0f,
+            phonemeRatios = _ratios,
+        };
+        return;
+    }
 #endif
 
-            _jobHandle.Complete();
+            _jobHandle.Complete(); // Wait for async job completion
             _mfccForOther.CopyFrom(_mfcc);
 
 #if ULIPSYNC_DEBUG
-        _debugDataForOther.CopyFrom(_debugData);
-        _debugSpectrumForOther.CopyFrom(_debugSpectrum);
-        _debugMelSpectrumForOther.CopyFrom(_debugMelSpectrum);
-        _debugMelCepstrumForOther.CopyFrom(_debugMelCepstrum);
+    _debugDataForOther.CopyFrom(_debugData);
+    _debugSpectrumForOther.CopyFrom(_debugSpectrum);
+    _debugMelSpectrumForOther.CopyFrom(_debugMelSpectrum);
+    _debugMelCepstrumForOther.CopyFrom(_debugMelCepstrum);
 #endif
 
+            // Main phoneme identification
             int index = _info[0].mainPhonemeIndex;
             string mainPhoneme = profile.GetPhoneme(index);
 
+            // Calculate sumScore and populate UpdateResultsBuffer
             float sumScore = 0f;
             _scores.CopyTo(UpdateResultsBuffer);
             for (int i = 0; i < phonemeCount; ++i)
@@ -231,25 +233,30 @@ namespace uLipSync
                 sumScore += UpdateResultsBuffer[i];
             }
 
+            // Clear and update _ratios
             _ratios.Clear();
+            float invSumScore = sumScore > 0f ? 1f / sumScore : 0f; // Precompute inverse for efficiency
             for (int i = 0; i < phonemeCount; ++i)
             {
-                var phoneme = profile.GetPhoneme(i);
-                var ratio = sumScore > 0f ? UpdateResultsBuffer[i] / sumScore : 0f;
-                if (!_ratios.ContainsKey(phoneme))
+                string phoneme = profile.GetPhoneme(i);
+                float ratio = UpdateResultsBuffer[i] * invSumScore; // Avoid division in loop
+                if (!_ratios.TryGetValue(phoneme, out float existingRatio))
                 {
-                    _ratios.Add(phoneme, 0f);
+                    _ratios[phoneme] = ratio; // Add new
                 }
-                _ratios[phoneme] += ratio;
+                else
+                {
+                    _ratios[phoneme] = existingRatio + ratio; // Accumulate
+                }
             }
 
+            // Normalize volume
             float rawVol = _info[0].volume;
             float minVol = Common.DefaultMinVolume;
             float maxVol = Common.DefaultMaxVolume;
-            float normVol = Mathf.Log10(rawVol);
-            normVol = (normVol - minVol) / (maxVol - minVol);
-            normVol = Mathf.Clamp(normVol, 0f, 1f);
+            float normVol = math.clamp((math.log10(rawVol) - minVol) / (maxVol - minVol), 0f, 1f);
 
+            // Update result
             result = new LipSyncInfo()
             {
                 phoneme = mainPhoneme,
