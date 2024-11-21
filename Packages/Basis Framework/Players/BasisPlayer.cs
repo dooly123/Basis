@@ -48,38 +48,17 @@ namespace Basis.Scripts.BasisSdk.Players
                 BasisAvatarStrainJiggleDriver.OnCalibration();
             }
         }
-        private void UpdateFaceVisibility(bool State)
+        public void UpdateFaceVisibility(bool State)
         {
             FaceisVisible = State;
         }
         public void AvatarSwitchedFallBack()
         {
-            UpdateFaceRenderer();//dont process face for fallback
             OnAvatarSwitchedFallBack?.Invoke();
         }
         public void AvatarSwitched()
         {
-            UpdateFaceRenderer();
             OnAvatarSwitched?.Invoke();
-        }
-        public void UpdateFaceRenderer()
-        {
-            FaceisVisible = false;
-            if (Avatar == null)
-            {
-                Debug.LogError("Missing Avatar");
-            }
-            if (Avatar.FaceVisemeMesh == null)
-            {
-                Debug.Log("Missing Face for " + DisplayName);
-            }
-            UpdateFaceVisibility(Avatar.FaceVisemeMesh.isVisible);
-            if (FaceRenderer != null)
-            {
-                GameObject.Destroy(FaceRenderer);
-            }
-            FaceRenderer = BasisHelpers.GetOrAddComponent<BasisMeshRendererCheck>(Avatar.FaceVisemeMesh.gameObject);
-            FaceRenderer.Check += UpdateFaceVisibility;
         }
     }
 }

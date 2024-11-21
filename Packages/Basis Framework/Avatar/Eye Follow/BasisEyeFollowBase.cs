@@ -20,8 +20,8 @@ namespace Basis.Scripts.Eye_Follow
         public float MaximumLookDistance = 0.25f; // Maximum offset from the target position
         public float minLookSpeed = 0.03f; // Minimum speed of looking
         public float maxLookSpeed = 0.1f; // Maximum speed of looking
-
-        public BasisPlayer BasisPlayer;
+        public bool HasRendererCheckWiredUp = false;
+        public BasisPlayer LinkedPlayer;
         public BasisAvatarDriver BasisAvatarDriver;
         public Transform leftEyeTransform;
         public Transform rightEyeTransform;
@@ -50,19 +50,23 @@ namespace Basis.Scripts.Eye_Follow
         {
             if (HasEvents)
             {
-                if (BasisPlayer.IsLocal)
+                if (LinkedPlayer.IsLocal)
                 {
                     BasisLocalPlayer.Instance.OnSpawnedEvent -= AfterTeleport;
                 }
                 HasEvents = false;
             }
             BasisGizmoManager.OnUseGizmosChanged -= UpdatGizmoUsage;
+            if (HasRendererCheckWiredUp && LinkedPlayer != null && LinkedPlayer.FaceRenderer != null)
+            {
+                LinkedPlayer.FaceRenderer.Check -= UpdateFaceVisibility;
+            }
             //its regenerated this script will be nuked and rebuilt BasisLocalPlayer.OnLocalAvatarChanged -= AfterTeleport;
         }
         public void Initalize(BasisAvatarDriver CAD, BasisPlayer Player)
         {
             BasisAvatarDriver = CAD;
-            BasisPlayer = Player;
+            LinkedPlayer = Player;
             // Initialize look speed
             lookSpeed = UnityEngine.Random.Range(minLookSpeed, maxLookSpeed);
             if (HasEvents == false)
@@ -97,6 +101,20 @@ namespace Basis.Scripts.Eye_Follow
                 rightEyeInitialRotation = rightEyeTransform.localRotation;
             }
             BasisGizmoManager.OnUseGizmosChanged += UpdatGizmoUsage;
+            if (HasRendererCheckWiredUp == false)
+            {
+                if (LinkedPlayer != null && LinkedPlayer.FaceRenderer != null)
+                {
+                    Debug.Log("Wired up Renderer Check For Blinking");
+                    LinkedPlayer.FaceRenderer.Check += UpdateFaceVisibility;
+                    UpdateFaceVisibility(LinkedPlayer.FaceisVisible);
+                    HasRendererCheckWiredUp = true;
+                }
+            }
+        }
+        private void UpdateFaceVisibility(bool State)
+        {
+            enabled = State;
         }
         public void UpdatGizmoUsage(bool State)
         {

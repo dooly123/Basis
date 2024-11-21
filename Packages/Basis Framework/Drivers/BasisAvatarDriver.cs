@@ -39,10 +39,27 @@ namespace Basis.Scripts.Drivers
         {
             FindSkinnedMeshRenders();
             BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
+            Player.FaceisVisible = false;
+            if (Avatar == null)
+            {
+                Debug.LogError("Missing Avatar");
+            }
+            if (Avatar.FaceVisemeMesh == null)
+            {
+                Debug.Log("Missing Face for " + Player.DisplayName);
+            }
+            Player.UpdateFaceVisibility(Avatar.FaceVisemeMesh.isVisible);
+            if (Player.FaceRenderer != null)
+            {
+                GameObject.Destroy(Player.FaceRenderer);
+            }
+            Player.FaceRenderer = BasisHelpers.GetOrAddComponent<BasisMeshRendererCheck>(Avatar.FaceVisemeMesh.gameObject);
+            Player.FaceRenderer.Check += Player.UpdateFaceVisibility;
+
             if (BasisFacialBlinkDriver.MeetsRequirements(Avatar))
             {
                 BasisFacialBlinkDriver FacialBlinkDriver = BasisHelpers.GetOrAddComponent<BasisFacialBlinkDriver>(Avatar.gameObject);
-                FacialBlinkDriver.Initialize(Avatar);
+                FacialBlinkDriver.Initialize(Player,Avatar);
             }
         }
         public void PutAvatarIntoTPose()

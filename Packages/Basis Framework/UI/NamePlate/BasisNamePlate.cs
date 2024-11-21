@@ -27,14 +27,17 @@ namespace Basis.Scripts.UI.NamePlate
         public Image namePlateImage;
         public Color NormalColor;
         public Color IsTalkingColor;
-        [SerializeField] private float transitionDuration = 0.3f;
-        [SerializeField] private float returnDelay = 0.4f;
+        [SerializeField] 
+        private float transitionDuration = 0.3f;
+        [SerializeField] 
+        private float returnDelay = 0.4f;
 
         private Coroutine colorTransitionCoroutine;
         private Coroutine returnToNormalCoroutine;
         private static readonly Queue<Action> actions = new Queue<Action>();
         private static Vector3 cachedDirection;
         private static Quaternion cachedRotation;
+        public bool HasRendererCheckWiredUp = false;
 
         public void Initalize(BasisBoneControl hipTarget, BasisRemotePlayer basisRemotePlayer)
         {
@@ -47,8 +50,28 @@ namespace Basis.Scripts.UI.NamePlate
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressComplete += OnProgressComplete;
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressStart += OnProgressStart;
             BasisRemotePlayer.AudioReceived += OnAudioReceived;
+            BasisRemotePlayer.OnAvatarSwitched += RebuildRenderCheck;
+            BasisRemotePlayer.OnAvatarSwitchedFallBack += RebuildRenderCheck;
         }
-
+        public void RebuildRenderCheck()
+        {
+            if (HasRendererCheckWiredUp)
+            {
+                DeInitalizeCallToRender();
+            }
+            HasRendererCheckWiredUp = false;
+            if (BasisRemotePlayer != null && BasisRemotePlayer.FaceRenderer != null)
+            {
+                Debug.Log("Wired up Renderer Check For Blinking");
+                BasisRemotePlayer.FaceRenderer.Check += UpdateFaceVisibility;
+                UpdateFaceVisibility(BasisRemotePlayer.FaceisVisible);
+                HasRendererCheckWiredUp = true;
+            }
+        }
+        private void UpdateFaceVisibility(bool State)
+        {
+            gameObject.SetActive(State);
+        }
         public void OnAudioReceived(bool hasRealAudio)
         {
             Color targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
@@ -107,8 +130,15 @@ namespace Basis.Scripts.UI.NamePlate
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressComplete -= OnProgressComplete;
             BasisRemotePlayer.ProgressReportAvatarLoad.OnProgressStart -= OnProgressStart;
             BasisRemotePlayer.AudioReceived -= OnAudioReceived;
+            DeInitalizeCallToRender();
         }
-
+        public void DeInitalizeCallToRender()
+        {
+            if (HasRendererCheckWiredUp && BasisRemotePlayer != null && BasisRemotePlayer.FaceRenderer != null)
+            {
+                BasisRemotePlayer.FaceRenderer.Check -= UpdateFaceVisibility;
+            }
+        }
         private void OnProgressStart()
         {
             EnqueueOnMainThread(() =>
@@ -151,7 +181,7 @@ namespace Basis.Scripts.UI.NamePlate
             Loadingbar.rectTransform.localScale = scale;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             directionToCamera = LocalCameraDriver.position - transform.position;
 
