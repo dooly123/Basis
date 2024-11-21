@@ -109,7 +109,8 @@ namespace uLipSync
             UpdateBuffers();
             UpdateAudioSourceProxy();
         }
-
+        public float[] UpdateResultsBuffer;
+        public int phonemeCount;
         void AllocateBuffers()
         {
             if (_allocated)
@@ -123,7 +124,7 @@ namespace uLipSync
             lock (_lockObject)
             {
                 int n = inputSampleCount;
-                int phonemeCount = profile ? profile.mfccs.Count : 1;
+                phonemeCount = profile ? profile.mfccs.Count : 1;
                 _rawInputData = new NativeArray<float>(n, Allocator.Persistent);
                 _inputData = new NativeArray<float>(n, Allocator.Persistent);
                 _mfcc = new NativeArray<float>(mfccNum, Allocator.Persistent);
@@ -131,6 +132,7 @@ namespace uLipSync
                 _means = new NativeArray<float>(mfccNum, Allocator.Persistent);
                 _standardDeviations = new NativeArray<float>(mfccNum, Allocator.Persistent);
                 _scores = new NativeArray<float>(phonemeCount, Allocator.Persistent);
+                UpdateResultsBuffer = new float[phonemeCount];
                 _phonemes = new NativeArray<float>(mfccNum * phonemeCount, Allocator.Persistent);
                 _info = new NativeArray<LipSyncJob.Info>(1, Allocator.Persistent);
 #if ULIPSYNC_DEBUG
@@ -193,7 +195,6 @@ namespace uLipSync
                 }
             }
         }
-
         void UpdateResult()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -224,17 +225,17 @@ namespace uLipSync
             string mainPhoneme = profile.GetPhoneme(index);
 
             float sumScore = 0f;
-            int ScoreLength = _scores.Length;
-            for (int i = 0; i < ScoreLength; ++i)
+            _scores.CopyTo(UpdateResultsBuffer);
+            for (int i = 0; i < phonemeCount; ++i)
             {
-                sumScore += _scores[i];
+                sumScore += UpdateResultsBuffer[i];
             }
 
             _ratios.Clear();
-            for (int i = 0; i < ScoreLength; ++i)
+            for (int i = 0; i < phonemeCount; ++i)
             {
                 var phoneme = profile.GetPhoneme(i);
-                var ratio = sumScore > 0f ? _scores[i] / sumScore : 0f;
+                var ratio = sumScore > 0f ? UpdateResultsBuffer[i] / sumScore : 0f;
                 if (!_ratios.ContainsKey(phoneme))
                 {
                     _ratios.Add(phoneme, 0f);
