@@ -93,6 +93,8 @@ namespace Basis.Scripts.UI
                 LineRenderer.positionCount = 2;
                 HasLineRenderer = true;
                 LineRenderer.enabled = HasLineRenderer;
+                LineRenderer.numCapVertices = 12;
+                LineRenderer.numCornerVertices = 12;
                 LineRenderer.gameObject.layer = LayerMask.NameToLayer(UILayer);
             }
             if (BasisDeviceMatchableNames.HasRayCastRedical)
