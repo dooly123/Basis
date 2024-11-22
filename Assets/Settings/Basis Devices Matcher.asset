@@ -181,10 +181,10 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
+    PositionRayCastOffset: {x: -0.01, y: -0.03, z: -0.02}
+    RotationRaycastOffset: {x: 44.5, y: -12.11, z: 0}
     AvatarPositionOffset: {x: 0.07, y: -0.02, z: 0.11}
-    AvatarRotationOffset: {x: 340, y: 10, z: 90}
+    AvatarRotationOffset: {x: 340, y: 0, z: 90}
     HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_quest_plus_controller_right
@@ -195,10 +195,10 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
+    PositionRayCastOffset: {x: -0.01, y: -0.03, z: -0.02}
+    RotationRaycastOffset: {x: 44.5, y: -12.11, z: 0}
     AvatarPositionOffset: {x: -0.07, y: -0.02, z: 0.11}
-    AvatarRotationOffset: {x: 340, y: 10, z: 270}
+    AvatarRotationOffset: {x: 340, y: 0, z: 270}
     HasTrackedRole: 1
     TrackedRole: 19
   - DeviceID: oculus_quest_controller_left
@@ -454,10 +454,10 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
+    PositionRayCastOffset: {x: -0.01, y: -0.03, z: -0.02}
+    RotationRaycastOffset: {x: 44.5, y: -12.11, z: 0}
     AvatarPositionOffset: {x: 0.07, y: -0.02, z: 0.11}
-    AvatarRotationOffset: {x: 340, y: 10, z: 90}
+    AvatarRotationOffset: {x: 340, y: 0, z: 90}
     HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_quest_plus_controller_right
@@ -468,10 +468,10 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
+    PositionRayCastOffset: {x: -0.01, y: -0.03, z: -0.02}
+    RotationRaycastOffset: {x: 44.5, y: -12.11, z: 0}
     AvatarPositionOffset: {x: -0.07, y: -0.02, z: 0.11}
-    AvatarRotationOffset: {x: 340, y: 10, z: 270}
+    AvatarRotationOffset: {x: 340, y: 0, z: 270}
     HasTrackedRole: 1
     TrackedRole: 19
   - DeviceID: oculus_quest_controller_left
