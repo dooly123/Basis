@@ -155,7 +155,7 @@ public class BasisUIOffsetsMenu : BasisUIBase
                 if (Input.BasisDeviceMatchableNames.DeviceID == BasisDeviceMatchableNames.DeviceID)
                 {
                     Input.AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
-                    Input.AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
+                    Input.AvatarRotationOffset = BasisDeviceMatchableNames.AvatarRotationOffset;
                     Debug.Log("loaded for " + Input.UniqueDeviceIdentifier);
                 }
             }
@@ -184,7 +184,7 @@ public class BasisUIOffsetsMenu : BasisUIBase
                 if (input.BasisDeviceMatchableNames.DeviceID == match.DeviceID)
                 {
                     input.AvatarPositionOffset = match.AvatarPositionOffset;
-                    input.AvatarRotationOffset = Quaternion.Euler(match.AvatarRotationOffset);
+                    input.AvatarRotationOffset = match.AvatarRotationOffset;
                     Debug.Log("Loaded for " + input.UniqueDeviceIdentifier);
                     input.BasisDeviceMatchableNames = match; // Use deep clone here
                 }

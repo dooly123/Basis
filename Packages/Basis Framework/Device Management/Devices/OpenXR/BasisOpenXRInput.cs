@@ -39,7 +39,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
                     LocalRawRotation = Rotation;
                     if (hasRoleAssigned && Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
-                        Control.IncomingData.rotation = math.mul(LocalRawRotation, AvatarRotationOffset);
+                        Control.IncomingData.rotation = math.mul(LocalRawRotation, Quaternion.Euler(AvatarRotationOffset));
                     }
                 }
 

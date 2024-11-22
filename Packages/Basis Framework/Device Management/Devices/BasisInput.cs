@@ -33,7 +33,7 @@ namespace Basis.Scripts.Device_Management.Devices
         public quaternion FinalRotation;
         [Header("Avatar Offset Applied Per Frame")]
         public float3 AvatarPositionOffset = Vector3.zero;
-        public quaternion AvatarRotationOffset = Quaternion.identity;
+        public float3 AvatarRotationOffset = Vector3.zero;
 
         public bool HasUIInputSupport = false;
         public string CommonDeviceIdentifier;
@@ -155,7 +155,7 @@ namespace Basis.Scripts.Device_Management.Devices
             //unassign the old tracker
             UnAssignTracker();
             Debug.Log("Finding ID " + unUniqueDeviceID);
-            AvatarRotationOffset = Quaternion.identity;
+            AvatarRotationOffset = Quaternion.identity.eulerAngles;
             //configure device identifier
             SubSystemIdentifier = subSystems;
             CommonDeviceIdentifier = unUniqueDeviceID;
@@ -170,7 +170,7 @@ namespace Basis.Scripts.Device_Management.Devices
 
             if (hasRoleAssigned)
             {
-                AvatarRotationOffset = Quaternion.Euler(BasisDeviceMatchableNames.AvatarRotationOffset);
+                AvatarRotationOffset = BasisDeviceMatchableNames.AvatarRotationOffset;
                 AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
                 HasUIInputSupport = BasisDeviceMatchableNames.HasRayCastSupport;
                 if (HasUIInputSupport)

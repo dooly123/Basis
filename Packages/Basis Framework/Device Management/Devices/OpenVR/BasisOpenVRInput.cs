@@ -46,7 +46,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                                 Control.IncomingData.position = FinalPosition - math.mul(FinalRotation, AvatarPositionOffset);
 
                                 // Apply the rotation offset using math.mul for quaternion multiplication
-                                Control.IncomingData.rotation = math.mul(FinalRotation, AvatarRotationOffset);
+                                Control.IncomingData.rotation = math.mul(FinalRotation, Quaternion.Euler(AvatarRotationOffset));
                             }
                         }
                         if (HasInputSource)
