@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -6,21 +6,35 @@ namespace BattlePhaze.SettingsManager.Intergrations
 {
     public class SMModuleAudio : SettingsManagerOption
     {
-        public bool UseAudioListener = true;
         public AudioMixer Mixer;
+        /// <summary>
+        /// 0 to 1 rest or 0 to 100
+        /// </summary>
+        public static Action<float> MainVolume;
+        public static Action<float> MenusVolume;
+        public static Action<float> WorldVolume;
+        public static Action<float> PlayerVolume;
+        public static float ActiveMainVolume;
+        public static float ActiveMenusVolume;
+        public static float ActiveWorldVolume;
+        public static float ActivePlayerVolume;
         public override void ReceiveOption(SettingsMenuInput Option, SettingsManager Manager)
         {
             if (NameReturn(0, Option))
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
-                    AudioListener.volume = Value/100;
+                    ActiveMainVolume = Value / 100;
+                    MainVolume?.Invoke(ActiveMainVolume);
+                    AudioListener.volume = ActiveMainVolume;
                 }
             }
             if (NameReturn(1, Option))
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
+                    ActiveMenusVolume = Value;
+                    MenusVolume?.Invoke(ActiveMenusVolume);
                     ChangeVolume(Value - 80, Option.Name);
                 }
             }
@@ -28,6 +42,8 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
+                    ActiveWorldVolume = Value;
+                    WorldVolume?.Invoke(ActiveWorldVolume);
                     ChangeVolume(Value - 80, Option.Name);
                 }
             }
@@ -35,6 +51,8 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 if (SliderReadOption(Option, Manager, out float Value))
                 {
+                    ActivePlayerVolume = Value;
+                    PlayerVolume?.Invoke(ActivePlayerVolume);
                     ChangeVolume(Value - 80, Option.Name);
                 }
             }

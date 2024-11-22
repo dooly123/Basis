@@ -1992,7 +1992,6 @@ MonoBehaviour:
     Explanation: 
     Parse: 0
     Type: 3
-  UseAudioListener: 1
   Mixer: {fileID: 24100000, guid: 471a0209081144d4da2426822e8a0b47, type: 2}
 --- !u!114 &4907001347912712639
 MonoBehaviour:
