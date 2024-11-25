@@ -39,7 +39,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public Action OnPlayersHeightChanged;
         public BasisLocalBoneDriver LocalBoneDriver;
         public BasisLocalAvatarDriver AvatarDriver;
-    //   public BasisFootPlacementDriver FootPlacementDriver;
+        //   public BasisFootPlacementDriver FootPlacementDriver;
         public BasisVisemeDriver VisemeDriver;
         [SerializeField]
         public LayerMask GroundMask;
@@ -56,6 +56,7 @@ namespace Basis.Scripts.BasisSdk.Players
                 Instance = this;
             }
             Instance = this;
+            MicrophoneRecorder.OnPausedAction += OnPausedEvent;
             OnLocalPlayerCreated?.Invoke();
             IsLocal = true;
             LocalBoneDriver.CreateInitialArrays(LocalBoneDriver.transform, true);
@@ -70,8 +71,8 @@ namespace Basis.Scripts.BasisSdk.Players
                 SceneManager.sceneLoaded += OnSceneLoadedCallback;
                 HasEvents = true;
             }
-         bool LoadedState = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal,out BasisDataStore.BasisSavedAvatar LastUsedAvatar);
-            if(LoadedState)
+            bool LoadedState = BasisDataStore.LoadAvatar(LoadFileNameAndExtension, DefaultAvatar, BasisPlayer.LoadModeLocal, out BasisDataStore.BasisSavedAvatar LastUsedAvatar);
+            if (LoadedState)
             {
                 await LoadInitalAvatar(LastUsedAvatar);
             }
@@ -123,7 +124,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {
-           BasisAvatarStrainJiggleDriver.PrepareTeleport();
+            BasisAvatarStrainJiggleDriver.PrepareTeleport();
             Debug.Log("Teleporting");
             Move.enabled = false;
             transform.SetPositionAndRotation(position, rotation);
@@ -182,11 +183,31 @@ namespace Basis.Scripts.BasisSdk.Players
             {
                 GameObject.Destroy(VisemeDriver);
             }
-          LocalBoneDriver.DeInitalzeGizmos();
+            MicrophoneRecorder.OnPausedAction -= OnPausedEvent;
+            LocalBoneDriver.DeInitalzeGizmos();
         }
         public void DriveAudioToViseme()
         {
             VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray);
+        }
+        private void OnPausedEvent(bool IsPaused)
+        {
+            if (IsPaused)
+            {
+                if (VisemeDriver.uLipSyncBlendShape != null)
+                {
+                    VisemeDriver.uLipSyncBlendShape.maxVolume = 0;
+                    VisemeDriver.uLipSyncBlendShape.minVolume = 0;
+                }
+            }
+            else
+            {
+                if (VisemeDriver.uLipSyncBlendShape != null)
+                {
+                    VisemeDriver.uLipSyncBlendShape.maxVolume = -1.5f;
+                    VisemeDriver.uLipSyncBlendShape.minVolume = -2.5f;
+                }
+            }
         }
     }
 }

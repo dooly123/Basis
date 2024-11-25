@@ -12,7 +12,6 @@ namespace uLipSync
         public Profile profile;
         public LipSyncUpdateEvent onLipSyncUpdate = new LipSyncUpdateEvent();
         [Range(0f, 1f)] public float outputSoundGain = 1f;
-        public uLipSyncAudioSource audioSourceProxy;
         uLipSyncAudioSource _currentAudioSourceProxy;
 
         JobHandle _jobHandle;
@@ -74,8 +73,6 @@ namespace uLipSync
 
         void Awake()
         {
-            UpdateAudioSourceProxy();
-
 #if UNITY_WEBGL && !UNITY_EDITOR
         InitializeWebGL();
 #endif
@@ -92,7 +89,7 @@ namespace uLipSync
             DisposeBuffers();
         }
 
-        void Update()
+       public void DoUpdate()
         {
             if (!profile) return;
             if (!_jobHandle.IsCompleted) return;
@@ -107,7 +104,6 @@ namespace uLipSync
             ScheduleJob();
 
             UpdateBuffers();
-            UpdateAudioSourceProxy();
         }
         public float[] UpdateResultsBuffer;
         public int phonemeCount;
@@ -348,22 +344,6 @@ namespace uLipSync
 
             _requestedCalibrationVowels.Clear();
         }
-        void UpdateAudioSourceProxy()
-        {
-            if (audioSourceProxy == _currentAudioSourceProxy) return;
-
-            if (_currentAudioSourceProxy)
-            {
-                _currentAudioSourceProxy.onAudioFilterRead.RemoveListener(OnDataReceived);
-            }
-
-            if (audioSourceProxy)
-            {
-                audioSourceProxy.onAudioFilterRead.AddListener(OnDataReceived);
-            }
-
-            _currentAudioSourceProxy = audioSourceProxy;
-        }
 
         public void OnDataReceived(float[] input, int channels)
         {
@@ -389,13 +369,6 @@ namespace uLipSync
             }
 
             _isDataReceived = true;
-        }
-
-        void OnAudioFilterRead(float[] input, int channels)
-        {
-            if (audioSourceProxy) return;
-
-            OnDataReceived(input, channels);
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
