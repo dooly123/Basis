@@ -628,7 +628,7 @@ Transform:
   m_GameObject: {fileID: 7870497644678491072}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.616, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -654,13 +654,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eb44129194077a499d84962b1668070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Renderer: {fileID: 0}
   BasisInput: {fileID: 0}
   TrackedSetup:
     m_PersistentCalls:
       m_Calls: []
   ModelRotationOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   ModelPositionOffset: {x: 0, y: 0, z: 0}
+  HasEvents: 0
+  ScaleOfModel: {x: 1, y: 1, z: 1}
 --- !u!1 &9135796989880826139
 GameObject:
   m_ObjectHideFlags: 0

@@ -94,7 +94,7 @@ MonoBehaviour:
     matchableDeviceIds:
     - oculus_quest_pro_controller_left
     HasRayCastSupport: 1
-    CanDisplayPhysicalTracker: 0
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: 0, y: 0, z: 0}
@@ -108,7 +108,7 @@ MonoBehaviour:
     matchableDeviceIds:
     - oculus_quest_pro_controller_right
     HasRayCastSupport: 1
-    CanDisplayPhysicalTracker: 0
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: 0, y: 0, z: 0}
@@ -367,7 +367,7 @@ MonoBehaviour:
     matchableDeviceIds:
     - oculus_quest_pro_controller_left
     HasRayCastSupport: 1
-    CanDisplayPhysicalTracker: 0
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: 0, y: 0, z: 0}
@@ -381,7 +381,7 @@ MonoBehaviour:
     matchableDeviceIds:
     - oculus_quest_pro_controller_right
     HasRayCastSupport: 1
-    CanDisplayPhysicalTracker: 0
+    CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: 0, y: 0, z: 0}
