@@ -38,7 +38,7 @@ namespace Basis.Scripts.UI.NamePlate
         private static Vector3 cachedDirection;
         private static Quaternion cachedRotation;
         public bool HasRendererCheckWiredUp = false;
-
+        public bool IsVisible = true;
         public void Initalize(BasisBoneControl hipTarget, BasisRemotePlayer basisRemotePlayer)
         {
             BasisRemotePlayer = basisRemotePlayer;
@@ -70,18 +70,34 @@ namespace Basis.Scripts.UI.NamePlate
         }
         private void UpdateFaceVisibility(bool State)
         {
+            IsVisible = State;
             gameObject.SetActive(State);
+            if (IsVisible == false)
+            {
+                if (returnToNormalCoroutine != null)
+                {
+                    StopCoroutine(returnToNormalCoroutine);
+                }
+                if (colorTransitionCoroutine != null)
+                {
+                    StopCoroutine(colorTransitionCoroutine);
+                }
+            }
         }
+                    
         public void OnAudioReceived(bool hasRealAudio)
         {
-            Color targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
-
-            if (colorTransitionCoroutine != null)
+            if (IsVisible)
             {
-                StopCoroutine(colorTransitionCoroutine);
-            }
+                Color targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
 
-            colorTransitionCoroutine = StartCoroutine(TransitionColor(targetColor));
+                if (colorTransitionCoroutine != null)
+                {
+                    StopCoroutine(colorTransitionCoroutine);
+                }
+
+                colorTransitionCoroutine = StartCoroutine(TransitionColor(targetColor));
+            }
         }
 
         private IEnumerator TransitionColor(Color targetColor)
