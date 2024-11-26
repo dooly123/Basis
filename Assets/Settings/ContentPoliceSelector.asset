@@ -119,3 +119,15 @@ MonoBehaviour:
   - Assets.Scenes.Garden_doolys_scene_name_that_cant_be_replicated_by_u_wahhaha.Scripts.Runtime.DynamicLightController
   - Assets.Scenes.Garden_doolys_scene_name_that_cant_be_replicated_by_u_wahhaha.Scripts.Runtime.LightFlicker
   - Assets.Scenes.Garden_doolys_scene_name_that_cant_be_replicated_by_u_wahhaha.Scripts.Runtime.WashiLightController
+  - AudioLink.AudioLink
+  - AudioLink.AudioLinkController
+  - AudioLink.AudioLinkControllerV0
+  - AudioLink.AudioLinkZone
+  - AudioLink.AudioReactiveBlendshapes
+  - AudioLink.AudioReactiveLight
+  - AudioLink.AudioReactiveObject
+  - AudioLink.AudioReactiveSurface
+  - AudioLink.AudioReactiveSurfaceArray
+  - AudioLink.ThemeColorController
+  - AudioLink.ThemeColorControllerV0
+  - AudioLink.ytdlpPlayer

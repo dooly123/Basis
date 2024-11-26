@@ -131,12 +131,19 @@ namespace Basis.Scripts.Device_Management
         }
         public async Task Initialize()
         {
-            CommandLineArgs.Initialize(BakedInCommandLineArgs);
+            CommandLineArgs.Initialize(BakedInCommandLineArgs,out string ForcedDevicemanager);
             LoadAndOrSaveDefaultDeviceConfigs();
             InstantiationParameters parameters = new InstantiationParameters();
             await BasisPlayerFactory.CreateLocalPlayer(parameters);
 
-            SwitchMode(DefaultMode());
+            if (string.IsNullOrEmpty(ForcedDevicemanager))
+            {
+                SwitchMode(DefaultMode());
+            }
+            else
+            {
+                SwitchMode(ForcedDevicemanager);
+            }
             if (HasEvents == false)
             {
                 BasisXRManagement.CheckForPass += CheckForPass;

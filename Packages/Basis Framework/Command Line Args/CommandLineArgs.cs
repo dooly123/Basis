@@ -9,11 +9,11 @@ namespace Basis.Scripts.Command_Line_Args
     public static class CommandLineArgs
     {
         private const string DisableFlag = "--disable-";
-
+        private const string ForceFlag = "--force-";
         /// <summary>
         /// Initializes the command line argument handling for disabling specific device manager solutions.
         /// </summary>
-        public static void Initialize(string[] BakedIn)
+        public static void Initialize(string[] BakedIn,out string ForcedDeviceManager)
         {
             string[] args = Environment.GetCommandLineArgs();
             List<string> StringArgs = args.ToList();
@@ -24,6 +24,13 @@ namespace Basis.Scripts.Command_Line_Args
                 string replacement = arg.Substring(DisableFlag.Length);
                 DisableDeviceManagerSolution(replacement);
             }
+
+            foreach (string arg in StringArgs.Where(a => a.StartsWith(ForceFlag, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                ForcedDeviceManager = arg.Substring(ForceFlag.Length);
+                return;
+            }
+            ForcedDeviceManager = string.Empty;
         }
 
         /// <summary>
