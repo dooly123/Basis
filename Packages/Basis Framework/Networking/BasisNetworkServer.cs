@@ -1,13 +1,6 @@
 using UnityEngine;
-using System.Collections;
-using System;
-using System.Xml.Linq;
-using System.Collections.Specialized;
 using System.Threading;
 using DarkRift.Server;
-using DarkRift.Server.Unity;
-using DarkRift.Server.Configuration;
-
 namespace Basis.Scripts.Networking
 {
     [AddComponentMenu("DarkRift/Server")]
@@ -54,7 +47,6 @@ namespace Basis.Scripts.Networking
 
             // Add types
              spawnData.PluginSearch.PluginTypes.AddRange(UnityServerHelper.SearchForPlugins());
-             spawnData.PluginSearch.PluginTypes.Add(typeof(UnityConsoleWriter));
             // Create server
             Server = new DarkRiftServer(spawnData);
             Server.StartServer();

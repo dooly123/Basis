@@ -391,8 +391,8 @@ MonoBehaviour:
       SupportedRenderPipelines: 0
       DefaultPlatform: 0
       ExcludePlatform: 0
-      ValueToggle: 1
-      EditorVisable: 1
+      ValueToggle: 0
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -487,7 +487,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
