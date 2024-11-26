@@ -47,7 +47,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
 
         private void CreateTrackerDevice(uint deviceIndex, ETrackedDeviceClass deviceClass, string uniqueID, string notUniqueID)
         {
-            var openVRDevice = new OpenVRDevice
+            OpenVRDevice openVRDevice = new OpenVRDevice
             {
                 deviceClass = deviceClass,
                 deviceIndex = deviceIndex,
@@ -63,7 +63,19 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                     CreateController(openVRDevice, uniqueID, notUniqueID);
                     break;
                 case ETrackedDeviceClass.TrackingReference:
-                    Debug.Log("Was Tracked Reference Returning (lighthouse)");
+                    Debug.Log("Was TrackingReference Device");
+                    break;
+                case ETrackedDeviceClass.Invalid:
+                    Debug.Log("Was Invalid Device");
+                    break;
+                case ETrackedDeviceClass.GenericTracker:
+                    Debug.Log("Was GenericTracker Device");
+                    break;
+                case ETrackedDeviceClass.DisplayRedirect:
+                    Debug.Log("Was DisplayRedirect Device");
+                    break;
+                case ETrackedDeviceClass.Max:
+                    Debug.Log("Was Max Device");
                     break;
                 default:
                     CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
@@ -164,18 +176,20 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                 {
                     role = BasisBoneTrackedRole.LeftHand;
                     source = SteamVR_Input_Sources.LeftHand;
+                    Debug.LogError("Unable to discover Correctly using Name for role lookup " + source);
                     return true;
                 }
                 else
                 {
                     if (NameInCaseFallback.ToLower().Contains("right"))
                     {
-                        role = BasisBoneTrackedRole.LeftHand;
-                        source = SteamVR_Input_Sources.LeftHand;
+                        role = BasisBoneTrackedRole.RightHand;
+                        source = SteamVR_Input_Sources.RightHand;
+                        Debug.LogError("Unable to discover Correctly using Name for role lookup " + source);
                         return true;
                     }
                 }
-                Debug.LogError("Device unknown");
+                Debug.LogError("Device unknown " + NameInCaseFallback);
             }
 
             return false;
