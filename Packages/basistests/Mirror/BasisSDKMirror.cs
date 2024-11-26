@@ -195,9 +195,9 @@ public class BasisSDKMirror : MonoBehaviour
     {
         Vector3 eyeOffset = eye == MonoOrStereoscopicEye.Mono ? srcCamera.transform.position : srcCamera.GetStereoViewMatrix((StereoscopicEye)eye).inverse.MultiplyPoint(Vector3.zero);
 
-        destCamera.transform.localPosition = Vector3.Reflect(transform.InverseTransformPoint(eyeOffset), Vector3.forward);
-        destCamera.transform.localRotation = Quaternion.LookRotation(Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.forward), Vector3.forward), Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.up), Vector3.forward));
-
+        Vector3 Position = Vector3.Reflect(transform.InverseTransformPoint(eyeOffset), Vector3.forward);
+        Quaternion Rotation = Quaternion.LookRotation(Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.forward), Vector3.forward), Vector3.Reflect(transform.InverseTransformDirection(srcCamera.transform.rotation * Vector3.up), Vector3.forward));
+        destCamera.transform.SetLocalPositionAndRotation(Position, Rotation);
         // Calculate the clip plane for the reflection camera
         Vector4 clipPlane = BasisHelpers.CameraSpacePlane(destCamera.worldToCameraMatrix, ThisPosition, normal, m_ClipPlaneOffset);
         clipPlane.x *= -1; // Applied to projection matrix with flipped x
@@ -206,19 +206,8 @@ public class BasisSDKMirror : MonoBehaviour
         Matrix4x4 projectionMatrix = eye == MonoOrStereoscopicEye.Mono ? srcCamera.projectionMatrix : srcCamera.GetStereoProjectionMatrix((StereoscopicEye)eye);
         BasisHelpers.CalculateObliqueMatrix(ref projectionMatrix, clipPlane);
         // Chirality hack: Flip X on the projection matrix, since the shader inverts the uv.x
-        projectionMatrix = Matrix4x4.Scale(new Vector3(-1,1,1)) * projectionMatrix * Matrix4x4.Scale(new Vector3(-1,1,1));
+        projectionMatrix = Matrix4x4.Scale(new Vector3(-1, 1, 1)) * projectionMatrix * Matrix4x4.Scale(new Vector3(-1, 1, 1));
         destCamera.projectionMatrix = projectionMatrix;
-    }
-    private Vector3 GetEyePosition(MonoOrStereoscopicEye eye)
-    {
-        if (eye == MonoOrStereoscopicEye.Left)
-        {
-            return BasisLocalCameraDriver.LeftEyePosition();
-        }
-        else
-        {
-            return BasisLocalCameraDriver.RightEyePosition();
-        }
     }
     private void CreatePortalCamera(Camera camera, StereoscopicEye eye, ref Camera portalCamera, ref RenderTexture PortalTexture)
     {
@@ -230,7 +219,8 @@ public class BasisSDKMirror : MonoBehaviour
             antiAliasing = Antialising
         };
         string Property = "_ReflectionTex" + eye.ToString();
-        MirrorsMaterial.SetTexture(Property, PortalTexture);
+        Renderer.material = MirrorsMaterial;
+        Renderer.sharedMaterial.SetTexture(Property, PortalTexture);
         CreateNewCamera(camera, out portalCamera);
         portalCamera.targetTexture = PortalTexture;
     }
