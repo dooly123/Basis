@@ -92,7 +92,6 @@ This would not be possible without the following:
 - [lilToon](https://github.com/lilxyzw/lilToon)
 - [RNNoise](https://github.com/xiph/rnnoise?tab=BSD-3-Clause-1-ov-file)
 - [RNNoise.Net](https://github.com/Yellow-Dog-Man/RNNoise.Net)
-- [popcorn gizmos](https://github.com/popcron/gizmos)
 - [unity](https://unity.com/)
 - [ionic icons](https://github.com/ionic-team/ionicons?ref=svgrepo.com)
 
