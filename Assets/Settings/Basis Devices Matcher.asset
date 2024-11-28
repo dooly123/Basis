@@ -255,7 +255,7 @@ MonoBehaviour:
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
     AvatarPositionOffset: {x: 0.04, y: -0.05, z: 0.05}
     AvatarRotationOffset: {x: 340, y: 10, z: 270}
-    HasTrackedRole: 0
+    HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_quest2_controller_left
     VersionNumber: 2
@@ -528,7 +528,7 @@ MonoBehaviour:
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
     AvatarPositionOffset: {x: 0.04, y: -0.05, z: 0.05}
     AvatarRotationOffset: {x: 340, y: 10, z: 270}
-    HasTrackedRole: 0
+    HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_quest2_controller_left
     VersionNumber: 2

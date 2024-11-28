@@ -209,7 +209,10 @@ namespace Basis.Scripts.Drivers
         }
         public void Update()
         {
-            uLipSync.DoUpdate();
+            if (WasSuccessful)
+            {
+                uLipSync.DoUpdate();
+            }
         }
     }
 }
