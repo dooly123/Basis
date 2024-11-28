@@ -237,9 +237,9 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0.03, y: 0, z: 0.15}
+    PositionRayCastOffset: {x: 0.02, y: -0.025, z: -0.01}
+    RotationRaycastOffset: {x: 25, y: 15, z: 0}
+    AvatarPositionOffset: {x: -0.03, y: 0, z: 0.15}
     AvatarRotationOffset: {x: -60, y: 10, z: -60}
     HasTrackedRole: 1
     TrackedRole: 19
@@ -251,8 +251,8 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
+    PositionRayCastOffset: {x: 0.02, y: -0.025, z: -0.01}
+    RotationRaycastOffset: {x: 25, y: 15, z: 0}
     AvatarPositionOffset: {x: 0.03, y: 0, z: 0.15}
     AvatarRotationOffset: {x: -60, y: 0, z: 60}
     HasTrackedRole: 1
@@ -510,9 +510,9 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0, y: 0, z: 0.1}
+    PositionRayCastOffset: {x: 0.02, y: -0.025, z: -0.01}
+    RotationRaycastOffset: {x: 25, y: 15, z: 0}
+    AvatarPositionOffset: {x: -0.03, y: 0, z: 0.15}
     AvatarRotationOffset: {x: -60, y: 10, z: -60}
     HasTrackedRole: 1
     TrackedRole: 19
@@ -524,9 +524,9 @@ MonoBehaviour:
     CanDisplayPhysicalTracker: 1
     HasRayCastVisual: 1
     HasRayCastRedical: 1
-    PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
-    RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0, y: 0, z: 0.1}
+    PositionRayCastOffset: {x: 0.02, y: -0.025, z: -0.01}
+    RotationRaycastOffset: {x: 25, y: 15, z: 0}
+    AvatarPositionOffset: {x: 0.03, y: 0, z: 0.15}
     AvatarRotationOffset: {x: -60, y: 0, z: 60}
     HasTrackedRole: 1
     TrackedRole: 18
