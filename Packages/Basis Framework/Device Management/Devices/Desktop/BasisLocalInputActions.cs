@@ -279,11 +279,24 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         public void RunStarted()
         {
-            basisLocalPlayer.Move.SpeedMultiplyer = 1;
+            if (Crouching)
+            {
+            }
+            else
+            {
+                basisLocalPlayer.Move.SpeedMultiplyer = 1;
+            }
         }
         public void RunCancelled()
         {
-            basisLocalPlayer.Move.SpeedMultiplyer = 0.75f;
+            if (Crouching)
+            {
+                basisLocalPlayer.Move.SpeedMultiplyer = 0;
+            }
+            else
+            {
+                basisLocalPlayer.Move.SpeedMultiplyer = 0.5f;
+            }
         }
     }
 }
