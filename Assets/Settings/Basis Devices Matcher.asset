@@ -239,8 +239,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0.04, y: -0.05, z: 0.05}
-    AvatarRotationOffset: {x: 340, y: 10, z: 270}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0.1}
+    AvatarRotationOffset: {x: -60, y: 10, z: -60}
     HasTrackedRole: 1
     TrackedRole: 19
   - DeviceID: oculus_quest_pro_controller_left
@@ -253,8 +253,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0.04, y: -0.05, z: 0.05}
-    AvatarRotationOffset: {x: 340, y: 10, z: 270}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0.1}
+    AvatarRotationOffset: {x: -60, y: 0, z: 60}
     HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_quest2_controller_left
@@ -512,8 +512,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0.04, y: -0.05, z: 0.05}
-    AvatarRotationOffset: {x: 340, y: 10, z: 270}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0.1}
+    AvatarRotationOffset: {x: -60, y: 10, z: -60}
     HasTrackedRole: 1
     TrackedRole: 19
   - DeviceID: oculus_quest_pro_controller_left
@@ -526,8 +526,8 @@ MonoBehaviour:
     HasRayCastRedical: 1
     PositionRayCastOffset: {x: -0.04, y: -0.02, z: -0.03}
     RotationRaycastOffset: {x: 72.5, y: -42.3, z: 0}
-    AvatarPositionOffset: {x: 0.04, y: -0.05, z: 0.05}
-    AvatarRotationOffset: {x: 340, y: 10, z: 270}
+    AvatarPositionOffset: {x: 0, y: 0, z: 0.1}
+    AvatarRotationOffset: {x: -60, y: 0, z: 60}
     HasTrackedRole: 1
     TrackedRole: 18
   - DeviceID: oculus_quest2_controller_left
