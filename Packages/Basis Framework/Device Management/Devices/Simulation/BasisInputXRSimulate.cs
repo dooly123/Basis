@@ -38,13 +38,9 @@ namespace Basis.Scripts.Device_Management.Devices.Simulation
             {
                 if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                 {
-                    // Apply position offset using math operations for Unity.Mathematics
-                    float3 AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset; // Assuming it's float3
+                    // Apply the position offset using math.mul for quaternion-vector multiplication
                     Control.IncomingData.position = FinalPosition - math.mul(FinalRotation, AvatarPositionOffset);
-
-                    // Apply rotation offset using math.Euler to convert to quaternion, then multiply
-                    quaternion AvatarRotationOffset = quaternion.Euler(math.radians(BasisDeviceMatchableNames.AvatarRotationOffset)); // Convert degrees to radians
-                    Control.IncomingData.rotation = math.mul(FinalRotation, AvatarRotationOffset);
+                    Control.IncomingData.rotation = math.mul(FinalRotation, Quaternion.Euler(AvatarRotationOffset));
                 }
             }
             UpdatePlayerControl();
