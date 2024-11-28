@@ -78,156 +78,11 @@ MonoBehaviour:
   BasisAvatarStrainJiggleDriver: {fileID: 0}
   Move: {fileID: 8783102315984964394}
   PlayerEyeHeight: 1.64
+  AvatarEyeHeight: 1.64
   RatioPlayerToAvatarScale: 1
   EyeRatioPlayerToDefaultScale: 1
   EyeRatioAvatarToAvatarDefaultScale: 1
   LocalBoneDriver: {fileID: 1116109802514353462}
-  Hips:
-    Cullable: 0
-    Name: 
-    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
-    HasBone: 0
-    BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
-    HasEvents: 0
-    hasTrackerDriver: 1
-    OnHasRigChanged:
-      m_PersistentCalls:
-        m_Calls: []
-    WeightsChanged:
-      m_PersistentCalls:
-        m_Calls: []
-    hasRigLayer: 1
-    positionWeight: 1
-    rotationWeight: 1
-    GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    OutGoingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    IncomingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    OutgoingWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-  CenterEye:
-    Cullable: 0
-    Name: 
-    gizmoColor: {r: 0, g: 0, b: 1, a: 1}
-    HasBone: 0
-    BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
-    HasEvents: 0
-    hasTrackerDriver: 1
-    OnHasRigChanged:
-      m_PersistentCalls:
-        m_Calls: []
-    WeightsChanged:
-      m_PersistentCalls:
-        m_Calls: []
-    hasRigLayer: 1
-    positionWeight: 1
-    rotationWeight: 1
-    GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    OutGoingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    IncomingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    OutgoingWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
   AvatarDriver: {fileID: 5000096567804979388}
   VisemeDriver: {fileID: 0}
   GroundMask:
@@ -236,10 +91,6 @@ MonoBehaviour:
   HasEvents: 0
   MicrophoneRecorder: {fileID: 0}
   SpawnPlayerOnSceneLoad: 1
-  PositionLerp: 0.7
-  RotationLerp: 0.7
-  LastPosition: {x: 0, y: 0, z: 0}
-  LastRotation: {x: 0, y: 0, z: 0, w: 0}
   HasCalibrationEvents: 0
 --- !u!114 &1116109802514353462
 MonoBehaviour:
@@ -259,6 +110,9 @@ MonoBehaviour:
   HasControls: 0
   ProvidedTime: 0
   DeltaTime: 0
+  QatCalibrationHeading: {x: 0, y: 0, z: 0, w: 0}
+  CalibrationHeading: {x: 0, y: 0, z: 0}
+  CalibrationHeadingY: 0
 --- !u!114 &5000096567804979388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,10 +125,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5838aa3334f5e5a40b4f9837a0d7cd65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeAnimatorController: {fileID: 9100000, guid: 44e34e57747369b4791afeff1fe21695, type: 2}
+  SavedruntimeAnimatorController: {fileID: 0}
   SkinnedMeshRenderer: []
   Player: {fileID: 4587526044252889482}
-  InTPose: 0
+  CurrentlyTposing: 0
   HasEvents: 0
   HeadScale: {x: 0, y: 0, z: 0}
   HeadScaledDown: {x: 0, y: 0, z: 0}
@@ -286,19 +140,16 @@ MonoBehaviour:
   RightFootTwoBoneIK: {fileID: 0}
   LeftHandTwoBoneIK: {fileID: 0}
   RightHandTwoBoneIK: {fileID: 0}
-  UpperChestTwoBoneIK: {fileID: 0}
-  LeftShoulderTwoBoneIK: {fileID: 0}
-  RightShoulderTwoBoneIK: {fileID: 0}
   LeftFingers: []
   RightFingers: []
   LeftToeRig: {fileID: 0}
   RightToeRig: {fileID: 0}
+  RigChestRig: {fileID: 0}
   RigHeadRig: {fileID: 0}
   LeftHandRig: {fileID: 0}
   RightHandRig: {fileID: 0}
   LeftFootRig: {fileID: 0}
   RightFootRig: {fileID: 0}
-  ChestSpineRig: {fileID: 0}
   LeftShoulderRig: {fileID: 0}
   RightShoulderRig: {fileID: 0}
   LeftHandLayer:
@@ -322,7 +173,7 @@ MonoBehaviour:
   RigHeadLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
-  ChestSpineLayer:
+  RigChestLayer:
     m_Rig: {fileID: 0}
     m_Active: 0
   LeftShoulderLayer:
@@ -368,23 +219,109 @@ MonoBehaviour:
   bottomPointLocalspace: {x: 0, y: 0, z: 0}
   LastbottomPoint: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
-  RunSpeed: 5
-  playerSpeed: 3
+  FastestRunSpeed: 4
+  SlowestPlayerSpeed: 0.5
   gravityValue: -9.81
   RaycastDistance: 0.2
   MinimumColliderSize: 0.01
   MovementVector: {x: 0, y: 0}
-  Running: 0
   driver: {fileID: 1116109802514353462}
   Eye:
+    TargetControl:
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      HasRotationalTarget: 0
+      HasLineDraw: 0
+      LineDrawIndex: 0
+      HasTarget: 0
+      Offset:
+        x: 0
+        y: 0
+        z: 0
+      LerpAmount: 0
+    OutGoingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    LastRunData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    TposeLocal:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    InverseOffsetFromBone:
+      Use: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    IncomingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    OutgoingWorldData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    GizmoReference: -1
+    HasGizmo: 0
+    TposeGizmoReference: -1
+    TposeHasGizmo: 0
+    HasVirtualOverride: 0
+    trackersmooth: 25
+    IsHintRoleIgnoreRotation: 0
     Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
     HasEvents: 0
     hasTrackerDriver: 1
+    NotProcessing: 0
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
@@ -395,69 +332,102 @@ MonoBehaviour:
     positionWeight: 1
     rotationWeight: 1
     GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    OutGoingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    IncomingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    OutgoingWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
   Head:
+    TargetControl:
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      HasRotationalTarget: 0
+      HasLineDraw: 0
+      LineDrawIndex: 0
+      HasTarget: 0
+      Offset:
+        x: 0
+        y: 0
+        z: 0
+      LerpAmount: 0
+    OutGoingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    LastRunData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    TposeLocal:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    InverseOffsetFromBone:
+      Use: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    IncomingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    OutgoingWorldData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    GizmoReference: -1
+    HasGizmo: 0
+    TposeGizmoReference: -1
+    TposeHasGizmo: 0
+    HasVirtualOverride: 0
+    trackersmooth: 25
+    IsHintRoleIgnoreRotation: 0
     Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
     HasEvents: 0
     hasTrackerDriver: 1
+    NotProcessing: 0
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
@@ -468,60 +438,6 @@ MonoBehaviour:
     positionWeight: 1
     rotationWeight: 1
     GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    OutGoingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    IncomingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    OutgoingWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
   HasEye: 0
   HasHead: 0
   LastWasGrounded: 1
@@ -534,6 +450,8 @@ MonoBehaviour:
   RotationSpeed: 140
   HasEvents: 0
   pushPower: 1
+  CurrentSpeed: 0
+  SpeedMultiplyer: 0.5
 --- !u!143 &5548795088377030369
 CharacterController:
   m_ObjectHideFlags: 0

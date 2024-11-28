@@ -6,7 +6,6 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI;
 using Basis.Scripts.UI.UI_Panels;
-using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -303,6 +302,10 @@ namespace Basis.Scripts.Device_Management.Devices
             switch (trackedRole)
             {
                 case BasisBoneTrackedRole.LeftHand:
+                    float largestValue = Mathf.Max(InputState.Primary2DAxis.x, InputState.Primary2DAxis.y);
+                    //0 to 1 largestValue
+
+                    BasisLocalPlayer.Instance.Move.SpeedMultiplyer = largestValue;
                     BasisLocalPlayer.Instance.Move.MovementVector = InputState.Primary2DAxis;
                     //only open ui after we have stopped pressing down on the secondary button
                     if (InputState.SecondaryButtonGetState == false && LastState.SecondaryButtonGetState)

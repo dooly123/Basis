@@ -1,6 +1,7 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.TransformBinders.BoneControl;
+using Unity.Mathematics;
 using UnityEngine;
 using static Basis.Scripts.Drivers.BaseBoneDriver;
 namespace Basis.Scripts.BasisCharacterController
@@ -11,13 +12,12 @@ namespace Basis.Scripts.BasisCharacterController
         public Vector3 bottomPointLocalspace;
         public Vector3 LastbottomPoint;
         public bool groundedPlayer;
-        [SerializeField] public float RunSpeed = 2f;
-        [SerializeField] public float playerSpeed = 1.5f;
+        [SerializeField] public float FastestRunSpeed = 4;
+        [SerializeField] public float SlowestPlayerSpeed = 0.5f;
         [SerializeField] public float gravityValue = -9.81f;
         [SerializeField] public float RaycastDistance = 0.2f;
         [SerializeField] public float MinimumColliderSize = 0.01f;
         [SerializeField] public Vector2 MovementVector;
-        [SerializeField] public bool Running;
         [SerializeField] public BasisLocalBoneDriver driver;
         [SerializeField] public BasisBoneControl Eye;
         [SerializeField] public BasisBoneControl Head;
@@ -130,6 +130,7 @@ namespace Basis.Scripts.BasisCharacterController
 
             LastWasGrounded = groundedPlayer;
         }
+        public float CurrentSpeed;
         public void HandleMovement()
         {
             if (BlockMovement)
@@ -148,8 +149,11 @@ namespace Basis.Scripts.BasisCharacterController
 
             // Calculate horizontal movement direction
             Vector3 horizontalMoveDirection = new Vector3(MovementVector.x, 0, MovementVector.y).normalized;
-            float speed = Running ? RunSpeed : playerSpeed;
-            Vector3 totalMoveDirection = flattenedRotation * horizontalMoveDirection * speed * driver.DeltaTime;
+
+            CurrentSpeed = math.lerp(SlowestPlayerSpeed,FastestRunSpeed,SpeedMultiplyer);
+            CurrentSpeed = math.clamp(CurrentSpeed, 0, FastestRunSpeed);
+
+            Vector3 totalMoveDirection = flattenedRotation * horizontalMoveDirection * CurrentSpeed * driver.DeltaTime;
 
             // Handle jumping and falling
             if (groundedPlayer && HasJumpAction)
@@ -172,10 +176,7 @@ namespace Basis.Scripts.BasisCharacterController
             // Move character
             characterController.Move(totalMoveDirection);
         }
-        public void RunningToggle()
-        {
-            Running = !Running;
-        }
+        public float SpeedMultiplyer = 0.5f;
         public void CalculateCharacterSize()
         {
             eyeHeight = HasEye ? Eye.OutGoingData.position.y : 1.73f;
