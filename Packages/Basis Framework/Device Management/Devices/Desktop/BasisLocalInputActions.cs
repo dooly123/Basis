@@ -252,12 +252,10 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public void CrouchStarted(InputAction.CallbackContext context)
         {
             CrouchToggle(context);
-            basisLocalPlayer.Move.SpeedMultiplyer = 0;
         }
         public void CrouchCancelled(InputAction.CallbackContext context)
         {
             CrouchToggle(context);
-            basisLocalPlayer.Move.SpeedMultiplyer = 1f;
         }
         public void CrouchToggle(InputAction.CallbackContext context)
         {
@@ -268,6 +266,14 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
                 if (CharacterEyeInput != null)
                 {
                     CharacterEyeInput.HandleMouseRotation(LookDirection);
+                }
+                if (Crouching)
+                {
+                    basisLocalPlayer.Move.SpeedMultiplyer = 0;
+                }
+                else
+                {
+                    basisLocalPlayer.Move.SpeedMultiplyer = 0.5f;
                 }
             }
         }
