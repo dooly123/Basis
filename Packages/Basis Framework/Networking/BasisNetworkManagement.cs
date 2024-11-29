@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Networking.Recievers;
 using DarkRift;
 using DarkRift.Basis_Common.Serializable;
 using DarkRift.Client;
@@ -10,6 +11,7 @@ using DarkRift.Server.Plugins.Commands;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static BasisNetworkGenericMessages;
@@ -29,12 +31,22 @@ namespace Basis.Scripts.Networking
         /// </summary>
         public static OnNetworkMessageReceiveOwnershipTransfer OnOwnershipTransfer;
         public static Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
+        public static Dictionary<ushort, BasisNetworkReceiver> RemotePlayers = new Dictionary<ushort, BasisNetworkReceiver>();
         public static HashSet<ushort> JoiningPlayers = new HashSet<ushort>();
-        public static bool AddPlayer(BasisNetworkedPlayer Player)
+        public static BasisNetworkReceiver[] ReceiverArray;
+        public static int ReceiverCount = 0;
+        public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
         {
             if (Instance != null)
             {
-                return Players.TryAdd(Player.NetId, Player);
+                if (NetPlayer.Player != null && NetPlayer.Player.IsLocal == false)
+                {
+                    RemotePlayers.TryAdd(NetPlayer.NetId, (BasisNetworkReceiver)NetPlayer.NetworkSend);
+                    ReceiverArray = RemotePlayers.Values.ToArray();
+                    ReceiverCount = ReceiverArray.Length;
+                    Debug.Log("ReceiverCount was " + ReceiverCount);
+                }
+                return Players.TryAdd(NetPlayer.NetId, NetPlayer);
             }
             return false;
         }
@@ -42,15 +54,23 @@ namespace Basis.Scripts.Networking
         {
             if (Instance != null)
             {
+                RemotePlayers.Remove(NetID);
                 return Players.Remove(NetID);
             }
             return false;
         }
-        public static bool RemovePlayer(BasisNetworkedPlayer BasisNetworkedPlayer)
+        public static bool RemovePlayer(BasisNetworkedPlayer NetPlayer)
         {
             if (Instance != null)
             {
-                return Players.Remove(BasisNetworkedPlayer.NetId);
+                if (NetPlayer.Player != null && NetPlayer.Player.IsLocal == false)
+                {
+                    RemotePlayers.Remove(NetPlayer.NetId);
+                    ReceiverArray = RemotePlayers.Values.ToArray();
+                    ReceiverCount = ReceiverArray.Length;
+                    Debug.Log("ReceiverCount was " + ReceiverCount);
+                }
+                return Players.Remove(NetPlayer.NetId);
             }
             return false;
         }
@@ -107,9 +127,9 @@ namespace Basis.Scripts.Networking
         }
         public static bool TryGetLocalPlayerID(out ushort LocalID)
         {
-            if(Instance != null && Instance.Client != null)
+            if (Instance != null && Instance.Client != null)
             {
-                LocalID =  Instance.Client.ID;
+                LocalID = Instance.Client.ID;
                 return true;
             }
             LocalID = 0;
@@ -264,7 +284,7 @@ namespace Basis.Scripts.Networking
                 }
             }
         }
-        public static void RequestOwnership(string UniqueNetworkId,ushort NewOwner)
+        public static void RequestOwnership(string UniqueNetworkId, ushort NewOwner)
         {
             OwnershipTransferMessage OwnershipTransferMessage = new OwnershipTransferMessage
             {
@@ -279,7 +299,7 @@ namespace Basis.Scripts.Networking
                 writer.Write(OwnershipTransferMessage);
                 using (Message serverOwnershipInitialize = Message.Create(BasisTags.OwnershipTransfer, writer))
                 {
-                  BasisNetworkManagement.Instance.Client.SendMessage(serverOwnershipInitialize, DarkRift.Server.Plugins.Commands.BasisNetworking.EventsChannel, DeliveryMethod.ReliableSequenced);
+                    BasisNetworkManagement.Instance.Client.SendMessage(serverOwnershipInitialize, DarkRift.Server.Plugins.Commands.BasisNetworking.EventsChannel, DeliveryMethod.ReliableSequenced);
                 }
             }
         }
@@ -318,7 +338,7 @@ namespace Basis.Scripts.Networking
                 BasisPlayer = null;
                 return false;
             }
-            if(Avatar.TryGetLinkedPlayer(out ushort id))
+            if (Avatar.TryGetLinkedPlayer(out ushort id))
             {
                 BasisNetworkedPlayer output = Players[id];
                 NetworkedPlayer = output;
