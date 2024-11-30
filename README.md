@@ -13,7 +13,7 @@ The Social VR Framework</br>
      
  ## About Basis
 
-[Basis Philosophy](https://github.com/dooly123/Basis/blob/main/Philosophy%20of%20Basis.md) <- read our Philosophy here!
+[Basis Philosophy](https://github.com/dooly123/Basis/blob/main/PHILOSOPHY.md) <- read our Philosophy here!
 
 We are a MIT-Licensed Open-Source project with a focus on open development and full access to any optional modification desired or required.
 
