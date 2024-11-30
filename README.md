@@ -13,8 +13,7 @@ The Social VR Framework</br>
      
  ## About Basis
 
-As a framework, Basis provides you with all the necessary tools to create your own Social VR Platform to use as a Ready-To-Use Foundation to be built upon.
-This allows you to focus on your vision, without needing to do any heavy lifting to get going. Basis is designed with great care to remove any barrier that previously made VR projects notoriously hard to set up.
+[Basis Philosophy](https://github.com/dooly123/Basis/blob/main/Philosophy%20of%20Basis.md) <- read our Philosophy here!
 
 We are a MIT-Licensed Open-Source project with a focus on open development and full access to any optional modification desired or required.
 
