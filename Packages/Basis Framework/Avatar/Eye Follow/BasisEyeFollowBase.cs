@@ -148,6 +148,21 @@ namespace Basis.Scripts.Eye_Follow
         {
             Simulate();
         }
+        public void OnDisable()
+        {
+            if (HasLeftEye && leftEyeTransform != null)
+            {
+                leftEyeTransform.rotation = LeftEyeInitallocalSpace.rotation;
+            }
+
+            if (HasRightEye && rightEyeTransform != null)
+            {
+                rightEyeTransform.rotation = RightEyeInitallocalSpace.rotation;
+            }
+            CenterTargetWorld = RandomizedPosition;
+            wasDisabled = true;
+        }
+        bool wasDisabled = false;
         public void Simulate()
         {
             if (Override == false && HasHead)
@@ -174,9 +189,10 @@ namespace Basis.Scripts.Eye_Follow
                 float3 targetPosition = float3headPosition + math.mul(QheadRotation, EyeFowards) + AppliedOffset;
 
                 // Check distance for teleporting, otherwise smooth move
-                if (math.distance(targetPosition, CenterTargetWorld) > DistanceBeforeTeleport)
+                if (math.distance(targetPosition, CenterTargetWorld) > DistanceBeforeTeleport || wasDisabled)
                 {
                     CenterTargetWorld = targetPosition;
+                    wasDisabled = false;
                 }
                 else
                 {
