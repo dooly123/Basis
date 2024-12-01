@@ -2,35 +2,67 @@
 
 ## What is Basis?
 
-The simple answer is short. Basis is anything you want it to be, minus the hard foundational work that limits your creativity or agency.
+Basis is an open source MIT licensed framework for building immersive VR games.
+It lowers the barrier of entry for game developers and is the *basis* upon which
+those games can build.
 
-Want to make a game? Focus on the art and gameplay.
-
-Want to hold an event? Build the venue.
-
-Feel overwhelmed by the technical demands of VR but have an idea you want to make real? Use Basis to help you do that. Use it as a starting point to build what you want.
-
-### Technically...?
-
-Basis is a **set of libraries** designed to help you bootstrap your VR projects. Basis is also a **reference implementation** that demonstrates how these components can work together.
+To be specific, Basis is a **set of libraries** designed to help you bootstrap your VR
+projects. Basis is also a **reference implementation** that demonstrates how
+these components can work together.
 
 It is built on top of Unity and C#, and the reference implementation in particular makes use of the Universal Rendering Pipeline (URP) for rendering, and targets IL2CPP.
 
-## Who is Basis for?
+## Who is this for?
 
-The simple answer: creators who want to bypass a lot of the core work needed to bring up a VR game at all.
+This is for game developers and creators. Most but not all people interested in
+basis fit into one of these categories:
 
-In principle, there are three major building blocks necessary for a good VR experience (and a fourth, which will be introduced later)
+- You want to build a singleplayer VR game with high quality full-body tracking
+  and avatars
+- You want to build a multiplayer social VR platform
+- You want to host events in VR and bypass limitations of other platforms
+- You want to contribute to FOSS (Free and Open Source Software)
+- You want to tinker, experiment, and create
+
+In short, Basis is whatever you want it to be, minus the hard foundational work
+that limits your creativity or agency. Use basis as a starting point to build
+what you want.
+
+A rising tide lifts all ships. By providing a foundation to support VR
+projects, creators can focus on their strengths while minimizing the impact of
+their weaknesses.
+
+
+## What are the project goals?
+
+Basis seeks to build best-in-class implementations for the following features:
 
 - **Presence**: The feeling, based on your passive senses, that you exist in a space.  
 - **Spatialization**: The feeling that phenomena (especially your actions) exist in, and have an active effect on, objects in physical space.  
 - **Embodiment**: The association between a representation of a body and the real body itself, created by continuous feedback between action and reaction within a physical body.  
+- Social Features: *apis and frameworks* for multiplayer features, such as authentication to instances, instance moderation, asset retrieval, etc.
 
 Basis aims to offer these building blocks to creators.
 
-## The controversial part
+## Non-goals
 
-A rising tide lifts all ships. By providing a foundation to support VR projects, creators can focus on their strengths while minimizing the impact of their weaknesses. But not all features are created equal. There are some features which empower creators but which it is best to plan to avoid including as a part of the core project.
+There are some features which arguable are useful but which it is best to plan
+to avoid including as a part of the core project. This is intentionally done to
+limit project scope and avoid tying it to closely to any one approach or
+platform.
+
+In particular, the reference implementation does not plan to include the following:
+* Content Delivery Networks - instead of us building backend services for a
+  CDN, you are responsible for hosting your own content on your own CDN. We will
+  provide batteries included integrations for popular CDNs, but building a CDN
+  ourselves or moderating content on it is out of scope.
+* Paid features - the reference implementation is not a profit vehicle and we
+  have no plans to monetize it with paid features. All code in the reference
+  implementation will be free and open source, and distributed for free. We *may*
+  provide paid hosting services for non-technical users to spin up their own
+  servers, but all of this will be FOSS MIT licensed software.
+* Non-realtime social features - we do not plan to build any services other than what
+  is strictly necessary for authentication, moderating an instance, and 
 
 ### Anti-plans
 
