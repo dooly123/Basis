@@ -302,7 +302,9 @@ namespace Basis.Scripts.Device_Management.Devices
             switch (trackedRole)
             {
                 case BasisBoneTrackedRole.LeftHand:
-                    float largestValue = Mathf.Max(InputState.Primary2DAxis.x, InputState.Primary2DAxis.y);
+                    float largestValue = Mathf.Abs(InputState.Primary2DAxis.x) > Mathf.Abs(InputState.Primary2DAxis.y)
+                        ? InputState.Primary2DAxis.x
+                        : InputState.Primary2DAxis.y;
                     //0 to 1 largestValue
 
                     BasisLocalPlayer.Instance.Move.SpeedMultiplyer = largestValue;

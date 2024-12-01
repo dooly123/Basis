@@ -337,6 +337,17 @@
                 },
                 {
                     "name": "",
+                    "id": "d34a71e0-52fd-4596-a13a-a8a74181738f",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";All",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c999b1a6-ae34-43ea-9b4b-0427589ad521",
                     "path": "<Keyboard>/c",
                     "interactions": "",
@@ -405,6 +416,17 @@
                     "name": "",
                     "id": "c6d472f4-6146-4505-ac0c-91f75370d0a4",
                     "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";All",
+                    "action": "Primary Controller A",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ca1996e-3efc-438b-ad79-a6061e3de07b",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": ";All",

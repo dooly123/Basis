@@ -150,6 +150,7 @@ namespace Basis.Scripts.BasisCharacterController
             // Calculate horizontal movement direction
             Vector3 horizontalMoveDirection = new Vector3(MovementVector.x, 0, MovementVector.y).normalized;
 
+            SpeedMultiplyer = math.abs(SpeedMultiplyer);
             CurrentSpeed = math.lerp(SlowestPlayerSpeed,FastestRunSpeed,SpeedMultiplyer);
             CurrentSpeed = math.clamp(CurrentSpeed, 0, FastestRunSpeed);
 
