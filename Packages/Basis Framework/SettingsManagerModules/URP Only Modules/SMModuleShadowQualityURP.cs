@@ -22,18 +22,18 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
         Asset.cascade2Split = 0.12f;                // 12% for 2-cascade setting
         Asset.cascade3Split = new Vector2(0.12f, 0.5f);  // 12% and 50% for 3-cascade setting
         Asset.cascade4Split = new Vector3(0.12f, 0.3f, 0.6f); // 12%, 30%, and 60% for 4-cascade setting
-        Asset.shadowDistance = 150;                // Max distance for shadows
         switch (Quality)
         {
             case "very low":
-                Asset.mainLightShadowmapResolution = 256;
-                Asset.additionalLightsShadowmapResolution = 256;
-                Asset.maxAdditionalLightsCount = 2;
+                Asset.mainLightShadowmapResolution = 32;
+                Asset.additionalLightsShadowmapResolution = 32;
+                Asset.maxAdditionalLightsCount = 0;
+                Asset.shadowDistance = 0;
                 break;
             case "low":
                 Asset.mainLightShadowmapResolution = 512;
                 Asset.additionalLightsShadowmapResolution = 512;
-                Asset.maxAdditionalLightsCount = 4;
+                Asset.maxAdditionalLightsCount = 2;
                 break;
             case "medium":
                 Asset.mainLightShadowmapResolution = 2048;
@@ -51,6 +51,7 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
                 Asset.maxAdditionalLightsCount = 16;
                 break;
         }
+        Asset.shadowDistance = 150;
     }
     private System.Type universalRenderPipelineAssetType;
     private FieldInfo mainLightShadowmapResolutionFieldInfo;
@@ -98,7 +99,7 @@ public class SMModuleShadowQualityURP : SettingsManagerOption
         }
         set
         {
-            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline; 
+            UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (additionalLightsRenderingMode == null)
             {
                 InitializeShadowMapFieldInfo();
