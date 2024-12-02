@@ -89,6 +89,7 @@ namespace Basis.Scripts.Drivers
             {
                 _lastTalkingState = _isTalking;
                 MicrophoneUnMutedIcon.color = _isTalking ? UnMutedMutedIconColorActive : UnMutedMutedIconColorInactive;
+                MicrophoneUnMutedIcon.transform.localScale = _isTalking ? largerScale : StartingScale;
             }
         }
 
