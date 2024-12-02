@@ -30,7 +30,7 @@ Basis aims to offer these building blocks to creators.
 
 ## The controversial part
 
-A rising tide lifts all ships. By providing a foundation to support VR projects, creators can focus on their strengths while minimizing the impact of their weaknesses. But not all features are created equal. There are some features which empower creators but which it is best to plan to avoid including as a part of the core project.
+A rising tide lifts all boats. By providing a foundation to support VR projects, creators can focus on their strengths while minimizing the impact of their weaknesses. But not all features are created equal. There are some features which empower creators but which it is best to plan to avoid including as a part of the core project.
 
 ### Anti-plans
 
@@ -62,7 +62,7 @@ Building and maintaining a successful platform is an immense undertaking, requir
 > [!NOTE]
 > Nothing stops others from doing so themselves, of course, but it is a far greater challenge than most expect.
 
-tl;dr: Basis is not a shortcut to competing with established social platforms. Yes, in a “social VR dark age” (e.g., if major platforms disappeared), Basis could theoretically be used as a tool to restore the bare bones of social VR, but fundamentally, Basis is about flexibility and agency. It provides the tools and leaves the rest to you. You are free to take full control of your project - and with that freedom comes the responsibility to manage and maintain it.
+tl;dr: Basis is not a shortcut to competing with established social platforms. Yes, in a "social VR dark age" (e.g., if major platforms disappeared), Basis could theoretically be used as a tool to restore the bare bones of social VR, but fundamentally, Basis is about flexibility and agency. It provides the tools and leaves the rest to you. You are free to take full control of your project - and with that freedom comes the responsibility to manage and maintain it.
 
 ### Social features, pt. 2
 
