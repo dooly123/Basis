@@ -1,5 +1,8 @@
 # Philosophy of Basis
 
+> [!CAUTION]
+> This is document is under heavy discussion and iteration, and should not (yet) be taken as the official position of the project. It was merged before a full discussion had taken place because dooly likes shiny merge buttons and couldn't resist pressing it. Stay tuned for updates.
+
 ## What is Basis?
 
 The simple answer is short. Basis is anything you want it to be, minus the hard foundational work that limits your creativity or agency.
