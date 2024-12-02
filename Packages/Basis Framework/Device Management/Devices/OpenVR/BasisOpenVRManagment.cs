@@ -64,18 +64,21 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                     break;
                 case ETrackedDeviceClass.TrackingReference:
                     Debug.Log("Was TrackingReference Device");
+                    //  CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
                     break;
                 case ETrackedDeviceClass.Invalid:
                     Debug.Log("Was Invalid Device");
                     break;
                 case ETrackedDeviceClass.GenericTracker:
                     Debug.Log("Was GenericTracker Device");
+                    CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
                     break;
                 case ETrackedDeviceClass.DisplayRedirect:
                     Debug.Log("Was DisplayRedirect Device");
                     break;
                 case ETrackedDeviceClass.Max:
                     Debug.Log("Was Max Device");
+                    CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
                     break;
                 default:
                     CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
