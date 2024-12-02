@@ -49,7 +49,7 @@ namespace Basis.Scripts.Drivers
         public Color UnMutedMutedIconColorActive = Color.white;
         public Color UnMutedMutedIconColorInactive = Color.grey;
 
-        private bool _isMuted, _isTalking;
+        private bool _isMuted, _isTalking, _lastTalkingState;
         
         public void OnEnable()
         {
@@ -85,8 +85,11 @@ namespace Basis.Scripts.Drivers
         private void Update()
         {
             // Don't bother updating icon color when muted
-            if (!_isMuted)
+            if (!_isMuted && _isTalking != _lastTalkingState)
+            {
+                _lastTalkingState = _isTalking;
                 MicrophoneUnMutedIcon.color = _isTalking ? UnMutedMutedIconColorActive : UnMutedMutedIconColorInactive;
+            }
         }
 
         private void OnPausedEvent(bool IsMuted)
