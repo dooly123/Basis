@@ -45,6 +45,12 @@ namespace Basis.Scripts.Drivers
         public Vector3 largerScale;
         public static Vector3 LeftEye;
         public static Vector3 RightEye;
+        
+        public Color UnMutedMutedIconColorActive = Color.white;
+        public Color UnMutedMutedIconColorInactive = Color.grey;
+
+        private bool _isMuted, _isTalking;
+        
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -61,6 +67,8 @@ namespace Basis.Scripts.Drivers
             if (HasEvents == false)
             {
                 MicrophoneRecorder.OnPausedAction += OnPausedEvent;
+                MicrophoneRecorder.OnHasAudio += () => _isTalking = true;
+                MicrophoneRecorder.OnHasSilence += () => _isTalking = false;
                 RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
                 BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
                 BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
@@ -73,12 +81,21 @@ namespace Basis.Scripts.Drivers
             largerScale = StartingScale * 1.2f;
             UpdateMicrophoneVisuals(MicrophoneRecorder.isPaused,false);
         }
+
+        private void Update()
+        {
+            // Don't bother updating icon color when muted
+            if (!_isMuted)
+                MicrophoneUnMutedIcon.color = _isTalking ? UnMutedMutedIconColorActive : UnMutedMutedIconColorInactive;
+        }
+
         private void OnPausedEvent(bool IsMuted)
         {
             UpdateMicrophoneVisuals(IsMuted,true);
         }
         public void UpdateMicrophoneVisuals(bool IsMuted, bool PlaySound)
         {
+            _isMuted = IsMuted;
            // Debug.Log(nameof(UpdateMicrophoneVisuals));
             // Cancel the current coroutine if it's running
             if (scaleCoroutine != null)
