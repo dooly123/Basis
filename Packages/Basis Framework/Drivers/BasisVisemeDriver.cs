@@ -29,6 +29,7 @@ namespace Basis.Scripts.Drivers
             public int blendShape;
         }
         public bool WasSuccessful;
+        public int HashInstanceID = -1;
         public bool TryInitialize(BasisPlayer BasisPlayer)
         {
             WasSuccessful = false;
@@ -163,20 +164,15 @@ namespace Basis.Scripts.Drivers
             {
                 uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
             }
-            if (HasRendererCheckWiredUp == false)
+            if (Player != null && Player.FaceRenderer != null && HashInstanceID != Player.FaceRenderer.GetInstanceID())
             {
-                if (Player != null && Player.FaceRenderer != null)
-                {
-                    Debug.Log("Wired up Renderer Check For Blinking");
-                    Player.FaceRenderer.Check += UpdateFaceVisibility;
-                    UpdateFaceVisibility(Player.FaceisVisible);
-                    HasRendererCheckWiredUp = true;
-                }
+                Debug.Log("Wired up Renderer Check For Blinking");
+                Player.FaceRenderer.Check += UpdateFaceVisibility;
             }
+            UpdateFaceVisibility(Player.FaceisVisible);
             WasSuccessful = true;
             return true;
         }
-        public bool HasRendererCheckWiredUp = false;
         public bool uLipSyncEnabledState = true;
 
         public Profile Profile { get => profile; set => profile = value; }
@@ -189,7 +185,7 @@ namespace Basis.Scripts.Drivers
         {
             if (Player != null)
             {
-                if (HasRendererCheckWiredUp && Player.FaceRenderer != null)
+                if (Player.FaceRenderer != null && HashInstanceID == Player.FaceRenderer.GetInstanceID())
                 {
                     Player.FaceRenderer.Check -= UpdateFaceVisibility;
                 }
