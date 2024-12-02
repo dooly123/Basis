@@ -211,7 +211,10 @@ namespace HVR.Basis.Comms
                 {
                     foreach (var blendshapeIndex in target.BlendshapeIndices)
                     {
-                        target.Renderer.SetBlendShapeWeight(blendshapeIndex, 0);
+                        if (target.Renderer != null)
+                        {
+                            target.Renderer.SetBlendShapeWeight(blendshapeIndex, 0);
+                        }
                     }
                 }
             }

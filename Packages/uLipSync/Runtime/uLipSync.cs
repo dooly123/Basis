@@ -89,7 +89,7 @@ namespace uLipSync
             DisposeBuffers();
         }
 
-       public void DoUpdate()
+       public void LateUpdate()
         {
             if (!profile) return;
             if (!_jobHandle.IsCompleted) return;

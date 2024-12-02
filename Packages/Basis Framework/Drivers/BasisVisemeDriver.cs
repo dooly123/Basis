@@ -168,10 +168,16 @@ namespace Basis.Scripts.Drivers
             {
                 Debug.Log("Wired up Renderer Check For Blinking");
                 Player.FaceRenderer.Check += UpdateFaceVisibility;
+                Player.FaceRenderer.DestroyCalled += TryDeinitalize;
             }
             UpdateFaceVisibility(Player.FaceisVisible);
             WasSuccessful = true;
             return true;
+        }
+        public void TryDeinitalize()
+        {
+            WasSuccessful = false;
+            OnDeInitalize();
         }
         public bool uLipSyncEnabledState = true;
 
@@ -181,13 +187,14 @@ namespace Basis.Scripts.Drivers
         {
             uLipSyncEnabledState = State;
         }
-        public void OnDestroy()
+        public void OnDeInitalize()
         {
             if (Player != null)
             {
                 if (Player.FaceRenderer != null && HashInstanceID == Player.FaceRenderer.GetInstanceID())
                 {
                     Player.FaceRenderer.Check -= UpdateFaceVisibility;
+                    Player.FaceRenderer.DestroyCalled -= TryDeinitalize;
                 }
             }
         }
@@ -202,13 +209,6 @@ namespace Basis.Scripts.Drivers
                 return;
             }
             uLipSync.OnDataReceived(data, 1);
-        }
-        public void Update()
-        {
-            if (WasSuccessful)
-            {
-                uLipSync.DoUpdate();
-            }
         }
     }
 }

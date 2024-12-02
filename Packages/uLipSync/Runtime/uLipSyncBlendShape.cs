@@ -129,8 +129,9 @@ namespace uLipSync
             if (!skinnedMeshRenderer) return;
 
             // Iterate through blendShapes once and set blend shape weights
-            foreach (var bs in blendShapes)
+            for (int Index = 0; Index < blendShapes.Count; Index++)
             {
+                BlendShapeInfo bs = blendShapes[Index];
                 if (bs.index < 0) continue;
 
                 // Reset the blend shape weight to zero

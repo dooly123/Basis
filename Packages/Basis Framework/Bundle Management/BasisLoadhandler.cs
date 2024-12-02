@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class BasisLoadHandler
 {
@@ -17,12 +18,57 @@ public static class BasisLoadHandler
     private static SemaphoreSlim _initSemaphore = new SemaphoreSlim(1, 1);
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static async Task OnGameStart()
+    private static async Task OnGameStart()
     {
         Debug.Log("Game has started after scene load.");
         await EnsureInitializationComplete();
+        SceneManager.sceneUnloaded += sceneUnloaded;
     }
 
+    private static void sceneUnloaded(Scene UnloadedScene)
+    {
+        foreach (KeyValuePair<string, BasisTrackedBundleWrapper> kvp in LoadedBundles)
+        {
+            if (kvp.Value != null)
+            {
+                if (kvp.Value.MetaLink == UnloadedScene.path)
+                {
+                    kvp.Value.DeIncrement();
+                    bool State = kvp.Value.UnloadIfReady();
+                    if (State)
+                    {
+                        LoadedBundles.Remove(kvp.Key);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    public static void DestroyGameobject(GameObject Destroy, string LoadedKey, bool DestroyImmediately = false)
+    {
+        if (DestroyImmediately)
+        {
+            GameObject.DestroyImmediate(Destroy);
+        }
+        else
+        {
+            GameObject.Destroy(Destroy);
+        }
+        if (LoadedBundles.TryGetValue(LoadedKey, out BasisTrackedBundleWrapper Wrapper))
+        {
+            Wrapper.DeIncrement();
+            bool State = Wrapper.UnloadIfReady();
+            if (State)
+            {
+                LoadedBundles.Remove(LoadedKey);
+                return;
+            }
+        }
+        else
+        {
+            Debug.LogError($"tried to find Loaded Key {LoadedKey} but could not find it!");
+        }
+    }
     public static async Task<GameObject> LoadGameObjectBundle(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
         await EnsureInitializationComplete();
@@ -32,7 +78,7 @@ public static class BasisLoadHandler
             try
             {
                 await wrapper.WaitForBundleLoadAsync();
-                return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval,Position,Rotation,Parent);
+                return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval, Position, Rotation, Parent);
             }
             catch (Exception ex)
             {
@@ -42,7 +88,7 @@ public static class BasisLoadHandler
             }
         }
 
-        return await HandleFirstBundleLoad(loadableBundle, useContentRemoval, report, cancellationToken,Position,Rotation,Parent);
+        return await HandleFirstBundleLoad(loadableBundle, useContentRemoval, report, cancellationToken, Position, Rotation, Parent);
     }
 
     public static async Task LoadSceneBundle(bool makeActiveScene, BasisLoadableBundle loadableBundle, BasisProgressReport report, CancellationToken cancellationToken)
@@ -75,8 +121,8 @@ public static class BasisLoadHandler
 
     private static async Task<GameObject> HandleFirstBundleLoad(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
-        BasisTrackedBundleWrapper wrapper = new BasisTrackedBundleWrapper 
-        { 
+        BasisTrackedBundleWrapper wrapper = new BasisTrackedBundleWrapper
+        {
             AssetBundle = null,
             LoadableBundle = loadableBundle
         };
@@ -90,7 +136,7 @@ public static class BasisLoadHandler
         try
         {
             await HandleBundleAndMetaLoading(wrapper, report, cancellationToken);
-            return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval,Position,Rotation,Parent);
+            return await BasisBundleLoadAsset.LoadFromWrapper(wrapper, useContentRemoval, Position, Rotation, Parent);
         }
         catch (Exception ex)
         {
@@ -125,7 +171,7 @@ public static class BasisLoadHandler
         {
             Debug.Log("Bundle was already on disc proceeding");
         }
-        IEnumerable<AssetBundle> AssetBundles =  AssetBundle.GetAllLoadedAssetBundles();
+        IEnumerable<AssetBundle> AssetBundles = AssetBundle.GetAllLoadedAssetBundles();
         foreach (AssetBundle assetBundle in AssetBundles)
         {
             if (assetBundle != null && assetBundle.Contains(wrapper.LoadableBundle.BasisBundleInformation.BasisBundleGenerated.AssetToLoadName))

@@ -52,7 +52,7 @@ namespace Basis.Scripts.Avatar
                 return;
             }
 
-            DeleteLastAvatar(Player);
+            DeleteLastAvatar(Player, false);
             LoadLoadingAvatar(Player, LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile);
 
             try
@@ -107,7 +107,7 @@ namespace Basis.Scripts.Avatar
                 return;
             }
 
-            DeleteLastAvatar(Player);
+            DeleteLastAvatar(Player,false);
             LoadLoadingAvatar(Player, LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile);
 
             try
@@ -160,7 +160,7 @@ namespace Basis.Scripts.Avatar
         {
             if (Output.TryGetComponent(out BasisAvatar Avatar))
             {
-                DeleteLastAvatar(Player);
+                DeleteLastAvatar(Player, true);
                 Player.Avatar = Avatar;
                 Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
                 if (Player is BasisLocalPlayer localPlayer)
@@ -252,11 +252,18 @@ namespace Basis.Scripts.Avatar
             }
         }
 
-        public static void DeleteLastAvatar(BasisPlayer Player)
+        public static void DeleteLastAvatar(BasisPlayer Player,bool IsRemovingFallback)
         {
             if (Player.Avatar != null)
             {
-                GameObject.Destroy(Player.Avatar.gameObject);
+                if (IsRemovingFallback)
+                {
+                    GameObject.Destroy(Player.Avatar.gameObject);
+                }
+                else
+                {
+                    BasisLoadHandler.DestroyGameobject(Player.Avatar.gameObject, Player.AvatarMetaData.BasisRemoteBundleEncrypted.MetaURL, false);
+                }
             }
 
             if (Player.AvatarAddressableGenericResource != null)
