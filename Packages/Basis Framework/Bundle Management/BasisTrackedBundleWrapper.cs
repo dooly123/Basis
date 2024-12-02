@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using System.Timers;
 using UnityEngine;
 [System.Serializable]
 public class BasisTrackedBundleWrapper
@@ -39,12 +41,20 @@ public class BasisTrackedBundleWrapper
     /// i dont want to introduce await conditional issues
     /// </summary>
     /// <returns></returns>
-    public bool UnloadIfReady()
+    public async Task<bool> UnloadIfReady()
     {
         if (RequestedTimes <= 0 && AssetBundle != null)
         {
-            Debug.Log("Unloading Bundle " + AssetBundle.name);
-            AssetBundle.Unload(true);
+            await Task.Delay(TimeSpan.FromSeconds(BasisLoadHandler.TimeUntilMemoryRemoval));
+            if (RequestedTimes <= 0 && AssetBundle != null)
+            {
+                Debug.Log("Unloading Bundle " + AssetBundle.name);
+                AssetBundle.Unload(true);
+            }
+            else
+            {
+                return false;
+            }
             return true;
         }
         else

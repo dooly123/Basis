@@ -252,7 +252,7 @@ namespace Basis.Scripts.Avatar
             }
         }
 
-        public static void DeleteLastAvatar(BasisPlayer Player,bool IsRemovingFallback)
+        public static async void DeleteLastAvatar(BasisPlayer Player,bool IsRemovingFallback)
         {
             if (Player.Avatar != null)
             {
@@ -262,7 +262,7 @@ namespace Basis.Scripts.Avatar
                 }
                 else
                 {
-                    BasisLoadHandler.DestroyGameobject(Player.Avatar.gameObject, Player.AvatarMetaData.BasisRemoteBundleEncrypted.MetaURL, false);
+                  await  BasisLoadHandler.DestroyGameobject(Player.Avatar.gameObject, Player.AvatarMetaData.BasisRemoteBundleEncrypted.MetaURL, false);
                 }
             }
 

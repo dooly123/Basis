@@ -16,7 +16,7 @@ public static class BasisLoadHandler
 
     private static readonly object _discInfoLock = new object();
     private static SemaphoreSlim _initSemaphore = new SemaphoreSlim(1, 1);
-
+    public static int TimeUntilMemoryRemoval = 30;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static async Task OnGameStart()
     {
@@ -25,7 +25,7 @@ public static class BasisLoadHandler
         SceneManager.sceneUnloaded += sceneUnloaded;
     }
 
-    private static void sceneUnloaded(Scene UnloadedScene)
+    private static async void sceneUnloaded(Scene UnloadedScene)
     {
         foreach (KeyValuePair<string, BasisTrackedBundleWrapper> kvp in LoadedBundles)
         {
@@ -34,7 +34,7 @@ public static class BasisLoadHandler
                 if (kvp.Value.MetaLink == UnloadedScene.path)
                 {
                     kvp.Value.DeIncrement();
-                    bool State = kvp.Value.UnloadIfReady();
+                    bool State = await kvp.Value.UnloadIfReady();
                     if (State)
                     {
                         LoadedBundles.Remove(kvp.Key);
@@ -44,7 +44,16 @@ public static class BasisLoadHandler
             }
         }
     }
-    public static void DestroyGameobject(GameObject Destroy, string LoadedKey, bool DestroyImmediately = false)
+    /// <summary>
+    /// this will take 30 seconds to execute
+    /// the gameobject will be nuked right away
+    /// after that we wait for 30 seconds to see if we can also remove the bundle!
+    /// </summary>
+    /// <param name="Destroy"></param>
+    /// <param name="LoadedKey"></param>
+    /// <param name="DestroyImmediately"></param>
+    /// <returns></returns>
+    public static async Task DestroyGameobject(GameObject Destroy, string LoadedKey, bool DestroyImmediately = false)
     {
         if (DestroyImmediately)
         {
@@ -57,7 +66,7 @@ public static class BasisLoadHandler
         if (LoadedBundles.TryGetValue(LoadedKey, out BasisTrackedBundleWrapper Wrapper))
         {
             Wrapper.DeIncrement();
-            bool State = Wrapper.UnloadIfReady();
+            bool State = await Wrapper.UnloadIfReady();
             if (State)
             {
                 LoadedBundles.Remove(LoadedKey);
