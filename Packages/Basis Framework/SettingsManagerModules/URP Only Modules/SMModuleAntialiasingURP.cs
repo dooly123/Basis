@@ -31,7 +31,7 @@ public class SMModuleAntialiasingURP : SettingsManagerOption
         switch (Quality)
         {
             case "very low":
-                Asset.msaaSampleCount = 0;
+                Asset.msaaSampleCount = 1;
                 Camera.allowMSAA = false;
                 Data.antialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
                 Data.antialiasingQuality = AntialiasingQuality.Low;
