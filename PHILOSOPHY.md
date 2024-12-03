@@ -20,7 +20,7 @@ It is built on top of Unity and C#, and the demo in particular makes use of the 
 
 The simple answer: creators who want to bypass a lot of the core work needed to bring up a VR game at all.
 
-In principle, there are three major building blocks necessary for a good VR experience (and a fourth, which will be introduced later)
+In principle, there are three major building blocks necessary for a good VR experience.
 
 - **Presence**: The feeling, based on your passive senses, that you exist in a space.  
 - **Spatialization**: The feeling that phenomena (especially your actions) exist in, and have an active effect on, objects in physical space.  
