@@ -1,6 +1,7 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 using static SerializableDarkRift;
 namespace Basis.Scripts.Networking.NetworkedAvatar
@@ -20,8 +21,19 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             avatarBuffer.Scale = BasisBitPackerExtensions.ReadUshortVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkReceiver.ScaleRanged, ref Offset);
             avatarBuffer.rotation = BasisBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);
             BasisBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref Offset);
-            avatarBuffer.timestamp = Time.realtimeSinceStartupAsDouble;
-            baseReceiver.AvatarDataBuffer.Add(avatarBuffer);
+            avatarBuffer.timestamp = Time.timeAsDouble;
+            avatarBuffer.SendRate = 0.1;
+
+            // Only compute the sendRate if data is available
+            if (baseReceiver.PayloadQueue.Count > 0)
+            {
+                double lastPayloadTime = baseReceiver.PayloadQueue.Peek().timestamp;
+                baseReceiver.sendRate = avatarBuffer.timestamp - lastPayloadTime;
+                baseReceiver.smoothedSendRate = baseReceiver.smoothedSendRate * (1 - baseReceiver.smoothingFactor) + baseReceiver.sendRate * baseReceiver.smoothingFactor;
+                avatarBuffer.SendRate = baseReceiver.smoothedSendRate;
+            }
+            avatarBuffer.IsInitalized = true;
+            baseReceiver.PayloadQueue.Enqueue(avatarBuffer);
         }
     }
 }

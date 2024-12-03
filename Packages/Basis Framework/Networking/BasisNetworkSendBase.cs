@@ -23,6 +23,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             public float3 Position;
             public float[] Muscles;
             public double timestamp;
+            public double SendRate;
+            public bool IsInitalized;
         }
         [SerializeField]
         public HumanPose HumanPose = new HumanPose();

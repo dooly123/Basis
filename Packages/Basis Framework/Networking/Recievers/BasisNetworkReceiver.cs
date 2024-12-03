@@ -10,6 +10,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using static SerializableDarkRift;
+using static UnityEngine.ParticleSystem;
 
 namespace Basis.Scripts.Networking.Recievers
 {
@@ -24,7 +25,7 @@ namespace Basis.Scripts.Networking.Recievers
         [Header("Interpolation Settings")]
         public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
         [SerializeField]
-        public List<AvatarBuffer> AvatarDataBuffer = new List<AvatarBuffer>();
+        public Queue<AvatarBuffer> PayloadQueue = new Queue<AvatarBuffer>();
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
         private NativeArray<float3> OuputVectors;      // Merged positions and scales
@@ -38,6 +39,28 @@ namespace Basis.Scripts.Networking.Recievers
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
         public float[] MuscleFinalStageOutput = new float[90];
         public quaternion OutputRotation;
+
+
+        [SerializeField] public AvatarBuffer First;
+        [SerializeField] public AvatarBuffer Last;
+        public double PulseBehindCurrentTime;
+        public double sendRate;
+        public int PayloadCount = 0;
+        public float interpolationTime;
+        public double TimeAheadOfFirst;
+        public double TimeBeforeCompletion;
+        public int BuffersToHold = 2;
+
+        // For smoothing sendRate calculation
+        public double smoothedSendRate = 0.1; // Initial smoothing value
+        public double smoothingFactor = 0.5; // Controls smoothing
+
+        // Base speed-up factor
+        public float baseSpeedUpFactor = 1.0f;
+
+        // Additional speed-up factor per extra packet
+        public float additionalSpeedPerPacket = 0.05f;
+        public double TimeInThePast;
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -51,6 +74,14 @@ namespace Basis.Scripts.Networking.Recievers
             musclesJob.targetMuscles = targetMuscles;
             AvatarJob.OutputVector = OuputVectors;
             AvatarJob.TargetVector = TargetVectors;
+            if (PayloadQueue.Count > 0)
+            {
+                // Initialize First and Last payload if data is available
+                First = PayloadQueue.Peek();
+                Last = PayloadQueue.Peek();
+            }
+
+            PulseBehindCurrentTime = Time.timeAsDouble - smoothedSendRate;
         }
         /// <summary>
         /// Clean up resources used in the compute process.
@@ -72,44 +103,51 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 return;
             }
+            double TimeAsDouble = Time.timeAsDouble;
+            PulseBehindCurrentTime = TimeAsDouble - smoothedSendRate;
+            PayloadCount = PayloadQueue.Count;
 
-            double currentTime = Time.realtimeSinceStartupAsDouble;
-
-            // Remove outdated rotations, keeping at least 2 data points
-            while (AvatarDataBuffer.Count > 1 && currentTime - delayTime > AvatarDataBuffer[1].timestamp)
+            // Move payloads in the queue based on the current time
+            while (interpolationTime >= 1 && PayloadQueue.Count > BuffersToHold)
             {
-                BasisAvatarBufferPool.Return(AvatarDataBuffer[0]);
-                AvatarDataBuffer.RemoveAt(0);
+                First = Last;
+                Last = PayloadQueue.Dequeue();
+                TimeBeforeCompletion = Last.timestamp - First.timestamp; // how long to run for
+                TimeInThePast = TimeAsDouble;
             }
-            // Ensure there are enough data points
-            if (AvatarDataBuffer.Count >= 2)
+
+            double Difference = TimeAsDouble - TimeInThePast;
+
+            // Avoid negative or overly large interpolationTime
+            interpolationTime = (float)(Difference / TimeBeforeCompletion);
+
+            // Dynamically adjust the speed-up factor based on the number of additional packets
+            int extraPackets = PayloadQueue.Count - BuffersToHold;
+            float dynamicSpeedUpFactor = baseSpeedUpFactor + (extraPackets * additionalSpeedPerPacket);
+
+            // Apply dynamic speed-up factor
+            interpolationTime *= dynamicSpeedUpFactor;
+
+            // Ensure the interpolation time stays between 0 and 1
+            interpolationTime = Mathf.Clamp01(interpolationTime);
+            if (Last.IsInitalized && First.IsInitalized && !float.IsNaN(interpolationTime))
             {
-                AvatarBuffer Inital = AvatarDataBuffer[0];
-                AvatarBuffer Target = AvatarDataBuffer[1];
-                double startTime = AvatarDataBuffer[0].timestamp;
-                double endTime = AvatarDataBuffer[1].timestamp;
-                double targetTime = currentTime - delayTime;
+                TargetVectors[0] = Last.Position; // Target position at index 0
+                OuputVectors[0] = First.Position; // Position at index 0
 
-                // Calculate normalized interpolation factor t
-                float normalizedTime = (float)((targetTime - startTime) / (endTime - startTime));
-                normalizedTime = Mathf.Clamp01(normalizedTime);
+                OuputVectors[1] = First.Scale;    // Scale at index 1
+                TargetVectors[1] = Last.Scale;    // Target scale at index 1
 
-                TargetVectors[0] = Target.Position; // Target position at index 0
-                OuputVectors[0] = Inital.Position; // Position at index 0
-
-                OuputVectors[1] = Inital.Scale;    // Scale at index 1
-                TargetVectors[1] = Target.Scale;    // Target scale at index 1
-
-                muscles.CopyFrom(Inital.Muscles);
-                targetMuscles.CopyFrom(Target.Muscles);
-                AvatarJob.Time = normalizedTime;
+                muscles.CopyFrom(First.Muscles);
+                targetMuscles.CopyFrom(Last.Muscles);
+                AvatarJob.Time = interpolationTime;
 
                 AvatarHandle = AvatarJob.Schedule();
 
                 // Muscle interpolation job
-                musclesJob.Time = normalizedTime;
+                musclesJob.Time = interpolationTime;
                 musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
-                OutputRotation = math.slerp(Inital.rotation, Target.rotation, normalizedTime);
+                OutputRotation = math.slerp(First.rotation, Last.rotation, interpolationTime);
                 // Complete the jobs and apply the results
                 musclesHandle.Complete();
 
