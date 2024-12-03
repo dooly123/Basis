@@ -27,8 +27,6 @@ public class uLipSyncEditor : Editor
         if (EditorUtil.Foldout("Parameters", true))
         {
             ++EditorGUI.indentLevel;
-
-            EditorUtil.DrawProperty(serializedObject, nameof(lipSync.outputSoundGain));
 #if UNITY_WEBGL
             EditorUtil.DrawProperty(serializedObject, nameof(lipSync.autoAudioSyncOnWebGL));
             EditorUtil.DrawProperty(serializedObject, nameof(lipSync.audioSyncOffsetTime));

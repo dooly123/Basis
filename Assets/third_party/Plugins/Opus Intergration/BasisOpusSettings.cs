@@ -15,7 +15,7 @@ public class BasisOpusSettings : ScriptableObject
     public NumChannels NumChannels = NumChannels.Mono;
     public OpusApplication OpusApplication = OpusApplication.Audio;
     public OpusSignal OpusSignal = OpusSignal.Auto;
-    public float DesiredDurationInSeconds = 0.04f; // 40 milliseconds
+    public float DesiredDurationInSeconds = 0.02f;
     public int GetSampleFreq()
     {
         return SampleFreqToInt(SamplingFrequency);

@@ -1,16 +1,14 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
-using System;
 using UnityEngine;
 using uLipSync;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Basis.Scripts.BasisSdk.Helpers;
-using static UnityEngine.Analytics.IAnalytic;
 namespace Basis.Scripts.Drivers
 {
-    public class BasisVisemeDriver : MonoBehaviour
+    public class BasisAudioAndVisemeDriver : MonoBehaviour
     {
         public int smoothAmount = 70;
         public bool[] HasViseme;
@@ -174,9 +172,7 @@ namespace Basis.Scripts.Drivers
             return true;
         }
         public bool uLipSyncEnabledState = true;
-
         public Profile Profile { get => profile; set => profile = value; }
-
         private void UpdateFaceVisibility(bool State)
         {
             uLipSyncEnabledState = State;
@@ -191,7 +187,7 @@ namespace Basis.Scripts.Drivers
                 }
             }
         }
-        public void ProcessAudioSamples(float[] data)
+        public void ProcessAudioSamples(float[] data,int channels)
         {
             if (uLipSyncEnabledState == false)
             {
@@ -201,7 +197,7 @@ namespace Basis.Scripts.Drivers
             {
                 return;
             }
-            uLipSync.OnDataReceived(data, 1);
+            uLipSync.OnDataReceived(data, channels);
         }
         public void Update()
         {

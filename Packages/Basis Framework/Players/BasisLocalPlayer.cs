@@ -40,7 +40,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisLocalBoneDriver LocalBoneDriver;
         public BasisLocalAvatarDriver AvatarDriver;
         //   public BasisFootPlacementDriver FootPlacementDriver;
-        public BasisVisemeDriver VisemeDriver;
+        public BasisAudioAndVisemeDriver VisemeDriver;
         [SerializeField]
         public LayerMask GroundMask;
         public static string LoadFileNameAndExtension = "LastUsedAvatar.BAS";
@@ -154,7 +154,7 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             if (VisemeDriver == null)
             {
-                VisemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(this.gameObject);
+                VisemeDriver = BasisHelpers.GetOrAddComponent<BasisAudioAndVisemeDriver>(this.gameObject);
             }
             VisemeDriver.TryInitialize(this);
             if (HasCalibrationEvents == false)
@@ -188,7 +188,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void DriveAudioToViseme()
         {
-            VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray);
+            VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray,1);
         }
         private void OnPausedEvent(bool IsPaused)
         {
