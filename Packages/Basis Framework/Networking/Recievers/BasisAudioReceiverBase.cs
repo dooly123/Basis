@@ -1,5 +1,7 @@
 using Basis.Scripts.Drivers;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Basis.Scripts.Networking.Recievers
@@ -19,19 +21,18 @@ namespace Basis.Scripts.Networking.Recievers
         public int samplingFrequency;
         public int numChannels;
         public int SampleLength;
-        public int MaxQueueSize = 4;
         public void OnDecoded()
         {
-            OnDecoded(decoder.pcmBuffer);
+            OnDecoded(decoder.pcmBuffer, decoder.pcmLength);
         }
-        public void OnDecoded(float[] pcm)
+        public void OnDecoded(float[] pcm, int length)
         {
-            if (pcm.Length != decoder.pcmLength)
+            if (length != decoder.pcmLength)
             {
-                Debug.LogError($"PCM length {pcm.Length} does not match SegmentSize {decoder.pcmLength}");
+                Debug.LogError($"PCM length {length} does not match SegmentSize {decoder.pcmLength}");
                 return;
             }
-            RingBuffer.Add(pcm, pcm.Length);
+            RingBuffer.Add(pcm, decoder.pcmLength);
         }
         /// <summary>
         /// processed in array size 2048 
@@ -54,6 +55,8 @@ namespace Basis.Scripts.Networking.Recievers
                     data[i * channels + c] = sample; // Copy the sample to all channels
                 }
             }
+            //no need to lock unlock as its only used here!
+            RingBuffer.BufferedReturn.Enqueue(segment);
         }
     }
     public class RingBuffer
@@ -63,7 +66,7 @@ namespace Basis.Scripts.Networking.Recievers
         private int tail; // Points to the next position to read
         private int size; // Current data size in the buffer
         private readonly object lockObject = new();
-
+        public Queue<float[]> BufferedReturn = new Queue<float[]>();
         public RingBuffer(int capacity)
         {
             if (capacity <= 0) throw new ArgumentException("Capacity must be greater than zero.");
@@ -72,24 +75,7 @@ namespace Basis.Scripts.Networking.Recievers
             tail = 0;
             size = 0;
         }
-
         public int Capacity => buffer.Length;
-
-        public int Count
-        {
-            get
-            {
-                lock (lockObject)
-                {
-                    return size;
-                }
-            }
-        }
-
-        public bool IsFull => Count == Capacity;
-
-        public bool IsEmpty => Count == 0;
-
         public void Add(float[] segment, int length)
         {
             if (segment == null || segment.Length == 0)
@@ -99,17 +85,24 @@ namespace Basis.Scripts.Networking.Recievers
 
             lock (lockObject)
             {
-                // Check if there's enough space in the buffer for the valid data (length)
-                if (length > Capacity - size)
+                // If the segment is larger than the buffer capacity, we can't fit it
+                if (length > Capacity)
                 {
-                    throw new InvalidOperationException("Not enough space to add the segment.");
+                    throw new InvalidOperationException("The segment is too large to fit into the buffer.");
+                }
+
+                // If there's not enough space, remove oldest data until there is enough space
+                while (length > Capacity - size)
+                {
+                    // Remove the oldest item to make room for new data
+                    tail = (tail + 1) % Capacity;
+                    size--;
                 }
 
                 // Add data up to the valid 'length'
                 for (int i = 0; i < length; i++)
                 {
-                    float b = segment[i];
-                    buffer[head] = b;
+                    buffer[head] = segment[i];
                     head = (head + 1) % Capacity;
                     size++;
                 }
@@ -121,7 +114,11 @@ namespace Basis.Scripts.Networking.Recievers
 
             lock (lockObject)
             {
-                float[] segment = new float[segmentSize];
+                BufferedReturn.TryDequeue(out float[] segment);
+                if (segment == null || segment.Length != segmentSize)
+                {
+                    segment = new float[segmentSize];
+                }
                 int bytesToRemove = Math.Min(segmentSize, size);
 
                 if (bytesToRemove < segmentSize)

@@ -185,7 +185,7 @@ namespace Basis.Scripts.Networking.Recievers
                     silentData = new float[AudioReceiverModule.decoder.pcmLength];
                     Array.Fill(silentData, 0f);
                 }
-                AudioReceiverModule.OnDecoded(silentData);
+                AudioReceiverModule.OnDecoded(silentData, AudioReceiverModule.decoder.pcmLength);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(false);
             }
         }
