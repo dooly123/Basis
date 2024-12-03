@@ -172,7 +172,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
-                AudioReceiverModule.decoder.OnEncoded(audioSegment.audioSegmentData.buffer);
+                AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
         }

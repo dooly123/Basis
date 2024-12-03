@@ -4,6 +4,7 @@ using Basis.Scripts.Device_Management;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Basis.Scripts.Networking.Recievers
 {
@@ -28,11 +29,12 @@ namespace Basis.Scripts.Networking.Recievers
             audioSource.loop = true;
             // Initialize sampling parameters
             samplingFrequency = settings.GetSampleFreq();
-            numChannels = settings.GetChannelAsInt();
+            numChannels = 1;
             SampleLength = samplingFrequency * numChannels;
-
+            int Size = 2048 * 2;
+            RingBuffer = new RingBuffer(4096*2);
             // Create AudioClip
-            audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", 2048*2, numChannels, samplingFrequency, false);
+            audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Size, numChannels, samplingFrequency, false);
             // Ensure decoder is initialized and subscribe to events
             if (decoder == null)
             {
