@@ -190,13 +190,6 @@ public class uLipSyncCalibrationAudioPlayerEditor : Editor
     void DrawHelpBox()
     {
         var lipSync = player.GetComponent<uLipSync>();
-        if (lipSync && lipSync.outputSoundGain < Mathf.Epsilon)
-        {
-            var msg = 
-                "uLipSync.outputSoundGain is zero." +
-                "It means that you will not be able to hear the sound.";
-            _messages.Add(msg);
-        }
 
         foreach (var msg in _messages)
         {

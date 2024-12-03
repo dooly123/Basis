@@ -1,128 +1,21 @@
-﻿using DarkRift;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 
 namespace Basis.Scripts.Networking.Compression
 {
     public static class BasisBitPackerExtensions
     {
-        public static void WriteUshortFloat(DarkRiftWriter bitPacker, float value, BasisRangedUshortFloatData compressor)
-        {
-            bitPacker.Write(compressor.Compress(value));
-        }
-        public static float ReadUshortFloat(this DarkRiftReader bitPacker, BasisRangedUshortFloatData compressor)
-        {
-            bitPacker.Read(out ushort data);
-            return compressor.Decompress(data);
-        }
-        public static void ReadUshortFloat(this DarkRiftReader bitPacker, BasisRangedUshortFloatData compressor, ref float Value)
-        {
-            bitPacker.Read(out ushort data);
-            Value = compressor.Decompress(data);
-        }
-        public static void WriteUshortVectorFloat(DarkRiftWriter bitPacker, Vector3 values, BasisRangedUshortFloatData compressor)
-        {
-            ushort Compressx = compressor.Compress(values.x);
-            ushort Compressy = compressor.Compress(values.y);
-            ushort Compressz = compressor.Compress(values.z);
-            bitPacker.Write(Compressx);
-            bitPacker.Write(Compressy);
-            bitPacker.Write(Compressz);
-        }
-        public static void ReadVectorFloat(this DarkRiftReader bitPacker, out float X, out float Y, out float Z)
-        {
-            bitPacker.Read(out X);
-            bitPacker.Read(out Y);
-            bitPacker.Read(out Z);
-        }
-        public static void WriteVectorFloat(DarkRiftWriter bitPacker, Vector3 values)
-        {
-            bitPacker.Write(values.x);
-            bitPacker.Write(values.y);
-            bitPacker.Write(values.z);
-        }
-        public static void CompressUShortVector3(Vector3 Input, DarkRiftWriter packer, BasisRangedUshortFloatData compressor)
-        {
-            WriteUshortVectorFloat(packer, Input, compressor);
-        }
-        public static void DecompressUShortVector3(DarkRiftReader Packer, BasisRangedUshortFloatData CF, ref float3 Scale)
-        {
-            ReadUshortFloat(Packer, CF, ref Scale.x);
-            ReadUshortFloat(Packer, CF, ref Scale.y);
-            ReadUshortFloat(Packer, CF, ref Scale.z);
-        }
-        public static void CompressVector3(Vector3 Input, DarkRiftWriter packer)
-        {
-            WriteVectorFloat(packer, Input);
-        }
-        public static void DecompressVector3(DarkRiftReader Packer, ref float3 Position)
-        {
-            ReadVectorFloat(Packer, out Position.x, out Position.y, out Position.z);
-        }
         public static BasisRangedUshortFloatData BasisRangedUshortFloatData = new BasisRangedUshortFloatData(-1f, 1f, 0.001f);
-        public static void CompressQuaternion(DarkRiftWriter Packer, quaternion Rotation)
-        {
-            Packer.Write(Rotation.value.x);
-            Packer.Write(Rotation.value.y);
-            Packer.Write(Rotation.value.z);
-            Packer.Write(BasisRangedUshortFloatData.Compress(Rotation.value.w));
-        }
-        public static void DecompressQuaternion(DarkRiftReader bitPacker, ref quaternion Quaternion)
-        {
-            //checked
-            bitPacker.Read(out float x);
-            bitPacker.Read(out float y);
-            bitPacker.Read(out float z);
-            bitPacker.Read(out ushort W);
-            Quaternion.value.x = x;
-            Quaternion.value.y = y;
-            Quaternion.value.z = z;
-            Quaternion.value.w = BasisRangedUshortFloatData.Decompress(W);
-        }
         public static int LengthSize = 90;
         public static int LengthBytes = LengthSize * 4; // Initialize LengthBytes first
         public static byte[] StoredBytes = new byte[LengthBytes];
-        // Compress the muscle data into the byte array
-        public static void CompressMuscles(DarkRiftWriter Packer, float[] muscles)
-        {
-            // Convert the float array to bytes using Buffer.BlockCopy
-            Buffer.BlockCopy(muscles, 0, StoredBytes, 0, LengthBytes);
 
-            // Write the raw byte array to the Packer
-            Packer.WriteRaw(StoredBytes, 0, LengthBytes);
-        }
-        // Decompress the byte array back into the muscle data
-        public static void DecompressMuscles(DarkRiftReader Packer, ref AvatarBuffer BasisAvatarData)
-        {
-            // Read the raw byte array from the Packer
-            Packer.ReadRaw(LengthBytes, ref StoredBytes);
+        // Object pool for byte arrays to avoid allocation during runtime
+        private static readonly ObjectPool<byte[]> byteArrayPool = new ObjectPool<byte[]>(() => new byte[LengthBytes]);
 
-            if (BasisAvatarData.Muscles == null)
-            {
-                BasisAvatarData.Muscles = new float[LengthSize];
-            }
-            // Convert the byte array back to the float array using Buffer.BlockCopy
-            Buffer.BlockCopy(StoredBytes, 0, BasisAvatarData.Muscles, 0, LengthBytes);
-        }
-
-        public static void WriteUshortFloatToBytes(float value, BasisRangedUshortFloatData compressor, ref byte[] bytes, ref int offset)
-        {
-            EnsureSize(ref bytes, offset + 2);
-            ushort compressedValue = compressor.Compress(value);
-            Buffer.BlockCopy(BitConverter.GetBytes(compressedValue), 0, bytes, offset, 2);
-            offset += 2;
-        }
-
-        public static float ReadUshortFloatFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
-        {
-            EnsureSize(bytes, offset + 2);
-            ushort data = BitConverter.ToUInt16(bytes, offset);
-            offset += 2;
-            return compressor.Decompress(data);
-        }
-
+        // Manual conversion of ushort to bytes (without BitConverter)
         public static void WriteUshortVectorFloatToBytes(Vector3 values, BasisRangedUshortFloatData compressor, ref byte[] bytes, ref int offset)
         {
             EnsureSize(ref bytes, offset + 6);
@@ -130,18 +23,28 @@ namespace Basis.Scripts.Networking.Compression
             ushort compressedY = compressor.Compress(values.y);
             ushort compressedZ = compressor.Compress(values.z);
 
-            Buffer.BlockCopy(BitConverter.GetBytes(compressedX), 0, bytes, offset, 2);
-            Buffer.BlockCopy(BitConverter.GetBytes(compressedY), 0, bytes, offset + 2, 2);
-            Buffer.BlockCopy(BitConverter.GetBytes(compressedZ), 0, bytes, offset + 4, 2);
+            // Manually write the compressed values to the byte array (no BitConverter)
+            bytes[offset] = (byte)(compressedX & 0xFF);           // Low byte
+            bytes[offset + 1] = (byte)((compressedX >> 8) & 0xFF); // High byte
+
+            bytes[offset + 2] = (byte)(compressedY & 0xFF);           // Low byte
+            bytes[offset + 3] = (byte)((compressedY >> 8) & 0xFF);    // High byte
+
+            bytes[offset + 4] = (byte)(compressedZ & 0xFF);           // Low byte
+            bytes[offset + 5] = (byte)((compressedZ >> 8) & 0xFF);    // High byte
+
             offset += 6;
         }
 
+        // Manual conversion of bytes to ushort (without BitConverter)
         public static Vector3 ReadUshortVectorFloatFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
         {
             EnsureSize(bytes, offset + 6);
-            ushort compressedX = BitConverter.ToUInt16(bytes, offset);
-            ushort compressedY = BitConverter.ToUInt16(bytes, offset + 2);
-            ushort compressedZ = BitConverter.ToUInt16(bytes, offset + 4);
+
+            ushort compressedX = (ushort)(bytes[offset] | (bytes[offset + 1] << 8));
+            ushort compressedY = (ushort)(bytes[offset + 2] | (bytes[offset + 3] << 8));
+            ushort compressedZ = (ushort)(bytes[offset + 4] | (bytes[offset + 5] << 8));
+
             offset += 6;
 
             return new Vector3(
@@ -151,59 +54,75 @@ namespace Basis.Scripts.Networking.Compression
             );
         }
 
+        // Manual conversion of Vector3 to bytes (without BitConverter)
         public static void WriteVectorFloatToBytes(Vector3 values, ref byte[] bytes, ref int offset)
         {
             EnsureSize(ref bytes, offset + 12);
-            Buffer.BlockCopy(BitConverter.GetBytes(values.x), 0, bytes, offset, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(values.y), 0, bytes, offset + 4, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(values.z), 0, bytes, offset + 8, 4);
-            offset += 12;
+
+            // Manually write the float values to bytes (no BitConverter)
+            WriteFloatToBytes(values.x, ref bytes, ref offset);
+            WriteFloatToBytes(values.y, ref bytes, ref offset);
+            WriteFloatToBytes(values.z, ref bytes, ref offset);
         }
 
+        // Manual conversion of bytes to Vector3 (without BitConverter)
         public static Vector3 ReadVectorFloatFromBytes(ref byte[] bytes, ref int offset)
         {
             EnsureSize(bytes, offset + 12);
-            float x = BitConverter.ToSingle(bytes, offset);
-            float y = BitConverter.ToSingle(bytes, offset + 4);
-            float z = BitConverter.ToSingle(bytes, offset + 8);
-            offset += 12;
+
+            float x = ReadFloatFromBytes(ref bytes, ref offset);
+            float y = ReadFloatFromBytes(ref bytes, ref offset);
+            float z = ReadFloatFromBytes(ref bytes, ref offset);
 
             return new Vector3(x, y, z);
         }
 
+        // Manual conversion of quaternion to bytes (without BitConverter)
         public static void WriteQuaternionToBytes(quaternion rotation, ref byte[] bytes, ref int offset, BasisRangedUshortFloatData compressor)
         {
             EnsureSize(ref bytes, offset + 14);
             ushort compressedW = compressor.Compress(rotation.value.w);
 
-            Buffer.BlockCopy(BitConverter.GetBytes(rotation.value.x), 0, bytes, offset, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(rotation.value.y), 0, bytes, offset + 4, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(rotation.value.z), 0, bytes, offset + 8, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(compressedW), 0, bytes, offset + 12, 2);
-            offset += 14;
+            // Write the quaternion's components
+            WriteFloatToBytes(rotation.value.x, ref bytes, ref offset);
+            WriteFloatToBytes(rotation.value.y, ref bytes, ref offset);
+            WriteFloatToBytes(rotation.value.z, ref bytes, ref offset);
+
+            // Write the compressed 'w' component
+            bytes[offset] = (byte)(compressedW & 0xFF);           // Low byte
+            bytes[offset + 1] = (byte)((compressedW >> 8) & 0xFF); // High byte
+            offset += 2;
         }
 
+        // Manual conversion of bytes to quaternion (without BitConverter)
         public static quaternion ReadQuaternionFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
         {
             EnsureSize(bytes, offset + 14);
-            float x = BitConverter.ToSingle(bytes, offset);
-            float y = BitConverter.ToSingle(bytes, offset + 4);
-            float z = BitConverter.ToSingle(bytes, offset + 8);
-            ushort compressedW = BitConverter.ToUInt16(bytes, offset + 12);
-            offset += 14;
+
+            float x = ReadFloatFromBytes(ref bytes, ref offset);
+            float y = ReadFloatFromBytes(ref bytes, ref offset);
+            float z = ReadFloatFromBytes(ref bytes, ref offset);
+
+            ushort compressedW = (ushort)(bytes[offset] | (bytes[offset + 1] << 8));
+            offset += 2;
 
             return new quaternion(x, y, z, compressor.Decompress(compressedW));
         }
 
+        // Write muscles to bytes (no BitConverter)
         public static void WriteMusclesToBytes(float[] muscles, ref byte[] bytes, ref int offset)
         {
             int requiredLength = muscles.Length * sizeof(float);
             EnsureSize(ref bytes, offset + requiredLength);
 
-            Buffer.BlockCopy(muscles, 0, bytes, offset, requiredLength);
-            offset += requiredLength;
+            // Manually copy float values as bytes
+            for (int i = 0; i < muscles.Length; i++)
+            {
+                WriteFloatToBytes(muscles[i], ref bytes, ref offset);
+            }
         }
 
+        // Read muscles from bytes (no BitConverter)
         public static void ReadMusclesFromBytes(ref byte[] bytes, ref float[] muscles, ref int offset)
         {
             int requiredLength = bytes.Length - offset;
@@ -211,23 +130,81 @@ namespace Basis.Scripts.Networking.Compression
                 muscles = new float[requiredLength / sizeof(float)];
 
             EnsureSize(bytes, offset + requiredLength);
-            Buffer.BlockCopy(bytes, offset, muscles, 0, requiredLength);
-            offset += requiredLength;
+
+            // Manually read float values from bytes
+            for (int i = 0; i < muscles.Length; i++)
+            {
+                muscles[i] = ReadFloatFromBytes(ref bytes, ref offset);
+            }
         }
 
+        // Manual float to bytes conversion
+        // Manual float to bytes conversion (without BitConverter)
+        private unsafe static void WriteFloatToBytes(float value, ref byte[] bytes, ref int offset)
+        {
+            // Convert the float to a uint using its bitwise representation
+            uint intValue = *((uint*)&value);
+
+            // Manually write the bytes
+            bytes[offset] = (byte)(intValue & 0xFF);
+            bytes[offset + 1] = (byte)((intValue >> 8) & 0xFF);
+            bytes[offset + 2] = (byte)((intValue >> 16) & 0xFF);
+            bytes[offset + 3] = (byte)((intValue >> 24) & 0xFF);
+            offset += 4;
+        }
+
+        // Manual bytes to float conversion (without BitConverter)
+        private unsafe static float ReadFloatFromBytes(ref byte[] bytes, ref int offset)
+        {
+            // Reconstruct the uint from the byte array
+            uint intValue = (uint)(bytes[offset] | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16) | (bytes[offset + 3] << 24));
+
+            // Convert the uint back to float using a pointer cast
+            float result = *((float*)&intValue);
+            offset += 4;
+            return result;
+        }
+
+        // Ensure the byte array is large enough to hold the data
         private static void EnsureSize(ref byte[] bytes, int requiredSize)
         {
             if (bytes == null || bytes.Length < requiredSize)
             {
+                // Reuse pooled byte arrays
+                bytes = byteArrayPool.Get();
                 Array.Resize(ref bytes, requiredSize);
             }
         }
 
+        // Ensure the byte array is large enough for reading
         private static void EnsureSize(byte[] bytes, int requiredSize)
         {
             if (bytes == null || bytes.Length < requiredSize)
             {
                 throw new ArgumentException("Byte array is too small for the required size.");
+            }
+        }
+
+        // Object pool for byte arrays to avoid allocation during runtime
+        private class ObjectPool<T>
+        {
+            private readonly Func<T> createFunc;
+            private readonly Stack<T> pool;
+
+            public ObjectPool(Func<T> createFunc)
+            {
+                this.createFunc = createFunc;
+                this.pool = new Stack<T>();
+            }
+
+            public T Get()
+            {
+                return pool.Count > 0 ? pool.Pop() : createFunc();
+            }
+
+            public void Return(T item)
+            {
+                pool.Push(item);
             }
         }
     }

@@ -11,7 +11,7 @@ namespace Basis.Scripts.Networking.Recievers
     [System.Serializable]
     public class BasisAudioReceiver : BasisAudioReceiverBase
     {
-        public BasisRemoteVisemeAudioDriver BasisRemoteVisemeAudioDriver;
+        public BasisRemoteAudioDriver BasisRemoteVisemeAudioDriver;
         public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
         {
             // Initialize settings and audio source
@@ -26,15 +26,15 @@ namespace Basis.Scripts.Networking.Recievers
             audioSource.spatialBlend = 1.0f;
             audioSource.dopplerLevel = 0;
             audioSource.volume = 1.0f;
-            audioSource.loop = false;
+            audioSource.loop = true;
             // Initialize sampling parameters
             samplingFrequency = settings.GetSampleFreq();
-            numChannels = settings.GetChannelAsInt();
+            numChannels = 1;
             SampleLength = samplingFrequency * numChannels;
-
+            int Size = 2048 * 2;
+            RingBuffer = new RingBuffer(4096*2);
             // Create AudioClip
-            Buffer = new BasisFloatCircularBuffer(SegmentSize, MaximumStored);
-            audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Buffer.BufferSize, numChannels, samplingFrequency, false);
+            audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Size, numChannels, samplingFrequency, false);
             // Ensure decoder is initialized and subscribe to events
             if (decoder == null)
             {
@@ -46,7 +46,6 @@ namespace Basis.Scripts.Networking.Recievers
             // Perform calibration
             OnCalibration(networkedPlayer);
         }
-
         public void OnDestroy()
         {
             // Unsubscribe from events on destroy
@@ -55,7 +54,6 @@ namespace Basis.Scripts.Networking.Recievers
                 decoder.OnDecoded -= OnDecoded;
             }
         }
-
         public void OnDisable()
         {
             // Clean up audio and related components
@@ -76,19 +74,18 @@ namespace Basis.Scripts.Networking.Recievers
                 GameObject.Destroy(visemeDriver);
             }
         }
-
-
         public void OnCalibration(BasisNetworkedPlayer networkedPlayer)
         {
             // Ensure viseme driver is initialized for audio processing
             if (visemeDriver == null)
             {
-                visemeDriver = BasisHelpers.GetOrAddComponent<BasisVisemeDriver>(audioSource.gameObject);
+                visemeDriver = BasisHelpers.GetOrAddComponent<BasisAudioAndVisemeDriver>(audioSource.gameObject);
             }
             visemeDriver.TryInitialize(networkedPlayer.Player);
             if (BasisRemoteVisemeAudioDriver == null)
             {
-                BasisRemoteVisemeAudioDriver = BasisHelpers.GetOrAddComponent<BasisRemoteVisemeAudioDriver>(audioSource.gameObject);
+                BasisRemoteVisemeAudioDriver = BasisHelpers.GetOrAddComponent<BasisRemoteAudioDriver>(audioSource.gameObject);
+                BasisRemoteVisemeAudioDriver.BasisAudioReceiver = this;
             }
             BasisRemoteVisemeAudioDriver.Initalize(visemeDriver);
         }

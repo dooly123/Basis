@@ -11,7 +11,6 @@ namespace uLipSync
     {
         public Profile profile;
         public LipSyncUpdateEvent onLipSyncUpdate = new LipSyncUpdateEvent();
-        [Range(0f, 1f)] public float outputSoundGain = 1f;
         uLipSyncAudioSource _currentAudioSourceProxy;
 
         JobHandle _jobHandle;
@@ -356,15 +355,6 @@ namespace uLipSync
                 for (int i = 0; i < input.Length; i += channels)
                 {
                     _rawInputData[_index++ % n] = input[i];
-                }
-            }
-
-            if (math.abs(outputSoundGain - 1f) > math.EPSILON)
-            {
-                int n = input.Length;
-                for (int i = 0; i < n; ++i)
-                {
-                    input[i] *= outputSoundGain;
                 }
             }
 

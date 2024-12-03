@@ -4,6 +4,7 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -150,7 +151,6 @@ namespace Basis.Scripts.Networking.Recievers
             if (Ready)
             {
                 Compute();
-                AudioReceiverModule.LateUpdate();
             }
         }
         public bool IsAbleToUpdate()
@@ -172,7 +172,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
-                AudioReceiverModule.decoder.OnEncoded(audioSegment.audioSegmentData.buffer);
+                AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
         }
@@ -180,12 +180,12 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
-                if (silentData == null || silentData.Length != AudioReceiverModule.SegmentSize)
+                if (silentData == null || silentData.Length != AudioReceiverModule.decoder.pcmLength)
                 {
-                    silentData = new float[AudioReceiverModule.SegmentSize];
+                    silentData = new float[AudioReceiverModule.decoder.pcmLength];
                     Array.Fill(silentData, 0f);
                 }
-                AudioReceiverModule.OnDecoded(silentData);
+                AudioReceiverModule.OnDecoded(silentData, AudioReceiverModule.decoder.pcmLength);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(false);
             }
         }

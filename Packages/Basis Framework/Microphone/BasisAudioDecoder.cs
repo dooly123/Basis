@@ -21,8 +21,9 @@ public class BasisAudioDecoder : MonoBehaviour
     }
     public void Initialize()
     {
+        pcmLength = 2048;
         Settings = BasisDeviceManagement.Instance.BasisOpusSettings;
-        pcmBuffer = new float[AudioDecoder.maximumPacketDuration * (int)Settings.NumChannels];
+        pcmBuffer = new float[pcmLength * (int)Settings.NumChannels];//AudioDecoder.maximumPacketDuration now its 2048
         decoder = new AudioDecoder(Settings.SamplingFrequency, Settings.NumChannels);
     }
     public void Deinitalize()
@@ -37,7 +38,7 @@ public class BasisAudioDecoder : MonoBehaviour
     /// the pcm length is how much was actually encoded.
     /// </summary>
     /// <param name="data"></param>
-    public void OnEncoded(byte[] data)
+    public void OnDecode(byte[] data)
     {
         pcmLength = decoder.Decode(data, data.Length, pcmBuffer);
         OnDecoded?.Invoke();
