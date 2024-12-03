@@ -29,6 +29,7 @@ namespace Basis.Scripts.Drivers
         public Canvas MicrophoneCanvas;
         public RawImage MicrophoneMutedIcon;
         public RawImage MicrophoneUnMutedIcon;
+        public Transform MicrophoneUnMutedIconTransform;
 
         public Vector3 DesktopMicrophoneOffset = new Vector3(-0.001f, -0.0015f, 2f); // Adjust as needed for canvas position and depth
         public Vector3 VRMicrophoneOffset = new Vector3(-0.0004f, -0.0015f, 2f);
@@ -49,8 +50,6 @@ namespace Basis.Scripts.Drivers
         public Color UnMutedMutedIconColorActive = Color.white;
         public Color UnMutedMutedIconColorInactive = Color.grey;
 
-        private bool _isMuted, _isTalking, _lastTalkingState;
-        
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -67,30 +66,29 @@ namespace Basis.Scripts.Drivers
             if (HasEvents == false)
             {
                 MicrophoneRecorder.OnPausedAction += OnPausedEvent;
-                MicrophoneRecorder.OnHasAudio += () => _isTalking = true;
-                MicrophoneRecorder.OnHasSilence += () => _isTalking = false;
+                MicrophoneRecorder.MainThreadOnHasAudio += MicrophoneTransmitting;
+                MicrophoneRecorder.MainThreadOnHasSilence += MicrophoneNotTransmitting;
                 RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
                 BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
                 BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
                 InstanceExists?.Invoke();
                 HasEvents = true;
-            } 
+            }
             halfDuration = duration / 2f; // Time to scale up and down
             StartingScale = MicrophoneMutedIcon.transform.localScale;
             // Target scale for the "bounce" effect (e.g., 1.2 times larger)
             largerScale = StartingScale * 1.2f;
-            UpdateMicrophoneVisuals(MicrophoneRecorder.isPaused,false);
+            UpdateMicrophoneVisuals(MicrophoneRecorder.isPaused, false);
         }
-
-        private void Update()
+        public void MicrophoneTransmitting()
         {
-            // Don't bother updating icon color when muted
-            if (!_isMuted && _isTalking != _lastTalkingState)
-            {
-                _lastTalkingState = _isTalking;
-                MicrophoneUnMutedIcon.color = _isTalking ? UnMutedMutedIconColorActive : UnMutedMutedIconColorInactive;
-                MicrophoneUnMutedIcon.transform.localScale = _isTalking ? largerScale : StartingScale;
-            }
+            MicrophoneUnMutedIcon.color = UnMutedMutedIconColorActive;
+            MicrophoneUnMutedIconTransform.localScale = largerScale;
+        }
+        public void MicrophoneNotTransmitting()
+        {
+            MicrophoneUnMutedIcon.color = UnMutedMutedIconColorInactive;
+            MicrophoneUnMutedIconTransform.localScale = StartingScale;
         }
 
         private void OnPausedEvent(bool IsMuted)
@@ -99,7 +97,6 @@ namespace Basis.Scripts.Drivers
         }
         public void UpdateMicrophoneVisuals(bool IsMuted, bool PlaySound)
         {
-            _isMuted = IsMuted;
            // Debug.Log(nameof(UpdateMicrophoneVisuals));
             // Cancel the current coroutine if it's running
             if (scaleCoroutine != null)
@@ -289,6 +286,8 @@ namespace Basis.Scripts.Drivers
             {
                 RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
                 BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
+                MicrophoneRecorder.MainThreadOnHasAudio -= MicrophoneTransmitting;
+                MicrophoneRecorder.MainThreadOnHasSilence -= MicrophoneNotTransmitting;
                 HasEvents = false;
             }
         }

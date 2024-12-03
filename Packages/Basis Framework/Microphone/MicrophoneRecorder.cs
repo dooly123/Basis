@@ -7,6 +7,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
 using Unity.Mathematics;
+using System.Collections.Concurrent;
 
 public class MicrophoneRecorder : MicrophoneRecorderBase
 {
@@ -184,8 +185,12 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             OnPausedAction?.Invoke(isPaused);
         }
     }
-
-    void LateUpdate()
+    private bool ScheduleMainHasAudio;
+    private bool ScheduleMainHasSilence;
+    public static Action MainThreadOnHasAudio;
+    public static Action MainThreadOnHasSilence; // Event triggered when silence is detected
+    private readonly object _lock = new object();
+    public void LateUpdate()
     {
         if (MicrophoneIsStarted)
         {
@@ -200,6 +205,22 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
 
             // Signal the processing thread to start processing the audio data
             processingEvent.Set();
+            lock (_lock)
+            {
+                if (ScheduleMainHasAudio)
+                {
+                    MainThreadOnHasAudio?.Invoke();
+                    ScheduleMainHasAudio = false;
+                }
+                else
+                {
+                    if (ScheduleMainHasSilence)
+                    {
+                        MainThreadOnHasSilence?.Invoke();
+                        ScheduleMainHasSilence = false;
+                    }
+                }
+            }
         }
     }
 
@@ -271,10 +292,18 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             if (IsTransmitWorthy())
             {
                 OnHasAudio?.Invoke();
-            }
+                lock (_lock)
+                {
+                    ScheduleMainHasAudio = true;
+                }
+             }
             else
             {
                 OnHasSilence?.Invoke();
+                lock (_lock)
+                {
+                    ScheduleMainHasSilence = true;
+                }
             }
 
             head = (head + ProcessBufferLength) % bufferLength;
