@@ -24,7 +24,7 @@ public static class BasisBundleLoadAsset
                             await BasisLoadableBundle.AssetBundle.UnloadAsync(true);
                             return null;
                         }
-                        GameObject CreatedCopy = ContentControlCondom(loadedObject, UseContentRemoval, Vector3.positiveInfinity, Rotation, Parent);
+                        GameObject CreatedCopy = ContentControl(loadedObject, UseContentRemoval, Vector3.positiveInfinity, Rotation, Parent);
                         Incremented = BasisLoadableBundle.Increment();
                         return CreatedCopy;
                     }
@@ -46,7 +46,7 @@ public static class BasisBundleLoadAsset
     /// <param name="SearchAndDestroy">The original GameObject to copy and clean.</param>
     /// <param name="UseContentRemoval">Whether to remove unapproved MonoBehaviours or not.</param>
     /// <returns>A copy of the GameObject with unapproved scripts removed.</returns>
-    public static GameObject ContentControlCondom(GameObject SearchAndDestroy, bool UseContentRemoval, Vector3 Position, Quaternion Rotation, Transform Parent = null)
+    public static GameObject ContentControl(GameObject SearchAndDestroy, bool UseContentRemoval, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
 
         if (UseContentRemoval)
@@ -56,7 +56,8 @@ public static class BasisBundleLoadAsset
             SearchAndDestroy.GetComponentsInChildren(true, monoBehaviours);
 
             // Iterate through the list of MonoBehaviours and remove unapproved ones
-            for (int Index = monoBehaviours.Count - 1; Index >= 0; Index--)
+            int count = monoBehaviours.Count;
+            for (int Index = count - 1; Index >= 0; Index--)
             {
                 MonoBehaviour mono = monoBehaviours[Index];
                 if (mono != null)
@@ -124,6 +125,7 @@ public static class BasisBundleLoadAsset
         }
         else
         {
+            Debug.LogError("Path was null or empty! this should not be happening!");
         }
     }
 }
