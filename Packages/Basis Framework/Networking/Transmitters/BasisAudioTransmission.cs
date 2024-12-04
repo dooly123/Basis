@@ -105,22 +105,25 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         private void SendVoiceOverNetwork()
         {
-            if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
+            if (Base.HasReasonToSendAudio)
             {
-                AudioSegmentData.buffer = new byte[encodedLength];
-            }
-            Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer, 0, encodedLength);
-
-            using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
-            {
-                writer.Write(AudioSegmentData);
-                BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
-                using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
+                if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
                 {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
+                    AudioSegmentData.buffer = new byte[encodedLength];
                 }
+                Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer, 0, encodedLength);
+
+                using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
+                {
+                    writer.Write(AudioSegmentData);
+                    BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
+                    using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
+                    {
+                        BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
+                    }
+                }
+                Local.AudioReceived?.Invoke(true);
             }
-            Local.AudioReceived?.Invoke(true);
         }
         private void SendSilenceOverNetwork()
         {

@@ -90,7 +90,7 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (AreBoolArraysEqual(HearingIndex, LastHearingIndex) == false)
             {
-                Debug.Log("Arrays where not equal!");
+                //Debug.Log("Arrays where not equal!");
                 Array.Copy(HearingIndex, LastHearingIndex, HearingIndexLength);
                 List<ushort> TalkingPoints = new List<ushort>();
                 for (int Index = 0; Index < HearingIndexLength; Index++)
@@ -101,6 +101,15 @@ namespace Basis.Scripts.Networking.Transmitters
                         TalkingPoints.Add(HearingIndexToId[Index]);
                     }
                 }
+                if(TalkingPoints.Count != 0)
+                {
+                    HasReasonToSendAudio = true;
+                }
+                else
+                {
+                    HasReasonToSendAudio = false;
+                }
+                //even if we are not listening to anyone we still need to tell the server that!
                 VoiceReceiversMessage VRM = new VoiceReceiversMessage
                 {
                     users = TalkingPoints.ToArray()

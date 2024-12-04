@@ -55,6 +55,9 @@ namespace Basis.Scripts.Networking
             if (Instance != null)
             {
                 RemotePlayers.Remove(NetID);
+                ReceiverArray = RemotePlayers.Values.ToArray();
+                ReceiverCount = ReceiverArray.Length;
+                Debug.Log("ReceiverCount was " + ReceiverCount);
                 return Players.Remove(NetID);
             }
             return false;

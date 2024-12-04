@@ -13,6 +13,25 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     {
         public bool Ready;
         public BasisNetworkedPlayer NetworkedPlayer;
+        private readonly object _lock = new object(); // Lock object for thread-safety
+        private bool _hasReasonToSendAudio;
+        public bool HasReasonToSendAudio
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _hasReasonToSendAudio;
+                }
+            }
+            set
+            {
+                lock (_lock)
+                {
+                    _hasReasonToSendAudio = value;
+                }
+            }
+        }
         public static BasisRangedUshortFloatData RotationCompression = new BasisRangedUshortFloatData(-1f, 1f, 0.001f);
         [System.Serializable]
         public struct AvatarBuffer
