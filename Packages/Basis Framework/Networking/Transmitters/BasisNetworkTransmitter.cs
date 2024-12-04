@@ -4,6 +4,7 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst;
@@ -37,7 +38,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public ClosestTransformJob closestJob = new ClosestTransformJob();
         public JobHandle distanceJobHandle;
         public JobHandle closestJobHandle;
-        public float VoiceDistance = 25;
+        public float VoiceDistanceUnSquared = 625;
         public bool[] HearingIndex;
         public bool[] LastHearingIndex;
         public ushort[] HearingIndexToId;
@@ -65,13 +66,13 @@ namespace Basis.Scripts.Networking.Transmitters
 
                 for (int Index = 0; Index < HearingIndexLength; Index++)
                 {
-                    if (closestJob.distances[Index] > VoiceDistance)
+                    if (closestJob.distances[Index] < VoiceDistanceUnSquared)
                     {
-                        HearingIndex[Index] = false;
+                        HearingIndex[Index] = true;
                     }
                     else
                     {
-                        HearingIndex[Index] = true;
+                        HearingIndex[Index] = false;
                     }
                 }
 
@@ -89,13 +90,15 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (AreBoolArraysEqual(HearingIndex, LastHearingIndex) == false)
             {
+                Debug.Log("Arrays where not equal!");
+                Array.Copy(HearingIndex, LastHearingIndex, HearingIndexLength);
                 List<ushort> TalkingPoints = new List<ushort>();
                 for (int Index = 0; Index < HearingIndexLength; Index++)
                 {
                     bool User = HearingIndex[Index];
                     if (User)
                     {
-                        TalkingPoints.Add(TalkingPoints[Index]);
+                        TalkingPoints.Add(HearingIndexToId[Index]);
                     }
                 }
                 VoiceReceiversMessage VRM = new VoiceReceiversMessage
@@ -108,6 +111,7 @@ namespace Basis.Scripts.Networking.Transmitters
                     using (Message msg = Message.Create(BasisTags.AudioCommunication, writer))
                     {
                         BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.ReliableOrdered);
+                        Debug.Log("sending out voice Receivers");
                     }
                 }
             }
