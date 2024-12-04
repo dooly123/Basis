@@ -1,7 +1,6 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 using static SerializableDarkRift;
 namespace Basis.Scripts.Networking.NetworkedAvatar

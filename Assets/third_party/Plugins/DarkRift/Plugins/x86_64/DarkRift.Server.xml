@@ -4399,20 +4399,6 @@
             </summary>
             <param name="client">The client representing the player to be removed.</param>
         </member>
-        <member name="M:DarkRift.Server.Plugins.BasisNetworking.PlayerDataStore.BasisSavedState.AddLastData(DarkRift.Server.IClient,SerializableDarkRift.LocalAvatarSyncMessage)">
-            <summary>
-            Adds or updates the last avatar sync message for a player.
-            </summary>
-            <param name="client">The client representing the player.</param>
-            <param name="avatarSyncMessage">The last avatar sync message of the player.</param>
-        </member>
-        <member name="M:DarkRift.Server.Plugins.BasisNetworking.PlayerDataStore.BasisSavedState.AddLastData(DarkRift.Server.IClient,SerializableDarkRift.ClientAvatarChangeMessage)">
-            <summary>
-            Adds or updates the last avatar change message for a player.
-            </summary>
-            <param name="client">The client representing the player.</param>
-            <param name="avatarChangeMessage">The last avatar change message of the player.</param>
-        </member>
         <member name="M:DarkRift.Server.Plugins.BasisNetworking.PlayerDataStore.BasisSavedState.GetLastData(DarkRift.Server.IClient,DarkRift.Server.Plugins.BasisNetworking.PlayerDataStore.BasisSavedState.StoredData@)">
             <summary>
             Retrieves the last data message for a player.
@@ -5727,56 +5713,6 @@
         <member name="P:DarkRift.Server.ServerObjectCacheSettings.MaxServerMessageReceivedEventArgs">
             <summary>
                 The maximum number of ServerMessageReceivedEventArgs to cache per thread.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerObjectCacheTestHelper">
-            <summary>
-                Helper for tests to assert recycling is carried out correctly.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerObjectCacheTestHelper.RetrievedMessageReceivedEventArgs">
-            <summary>
-                The number of <see cref="T:DarkRift.Server.MessageReceivedEventArgs"/> objects that were retrieved from the cache.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerObjectCacheTestHelper.ReturnedMessageReceivedEventArgs">
-            <summary>
-                The number of <see cref="T:DarkRift.Server.MessageReceivedEventArgs"/> objects that were returned to the cache.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerObjectCacheTestHelper.RetrievedServerMessageReceivedEventArgs">
-            <summary>
-                The number of <see cref="T:DarkRift.Server.ServerMessageReceivedEventArgs"/> objects that were retrieved from the cache.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerObjectCacheTestHelper.ReturnedServerMessageReceivedEventArgs">
-            <summary>
-                The number of <see cref="T:DarkRift.Server.ServerMessageReceivedEventArgs"/> objects that were returned to the cache.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerObjectCacheTestHelper.MessageReceivedEventArgsWasRetrieved">
-            <summary>
-                Indcates an <see cref="T:DarkRift.Server.MessageReceivedEventArgs"/> was retrieved from the cache.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerObjectCacheTestHelper.MessageReceivedEventArgsWasReturned">
-            <summary>
-                Indcates an <see cref="T:DarkRift.Server.MessageReceivedEventArgs"/> was returned to the cache.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerObjectCacheTestHelper.ServerMessageReceivedEventArgsWasRetrieved">
-            <summary>
-                Indcates an <see cref="T:DarkRift.Server.ServerMessageReceivedEventArgs"/> was retrieved from the cache.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerObjectCacheTestHelper.ServerMessageReceivedEventArgsWasReturned">
-            <summary>
-                Indcates an <see cref="T:DarkRift.Server.ServerMessageReceivedEventArgs"/> was returned to the cache.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerObjectCacheTestHelper.ResetCounters">
-            <summary>
-                Resets all metrics recorded.
             </summary>
         </member>
         <member name="T:DarkRift.Server.ServerRegistryConnector">

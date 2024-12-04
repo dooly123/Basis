@@ -4,7 +4,8 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -36,6 +37,11 @@ namespace Basis.Scripts.Networking.Transmitters
         public ClosestTransformJob closestJob = new ClosestTransformJob();
         public JobHandle distanceJobHandle;
         public JobHandle closestJobHandle;
+        public float VoiceDistance = 25;
+        public bool[] HearingIndex;
+        public bool[] LastHearingIndex;
+        public ushort[] HearingIndexToId;
+        public int HearingIndexLength;
         public override void Compute()
         {
             if (Ready && NetworkedPlayer.Player.Avatar != null)
@@ -55,9 +61,22 @@ namespace Basis.Scripts.Networking.Transmitters
                 closestJob.distances = distanceJob.distances;
                 closestJob.Length = distances.Length;
 
-                closestJobHandle = closestJob.Schedule(closestJobHandle);
-                closestJobHandle.Complete();
+                closestJobHandle = closestJob.Schedule();
 
+                for (int Index = 0; Index < HearingIndexLength; Index++)
+                {
+                    if (closestJob.distances[Index] > VoiceDistance)
+                    {
+                        HearingIndex[Index] = false;
+                    }
+                    else
+                    {
+                        HearingIndex[Index] = true;
+                    }
+                }
+
+                closestJobHandle.Complete();
+                HandleAudioCommunication();
                 activeDistance = closestJob.result[0];
                 //this is a int miliseconds but i need to know if that will work for the timer check
 
@@ -65,6 +84,65 @@ namespace Basis.Scripts.Networking.Transmitters
                 interval = math.clamp(UnClampedInterval, 0.005f, 5);
                 timer = 0;
             }
+        }
+        public void HandleAudioCommunication()
+        {
+            if (AreBoolArraysEqual(HearingIndex, LastHearingIndex) == false)
+            {
+                List<ushort> TalkingPoints = new List<ushort>();
+                for (int Index = 0; Index < HearingIndexLength; Index++)
+                {
+                    bool User = HearingIndex[Index];
+                    if (User)
+                    {
+                        TalkingPoints.Add(TalkingPoints[Index]);
+                    }
+                }
+                VoiceReceiversMessage VRM = new VoiceReceiversMessage
+                {
+                    users = TalkingPoints.ToArray()
+                };
+                using (DarkRiftWriter writer = DarkRiftWriter.Create())
+                {
+                    writer.Write(VRM);
+                    using (Message msg = Message.Create(BasisTags.AudioCommunication, writer))
+                    {
+                        BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.ReliableOrdered);
+                    }
+                }
+            }
+        }
+        public static bool AreBoolArraysEqual(bool[] array1, bool[] array2)
+        {
+            // Check if both arrays are null
+            if (array1 == null && array2 == null)
+            {
+                return true;
+            }
+
+            // Check if one of them is null
+            if (array1 == null || array2 == null)
+            {
+                return false;
+            }
+
+            int Arraylength = array1.Length;
+            // Check if lengths differ
+            if (Arraylength != array2.Length)
+            {
+                return false;
+            }
+
+            // Compare values
+            for (int Index = 0; Index < Arraylength; Index++)
+            {
+                if (array1[Index] != array2[Index])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
         public void OnDestroy()
         {
@@ -111,6 +189,13 @@ namespace Basis.Scripts.Networking.Transmitters
             for (int Index = 0; Index < BasisNetworkManagement.ReceiverCount; Index++)
             {
                 targetPositions[Index] = BasisNetworkManagement.ReceiverArray[Index].NetworkedPlayer.MouthBone.OutgoingWorldData.position;
+            }
+            if(HearingIndexLength != BasisNetworkManagement.ReceiverCount)
+            {
+                LastHearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
+                HearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
+                HearingIndexLength = BasisNetworkManagement.ReceiverCount;
+                HearingIndexToId = BasisNetworkManagement.RemotePlayers.Keys.ToArray();
             }
             distanceJobHandle = distanceJob.Schedule(targetPositions.Length, 64);
         }
@@ -189,7 +274,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 }
             }
         }
-       // [BurstCompile]
+        [BurstCompile]
         public struct DistanceCalculationJob : IJobParallelFor
         {
             [ReadOnly]

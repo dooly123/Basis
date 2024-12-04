@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine;
 
 namespace Basis.Scripts.Networking.Compression
 {
