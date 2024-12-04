@@ -1,16 +1,13 @@
-using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using static SerializableDarkRift;
-using static UnityEngine.ParticleSystem;
 
 namespace Basis.Scripts.Networking.Recievers
 {

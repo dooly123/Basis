@@ -27,6 +27,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public BasisAudioTransmission AudioTransmission = new BasisAudioTransmission();
         private NativeArray<float3> targetPositions;  // NativeArray for multithreading.
         private NativeArray<float> distances;         // Distance results.
+        private NativeArray<bool> DistanceResults;
         public float UnClampedInterval;
 
         public static float DefaultInterval = 0.0333333333333333f;
@@ -61,21 +62,9 @@ namespace Basis.Scripts.Networking.Transmitters
 
                 closestJob.distances = distanceJob.distances;
                 closestJob.Length = distances.Length;
+                closestJob.VoiceDistance = VoiceDistanceUnSquared;
 
                 closestJobHandle = closestJob.Schedule();
-
-                for (int Index = 0; Index < HearingIndexLength; Index++)
-                {
-                    if (closestJob.distances[Index] < VoiceDistanceUnSquared)
-                    {
-                        HearingIndex[Index] = true;
-                    }
-                    else
-                    {
-                        HearingIndex[Index] = false;
-                    }
-                }
-
                 closestJobHandle.Complete();
                 HandleAudioCommunication();
                 activeDistance = closestJob.result[0];
@@ -88,6 +77,19 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void HandleAudioCommunication()
         {
+            if (closestJob.DistanceResults == null)
+            {
+               return;
+            }
+            if(HearingIndex == null)
+            {
+                return;
+            }
+            if(HearingIndex.Length != closestJob.DistanceResults.Length)
+            {
+                return;
+            }
+            closestJob.DistanceResults.CopyTo(HearingIndex);
             if (AreBoolArraysEqual(HearingIndex, LastHearingIndex) == false)
             {
                 //Debug.Log("Arrays where not equal!");
@@ -101,7 +103,7 @@ namespace Basis.Scripts.Networking.Transmitters
                         TalkingPoints.Add(HearingIndexToId[Index]);
                     }
                 }
-                if(TalkingPoints.Count != 0)
+                if (TalkingPoints.Count != 0)
                 {
                     HasReasonToSendAudio = true;
                 }
@@ -186,12 +188,10 @@ namespace Basis.Scripts.Networking.Transmitters
                 Debug.Log("Already Ready");
             }
         }
-
         private void OnRemoteLeft(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
         {
             ResizeOrCreateArrayData(BasisNetworkManagement.ReceiverCount);
         }
-
         private void OnRemoteJoined(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
         {
             ResizeOrCreateArrayData(BasisNetworkManagement.ReceiverCount);
@@ -203,7 +203,7 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 targetPositions[Index] = BasisNetworkManagement.ReceiverArray[Index].NetworkedPlayer.MouthBone.OutgoingWorldData.position;
             }
-            if(HearingIndexLength != BasisNetworkManagement.ReceiverCount)
+            if (HearingIndexLength != BasisNetworkManagement.ReceiverCount)
             {
                 LastHearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
                 HearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
@@ -233,13 +233,19 @@ namespace Basis.Scripts.Networking.Transmitters
                 {
                     result.Dispose();
                 }
+                if(DistanceResults.IsCreated)
+                {
+                    DistanceResults.Dispose();
+                }
                 result = new NativeArray<float>(1, Allocator.TempJob);
                 targetPositions = new NativeArray<float3>(TotalUserCount, Allocator.Persistent);
                 distances = new NativeArray<float>(TotalUserCount, Allocator.Persistent);
+                DistanceResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
                 InitalizedLength = TotalUserCount;
 
                 // Step 2: Find closest index in the next frame
                 closestJob.distances = distances;
+                closestJob.DistanceResults = DistanceResults;
                 distanceJob.distances = distances;
 
                 distanceJob.targetPositions = targetPositions;
@@ -267,6 +273,10 @@ namespace Basis.Scripts.Networking.Transmitters
                 {
                     result.Dispose();
                 }
+                if (DistanceResults.IsCreated)
+                {
+                    DistanceResults.Dispose();
+                }
                 HasEvents = false;
             }
         }
@@ -292,16 +302,14 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             [ReadOnly]
             public float3 referencePosition;
-            [ReadOnly] 
+            [ReadOnly]
             public NativeArray<float3> targetPositions;
             [WriteOnly]
             public NativeArray<float> distances;
-
             public void Execute(int index)
             {
                 Vector3 diff = targetPositions[index] - referencePosition;
                 distances[index] = diff.sqrMagnitude;
-                //Debug.Log(" distances " + index + " | " + distances[index] + " Refer " + referencePosition + " To " + targetPositions[index]);
             }
         }
 
@@ -309,9 +317,13 @@ namespace Basis.Scripts.Networking.Transmitters
         public struct ClosestTransformJob : IJob
         {
             public int Length;
-            [ReadOnly] public NativeArray<float> distances;
-            public NativeArray<float> result; // Shared writable array for results
-
+            public float VoiceDistance;
+            [ReadOnly]
+            public NativeArray<float> distances;
+            [WriteOnly]
+            public NativeArray<float> result;
+            [WriteOnly]
+            public NativeArray<bool> DistanceResults;
             public void Execute()
             {
                 float smallestDistance = float.MaxValue;
@@ -321,6 +333,14 @@ namespace Basis.Scripts.Networking.Transmitters
                     if (distances[Index] < smallestDistance)
                     {
                         smallestDistance = distances[Index];
+                    }
+                    if (distances[Index] < VoiceDistance)
+                    {
+                        DistanceResults[Index] = true;
+                    }
+                    else
+                    {
+                        DistanceResults[Index] = false;
                     }
                 }
 
