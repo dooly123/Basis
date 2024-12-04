@@ -3,8 +3,8 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.Drivers;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using System;
 using UnityEngine;
-using UnityEngine.Audio;
 
 namespace Basis.Scripts.Networking.Recievers
 {
@@ -22,7 +22,7 @@ namespace Basis.Scripts.Networking.Recievers
                 audioSource = BasisHelpers.GetOrAddComponent<AudioSource>(remotePlayer.AudioSourceGameobject);
             }
             audioSource.spatialize = true;
-            audioSource.spatializePostEffects = false;
+            audioSource.spatializePostEffects = true; //revist later!
             audioSource.spatialBlend = 1.0f;
             audioSource.dopplerLevel = 0;
             audioSource.volume = 1.0f;
@@ -31,10 +31,12 @@ namespace Basis.Scripts.Networking.Recievers
             samplingFrequency = settings.GetSampleFreq();
             numChannels = 1;
             SampleLength = samplingFrequency * numChannels;
-            int Size = 2048 * 2;
             RingBuffer = new RingBuffer(4096*2);
             // Create AudioClip
-            audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", Size, numChannels, samplingFrequency, false);
+            audioSource.clip = AudioClip.Create($"player [{networkedPlayer.NetId}]", 4096, numChannels, samplingFrequency, false, (buf) => 
+            {
+                Array.Fill(buf, 1.0f);
+            });
             // Ensure decoder is initialized and subscribe to events
             if (decoder == null)
             {

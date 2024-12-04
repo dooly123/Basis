@@ -10,7 +10,7 @@ namespace Basis.Scripts.Drivers
         public void OnAudioFilterRead(float[] data, int channels)
         {
           //2048  Debug.Log("data" + data.Length);
-            BasisAudioReceiver.ProcessAudioSamples(data, channels); 
+            BasisAudioReceiver.OnAudioFilterRead(data, channels); 
             BasisAudioAndVisemeDriver.ProcessAudioSamples(data, channels);
         }
         public void Initalize(BasisAudioAndVisemeDriver basisVisemeDriver)

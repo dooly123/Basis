@@ -34,35 +34,38 @@ namespace Basis.Scripts.Networking.Recievers
             }
             RingBuffer.Add(pcm, decoder.pcmLength);
         }
-        /// <summary>
-        /// processed in array size 2048 
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="channels"></param>
-        public void ProcessAudioSamples(float[] data, int channels)
+        public void OnAudioFilterRead(float[] data, int channels)
         {
-            // Ensure you have enough data for the required samples
+            // Ensure we have enough data for the required samples
             int length = data.Length;
             int frames = length / channels; // Number of audio frames
+
+            // If no data in the buffer, clear the output
             if (RingBuffer.IsEmpty)
             {
-              //  Debug.Log("no voice data clearing out existing");
-                Array.Clear(data, 0, length);
+                // No voice data, fill with silence
+                Array.Fill(data, 0);
                 return;
             }
+
+            // Retrieve the segment of audio data from the RingBuffer
             RingBuffer.Remove(frames, out float[] segment);
 
-            // Populate the interleaved data array
+            // Apply the filter: multiply the existing data by the generated samples
             for (int i = 0; i < frames; i++)
             {
-                float sample = segment[i]; // Get the sample from your single-channel RingBuffer
+                float sample = segment[i]; // Single-channel sample from the RingBuffer
 
                 for (int c = 0; c < channels; c++)
                 {
-                    data[i * channels + c] = sample; // Copy the sample to all channels
+                    int index = i * channels + c;
+
+                    // Multiply existing data with the sample
+                    data[index] *= sample;
                 }
             }
-            //no need to lock unlock as its only used here!
+
+            // Return the processed segment back to the buffer for reuse
             RingBuffer.BufferedReturn.Enqueue(segment);
         }
     }
