@@ -35,10 +35,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
 
             int Offset = 0;
-            BasisBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition,ref NetworkSendBase.LASM.array,ref Offset);
-            BasisBitPackerExtensions.WriteUshortVectorFloatToBytes(Anim.transform.localScale, BasisNetworkSendBase.ScaleRanged,ref NetworkSendBase.LASM.array, ref Offset);
-            BasisBitPackerExtensions.WriteQuaternionToBytes(Anim.bodyRotation, ref NetworkSendBase.LASM.array, ref Offset, BasisNetworkSendBase.RotationCompression);
-            BasisBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref NetworkSendBase.LASM.array,ref Offset);
+            BasisUnityBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition,ref NetworkSendBase.LASM.array,ref Offset);
+            BasisUnityBitPackerExtensions.WriteUshortVectorFloatToBytes(Anim.transform.localScale, BasisNetworkSendBase.ScaleRanged,ref NetworkSendBase.LASM.array, ref Offset);
+            BasisUnityBitPackerExtensions.WriteQuaternionToBytes(Anim.bodyRotation, ref NetworkSendBase.LASM.array, ref Offset, BasisNetworkSendBase.RotationCompression);
+            BasisUnityBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref NetworkSendBase.LASM.array,ref Offset);
         }
     }
 }

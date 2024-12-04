@@ -526,6 +526,12 @@
             </summary>
             <returns>The array of bytes read.</returns>
         </member>
+        <member name="M:DarkRift.DarkRiftReader.ReadBytes(System.Byte[]@)">
+            <summary>
+                Reads an array of bytes from the reader.
+            </summary>
+            <returns>The array of bytes read.</returns>
+        </member>
         <member name="M:DarkRift.DarkRiftReader.Read(System.Byte[]@)">
             <summary>
                 Reads an array of bytes from the reader.
@@ -758,6 +764,12 @@
             </summary>
             <returns>The array of unsigned 32bit integers read.</returns>
         </member>
+        <member name="M:DarkRift.DarkRiftReader.ReadUInt32s(System.UInt32[]@)">
+            <summary>
+                Reads an array unsigned 32bit integers from the reader.
+            </summary>
+            <returns>The array of unsigned 32bit integers read.</returns>
+        </member>
         <member name="M:DarkRift.DarkRiftReader.Read(System.UInt32[]@)">
             <summary>
                 Reads an array unsigned 32bit integers from the reader.
@@ -772,6 +784,12 @@
             <param name="offset">The offset at which to write bytes into the array.</param>
         </member>
         <member name="M:DarkRift.DarkRiftReader.ReadUInt64s">
+            <summary>
+                Reads an array unsigned 64bit integers from the reader.
+            </summary>
+            <returns>The array of unsigned 64bit integers read.</returns>
+        </member>
+        <member name="M:DarkRift.DarkRiftReader.ReadUInt64s(System.UInt64[]@)">
             <summary>
                 Reads an array unsigned 64bit integers from the reader.
             </summary>
@@ -816,6 +834,14 @@
                 Reads an array of raw bytes from the reader.
             </summary>
             <param name="length">The number of bytes to read.</param>
+            <returns>The array of bytes read.</returns>
+        </member>
+        <member name="M:DarkRift.DarkRiftReader.ReadRaw(System.Int32,System.Byte[]@)">
+            <summary>
+                Reads an array of raw bytes from the reader.
+            </summary>
+            <param name="length">The number of bytes to read.</param>
+            <param name="raw"></param>
             <returns>The array of bytes read.</returns>
         </member>
         <member name="M:DarkRift.DarkRiftReader.ReadRawInto(System.Byte[],System.Int32,System.Int32)">
@@ -2774,6 +2800,16 @@
         </member>
         <member name="M:DarkRift.UnmanagedMemoryBuffer.Clone">
             <inheritdoc/>
+        </member>
+        <member name="M:Basis.Scripts.Networking.Compression.BasisBitPackerExtensions.DecompressAndProcessAvatar(SerializableDarkRift.ServerSideSyncPlayerMessage)">
+            <summary>
+            Single API to handle all avatar decompression tasks.
+            </summary>
+        </member>
+        <member name="T:Basis.Scripts.Networking.Compression.float3">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:Compression">
             <summary>Functions to Compress Quaternions and Floats</summary>

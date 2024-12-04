@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Basis.Scripts.Networking.Compression
 {
-    public static class BasisBitPackerExtensions
+    public static class BasisUnityBitPackerExtensions
     {
         public static BasisRangedUshortFloatData BasisRangedUshortFloatData = new BasisRangedUshortFloatData(-1f, 1f, 0.001f);
         public static int LengthSize = 90;
@@ -16,7 +16,7 @@ namespace Basis.Scripts.Networking.Compression
         private static readonly ObjectPool<byte[]> byteArrayPool = new ObjectPool<byte[]>(() => new byte[LengthBytes]);
 
         // Manual conversion of ushort to bytes (without BitConverter)
-        public static void WriteUshortVectorFloatToBytes(Vector3 values, BasisRangedUshortFloatData compressor, ref byte[] bytes, ref int offset)
+        public static void WriteUshortVectorFloatToBytes(UnityEngine.Vector3 values, BasisRangedUshortFloatData compressor, ref byte[] bytes, ref int offset)
         {
             EnsureSize(ref bytes, offset + 6);
             ushort compressedX = compressor.Compress(values.x);
@@ -37,7 +37,7 @@ namespace Basis.Scripts.Networking.Compression
         }
 
         // Manual conversion of bytes to ushort (without BitConverter)
-        public static Vector3 ReadUshortVectorFloatFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
+        public static Unity.Mathematics.float3 ReadUshortVectorFloatFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
         {
             EnsureSize(bytes, offset + 6);
 
@@ -47,7 +47,7 @@ namespace Basis.Scripts.Networking.Compression
 
             offset += 6;
 
-            return new Vector3(
+            return new Unity.Mathematics.float3(
                 compressor.Decompress(compressedX),
                 compressor.Decompress(compressedY),
                 compressor.Decompress(compressedZ)
@@ -55,7 +55,7 @@ namespace Basis.Scripts.Networking.Compression
         }
 
         // Manual conversion of Vector3 to bytes (without BitConverter)
-        public static void WriteVectorFloatToBytes(Vector3 values, ref byte[] bytes, ref int offset)
+        public static void WriteVectorFloatToBytes(UnityEngine. Vector3 values, ref byte[] bytes, ref int offset)
         {
             EnsureSize(ref bytes, offset + 12);
 
@@ -66,7 +66,7 @@ namespace Basis.Scripts.Networking.Compression
         }
 
         // Manual conversion of bytes to Vector3 (without BitConverter)
-        public static Vector3 ReadVectorFloatFromBytes(ref byte[] bytes, ref int offset)
+        public static Unity.Mathematics.float3 ReadVectorFloatFromBytes(ref byte[] bytes, ref int offset)
         {
             EnsureSize(bytes, offset + 12);
 
@@ -74,11 +74,11 @@ namespace Basis.Scripts.Networking.Compression
             float y = ReadFloatFromBytes(ref bytes, ref offset);
             float z = ReadFloatFromBytes(ref bytes, ref offset);
 
-            return new Vector3(x, y, z);
+            return new Unity.Mathematics.float3(x, y, z);
         }
 
         // Manual conversion of quaternion to bytes (without BitConverter)
-        public static void WriteQuaternionToBytes(quaternion rotation, ref byte[] bytes, ref int offset, BasisRangedUshortFloatData compressor)
+        public static void WriteQuaternionToBytes(Unity.Mathematics.quaternion rotation, ref byte[] bytes, ref int offset, BasisRangedUshortFloatData compressor)
         {
             EnsureSize(ref bytes, offset + 14);
             ushort compressedW = compressor.Compress(rotation.value.w);
@@ -95,7 +95,7 @@ namespace Basis.Scripts.Networking.Compression
         }
 
         // Manual conversion of bytes to quaternion (without BitConverter)
-        public static quaternion ReadQuaternionFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
+        public static Unity.Mathematics.quaternion ReadQuaternionFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
         {
             EnsureSize(bytes, offset + 14);
 
@@ -106,7 +106,7 @@ namespace Basis.Scripts.Networking.Compression
             ushort compressedW = (ushort)(bytes[offset] | (bytes[offset + 1] << 8));
             offset += 2;
 
-            return new quaternion(x, y, z, compressor.Decompress(compressedW));
+            return new Unity.Mathematics.quaternion(x, y, z, compressor.Decompress(compressedW));
         }
 
         // Write muscles to bytes (no BitConverter)

@@ -7028,5 +7028,58 @@
             <param name="lineInfo">The line information about where this issue is.</param>
             <param name="innerException">The inner exception.</param>
         </member>
+        <member name="M:BasisServerReductionSystem.AddOrUpdatePlayer(DarkRift.Server.IClient,SerializableDarkRift.ServerSideSyncPlayerMessage,DarkRift.Server.IClient)">
+            <summary>
+            add the new client
+            then update all existing clients arrays
+            </summary>
+            <param name="playerID"></param>
+            <param name="playerToUpdate"></param>
+            <param name="serverSideSyncPlayer"></param>
+        </member>
+        <member name="T:BasisServerReductionSystem.SyncedToPlayerPulse">
+            <summary>
+            Structure to synchronize data with a specific player.
+            </summary>
+        </member>
+        <member name="F:BasisServerReductionSystem.SyncedToPlayerPulse.queuedPlayerMessages">
+            <summary>
+            Dictionary to hold queued messages for each player.
+            Key: Player ID, Value: Server-side player data
+            </summary>
+        </member>
+        <member name="M:BasisServerReductionSystem.SyncedToPlayerPulse.SupplyNewData(DarkRift.Server.IClient,SerializableDarkRift.ServerSideSyncPlayerMessage,DarkRift.Server.IClient)">
+            <summary>
+            Supply new data to a specific player.
+            </summary>
+            <param name="playerID">The ID of the player</param>
+            <param name="serverSideSyncPlayerMessage">The message to be synced</param>
+            <param name="serverSidePlayer"></param>
+        </member>
+        <member name="M:BasisServerReductionSystem.SyncedToPlayerPulse.AddPlayer(DarkRift.Server.IClient,SerializableDarkRift.ServerSideSyncPlayerMessage,DarkRift.Server.IClient)">
+            <summary>
+            Adds a new player to the queue with a default timer and settings.
+            </summary>
+            <param name="playerID">The ID of the player</param>
+            <param name="serverSideSyncPlayerMessage">The initial message to be sent</param>
+            <param name="serverSidePlayer"></param>
+        </member>
+        <member name="M:BasisServerReductionSystem.SyncedToPlayerPulse.RemovePlayer(DarkRift.Server.IClient)">
+            <summary>
+            Removes a player from the queue and disposes of their timer.
+            </summary>
+            <param name="playerID">The ID of the player to remove</param>
+        </member>
+        <member name="M:BasisServerReductionSystem.SyncedToPlayerPulse.SendPlayerData(System.Object)">
+            <summary>
+            Callback function to send player data at regular intervals.
+            </summary>
+            <param name="state">The player ID (passed from the timer)</param>
+        </member>
+        <member name="T:BasisServerReductionSystem.ServerSideReducablePlayer">
+            <summary>
+            Structure representing a player's server-side data that can be reduced.
+            </summary>
+        </member>
     </members>
 </doc>

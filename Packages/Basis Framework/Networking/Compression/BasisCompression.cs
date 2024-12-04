@@ -36,14 +36,14 @@ public static class BasisCompression
 
     // helper function to find largest absolute element
     // returns the index of the largest one
-    public static int LargestAbsoluteComponentIndex(Vector4 value, out float largestAbs, out Vector3 withoutLargest)
+    public static int LargestAbsoluteComponentIndex(UnityEngine.Vector4 value, out float largestAbs, out UnityEngine.Vector3 withoutLargest)
     {
-        // convert to abs
-        Vector4 abs = new Vector4(Mathf.Abs(value.x), Mathf.Abs(value.y), Mathf.Abs(value.z), Mathf.Abs(value.w));
+            // convert to abs
+            UnityEngine.Vector4 abs = new UnityEngine.Vector4(Mathf.Abs(value.x), Mathf.Abs(value.y), Mathf.Abs(value.z), Mathf.Abs(value.w));
 
         // set largest to first abs (x)
         largestAbs = abs.x;
-        withoutLargest = new Vector3(value.y, value.z, value.w);
+        withoutLargest = new UnityEngine.Vector3(value.y, value.z, value.w);
         int largestIndex = 0;
 
         // compare to the others, starting at second value
@@ -54,19 +54,19 @@ public static class BasisCompression
         {
             largestIndex = 1;
             largestAbs = abs.y;
-            withoutLargest = new Vector3(value.x, value.z, value.w);
+            withoutLargest = new UnityEngine.Vector3(value.x, value.z, value.w);
         }
         if (abs.z > largestAbs)
         {
             largestIndex = 2;
             largestAbs = abs.z;
-            withoutLargest = new Vector3(value.x, value.y, value.w);
+            withoutLargest = new UnityEngine.Vector3(value.x, value.y, value.w);
         }
         if (abs.w > largestAbs)
         {
             largestIndex = 3;
             largestAbs = abs.w;
-            withoutLargest = new Vector3(value.x, value.y, value.z);
+            withoutLargest = new UnityEngine.Vector3(value.x, value.y, value.z);
         }
 
         return largestIndex;
@@ -79,7 +79,7 @@ public static class BasisCompression
         //       normalize here. we already normalize when decompressing.
 
         // find the largest component index [0,3] + value
-        int largestIndex = LargestAbsoluteComponentIndex(new Vector4(q.x, q.y, q.z, q.w), out float _, out Vector3 withoutLargest);
+        int largestIndex = LargestAbsoluteComponentIndex(new UnityEngine.Vector4(q.x, q.y, q.z, q.w), out float _, out UnityEngine.Vector3 withoutLargest);
 
         // from here on, we work with the 3 components without largest!
 
@@ -126,8 +126,8 @@ public static class BasisCompression
         // The smallest positive normal number representable in a float.
         const float FLT_MIN_NORMAL = 1.175494351e-38F;
 
-        Vector4 v = new Vector4(value.x, value.y, value.z, value.w);
-        float length = Vector4.Dot(v, v);
+            UnityEngine.Vector4 v = new UnityEngine.Vector4(value.x, value.y, value.z, value.w);
+        float length = UnityEngine.Vector4.Dot(v, v);
         return length > FLT_MIN_NORMAL
                ? value.normalized
                : Quaternion.identity;
@@ -156,14 +156,14 @@ public static class BasisCompression
         // calculate the omitted component based on a�+b�+c�+d�=1
         float d = Mathf.Sqrt(1 - a * a - b * b - c * c);
 
-        // reconstruct based on largest index
-        Vector4 value;
+            // reconstruct based on largest index
+            UnityEngine.Vector4 value;
         switch (largestIndex)
         {
-            case 0: value = new Vector4(d, a, b, c); break;
-            case 1: value = new Vector4(a, d, b, c); break;
-            case 2: value = new Vector4(a, b, d, c); break;
-            default: value = new Vector4(a, b, c, d); break;
+            case 0: value = new UnityEngine.Vector4(d, a, b, c); break;
+            case 1: value = new UnityEngine.Vector4(a, d, b, c); break;
+            case 2: value = new UnityEngine.Vector4(a, b, d, c); break;
+            default: value = new UnityEngine.Vector4(a, b, c, d); break;
         }
 
         // ECS Rotation only works with normalized quaternions.
