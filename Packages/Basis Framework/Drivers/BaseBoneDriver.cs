@@ -33,15 +33,14 @@ namespace Basis.Scripts.Drivers
         /// <summary>
         /// call this after updating the bone data
         /// </summary>
-        public void Simulate()
+        public void Simulate(double timeAsDouble,float deltaTime)
         {
             // sequence all other devices to run at the same time
-            ProvidedTime = Time.timeAsDouble;
-            DeltaTime = Time.deltaTime;
-            if (float.IsNaN(DeltaTime) || DeltaTime <= 0f)
+            ProvidedTime = timeAsDouble;
+            DeltaTime = deltaTime;
+            if (float.IsNaN(DeltaTime))
             {
-                DeltaTime = 0f;
-                return; // Skip simulation if DeltaTime is invalid or zero
+                return;
             }
 
             OnSimulate?.Invoke();
@@ -80,9 +79,9 @@ namespace Basis.Scripts.Drivers
                 }
             }
         }
-        public void SimulateAndApply()
+        public void SimulateAndApply(double timeAsDouble, float deltaTime)
         {
-            Simulate();
+            Simulate( timeAsDouble, deltaTime);
             ApplyMovement();
         }
         public void SimulateAndApplyWithoutLerp()

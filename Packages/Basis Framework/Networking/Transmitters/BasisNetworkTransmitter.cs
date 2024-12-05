@@ -53,7 +53,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public float VoiceDistanceUnSquared = 625;
         public float HearingDistanceUnSquared = 625;
         public float AvatarDistanceUnSquared = 625;
-        public override void Compute()
+        public void Compute()
         {
             if (Ready && NetworkedPlayer.Player.Avatar != null)
             {
@@ -255,7 +255,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 {
                     AvatarResults.Dispose();
                 }
-                smallestDistance = new NativeArray<float>(1, Allocator.TempJob);
+                smallestDistance = new NativeArray<float>(1, Allocator.Persistent);
                 targetPositions = new NativeArray<float3>(TotalUserCount, Allocator.Persistent);
                 distances = new NativeArray<float>(TotalUserCount, Allocator.Persistent);
                 DistanceResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);

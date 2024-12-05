@@ -18,6 +18,7 @@ using static BasisNetworkGenericMessages;
 using static SerializableDarkRift;
 namespace Basis.Scripts.Networking
 {
+    [DefaultExecutionOrder(15001)]
     public class BasisNetworkManagement : MonoBehaviour
     {
         public string Ip = "170.64.184.249";
@@ -109,7 +110,7 @@ namespace Basis.Scripts.Networking
             {
                 Instance = this;
             }            // Initialize AvatarBuffer
-            BasisAvatarBufferPool.AvatarBufferPool();
+            BasisAvatarBufferPool.AvatarBufferPool(30);
             OwnershipPairing.Clear();
             if (BasisScene.Instance != null)
             {
@@ -127,6 +128,22 @@ namespace Basis.Scripts.Networking
         {
             Players.Clear();
             BasisAvatarBufferPool.Clear();
+        }
+        public void LateUpdate()
+        {
+            double TimeAsDouble = Time.timeAsDouble;
+            float deltaTime = Time.deltaTime;
+            for (int Index = 0; Index < ReceiverCount; Index++)
+            {
+                //schedule mulithreaded tasks
+                ReceiverArray[Index].Compute(TimeAsDouble);
+            }
+            for (int Index = 0; Index < ReceiverCount; Index++)
+            {
+                //now that its all schedule start going through and
+                //completing if they are not done already
+                ReceiverArray[Index].Apply(TimeAsDouble, deltaTime);
+            }
         }
         public static bool TryGetLocalPlayerID(out ushort LocalID)
         {

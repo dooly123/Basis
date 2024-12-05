@@ -2,8 +2,6 @@
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics; // Using Unity.Mathematics for math operations
-using UnityEngine;
-
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     [BurstCompile]

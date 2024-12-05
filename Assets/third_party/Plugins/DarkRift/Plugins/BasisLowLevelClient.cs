@@ -90,7 +90,7 @@ namespace DarkRift.Client.Unity
             Client.MessageReceived += Client_MessageReceived;
             Client.Disconnected += Client_Disconnected;
         }
-        private const float interval = 1.0f / 30.0f;
+        private const float interval = 0.0333333333333333f;
         private float timer = 0.0f;
         void Update()
         {
@@ -171,7 +171,7 @@ namespace DarkRift.Client.Unity
         /// </summary>
         /// <param name="message">The message template to send.</param>
         /// <returns>Whether the send was successful.</returns>
-        public bool SendMessage(Message message,byte channel, DeliveryMethod sendMode)
+        public bool SendMessage(Message message, byte channel, DeliveryMethod sendMode)
         {
             return Client.SendMessage(message, channel, sendMode);
         }

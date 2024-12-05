@@ -11,7 +11,7 @@ namespace Basis.Scripts.BasisSdk.Players
     {
         public BasisRemoteBoneDriver RemoteBoneDriver;
         public BasisRemoteAvatarDriver RemoteAvatarDriver;
-        public GameObject AudioSourceGameobject;
+        public Transform AudioSourceTransform;
         public BasisBoneControl MouthControl;
         public bool HasEvents = false;
         public bool LockAvatarFromChanging;
@@ -52,7 +52,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void UpdateTransform(Vector3 position, Quaternion rotation)
         {
-            AudioSourceGameobject.transform.SetPositionAndRotation(position, rotation);
+            AudioSourceTransform.SetPositionAndRotation(position, rotation);
         }
         public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle)
         {

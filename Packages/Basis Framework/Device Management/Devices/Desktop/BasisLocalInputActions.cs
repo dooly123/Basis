@@ -65,7 +65,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
 
         private void OnBeforeRender()
         {
-            BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply();
+            BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply(Time.timeAsDouble,Time.deltaTime);
             AfterAvatarChanges?.Invoke();
         }
 

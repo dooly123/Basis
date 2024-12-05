@@ -19,7 +19,7 @@ namespace Basis.Scripts.Networking.Recievers
             if (audioSource == null)
             {
                 var remotePlayer = (BasisRemotePlayer)networkedPlayer.Player;
-                audioSource = BasisHelpers.GetOrAddComponent<AudioSource>(remotePlayer.AudioSourceGameobject);
+                audioSource = BasisHelpers.GetOrAddComponent<AudioSource>(remotePlayer.AudioSourceTransform.gameObject);
             }
             audioSource.spatialize = true;
             audioSource.spatializePostEffects = true; //revist later!

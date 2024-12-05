@@ -41,7 +41,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             public Unity.Mathematics.float3 Position;
             public float[] Muscles;
             public double SecondsInterval;
-            public bool IsInitalized;
         }
         [SerializeField]
         public HumanPose HumanPose = new HumanPose();
@@ -59,7 +58,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public const int SizeAfterGap = 95 - SecondBuffer;
         public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;
-        public abstract void Compute();
         public abstract void Initialize(BasisNetworkedPlayer NetworkedPlayer);
         public abstract void DeInitialize();
         public void OnAvatarCalibration()

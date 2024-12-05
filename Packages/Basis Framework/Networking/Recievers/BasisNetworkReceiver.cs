@@ -48,12 +48,6 @@ namespace Basis.Scripts.Networking.Recievers
             musclesJob.targetMuscles = targetMuscles;
             AvatarJob.OutputVector = OuputVectors;
             AvatarJob.TargetVector = TargetVectors;
-            if (PayloadQueue.Count > 0)
-            {
-                // Initialize First and Last payload if data is available
-                First = PayloadQueue.Peek();
-                Last = PayloadQueue.Peek();
-            }
         }
         /// <summary>
         /// Clean up resources used in the compute process.
@@ -67,51 +61,49 @@ namespace Basis.Scripts.Networking.Recievers
         }
         [SerializeField] public AvatarBuffer First;
         [SerializeField] public AvatarBuffer Last;
-        public int PayloadCount = 0;
-        public int BufferCapacityBeforeCleanup = 3;
+        //  public int PayloadCount = 0;
+        public static int BufferCapacityBeforeCleanup = 3;
         public float interpolationTime;
         public double TimeBeforeCompletion;
         public double TimeInThePast;
+        public bool HasAvatarInitalized;
         /// <summary>
         /// Perform computations to interpolate and update avatar state.
         /// </summary>
-        public override void Compute()
+        public void Compute(double TimeAsDouble)
         {
-            if (!IsAbleToUpdate())
+            if (Ready)
             {
-                return;
+                if (!IsAbleToUpdate() || PayloadQueue.Count == 0) return;
+
+                // Calculate interpolation time
+                interpolationTime = Mathf.Clamp01((float)((TimeAsDouble - TimeInThePast) / TimeBeforeCompletion));
+
+                // PayloadCount = PayloadQueue.Count;
+                if (HasAvatarInitalized)
+                {
+                    TargetVectors[0] = Last.Position; // Target position at index 0
+                    OuputVectors[0] = First.Position; // Position at index 0
+
+                    OuputVectors[1] = First.Scale;    // Scale at index 1
+                    TargetVectors[1] = Last.Scale;    // Target scale at index 1
+
+                    muscles.CopyFrom(First.Muscles);
+                    targetMuscles.CopyFrom(Last.Muscles);
+                    AvatarJob.Time = interpolationTime;
+
+                    AvatarHandle = AvatarJob.Schedule();
+
+                    // Muscle interpolation job
+                    musclesJob.Time = interpolationTime;
+                    musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
+                }
             }
-            double TimeAsDouble = Time.timeAsDouble;
-            PayloadCount = PayloadQueue.Count;
-
-            double Difference = TimeAsDouble - TimeInThePast;
-
-            // Avoid negative or overly large interpolationTime
-            interpolationTime = (float)(Difference / TimeBeforeCompletion);
-
-            // Ensure the interpolation time stays between 0 and 1
-            interpolationTime = Mathf.Clamp01(interpolationTime);
-            if (float.IsNaN(interpolationTime))
+        }
+        public void Apply(double TimeAsDouble, float DeltaTime)
+        {
+            if (HasAvatarInitalized)
             {
-                interpolationTime = 1;
-            }
-            if (Last.IsInitalized)
-            {
-                TargetVectors[0] = Last.Position; // Target position at index 0
-                OuputVectors[0] = First.Position; // Position at index 0
-
-                OuputVectors[1] = First.Scale;    // Scale at index 1
-                TargetVectors[1] = Last.Scale;    // Target scale at index 1
-
-                muscles.CopyFrom(First.Muscles);
-                targetMuscles.CopyFrom(Last.Muscles);
-                AvatarJob.Time = interpolationTime;
-
-                AvatarHandle = AvatarJob.Schedule();
-
-                // Muscle interpolation job
-                musclesJob.Time = interpolationTime;
-                musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
                 OutputRotation = math.slerp(First.rotation, Last.rotation, interpolationTime);
                 // Complete the jobs and apply the results
                 musclesHandle.Complete();
@@ -119,24 +111,29 @@ namespace Basis.Scripts.Networking.Recievers
                 ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], OutputRotation, muscles);
                 PoseHandler.SetHumanPose(ref HumanPose);
 
-                RemotePlayer.RemoteBoneDriver.SimulateAndApply();
+                RemotePlayer.RemoteBoneDriver.SimulateAndApply(TimeAsDouble, DeltaTime);
                 RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
             }
-
             if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
             {
+                PoolPayload(First);
                 First = Last;
                 Last = result;
                 TimeBeforeCompletion = First.SecondsInterval; // how long to run for
                 TimeInThePast = TimeAsDouble;
             }
         }
+        public void PoolPayload(AvatarBuffer result)
+        {
+            BasisAvatarBufferPool.Return(result);
+        }
         public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
         {
-            if (First.IsInitalized == false)//set first and last to the same thing
+            if (HasAvatarInitalized == false)//set first and last to the same thing
             {
                 First = avatarBuffer;
                 Last = avatarBuffer;
+                HasAvatarInitalized = true;
             }
             else
             {
@@ -172,13 +169,6 @@ namespace Basis.Scripts.Networking.Recievers
 
             // Adjust the local scale of the animator's transform
             animator.transform.localScale = Scale;  // Directly adjust scale with output scaling
-        }
-        public void LateUpdate()
-        {
-            if (Ready)
-            {
-                Compute();
-            }
         }
         public bool IsAbleToUpdate()
         {
