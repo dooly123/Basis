@@ -23,10 +23,9 @@ public static class BasisNetworkHandleAvatar
     public static void HandleAvatarUpdate(DarkRiftReader reader)
     {
         reader.Read(out ServerSideSyncPlayerMessage ServerSideSyncPlayerMessage);
-        if (BasisNetworkManagement.Players.TryGetValue(ServerSideSyncPlayerMessage.playerIdMessage.playerID, out BasisNetworkedPlayer player))
+        if (BasisNetworkManagement.RemotePlayers.TryGetValue(ServerSideSyncPlayerMessage.playerIdMessage.playerID, out BasisNetworkReceiver player))
         {
-            BasisNetworkReceiver networkReceiver = (BasisNetworkReceiver)player.NetworkSend;
-            networkReceiver.ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage);
+            player.ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage);
         }
         else
         {

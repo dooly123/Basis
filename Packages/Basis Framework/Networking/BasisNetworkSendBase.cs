@@ -45,8 +45,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         [SerializeField]
         public HumanPose HumanPose = new HumanPose();
         [SerializeField]
-        public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
-        [SerializeField]
         public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
         [SerializeField]
         public HumanPoseHandler PoseHandler;

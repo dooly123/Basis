@@ -12,8 +12,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         /// </summary>
         public static void DecompressAndProcessAvatar(BasisNetworkReceiver baseReceiver, ServerSideSyncPlayerMessage syncMessage)
         {
-            // Update receiver state
-            baseReceiver.LASM = syncMessage.avatarSerialization;
             AvatarBuffer avatarBuffer = BasisAvatarBufferPool.Rent();
             int Offset = 0;
             avatarBuffer.Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref Offset);

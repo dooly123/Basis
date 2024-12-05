@@ -34,7 +34,8 @@ namespace Basis.Scripts.Networking.Transmitters
         public NativeArray<float> smallestDistance;
 
 
-
+        [SerializeField]
+        public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
         public float UnClampedInterval;
 
         public static float DefaultInterval = 0.0333333333333333f;

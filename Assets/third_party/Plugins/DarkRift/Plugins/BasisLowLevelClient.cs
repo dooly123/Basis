@@ -1,5 +1,6 @@
 ﻿using DarkRift.Dispatching;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
@@ -45,8 +46,11 @@ namespace DarkRift.Client.Unity
         /// <summary>
         ///     Event fired when a message is received.
         /// </summary>
+        public event EventHandler<MessageReceivedEventArgs> MessageReceivedOnMainThread;
+        /// <summary>
+        ///     Event fired when a message is received.
+        /// </summary>
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
-
         /// <summary>
         ///     Event fired when we disconnect form the server.
         /// </summary>
@@ -165,7 +169,7 @@ namespace DarkRift.Client.Unity
                 }
             );
         }
-
+        public HashSet<ushort> MultithreadSafeTag;
         /// <summary>
         ///     Sends a message to the server.
         /// </summary>
@@ -184,10 +188,10 @@ namespace DarkRift.Client.Unity
         public void Client_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
             // If we're handling multithreading then pass the event to the dispatcher
-            if (invokeFromDispatcher)
+            if (MultithreadSafeTag.Contains(e.Tag) == false)
             {
                 // Capture the handler outside the lambda to avoid repeated allocations
-                EventHandler<MessageReceivedEventArgs> handler = MessageReceived;
+                EventHandler<MessageReceivedEventArgs> handler = MessageReceivedOnMainThread;
                 if (handler != null)
                 {
                     Dispatcher.InvokeAsync(new Action(() =>

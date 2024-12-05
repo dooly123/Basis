@@ -10,6 +10,7 @@ using DarkRift.Client.Unity;
 using DarkRift.Server.Plugins.Commands;
 using JetBrains.Annotations;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,8 +32,8 @@ namespace Basis.Scripts.Networking
         /// fire when ownership is changed for a unique string
         /// </summary>
         public static OnNetworkMessageReceiveOwnershipTransfer OnOwnershipTransfer;
-        public static Dictionary<ushort, BasisNetworkedPlayer> Players = new Dictionary<ushort, BasisNetworkedPlayer>();
-        public static Dictionary<ushort, BasisNetworkReceiver> RemotePlayers = new Dictionary<ushort, BasisNetworkReceiver>();
+        public static ConcurrentDictionary<ushort, BasisNetworkedPlayer> Players = new ConcurrentDictionary<ushort, BasisNetworkedPlayer>();
+        public static ConcurrentDictionary<ushort, BasisNetworkReceiver> RemotePlayers = new ConcurrentDictionary<ushort, BasisNetworkReceiver>();
         public static HashSet<ushort> JoiningPlayers = new HashSet<ushort>();
         public static BasisNetworkReceiver[] ReceiverArray;
         public static int ReceiverCount = 0;
@@ -55,11 +56,11 @@ namespace Basis.Scripts.Networking
         {
             if (Instance != null)
             {
-                RemotePlayers.Remove(NetID);
+                RemotePlayers.TryRemove(NetID,out BasisNetworkReceiver A);
                 ReceiverArray = RemotePlayers.Values.ToArray();
                 ReceiverCount = ReceiverArray.Length;
                 Debug.Log("ReceiverCount was " + ReceiverCount);
-                return Players.Remove(NetID);
+                return Players.Remove(NetID, out var B);
             }
             return false;
         }
@@ -69,12 +70,12 @@ namespace Basis.Scripts.Networking
             {
                 if (NetPlayer.Player != null && NetPlayer.Player.IsLocal == false)
                 {
-                    RemotePlayers.Remove(NetPlayer.NetId);
+                    RemotePlayers.Remove(NetPlayer.NetId, out BasisNetworkReceiver A);
                     ReceiverArray = RemotePlayers.Values.ToArray();
                     ReceiverCount = ReceiverArray.Length;
                     Debug.Log("ReceiverCount was " + ReceiverCount);
                 }
-                return Players.Remove(NetPlayer.NetId);
+                return Players.Remove(NetPlayer.NetId, out var B);
             }
             return false;
         }
@@ -112,6 +113,7 @@ namespace Basis.Scripts.Networking
             }            // Initialize AvatarBuffer
             BasisAvatarBufferPool.AvatarBufferPool(30);
             OwnershipPairing.Clear();
+            Client.MultithreadSafeTag = new HashSet<ushort>() { BasisTags.AvatarMuscleUpdateTag };
             if (BasisScene.Instance != null)
             {
                 SetupSceneEvents(BasisScene.Instance);
@@ -181,7 +183,8 @@ namespace Basis.Scripts.Networking
             if (HasAuthenticated == false)
             {
                 HasAuthenticated = true;
-                Client.MessageReceived += MessageReceived;
+                Client.MessageReceivedOnMainThread += MainThreadMessageReceived;
+                Client.MessageReceived += ThreadedMessageReceived;
             }
             Client.ConnectInBackground(BasisNetworkIPResolve.IpOutput(IpString), Port, Callback);
         }
@@ -205,7 +208,8 @@ namespace Basis.Scripts.Networking
         {
             if (HasAuthenticated)
             {
-                Client.MessageReceived -= MessageReceived;
+                Client.MessageReceivedOnMainThread -= MainThreadMessageReceived;
+                Client.MessageReceived -= ThreadedMessageReceived;
                 HasAuthenticated = false;
             }
             Client.Close();
@@ -220,7 +224,25 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-        private async void MessageReceived(object sender, MessageReceivedEventArgs e)
+        private void ThreadedMessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            using (Message message = e.GetMessage())
+            {
+                using (DarkRiftReader reader = message.GetReader())
+                {
+                    switch (message.Tag)
+                    {
+                        case BasisTags.AvatarMuscleUpdateTag:
+                            BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
+                            break;
+                        default:
+                            Debug.Log("Unknown message tag: " + message.Tag);
+                            break;
+                    }
+                }
+            }
+        }
+        private async void MainThreadMessageReceived(object sender, MessageReceivedEventArgs e)
         {
             using (Message message = e.GetMessage())
             {
@@ -232,9 +254,9 @@ namespace Basis.Scripts.Networking
                             await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
                             break;
 
-                        case BasisTags.AvatarMuscleUpdateTag:
-                            BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
-                            break;
+                      //  case BasisTags.AvatarMuscleUpdateTag:
+                        //    BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
+                        //    break;
 
                         case BasisTags.AudioSegmentTag:
                             BasisNetworkHandleVoice.HandleAudioUpdate(reader);
