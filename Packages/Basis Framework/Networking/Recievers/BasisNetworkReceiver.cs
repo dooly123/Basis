@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
@@ -22,7 +23,7 @@ namespace Basis.Scripts.Networking.Recievers
         [Header("Interpolation Settings")]
         public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
         [SerializeField]
-        public Queue<AvatarBuffer> PayloadQueue = new Queue<AvatarBuffer>();
+        public ConcurrentQueue<AvatarBuffer> PayloadQueue = new ConcurrentQueue<AvatarBuffer>();
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
         private NativeArray<float3> OuputVectors;      // Merged positions and scales
@@ -140,7 +141,8 @@ namespace Basis.Scripts.Networking.Recievers
                 PayloadQueue.Enqueue(avatarBuffer);
                 while (PayloadQueue.Count > BufferCapacityBeforeCleanup)
                 {
-                    PayloadQueue.Dequeue();
+                    PayloadQueue.TryDequeue(out AvatarBuffer Buffer);
+                    PoolPayload(Buffer);
                 }
             }
         }

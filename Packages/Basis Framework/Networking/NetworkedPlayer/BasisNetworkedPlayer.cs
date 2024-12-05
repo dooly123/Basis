@@ -129,11 +129,12 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
             }
             else
             {
-                NetworkSend = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
-                if (sspm.array != null && sspm.array.Length != 0)
-                {
-                    NetworkSend.LASM = sspm;
-                }
+                BasisNetworkReceiver BasisNetworkReceiver = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
+                NetworkSend = BasisNetworkReceiver;
+                // if (sspm.array != null && sspm.array.Length != 0)
+                //  {
+                //  BasisNetworkReceiver.ReceiveNetworkAvatarData = sspm;
+                //  }
             }
             NetworkSend.NetworkNetID.playerID = PlayerID;
             NetworkSend.Initialize(this);

@@ -1,4 +1,5 @@
 using Basis.Scripts.Networking.Compression;
+using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.Profiler;
 using DarkRift;
 using DarkRift.Server.Plugins.Commands;
@@ -10,7 +11,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     public static class BasisNetworkAvatarCompressor
     {
         public static float[] FloatArray = new float[90];
-        public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim)
+        public static void Compress(BasisNetworkTransmitter NetworkSendBase, Animator Anim)
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
             {
@@ -23,7 +24,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
         }
-        public static void CompressAvatarData(BasisNetworkSendBase NetworkSendBase, Animator Anim)
+        public static void CompressAvatarData(BasisNetworkTransmitter NetworkSendBase, Animator Anim)
         {
             // Retrieve the human pose from the Animator
             NetworkSendBase.PoseHandler.GetHumanPose(ref NetworkSendBase.HumanPose);
