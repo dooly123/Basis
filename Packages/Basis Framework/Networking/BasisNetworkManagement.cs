@@ -113,7 +113,7 @@ namespace Basis.Scripts.Networking
             }            // Initialize AvatarBuffer
             BasisAvatarBufferPool.AvatarBufferPool(30);
             OwnershipPairing.Clear();
-            Client.MultithreadSafeTag = new HashSet<ushort>() { BasisTags.AvatarMuscleUpdateTag };
+            Client.MultithreadSafeTag = new HashSet<ushort>() { BasisTags.AvatarMuscleUpdateTag, BasisTags.AudioSegmentTag };
             if (BasisScene.Instance != null)
             {
                 SetupSceneEvents(BasisScene.Instance);
@@ -235,6 +235,9 @@ namespace Basis.Scripts.Networking
                         case BasisTags.AvatarMuscleUpdateTag:
                             BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
                             break;
+                        case BasisTags.AudioSegmentTag:
+                            BasisNetworkHandleVoice.HandleAudioUpdate(reader);
+                            break;
                         default:
                             Debug.Log("Unknown message tag: " + message.Tag);
                             break;
@@ -258,9 +261,9 @@ namespace Basis.Scripts.Networking
                         //    BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
                         //    break;
 
-                        case BasisTags.AudioSegmentTag:
-                            BasisNetworkHandleVoice.HandleAudioUpdate(reader);
-                            break;
+                      //  case BasisTags.AudioSegmentTag:
+                        //    BasisNetworkHandleVoice.HandleAudioUpdate(reader);
+                         //   break;
 
                         case BasisTags.DisconnectTag:
                             BasisNetworkHandleRemoval.HandleDisconnection(reader);
