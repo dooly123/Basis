@@ -22,7 +22,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public bool HasEvents = false;
         public float timer = 0f;
         public float interval = 0.0333333333333333f;
-        public float activeDistance;
+        public float SmallestDistanceToAnotherPlayer;
         [SerializeField]
         public BasisAudioTransmission AudioTransmission = new BasisAudioTransmission();
         public NativeArray<float3> targetPositions;
@@ -64,23 +64,25 @@ namespace Basis.Scripts.Networking.Transmitters
         void SendOutLatest()
         {
             timer += Time.deltaTime;
-            if (timer >= interval) // Trigger Compute at specified intervals
+
+            if (timer >= interval)
             {
                 ScheduleCheck();
                 Compute();
-                distanceJob.AvatarDistance = AvatarDistanceUnSquared;
-                distanceJob.HearingDistance = HearingDistanceUnSquared;
-                distanceJob.VoiceDistance = VoiceDistanceUnSquared;
                 distanceJobHandle.Complete();
                 HandleAudioCommunication();
-                activeDistance = distanceJob.smallestDistance[0];
-                //this is a int miliseconds but i need to know if that will work for the timer check
 
-                UnClampedInterval = DefaultInterval * (BaseMultiplier + (activeDistance * IncreaseRate));
+                SmallestDistanceToAnotherPlayer = distanceJob.smallestDistance[0];
+
+                // Calculate next interval and clamp it
+                UnClampedInterval = DefaultInterval * (BaseMultiplier + (SmallestDistanceToAnotherPlayer * IncreaseRate));
                 interval = math.clamp(UnClampedInterval, 0.005f, SlowestSendRate);
-                timer = 0;
+
+                // Account for overshoot
+                timer -= interval;
             }
         }
+
         public void HandleAudioCommunication()
         {
             if (distanceJob.DistanceResults == null)
@@ -204,6 +206,9 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void ScheduleCheck()
         {
+            distanceJob.AvatarDistance = AvatarDistanceUnSquared;
+            distanceJob.HearingDistance = HearingDistanceUnSquared;
+            distanceJob.VoiceDistance = VoiceDistanceUnSquared;
             distanceJob.referencePosition = NetworkedPlayer.MouthBone.OutgoingWorldData.position;
             for (int Index = 0; Index < BasisNetworkManagement.ReceiverCount; Index++)
             {
