@@ -25,9 +25,16 @@ namespace Basis.Scripts.Networking.Transmitters
         public float activeDistance;
         [SerializeField]
         public BasisAudioTransmission AudioTransmission = new BasisAudioTransmission();
-        private NativeArray<float3> targetPositions;  // NativeArray for multithreading.
-        private NativeArray<float> distances;         // Distance results.
-        private NativeArray<bool> DistanceResults;
+        public NativeArray<float3> targetPositions;
+        public NativeArray<float> distances;
+        public NativeArray<bool> DistanceResults;
+
+        public NativeArray<bool> HearingResults;
+        public NativeArray<bool> AvatarResults;
+        public NativeArray<float> smallestDistance;
+
+
+
         public float UnClampedInterval;
 
         public static float DefaultInterval = 0.0333333333333333f;
@@ -35,15 +42,17 @@ namespace Basis.Scripts.Networking.Transmitters
         public static float IncreaseRate = 0.0075f; // Rate of increase per unit distance.
 
         public int InitalizedLength = -1;
-        public DistanceCalculationJob distanceJob = new DistanceCalculationJob();
-        public ClosestTransformJob closestJob = new ClosestTransformJob();
+        public CombinedDistanceAndClosestTransformJob distanceJob = new CombinedDistanceAndClosestTransformJob();
         public JobHandle distanceJobHandle;
-        public JobHandle closestJobHandle;
-        public float VoiceDistanceUnSquared = 625;
         public bool[] HearingIndex;
         public bool[] LastHearingIndex;
         public ushort[] HearingIndexToId;
         public int HearingIndexLength;
+
+
+        public float VoiceDistanceUnSquared = 625;
+        public float HearingDistanceUnSquared = 625;
+        public float AvatarDistanceUnSquared = 625;
         public override void Compute()
         {
             if (Ready && NetworkedPlayer.Player.Avatar != null)
@@ -59,16 +68,12 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 ScheduleCheck();
                 Compute();
+                distanceJob.AvatarDistance = AvatarDistanceUnSquared;
+                distanceJob.HearingDistance = HearingDistanceUnSquared;
+                distanceJob.VoiceDistance = VoiceDistanceUnSquared;
                 distanceJobHandle.Complete();
-
-                closestJob.distances = distanceJob.distances;
-                closestJob.Length = distances.Length;
-                closestJob.VoiceDistance = VoiceDistanceUnSquared;
-
-                closestJobHandle = closestJob.Schedule();
-                closestJobHandle.Complete();
                 HandleAudioCommunication();
-                activeDistance = closestJob.result[0];
+                activeDistance = distanceJob.smallestDistance[0];
                 //this is a int miliseconds but i need to know if that will work for the timer check
 
                 UnClampedInterval = DefaultInterval * (BaseMultiplier + (activeDistance * IncreaseRate));
@@ -78,19 +83,19 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void HandleAudioCommunication()
         {
-            if (closestJob.DistanceResults == null)
-            {
-               return;
-            }
-            if(HearingIndex == null)
+            if (distanceJob.DistanceResults == null)
             {
                 return;
             }
-            if(HearingIndex.Length != closestJob.DistanceResults.Length)
+            if (HearingIndex == null)
             {
                 return;
             }
-            closestJob.DistanceResults.CopyTo(HearingIndex);
+            if (HearingIndex.Length != distanceJob.DistanceResults.Length)
+            {
+                return;
+            }
+            distanceJob.DistanceResults.CopyTo(HearingIndex);
             if (AreBoolArraysEqual(HearingIndex, LastHearingIndex) == false)
             {
                 //Debug.Log("Arrays where not equal!");
@@ -213,14 +218,13 @@ namespace Basis.Scripts.Networking.Transmitters
             }
             distanceJobHandle = distanceJob.Schedule(targetPositions.Length, 64);
         }
-        public NativeArray<float> result;
         public void ResizeOrCreateArrayData(int TotalUserCount)
         {
             if (InitalizedLength != TotalUserCount)
             {
-                if (closestJobHandle.IsCompleted == false)
+                if (distanceJobHandle.IsCompleted == false)
                 {
-                    closestJobHandle.Complete();
+                    distanceJobHandle.Complete();
                 }
                 if (targetPositions.IsCreated)
                 {
@@ -230,28 +234,42 @@ namespace Basis.Scripts.Networking.Transmitters
                 {
                     distances.Dispose();
                 }
-                if (result.IsCreated)
+                if (smallestDistance.IsCreated)
                 {
-                    result.Dispose();
+                    smallestDistance.Dispose();
                 }
-                if(DistanceResults.IsCreated)
+                if (DistanceResults.IsCreated)
                 {
                     DistanceResults.Dispose();
                 }
-                result = new NativeArray<float>(1, Allocator.TempJob);
+                if (HearingResults.IsCreated)
+                {
+                    HearingResults.Dispose();
+                }
+                if (AvatarResults.IsCreated)
+                {
+                    AvatarResults.Dispose();
+                }
+                smallestDistance = new NativeArray<float>(1, Allocator.TempJob);
                 targetPositions = new NativeArray<float3>(TotalUserCount, Allocator.Persistent);
                 distances = new NativeArray<float>(TotalUserCount, Allocator.Persistent);
                 DistanceResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
+
+                HearingResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
+                AvatarResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
+
                 InitalizedLength = TotalUserCount;
 
                 // Step 2: Find closest index in the next frame
-                closestJob.distances = distances;
-                closestJob.DistanceResults = DistanceResults;
                 distanceJob.distances = distances;
+                distanceJob.DistanceResults = DistanceResults;
+                distanceJob.HearingResults = HearingResults;
+                distanceJob.AvatarResults = AvatarResults;
+
 
                 distanceJob.targetPositions = targetPositions;
 
-                closestJob.result = result;
+                distanceJob.smallestDistance = smallestDistance;
             }
         }
         public override void DeInitialize()
@@ -270,13 +288,21 @@ namespace Basis.Scripts.Networking.Transmitters
                 BasisNetworkManagement.OnRemotePlayerLeft -= OnRemoteLeft;
                 if (targetPositions.IsCreated) targetPositions.Dispose();
                 if (distances.IsCreated) distances.Dispose();
-                if (result.IsCreated)
+                if (smallestDistance.IsCreated)
                 {
-                    result.Dispose();
+                    smallestDistance.Dispose();
                 }
                 if (DistanceResults.IsCreated)
                 {
                     DistanceResults.Dispose();
+                }
+                if (HearingResults.IsCreated)
+                {
+                    HearingResults.Dispose();
+                }
+                if (AvatarResults.IsCreated)
+                {
+                    AvatarResults.Dispose();
                 }
                 HasEvents = false;
             }
@@ -299,54 +325,47 @@ namespace Basis.Scripts.Networking.Transmitters
             }
         }
         [BurstCompile]
-        public struct DistanceCalculationJob : IJobParallelFor
+        public struct CombinedDistanceAndClosestTransformJob : IJobParallelFor
         {
+            public float VoiceDistance;
+            public float HearingDistance;
+            public float AvatarDistance;
             [ReadOnly]
             public float3 referencePosition;
             [ReadOnly]
             public NativeArray<float3> targetPositions;
-            [WriteOnly]
-            public NativeArray<float> distances;
-            public void Execute(int index)
-            {
-                Vector3 diff = targetPositions[index] - referencePosition;
-                distances[index] = diff.sqrMagnitude;
-            }
-        }
 
-        [BurstCompile]
-        public struct ClosestTransformJob : IJob
-        {
-            public int Length;
-            public float VoiceDistance;
-            [ReadOnly]
-            public NativeArray<float> distances;
             [WriteOnly]
-            public NativeArray<float> result;
+            public NativeArray<float> distances;
             [WriteOnly]
             public NativeArray<bool> DistanceResults;
-            public void Execute()
+            [WriteOnly]
+            public NativeArray<bool> HearingResults;
+            [WriteOnly]
+            public NativeArray<bool> AvatarResults;
+
+            // Shared result for the smallest distance
+            [NativeDisableParallelForRestriction]
+            public NativeArray<float> smallestDistance;
+
+            public void Execute(int index)
             {
-                float smallestDistance = float.MaxValue;
+                // Calculate distance
+                Vector3 diff = targetPositions[index] - referencePosition;
+                float sqrDistance = diff.sqrMagnitude;
+                distances[index] = sqrDistance;
 
-                for (int Index = 0; Index < Length; Index++)
+                // Determine boolean results
+                DistanceResults[index] = sqrDistance < VoiceDistance;
+                HearingResults[index] = sqrDistance < HearingDistance;
+                AvatarResults[index] = sqrDistance < AvatarDistance;
+
+                // Update the smallest distance (atomic operation to avoid race conditions)
+                float currentSmallest = smallestDistance[0];
+                if (sqrDistance < currentSmallest)
                 {
-                    if (distances[Index] < smallestDistance)
-                    {
-                        smallestDistance = distances[Index];
-                    }
-                    if (distances[Index] < VoiceDistance)
-                    {
-                        DistanceResults[Index] = true;
-                    }
-                    else
-                    {
-                        DistanceResults[Index] = false;
-                    }
+                    smallestDistance[0] = sqrDistance;
                 }
-
-                // Store the result
-                result[0] = smallestDistance;
             }
         }
     }

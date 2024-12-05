@@ -9,6 +9,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     public static class BasisNetworkAvatarCompressor
     {
+        public static float[] FloatArray = new float[90];
         public static void Compress(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
             using (DarkRiftWriter writer = DarkRiftWriter.Create())
@@ -22,7 +23,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
         }
-        public static float[] FloatArray = new float[90];
         public static void CompressAvatarData(BasisNetworkSendBase NetworkSendBase, Animator Anim)
         {
             // Retrieve the human pose from the Animator
