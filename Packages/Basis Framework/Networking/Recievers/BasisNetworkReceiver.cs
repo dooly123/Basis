@@ -76,7 +76,6 @@ namespace Basis.Scripts.Networking.Recievers
             if (Ready)
             {
                 if (!IsAbleToUpdate() || PayloadQueue.Count == 0) return;
-
                 // Calculate interpolation time
                 interpolationTime = Mathf.Clamp01((float)((TimeAsDouble - TimeInThePast) / TimeBeforeCompletion));
 
@@ -99,6 +98,13 @@ namespace Basis.Scripts.Networking.Recievers
                     musclesJob.Time = interpolationTime;
                     musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
                 }
+                if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
+                {
+                    First = Last;
+                    Last = result;
+                    TimeBeforeCompletion = First.SecondsInterval; // how long to run for
+                    TimeInThePast = TimeAsDouble;
+                }
             }
         }
         public void Apply(double TimeAsDouble, float DeltaTime)
@@ -117,7 +123,7 @@ namespace Basis.Scripts.Networking.Recievers
             }
             if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
             {
-                PoolPayload(First);
+                //  PoolPayload(First);
                 First = Last;
                 Last = result;
                 TimeBeforeCompletion = First.SecondsInterval; // how long to run for
@@ -126,7 +132,7 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void PoolPayload(AvatarBuffer result)
         {
-            BasisAvatarBufferPool.Return(result);
+          //  BasisAvatarBufferPool.Return(result);
         }
         public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
         {
@@ -142,7 +148,7 @@ namespace Basis.Scripts.Networking.Recievers
                 while (PayloadQueue.Count > BufferCapacityBeforeCleanup)
                 {
                     PayloadQueue.TryDequeue(out AvatarBuffer Buffer);
-                    PoolPayload(Buffer);
+                   // PoolPayload(Buffer);
                 }
             }
         }

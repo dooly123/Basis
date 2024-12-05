@@ -134,12 +134,12 @@ namespace Basis.Scripts.Networking
         public void LateUpdate()
         {
             double TimeAsDouble = Time.timeAsDouble;
-            float deltaTime = Time.deltaTime;
             for (int Index = 0; Index < ReceiverCount; Index++)
             {
                 //schedule mulithreaded tasks
                 ReceiverArray[Index].Compute(TimeAsDouble);
             }
+            float deltaTime = Time.deltaTime;
             for (int Index = 0; Index < ReceiverCount; Index++)
             {
                 //now that its all schedule start going through and
