@@ -36,28 +36,6 @@ namespace Basis.Scripts.Networking.Recievers
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
         public float[] MuscleFinalStageOutput = new float[90];
         public quaternion OutputRotation;
-
-
-        [SerializeField] public AvatarBuffer First;
-        [SerializeField] public AvatarBuffer Last;
-        public double PulseBehindCurrentTime;
-        public double sendRate;
-        public int PayloadCount = 0;
-        public float interpolationTime;
-        public double TimeAheadOfFirst;
-        public double TimeBeforeCompletion;
-        public int BuffersToHold = 2;
-
-        // For smoothing sendRate calculation
-        public double smoothedSendRate = 0.1; // Initial smoothing value
-        public double smoothingFactor = 0.5; // Controls smoothing
-
-        // Base speed-up factor
-        public float baseSpeedUpFactor = 1.0f;
-
-        // Additional speed-up factor per extra packet
-        public float additionalSpeedPerPacket = 0.05f;
-        public double TimeInThePast;
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -77,8 +55,6 @@ namespace Basis.Scripts.Networking.Recievers
                 First = PayloadQueue.Peek();
                 Last = PayloadQueue.Peek();
             }
-
-            PulseBehindCurrentTime = Time.timeAsDouble - smoothedSendRate;
         }
         /// <summary>
         /// Clean up resources used in the compute process.
@@ -90,7 +66,14 @@ namespace Basis.Scripts.Networking.Recievers
             if (muscles.IsCreated) muscles.Dispose();
             if (targetMuscles.IsCreated) targetMuscles.Dispose();
         }
-
+        [SerializeField] public AvatarBuffer First;
+        [SerializeField] public AvatarBuffer Last;
+        public int PayloadCount = 0;
+        public float interpolationTime;
+        public double TimeAheadOfFirst;
+        public double TimeBeforeCompletion;
+        public int BuffersToHold = 2;
+        public double TimeInThePast;
         /// <summary>
         /// Perform computations to interpolate and update avatar state.
         /// </summary>
@@ -101,7 +84,6 @@ namespace Basis.Scripts.Networking.Recievers
                 return;
             }
             double TimeAsDouble = Time.timeAsDouble;
-            PulseBehindCurrentTime = TimeAsDouble - smoothedSendRate;
             PayloadCount = PayloadQueue.Count;
 
             // Move payloads in the queue based on the current time
@@ -109,7 +91,7 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 First = Last;
                 Last = PayloadQueue.Dequeue();
-                TimeBeforeCompletion = Last.timestamp - First.timestamp; // how long to run for
+                TimeBeforeCompletion = Last.CompletionTime - First.CompletionTime; // how long to run for
                 TimeInThePast = TimeAsDouble;
             }
 
@@ -117,13 +99,6 @@ namespace Basis.Scripts.Networking.Recievers
 
             // Avoid negative or overly large interpolationTime
             interpolationTime = (float)(Difference / TimeBeforeCompletion);
-
-            // Dynamically adjust the speed-up factor based on the number of additional packets
-            int extraPackets = PayloadQueue.Count - BuffersToHold;
-            float dynamicSpeedUpFactor = baseSpeedUpFactor + (extraPackets * additionalSpeedPerPacket);
-
-            // Apply dynamic speed-up factor
-            interpolationTime *= dynamicSpeedUpFactor;
 
             // Ensure the interpolation time stays between 0 and 1
             interpolationTime = Mathf.Clamp01(interpolationTime);

@@ -35,10 +35,30 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             Array.Copy(NetworkSendBase.HumanPose.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
 
             int Offset = 0;
-            BasisUnityBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition,ref NetworkSendBase.LASM.array,ref Offset);
-            BasisUnityBitPackerExtensions.WriteUshortVectorFloatToBytes(Anim.transform.localScale, BasisNetworkSendBase.ScaleRanged,ref NetworkSendBase.LASM.array, ref Offset);
+            //we write position first so we can use that on the server
+            BasisUnityBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition, ref NetworkSendBase.LASM.array, ref Offset);
             BasisUnityBitPackerExtensions.WriteQuaternionToBytes(Anim.bodyRotation, ref NetworkSendBase.LASM.array, ref Offset, BasisNetworkSendBase.RotationCompression);
-            BasisUnityBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref NetworkSendBase.LASM.array,ref Offset);
+            BasisUnityBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref NetworkSendBase.LASM.array, ref Offset);
+
+            UnityEngine.Vector3 Scale = Anim.transform.localScale;
+            //we decode localscale last so we can optimize it.
+            if (Scale == UnityEngine.Vector3.one)
+            {
+                //dont send anything as the remote can assume its one
+            }
+            else
+            {
+                if (Scale.x == Scale.y && Scale.y == Scale.z)
+                {
+                    //we write a single ushort
+                    BasisUnityBitPackerExtensions.WriteUshortToBytes(Scale.x, BasisNetworkSendBase.ScaleRanged, ref NetworkSendBase.LASM.array, ref Offset);
+                }
+                else
+                {
+                    //we write 3 ushorts
+                    BasisUnityBitPackerExtensions.WriteUshortVectorFloatToBytes(Scale, BasisNetworkSendBase.ScaleRanged, ref NetworkSendBase.LASM.array, ref Offset);
+                }
+            }
         }
     }
 }

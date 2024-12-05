@@ -33,7 +33,18 @@ namespace Basis.Scripts.Networking.Compression
 
             offset += 6;
         }
+        // Manual conversion of ushort to bytes (without BitConverter) for a single ushort
+        public static void WriteUshortToBytes(float input, BasisRangedUshortFloatData compressor, ref byte[] bytes, ref int offset)
+        {
+            ushort value = compressor.Compress(input);
+            EnsureSize(ref bytes, offset + 2); // Ensure enough space for 2 bytes
 
+            // Manually write the ushort value to the byte array
+            bytes[offset] = (byte)(value & 0xFF);           // Low byte
+            bytes[offset + 1] = (byte)((value >> 8) & 0xFF); // High byte
+
+            offset += 2; // Increment offset by 2 bytes
+        }
         // Manual conversion of bytes to ushort (without BitConverter)
         public static Unity.Mathematics.float3 ReadUshortVectorFloatFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
         {
@@ -51,7 +62,26 @@ namespace Basis.Scripts.Networking.Compression
                 compressor.Decompress(compressedZ)
             );
         }
+        public static float ReadUshortFloatFromBytes(ref byte[] bytes, BasisRangedUshortFloatData compressor, ref int offset)
+        {
+            EnsureSize(bytes, offset + 2);  // Only 2 bytes needed for one ushort value
 
+            // Read the single compressed ushort value
+            ushort compressedValue = (ushort)(bytes[offset] | (bytes[offset + 1] << 8));
+
+            offset += 2;
+
+            // Decompress the single value and return it
+            return compressor.Decompress(compressedValue);
+        }
+        // Manual conversion of Vector3 to bytes (without BitConverter)
+        public static void WriteEnsureFloatToBytes(float value, ref byte[] bytes, ref int offset)
+        {
+            EnsureSize(ref bytes, offset + 4);
+
+            // Manually write the float values to bytes (no BitConverter)
+            WriteFloatToBytes(value, ref bytes, ref offset);
+        }
         // Manual conversion of Vector3 to bytes (without BitConverter)
         public static void WriteVectorFloatToBytes(UnityEngine. Vector3 values, ref byte[] bytes, ref int offset)
         {

@@ -40,8 +40,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             public Unity.Mathematics.float3 Scale;
             public Unity.Mathematics.float3 Position;
             public float[] Muscles;
-            public double timestamp;
-            public double SendRate;
+            public double CompletionTime;
+            public double SecondsInterval;
             public bool IsInitalized;
         }
         [SerializeField]
