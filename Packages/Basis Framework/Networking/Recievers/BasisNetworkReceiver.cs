@@ -32,7 +32,6 @@ namespace Basis.Scripts.Networking.Recievers
         public JobHandle musclesHandle;
         public JobHandle AvatarHandle;
         public UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob();
-        public float DeltaTime;
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
         public float[] MuscleFinalStageOutput = new float[90];
         public quaternion OutputRotation;
@@ -70,9 +69,8 @@ namespace Basis.Scripts.Networking.Recievers
         [SerializeField] public AvatarBuffer Last;
         public int PayloadCount = 0;
         public float interpolationTime;
-        public double TimeAheadOfFirst;
         public double TimeBeforeCompletion;
-        public int BuffersToHold = 2;
+        public int BuffersToHold = 1;
         public double TimeInThePast;
         /// <summary>
         /// Perform computations to interpolate and update avatar state.

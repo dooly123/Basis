@@ -20,14 +20,14 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             avatarBuffer.Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref Offset);
             avatarBuffer.rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);
             BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref Offset);
-
-            if (Offset == syncMessage.avatarSerialization.array.Length)//we are at the end
+            int length = syncMessage.avatarSerialization.array.Length;
+            if (Offset == length)//we are at the end
             {
                 avatarBuffer.Scale = Vector3.one;
             }
             else
             {
-                if (syncMessage.avatarSerialization.array.Length > Offset + 6)//we have 3 ushorts
+                if (length > Offset + 6)//we have 3 ushorts
                 {
                     avatarBuffer.Scale = BasisUnityBitPackerExtensions.ReadUshortVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkReceiver.ScaleRanged, ref Offset);
                 }
