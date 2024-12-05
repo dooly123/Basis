@@ -51,6 +51,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
             }
         }
+        public float SlowestSendRate = 2.5f;
         void SendOutLatest()
         {
             timer += Time.deltaTime;
@@ -71,7 +72,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 //this is a int miliseconds but i need to know if that will work for the timer check
 
                 UnClampedInterval = DefaultInterval * (BaseMultiplier + (activeDistance * IncreaseRate));
-                interval = math.clamp(UnClampedInterval, 0.005f, 5);
+                interval = math.clamp(UnClampedInterval, 0.005f, SlowestSendRate);
                 timer = 0;
             }
         }

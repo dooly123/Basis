@@ -68,9 +68,9 @@ namespace Basis.Scripts.Networking.Recievers
         [SerializeField] public AvatarBuffer First;
         [SerializeField] public AvatarBuffer Last;
         public int PayloadCount = 0;
+        public int BufferCapacityBeforeCleanup = 3;
         public float interpolationTime;
         public double TimeBeforeCompletion;
-        public int BuffersToHold = 1;
         public double TimeInThePast;
         /// <summary>
         /// Perform computations to interpolate and update avatar state.
@@ -84,15 +84,6 @@ namespace Basis.Scripts.Networking.Recievers
             double TimeAsDouble = Time.timeAsDouble;
             PayloadCount = PayloadQueue.Count;
 
-            // Move payloads in the queue based on the current time
-            while (interpolationTime >= 1 && PayloadQueue.Count > BuffersToHold)
-            {
-                First = Last;
-                Last = PayloadQueue.Dequeue();
-                TimeBeforeCompletion = Last.CompletionTime - First.CompletionTime; // how long to run for
-                TimeInThePast = TimeAsDouble;
-            }
-
             double Difference = TimeAsDouble - TimeInThePast;
 
             // Avoid negative or overly large interpolationTime
@@ -100,7 +91,11 @@ namespace Basis.Scripts.Networking.Recievers
 
             // Ensure the interpolation time stays between 0 and 1
             interpolationTime = Mathf.Clamp01(interpolationTime);
-            if (Last.IsInitalized && First.IsInitalized && !float.IsNaN(interpolationTime))
+            if (float.IsNaN(interpolationTime))
+            {
+                interpolationTime = 1;
+            }
+            if (Last.IsInitalized)
             {
                 TargetVectors[0] = Last.Position; // Target position at index 0
                 OuputVectors[0] = First.Position; // Position at index 0
@@ -126,6 +121,30 @@ namespace Basis.Scripts.Networking.Recievers
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply();
                 RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
+            }
+
+            if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
+            {
+                First = Last;
+                Last = result;
+                TimeBeforeCompletion = First.SecondsInterval; // how long to run for
+                TimeInThePast = TimeAsDouble;
+            }
+        }
+        public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
+        {
+            if (First.IsInitalized == false)//set first and last to the same thing
+            {
+                First = avatarBuffer;
+                Last = avatarBuffer;
+            }
+            else
+            {
+                PayloadQueue.Enqueue(avatarBuffer);
+                while (PayloadQueue.Count > BufferCapacityBeforeCleanup)
+                {
+                    PayloadQueue.Dequeue();
+                }
             }
         }
         public void ApplyPoseData(Animator animator, float3 Scale, float3 Position, quaternion Rotation, NativeArray<float> Muscles)

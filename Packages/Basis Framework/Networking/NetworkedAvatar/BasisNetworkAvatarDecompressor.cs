@@ -39,9 +39,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }
             avatarBuffer.SecondsInterval = syncMessage.interval / 1000.0f;
-            avatarBuffer.CompletionTime = Time.timeAsDouble + avatarBuffer.SecondsInterval;
             avatarBuffer.IsInitalized = true;
-            baseReceiver.PayloadQueue.Enqueue(avatarBuffer);
+            baseReceiver.EnQueueAvatarBuffer(avatarBuffer);
         }
     }
 }
