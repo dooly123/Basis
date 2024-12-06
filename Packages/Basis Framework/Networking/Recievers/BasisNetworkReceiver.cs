@@ -98,13 +98,6 @@ namespace Basis.Scripts.Networking.Recievers
                     musclesJob.Time = interpolationTime;
                     musclesHandle = musclesJob.Schedule(muscles.Length, 64, AvatarHandle);
                 }
-                if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
-                {
-                    First = Last;
-                    Last = result;
-                    TimeBeforeCompletion = First.SecondsInterval; // how long to run for
-                    TimeInThePast = TimeAsDouble;
-                }
             }
         }
         public void Apply(double TimeAsDouble, float DeltaTime)
@@ -130,10 +123,6 @@ namespace Basis.Scripts.Networking.Recievers
                 TimeInThePast = TimeAsDouble;
             }
         }
-        public void PoolPayload(AvatarBuffer result)
-        {
-          //  BasisAvatarBufferPool.Return(result);
-        }
         public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
         {
             if (HasAvatarInitalized == false)//set first and last to the same thing
@@ -148,7 +137,6 @@ namespace Basis.Scripts.Networking.Recievers
                 while (PayloadQueue.Count > BufferCapacityBeforeCleanup)
                 {
                     PayloadQueue.TryDequeue(out AvatarBuffer Buffer);
-                   // PoolPayload(Buffer);
                 }
             }
         }

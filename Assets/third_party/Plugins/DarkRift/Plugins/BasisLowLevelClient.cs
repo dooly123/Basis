@@ -9,10 +9,6 @@ namespace DarkRift.Client.Unity
     public class BasisLowLevelClient : MonoBehaviour
     {
 
-        [SerializeField]
-        [Tooltip("Specifies that DarkRift should take care of multithreading and invoke all events from Unity's main thread.")]
-        public volatile bool invokeFromDispatcher = true;
-
         #region Cache settings
         [SerializeField]
         [Tooltip("The maximum number of DarkRiftWriter instances stored per thread.")]
@@ -41,16 +37,6 @@ namespace DarkRift.Client.Unity
         private SerializableObjectCacheSettings objectCacheSettings = new SerializableObjectCacheSettings();
 #pragma warning restore IDE0044 // Add readonly modifier, Unity can't serialize readonly fields
         #endregion
-
-
-        /// <summary>
-        ///     Event fired when a message is received.
-        /// </summary>
-        public event EventHandler<MessageReceivedEventArgs> MessageReceivedOnMainThread;
-        /// <summary>
-        ///     Event fired when a message is received.
-        /// </summary>
-        public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         /// <summary>
         ///     Event fired when we disconnect form the server.
         /// </summary>
@@ -77,21 +63,12 @@ namespace DarkRift.Client.Unity
             }
         }
         public DarkRiftClient Client;
-        /// <summary>
-        ///     The dispatcher for moving work to the main thread.
-        /// </summary>
-        public Dispatcher Dispatcher { get; private set; }
 
         public LiteNetLibClientConnection LiteNetLibConnnection;
         public void Initialize()
         {
             ObjectCacheSettings = objectCacheSettings.ToClientObjectCacheSettings();
             Client = new DarkRiftClient(ObjectCacheSettings);
-            //Setup dispatcher
-            Dispatcher = new Dispatcher(true);
-
-            //Setup routing for events
-            Client.MessageReceived += Client_MessageReceived;
             Client.Disconnected += Client_Disconnected;
         }
         private const float interval = 0.0333333333333333f;
@@ -121,7 +98,6 @@ namespace DarkRift.Client.Unity
                 return;
             }
             LiteNetLibConnnection.PerformUpdate();
-            Dispatcher.ExecuteDispatcherTasks();
         }
         public void OnDestroy()
         {
@@ -151,10 +127,7 @@ namespace DarkRift.Client.Unity
                 {
                     if (callback != null)
                     {
-                        if (invokeFromDispatcher)
-                            Dispatcher.InvokeAsync(() => callback(e));
-                        else
-                            callback.Invoke(e);
+                        callback.Invoke(e);
                     }
 
                     if (ConnectionState == ConnectionState.Connected)
@@ -169,7 +142,6 @@ namespace DarkRift.Client.Unity
                 }
             );
         }
-        public HashSet<ushort> MultithreadSafeTag;
         /// <summary>
         ///     Sends a message to the server.
         /// </summary>
@@ -179,36 +151,6 @@ namespace DarkRift.Client.Unity
         {
             return Client.SendMessage(message, channel, sendMode);
         }
-
-        /// <summary>
-        /// Invoked when DarkRift receives a message from the server.
-        /// </summary>
-        /// <param name="sender">The client that received the message.</param>
-        /// <param name="e">The arguments for the event.</param>
-        public void Client_MessageReceived(object sender, MessageReceivedEventArgs e)
-        {
-            // If we're handling multithreading then pass the event to the dispatcher
-            if (MultithreadSafeTag.Contains(e.Tag) == false)
-            {
-                // Capture the handler outside the lambda to avoid repeated allocations
-                EventHandler<MessageReceivedEventArgs> handler = MessageReceivedOnMainThread;
-                if (handler != null)
-                {
-                    Dispatcher.InvokeAsync(new Action(() =>
-                    {
-                        handler.Invoke(sender, e);
-                    }));
-                }
-            }
-            else
-            {
-                EventHandler<MessageReceivedEventArgs> handler = MessageReceived;
-                if (handler != null)
-                {
-                    handler.Invoke(sender, e);
-                }
-            }
-        }
         /// <summary>
         /// Invoked when the client is disconnected from the server.
         /// </summary>
@@ -217,30 +159,13 @@ namespace DarkRift.Client.Unity
         public void Client_Disconnected(object sender, DisconnectedEventArgs e)
         {
             // If we're handling multithreading then pass the event to the dispatcher
-            if (invokeFromDispatcher)
-            {
-                if (!e.LocalDisconnect)
-                    Debug.Log("Disconnected from server, error: " + e.Error);
+            if (!e.LocalDisconnect)
+                Debug.Log("Disconnected from server, error: " + e.Error);
 
-                EventHandler<DisconnectedEventArgs> handler = Disconnected;
-                if (handler != null)
-                {
-                    Dispatcher.InvokeAsync(new Action(() =>
-                    {
-                        handler.Invoke(sender, e);
-                    }));
-                }
-            }
-            else
+            EventHandler<DisconnectedEventArgs> handler = Disconnected;
+            if (handler != null)
             {
-                if (!e.LocalDisconnect)
-                    Debug.Log("Disconnected from server, error: " + e.Error);
-
-                EventHandler<DisconnectedEventArgs> handler = Disconnected;
-                if (handler != null)
-                {
-                    handler.Invoke(sender, e);
-                }
+                handler.Invoke(sender, e);
             }
         }
 
@@ -266,14 +191,8 @@ namespace DarkRift.Client.Unity
         public void Close()
         {
             Debug.Log("Closing Connection");
-            if (Dispatcher != null)
-            {
-                Dispatcher.Dispose();
-                Dispatcher = null;
-            }
             if (Client != null)
             {
-                Client.MessageReceived -= Client_MessageReceived;
                 Client.Disconnected -= Client_Disconnected;
 
                 Client.Dispose();

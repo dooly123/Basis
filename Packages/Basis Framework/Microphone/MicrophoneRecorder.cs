@@ -23,7 +23,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     private object processingLock = new object();
     private int position;
     private NativeArray<float> PBA;
-    private VolumeAdjustmentJob VAJ;
+    private LogarithmicVolumeAdjustmentJob VAJ;
     private JobHandle handle;
     public bool TryInitialize()
     {
@@ -40,7 +40,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         BasisOpusSettings = BasisDeviceManagement.Instance.BasisOpusSettings;
         processBufferArray = BasisOpusSettings.CalculateProcessBuffer();
         PBA = new NativeArray<float>(processBufferArray, Allocator.Persistent);
-        VAJ = new VolumeAdjustmentJob
+        VAJ = new LogarithmicVolumeAdjustmentJob
         {
             processBufferArray = PBA,
             Volume = Volume
@@ -319,15 +319,19 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         VAJ.processBufferArray.CopyTo(processBufferArray);
     }
     [BurstCompile]
-   public struct VolumeAdjustmentJob : IJobParallelFor
+    public struct LogarithmicVolumeAdjustmentJob : IJobParallelFor
     {
         [NativeDisableParallelForRestriction]
         public NativeArray<float> processBufferArray;
-        public float Volume;
+        public float Volume; // Recommended range: 0.0f to 1.0f
 
         public void Execute(int index)
         {
-            processBufferArray[index] = math.sign(processBufferArray[index]) * math.log(1 + Volume * math.abs(processBufferArray[index]));
+            float sample = processBufferArray[index];
+            float sign = math.sign(sample);
+            sample = math.abs(sample);
+            sample = math.log(1.0f + Volume * sample) / math.log(1.0f + Volume); // Normalize to keep the scale consistent
+            processBufferArray[index] = sign * sample;
         }
     }
     public float GetRMS()

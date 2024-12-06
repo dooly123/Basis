@@ -1,29 +1,59 @@
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.Recievers;
 using DarkRift;
+using DarkRift.Client;
+using System.Threading;
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using static SerializableDarkRift;
 
 public static class BasisNetworkHandleVoice
 {
-    public static void HandleAudioUpdate(DarkRiftReader reader)
+    private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1); // Ensures single execution
+    private const int TimeoutMilliseconds = 100; // 100ms limit per execution
+
+    public static async Task HandleAudioUpdate(MessageReceivedEventArgs e)
     {
-        reader.Read(out AudioSegmentMessage AudioUpdate);
-        if (BasisNetworkManagement.Players.TryGetValue(AudioUpdate.playerIdMessage.playerID, out var player))
+        if (!await semaphore.WaitAsync(TimeoutMilliseconds))
         {
-            BasisNetworkReceiver networkReceiver = (BasisNetworkReceiver)player.NetworkSend;
-            if (AudioUpdate.wasSilentData)
+            Debug.LogWarning("Skipped HandleAudioUpdate due to execution overlap.");
+            return; // Skip this call if the previous one isn't done
+        }
+
+        try
+        {
+            using (Message message = e.GetMessage())
             {
-                networkReceiver.ReceiveSilentNetworkAudio(AudioUpdate.silentData);
-            }
-            else
-            {
-                networkReceiver.ReceiveNetworkAudio(AudioUpdate);
+                using (DarkRiftReader reader = message.GetReader())
+                {
+                    reader.Read(out AudioSegmentMessage audioUpdate);
+
+                    if (BasisNetworkManagement.RemotePlayers.TryGetValue(audioUpdate.playerIdMessage.playerID, out BasisNetworkReceiver player))
+                    {
+                        if (audioUpdate.wasSilentData)
+                        {
+                            player.ReceiveSilentNetworkAudio(audioUpdate.silentData);
+                        }
+                        else
+                        {
+                            player.ReceiveNetworkAudio(audioUpdate);
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"Missing Player For Message {audioUpdate.playerIdMessage.playerID}");
+                    }
+                }
             }
         }
-        else
+        catch (Exception ex)
         {
-            Debug.Log("Missing Player For Message " + AudioUpdate.playerIdMessage.playerID);
+            Debug.LogError($"Error in HandleAudioUpdate: {ex.Message}");
+        }
+        finally
+        {
+            semaphore.Release();
         }
     }
 }

@@ -113,7 +113,6 @@ namespace Basis.Scripts.Networking
             }            // Initialize AvatarBuffer
             BasisAvatarBufferPool.AvatarBufferPool(30);
             OwnershipPairing.Clear();
-            Client.MultithreadSafeTag = new HashSet<ushort>() { BasisTags.AvatarMuscleUpdateTag, BasisTags.AudioSegmentTag };
             if (BasisScene.Instance != null)
             {
                 SetupSceneEvents(BasisScene.Instance);
@@ -183,8 +182,7 @@ namespace Basis.Scripts.Networking
             if (HasAuthenticated == false)
             {
                 HasAuthenticated = true;
-                Client.MessageReceivedOnMainThread += MainThreadMessageReceived;
-                Client.MessageReceived += ThreadedMessageReceived;
+                Client.Client.MessageReceived += MainThreadMessageReceived;
             }
             Client.ConnectInBackground(BasisNetworkIPResolve.IpOutput(IpString), Port, Callback);
         }
@@ -208,8 +206,7 @@ namespace Basis.Scripts.Networking
         {
             if (HasAuthenticated)
             {
-                Client.MessageReceivedOnMainThread -= MainThreadMessageReceived;
-                Client.MessageReceived -= ThreadedMessageReceived;
+                Client.Client.MessageReceived -= MainThreadMessageReceived;
                 HasAuthenticated = false;
             }
             Client.Close();
@@ -224,109 +221,139 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-        private void ThreadedMessageReceived(object sender, MessageReceivedEventArgs e)
-        {
-            using (Message message = e.GetMessage())
-            {
-                using (DarkRiftReader reader = message.GetReader())
-                {
-                    switch (message.Tag)
-                    {
-                        case BasisTags.AvatarMuscleUpdateTag:
-                            BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
-                            break;
-                        case BasisTags.AudioSegmentTag:
-                            BasisNetworkHandleVoice.HandleAudioUpdate(reader);
-                            break;
-                        default:
-                            Debug.Log("Unknown message tag: " + message.Tag);
-                            break;
-                    }
-                }
-            }
-        }
         private async void MainThreadMessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            using (Message message = e.GetMessage())
+            switch (e.Tag) // Use e.Tag instead of message.Tag
             {
-                using (DarkRiftReader reader = message.GetReader())
-                {
-                    switch (message.Tag)
+                case BasisTags.AuthSuccess:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
                     {
-                        case BasisTags.AuthSuccess:
-                            await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
-                            break;
-
-                      //  case BasisTags.AvatarMuscleUpdateTag:
-                        //    BasisNetworkHandleAvatar.HandleAvatarUpdate(reader);
-                        //    break;
-
-                      //  case BasisTags.AudioSegmentTag:
-                        //    BasisNetworkHandleVoice.HandleAudioUpdate(reader);
-                         //   break;
-
-                        case BasisTags.DisconnectTag:
-                            BasisNetworkHandleRemoval.HandleDisconnection(reader);
-                            break;
-
-                        case BasisTags.AvatarChangeMessage:
-                            BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
-                            break;
-
-                        case BasisTags.CreateRemotePlayerTag:
-                            await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
-                            break;
-
-                        case BasisTags.CreateRemotePlayersTag:
-                            await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
-                            break;
-
-                        case BasisTags.SceneGenericMessage:
-                            BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
-                            break;
-
-                        case BasisTags.SceneGenericMessage_NoRecipients:
-                            BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
-                            break;
-
-                        case BasisTags.SceneGenericMessage_NoRecipients_NoPayload:
-                            BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
-                            break;
-
-                        case BasisTags.AvatarGenericMessage:
-                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
-                            break;
-
-                        case BasisTags.AvatarGenericMessage_NoRecipients:
-                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
-                            break;
-
-                        case BasisTags.AvatarGenericMessage_NoRecipients_NoPayload:
-                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
-                            break;
-
-                        case BasisTags.AvatarGenericMessage_Recipients_NoPayload:
-                            BasisNetworkGenericMessages.HandleServerAvatarDataMessage_Recipients_NoPayload(reader);
-                            break;
-
-                        case BasisTags.SceneGenericMessage_Recipients_NoPayload:
-                            BasisNetworkGenericMessages.HandleServerSceneDataMessage_Recipients_NoPayload(reader);
-                            break;
-
-
-                        case BasisTags.OwnershipResponse:
-                            BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
-                            break;
-
-                        case BasisTags.OwnershipTransfer:
-                            BasisNetworkGenericMessages.HandleOwnershipTransfer(reader);
-                            break;
-
-                        default:
-                            Debug.Log("Unknown message tag: " + message.Tag);
-                            break;
+                        await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
                     }
-                }
+                    break;
+                case BasisTags.AvatarMuscleUpdateTag:
+                    BasisNetworkHandleAvatar.HandleAvatarUpdate(e);
+                    break;
+                case BasisTags.AudioSegmentTag:
+                    BasisNetworkHandleVoice.HandleAudioUpdate(e);
+                    break;
+
+                case BasisTags.DisconnectTag:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkHandleRemoval.HandleDisconnection(reader);
+                    }
+                    break;
+
+                case BasisTags.AvatarChangeMessage:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
+                    }
+                    break;
+
+                case BasisTags.CreateRemotePlayerTag:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
+                    }
+                    break;
+
+                case BasisTags.CreateRemotePlayersTag:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
+                    }
+                    break;
+
+                case BasisTags.SceneGenericMessage:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
+                    }
+                    break;
+
+                case BasisTags.SceneGenericMessage_NoRecipients:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
+                    }
+                    break;
+
+                case BasisTags.SceneGenericMessage_NoRecipients_NoPayload:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
+                    }
+                    break;
+
+                case BasisTags.AvatarGenericMessage:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
+                    }
+                    break;
+
+                case BasisTags.AvatarGenericMessage_NoRecipients:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
+                    }
+                    break;
+
+                case BasisTags.AvatarGenericMessage_NoRecipients_NoPayload:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
+                    }
+                    break;
+
+                case BasisTags.AvatarGenericMessage_Recipients_NoPayload:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage_Recipients_NoPayload(reader);
+                    }
+                    break;
+
+                case BasisTags.SceneGenericMessage_Recipients_NoPayload:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleServerSceneDataMessage_Recipients_NoPayload(reader);
+                    }
+                    break;
+
+                case BasisTags.OwnershipResponse:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
+                    }
+                    break;
+
+                case BasisTags.OwnershipTransfer:
+                    using (Message message = e.GetMessage())
+                    using (DarkRiftReader reader = message.GetReader())
+                    {
+                        BasisNetworkGenericMessages.HandleOwnershipTransfer(reader);
+                    }
+                    break;
+
+                default:
+                    Debug.Log("Unknown message tag: " + e.Tag);
+                    break;
             }
         }
         public static void RequestOwnership(string UniqueNetworkId, ushort NewOwner)

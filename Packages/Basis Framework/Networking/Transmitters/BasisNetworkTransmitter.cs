@@ -45,9 +45,6 @@ namespace Basis.Scripts.Networking.Transmitters
         public int InitalizedLength = -1;
         public CombinedDistanceAndClosestTransformJob distanceJob = new CombinedDistanceAndClosestTransformJob();
         public JobHandle distanceJobHandle;
-        public bool[] HearingIndex;
-        public bool[] LastHearingIndex;
-        public ushort[] HearingIndexToId;
         public int HearingIndexLength;
 
 
@@ -83,30 +80,38 @@ namespace Basis.Scripts.Networking.Transmitters
                 timer -= interval;
             }
         }
+        public bool[] MicrophoneRangeIndex;
+        public bool[] LastMicrophoneRangeIndex;
 
+        public bool[] HearingIndex;
+        public bool[] AvatarIndex;
+        public ushort[] HearingIndexToId;
         public void HandleAudioCommunication()
         {
             if (distanceJob.DistanceResults == null)
             {
                 return;
             }
-            if (HearingIndex == null)
+            if (MicrophoneRangeIndex == null)
             {
                 return;
             }
-            if (HearingIndex.Length != distanceJob.DistanceResults.Length)
+            if (MicrophoneRangeIndex.Length != distanceJob.DistanceResults.Length)
             {
                 return;
             }
-            distanceJob.DistanceResults.CopyTo(HearingIndex);
-            if (AreBoolArraysEqual(HearingIndex, LastHearingIndex) == false)
+            distanceJob.DistanceResults.CopyTo(MicrophoneRangeIndex);
+            distanceJob.HearingResults.CopyTo(HearingIndex);
+            distanceJob.AvatarResults.CopyTo(AvatarIndex);
+
+            if (AreBoolArraysEqual(MicrophoneRangeIndex, LastMicrophoneRangeIndex) == false)
             {
                 //Debug.Log("Arrays where not equal!");
-                Array.Copy(HearingIndex, LastHearingIndex, HearingIndexLength);
+                Array.Copy(MicrophoneRangeIndex, LastMicrophoneRangeIndex, HearingIndexLength);
                 List<ushort> TalkingPoints = new List<ushort>();
                 for (int Index = 0; Index < HearingIndexLength; Index++)
                 {
-                    bool User = HearingIndex[Index];
+                    bool User = MicrophoneRangeIndex[Index];
                     if (User)
                     {
                         TalkingPoints.Add(HearingIndexToId[Index]);
@@ -217,8 +222,11 @@ namespace Basis.Scripts.Networking.Transmitters
             }
             if (HearingIndexLength != BasisNetworkManagement.ReceiverCount)
             {
-                LastHearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
+                LastMicrophoneRangeIndex = new bool[BasisNetworkManagement.ReceiverCount];
+                MicrophoneRangeIndex = new bool[BasisNetworkManagement.ReceiverCount];
                 HearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
+                AvatarIndex = new bool[BasisNetworkManagement.ReceiverCount];
+
                 HearingIndexLength = BasisNetworkManagement.ReceiverCount;
                 HearingIndexToId = BasisNetworkManagement.RemotePlayers.Keys.ToArray();
             }
