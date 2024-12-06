@@ -33,7 +33,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             }
         }
         public static BasisRangedUshortFloatData RotationCompression = new BasisRangedUshortFloatData(-1f, 1f, 0.001f);
-        [System.Serializable]
         public struct AvatarBuffer
         {
             public Unity.Mathematics.quaternion rotation;

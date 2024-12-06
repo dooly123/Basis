@@ -9,6 +9,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using static SerializableDarkRift;
+using static UnityEngine.ParticleSystem;
 
 namespace Basis.Scripts.Networking.Recievers
 {
@@ -45,7 +46,8 @@ namespace Basis.Scripts.Networking.Recievers
             targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
             musclesJob = new UpdateAvatarMusclesJob();
             AvatarJob = new UpdateAvatarJob();
-
+            First.Muscles = new float[90];
+            Last.Muscles = new float[90];
             musclesJob.Outputmuscles = muscles;
             musclesJob.targetMuscles = targetMuscles;
             AvatarJob.OutputVector = OuputVectors;
@@ -61,8 +63,8 @@ namespace Basis.Scripts.Networking.Recievers
             if (muscles.IsCreated) muscles.Dispose();
             if (targetMuscles.IsCreated) targetMuscles.Dispose();
         }
-        [SerializeField] public AvatarBuffer First;
-        [SerializeField] public AvatarBuffer Last;
+        public AvatarBuffer First;
+        public AvatarBuffer Last;
         //  public int PayloadCount = 0;
         public static int BufferCapacityBeforeCleanup = 3;
         public float interpolationTime;
@@ -117,20 +119,46 @@ namespace Basis.Scripts.Networking.Recievers
             }
             if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
             {
-                DecompressionQueue.Enqueue(First);
-                First = Last;
-                Last = result;
-                TimeBeforeCompletion = First.SecondsInterval; // how long to run for
+                Array.Copy(Last.Muscles, First.Muscles, Last.Muscles.Length);
+                First.Scale = new float3(Last.Scale);
+                First.Position = new float3(Last.Position);
+                First.rotation = new quaternion(Last.rotation.value);
+                First.SecondsInterval = Last.SecondsInterval;
+
+                Array.Copy(result.Muscles, Last.Muscles, result.Muscles.Length);
+                Last.Scale = new float3(result.Scale);
+                Last.Position = new float3(result.Position);
+                Last.rotation = new quaternion(result.rotation.value);
+                Last.SecondsInterval = result.SecondsInterval;
+
+                TimeBeforeCompletion = Last.SecondsInterval; // how long to run for
                 TimeInThePast = TimeAsDouble;
+                DecompressionQueue.Enqueue(result);
             }
         }
         public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
         {
             if (HasAvatarInitalized == false)//set first and last to the same thing
             {
-                First = avatarBuffer;
-                Last = avatarBuffer;
+                First.Muscles = new float[avatarBuffer.Muscles.Length];
+                Array.Copy(avatarBuffer.Muscles, Last.Muscles, avatarBuffer.Muscles.Length);
+
+                First.Scale = new float3(avatarBuffer.Scale);
+                First.Position = new float3(avatarBuffer.Position);
+                First.rotation = new quaternion(avatarBuffer.rotation.value);
+                First.SecondsInterval = avatarBuffer.SecondsInterval;
+
+                Last.Muscles = new float[avatarBuffer.Muscles.Length];
+                Array.Copy(avatarBuffer.Muscles, Last.Muscles, avatarBuffer.Muscles.Length);
+
+                Last.Scale = new float3(avatarBuffer.Scale);
+                Last.Position = new float3(avatarBuffer.Position);
+                Last.rotation = new quaternion(avatarBuffer.rotation.value);
+                Last.SecondsInterval = avatarBuffer.SecondsInterval;
+
+
                 HasAvatarInitalized = true;
+                DecompressionQueue.Enqueue(avatarBuffer);
             }
             else
             {
