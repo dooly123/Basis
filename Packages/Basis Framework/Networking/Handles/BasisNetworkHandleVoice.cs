@@ -7,53 +7,77 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using static SerializableDarkRift;
+using System.Collections.Concurrent;
 
 public static class BasisNetworkHandleVoice
 {
-    private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1); // Ensures single execution
-    private const int TimeoutMilliseconds = 100; // 100ms limit per execution
-
+    private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+    private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+    private const int TimeoutMilliseconds = 1000;
+    public static ConcurrentQueue<AudioSegmentMessage> Message = new ConcurrentQueue<AudioSegmentMessage>();
     public static async Task HandleAudioUpdate(MessageReceivedEventArgs e)
     {
-        if (!await semaphore.WaitAsync(TimeoutMilliseconds))
-        {
-            Debug.LogWarning("Skipped HandleAudioUpdate due to execution overlap.");
-            return; // Skip this call if the previous one isn't done
-        }
+        // Cancel any ongoing task
+        cancellationTokenSource.Cancel();
+        cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = cancellationTokenSource.Token;
 
         try
         {
-            using (Message message = e.GetMessage())
-            {
-                using (DarkRiftReader reader = message.GetReader())
-                {
-                    reader.Read(out AudioSegmentMessage audioUpdate);
+            await semaphore.WaitAsync(TimeoutMilliseconds);
 
-                    if (BasisNetworkManagement.RemotePlayers.TryGetValue(audioUpdate.playerIdMessage.playerID, out BasisNetworkReceiver player))
+            try
+            {
+                using (Message message = e.GetMessage())
+                {
+                    using (DarkRiftReader reader = message.GetReader())
                     {
-                        if (audioUpdate.wasSilentData)
+                        if (Message.TryDequeue(out AudioSegmentMessage audioUpdate) == false)
                         {
-                            player.ReceiveSilentNetworkAudio(audioUpdate.silentData);
+                            audioUpdate = new AudioSegmentMessage();
+                        }
+                        audioUpdate.Deserialize(reader.deserializeEventSingleton);
+                        if (BasisNetworkManagement.RemotePlayers.TryGetValue(audioUpdate.playerIdMessage.playerID, out BasisNetworkReceiver player))
+                        {
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                Debug.Log("Operation canceled.");
+                                return; // Exit early if a cancellation is requested
+                            }
+
+                            if (audioUpdate.wasSilentData)
+                            {
+                                player.ReceiveSilentNetworkAudio(audioUpdate.silentData);
+                            }
+                            else
+                            {
+                                player.ReceiveNetworkAudio(audioUpdate);
+                            }
                         }
                         else
                         {
-                            player.ReceiveNetworkAudio(audioUpdate);
+                            Debug.Log($"Missing Player For Message {audioUpdate.playerIdMessage.playerID}");
                         }
-                    }
-                    else
-                    {
-                        Debug.Log($"Missing Player For Message {audioUpdate.playerIdMessage.playerID}");
+                        Message.Enqueue(audioUpdate);
+                        while(Message.Count > 250)
+                        {
+                            Message.TryDequeue(out AudioSegmentMessage seg);
+                        }
                     }
                 }
             }
+            catch (Exception ex) when (!(ex is OperationCanceledException))
+            {
+                Debug.LogError($"Error in HandleAudioUpdate: {ex.Message}");
+            }
+            finally
+            {
+                semaphore.Release();
+            }
         }
-        catch (Exception ex)
+        catch (OperationCanceledException)
         {
-            Debug.LogError($"Error in HandleAudioUpdate: {ex.Message}");
-        }
-        finally
-        {
-            semaphore.Release();
+            Debug.Log("HandleAudioUpdate task canceled.");
         }
     }
 }

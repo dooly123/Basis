@@ -38,9 +38,9 @@ public class BasisAudioDecoder : MonoBehaviour
     /// the pcm length is how much was actually encoded.
     /// </summary>
     /// <param name="data"></param>
-    public void OnDecode(byte[] data)
+    public void OnDecode(byte[] data,int length)
     {
-        pcmLength = decoder.Decode(data, data.Length, pcmBuffer);
+        pcmLength = decoder.Decode(data, length, pcmBuffer);
         OnDecoded?.Invoke();
     }
 }

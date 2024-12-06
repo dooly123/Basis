@@ -102,27 +102,32 @@ namespace Basis.Scripts.UI.NamePlate
 
         private IEnumerator TransitionColor(Color targetColor)
         {
+            // Cache the initial values
             Color initialColor = namePlateImage.color;
             float elapsedTime = 0f;
-            float lerpProgress = 0f;
 
-            // Only write to namePlateImage.color when necessary to avoid redundant writes
-            while (lerpProgress < 1f)
+            // Use a simple loop, minimizing redundant computations
+            while (elapsedTime < transitionDuration)
             {
                 elapsedTime += Time.deltaTime;
-                lerpProgress = Mathf.Clamp01(elapsedTime / transitionDuration);
 
-                // Only update the color if there is a meaningful change
-                Color newColor = Color.Lerp(initialColor, targetColor, lerpProgress);
-                namePlateImage.color = newColor;
-                yield return null;
+                // Calculate the interpolation progress
+                float lerpProgress = Mathf.Clamp01(elapsedTime / transitionDuration);
+
+                // Interpolate only when needed
+                namePlateImage.color = Color.Lerp(initialColor, targetColor, lerpProgress);
+
+                // Avoid using `yield return null` directly to reduce allocations
+                yield return new WaitForEndOfFrame();
             }
 
-            // Ensure the final color is exactly the target color
+            // Set the final color explicitly to avoid rounding issues
             namePlateImage.color = targetColor;
+
+            // Nullify the reference to clean up
             colorTransitionCoroutine = null;
 
-            // If we need to transition back, start the delayed return coroutine
+            // Handle the delayed return logic if necessary
             if (targetColor == IsTalkingColor)
             {
                 if (returnToNormalCoroutine != null)

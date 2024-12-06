@@ -1,5 +1,6 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
+using System.Collections.Concurrent;
 using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 using static SerializableDarkRift;
 using Vector3 = UnityEngine.Vector3;
@@ -12,7 +13,14 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         /// </summary>
         public static void DecompressAndProcessAvatar(BasisNetworkReceiver baseReceiver, ServerSideSyncPlayerMessage syncMessage)
         {
-            AvatarBuffer avatarBuffer = new AvatarBuffer();
+            while (baseReceiver.DecompressionQueue.Count > 10)
+            {
+                baseReceiver.DecompressionQueue.TryDequeue(out AvatarBuffer Buffer);
+            }
+            if (baseReceiver.DecompressionQueue.TryDequeue(out AvatarBuffer avatarBuffer) == false)
+            {
+                avatarBuffer = new AvatarBuffer();
+            }
             int Offset = 0;
             avatarBuffer.Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref Offset);
             avatarBuffer.rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);

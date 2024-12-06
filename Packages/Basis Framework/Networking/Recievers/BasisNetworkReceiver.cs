@@ -36,6 +36,7 @@ namespace Basis.Scripts.Networking.Recievers
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
         public float[] MuscleFinalStageOutput = new float[90];
         public quaternion OutputRotation;
+        public ConcurrentQueue<AvatarBuffer> DecompressionQueue = new ConcurrentQueue<AvatarBuffer>();
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -116,7 +117,7 @@ namespace Basis.Scripts.Networking.Recievers
             }
             if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
             {
-                //  PoolPayload(First);
+                DecompressionQueue.Enqueue(First);
                 First = Last;
                 Last = result;
                 TimeBeforeCompletion = First.SecondsInterval; // how long to run for
@@ -137,6 +138,7 @@ namespace Basis.Scripts.Networking.Recievers
                 while (PayloadQueue.Count > BufferCapacityBeforeCleanup)
                 {
                     PayloadQueue.TryDequeue(out AvatarBuffer Buffer);
+                    DecompressionQueue.Enqueue(Buffer);
                 }
             }
         }
@@ -185,7 +187,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
-                AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer);
+                AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer, audioSegment.audioSegmentData.size);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
         }

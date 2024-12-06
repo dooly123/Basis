@@ -233,10 +233,10 @@ namespace Basis.Scripts.Networking
                     }
                     break;
                 case BasisTags.AvatarMuscleUpdateTag:
-                    BasisNetworkHandleAvatar.HandleAvatarUpdate(e);
+                    await BasisNetworkHandleAvatar.HandleAvatarUpdate(e);
                     break;
                 case BasisTags.AudioSegmentTag:
-                    BasisNetworkHandleVoice.HandleAudioUpdate(e);
+                  await BasisNetworkHandleVoice.HandleAudioUpdate(e);
                     break;
 
                 case BasisTags.DisconnectTag:

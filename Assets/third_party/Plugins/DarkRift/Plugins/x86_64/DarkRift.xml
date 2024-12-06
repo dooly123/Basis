@@ -526,7 +526,7 @@
             </summary>
             <returns>The array of bytes read.</returns>
         </member>
-        <member name="M:DarkRift.DarkRiftReader.ReadBytes(System.Byte[]@)">
+        <member name="M:DarkRift.DarkRiftReader.ReadBytes(System.Byte[]@,System.Int32@)">
             <summary>
                 Reads an array of bytes from the reader.
             </summary>
@@ -789,7 +789,7 @@
             </summary>
             <returns>The array of unsigned 64bit integers read.</returns>
         </member>
-        <member name="M:DarkRift.DarkRiftReader.ReadUInt64s(System.UInt64[]@)">
+        <member name="M:DarkRift.DarkRiftReader.ReadUInt64s(System.UInt64[]@,System.Int32@)">
             <summary>
                 Reads an array unsigned 64bit integers from the reader.
             </summary>
