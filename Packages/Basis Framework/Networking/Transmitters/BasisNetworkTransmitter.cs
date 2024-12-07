@@ -180,7 +180,7 @@ namespace Basis.Scripts.Networking.Transmitters
                     using (Message msg = Message.Create(BasisTags.AudioCommunication, writer))
                     {
                         BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.ReliableOrdered);
-                        Debug.Log("sending out voice Receivers");
+                       // Debug.Log("sending out voice Receivers");
                     }
                 }
             }

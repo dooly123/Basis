@@ -190,6 +190,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ebe60fd8e87b4546aaf34254b33e227
+    m_Address: Assets/Prefabs/UI/Indication.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a67751b7d392b924e89b90084f01a19b
     m_Address: Packages/com.basis.gizmos/GizmoLine.prefab
     m_ReadOnly: 0
