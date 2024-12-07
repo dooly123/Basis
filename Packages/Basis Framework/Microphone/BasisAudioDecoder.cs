@@ -3,22 +3,13 @@ using System;
 using UnityOpus;
 using Basis.Scripts.Device_Management;
 
-public class BasisAudioDecoder : MonoBehaviour
+public class BasisAudioDecoder
 {
     public event Action OnDecoded;
     AudioDecoder decoder;
     public BasisOpusSettings Settings;
     public float[] pcmBuffer;
     public int pcmLength;
-    void OnEnable()
-    {
-        Initialize();
-    }
-
-    void OnDisable()
-    {
-        Deinitalize();
-    }
     public void Initialize()
     {
         pcmLength = 2048;

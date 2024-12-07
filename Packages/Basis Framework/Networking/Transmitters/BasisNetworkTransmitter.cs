@@ -45,12 +45,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public int InitalizedLength = -1;
         public CombinedDistanceAndClosestTransformJob distanceJob = new CombinedDistanceAndClosestTransformJob();
         public JobHandle distanceJobHandle;
-        public int HearingIndexLength;
-
-
-        public float VoiceDistanceUnSquared = 625;
-        public float HearingDistanceUnSquared = 625;
-        public float AvatarDistanceUnSquared = 625;
+        public int IndexLength;
         public void Compute()
         {
             if (Ready && NetworkedPlayer.Player.Avatar != null)
@@ -68,8 +63,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 ScheduleCheck();
                 Compute();
                 distanceJobHandle.Complete();
-                HandleAudioCommunication();
-
+                HandleResults();
                 SmallestDistanceToAnotherPlayer = distanceJob.smallestDistance[0];
 
                 // Calculate next interval and clamp it
@@ -86,7 +80,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public bool[] HearingIndex;
         public bool[] AvatarIndex;
         public ushort[] HearingIndexToId;
-        public void HandleAudioCommunication()
+        public void HandleResults()
         {
             if (distanceJob.DistanceResults == null)
             {
@@ -104,12 +98,52 @@ namespace Basis.Scripts.Networking.Transmitters
             distanceJob.HearingResults.CopyTo(HearingIndex);
             distanceJob.AvatarResults.CopyTo(AvatarIndex);
 
+            MicrophoneOutputCheck();
+            AudioDistanceCheck();
+            MaximumAvatarsVisible();
+        }
+        /// <summary>
+        /// how far we can hear locally
+        /// </summary>
+        public void AudioDistanceCheck()
+        {
+            for (int Index = 0; Index < IndexLength; Index++)
+            {
+                if (BasisNetworkManagement.ReceiverArray[Index].AudioReceiverModule.IsPlaying != HearingIndex[Index])
+                {
+                    if (HearingIndex[Index])
+                    {
+                        BasisNetworkManagement.ReceiverArray[Index].AudioReceiverModule.StartAudio();
+                    }
+                    else
+                    {
+                        BasisNetworkManagement.ReceiverArray[Index].AudioReceiverModule.StopAudio();
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// check if player is visible or not.
+        /// check there distance bool.
+        /// 
+        /// </summary>
+        public void MaximumAvatarsVisible()
+        {
+            ///run through all visible avatars
+            ///
+        }
+        /// <summary>
+        ///lets the server know who can hear us.
+        /// </summary>
+        public void MicrophoneOutputCheck()
+        {
+
             if (AreBoolArraysEqual(MicrophoneRangeIndex, LastMicrophoneRangeIndex) == false)
             {
                 //Debug.Log("Arrays where not equal!");
-                Array.Copy(MicrophoneRangeIndex, LastMicrophoneRangeIndex, HearingIndexLength);
+                Array.Copy(MicrophoneRangeIndex, LastMicrophoneRangeIndex, IndexLength);
                 List<ushort> TalkingPoints = new List<ushort>();
-                for (int Index = 0; Index < HearingIndexLength; Index++)
+                for (int Index = 0; Index < IndexLength; Index++)
                 {
                     bool User = MicrophoneRangeIndex[Index];
                     if (User)
@@ -212,22 +246,22 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void ScheduleCheck()
         {
-            distanceJob.AvatarDistance = AvatarDistanceUnSquared;
-            distanceJob.HearingDistance = HearingDistanceUnSquared;
-            distanceJob.VoiceDistance = VoiceDistanceUnSquared;
+            distanceJob.AvatarDistance = 0;
+            distanceJob.HearingDistance = SMModuleDistanceBasedReductions.HearingRange;
+            distanceJob.VoiceDistance = SMModuleDistanceBasedReductions.MicrophoneRange;
             distanceJob.referencePosition = NetworkedPlayer.MouthBone.OutgoingWorldData.position;
             for (int Index = 0; Index < BasisNetworkManagement.ReceiverCount; Index++)
             {
                 targetPositions[Index] = BasisNetworkManagement.ReceiverArray[Index].NetworkedPlayer.MouthBone.OutgoingWorldData.position;
             }
-            if (HearingIndexLength != BasisNetworkManagement.ReceiverCount)
+            if (IndexLength != BasisNetworkManagement.ReceiverCount)
             {
                 LastMicrophoneRangeIndex = new bool[BasisNetworkManagement.ReceiverCount];
                 MicrophoneRangeIndex = new bool[BasisNetworkManagement.ReceiverCount];
                 HearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
                 AvatarIndex = new bool[BasisNetworkManagement.ReceiverCount];
 
-                HearingIndexLength = BasisNetworkManagement.ReceiverCount;
+                IndexLength = BasisNetworkManagement.ReceiverCount;
                 HearingIndexToId = BasisNetworkManagement.RemotePlayers.Keys.ToArray();
             }
             distanceJobHandle = distanceJob.Schedule(targetPositions.Length, 64);

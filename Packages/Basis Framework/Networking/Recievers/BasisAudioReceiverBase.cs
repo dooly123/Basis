@@ -21,9 +21,22 @@ namespace Basis.Scripts.Networking.Recievers
         public int samplingFrequency;
         public int numChannels;
         public int SampleLength;
+        public bool IsPlaying = false;
         public void OnDecoded()
         {
             OnDecoded(decoder.pcmBuffer, decoder.pcmLength);
+        }
+        public void StopAudio()
+        {
+            IsPlaying = false;
+        //    audioSource.enabled = false;
+            audioSource.Stop();
+        }
+        public void StartAudio()
+        {
+            IsPlaying = true;
+          //  audioSource.enabled = true;
+            audioSource.Play();
         }
         public void OnDecoded(float[] pcm, int length)
         {

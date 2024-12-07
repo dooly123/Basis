@@ -40,10 +40,11 @@ namespace Basis.Scripts.Networking.Recievers
             // Ensure decoder is initialized and subscribe to events
             if (decoder == null)
             {
-                decoder = BasisHelpers.GetOrAddComponent<BasisAudioDecoder>(audioParent);
+                decoder = new BasisAudioDecoder();
+                decoder.Initialize();
             }
             decoder.OnDecoded += OnDecoded;
-            audioSource.Play();
+            StartAudio();
 
             // Perform calibration
             OnCalibration(networkedPlayer);
@@ -54,6 +55,7 @@ namespace Basis.Scripts.Networking.Recievers
             if (decoder != null)
             {
                 decoder.OnDecoded -= OnDecoded;
+                decoder.Deinitalize();
             }
         }
         public void OnDisable()
@@ -62,7 +64,7 @@ namespace Basis.Scripts.Networking.Recievers
             if (decoder != null)
             {
                 decoder.OnDecoded -= OnDecoded;
-                GameObject.Destroy(decoder.gameObject);
+                decoder.Deinitalize();
             }
 
             if (audioSource != null)
