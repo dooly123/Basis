@@ -15,12 +15,16 @@ namespace Basis.Scripts.BasisSdk.Players
         public BasisBoneControl MouthControl;
         public bool HasEvents = false;
         public bool LockAvatarFromChanging;
-        public async Task RemoteInitialize(ClientAvatarChangeMessage CACM, PlayerMetaDataMessage PlayerMetaDataMessage)
+        public bool IsNotFallBack = false;
+        public bool OutOfRangeFromLocal = false;
+        public ClientAvatarChangeMessage CACM;
+        public async Task RemoteInitialize(ClientAvatarChangeMessage cACM, PlayerMetaDataMessage PlayerMetaDataMessage)
         {
+            CACM = cACM;
             DisplayName = PlayerMetaDataMessage.playerDisplayName;
             UUID = PlayerMetaDataMessage.playerUUID;
             IsLocal = false;
-            RemoteBoneDriver.CreateInitialArrays(RemoteBoneDriver.transform,false);
+            RemoteBoneDriver.CreateInitialArrays(RemoteBoneDriver.transform, false);
             RemoteBoneDriver.Initialize();
             if (HasEvents == false)
             {
@@ -34,8 +38,16 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             if (Avatar == null)
             {
-                BasisLoadableBundle BasisLoadedBundle = BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
-                await BasisAvatarFactory.LoadAvatarRemote(this, CACM.loadMode, BasisLoadedBundle);
+                this.CACM = CACM;
+              //  if (IsNotFallBack)
+               // {
+                    BasisLoadableBundle BasisLoadedBundle = BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(CACM.byteArray);
+                    await BasisAvatarFactory.LoadAvatarRemote(this, CACM.loadMode, BasisLoadedBundle);
+               // }
+              //  else
+              //  {
+               //     BasisAvatarFactory.LoadLoadingAvatar(this, BasisAvatarFactory.LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile);
+               // }
             }
         }
         public void OnDestroy()
@@ -56,19 +68,26 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle)
         {
-            if (BasisLoadableBundle.BasisLocalEncryptedBundle.LocalBundleFile == BasisAvatarFactory.LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile)
-            {
-                Debug.Log("Avatar Load string was null or empty using fallback!");
-                await BasisAvatarFactory.LoadAvatarRemote(this, BasisPlayer.LoadModeError, BasisLoadableBundle);
-            }
-            else
-            {
-                Debug.Log("loading avatar from " + BasisLoadableBundle.BasisLocalEncryptedBundle.LocalBundleFile + " with net mode " + Mode);
-                if (LockAvatarFromChanging == false)
+          //  if (IsNotFallBack)
+          //  {
+                if (BasisLoadableBundle.BasisLocalEncryptedBundle.LocalBundleFile == BasisAvatarFactory.LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile)
                 {
-                    await BasisAvatarFactory.LoadAvatarRemote(this, Mode, BasisLoadableBundle);
+                    Debug.Log("Avatar Load string was null or empty using fallback!");
+                    await BasisAvatarFactory.LoadAvatarRemote(this, BasisPlayer.LoadModeError, BasisLoadableBundle);
                 }
-            }
+                else
+                {
+                    Debug.Log("loading avatar from " + BasisLoadableBundle.BasisLocalEncryptedBundle.LocalBundleFile + " with net mode " + Mode);
+                    if (LockAvatarFromChanging == false)
+                    {
+                        await BasisAvatarFactory.LoadAvatarRemote(this, Mode, BasisLoadableBundle);
+                    }
+                }
+          //  }
+          //  else
+           // {
+           //     BasisAvatarFactory.LoadLoadingAvatar(this, BasisAvatarFactory.LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile);
+           // }
         }
         public void RemoteCalibration()
         {

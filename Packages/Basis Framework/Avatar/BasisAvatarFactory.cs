@@ -227,13 +227,14 @@ namespace Basis.Scripts.Avatar
             {
                 Player.Avatar = Avatar;
                 Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
+                int RenderCount = Player.Avatar.Renders.Length;
                 if (Player.IsLocal)
                 {
                     BasisLocalPlayer BasisLocalPlayer = (BasisLocalPlayer)Player;
                     Player.Avatar.IsOwnedLocally = true;
                     CreateLocal(BasisLocalPlayer);
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
-                    for (int Index = 0; Index < Player.Avatar.Renders.Length; Index++)
+                    for (int Index = 0; Index < RenderCount; Index++)
                     {
                         Avatar.Renders[Index].gameObject.layer = 6;
                     }
@@ -244,14 +245,13 @@ namespace Basis.Scripts.Avatar
                     Player.Avatar.IsOwnedLocally = false;
                     CreateRemote(BasisRemotePlayer);
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
-                    for (int Index = 0; Index < Player.Avatar.Renders.Length; Index++)
+                    for (int Index = 0; Index < RenderCount; Index++)
                     {
                         Avatar.Renders[Index].gameObject.layer = 7;
                     }
                 }
             }
         }
-
         public static async void DeleteLastAvatar(BasisPlayer Player,bool IsRemovingFallback)
         {
             if (Player.Avatar != null)

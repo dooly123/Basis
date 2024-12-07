@@ -1,3 +1,4 @@
+using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Networking.NetworkedAvatar;
@@ -99,38 +100,47 @@ namespace Basis.Scripts.Networking.Transmitters
             distanceJob.AvatarResults.CopyTo(AvatarIndex);
 
             MicrophoneOutputCheck();
-            AudioDistanceCheck();
-            MaximumAvatarsVisible();
+            Iteration();
         }
         /// <summary>
         /// how far we can hear locally
         /// </summary>
-        public void AudioDistanceCheck()
+        public void Iteration()
         {
             for (int Index = 0; Index < IndexLength; Index++)
             {
-                if (BasisNetworkManagement.ReceiverArray[Index].AudioReceiverModule.IsPlaying != HearingIndex[Index])
+                Recievers.BasisNetworkReceiver Rec = BasisNetworkManagement.ReceiverArray[Index];
+                if (Rec.AudioReceiverModule.IsPlaying != HearingIndex[Index])
                 {
                     if (HearingIndex[Index])
                     {
-                        BasisNetworkManagement.ReceiverArray[Index].AudioReceiverModule.StartAudio();
+                        Rec.AudioReceiverModule.StartAudio();
+                        Rec.RemotePlayer.OutOfRangeFromLocal = false;
                     }
                     else
                     {
-                        BasisNetworkManagement.ReceiverArray[Index].AudioReceiverModule.StopAudio();
+                        Rec.AudioReceiverModule.StopAudio();
+                        Rec.RemotePlayer.OutOfRangeFromLocal = true;
                     }
                 }
+                /*
+                if (Rec.RemotePlayer.IsNotFallBack != AvatarIndex[Index])
+                {
+                    if (AvatarIndex[Index])
+                    {
+                        BasisLoadableBundle BasisLoadableBundle = BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(Rec.RemotePlayer.CACM.byteArray);
+
+                        Rec.RemotePlayer.CreateAvatar(Rec.RemotePlayer.CACM.loadMode, BasisLoadableBundle);
+                        Rec.RemotePlayer.IsNotFallBack = true;
+                    }
+                    else
+                    {
+                     //   BasisAvatarFactory.LoadLoadingAvatar(Rec.RemotePlayer, BasisAvatarFactory.LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile);
+                       // Rec.RemotePlayer.IsNotFallBack = false;
+                    }
+                }
+                */
             }
-        }
-        /// <summary>
-        /// check if player is visible or not.
-        /// check there distance bool.
-        /// 
-        /// </summary>
-        public void MaximumAvatarsVisible()
-        {
-            ///run through all visible avatars
-            ///
         }
         /// <summary>
         ///lets the server know who can hear us.
@@ -246,7 +256,7 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void ScheduleCheck()
         {
-            distanceJob.AvatarDistance = 0;
+            distanceJob.AvatarDistance = SMModuleDistanceBasedReductions.AvatarRange;
             distanceJob.HearingDistance = SMModuleDistanceBasedReductions.HearingRange;
             distanceJob.VoiceDistance = SMModuleDistanceBasedReductions.MicrophoneRange;
             distanceJob.referencePosition = NetworkedPlayer.MouthBone.OutgoingWorldData.position;

@@ -3,13 +3,11 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using static SerializableDarkRift;
-using static UnityEngine.ParticleSystem;
 
 namespace Basis.Scripts.Networking.Recievers
 {
@@ -18,7 +16,6 @@ namespace Basis.Scripts.Networking.Recievers
     public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         public float[] silentData;
-
         [SerializeField]
         public BasisAudioReceiver AudioReceiverModule = new BasisAudioReceiver();
         [Header("Interpolation Settings")]
@@ -238,6 +235,7 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void ReceiveAvatarChangeRequest(ServerAvatarChangeMessage ServerAvatarChangeMessage)
         {
+            RemotePlayer.CACM = ServerAvatarChangeMessage.clientAvatarChangeMessage;
             BasisLoadableBundle BasisLoadableBundle = BasisBundleConversionNetwork.ConvertNetworkBytesToBasisLoadableBundle(ServerAvatarChangeMessage.clientAvatarChangeMessage.byteArray);
 
             RemotePlayer.CreateAvatar(ServerAvatarChangeMessage.clientAvatarChangeMessage.loadMode, BasisLoadableBundle);

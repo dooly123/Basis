@@ -79,14 +79,101 @@ MonoBehaviour:
   LocalCameraDriver: {fileID: 0}
   directionToCamera: {x: 0, y: 0, z: 0}
   HipTarget:
+    TargetControl:
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      HasRotationalTarget: 0
+      HasLineDraw: 0
+      LineDrawIndex: 0
+      HasTarget: 0
+      Offset:
+        x: 0
+        y: 0
+        z: 0
+      LerpAmount: 0
+    OutGoingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    LastRunData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    TposeLocal:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    InverseOffsetFromBone:
+      Use: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    IncomingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    OutgoingWorldData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    GizmoReference: -1
+    HasGizmo: 0
+    TposeGizmoReference: -1
+    TposeHasGizmo: 0
+    HasVirtualOverride: 0
+    trackersmooth: 25
+    IsHintRoleIgnoreRotation: 0
     Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
     HasEvents: 0
     hasTrackerDriver: 1
+    NotProcessing: 0
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
@@ -97,69 +184,102 @@ MonoBehaviour:
     positionWeight: 1
     rotationWeight: 1
     GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    OutGoingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    IncomingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    OutgoingWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
   MouthTarget:
+    TargetControl:
+      LerpAmountNormal: 0
+      LerpAmountFastMovement: 0
+      AngleBeforeSpeedup: 0
+      HasRotationalTarget: 0
+      HasLineDraw: 0
+      LineDrawIndex: 0
+      HasTarget: 0
+      Offset:
+        x: 0
+        y: 0
+        z: 0
+      LerpAmount: 0
+    OutGoingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    LastRunData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    TposeLocal:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    InverseOffsetFromBone:
+      Use: 0
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    IncomingData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    OutgoingWorldData:
+      rotation:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      position:
+        x: 0
+        y: 0
+        z: 0
+    GizmoReference: -1
+    HasGizmo: 0
+    TposeGizmoReference: -1
+    TposeHasGizmo: 0
+    HasVirtualOverride: 0
+    trackersmooth: 25
+    IsHintRoleIgnoreRotation: 0
     Cullable: 0
     Name: 
     gizmoColor: {r: 0, g: 0, b: 1, a: 1}
     HasBone: 0
     BoneTransform: {fileID: 0}
-    BoneModelTransform: {fileID: 0}
     HasEvents: 0
     hasTrackerDriver: 1
+    NotProcessing: 0
     OnHasRigChanged:
       m_PersistentCalls:
         m_Calls: []
@@ -170,60 +290,6 @@ MonoBehaviour:
     positionWeight: 1
     rotationWeight: 1
     GeneralLocation: 0
-    RotationControl:
-      Lerp: 0
-      LerpAmountNormal: 0
-      LerpAmountFastMovement: 0
-      AngleBeforeSpeedup: 0
-      TaretInterpreter: 0
-      Offset: {x: 0, y: 0, z: 0, w: 0}
-      ClampStats: 0
-      ClampableAxis: 0
-      ClampSize: 0
-      UseAngle: 0
-      AngleBeforeMove: 0
-      AngleBeforeSame: 0
-      ResetAfterTime: 0
-      NextReset: 0
-      HasActiveTimer: 0
-      RotationOverride: 0
-    PositionControl:
-      Offset: {x: 0, y: 0, z: 0}
-      LerpAmount: 0
-      Lerp: 0
-      TaretInterpreter: 0
-    OutGoingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastRunData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeWorld:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    TposeLocal:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    InverseOffsetFromBone:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    IncomingData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    OutgoingWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
-    LastWorldData:
-      Use: 0
-      rotation: {x: 0, y: 0, z: 0, w: 0}
-      position: {x: 0, y: 0, z: 0}
   Text: {fileID: 5913064765185686731}
   Loadingbar: {fileID: 2027450512927559089}
   Loadingtext: {fileID: 4013479155598010129}
@@ -233,8 +299,11 @@ MonoBehaviour:
   namePlateImage: {fileID: 3515079843213119928}
   NormalColor: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 0.4509804}
   IsTalkingColor: {r: 0.2275, g: 0.5091666, b: 0.65, a: 0.7490196}
+  OutOfRangeColor: {r: 0.10622106, g: 0.23037562, b: 0.2924528, a: 0.7490196}
   transitionDuration: 0.3
   returnDelay: 0.4
+  HasRendererCheckWiredUp: 0
+  IsVisible: 1
 --- !u!114 &2997356888555999241
 MonoBehaviour:
   m_ObjectHideFlags: 0

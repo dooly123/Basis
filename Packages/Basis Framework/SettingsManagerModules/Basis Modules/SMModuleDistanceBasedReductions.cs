@@ -4,11 +4,11 @@ public class SMModuleDistanceBasedReductions : SettingsManagerOption
 {
     private static float _microphoneRange;
     private static float _hearingRange;
-    private static float _maximumAvatars;
+    private static float _AvatarRange;
 
     public static event Action<float> OnMicrophoneRangeChanged;
     public static event Action<float> OnHearingRangeChanged;
-    public static event Action<float> OnMaximumAvatarsChanged;
+    public static event Action<float> OnAvatarRangeChanged;
     /// <summary>
     /// will be value * value returned pre-squared
     /// </summary>
@@ -33,13 +33,13 @@ public class SMModuleDistanceBasedReductions : SettingsManagerOption
             OnHearingRangeChanged?.Invoke(value);
         }
     }
-    public static float MaximumAvatars
+    public static float AvatarRange
     {
-        get => _maximumAvatars;
+        get => _AvatarRange;
         set
         {
-            _maximumAvatars = value;
-            OnMaximumAvatarsChanged?.Invoke(value);
+            _AvatarRange = value;
+            OnAvatarRangeChanged?.Invoke(value);
         }
     }
 
@@ -68,9 +68,9 @@ public class SMModuleDistanceBasedReductions : SettingsManagerOption
         }
         else if (NameReturn(2, Option))
         {
-            if (SliderReadOption(Option, Manager, out var newMaximumAvatars))
+            if (SliderReadOption(Option, Manager, out var LoadRange))
             {
-                MaximumAvatars = newMaximumAvatars;
+                AvatarRange = LoadRange * LoadRange;
             }
         }
     }

@@ -27,6 +27,9 @@ namespace Basis.Scripts.UI.NamePlate
         public Image namePlateImage;
         public Color NormalColor;
         public Color IsTalkingColor;
+
+        public Color OutOfRangeColor;
+
         [SerializeField] 
         private float transitionDuration = 0.3f;
         [SerializeField] 
@@ -84,12 +87,19 @@ namespace Basis.Scripts.UI.NamePlate
                 }
             }
         }
-                    
         public void OnAudioReceived(bool hasRealAudio)
         {
             if (IsVisible)
             {
-                Color targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
+                Color targetColor;
+                if (BasisRemotePlayer.OutOfRangeFromLocal)
+                {
+                    targetColor = hasRealAudio ? OutOfRangeColor : NormalColor;
+                }
+                else
+                {
+                    targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
+                }
 
                 if (colorTransitionCoroutine != null)
                 {

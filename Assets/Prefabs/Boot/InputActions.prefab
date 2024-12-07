@@ -368,6 +368,7 @@ MonoBehaviour:
     CurrentlySelectedSaveModule: {fileID: 256212325347645450}
     CurrentlySelectedSaveModuleName: JSON
   SettingsManagerOptions:
+  - {fileID: 7651783332187204033}
   - {fileID: 500068882267357641}
   - {fileID: 6430705635976775670}
   - {fileID: 2467030893667730727}
@@ -1466,6 +1467,96 @@ MonoBehaviour:
     ParseController: 1
     ReturnedValueTextType: 1
     SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 25
+    SliderMinValue: 0
+    Name: Microphone Range
+    ValueDescriptor: Microphone Range
+    SelectedValueDefault: 
+    ValueDefault: 25
+    Explanation: 
+    selectedValue: 
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 1
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 0
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 2
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 25
+    SliderMinValue: 0
+    Name: Hearing Range
+    ValueDescriptor: Hearing Range
+    SelectedValueDefault: 
+    ValueDefault: 25
+    Explanation: 
+    selectedValue: 
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 1
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 0
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 75
+    SliderMinValue: 0
+    Name: Maximum Avatar Distance
+    ValueDescriptor: Maximum Avatar Distance
+    SelectedValueDefault: 
+    ValueDefault: 75
+    Explanation: 
+    selectedValue: 
+    Type: 4
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 0
+    ReturnedValueTextType: 1
+    SelectableValueList: []
   SaveModules:
   - {fileID: 6482417607131076391}
   - {fileID: 256212325347645450}
@@ -1500,14 +1591,16 @@ MonoBehaviour:
     SelectedValue: smaa
     Index: 0
     SelectableValueList:
-    - realValue: taa
-      UserValue: TAA
-    - realValue: fxaa
-      UserValue: FXAA
-    - realValue: smaa
-      UserValue: SMAA
-    - realValue: noaa
-      UserValue: NOAA
+    - realValue: very low
+      UserValue: Very Low
+    - realValue: low
+      UserValue: Low
+    - realValue: medium
+      UserValue: Medium
+    - realValue: high
+      UserValue: High
+    - realValue: ultra
+      UserValue: Ultra
     Min: 0
     Max: 0
   - Name: Master Quality
@@ -1708,10 +1801,49 @@ MonoBehaviour:
       UserValue: Ultra
     Min: 0
     Max: 0
-  - Name: Resolution
-    DefaultValue: 
+  - Name: UpScaler
+    DefaultValue: False
     SelectedValue: auto
     Index: 13
+    SelectableValueList:
+    - realValue: auto
+      UserValue: Auto
+    - realValue: linear upscaling
+      UserValue: Linear Upscaling
+    - realValue: point upscaling
+      UserValue: Point Upscaling
+    - realValue: fsr upscaling
+      UserValue: FSR Upscaling
+    - realValue: spatial temporal upscaling
+      UserValue: Spatial Temporal Upscaling
+    Min: 0
+    Max: 0
+  - Name: Microphone Denoiser
+    DefaultValue: 
+    SelectedValue: false
+    Index: 14
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+    Min: 0
+    Max: 0
+  - Name: Debug Visuals
+    DefaultValue: 
+    SelectedValue: false
+    Index: 15
+    SelectableValueList:
+    - realValue: true
+      UserValue: true
+    - realValue: false
+      UserValue: false
+    Min: 0
+    Max: 0
+  - Name: Resolution
+    DefaultValue: 
+    SelectedValue: 2560x1440
+    Index: 16
     SelectableValueList:
     - realValue: 640x480
       UserValue: 640x480
@@ -1767,144 +1899,124 @@ MonoBehaviour:
     Max: 0
   - Name: ScreenMode
     DefaultValue: 
-    SelectedValue: false
-    Index: 14
+    SelectedValue: windowed
+    Index: 17
     SelectableValueList:
-    - realValue: exclusive fullscreen
-      UserValue: Exclusive FullScreen
     - realValue: fullscreen
-      UserValue: Fullscreen
+      UserValue: fullscreen
     - realValue: maximized window
       UserValue: Maximized Window
     - realValue: windowed
-      UserValue: Windowed
+      UserValue: windowed
     Min: 0
     Max: 0
   - Name: Monitor
     DefaultValue: 
-    SelectedValue: false
-    Index: 15
+    SelectedValue: 0
+    Index: 18
     SelectableValueList:
     - realValue: 0
       UserValue: 0
     Min: 0
     Max: 0
+  - Name: Selected Microphone
+    DefaultValue: 
+    SelectedValue: microphone (nvidia broadcast)
+    Index: 19
+    SelectableValueList:
+    - realValue: microphone (virtual desktop audio)
+      UserValue: Microphone (Virtual Desktop Audio)
+    - realValue: microphone (antlion wireless microphone)
+      UserValue: Microphone (Antlion Wireless Microphone)
+    - realValue: headset microphone (oculus virtual audio device)
+      UserValue: Headset Microphone (Oculus Virtual Audio Device)
+    - realValue: microphone (logitech streamcam)
+      UserValue: Microphone (Logitech StreamCam)
+    - realValue: microphone (rode nt-usb)
+      UserValue: Microphone (RODE NT-USB)
+    - realValue: microphone (steam streaming microphone)
+      UserValue: Microphone (Steam Streaming Microphone)
+    - realValue: microphone (nvidia broadcast)
+      UserValue: Microphone (NVIDIA Broadcast)
+    Min: 0
+    Max: 0
   - Name: Main Audio
-    DefaultValue: 1
-    SelectedValue: 1
-    Index: 16
+    DefaultValue: 100
+    SelectedValue: 100
+    Index: 20
     SelectableValueList: []
     Min: 0
     Max: 0
   - Name: Menus Volume
     DefaultValue: 50
     SelectedValue: 70
-    Index: 17
+    Index: 21
     SelectableValueList: []
     Min: 0
     Max: 0
   - Name: World Volume
     DefaultValue: 50
     SelectedValue: 70
-    Index: 18
+    Index: 22
     SelectableValueList: []
     Min: 0
     Max: 0
   - Name: Player Volume
     DefaultValue: 50
-    SelectedValue: 6
-    Index: 19
+    SelectedValue: 70
+    Index: 23
     SelectableValueList: []
     Min: 0
     Max: 0
   - Name: Microphone Volume
     DefaultValue: 1
     SelectedValue: 1
-    Index: 20
+    Index: 24
     SelectableValueList: []
     Min: 0
-    Max: 100
-  - Name: Selected Microphone
-    DefaultValue: 
-    SelectedValue: 70
-    Index: 21
-    SelectableValueList:
-    - realValue: digital audio interface (valve vr radio & hmd mic)
-      UserValue: Digital Audio Interface (Valve VR Radio & HMD Mic)
-    - realValue: headset microphone (oculus virtual audio device)
-      UserValue: Headset Microphone (Oculus Virtual Audio Device)
-    - realValue: microphone (nvidia broadcast)
-      UserValue: Microphone (NVIDIA Broadcast)
-    - realValue: microphone (steam streaming microphone)
-      UserValue: Microphone (Steam Streaming Microphone)
-    - realValue: microphone (logitech streamcam)
-      UserValue: Microphone (Logitech StreamCam)
-    - realValue: microphone (2- rode nt-usb)
-      UserValue: Microphone (2- RODE NT-USB)
-    - realValue: microphone (2- antlion wireless microphone)
-      UserValue: Microphone (2- Antlion Wireless Microphone)
-    Min: 0
-    Max: 80
+    Max: 0
   - Name: Mcrophone Volume
     DefaultValue: 1
-    SelectedValue: 70
-    Index: 22
-    SelectableValueList: []
-    Min: 0
-    Max: 80
-  - Name: Render Resolution
-    DefaultValue: 1
-    SelectedValue: 70
-    Index: 23
-    SelectableValueList: []
-    Min: 0
-    Max: 80
-  - Name: UpScaler
-    DefaultValue: False
-    SelectedValue: 1
-    Index: 24
-    SelectableValueList:
-    - realValue: auto
-      UserValue: Auto
-    - realValue: linear upscaling
-      UserValue: Linear Upscaling
-    - realValue: point upscaling
-      UserValue: Point Upscaling
-    - realValue: fsr upscaling
-      UserValue: FSR Upscaling
-    - realValue: spatial temporal upscaling
-      UserValue: Spatial Temporal Upscaling
-    Min: 0
-    Max: 1
-  - Name: Microphone Denoiser
-    DefaultValue: 
     SelectedValue: 1
     Index: 25
-    SelectableValueList:
-    - realValue: true
-      UserValue: true
-    - realValue: false
-      UserValue: false
+    SelectableValueList: []
     Min: 0
-    Max: 1.5
-  - Name: Controller DeadZone
-    DefaultValue: 0.05
+    Max: 0
+  - Name: Render Resolution
+    DefaultValue: 1
     SelectedValue: 0.9680337
     Index: 26
     SelectableValueList: []
-    Min: 0.25
-    Max: 1.5
-  - Name: Debug Visuals
-    DefaultValue: 
+    Min: 0
+    Max: 0
+  - Name: Controller DeadZone
+    DefaultValue: 0.05
     SelectedValue: 0.1
     Index: 27
-    SelectableValueList:
-    - realValue: true
-      UserValue: true
-    - realValue: false
-      UserValue: false
+    SelectableValueList: []
     Min: 0
-    Max: 0.5
+    Max: 0
+  - Name: 
+    DefaultValue: 
+    SelectedValue: 0
+    Index: 28
+    SelectableValueList: []
+    Min: 0
+    Max: 25
+  - Name: 
+    DefaultValue: 
+    SelectedValue: 0
+    Index: 29
+    SelectableValueList: []
+    Min: 0
+    Max: 25
+  - Name: 
+    DefaultValue: 
+    SelectedValue: 0
+    Index: 30
+    SelectableValueList: []
+    Min: 0
+    Max: 75
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -1941,6 +2053,7 @@ GameObject:
   - component: {fileID: 2467030893667730727}
   - component: {fileID: 6430705635976775670}
   - component: {fileID: 500068882267357641}
+  - component: {fileID: 7651783332187204033}
   m_Layer: 0
   m_Name: Modules
   m_TagString: Untagged
@@ -2111,11 +2224,13 @@ MonoBehaviour:
     Explanation: Quality Level
     Parse: 1
     Type: 1
+  Data: {fileID: 0}
   VeryLow: 0
   low: 0
   medium: 1
   high: 1
   ultra: 1
+  Camera: {fileID: 0}
 --- !u!114 &1742149703474370130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2333,3 +2448,28 @@ MonoBehaviour:
     Parse: 1
     Type: 1
   RenderScale: 0.9680337
+--- !u!114 &7651783332187204033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7884915406730103288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c229f703169cd27498ae018a1e50a433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ManagerModuleOptions:
+  - OptionName: Microphone Range
+    Explanation: 
+    Parse: 0
+    Type: 3
+  - OptionName: Hearing Range
+    Explanation: 
+    Parse: 0
+    Type: 3
+  - OptionName: Maximum Avatar Distance
+    Explanation: 
+    Parse: 0
+    Type: 3
