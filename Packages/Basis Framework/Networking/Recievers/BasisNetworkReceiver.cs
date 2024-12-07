@@ -135,6 +135,11 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
         {
+            if (avatarBuffer.Muscles == null || avatarBuffer.Muscles.Length == 0)
+            {
+                Debug.LogError("this should never occur, avatar buffer had no muscles");
+                avatarBuffer.Muscles = new float[90];
+            }
             if (HasAvatarInitalized == false)//set first and last to the same thing
             {
                 First.Muscles = new float[avatarBuffer.Muscles.Length];
