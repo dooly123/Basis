@@ -22,7 +22,7 @@ namespace Basis.Scripts.Networking.Recievers
         [Header("Interpolation Settings")]
         public double delayTime = 0.1f; // How far behind real-time we want to stay, hopefully double is good.
         [SerializeField]
-        public ConcurrentQueue<AvatarBuffer> PayloadQueue = new ConcurrentQueue<AvatarBuffer>();
+        public Queue<AvatarBuffer> PayloadQueue = new Queue<AvatarBuffer>();
         public BasisRemotePlayer RemotePlayer;
         public bool HasEvents = false;
         private NativeArray<float3> OuputVectors;      // Merged positions and scales
@@ -88,29 +88,9 @@ namespace Basis.Scripts.Networking.Recievers
                     OuputVectors[1] = First.Scale;    // Scale at index 1
                     TargetVectors[1] = Last.Scale;    // Target scale at index 1
 
-
-                    if (First.Muscles == null || First.Muscles.Length != 90)
-                    {
-                        First.Muscles = new float[90];
-                    }
-                    if (Last.Muscles == null || Last.Muscles.Length != 90)
-                    {
-                        Last.Muscles = new float[90];
-                    }
-                    if (targetMuscles == null || targetMuscles.Length != 90)
-                    {
-                        if (targetMuscles.IsCreated) targetMuscles.Dispose();
-                        targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
-                    }
-                    if (muscles == null || muscles.Length != 90)
-                    {
-                        if (muscles.IsCreated) muscles.Dispose();
-                        muscles = new NativeArray<float>(90, Allocator.Persistent);
-                    }
-
-
                     muscles.CopyFrom(First.Muscles);
                     targetMuscles.CopyFrom(Last.Muscles);
+
                     AvatarJob.Time = interpolationTime;
 
                     AvatarHandle = AvatarJob.Schedule();
@@ -145,7 +125,7 @@ namespace Basis.Scripts.Networking.Recievers
               // DecompressionQueue.Enqueue(result);
             }
         }
-        public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
+        public void EnQueueAvatarBuffer(ref AvatarBuffer avatarBuffer)
         {
             if (avatarBuffer.Muscles == null || avatarBuffer.Muscles.Length == 0)
             {
@@ -166,11 +146,19 @@ namespace Basis.Scripts.Networking.Recievers
                 }
                 if (targetMuscles == null || targetMuscles.Length != 90)
                 {
+                    if (targetMuscles != null)
+                    {
+                        Debug.Log(targetMuscles.Length);
+                    }
                     if (targetMuscles.IsCreated) targetMuscles.Dispose();
                     targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
                 }
                 if (muscles == null || muscles.Length != 90)
                 {
+                    if (muscles != null)
+                    {
+                        Debug.Log(muscles.Length);
+                    }
                     if (muscles.IsCreated) muscles.Dispose();
                     muscles = new NativeArray<float>(90, Allocator.Persistent);
                 }

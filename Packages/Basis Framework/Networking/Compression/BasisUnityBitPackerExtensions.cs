@@ -153,16 +153,17 @@ namespace Basis.Scripts.Networking.Compression
         // Read muscles from bytes (no BitConverter)
         public static void ReadMusclesFromBytes(ref byte[] bytes, ref float[] muscles, ref int offset)
         {
-            int requiredLength = bytes.Length - offset;
-            if (muscles == null || muscles.Length * sizeof(float) != requiredLength)
-                muscles = new float[requiredLength / sizeof(float)];
-
-            EnsureSize(bytes, offset + requiredLength);
+            if (muscles == null || muscles.Length != 90)
+            {
+                muscles = new float[90];
+            }
+            EnsureSize(bytes, offset + 360);
 
             // Manually read float values from bytes
-            for (int i = 0; i < muscles.Length; i++)
+            for (int i = 0; i < 90; i++)
             {
                 muscles[i] = ReadFloatFromBytes(ref bytes, ref offset);
+               // UnityEngine.Debug.Log("" + muscles[i]);
             }
         }
 

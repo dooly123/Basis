@@ -19,6 +19,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             avatarBuffer.rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);
             BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref Offset);
             int length = syncMessage.avatarSerialization.array.Length;
+            avatarBuffer.Scale = Vector3.one;
+            /*
             if (Offset == length)//we are at the end
             {
                 avatarBuffer.Scale = Vector3.one;
@@ -36,8 +38,9 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     avatarBuffer.Scale = new Unity.Mathematics.float3(Size, Size, Size);
                 }
             }
+            */
             avatarBuffer.SecondsInterval = syncMessage.interval / 1000.0f;
-            baseReceiver.EnQueueAvatarBuffer(avatarBuffer);
+            baseReceiver.EnQueueAvatarBuffer(ref avatarBuffer);
         }
     }
 }
