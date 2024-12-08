@@ -89,11 +89,11 @@ namespace Basis.Scripts.Networking.Recievers
                     TargetVectors[1] = Last.Scale;    // Target scale at index 1
 
 
-                    if (First.Muscles == null || First.Muscles.Length == 0)
+                    if (First.Muscles == null || First.Muscles.Length != 90)
                     {
                         First.Muscles = new float[90];
                     }
-                    if (Last.Muscles == null || Last.Muscles.Length == 0)
+                    if (Last.Muscles == null || Last.Muscles.Length != 90)
                     {
                         Last.Muscles = new float[90];
                     }
