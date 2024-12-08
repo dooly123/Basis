@@ -88,6 +88,7 @@ namespace Basis.Scripts.Networking.Recievers
                     OuputVectors[1] = First.Scale;    // Scale at index 1
                     TargetVectors[1] = Last.Scale;    // Target scale at index 1
 
+                    Debug.Log("state " + muscles.Length + " " + First.Muscles);
                     muscles.CopyFrom(First.Muscles);
                     targetMuscles.CopyFrom(Last.Muscles);
                     AvatarJob.Time = interpolationTime;
@@ -135,7 +136,24 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 First = avatarBuffer;
                 Last = avatarBuffer;
-
+                if (First.Muscles == null || First.Muscles.Length == 0)
+                {
+                    First.Muscles = new float[90];
+                }
+                if (Last.Muscles == null || Last.Muscles.Length == 0)
+                {
+                    Last.Muscles = new float[90];
+                }
+                if (targetMuscles == null || targetMuscles.Length != 90)
+                {
+                    if (targetMuscles.IsCreated) targetMuscles.Dispose();
+                    targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
+                }
+                if (muscles == null || muscles.Length != 90)
+                {
+                    if (muscles.IsCreated) muscles.Dispose();
+                    muscles = new NativeArray<float>(90, Allocator.Persistent);
+                }
                 HasAvatarInitalized = true;
                // DecompressionQueue.Enqueue(avatarBuffer);
             }
