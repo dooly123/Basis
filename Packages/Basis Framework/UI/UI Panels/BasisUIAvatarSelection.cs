@@ -200,7 +200,9 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             if (BasisLocalPlayer.Instance != null)
             {
-                await BasisLocalPlayer.Instance.CreateAvatar(0, avatarLoadRequest);
+                var assetMode = avatarLoadRequest.BasisBundleInformation.BasisBundleGenerated.AssetMode;
+                var mode = !string.IsNullOrEmpty(assetMode) && byte.TryParse(assetMode, out var result) ? result : (byte)0;
+                await BasisLocalPlayer.Instance.CreateAvatar(mode, avatarLoadRequest);
             }
         }
 
