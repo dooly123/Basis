@@ -13,14 +13,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         /// </summary>
         public static void DecompressAndProcessAvatar(BasisNetworkReceiver baseReceiver, ServerSideSyncPlayerMessage syncMessage)
         {
-            while (baseReceiver.DecompressionQueue.Count > 10)
-            {
-                baseReceiver.DecompressionQueue.TryDequeue(out AvatarBuffer Buffer);
-            }
-            if (baseReceiver.DecompressionQueue.TryDequeue(out AvatarBuffer avatarBuffer) == false)
-            {
-                avatarBuffer = new AvatarBuffer();
-            }
+            AvatarBuffer avatarBuffer = new AvatarBuffer();
             int Offset = 0;
             avatarBuffer.Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref Offset);
             avatarBuffer.rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);

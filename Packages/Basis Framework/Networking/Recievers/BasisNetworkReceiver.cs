@@ -3,6 +3,7 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -34,7 +35,6 @@ namespace Basis.Scripts.Networking.Recievers
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
         public float[] MuscleFinalStageOutput = new float[90];
         public quaternion OutputRotation;
-        public ConcurrentQueue<AvatarBuffer> DecompressionQueue = new ConcurrentQueue<AvatarBuffer>();
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -116,21 +116,12 @@ namespace Basis.Scripts.Networking.Recievers
             }
             if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
             {
-                Array.Copy(Last.Muscles, First.Muscles, Last.Muscles.Length);
-                First.Scale = new float3(Last.Scale);
-                First.Position = new float3(Last.Position);
-                First.rotation = new quaternion(Last.rotation.value);
-                First.SecondsInterval = Last.SecondsInterval;
-
-                Array.Copy(result.Muscles, Last.Muscles, result.Muscles.Length);
-                Last.Scale = new float3(result.Scale);
-                Last.Position = new float3(result.Position);
-                Last.rotation = new quaternion(result.rotation.value);
-                Last.SecondsInterval = result.SecondsInterval;
+                First = Last;
+                Last = result;
 
                 TimeBeforeCompletion = Last.SecondsInterval; // how long to run for
                 TimeInThePast = TimeAsDouble;
-                DecompressionQueue.Enqueue(result);
+              // DecompressionQueue.Enqueue(result);
             }
         }
         public void EnQueueAvatarBuffer(AvatarBuffer avatarBuffer)
@@ -142,25 +133,11 @@ namespace Basis.Scripts.Networking.Recievers
             }
             if (HasAvatarInitalized == false)//set first and last to the same thing
             {
-                First.Muscles = new float[avatarBuffer.Muscles.Length];
-                Array.Copy(avatarBuffer.Muscles, Last.Muscles, avatarBuffer.Muscles.Length);
-
-                First.Scale = new float3(avatarBuffer.Scale);
-                First.Position = new float3(avatarBuffer.Position);
-                First.rotation = new quaternion(avatarBuffer.rotation.value);
-                First.SecondsInterval = avatarBuffer.SecondsInterval;
-
-                Last.Muscles = new float[avatarBuffer.Muscles.Length];
-                Array.Copy(avatarBuffer.Muscles, Last.Muscles, avatarBuffer.Muscles.Length);
-
-                Last.Scale = new float3(avatarBuffer.Scale);
-                Last.Position = new float3(avatarBuffer.Position);
-                Last.rotation = new quaternion(avatarBuffer.rotation.value);
-                Last.SecondsInterval = avatarBuffer.SecondsInterval;
-
+                First = avatarBuffer;
+                Last = avatarBuffer;
 
                 HasAvatarInitalized = true;
-                DecompressionQueue.Enqueue(avatarBuffer);
+               // DecompressionQueue.Enqueue(avatarBuffer);
             }
             else
             {
@@ -168,7 +145,7 @@ namespace Basis.Scripts.Networking.Recievers
                 while (PayloadQueue.Count > BufferCapacityBeforeCleanup)
                 {
                     PayloadQueue.TryDequeue(out AvatarBuffer Buffer);
-                    DecompressionQueue.Enqueue(Buffer);
+                   // DecompressionQueue.Enqueue(Buffer);
                 }
             }
         }
