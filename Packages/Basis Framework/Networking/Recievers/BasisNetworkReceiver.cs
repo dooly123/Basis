@@ -87,8 +87,6 @@ namespace Basis.Scripts.Networking.Recievers
 
                     OuputVectors[1] = First.Scale;    // Scale at index 1
                     TargetVectors[1] = Last.Scale;    // Target scale at index 1
-
-                    Debug.Log("state " + muscles.Length + " " + First.Muscles);
                     muscles.CopyFrom(First.Muscles);
                     targetMuscles.CopyFrom(Last.Muscles);
                     AvatarJob.Time = interpolationTime;
