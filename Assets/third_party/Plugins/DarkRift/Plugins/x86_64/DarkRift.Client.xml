@@ -122,19 +122,9 @@
                 The state of the connection.
             </summary>
         </member>
-        <member name="P:DarkRift.Client.DarkRiftClient.Connected">
-            <summary>
-                Returns whether or not this client is connected to the server.
-            </summary>
-        </member>
         <member name="P:DarkRift.Client.DarkRiftClient.RemoteEndPoints">
             <summary>
                 The endpoints of the connection.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Client.DarkRiftClient.RemoteEndPoint">
-            <summary>
-                The remote end point of the connection.
             </summary>
         </member>
         <member name="T:DarkRift.Client.DarkRiftClient.ConnectCompleteHandler">
@@ -163,33 +153,12 @@
                 The recommended cache settings for clients.
             </summary>
         </member>
-        <member name="P:DarkRift.Client.DarkRiftClient.DefaultClientCacheSettings">
-            <summary>
-                The recommended cache settings for clients.
-            </summary>
-        </member>
         <member name="M:DarkRift.Client.DarkRiftClient.#ctor">
             <summary>
                 Creates a new DarkRiftClient object with default cache settings.
             </summary>
         </member>
         <member name="M:DarkRift.Client.DarkRiftClient.#ctor(DarkRift.Client.ClientObjectCacheSettings)">
-            <summary>
-                Creates a new DarkRiftClient object with specified cache settings.
-            </summary>
-            <param name="objectCacheSettings">The settings for the object cache.</param>
-        </member>
-        <member name="M:DarkRift.Client.DarkRiftClient.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary>
-                Creates a new DarkRiftClient object with specified cache settings.
-            </summary>
-            <param name="maxCachedWriters">The maximum number of DarkRiftWriters to cache per thread.</param>
-            <param name="maxCachedReaders">The maximum number of DarkRiftReaders to cache per thread.</param>
-            <param name="maxCachedMessages">The maximum number of Messages to cache per thread.</param>
-            <param name="maxCachedSocketAsyncEventArgs">The maximum number of SocketAsyncEventArgs to cache per thread.</param>
-            <param name="maxActionDispatcherTasks">The maximum number of ActionDispatcherTasks to cache per thread.</param>
-        </member>
-        <member name="M:DarkRift.Client.DarkRiftClient.#ctor(DarkRift.ObjectCacheSettings)">
             <summary>
                 Creates a new DarkRiftClient object with specified cache settings.
             </summary>

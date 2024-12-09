@@ -1031,12 +1031,6 @@
             <param name="value">The string to write.</param>
             <param name="encoding">The encoding to deserialize the string using.</param>
         </member>
-        <member name="M:DarkRift.DarkRiftWriter.Write(DarkRift.IDarkRiftSerializable)">
-            <summary>
-                Writes a single serializable object to the writer.
-            </summary>
-            <param name="serializable">The serializable object to write.</param>
-        </member>
         <member name="M:DarkRift.DarkRiftWriter.Write``1(``0)">
             <summary>
                 Writes a single serializable object to the writer.
@@ -1746,21 +1740,6 @@
             </summary>
             <returns>A new <see cref="T:DarkRift.IMessageBuffer"/> with the same values as this.</returns>
         </member>
-        <member name="T:DarkRift.IPVersion">
-            <summary>
-                IP addressing modes.
-            </summary>
-        </member>
-        <member name="F:DarkRift.IPVersion.IPv4">
-            <summary>
-                Indicates IPv4 is in use/should be used.
-            </summary>
-        </member>
-        <member name="F:DarkRift.IPVersion.IPv6">
-            <summary>
-                Indicates IPv6 is in user/should be used.
-            </summary>
-        </member>
         <member name="T:DarkRift.LogType">
             <summary>
                 The level of logging that is associated with a log entry.
@@ -1972,13 +1951,6 @@
             <param name="tag">The tag the message has.</param>
             <param name="obj">The initial object in the message data.</param>
         </member>
-        <member name="M:DarkRift.Message.Create(System.UInt16,DarkRift.IDarkRiftSerializable)">
-            <summary>
-                Creates a new message with the given tag and serializable object.
-            </summary>
-            <param name="tag">The tag the message has.</param>
-            <param name="obj">The initial object in the message data.</param>
-        </member>
         <member name="M:DarkRift.Message.Create(DarkRift.IMessageBuffer,System.Boolean)">
             <summary>
                 Creates a new message from the given buffer.
@@ -2022,13 +1994,6 @@
             </summary>
             <typeparam name="T">The type of object to deserialize to.</typeparam>
             <param name="t">The object to deserialize the data into.</param>
-        </member>
-        <member name="M:DarkRift.Message.Serialize(DarkRift.IDarkRiftSerializable)">
-            <summary>
-                Serializes an object into the data of this message.
-            </summary>
-            <param name="obj">The object to serialize.</param>
-            <exception cref="T:System.AccessViolationException">If the message is readonly.</exception>
         </member>
         <member name="M:DarkRift.Message.Serialize``1(``0)">
             <summary>
@@ -2485,11 +2450,6 @@
                 The maximum number of extra large memory blocks stored per thread.
             </summary>
         </member>
-        <member name="F:DarkRift.ObjectCacheSettings.DontUseCache">
-            <summary>
-                Return settings so no objects are cached.
-            </summary>
-        </member>
         <member name="T:DarkRift.ObjectPool`1">
             <summary>
                 Generic pool of objects for implementing recycling.
@@ -2541,11 +2501,6 @@
         <member name="T:DarkRift.RoundTripTimeHelper">
             <summary>
                 Helper class for calculating the round trip time of messages.
-            </summary>
-        </member>
-        <member name="P:DarkRift.RoundTripTimeHelper.SmothedRtt">
-            <summary>
-                Returns the smoothed round trip time to the remote and back in seconds.
             </summary>
         </member>
         <member name="P:DarkRift.RoundTripTimeHelper.SmoothedRtt">

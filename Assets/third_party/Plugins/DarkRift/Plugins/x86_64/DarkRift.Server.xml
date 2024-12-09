@@ -22,9 +22,6 @@
         <member name="P:DarkRift.Server.Client.RemoteUdpEndPoint">
             <inheritdoc/>
         </member>
-        <member name="P:DarkRift.Server.Client.IsConnected">
-            <inheritdoc/>
-        </member>
         <member name="P:DarkRift.Server.Client.ConnectionState">
             <inheritdoc/>
         </member>
@@ -100,7 +97,7 @@
             <param name="logger">The logger this client will use.</param>
             <param name="metricsCollector">The metrics collector this client will use.</param>
         </member>
-        <member name="M:DarkRift.Server.Client.#ctor(DarkRift.Server.NetworkServerConnection,System.UInt16,DarkRift.Server.ClientManager,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.Logger,DarkRift.Server.Metrics.MetricsCollector)">
+        <member name="M:DarkRift.Server.Client.#ctor(DarkRift.Server.NetworkServerConnection,System.UInt16,DarkRift.Server.ClientManager,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.Logger,DarkRift.Server.Metrics.MetricsCollector,System.Int32,System.Int32)">
             <summary>
                 Creates a new client connection with a given global identifier and the client they are connected through.
             </summary>
@@ -110,6 +107,8 @@
             <param name="threadHelper">The thread helper this client will use.</param>
             <param name="logger">The logger this client will use.</param>
             <param name="metricsCollector">The metrics collector this client will use.</param>
+            <param name="rttsamplecount"></param>
+            <param name="pingbacklogsize"></param>
         </member>
         <member name="M:DarkRift.Server.Client.SendID">
             <summary>
@@ -204,16 +203,6 @@
                 The <see cref="P:DarkRift.Server.ClientConnectedEventArgs.Client"/> object for the new client.
             </summary>
         </member>
-        <member name="P:DarkRift.Server.ClientConnectedEventArgs.RemoteTcpEndPoint">
-            <summary>
-                The remote end point of the TCP connection to this client.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ClientConnectedEventArgs.RemoteUdpEndPoint">
-            <summary>
-                The remote end point of the UDP connection to this client.
-            </summary>
-        </member>
         <member name="P:DarkRift.Server.ClientConnectedEventArgs.RemoteEndPoints">
             <summary>
                 The collection of end points this client is connected to.
@@ -240,16 +229,6 @@
         <member name="P:DarkRift.Server.ClientDisconnectedEventArgs.Client">
             <summary>
                 The Client of the new client.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ClientDisconnectedEventArgs.RemoteTcpEndPoint">
-            <summary>
-                The remote end point of the TCP connection to this client.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ClientDisconnectedEventArgs.RemoteUdpEndPoint">
-            <summary>
-                The remote end point of the UDP connection to this client.
             </summary>
         </member>
         <member name="P:DarkRift.Server.ClientDisconnectedEventArgs.RemoteEndPoints">
@@ -400,7 +379,7 @@
                 Metrics collector used by the clients.
             </summary>
         </member>
-        <member name="M:DarkRift.Server.ClientManager.#ctor(DarkRift.Server.ServerSpawnData.ServerSettings,DarkRift.Server.NetworkListenerManager,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.Logger,DarkRift.Server.Logger,DarkRift.Server.Metrics.MetricsCollector,DarkRift.Server.Metrics.MetricsCollector)">
+        <member name="M:DarkRift.Server.ClientManager.#ctor(DarkRift.Server.ServerConfiguration.ServerSettings,DarkRift.Server.NetworkListenerManager,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.Logger,DarkRift.Server.Logger,DarkRift.Server.Metrics.MetricsCollector,DarkRift.Server.Metrics.MetricsCollector)">
             <summary>
                 Creates a new client manager.
             </summary>
@@ -878,23 +857,6 @@
             <param name="defaultValue">The default value if none is provided.</param>
             <returns>The IP address read.</returns>
         </member>
-        <member name="M:DarkRift.Server.ConfigurationFileHelper.ReadIPVersionAttribute(System.Xml.Linq.XElement,System.String)">
-            <summary>
-                Reads an IP version value from the XML element supplied.
-            </summary>
-            <param name="element">The element to read from.</param>
-            <param name="attributeName">The name of the attribute to read.</param>
-            <returns>The ip version read.</returns>
-        </member>
-        <member name="M:DarkRift.Server.ConfigurationFileHelper.ReadIPVersionAttributeOrDefault(System.Xml.Linq.XElement,System.String,DarkRift.IPVersion)">
-            <summary>
-                Reads an IP version value from the XML element supplied.
-            </summary>
-            <param name="element">The element to read from.</param>
-            <param name="attributeName">The name of the attribute to read.</param>
-            <param name="defaultValue">The default value if none is provided.</param>
-            <returns>The ip version read.</returns>
-        </member>
         <member name="M:DarkRift.Server.ConfigurationFileHelper.ReadBooleanAttribute(System.Xml.Linq.XElement,System.String,System.Boolean)">
             <summary>
                 Reads a Boolean value from the XML element supplied.
@@ -1321,11 +1283,6 @@
             The root URL of the server's documentation.
             </summary>
         </member>
-        <member name="P:DarkRift.Server.DarkRiftInfo.Type">
-            <summary>
-                The type of server running.
-            </summary>
-        </member>
         <member name="T:DarkRift.Server.DarkRiftInfo.ServerType">
             <summary>
                 The type of server.
@@ -1375,11 +1332,6 @@
         <member name="P:DarkRift.Server.DarkRiftServer.NetworkListenerManager">
             <summary>
                 The manager for all listeners.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.DarkRiftServer.DatabaseManager">
-            <summary>
-                The manager for databases.
             </summary>
         </member>
         <member name="P:DarkRift.Server.DarkRiftServer.Dispatcher">
@@ -1492,23 +1444,18 @@
                 The server's main logger.
             </summary>
         </member>
-        <member name="M:DarkRift.Server.DarkRiftServer.#ctor(DarkRift.Server.ServerSpawnData)">
+        <member name="M:DarkRift.Server.DarkRiftServer.#ctor(DarkRift.Server.ServerConfiguration)">
             <summary>
                 Creates a new server given spawn details and a default cluster.
             </summary>
             <param name="spawnData">The details of how to start the server.</param>
         </member>
-        <member name="M:DarkRift.Server.DarkRiftServer.#ctor(DarkRift.Server.ServerSpawnData,DarkRift.Server.ClusterSpawnData)">
+        <member name="M:DarkRift.Server.DarkRiftServer.#ctor(DarkRift.Server.ServerConfiguration,DarkRift.Server.ClusterSpawnData)">
             <summary>
                 Creates a new server given spawn details.
             </summary>
             <param name="spawnData">The details of how to start the server.</param>
             <param name="clusterSpawnData">The details of the cluster this server is part of.</param>
-        </member>
-        <member name="M:DarkRift.Server.DarkRiftServer.Start">
-            <summary>
-                Starts the server.
-            </summary>
         </member>
         <member name="M:DarkRift.Server.DarkRiftServer.StartServer">
             <summary>
@@ -1643,22 +1590,6 @@
             </summary>
             <param name="maxRetries">The maximum number of retries that will be performed.</param>
             <param name="baseDelay">The delay to apply of first failure.</param>
-        </member>
-        <member name="T:DarkRift.Server.DatabaseManager">
-            <summary>
-                Manages the connection strings used by server plugins.
-            </summary>
-        </member>
-        <member name="F:DarkRift.Server.DatabaseManager.connectionStrings">
-            <summary>
-                The connection strings we are aware of.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.DatabaseManager.GetConnectionString(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="P:DarkRift.Server.DatabaseManager.Item(System.String)">
-            <inheritdoc/>
         </member>
         <member name="T:DarkRift.Server.DataManager">
             <summary>
@@ -2068,24 +1999,11 @@
                 Metrics collector for the plugin.
             </summary>
         </member>
-        <member name="F:DarkRift.Server.ExtendedPluginBase.writeEventHandler">
-            <summary>
-                The handler for writing events.
-            </summary>
-        </member>
         <member name="M:DarkRift.Server.ExtendedPluginBase.#ctor(DarkRift.Server.ExtendedPluginBaseLoadData)">
             <summary>
                 Constructor taking extended load data.
             </summary>
             <param name="pluginLoadData">The load data for the plugins.</param>
-        </member>
-        <member name="M:DarkRift.Server.ExtendedPluginBase.WriteEvent(System.String,DarkRift.LogType,System.Exception)">
-            <summary>
-                Writes an event to the server's logs.
-            </summary>
-            <param name="message">The message to write.</param>
-            <param name="logType">The type of message to write.</param>
-            <param name="exception">The exception that occurred (if there was one).</param>
         </member>
         <member name="M:DarkRift.Server.ExtendedPluginBase.Loaded(DarkRift.Server.LoadedEventArgs)">
             <summary>
@@ -2120,11 +2038,6 @@
                 The metrics collector this plugin will use.
             </summary>
         </member>
-        <member name="P:DarkRift.Server.ExtendedPluginBaseLoadData.WriteEventHandler">
-            <summary>
-                The handler for writing events via <see cref="M:DarkRift.Server.ExtendedPluginBase.WriteEvent(System.String,DarkRift.LogType,System.Exception)"/>.
-            </summary>
-        </member>
         <member name="M:DarkRift.Server.ExtendedPluginBaseLoadData.#ctor(System.String,System.Collections.Specialized.NameValueCollection,DarkRift.Server.DarkRiftInfo,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.Logger)">
             <summary>
                 Creates new load data with the given properties.
@@ -2135,18 +2048,8 @@
             <param name="threadHelper">The server's thread helper.</param>
             <param name="logger">The logger this plugin will use.</param>
             <remarks>
-                This constructor ensures that the legacy <see cref="P:DarkRift.Server.ExtendedPluginBaseLoadData.WriteEventHandler"/> field is initialised to <see cref="M:DarkRift.Server.Logger.Log(System.String,DarkRift.LogType,System.Exception)"/> for backwards compatibility.
+                This constructor ensures that the legacy <see cref="T:DarkRift.Server.WriteEventHandler"/> field is initialised to <see cref="M:DarkRift.Server.Logger.Log(System.String,DarkRift.LogType,System.Exception)"/> for backwards compatibility.
             </remarks>
-        </member>
-        <member name="M:DarkRift.Server.ExtendedPluginBaseLoadData.#ctor(System.String,System.Collections.Specialized.NameValueCollection,DarkRift.Server.DarkRiftInfo,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.WriteEventHandler)">
-            <summary>
-                Creates new load data with the given properties.
-            </summary>
-            <param name="name">The name of the plugin.</param>
-            <param name="settings">The settings to pass the plugin.</param>
-            <param name="serverInfo">The runtime details about the server.</param>
-            <param name="threadHelper">The server's thread helper.</param>
-            <param name="writeEventHandler"><see cref="P:DarkRift.Server.ExtendedPluginBaseLoadData.WriteEventHandler"/> for logging.</param>
         </member>
         <member name="T:DarkRift.Server.ExtendedPluginManagerBase`1">
             <summary>
@@ -2240,21 +2143,6 @@
         <member name="P:DarkRift.Server.IClient.ID">
             <summary>
                 The ID of the client.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.IClient.RemoteTcpEndPoint">
-            <summary>
-                The remote end point we are connected to on TCP.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.IClient.RemoteUdpEndPoint">
-            <summary>
-                The remote end point we are connected to UDP.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.IClient.IsConnected">
-            <summary>
-                Is this client still available?
             </summary>
         </member>
         <member name="P:DarkRift.Server.IClient.ConnectionState">
@@ -2370,29 +2258,6 @@
             </summary>
             <param name="id">The global ID of the client.</param>
             <returns>The client.</returns>
-        </member>
-        <member name="T:DarkRift.Server.IDatabaseManager">
-            <summary>
-                Manages the connection strings used by server plugins.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.IDatabaseManager.Item(System.String)">
-            <summary>
-                Gets a connection string defined in the configuration file. 
-            </summary>
-            <param name="providerName">The name of the connection string.</param>
-            <returns>
-                The connection string.
-            </returns>
-        </member>
-        <member name="M:DarkRift.Server.IDatabaseManager.GetConnectionString(System.String)">
-            <summary>
-                Gets a connection string defined in the configuration file. 
-            </summary>
-            <param name="providerName">The name of the connection string.</param>
-            <returns>
-                The connection string.
-            </returns>
         </member>
         <member name="T:DarkRift.Server.ILogManager">
             <summary>
@@ -2877,14 +2742,14 @@
                 Default writer for logs before log wrtiers have been setup.
             </summary>
         </member>
-        <member name="M:DarkRift.Server.LogManager.#ctor(DarkRift.Server.DarkRiftServer,DarkRift.Server.ServerSpawnData.LoggingSettings)">
+        <member name="M:DarkRift.Server.LogManager.#ctor(DarkRift.Server.DarkRiftServer,DarkRift.Server.ServerConfiguration.LoggingSettings)">
             <summary>
                 Creates a new log manager.
             </summary>
             <param name="server">The server we belong to.</param>
             <param name="settings">The settings to load writers from.</param>
         </member>
-        <member name="M:DarkRift.Server.LogManager.LoadWriters(DarkRift.Server.ServerSpawnData.LoggingSettings,DarkRift.Server.PluginFactory)">
+        <member name="M:DarkRift.Server.LogManager.LoadWriters(DarkRift.Server.ServerConfiguration.LoggingSettings,DarkRift.Server.PluginFactory)">
             <summary>
                 Loads the writers found by the plugin factory.
             </summary>
@@ -2924,26 +2789,6 @@
             <summary>
                 Base class for all log writers.
             </summary>
-        </member>
-        <member name="M:DarkRift.Server.LogWriter.#ctor(DarkRift.Server.PluginLoadData)">
-            <summary>
-                Creates a new LogWriter.
-            </summary>
-            <param name="pluginLoadData">The data to start the log writer with.</param>
-            <remarks>
-                This constructor is now obsolete and should not be used where possible as it carries
-                additional, irrelevant server components. Instead, now log writers should define a 
-                constructor that uses the LogWriterLoadData which should be a drop in replacement and 
-                should also provide for better unit testing.
-                
-                <code>
-                    <![CDATA[public MyLogWriter(LogWriterLoadData logWriterLoadData)
-                : base(logWriterLoadData)
-            {
-                
-            }]]>
-                </code>
-            </remarks>
         </member>
         <member name="M:DarkRift.Server.LogWriter.#ctor(DarkRift.Server.LogWriterLoadData)">
             <summary>
@@ -3202,14 +3047,14 @@
                 The server this belongs to.
             </summary>
         </member>
-        <member name="M:DarkRift.Server.Metrics.MetricsManager.#ctor(DarkRift.Server.DarkRiftServer,DarkRift.Server.ServerSpawnData.MetricsSettings)">
+        <member name="M:DarkRift.Server.Metrics.MetricsManager.#ctor(DarkRift.Server.DarkRiftServer,DarkRift.Server.ServerConfiguration.MetricsSettings)">
             <summary>
                 Creates a new metrics manager.
             </summary>
             <param name="server">The server we belong to.</param>
             <param name="settings">The settings to load from.</param>
         </member>
-        <member name="M:DarkRift.Server.Metrics.MetricsManager.LoadWriters(DarkRift.Server.ServerSpawnData.MetricsSettings,DarkRift.Server.PluginFactory,DarkRift.Server.LogManager)">
+        <member name="M:DarkRift.Server.Metrics.MetricsManager.LoadWriters(DarkRift.Server.ServerConfiguration.MetricsSettings,DarkRift.Server.PluginFactory,DarkRift.Server.LogManager)">
             <summary>
                 Loads the writers found by the plugin factory.
             </summary>
@@ -3394,14 +3239,6 @@
             </summary>
             <param name="pluginLoadData">The load data for the listener plugin.</param>
         </member>
-        <member name="M:DarkRift.Server.NetworkListener.WriteEvent(System.String,DarkRift.LogType,System.Exception)">
-            <summary>
-                Writes an event to the server's logs.
-            </summary>
-            <param name="message">The message to write.</param>
-            <param name="logType">The type of message to write.</param>
-            <param name="exception">The exception that occurred (if there was one).</param>
-        </member>
         <member name="M:DarkRift.Server.NetworkListener.RegisterConnection(DarkRift.Server.NetworkServerConnection)">
             <summary>
                 Registers a new connection to the server.
@@ -3446,16 +3283,6 @@
                 This constructor ensures that the legacy <see cref="T:DarkRift.Server.WriteEventHandler"/> field is initialised to <see cref="M:DarkRift.Server.Logger.Log(System.String,DarkRift.LogType,System.Exception)"/> for backwards compatibility.
             </remarks>
         </member>
-        <member name="M:DarkRift.Server.NetworkListenerLoadData.#ctor(System.String,System.Collections.Specialized.NameValueCollection,DarkRift.Server.DarkRiftInfo,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.WriteEventHandler)">
-            <summary>
-                Creates new load data for a <see cref="T:DarkRift.Server.NetworkListener"/>.
-            </summary>
-            <param name="name">The name of the listener.</param>
-            <param name="settings">The settings to pass the listener.</param>
-            <param name="serverInfo">The runtime details about the server.</param>
-            <param name="threadHelper">The server's thread helper.</param>
-            <param name="writeEventHandler"><see cref="T:DarkRift.Server.WriteEventHandler"/> for logging.</param>
-        </member>
         <member name="T:DarkRift.Server.NetworkListenerManager">
             <summary>
                 Manager for all <see cref="T:DarkRift.Server.NetworkListener"/> plugins.
@@ -3486,7 +3313,7 @@
             <param name="pluginFactory">The server's plugin factory.</param>
             <param name="metricsManager">The server's metrics manager.</param>
         </member>
-        <member name="M:DarkRift.Server.NetworkListenerManager.LoadNetworkListeners(DarkRift.Server.ServerSpawnData.ListenersSettings)">
+        <member name="M:DarkRift.Server.NetworkListenerManager.LoadNetworkListeners(DarkRift.Server.ServerConfiguration.ListenersSettings)">
             <summary>
                 Loads the plugins found by the plugin factory.
             </summary>
@@ -3807,11 +3634,6 @@
                 Should this plugin be hidden from output?
             </summary>
         </member>
-        <member name="P:DarkRift.Server.PluginBase.DatabaseManager">
-            <summary>
-                The database manager for the server.
-            </summary>
-        </member>
         <member name="P:DarkRift.Server.PluginBase.Dispatcher">
             <summary>
                 The dispatcher for this server.
@@ -3887,11 +3709,6 @@
                 The name to give the plugin.
             </summary>
         </member>
-        <member name="P:DarkRift.Server.PluginBaseLoadData.DatabaseManager">
-            <summary>
-                The database manager to pass to the plugin.
-            </summary>
-        </member>
         <member name="P:DarkRift.Server.PluginBaseLoadData.Dispatcher">
             <summary>
                 The dispatcher to pass to the plugin.
@@ -3957,7 +3774,7 @@
             </summary>
             <param name="logger">The logger this factory will use.</param>
         </member>
-        <member name="M:DarkRift.Server.PluginFactory.AddFromSettings(DarkRift.Server.ServerSpawnData.PluginSearchSettings)">
+        <member name="M:DarkRift.Server.PluginFactory.AddFromSettings(DarkRift.Server.ServerConfiguration.PluginSearchSettings)">
             <summary>
                 Adds plugins based on the plugins settings supplied.
             </summary>
@@ -4075,17 +3892,6 @@
                 This constructor ensures that the legacy <see cref="T:DarkRift.Server.WriteEventHandler"/> field is initialised to <see cref="M:DarkRift.Server.Logger.Log(System.String,DarkRift.LogType,System.Exception)"/> for backwards compatibility.
             </remarks>
         </member>
-        <member name="M:DarkRift.Server.PluginLoadData.#ctor(System.String,System.Collections.Specialized.NameValueCollection,DarkRift.Server.DarkRiftInfo,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.WriteEventHandler,System.String)">
-            <summary>
-                Creates new load data with the given properties.
-            </summary>
-            <param name="name">The name of the plugin.</param>
-            <param name="settings">The settings to pass the plugin.</param>
-            <param name="serverInfo">The runtime details about the server.</param>
-            <param name="threadHelper">The server's thread helper.</param>
-            <param name="writeEventHandler"><see cref="T:DarkRift.Server.WriteEventHandler"/> for logging.</param>
-            <param name="resourceDirectory">The directory to place this plugin's resources.</param>
-        </member>
         <member name="T:DarkRift.Server.PluginManager">
             <summary>
                 The manager of all plugins on the server.
@@ -4127,7 +3933,7 @@
             <param name="logger">The logger for this manager.</param>
             <param name="metricsManager">The server's metrics manager.</param>
         </member>
-        <member name="M:DarkRift.Server.PluginManager.LoadPlugins(DarkRift.Server.ServerSpawnData.PluginsSettings)">
+        <member name="M:DarkRift.Server.PluginManager.LoadPlugins(DarkRift.Server.ServerConfiguration.PluginsSettings)">
             <summary>
                 Loads the plugins found by the plugin factory.
             </summary>
@@ -4502,45 +4308,6 @@
                 If the serevr is still running or not.
             </summary>
         </member>
-        <member name="T:DarkRift.Server.Plugins.Listeners.Bichannel.AbstractBichannelListener">
-            <summary>
-                Abstract base class for bichannel listeners.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.Plugins.Listeners.Bichannel.AbstractBichannelListener.UdpPort">
-            <summary>
-                The UDP port being listened on.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.Plugins.Listeners.Bichannel.AbstractBichannelListener.NoDelay">
-            <summary>
-                Whether Nagle's algorithm should be disabled.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.Plugins.Listeners.Bichannel.AbstractBichannelListener.PreserveTcpOrdering">
-            <summary>
-                If true (default), reliable messages are delivered in order. If false, reliable messages can be delivered out of order to improve performance.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.Plugins.Listeners.Bichannel.AbstractBichannelListener.BichannelProtocolVersion">
-            <summary>
-                The version of the protocol used. The defaults to the latest version.
-                You only need to change this if you intend to retain backwards compatibility.
-                Will be removed in the next major release.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.Plugins.Listeners.Bichannel.AbstractBichannelListener.MaxTcpBodyLength">
-            <summary>
-                The maximum size the client can ask a TCP body to be without being striked.
-            </summary>
-            <remarks>This defaults to 65KB.</remarks>
-        </member>
-        <member name="M:DarkRift.Server.Plugins.Listeners.Bichannel.AbstractBichannelListener.#ctor(DarkRift.Server.NetworkListenerLoadData)">
-            <summary>
-                Creates a new bichannel listener with the given load data.
-            </summary>
-            <param name="networkListenerLoadData">The load data for thsi listener.</param>
-        </member>
         <member name="T:DarkRift.Server.Plugins.LogWriters.ColorsOnWindows">
             https://www.jerriepelser.com/blog/using-ansi-color-codes-in-net-console-apps/
         </member>
@@ -4551,6 +4318,11 @@
         </member>
         <member name="P:DarkRift.Server.Plugins.LogWriters.ConsoleWriter.Version">
             <inheritdoc/>
+        </member>
+        <member name="F:DarkRift.Server.Plugins.LogWriters.ConsoleWriter.aNSI_RESET_COLOR_CODE">
+            <summary>
+            Reset Color Code
+            </summary>
         </member>
         <member name="F:DarkRift.Server.Plugins.LogWriters.ConsoleWriter.foregroundColours">
             <summary>
@@ -4968,9 +4740,9 @@
         </member>
         <member name="M:DarkRift.Server.Plugins.Metrics.Prometheus.PrometheusEndpoint.GetTimestamp">
             <summary>
-            Calculates the currently unix timestamp in millis since epoch.
+            Calculates the current Unix timestamp in milliseconds since the epoch.
             </summary>
-            <returns>The Unix timstamp.</returns>
+            <returns>The Unix timestamp.</returns>
         </member>
         <member name="M:DarkRift.Server.Plugins.Metrics.Prometheus.PrometheusEndpoint.FormatMetric(System.String,System.String)">
             <summary>
@@ -5141,10 +4913,11 @@
                 Utility for testing plugins.
             </summary>
         </member>
-        <member name="M:DarkRift.Server.PluginTestUtil.RunCommandOn(System.String,DarkRift.Server.ExtendedPluginBase)">
+        <member name="M:DarkRift.Server.PluginTestUtil.RunCommandOn(System.Object,System.String,DarkRift.Server.ExtendedPluginBase)">
             <summary>
                 Runs a command on the given plugin.
             </summary>
+            <param name="sender"></param>
             <param name="command">The command to invoke. Plugin names will be ignored</param>
             <param name="plugin">The plugin to invoke the command on.</param>
         </member>
@@ -5198,7 +4971,7 @@
                 The logger to use.
             </summary>
         </member>
-        <member name="M:DarkRift.Server.RemoteServerManager.#ctor(DarkRift.Server.ServerSpawnData.ServerSettings,DarkRift.Server.ServerSpawnData.ServerRegistrySettings,DarkRift.Server.ClusterSpawnData,DarkRift.Server.NetworkListenerManager,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.ServerRegistryConnectorManager,DarkRift.Server.LogManager,DarkRift.Server.Logger,DarkRift.Server.Metrics.MetricsManager)">
+        <member name="M:DarkRift.Server.RemoteServerManager.#ctor(DarkRift.Server.ServerConfiguration.ServerSettings,DarkRift.Server.ServerConfiguration.ServerRegistrySettings,DarkRift.Server.ClusterSpawnData,DarkRift.Server.NetworkListenerManager,DarkRift.Server.DarkRiftThreadHelper,DarkRift.Server.ServerRegistryConnectorManager,DarkRift.Server.LogManager,DarkRift.Server.Logger,DarkRift.Server.Metrics.MetricsManager)">
             <summary>
                 Creates a new server manager.
             </summary>
@@ -5273,6 +5046,522 @@
                 Called when a pending server gets dropped.
             </summary>
             <param name="pendingServer">The pending server that has been dropped.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration">
+            <summary>
+                Details of how to start a new server.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.Server">
+            <summary>
+                The general settings for the server.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginSearch">
+            <summary>
+                The locations to search for plugins in.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.Data">
+            <summary>
+                The settings for the data handler plugins and general persistent storage.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.Logging">
+            <summary>
+                The settings for the log writer plugins and general logging.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.Plugins">
+            <summary>
+                The settings for resolving and loading plugins.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.Cache">
+            <summary>
+                The settings for the object cache.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.Listeners">
+            <summary>
+                The settings for the server's listeners.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerRegistry">
+            <summary>
+                The settings for the server regirsty.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.Metrics">
+            <summary>
+                The settings for the metrics writer plugins and general metrics.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.EventsFromDispatcher">
+            <summary>
+                Whether events are executed through the dispatcher or not.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.DispatcherExecutorThreadID">
+            <summary>
+                The ID of the thread that will be executing dispatcher tasks for deadlock protection. Setting this to -1 will disable this.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.ServerSettings">
+            <summary>
+                Holds settings related to the overall server.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerSettings.MaxStrikes">
+            <summary>
+                The number of strikes that can be received before the client is automatically kicked.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerSettings.ServerGroup">
+            <summary>
+                The server group this server belongs to.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerSettings.ReconnectAttempts">
+            <summary>
+                The number of times to try to reconnect to a server before considering it unconnectable.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ServerSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the server settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.PluginSearchSettings">
+            <summary>
+                Holds the paths to search for plugins from.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginSearchSettings.PluginSearchPaths">
+            <summary>
+                The paths to search.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginSearchSettings.PluginTypes">
+            <summary>
+                Individual types of plugins that should be loaded.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.PluginSearchSettings.PluginSearchPath">
+            <summary>
+                A path to search.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginSearchSettings.PluginSearchPath.Source">
+            <summary>
+                The path.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginSearchSettings.PluginSearchPath.CreateDirectory">
+            <summary>
+                Whether the directory should be created if missing.
+            </summary>
+            <remarks>This has no effect when the path is a file.</remarks>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginSearchSettings.PluginSearchPath.DependencyResolutionStrategy">
+            <summary>
+            The way to resolve dependencies for the plugin.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.PluginSearchSettings.PluginSearchPath.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the path from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.PluginSearchSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the server settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.DataSettings">
+            <summary>
+                Holds settings for persistent data storage.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.DataSettings.Directory">
+            <summary>
+                The directory to store data in.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.DataSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the server settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.LoggingSettings">
+            <summary>
+                Holds settings related to loading the logging system.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriters">
+            <summary>
+                The log writers to use.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.LoggingSettings.StartupLogLevels">
+            <summary>
+                Log levels to log out to console before log writers are loaded.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriterSettings">
+            <summary>
+                Holds settings about a log writer.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriterSettings.Name">
+            <summary>
+                The name of the log writer.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriterSettings.Type">
+            <summary>
+                The type of log writer.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriterSettings.LogLevels">
+            <summary>
+                The types of logs to be directed to this writer.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriterSettings.Settings">
+            <summary>
+                Settings that should be loaded for this writer.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriterSettings.#ctor">
+            <summary>
+                Creates a new LoggingSettings object.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.LoggingSettings.LogWriterSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the log writer settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.LoggingSettings.#ctor">
+            <summary>
+                Creates a new LoggingSettings object.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.LoggingSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the logging settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.PluginsSettings">
+            <summary>
+                Handles the settings for plugins.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginsSettings.LoadByDefault">
+            <summary>
+                The action to perform on all unlisted plugins.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginsSettings.Plugins">
+            <summary>
+                The list of plugins to load.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.PluginsSettings.PluginSettings">
+            <summary>
+                Holds settings about a plugin.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginsSettings.PluginSettings.Type">
+            <summary>
+                The type of plugin.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginsSettings.PluginSettings.Load">
+            <summary>
+                Whether to load or ignore this plugin.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.PluginsSettings.PluginSettings.Settings">
+            <summary>
+                Settings that should be loaded for this plugin.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.PluginsSettings.PluginSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the plugin settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.PluginsSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the plugins settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.CacheSettings">
+            <summary>
+                Holds settings related to the object cache.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.CacheSettings.MaxCachedWriters">
+            <summary>
+                The maximum number of <see cref="T:DarkRift.DarkRiftWriter"/> instances stored per thread.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.CacheSettings.MaxCachedReaders">
+            <summary>
+                The maximum number of <see cref="T:DarkRift.DarkRiftReader"/> instances stored per thread.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.CacheSettings.MaxCachedMessages">
+            <summary>
+                The maximum number of <see cref="T:DarkRift.Message"/> instances stored per thread.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.CacheSettings.MaxCachedSocketAsyncEventArgs">
+            <summary>
+                The maximum number of <see cref="T:System.Net.Sockets.SocketAsyncEventArgs"/> instances stored per thread.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.CacheSettings.MaxActionDispatcherTasks">
+            <summary>
+                The maximum number of <see cref="T:DarkRift.Dispatching.ActionDispatcherTask"/> instances stored per thread.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.CacheSettings.MaxAutoRecyclingArrays">
+            <summary>
+                The maximum number of <see cref="T:DarkRift.AutoRecyclingArray"/> instances stored per thread.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.CacheSettings.ServerObjectCacheSettings">
+            <summary>
+                The settings for the object cache.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.CacheSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the cache settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.ListenersSettings">
+            <summary>
+                Holds settings related to loading the listeners system.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListeners">
+            <summary>
+                The listeners to use.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings">
+            <summary>
+                Holds settings about a network listener.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings.Name">
+            <summary>
+                The name of the listener.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings.Type">
+            <summary>
+                The type of listener.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings.Address">
+            <summary>
+                The IP address this listener will listen on.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings.Port">
+            <summary>
+                The port this listener will listen on.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings.Settings">
+            <summary>
+                Settings that should be loaded for this listener.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings.#ctor">
+            <summary>
+                Creates a new NetworkListenerSettings object.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ListenersSettings.NetworkListenerSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the listener settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ListenersSettings.#ctor">
+            <summary>
+                Creates a new ListenerSettings object.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ListenersSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the listener settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.MetricsSettings">
+            <summary>
+                Holds settings related to loading the metrics system.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.MetricsSettings.MetricsWriter">
+            <summary>
+                The metrics writer to use.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.MetricsSettings.EnablePerMessageMetrics">
+            <summary>
+                Whether to enable metrics that get emitted per message.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.MetricsSettings.MetricsWriterSettings">
+            <summary>
+                Holds settings about a metrics writer.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.MetricsSettings.MetricsWriterSettings.Type">
+            <summary>
+                The type of plugin.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.MetricsSettings.MetricsWriterSettings.Settings">
+            <summary>
+                Settings that should be loaded for this metrics writer.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.MetricsSettings.MetricsWriterSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the metrics writer settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.MetricsSettings.#ctor">
+            <summary>
+                Creates a new MetricsSettings object.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.MetricsSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the metrics settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.ServerRegistrySettings">
+            <summary>
+                Holds settings related to loading the server registry.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.ServerRegistryConnector">
+            <summary>
+                The server registry connector to use.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.AdvertisedHost">
+            <summary>
+                The host the server is advertised on.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.AdvertisedPort">
+            <summary>
+                The port the server is advertised on.
+            </summary>
+        </member>
+        <member name="T:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.ServerRegistryConnectorSettings">
+            <summary>
+                Holds settings about a server registry connector.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.ServerRegistryConnectorSettings.Type">
+            <summary>
+                The type of plugin.
+            </summary>
+        </member>
+        <member name="P:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.ServerRegistryConnectorSettings.Settings">
+            <summary>
+                Settings that should be loaded for this server registry connector.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.ServerRegistryConnectorSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the server registry connector settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.#ctor">
+            <summary>
+                Creates a new ServerRegistrySettings object.
+            </summary>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.ServerRegistrySettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
+            <summary>
+                Loads the server registry settings from the specified XML element.
+            </summary>
+            <param name="element">The XML element to load from.</param>
+            <param name="helper">The XML configuration helper being used.</param>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.CreateFromXml(System.String,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+                Creates a server spawn data from specified XML configuration file.
+            </summary>
+            <param name="filePath">The path of the XML file.</param>
+            <param name="variables">The variables to inject into the configuration.</param>
+            <returns>The ServerSpawnData created.</returns>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.CreateFromXml(System.String)">
+            <summary>
+                Creates a server spawn data from specified XML configuration file.
+            </summary>
+            <param name="filePath">The path of the XML file.</param>
+            <returns>The ServerSpawnData created.</returns>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.CreateFromXml(System.Xml.Linq.XDocument,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+                Creates a server spawn data from specified XML configuration file.
+            </summary>
+            <param name="document">The XML file.</param>
+            <param name="variables">The variables to inject into the configuration.</param>
+            <returns>The ServerSpawnData created.</returns>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.CreateFromXml(System.Xml.Linq.XDocument)">
+            <summary>
+                Creates a server spawn data from specified XML configuration file.
+            </summary>
+            <param name="document">The XML file.</param>
+            <returns>The ServerSpawnData created.</returns>
+        </member>
+        <member name="M:DarkRift.Server.ServerConfiguration.#ctor">
+            <summary>
+                Default constructor.
+            </summary>
         </member>
         <member name="T:DarkRift.Server.ServerConnectedEventArgs">
             <summary>
@@ -5872,576 +6161,11 @@
             <param name="logManager">The server's log manager.</param>
             <param name="metricsManager">The server's metrics manager.</param>
         </member>
-        <member name="M:DarkRift.Server.ServerRegistryConnectorManager.LoadPlugins(DarkRift.Server.ServerSpawnData.ServerRegistrySettings)">
+        <member name="M:DarkRift.Server.ServerRegistryConnectorManager.LoadPlugins(DarkRift.Server.ServerConfiguration.ServerRegistrySettings)">
             <summary>
                 Loads the plugins found by the plugin factory.
             </summary>
             <param name="settings">The settings to load plugins with.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData">
-            <summary>
-                Details of how to start a new server.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Server">
-            <summary>
-                The general settings for the server.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginSearch">
-            <summary>
-                The locations to search for plugins in.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Data">
-            <summary>
-                The settings for the data handler plugins and general persistent storage.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Logging">
-            <summary>
-                The settings for the log writer plugins and general logging.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Plugins">
-            <summary>
-                The settings for resolving and loading plugins.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Databases">
-            <summary>
-                The settings for database connections.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Cache">
-            <summary>
-                The settings for the object cache.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Listeners">
-            <summary>
-                The settings for the server's listeners.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerRegistry">
-            <summary>
-                The settings for the server regirsty.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.Metrics">
-            <summary>
-                The settings for the metrics writer plugins and general metrics.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.EventsFromDispatcher">
-            <summary>
-                Whether events are executed through the dispatcher or not.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.DispatcherExecutorThreadID">
-            <summary>
-                The ID of the thread that will be executing dispatcher tasks for deadlock protection. Setting this to -1 will disable this.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.ServerSettings">
-            <summary>
-                Holds settings related to the overall server.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerSettings.MaxStrikes">
-            <summary>
-                The number of strikes that can be received before the client is automatically kicked.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerSettings.ServerGroup">
-            <summary>
-                The server group this server belongs to.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerSettings.ReconnectAttempts">
-            <summary>
-                The number of times to try to reconnect to a server before considering it unconnectable.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ServerSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the server settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.PluginSearchSettings">
-            <summary>
-                Holds the paths to search for plugins from.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginSearchSettings.PluginSearchPaths">
-            <summary>
-                The paths to search.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginSearchSettings.PluginTypes">
-            <summary>
-                Individual types of plugins that should be loaded.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.PluginSearchSettings.PluginSearchPath">
-            <summary>
-                A path to search.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginSearchSettings.PluginSearchPath.Source">
-            <summary>
-                The path.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginSearchSettings.PluginSearchPath.CreateDirectory">
-            <summary>
-                Whether the directory should be created if missing.
-            </summary>
-            <remarks>This has no effect when the path is a file.</remarks>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginSearchSettings.PluginSearchPath.DependencyResolutionStrategy">
-            <summary>
-            The way to resolve dependencies for the plugin.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.PluginSearchSettings.PluginSearchPath.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the path from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.PluginSearchSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the server settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.DataSettings">
-            <summary>
-                Holds settings for persistent data storage.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.DataSettings.Directory">
-            <summary>
-                The directory to store data in.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.DataSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the server settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.LoggingSettings">
-            <summary>
-                Holds settings related to loading the logging system.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriters">
-            <summary>
-                The log writers to use.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.LoggingSettings.StartupLogLevels">
-            <summary>
-                Log levels to log out to console before log writers are loaded.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriterSettings">
-            <summary>
-                Holds settings about a log writer.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriterSettings.Name">
-            <summary>
-                The name of the log writer.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriterSettings.Type">
-            <summary>
-                The type of log writer.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriterSettings.LogLevels">
-            <summary>
-                The types of logs to be directed to this writer.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriterSettings.Settings">
-            <summary>
-                Settings that should be loaded for this writer.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriterSettings.#ctor">
-            <summary>
-                Creates a new LoggingSettings object.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.LoggingSettings.LogWriterSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the log writer settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.LoggingSettings.#ctor">
-            <summary>
-                Creates a new LoggingSettings object.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.LoggingSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the logging settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.PluginsSettings">
-            <summary>
-                Handles the settings for plugins.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginsSettings.LoadByDefault">
-            <summary>
-                The action to perform on all unlisted plugins.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginsSettings.Plugins">
-            <summary>
-                The list of plugins to load.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.PluginsSettings.PluginSettings">
-            <summary>
-                Holds settings about a plugin.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginsSettings.PluginSettings.Type">
-            <summary>
-                The type of plugin.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginsSettings.PluginSettings.Load">
-            <summary>
-                Whether to load or ignore this plugin.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.PluginsSettings.PluginSettings.Settings">
-            <summary>
-                Settings that should be loaded for this plugin.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.PluginsSettings.PluginSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the plugin settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.PluginsSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the plugins settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.DatabaseSettings">
-            <summary>
-                Holds settings related to loading databases for plugins.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.DatabaseSettings.Databases">
-            <summary>
-                The databases to connect to.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.DatabaseSettings.DatabaseConnectionData">
-            <summary>
-                Holds data relating to a specific connection.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.DatabaseSettings.DatabaseConnectionData.Name">
-            <summary>
-                The name of the connection.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.DatabaseSettings.DatabaseConnectionData.ConnectionString">
-            <summary>
-                The connection string to create the connection with.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.DatabaseSettings.DatabaseConnectionData.#ctor(System.String,System.String)">
-            <summary>
-                Creates a new Database Connection data object.
-            </summary>
-            <param name="name">The name of the connection.</param>
-            <param name="connectionString">The connection string for the connection.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.DatabaseSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the database settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.CacheSettings">
-            <summary>
-                Holds settings related to the object cache.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.MaxCachedWriters">
-            <summary>
-                The maximum number of <see cref="T:DarkRift.DarkRiftWriter"/> instances stored per thread.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.MaxCachedReaders">
-            <summary>
-                The maximum number of <see cref="T:DarkRift.DarkRiftReader"/> instances stored per thread.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.MaxCachedMessages">
-            <summary>
-                The maximum number of <see cref="T:DarkRift.Message"/> instances stored per thread.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.MaxCachedSocketAsyncEventArgs">
-            <summary>
-                The maximum number of <see cref="T:System.Net.Sockets.SocketAsyncEventArgs"/> instances stored per thread.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.MaxActionDispatcherTasks">
-            <summary>
-                The maximum number of <see cref="T:DarkRift.Dispatching.ActionDispatcherTask"/> instances stored per thread.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.MaxAutoRecyclingArrays">
-            <summary>
-                The maximum number of <see cref="T:DarkRift.AutoRecyclingArray"/> instances stored per thread.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.ObjectCacheSettings">
-            <summary>
-                The settings for the object cache.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.CacheSettings.ServerObjectCacheSettings">
-            <summary>
-                The settings for the object cache.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.CacheSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the cache settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.ListenersSettings">
-            <summary>
-                Holds settings related to loading the listeners system.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListeners">
-            <summary>
-                The listeners to use.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings">
-            <summary>
-                Holds settings about a network listener.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings.Name">
-            <summary>
-                The name of the listener.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings.Type">
-            <summary>
-                The type of listener.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings.Address">
-            <summary>
-                The IP address this listener will listen on.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings.Port">
-            <summary>
-                The port this listener will listen on.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings.Settings">
-            <summary>
-                Settings that should be loaded for this listener.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings.#ctor">
-            <summary>
-                Creates a new NetworkListenerSettings object.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ListenersSettings.NetworkListenerSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the listener settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ListenersSettings.#ctor">
-            <summary>
-                Creates a new ListenerSettings object.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ListenersSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the listener settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.MetricsSettings">
-            <summary>
-                Holds settings related to loading the metrics system.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.MetricsSettings.MetricsWriter">
-            <summary>
-                The metrics writer to use.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.MetricsSettings.EnablePerMessageMetrics">
-            <summary>
-                Whether to enable metrics that get emitted per message.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.MetricsSettings.MetricsWriterSettings">
-            <summary>
-                Holds settings about a metrics writer.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.MetricsSettings.MetricsWriterSettings.Type">
-            <summary>
-                The type of plugin.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.MetricsSettings.MetricsWriterSettings.Settings">
-            <summary>
-                Settings that should be loaded for this metrics writer.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.MetricsSettings.MetricsWriterSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the metrics writer settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.MetricsSettings.#ctor">
-            <summary>
-                Creates a new MetricsSettings object.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.MetricsSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the metrics settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.ServerRegistrySettings">
-            <summary>
-                Holds settings related to loading the server registry.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.ServerRegistryConnector">
-            <summary>
-                The server registry connector to use.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.AdvertisedHost">
-            <summary>
-                The host the server is advertised on.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.AdvertisedPort">
-            <summary>
-                The port the server is advertised on.
-            </summary>
-        </member>
-        <member name="T:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.ServerRegistryConnectorSettings">
-            <summary>
-                Holds settings about a server registry connector.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.ServerRegistryConnectorSettings.Type">
-            <summary>
-                The type of plugin.
-            </summary>
-        </member>
-        <member name="P:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.ServerRegistryConnectorSettings.Settings">
-            <summary>
-                Settings that should be loaded for this server registry connector.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.ServerRegistryConnectorSettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the server registry connector settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.#ctor">
-            <summary>
-                Creates a new ServerRegistrySettings object.
-            </summary>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.ServerRegistrySettings.LoadFromXmlElement(System.Xml.Linq.XElement,DarkRift.Server.ConfigurationFileHelper)">
-            <summary>
-                Loads the server registry settings from the specified XML element.
-            </summary>
-            <param name="element">The XML element to load from.</param>
-            <param name="helper">The XML configuration helper being used.</param>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.CreateFromXml(System.String,System.Collections.Specialized.NameValueCollection)">
-            <summary>
-                Creates a server spawn data from specified XML configuration file.
-            </summary>
-            <param name="filePath">The path of the XML file.</param>
-            <param name="variables">The variables to inject into the configuration.</param>
-            <returns>The ServerSpawnData created.</returns>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.CreateFromXml(System.String)">
-            <summary>
-                Creates a server spawn data from specified XML configuration file.
-            </summary>
-            <param name="filePath">The path of the XML file.</param>
-            <returns>The ServerSpawnData created.</returns>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.CreateFromXml(System.Xml.Linq.XDocument,System.Collections.Specialized.NameValueCollection)">
-            <summary>
-                Creates a server spawn data from specified XML configuration file.
-            </summary>
-            <param name="document">The XML file.</param>
-            <param name="variables">The variables to inject into the configuration.</param>
-            <returns>The ServerSpawnData created.</returns>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.CreateFromXml(System.Xml.Linq.XDocument)">
-            <summary>
-                Creates a server spawn data from specified XML configuration file.
-            </summary>
-            <param name="document">The XML file.</param>
-            <returns>The ServerSpawnData created.</returns>
-        </member>
-        <member name="M:DarkRift.Server.ServerSpawnData.#ctor">
-            <summary>
-                Default constructor.
-            </summary>
         </member>
         <member name="T:DarkRift.Server.ServerVisibility">
             <summary>
