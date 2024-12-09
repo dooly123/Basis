@@ -37,6 +37,12 @@ public class ContentPoliceSelectorEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        var disallowAnimatorEventsValue = EditorGUILayout.ToggleLeft("Disallow Animator events", selector.disallowAnimatorEvents);
+        if (disallowAnimatorEventsValue != selector.disallowAnimatorEvents)
+        {
+            selector.disallowAnimatorEvents = disallowAnimatorEventsValue;
+            EditorUtility.SetDirty(selector);
+        }
         EditorGUILayout.LabelField("Select MonoBehaviour Types that are approved", EditorStyles.boldLabel);
         int TypeCount = typeNames.Length;
         // Loop through the type names and create checkboxes

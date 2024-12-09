@@ -7,4 +7,7 @@ public class ContentPoliceSelector : ScriptableObject
 {
     [SerializeField]
     public List<string> selectedTypes;
+    
+    [SerializeField]
+    public bool disallowAnimatorEvents = true;
 }

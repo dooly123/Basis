@@ -72,6 +72,15 @@ public static class BasisBundleLoadAsset
                     }
                 }
             }
+
+            if (BundledContentHolder.Instance.Selector.disallowAnimatorEvents)
+            {
+                var animators = SearchAndDestroy.GetComponentsInChildren<Animator>(true);
+                foreach (var animator in animators)
+                {
+                    animator.fireEvents = false;
+                }
+            }
         }
         if (Parent == null)
         {
