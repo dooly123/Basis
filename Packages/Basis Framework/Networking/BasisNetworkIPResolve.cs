@@ -4,6 +4,36 @@ using UnityEngine;
 
 public static class BasisNetworkIPResolve
 {
+    public static string ResolveHosttoIP(string hostname)
+    {
+        try
+        {
+            IPAddress[] ips = Dns.GetHostAddresses(hostname);
+            if (ips != null && ips.Length > 0)
+            {
+                string[] addresses = new string[ips.Length];
+                for (int Index = 0; Index < ips.Length; Index++)
+                {
+                    addresses[Index] = ips[Index].ToString();
+                    Debug.Log($"IP Candidate: {addresses[Index]}");
+
+                    bool hasThreePeriods = addresses[Index].Split('.').Length - 1 == 3;
+                    if (hasThreePeriods)
+                    {
+                        return addresses[Index]; // select IPv4 if possible (for now)
+                    }
+
+                }
+                return addresses[0]; // pick first one: IPv4 or IPv6 we don't care right now
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Failed to resolve to IP address: " + ex.Message);
+        }
+        return null;
+    }
+
     public static string[] ResolveLocalhostToIP(string hostname)
     {
         try
