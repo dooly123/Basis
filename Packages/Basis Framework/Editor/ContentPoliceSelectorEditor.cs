@@ -18,7 +18,7 @@ public class ContentPoliceSelectorEditor : Editor
         // Get all MonoBehaviour types in the project
         monoBehaviourTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => type.IsSubclassOf(typeof(MonoBehaviour)) && !type.IsAbstract)
+            .Where(type => type.IsSubclassOf(typeof(UnityEngine.Component)) && !type.IsAbstract)
             .ToList();
 
         // Convert the type names into a string array for the dropdown
@@ -37,7 +37,7 @@ public class ContentPoliceSelectorEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        EditorGUILayout.LabelField("Select MonoBehaviour Types that are approved", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Allowed Components Used On Avatars", EditorStyles.boldLabel);
         int TypeCount = typeNames.Length;
         // Loop through the type names and create checkboxes
         for (int Index = 0; Index < TypeCount; Index++)
