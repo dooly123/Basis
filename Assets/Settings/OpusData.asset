@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OpusData
   m_EditorClassIdentifier: 
   RecordingFullLength: 1
-  BitrateKPS: 128000
+  BitrateKPS: 64000
   Complexity: 10
   SamplingFrequency: 48000
   NumChannels: 1
