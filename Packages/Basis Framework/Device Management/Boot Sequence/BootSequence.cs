@@ -21,7 +21,12 @@ public static class BootSequence
     }
     private static async void OnAddressablesInitializationComplete(AsyncOperationHandle<IResourceLocator> obj)
     {
-      var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(BootManager, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+            ChecksRequired Required = new ChecksRequired
+            {
+                UseContentRemoval = false,
+                DisableAnimatorEvents = false
+            };
+            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(BootManager, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(), Required);
         List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {

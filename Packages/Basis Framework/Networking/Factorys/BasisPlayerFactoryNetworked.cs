@@ -12,7 +12,12 @@ public static class BasisPlayerFactoryNetworked
     public static async Task<BasisNetworkedPlayer> CreateNetworkedPlayer(InstantiationParameters InstantiationParameters, string PlayerAddressableID = "NetworkedPlayer")
     {
         Debug.Log("creating NetworkedPlayer Player");
-var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters);
+            ChecksRequired Required = new ChecksRequired
+            {
+                UseContentRemoval = false,
+                DisableAnimatorEvents = false
+            };
+            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(PlayerAddressableID, InstantiationParameters, Required);
         List<GameObject> Gameobjects = data.Item1;
         if (Gameobjects.Count != 0)
         {

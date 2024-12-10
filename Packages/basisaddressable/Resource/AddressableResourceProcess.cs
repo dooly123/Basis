@@ -20,7 +20,7 @@ public static class AddressableResourceProcess
         }
         return Instantiated;
     }
-    public static async Task<List<GameObject>> LoadAsGameObjectsAsync(AddressableGenericResource loadRequest, InstantiationParameters instantiationParameters)
+    public static async Task<List<GameObject>> LoadAsGameObjectsAsync(AddressableGenericResource loadRequest, InstantiationParameters instantiationParameters, ChecksRequired Required)
     {
         List<GameObject> instantiated = new List<GameObject>();
         for (int Index = 0; Index < loadRequest.Handles.Count; Index++)
@@ -29,7 +29,7 @@ public static class AddressableResourceProcess
             object result = await handle.Task;
             if (result is GameObject resource)
             {
-                GameObject spawned = Object.Instantiate(resource, instantiationParameters.Position, instantiationParameters.Rotation, instantiationParameters.Parent);
+                    GameObject spawned = ContentPoliceControl.ContentControl(resource, Required, instantiationParameters.Position, instantiationParameters.Rotation, instantiationParameters.Parent);
               //  Debug.Log("Spawned " + spawned.name + " at " + spawned.transform.position + " with rotation " + spawned.transform.rotation);
                 instantiated.Add(spawned);
             }
@@ -41,13 +41,13 @@ public static class AddressableResourceProcess
         return instantiated;
     }
 
-    public static async Task<(List<GameObject>, AddressableGenericResource)> LoadAsGameObjectsAsync(string key, InstantiationParameters instantiationParameters)
+    public static async Task<(List<GameObject>, AddressableGenericResource)> LoadAsGameObjectsAsync(string key, InstantiationParameters instantiationParameters, ChecksRequired Required)
     {
         AddressableGenericResource loadRequest = new AddressableGenericResource(key, AddressableExpectedResult.SingleItem);
         bool loaded = await AddressableLoadFactory.LoadAddressableResourceAsync<GameObject>(loadRequest);
         if (loaded)
         {
-            return ( await LoadAsGameObjectsAsync(loadRequest, instantiationParameters),loadRequest);
+            return ( await LoadAsGameObjectsAsync(loadRequest, instantiationParameters,Required),loadRequest);
         }
         else
         {
