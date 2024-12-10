@@ -184,7 +184,9 @@ namespace Basis.Scripts.Networking
                 HasAuthenticated = true;
                 Client.Client.MessageReceived += MainThreadMessageReceived;
             }
-            Client.ConnectInBackground(BasisNetworkIPResolve.IpOutput(IpString), Port, Callback);
+            string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
+            Debug.Log($"DNS call: {IpString} resolves to {result}");
+            Client.ConnectInBackground(BasisNetworkIPResolve.IpOutput(result.ToString()), Port, Callback);
         }
         public bool ISServer = false;
         private void Disconnected(object sender, DisconnectedEventArgs e)
