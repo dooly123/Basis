@@ -13,10 +13,11 @@ public static class ContentPoliceControl
     /// <returns>A copy of the GameObject with unapproved scripts removed.</returns>
     public static GameObject ContentControl(GameObject SearchAndDestroy, ChecksRequired ChecksRequired, Vector3 Position, Quaternion Rotation, Transform Parent = null)
     {
-        GameObject newGameObject = new GameObject("Temp");
-        newGameObject.SetActive(false);
         if (ChecksRequired.UseContentRemoval)
         {
+            GameObject newGameObject = new GameObject("Temp");
+            newGameObject.SetActive(false);
+
             SearchAndDestroy = GameObject.Instantiate(SearchAndDestroy, Position, Rotation, newGameObject.transform);
             // Create a list to hold all components in the original GameObject
             UnityEngine.Component[] components = SearchAndDestroy.GetComponentsInChildren<UnityEngine.Component>(true);
@@ -29,8 +30,7 @@ public static class ContentPoliceControl
                 {
                     if (ChecksRequired.DisableAnimatorEvents)
                     {
-                        Animator Animator = component as Animator;
-                        Animator.fireEvents = false;
+                        animator.fireEvents = false;
                     }
                 }
                 // Check if the component is a MonoBehaviour and not in the approved list
@@ -45,20 +45,31 @@ public static class ContentPoliceControl
                     }
                 }
             }
-        }
+            // Instantiate the cleaned GameObject copy
+            if (Parent == null)
+            {
+                SearchAndDestroy.transform.parent = null;
+                SearchAndDestroy.SetActive(true);
+            }
+            else
+            {
+                SearchAndDestroy.transform.parent = Parent;
+                SearchAndDestroy.SetActive(true);
+            }
+            GameObject.DestroyImmediate(newGameObject);
 
-        // Instantiate the cleaned GameObject copy
-        if (Parent == null)
-        {
-            SearchAndDestroy.transform.parent = null;
-            SearchAndDestroy.SetActive(true);
         }
         else
         {
-            SearchAndDestroy.transform.parent = Parent;
-            SearchAndDestroy.SetActive(true);
+            if (Parent == null)
+            {
+                SearchAndDestroy = GameObject.Instantiate(SearchAndDestroy, Position, Rotation);
+            }
+            else
+            {
+                SearchAndDestroy = GameObject.Instantiate(SearchAndDestroy, Position, Rotation, Parent);
+            }
         }
-        GameObject.DestroyImmediate(newGameObject);
         return SearchAndDestroy;
     }
 }

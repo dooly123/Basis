@@ -67,7 +67,12 @@ namespace Basis.Scripts.Avatar
                     case 1://localload
                         Debug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
                         var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, Para);
+                        ChecksRequired Required = new ChecksRequired
+                        {
+                            UseContentRemoval = true,
+                            DisableAnimatorEvents = false
+                        };
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, Para, Required);
 
                         if (GameObjects.Count > 0)
                         {
@@ -120,8 +125,13 @@ namespace Basis.Scripts.Avatar
                         break;
                     case 1://localload
                         Debug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                        ChecksRequired Required = new ChecksRequired
+                        {
+                            UseContentRemoval = false,
+                            DisableAnimatorEvents = false
+                        };
                         var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, Para);
+                        (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, Para, Required);
 
                         if (GameObjects.Count > 0)
                         {
@@ -192,8 +202,13 @@ namespace Basis.Scripts.Avatar
         {
             try
             {
+                ChecksRequired Required = new ChecksRequired
+                {
+                    UseContentRemoval = false,
+                    DisableAnimatorEvents = false
+                };
                 var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
-                (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile, Para);
+                (List<GameObject> GameObjects, AddressableGenericResource resource) = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadingAvatar.BasisLocalEncryptedBundle.LocalBundleFile, Para, Required);
 
                 if (GameObjects.Count != 0)
                 {

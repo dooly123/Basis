@@ -11,7 +11,12 @@ namespace Basis.Scripts.UI.NamePlate
     {
         public static async Task LoadRemoteNamePlate(BasisRemotePlayer Player, string RemoteNamePlate = "Assets/UI/Prefabs/NamePlate.prefab")
         {
-            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(RemoteNamePlate, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+            ChecksRequired Required = new ChecksRequired
+            {
+                UseContentRemoval = false,
+                DisableAnimatorEvents = false
+            };
+            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(RemoteNamePlate, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(), Required);
             List<GameObject> Gameobjects = data.Item1;
             if (Gameobjects.Count != 0)
             {

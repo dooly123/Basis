@@ -249,7 +249,9 @@ namespace Basis.Scripts.Device_Management
         }
         public static async Task LoadGameobject(string playerAddressableID, InstantiationParameters instantiationParameters)
         {
-            (List<GameObject>, Addressable_Driver.AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(playerAddressableID, instantiationParameters);
+            ChecksRequired Required = new ChecksRequired();
+            Required.UseContentRemoval = false;
+            (List<GameObject>, Addressable_Driver.AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(playerAddressableID, instantiationParameters, Required);
             List<GameObject> gameObjects = data.Item1;
 
             if (gameObjects.Count == 0)

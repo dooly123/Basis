@@ -107,7 +107,12 @@ namespace Basis.Scripts.UI
         }
         public async Task CreateRadical()
         {
-            (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadUIRedicalAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+            ChecksRequired Required = new ChecksRequired
+            {
+                UseContentRemoval = false,
+                DisableAnimatorEvents = false
+            };
+            (List<GameObject>, AddressableGenericResource) data = await AddressableResourceProcess.LoadAsGameObjectsAsync(LoadUIRedicalAddress, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(), Required);
             List<GameObject> gameObjects = data.Item1;
             if (gameObjects == null)
             {

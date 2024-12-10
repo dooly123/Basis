@@ -75,7 +75,12 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         public static async Task CreateInputAction(BasisLocalPlayer Local)
         {
-            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(InputActions, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters());
+            ChecksRequired Required = new ChecksRequired
+            {
+                UseContentRemoval = false,
+                DisableAnimatorEvents = false
+            };
+            var data = await AddressableResourceProcess.LoadAsGameObjectsAsync(InputActions, new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(), Required);
             List<GameObject> Gameobjects = data.Item1;
             if (Gameobjects.Count != 0)
             {
