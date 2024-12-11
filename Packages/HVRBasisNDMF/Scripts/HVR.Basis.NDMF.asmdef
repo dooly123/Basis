@@ -3,7 +3,10 @@
     "rootNamespace": "",
     "references": [
         "nadena.dev.ndmf",
-        "BasisSDKEditor"
+        "BasisSDKEditor",
+        "Unity.Addressables",
+        "Unity.Addressables.Editor",
+        "BasisSDK"
     ],
     "includePlatforms": [
         "Editor"
