@@ -1,0 +1,8 @@
+theme: jekyll-theme-minimal
+title: Basis
+description: Basis Framework
+lsi: false
+safe: true
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
