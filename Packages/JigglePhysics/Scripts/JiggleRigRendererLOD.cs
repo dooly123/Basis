@@ -5,16 +5,16 @@ namespace JigglePhysics
 {
     public class JiggleRigRendererLOD : JiggleRigSimpleLOD
     {
-        private class RendererSubscription
+        public class RendererSubscription
         {
             public bool visible;
             public Action<bool> action;
             public MonoBehaviorHider.JiggleRigLODRenderComponent rendererSubscription;
         }
 
-        private RendererSubscription[] subscriptions;
-        private int subscriptionCount;
-        private bool lastVisibility;
+        public RendererSubscription[] subscriptions;
+        public int subscriptionCount;
+        public bool lastVisibility;
 
         public void ClearRenderers()
         {

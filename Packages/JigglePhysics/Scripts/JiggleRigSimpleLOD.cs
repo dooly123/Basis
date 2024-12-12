@@ -14,7 +14,7 @@ namespace JigglePhysics
         [SerializeField] float blend = 5f;
 
         public static Camera currentCamera;
-
+        public Transform TargetPoint;
 
         protected virtual bool TryGetCamera(out Camera camera)
         {
@@ -27,7 +27,7 @@ namespace JigglePhysics
             {
                 return false;
             }
-            var cameraDistance = Vector3.Distance(camera.transform.position, transform.position);
+            var cameraDistance = Vector3.Distance(camera.transform.position, TargetPoint.position);
             var currentBlend = (cameraDistance - distance + blend) / blend;
             currentBlend = Mathf.Clamp01(1f - currentBlend);
             for (int Index = 0; Index < JiggleCount; Index++)

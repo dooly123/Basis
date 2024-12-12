@@ -114,6 +114,8 @@ namespace Basis.Scripts.Networking.Recievers
 
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply(TimeAsDouble, DeltaTime);
                 RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
+
+                RemotePlayer.Avatar.FaceVisemeMesh.transform.position = RemotePlayer.MouthControl.OutgoingWorldData.position;
             }
             if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
             {
@@ -122,7 +124,7 @@ namespace Basis.Scripts.Networking.Recievers
 
                 TimeBeforeCompletion = Last.SecondsInterval; // how long to run for
                 TimeInThePast = TimeAsDouble;
-              // DecompressionQueue.Enqueue(result);
+                // DecompressionQueue.Enqueue(result);
             }
         }
         public void EnQueueAvatarBuffer(ref AvatarBuffer avatarBuffer)

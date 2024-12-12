@@ -31,15 +31,6 @@ namespace JigglePhysics
             [Tooltip("Turn this on if you animate the jiggle bones via Animator (or through script). ")]
             public bool animated = false;
             private int boneCount;
-            private bool needsCollisions;
-            private int colliderCount;
-
-            public void SetColliders(ICollection<Collider> newColliders)
-            {
-                colliders = newColliders.ToArray();
-                colliderCount = colliders.Length;
-                needsCollisions = colliders.Length != 0;
-            }
             public Collider[] GetColliders() => colliders;
 
             private bool initialized => simulatedPoints != null;
@@ -60,7 +51,6 @@ namespace JigglePhysics
                 this.rootTransform = rootTransform;
                 this.jiggleSettings = jiggleSettings;
                 this.ignoredTransforms = new List<Transform>(ignoredTransforms);
-                SetColliders(colliders);
                 Initialize();
             }
 
@@ -206,8 +196,6 @@ namespace JigglePhysics
                 }
                 simulatedPoints = jiggleBoneList.ToArray();
                 boneCount = simulatedPoints.Length;
-                colliderCount = colliders.Length;
-                needsCollisions = colliderCount != 0;
             }
 
             /// <summary>
