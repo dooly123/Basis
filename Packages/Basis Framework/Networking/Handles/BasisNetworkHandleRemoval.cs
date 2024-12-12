@@ -1,11 +1,11 @@
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using DarkRift;
+
 using UnityEngine;
 
 public static class BasisNetworkHandleRemoval
 {
-    public static void HandleDisconnection(DarkRiftReader reader)
+    public static void HandleDisconnection(LiteNetLib.NetPacketReader reader)
     {
         ushort DisconnectValue = reader.ReadUInt16();
         if (BasisNetworkManagement.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer NetworkedPlayer))

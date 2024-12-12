@@ -5,7 +5,7 @@ using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEngine;
-using static SerializableDarkRift;
+
 
 namespace Basis.Scripts.Networking.NetworkedPlayer
 {

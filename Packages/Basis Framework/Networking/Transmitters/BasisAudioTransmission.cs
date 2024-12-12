@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityOpus;
 using DarkRift;
-using static SerializableDarkRift;
+
 using DarkRift.Server.Plugins.Commands;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.NetworkedAvatar;

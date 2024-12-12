@@ -3,12 +3,8 @@ using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
-using DarkRift;
-using DarkRift.Basis_Common.Serializable;
-using DarkRift.Client;
-using DarkRift.Client.Unity;
-using DarkRift.Server.Plugins.Commands;
 using JetBrains.Annotations;
+using LiteNetLib;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -16,7 +12,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static BasisNetworkGenericMessages;
-using static SerializableDarkRift;
+using static SerializableBasis;
 namespace Basis.Scripts.Networking
 {
     [DefaultExecutionOrder(15001)]
@@ -25,8 +21,6 @@ namespace Basis.Scripts.Networking
         public string Ip = "170.64.184.249";
         public ushort Port = 4296;
         public bool HasAuthenticated = false;
-
-        public BasisLowLevelClient Client;
         public ReadyMessage readyMessage = new ReadyMessage();
         /// <summary>
         /// fire when ownership is changed for a unique string
@@ -37,6 +31,7 @@ namespace Basis.Scripts.Networking
         public static HashSet<ushort> JoiningPlayers = new HashSet<ushort>();
         public static BasisNetworkReceiver[] ReceiverArray;
         public static int ReceiverCount = 0;
+        public static ushort LocalPlayerID;
         public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
         {
             if (Instance != null)
@@ -148,9 +143,9 @@ namespace Basis.Scripts.Networking
         }
         public static bool TryGetLocalPlayerID(out ushort LocalID)
         {
-            if (Instance != null && Instance.Client != null)
+            if (Instance != null)
             {
-                LocalID = Instance.Client.ID;
+                LocalID = LocalPlayerID;
                 return true;
             }
             LocalID = 0;
@@ -164,13 +159,12 @@ namespace Basis.Scripts.Networking
         {
             Connect(Port, Ip, ISServer);
         }
-        public void Connect(ushort Port, string IpString, bool StartServer)
+        public void Connect(ushort Port, string IpString, bool IsHostMode)
         {
-            Debug.Log("Connecting with Port " + Port + " IpString " + IpString + " Is Server = " + StartServer);
-            if (StartServer)
+            Debug.Log("Connecting with Port " + Port + " IpString " + IpString + " Is Server = " + IsHostMode);
+            if (IsHostMode)
             {
-                BasisNetworkServer NetworkServer = BasisHelpers.GetOrAddComponent<BasisNetworkServer>(this.gameObject);
-                NetworkServer.Create();
+                BasisNetworkServer.StartServer();
             }
             HasAuthenticated = false;
             if (HasInitalizedClient == false)
@@ -182,7 +176,7 @@ namespace Basis.Scripts.Networking
             if (HasAuthenticated == false)
             {
                 HasAuthenticated = true;
-                Client.Client.MessageReceived += MainThreadMessageReceived;
+                BasisNetworkClient.listener.NetworkReceiveEvent += MainThreadMessageReceived;
             }
             string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
             Debug.Log($"DNS call: {IpString} resolves to {result}");
@@ -223,131 +217,74 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-        private async void MainThreadMessageReceived(object sender, MessageReceivedEventArgs e)
+        private void MainThreadMessageReceived(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
         {
             switch (e.Tag) // Use e.Tag instead of message.Tag
             {
-                case BasisTags.AuthSuccess:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        await BasisNetworkLocalCreation.HandleAuthSuccess(this.transform);
-                    }
-                    break;
-                case BasisTags.AvatarMuscleUpdateTag:
+                case BasisNetworkTag.AvatarMuscleUpdateTag:
                     await BasisNetworkHandleAvatar.HandleAvatarUpdate(e);
                     break;
-                case BasisTags.AudioSegmentTag:
-                  await BasisNetworkHandleVoice.HandleAudioUpdate(e);
+                case BasisNetworkTag.AudioSegmentTag:
+                    await BasisNetworkHandleVoice.HandleAudioUpdate(e);
                     break;
 
-                case BasisTags.DisconnectTag:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkHandleRemoval.HandleDisconnection(reader);
-                    }
+                case BasisNetworkTag.DisconnectTag:
+                    BasisNetworkHandleRemoval.HandleDisconnection(reader);
                     break;
 
-                case BasisTags.AvatarChangeMessage:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
-                    }
+                case BasisNetworkTag.AvatarChangeMessage:
+                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
                     break;
 
-                case BasisTags.CreateRemotePlayerTag:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
-                    }
+                case BasisNetworkTag.CreateRemotePlayerTag:
+                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
                     break;
 
-                case BasisTags.CreateRemotePlayersTag:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
-                    }
+                case BasisNetworkTag.CreateRemotePlayersTag:
+                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
                     break;
 
-                case BasisTags.SceneGenericMessage:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
-                    }
+                case BasisNetworkTag.SceneGenericMessage:
+                    BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
                     break;
 
-                case BasisTags.SceneGenericMessage_NoRecipients:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
-                    }
+                case BasisNetworkTag.SceneGenericMessage_NoRecipients:
+                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
                     break;
 
-                case BasisTags.SceneGenericMessage_NoRecipients_NoPayload:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
-                    }
+                case BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload:
+                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
                     break;
 
-                case BasisTags.AvatarGenericMessage:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
-                    }
+                case BasisNetworkTag.AvatarGenericMessage:
+                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
                     break;
 
-                case BasisTags.AvatarGenericMessage_NoRecipients:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
-                    }
+                case BasisNetworkTag.AvatarGenericMessage_NoRecipients:
+                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
                     break;
 
-                case BasisTags.AvatarGenericMessage_NoRecipients_NoPayload:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
-                    }
+                case BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload:
+                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
                     break;
 
-                case BasisTags.AvatarGenericMessage_Recipients_NoPayload:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage_Recipients_NoPayload(reader);
-                    }
+                case BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload:
+                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_Recipients_NoPayload(reader);
                     break;
 
-                case BasisTags.SceneGenericMessage_Recipients_NoPayload:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleServerSceneDataMessage_Recipients_NoPayload(reader);
-                    }
+                case BasisNetworkTag.SceneGenericMessage_Recipients_NoPayload:
+                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_Recipients_NoPayload(reader);
                     break;
 
-                case BasisTags.OwnershipResponse:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
+                case BasisNetworkTag.OwnershipResponse:
+                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
                     {
                         BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
                     }
                     break;
 
-                case BasisTags.OwnershipTransfer:
-                    using (Message message = e.GetMessage())
-                    using (DarkRiftReader reader = message.GetReader())
+                case BasisNetworkTag.OwnershipTransfer:
+                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
                     {
                         BasisNetworkGenericMessages.HandleOwnershipTransfer(reader);
                     }

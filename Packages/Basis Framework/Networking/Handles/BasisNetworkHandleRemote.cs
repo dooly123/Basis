@@ -2,22 +2,22 @@
 using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Player;
-using DarkRift;
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using static SerializableDarkRift;
+
 namespace Basis.Scripts.Networking
 {
     public static class BasisNetworkHandleRemote
     {
-        public static async Task HandleCreateRemotePlayer(DarkRiftReader reader,Transform Parent)
+        public static async Task HandleCreateRemotePlayer(LiteNetLib.NetPacketReader reader,Transform Parent)
         {
             reader.Read(out ServerReadyMessage SRM);
             await CreateRemotePlayer(SRM, Parent);
         }
-        public static async Task HandleCreateAllRemoteClients(DarkRiftReader reader, Transform Parent)
+        public static async Task HandleCreateAllRemoteClients(LiteNetLib.NetPacketReader reader, Transform Parent)
         {
             reader.Read(out CreateAllRemoteMessage allRemote);
             int RemoteLength = allRemote.serverSidePlayer.Length;

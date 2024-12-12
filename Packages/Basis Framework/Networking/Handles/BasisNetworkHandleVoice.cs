@@ -1,13 +1,11 @@
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.Recievers;
-using DarkRift;
-using DarkRift.Client;
 using System.Threading;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
-using static SerializableDarkRift;
 using System.Collections.Concurrent;
+using static SerializableBasis;
 
 public static class BasisNetworkHandleVoice
 {
@@ -30,7 +28,7 @@ public static class BasisNetworkHandleVoice
             {
                 using (Message message = e.GetMessage())
                 {
-                    using (DarkRiftReader reader = message.GetReader())
+                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
                     {
                         if (Message.TryDequeue(out AudioSegmentMessage audioUpdate) == false)
                         {

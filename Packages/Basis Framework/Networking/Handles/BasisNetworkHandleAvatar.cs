@@ -1,14 +1,13 @@
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
-using DarkRift;
-using DarkRift.Client;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using static SerializableDarkRift;
+using static SerializableBasis;
+
 public static class BasisNetworkHandleAvatar
 {
     private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1); // Ensures single execution
@@ -30,7 +29,7 @@ public static class BasisNetworkHandleAvatar
             {
                 using (Message message = e.GetMessage())
                 {
-                    using (DarkRiftReader reader = message.GetReader())
+                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
                     {
                         if (Message.TryDequeue(out ServerSideSyncPlayerMessage SSM) == false)
                         {
@@ -74,7 +73,7 @@ public static class BasisNetworkHandleAvatar
             Debug.Log("HandleAvatarUpdate task canceled.");
         }
     }
-    public static void HandleAvatarChangeMessage(DarkRiftReader reader)
+    public static void HandleAvatarChangeMessage(LiteNetLib.NetPacketReader reader)
     {
         reader.Read(out ServerAvatarChangeMessage ServerAvatarChangeMessage);
         ushort PlayerID = ServerAvatarChangeMessage.uShortPlayerId.playerID;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using static SerializableDarkRift;
+
 
 namespace Basis.Scripts.Player
 {

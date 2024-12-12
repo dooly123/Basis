@@ -4,7 +4,7 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.NamePlate;
 using System.Threading.Tasks;
 using UnityEngine;
-using static SerializableDarkRift;
+
 namespace Basis.Scripts.BasisSdk.Players
 {
     public class BasisRemotePlayer : BasisPlayer

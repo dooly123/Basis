@@ -1,9 +1,9 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using DarkRift.Server.Plugins.Commands;
-using DarkRift;
+using LiteNetLib;
 using UnityEngine;
-using static SerializableDarkRift;
+using static BasisNetworkPrimitiveCompression;
+
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
     /// <summary>
