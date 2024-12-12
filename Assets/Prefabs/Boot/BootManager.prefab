@@ -187,9 +187,9 @@ MonoBehaviour:
   DefaultScene:
     UnlockPassword: Scene
     BasisRemoteBundleEncrypted:
-      IsLocal: 0
-      MetaURL: https://BasisFramework.b-cdn.net/Worlds/DX11/71d820c1-564d-4375-8ae5-47a53679e01f_638649993610700760.BasisEncyptedMeta
-      BundleURL: https://BasisFramework.b-cdn.net/Worlds/DX11/71d820c1-564d-4375-8ae5-47a53679e01f_638649993610700760.BasisEncyptedBundle
+      IsLocal: 1
+      MetaURL: Assets/Scenes/New Scene.unity
+      BundleURL: Assets/Scenes/New Scene.unity
     BasisLocalEncryptedBundle:
       LocalMetaFile: 
       LocalBundleFile: 
@@ -222,4 +222,4 @@ MonoBehaviour:
         AssetMode: Gameobject
         AssetToLoadName: LoadingAvatar
         AssetBundleCRC: 0
-  UseAddressables: 0
+  UseAddressables: 1

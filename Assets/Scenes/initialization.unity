@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasisOnSceneLoadCleanup
       objectReference: {fileID: 0}
+    - target: {fileID: 6945557231596396514, guid: f84144c055f881f4797d59bd2802d4a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
