@@ -1,0 +1,13 @@
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server Export\Basis.Network.Client\bin\Release\net9.0\Basis.Network.Client.deps.json
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server Export\Basis.Network.Client\bin\Release\net9.0\Basis.Network.Client.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server Export\Basis.Network.Client\bin\Release\net9.0\Basis.Network.Client.pdb
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Network.Client.csproj.AssemblyReference.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Network.Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Network.Client.AssemblyInfoInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Network.Client.AssemblyInfo.cs
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Network.Client.csproj.CoreCompileInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Ne.AD31A536.Up2Date
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Network.Client.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\refint\Basis.Network.Client.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\Basis.Network.Client.pdb
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\obj\Release\net9.0\ref\Basis.Network.Client.dll

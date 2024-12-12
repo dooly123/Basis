@@ -30,6 +30,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.basis.corenetworking": {
+      "version": "file:Basis Server",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.basis.gizmos": {
       "version": "file:basisGizmos",
       "depth": 0,
@@ -59,12 +65,6 @@
     },
     "com.naelstrof.jigglephysics": {
       "version": "file:JigglePhysics",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.revenantx.litenetlib": {
-      "version": "file:LiteNetLib",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

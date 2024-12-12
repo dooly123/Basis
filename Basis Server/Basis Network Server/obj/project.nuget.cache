@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "UvRkrQqUaaU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Server\\Basis.Network.Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\doola\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\doola\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\doola\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
+    "C:\\Users\\doola\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
+    "C:\\Users\\doola\\.nuget\\packages\\litenetlib\\1.3.1\\litenetlib.1.3.1.nupkg.sha512"
+  ],
+  "logs": []
+}

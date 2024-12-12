@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "OkwM6W6g5vk=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\doola\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.0\\microsoft.net.illink.tasks.9.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

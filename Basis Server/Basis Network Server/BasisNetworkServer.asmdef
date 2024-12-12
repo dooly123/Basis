@@ -1,0 +1,17 @@
+{
+    "name": "BasisNetworkServer",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b5b518e0e04211a428210085dbd52846",
+        "GUID:2fd46d625462ed449a76f6680f3d1f19"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

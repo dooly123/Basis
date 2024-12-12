@@ -1,0 +1,161 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v4.7.1": {},
+    "net9.0": {
+      "Microsoft.NET.ILLink.Tasks/9.0.0": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Tasks.props": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Microsoft.NET.ILLink.Tasks/9.0.0": {
+      "sha512": "zAwp213evC3UkimtVXRb+Dlgc/40QG145nmZDtp2LO9zJJMfrp+i/87BnXN7tRXEA4liyzdFkjqG1HE8/RPb4A==",
+      "type": "package",
+      "path": "microsoft.net.illink.tasks/9.0.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "Sdk/Sdk.props",
+        "THIRD-PARTY-NOTICES.TXT",
+        "analyzers/dotnet/cs/ILLink.CodeFixProvider.dll",
+        "analyzers/dotnet/cs/ILLink.RoslynAnalyzer.dll",
+        "build/Microsoft.NET.ILLink.Analyzers.props",
+        "build/Microsoft.NET.ILLink.Tasks.props",
+        "build/Microsoft.NET.ILLink.targets",
+        "microsoft.net.illink.tasks.9.0.0.nupkg.sha512",
+        "microsoft.net.illink.tasks.nuspec",
+        "tools/net472/ILLink.Tasks.dll",
+        "tools/net472/ILLink.Tasks.dll.config",
+        "tools/net472/Mono.Cecil.Mdb.dll",
+        "tools/net472/Mono.Cecil.Pdb.dll",
+        "tools/net472/Mono.Cecil.Rocks.dll",
+        "tools/net472/Mono.Cecil.dll",
+        "tools/net472/Sdk/Sdk.props",
+        "tools/net472/System.Buffers.dll",
+        "tools/net472/System.Collections.Immutable.dll",
+        "tools/net472/System.Memory.dll",
+        "tools/net472/System.Numerics.Vectors.dll",
+        "tools/net472/System.Reflection.Metadata.dll",
+        "tools/net472/System.Runtime.CompilerServices.Unsafe.dll",
+        "tools/net472/build/Microsoft.NET.ILLink.Analyzers.props",
+        "tools/net472/build/Microsoft.NET.ILLink.Tasks.props",
+        "tools/net472/build/Microsoft.NET.ILLink.targets",
+        "tools/net9.0/ILLink.Tasks.deps.json",
+        "tools/net9.0/ILLink.Tasks.dll",
+        "tools/net9.0/Mono.Cecil.Mdb.dll",
+        "tools/net9.0/Mono.Cecil.Pdb.dll",
+        "tools/net9.0/Mono.Cecil.Rocks.dll",
+        "tools/net9.0/Mono.Cecil.dll",
+        "tools/net9.0/Sdk/Sdk.props",
+        "tools/net9.0/build/Microsoft.NET.ILLink.Analyzers.props",
+        "tools/net9.0/build/Microsoft.NET.ILLink.Tasks.props",
+        "tools/net9.0/build/Microsoft.NET.ILLink.targets",
+        "tools/net9.0/illink.deps.json",
+        "tools/net9.0/illink.dll",
+        "tools/net9.0/illink.runtimeconfig.json",
+        "useSharedDesignerContext.txt"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v4.7.1": [],
+    "net9.0": [
+      "Microsoft.NET.ILLink.Tasks >= 9.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\doola\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.3.1",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj",
+      "projectName": "LiteNetLib",
+      "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj",
+      "packagesPath": "C:\\Users\\doola\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\obj\\",
+      "projectStyle": "PackageReference",
+      "crossTargeting": true,
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\doola\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net471",
+        "net9.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {}
+        },
+        "net471": {
+          "targetAlias": "net471",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "all"
+      },
+      "SdkAnalysisLevel": "9.0.100"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "dependencies": {
+          "Microsoft.NET.ILLink.Tasks": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[9.0.0, )",
+            "autoReferenced": true
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+      },
+      "net471": {
+        "targetAlias": "net471",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>LiteNetLib</id>
+    <version>1.3.1</version>
+    <title>Lite reliable UDP library for Mono and .NET</title>
+    <authors>Ruslan Pyrch</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/RevenantX/LiteNetLib</projectUrl>
+    <description>Lite reliable UDP library for .NET, Mono, and .NET Core</description>
+    <releaseNotes>https://github.com/RevenantX/LiteNetLib/releases/tag/1.3.1</releaseNotes>
+    <copyright>Copyright 2024 Ruslan Pyrch</copyright>
+    <tags>udp reliable-udp network</tags>
+    <repository type="git" url="https://github.com/RevenantX/LiteNetLib" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.1" />
+      <group targetFramework="net9.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\LiteNetLib\bin\Release\net471\LiteNetLib.dll" target="lib\net471\LiteNetLib.dll" />
+    <file src="C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\LiteNetLib\bin\Release\net9.0\LiteNetLib.dll" target="lib\net9.0\LiteNetLib.dll" />
+  </files>
+</package>

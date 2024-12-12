@@ -1,0 +1,16 @@
+{
+    "name": "BasisNetworkCore",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2fd46d625462ed449a76f6680f3d1f19"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

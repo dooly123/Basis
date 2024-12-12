@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Basis.Network.Core</id>
+    <version>2.10.1</version>
+    <authors>Basis.Network.Core</authors>
+    <description>Package Description</description>
+    <repository type="git" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.1">
+        <dependency id="LiteNetLib" version="1.3.1" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="LiteNetLib" version="1.3.1" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net471\Basis.Network.Core.dll" target="lib\net471\Basis.Network.Core.dll" />
+    <file src="C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net9.0\Basis.Network.Core.dll" target="lib\net9.0\Basis.Network.Core.dll" />
+  </files>
+</package>

@@ -1,0 +1,24 @@
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net9.0\Basis.Network.Core.deps.json
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net9.0\Basis.Network.Core.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net9.0\Basis.Network.Core.pdb
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.AssemblyInfoInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.AssemblyInfo.cs
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.csproj.CoreCompileInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\refint\Basis.Network.Core.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.pdb
+C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\ref\Basis.Network.Core.dll
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net9.0\Basis.Network.Core.deps.json
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net9.0\Basis.Network.Core.dll
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server Export\Basis.Network.Core\bin\Debug\net9.0\Basis.Network.Core.pdb
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.csproj.AssemblyReference.cache
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.AssemblyInfoInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.AssemblyInfo.cs
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.csproj.CoreCompileInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Ne.6A8B8FFB.Up2Date
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.dll
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\refint\Basis.Network.Core.dll
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\Basis.Network.Core.pdb
+C:\Users\doola\OneDrive\Documents\Github\BasisServer\Basis Server Standalone\Basis Server\Basis Network Core\obj\Debug\net9.0\ref\Basis.Network.Core.dll

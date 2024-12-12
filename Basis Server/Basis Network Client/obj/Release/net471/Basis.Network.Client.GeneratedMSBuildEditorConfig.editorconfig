@@ -1,0 +1,8 @@
+is_global = true
+build_property.RootNamespace = Basis.Network.Client
+build_property.ProjectDir = C:\Users\doola\OneDrive\Documents\Github\Basis Server Standalone\Basis Server\Basis Network Client\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 
