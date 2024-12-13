@@ -16,6 +16,7 @@ namespace HVR.Basis.Comms
         private const int SubHeaderBytes = HeaderBytes - 1;
         // 1/60 makes for a maximum encoded delta time of 4.25 seconds.
         private const float DeltaLocalIntToSeconds = 1 / 60f;
+        private const float DeltaTimeUsedForResyncs = 1 / 29f; // 29 is just a random number I picked. It really doesn't matter what value we're using for resyncs.
         // We use 254, not 255 (leaving 1 value out), because 254 divided by 2 is a round number, 127.
         // This makes the value of 0 in range [-1:1] encodable as 127.
         private const float EncodingRange = 254f;
@@ -81,7 +82,7 @@ namespace HVR.Basis.Comms
                     FloatValues = current // Not copied: Process this message immediately
                 };
 
-                EncodeAndSubmit(toSend);
+                EncodeAndSubmit(toSend, null);
                 
                 _timeLeft = 0;
             }
@@ -101,7 +102,7 @@ namespace HVR.Basis.Comms
                 // Debug.Log($"Unpacking delta {eval.DeltaTime} as {string.Join(',', eval.FloatValues.Select(f => $"{f}"))}");
                 var effectiveDeltaTime = _queue.Count <= 5 || totalQueueSeconds < 0.2f
                     ? eval.DeltaTime
-                    : (eval.DeltaTime * Mathf.Lerp(0.66f, 0.05f, Mathf.InverseLerp(0.1f, totalQueueSeconds, 4f)));
+                    : (eval.DeltaTime * Mathf.Lerp(0.66f, 0.05f, Mathf.InverseLerp(DeltaTimeUsedForResyncs, totalQueueSeconds, 4f)));
                 
                 _timeLeft += effectiveDeltaTime;
                 previous = target;
@@ -168,7 +169,7 @@ namespace HVR.Basis.Comms
         //   - Delta Time (1 byte)
         //   - Float Values (valueArraySize bytes)
 
-        private void EncodeAndSubmit(StreamedAvatarFeaturePayload message)
+        private void EncodeAndSubmit(StreamedAvatarFeaturePayload message, ushort[] recipientsNullable)
         {
             var buffer = new byte[HeaderBytes + valueArraySize];
             buffer[0] = _scopedIndex;
@@ -179,7 +180,7 @@ namespace HVR.Basis.Comms
                 buffer[HeaderBytes + i] = (byte)(message.FloatValues[i] * EncodingRange);
             }
             
-            avatar.NetworkMessageSend(HVRAvatarComms.OurMessageIndex, buffer, DeliveryMethod);
+            avatar.NetworkMessageSend(HVRAvatarComms.OurMessageIndex, buffer, DeliveryMethod, recipientsNullable);
         }
 
         private bool TryDecode(ArraySegment<byte> subBuffer, out StreamedAvatarFeaturePayload result)
@@ -205,6 +206,24 @@ namespace HVR.Basis.Comms
         }
         
         #endregion
+
+        public void OnResyncEveryoneRequested()
+        {
+            EncodeAndSubmit(new StreamedAvatarFeaturePayload
+            {
+                DeltaTime = DeltaTimeUsedForResyncs,
+                FloatValues = current
+            }, null);
+        }
+
+        public void OnResyncRequested(ushort[] whoAsked)
+        {
+            EncodeAndSubmit(new StreamedAvatarFeaturePayload
+            {
+                DeltaTime = DeltaTimeUsedForResyncs,
+                FloatValues = current
+            }, whoAsked);
+        }
     }
 
     public class StreamedAvatarFeaturePayload
