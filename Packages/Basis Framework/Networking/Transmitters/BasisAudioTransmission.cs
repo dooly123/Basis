@@ -11,6 +11,7 @@ using Basis.Scripts.Device_Management;
 using Basis.Scripts.Profiler;
 using static SerializableBasis;
 using LiteNetLib.Utils;
+using Basis.Network.Core;
 
 namespace Basis.Scripts.Networking.Transmitters
 {
@@ -114,16 +115,10 @@ namespace Basis.Scripts.Networking.Transmitters
                     AudioSegmentData.buffer = new byte[encodedLength];
                 }
                 Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer.Array, 0, encodedLength);
-
-                using (NetDataWriter writer = NetDataWriter.Create(encodedLength))
-                {
-                    writer.Write(AudioSegmentData);
-                    BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
-                    using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
-                    {
-                        BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
-                    }
-                }
+                NetDataWriter NetDataWriter = new NetDataWriter();
+                AudioSegmentData.Serialize(NetDataWriter);
+                BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
+                BasisNetworkManagement.LocalPlayerPeer.Send(NetDataWriter, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
                 Local.AudioReceived?.Invoke(true);
             }
         }
@@ -132,10 +127,7 @@ namespace Basis.Scripts.Networking.Transmitters
             NetDataWriter writer = new NetDataWriter();
             audioSilentSegmentData.Serialize(writer);
             BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
-            using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
-            {
-                BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
-            }
+            BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
             Local.AudioReceived?.Invoke(false);
         }
     }

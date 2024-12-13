@@ -1,3 +1,4 @@
+using Basis.Network.Core;
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using LiteNetLib;
@@ -94,9 +95,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                         playerIdMessage = new PlayerIdMessage() { playerID = NetId },
                         messageIndex = MessageIndex
                     };
+                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload);
                     AvatarDataMessage_NoRecipients_NoPayload.Serialize(netDataWriter);
                     // No recipients and no payload
-                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload, netDataWriter, DeliveryMethod);
+                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
                 }
                 else
                 {
@@ -106,10 +108,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                         messageIndex = MessageIndex,
                         payload = buffer
                     };
-
+                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage_NoRecipients);
                     AvatarDataMessage_NoRecipients.Serialize(netDataWriter);
                     // No recipients but has payload
-                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage_NoRecipients, netDataWriter, DeliveryMethod);
+                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
                 }
             }
             else
@@ -121,8 +123,9 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     AvatarDataMessage.messageIndex = MessageIndex;
                     AvatarDataMessage.recipients = Recipients;
                     // Recipients present, payload may or may not be present
+                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload);
                     AvatarDataMessage.Serialize(netDataWriter);
-                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload, netDataWriter, DeliveryMethod);
+                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
                 }
                 else
                 {
@@ -133,17 +136,18 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                         payload = buffer,
                         recipients = Recipients
                     };
+                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage);
                     AvatarDataMessage.Serialize(netDataWriter);
                     // Recipients present, payload may or may not be present
-                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage, netDataWriter, DeliveryMethod);
+                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
                 }
             }
         }
 
         // Helper method to avoid code duplication
-        private void WriteAndSendMessage(ushort tag, NetDataWriter writer, DeliveryMethod deliveryMethod)
+        private void WriteAndSendMessage(NetDataWriter writer, DeliveryMethod deliveryMethod)
         {
-            BasisNetworkManagement.Instance..SendMessage(msg, BasisNetworking.AvatarChannel, deliveryMethod);
+            BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.AvatarChannel, deliveryMethod);
         }
 
     }

@@ -6,6 +6,7 @@ using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
+using DarkRift.Basis_Common.Serializable;
 using JetBrains.Annotations;
 using LiteNetLib;
 using LiteNetLib.Utils;
@@ -184,7 +185,7 @@ namespace Basis.Scripts.Networking
             if (HasAuthenticated == false)
             {
                 HasAuthenticated = true;
-                BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEventTag;
+                BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
             }
             string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
             Debug.Log($"DNS call: {IpString} resolves to {result}");
@@ -253,35 +254,47 @@ namespace Basis.Scripts.Networking
         {
             if (HasAuthenticated)
             {
-                BasisNetworkClient.listener.NetworkReceiveEvent -= NetworkReceiveEventTag;
+                BasisNetworkClient.listener.NetworkReceiveEvent -= NetworkReceiveEvent;
                 HasAuthenticated = false;
             }
             BasisNetworkClient.Disconnect();
         }
-        private static void NetworkReceiveEvent(NetPeer peer, NetPacketReader Reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
+        private async void NetworkReceiveEvent(NetPeer peer, NetPacketReader Reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
         {
-            BasisMessageReceivedEventArgs e = new BasisMessageReceivedEventArgs
-            {
-                Tag = Reader.GetByte(),
-                SendMode = deliveryMethod,
-                ClientId = (ushort)peer.Id
-            };
             switch (channel)
             {
                 case BasisNetworkCommons.EventsChannel:
-                    NetworkReceiveEventTag(peer, Reader, e);
+                    BasisMessageReceivedEventArgs e = new BasisMessageReceivedEventArgs
+                    {
+                        Tag = Reader.GetByte(),
+                        SendMode = deliveryMethod,
+                        ClientId = (ushort)peer.Id
+                    };
+                    await NetworkReceiveEventTag(peer, Reader, e);
                     break;
                 case BasisNetworkCommons.VoiceChannel:
-                    HandleVoiceMessage(Reader, peer, e);
+                    await BasisNetworkHandleVoice.HandleAudioUpdate(Reader);
                     break;
                 case BasisNetworkCommons.MovementChannel:
-                    HandleAvatarMovement(Reader, peer, e);
+                    await BasisNetworkHandleAvatar.HandleAvatarUpdate(Reader);
                     break;
                 case BasisNetworkCommons.SceneChannel:
-                    NetworkReceiveEventTag(peer, Reader, e);
+                     e = new BasisMessageReceivedEventArgs
+                    {
+                        Tag = Reader.GetByte(),
+                        SendMode = deliveryMethod,
+                        ClientId = (ushort)peer.Id
+                    };
+                    await NetworkReceiveEventTag(peer, Reader, e);
                     break;
                 case BasisNetworkCommons.AvatarChannel:
-                    NetworkReceiveEventTag(peer, Reader, e);
+                     e = new BasisMessageReceivedEventArgs
+                    {
+                        Tag = Reader.GetByte(),
+                        SendMode = deliveryMethod,
+                        ClientId = (ushort)peer.Id
+                    };
+                    await NetworkReceiveEventTag(peer, Reader, e);
                     break;
                 default:
                     BNL.LogError($"this Channel was not been implemented {channel}");
@@ -289,17 +302,10 @@ namespace Basis.Scripts.Networking
             }
             Reader.Recycle();
         }
-        private async void NetworkReceiveEventTag(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
+        private async Task NetworkReceiveEventTag(NetPeer peer, NetPacketReader reader, BasisMessageReceivedEventArgs e)
         {
             switch (e.Tag) // Use e.Tag instead of message.Tag
             {
-                case BasisNetworkTag.AvatarMuscleUpdateTag:
-                    await BasisNetworkHandleAvatar.HandleAvatarUpdate(e);
-                    break;
-                case BasisNetworkTag.AudioSegmentTag:
-                    await BasisNetworkHandleVoice.HandleAudioUpdate(e);
-                    break;
-
                 case BasisNetworkTag.Disconnection:
                     BasisNetworkHandleRemoval.HandleDisconnection(reader);
                     break;
@@ -360,14 +366,10 @@ namespace Basis.Scripts.Networking
                 },
                 ownershipID = UniqueNetworkId
             };
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
-            {
-                writer.Write(OwnershipTransferMessage);
-                using (Message serverOwnershipInitialize = Message.Create(BasisTags.OwnershipTransfer, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(serverOwnershipInitialize, DarkRift.Server.Plugins.Commands.BasisNetworking.EventsChannel, DeliveryMethod.ReliableSequenced);
-                }
-            }
+            NetDataWriter netDataWriter = new NetDataWriter();
+            netDataWriter.Put(BasisNetworkTag.OwnershipTransfer);
+            OwnershipTransferMessage.Serialize(netDataWriter);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableSequenced);
         }
         public static void RequestCurrentOwnership(string UniqueNetworkId)
         {
@@ -375,18 +377,14 @@ namespace Basis.Scripts.Networking
             {
                 playerIdMessage = new PlayerIdMessage
                 {
-                    playerID = BasisNetworkManagement.Instance.Client.ID
+                    playerID = (ushort)BasisNetworkManagement.LocalPlayerPeer.Id,
                 },
                 ownershipID = UniqueNetworkId
             };
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
-            {
-                writer.Write(OwnershipTransferMessage);
-                using (Message serverOwnershipInitialize = Message.Create(BasisTags.OwnershipResponse, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(serverOwnershipInitialize, DarkRift.Server.Plugins.Commands.BasisNetworking.EventsChannel, DeliveryMethod.ReliableSequenced);
-                }
-            }
+            NetDataWriter netDataWriter = new NetDataWriter();
+            netDataWriter.Put(BasisNetworkTag.OwnershipResponse);
+            OwnershipTransferMessage.Serialize(netDataWriter);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter,BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableSequenced);
         }
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {
