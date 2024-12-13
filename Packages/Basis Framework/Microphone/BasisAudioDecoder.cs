@@ -29,9 +29,9 @@ public class BasisAudioDecoder
     /// the pcm length is how much was actually encoded.
     /// </summary>
     /// <param name="data"></param>
-    public void OnDecode(byte[] data,int length)
+    public void OnDecode(ArraySegment<byte> data,int length)
     {
-        pcmLength = decoder.Decode(data, length, pcmBuffer);
+        pcmLength = decoder.Decode(data.Array, length, pcmBuffer);
         OnDecoded?.Invoke();
     }
 }

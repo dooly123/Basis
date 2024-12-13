@@ -115,7 +115,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 }
                 Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer.Array, 0, encodedLength);
 
-                using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
+                using (NetDataWriter writer = NetDataWriter.Create(encodedLength))
                 {
                     writer.Write(AudioSegmentData);
                     BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);

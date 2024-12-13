@@ -1,10 +1,11 @@
+using Basis.Network.Core;
 using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
-
-
+using LiteNetLib;
+using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -175,15 +176,9 @@ namespace Basis.Scripts.Networking.Transmitters
                 {
                     users = TalkingPoints.ToArray()
                 };
-                using (DarkRiftWriter writer = DarkRiftWriter.Create())
-                {
-                    writer.Write(VRM);
-                    using (Message msg = Message.Create(BasisTags.AudioCommunication, writer))
-                    {
-                        BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.ReliableOrdered);
-                       // Debug.Log("sending out voice Receivers");
-                    }
-                }
+                NetDataWriter writer = new NetDataWriter();
+                VRM.Serialize(writer);
+                BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.ReliableOrdered);
             }
         }
         public static bool AreBoolArraysEqual(bool[] array1, bool[] array2)
@@ -371,19 +366,14 @@ namespace Basis.Scripts.Networking.Transmitters
         public void SendOutLatestAvatar()
         {
             byte[] LAI = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData);
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
+            NetDataWriter Writer = new NetDataWriter();
+            Writer.Put(BasisNetworkTag.AvatarChangeMessage);
+            ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
             {
-                ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
-                {
-                    byteArray = LAI,
-                    loadMode = NetworkedPlayer.Player.AvatarLoadMode,
-                };
-                writer.Write(ClientAvatarChangeMessage);
-                using (var msg = Message.Create(BasisTags.AvatarChangeMessage, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.EventsChannel, DeliveryMethod.ReliableOrdered);
-                }
-            }
+                byteArray = LAI,
+                loadMode = NetworkedPlayer.Player.AvatarLoadMode,
+            };
+            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableOrdered);
         }
         [BurstCompile]
         public struct CombinedDistanceAndClosestTransformJob : IJobParallelFor

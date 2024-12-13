@@ -1,3 +1,4 @@
+using Basis.Network.Core;
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
@@ -177,60 +178,55 @@ public static class BasisNetworkGenericMessages
         {
             buffer = null;
         }
-            // Check if there are no recipients and no payload
-            if (recipients == null && buffer == null)
+        // Check if there are no recipients and no payload
+        if (recipients == null && buffer == null)
+        {
+            // Debug.Log("Sending with no Recipients or buffer");
+            // No recipients, no payload case
+            SceneDataMessage_NoRecipients_NoPayload sceneDataMessage = new SceneDataMessage_NoRecipients_NoPayload
             {
-                // Debug.Log("Sending with no Recipients or buffer");
-                // No recipients, no payload case
-                SceneDataMessage_NoRecipients_NoPayload sceneDataMessage = new SceneDataMessage_NoRecipients_NoPayload
-                {
-                    messageIndex = messageIndex
-                };
+                messageIndex = messageIndex
+            };
             Writer.Put(BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload);
             sceneDataMessage.Serialize(Writer);
-            BasisNetworkManagement.LocalPlayerPeer.Send(msg, BasisNetworking.SceneChannel, deliveryMethod);
+            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.SceneChannel, deliveryMethod);
         }
-            // Check if there are no recipients but there is a payload
-            else if (recipients == null)
+        // Check if there are no recipients but there is a payload
+        else if (recipients == null)
+        {
+            // Debug.Log("Sending with no Recipients");
+            // No recipients but has payload
+            SceneDataMessage_NoRecipients sceneDataMessage = new SceneDataMessage_NoRecipients
             {
-                // Debug.Log("Sending with no Recipients");
-                // No recipients but has payload
-                SceneDataMessage_NoRecipients sceneDataMessage = new SceneDataMessage_NoRecipients
-                {
-                    messageIndex = messageIndex,
-                    payload = buffer
-                };
-                writer.Write(sceneDataMessage);
-
-                using (var msg = Message.Create(BasisTags.SceneGenericMessage_NoRecipients, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
-                }
-            }
-            // Case where there are recipients (payload could be null or not)
-            else
+                messageIndex = messageIndex,
+                payload = buffer
+            };
+            Writer.Put(BasisNetworkTag.SceneGenericMessage_NoRecipients);
+            sceneDataMessage.Serialize(Writer);
+            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.SceneChannel, deliveryMethod);
+        }
+        // Case where there are recipients (payload could be null or not)
+        else
+        {
+            //Debug.Log("Sending with Recipients and buffer");
+            SceneDataMessage sceneDataMessage = new SceneDataMessage
             {
-                //Debug.Log("Sending with Recipients and buffer");
-                SceneDataMessage sceneDataMessage = new SceneDataMessage
-                {
-                    messageIndex = messageIndex,
-                    payload = buffer,
-                    recipients = recipients
-                };
-                writer.Write(sceneDataMessage);
-
-                using (var msg = Message.Create(BasisTags.SceneGenericMessage, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
-                }
-            }
+                messageIndex = messageIndex,
+                payload = buffer,
+                recipients = recipients
+            };
+            Writer.Put(BasisNetworkTag.SceneGenericMessage);
+            sceneDataMessage.Serialize(Writer);
+            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.SceneChannel, deliveryMethod);
+        }
     }
 
     // Handler for server avatar data messages with recipients but no payload
     public static void HandleServerAvatarDataMessage_Recipients_NoPayload(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoPayload);
-        ushort avatarLinkID = serverAvatarDataMessage_NoPayload.avatarDataMessage.playerIdMessage.playerID; // destination
+        ServerAvatarDataMessage_NoRecipients_NoPayload ServerAvatarDataMessage_NoRecipients_NoPayload = new ServerAvatarDataMessage_NoRecipients_NoPayload();
+        ServerAvatarDataMessage_NoRecipients_NoPayload.Deserialize(reader);
+        ushort avatarLinkID = ServerAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
@@ -240,20 +236,20 @@ public static class BasisNetworkGenericMessages
             }
             if (player.Player.Avatar != null)
             {
-                AvatarDataMessage_NoRecipients_NoPayload output = serverAvatarDataMessage_NoPayload.avatarDataMessage;
-                player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage_NoPayload.playerIdMessage.playerID, output.messageIndex, null, null);
+                AvatarDataMessage_NoRecipients_NoPayload output = ServerAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage;
+                player.Player.Avatar.OnNetworkMessageReceived?.Invoke(ServerAvatarDataMessage_NoRecipients_NoPayload.playerIdMessage.playerID, output.messageIndex, null, null);
             }
         }
         else
         {
-            Debug.Log("Missing Player For Message " + serverAvatarDataMessage_NoPayload.playerIdMessage.playerID);
+            Debug.Log("Missing Player For Message " + ServerAvatarDataMessage_NoRecipients_NoPayload.playerIdMessage.playerID);
         }
     }
-
     // Handler for server scene data messages with recipients but no payload
     public static void HandleServerSceneDataMessage_Recipients_NoPayload(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerSceneDataMessage_NoRecipients_NoPayload serverSceneDataMessage_NoPayload);
+        ServerSceneDataMessage_NoRecipients_NoPayload serverSceneDataMessage_NoPayload = new ServerSceneDataMessage_NoRecipients_NoPayload();
+        serverSceneDataMessage_NoPayload.Deserialize(reader);
         ushort playerID = serverSceneDataMessage_NoPayload.playerIdMessage.playerID;
         SceneDataMessage_NoRecipients_NoPayload sceneDataMessage = serverSceneDataMessage_NoPayload.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, null);

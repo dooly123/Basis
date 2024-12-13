@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OkwM6W6g5vk=",
+  "dgSpecHash": "5xT//fQIoYE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj",
+  "projectFilePath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\doola\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.0\\microsoft.net.illink.tasks.9.0.0.nupkg.sha512"
   ],

@@ -1,6 +1,9 @@
+using Basis.Network.Core;
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.Profiler;
+using LiteNetLib;
+using LiteNetLib.Utils;
 using System;
 using UnityEngine;
 
@@ -11,16 +14,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public static float[] FloatArray = new float[90];
         public static void Compress(BasisNetworkTransmitter NetworkSendBase, Animator Anim)
         {
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
-            {
-                CompressAvatarData(NetworkSendBase, Anim);
-                writer.Write(NetworkSendBase.LASM);
-                BasisNetworkProfiler.AvatarUpdatePacket.Sample(writer.Length);
-                using (var msg = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.MovementChannel, DeliveryMethod.Sequenced);
-                }
-            }
+            NetDataWriter Writer = new NetDataWriter();
+            CompressAvatarData(NetworkSendBase, Anim);
+            NetworkSendBase.LASM.Serialize(Writer);
+            BasisNetworkProfiler.AvatarUpdatePacket.Sample(Writer.Length);
+            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
         }
         public static void CompressAvatarData(BasisNetworkTransmitter NetworkSendBase, Animator Anim)
         {

@@ -1,5 +1,4 @@
-﻿
-namespace Basis.Network.Server
+﻿namespace Basis.Network.Core
 {
     public struct BasisMessageReceivedEventArgs
     {

@@ -73,7 +73,7 @@ public static class BasisCompression
     }
 
     // note: assumes normalized quaternions
-    public static uint CompressQuaternion(Quaternion q)
+    public static uint CompressQuaternion(UnityEngine.Quaternion q)
     {
         // note: assuming normalized quaternions is enough. no need to force
         //       normalize here. we already normalize when decompressing.
@@ -121,20 +121,18 @@ public static class BasisCompression
     // => useful to produce valid quaternions even if client sends invalid
     //    data
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    static Quaternion QuaternionNormalizeSafe(Quaternion value)
+    static UnityEngine.Quaternion QuaternionNormalizeSafe(UnityEngine.Quaternion value)
     {
         // The smallest positive normal number representable in a float.
         const float FLT_MIN_NORMAL = 1.175494351e-38F;
 
             UnityEngine.Vector4 v = new UnityEngine.Vector4(value.x, value.y, value.z, value.w);
         float length = UnityEngine.Vector4.Dot(v, v);
-        return length > FLT_MIN_NORMAL
-               ? value.normalized
-               : Quaternion.identity;
+        return length > FLT_MIN_NORMAL? value.normalized: UnityEngine.Quaternion.identity;
     }
 
     // note: gives normalized quaternions
-    public static Quaternion DecompressQuaternion(uint data)
+    public static UnityEngine.Quaternion DecompressQuaternion(uint data)
     {
         // get cScaled which is at 0..10 and ignore the rest
         ushort cScaled = (ushort)(data & TenBitsMax);
@@ -171,7 +169,7 @@ public static class BasisCompression
         // everything stops moving if the quaternion isn't normalized.
         // => NormalizeSafe returns a normalized quaternion even if we pass
         //    in NaN from deserializing invalid values!
-        return QuaternionNormalizeSafe(new Quaternion(value.x, value.y, value.z, value.w));
+        return QuaternionNormalizeSafe(new UnityEngine.Quaternion(value.x, value.y, value.z, value.w));
     }
 }
 }

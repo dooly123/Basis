@@ -7,20 +7,30 @@ public static class BasisNetworkHandleRemoval
 {
     public static void HandleDisconnection(LiteNetLib.NetPacketReader reader)
     {
-        ushort DisconnectValue = reader.ReadUInt16();
-        if (BasisNetworkManagement.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer NetworkedPlayer))
+        if (reader.TryGetUShort(out ushort DisconnectValue))
         {
-            BasisNetworkManagement.RemovePlayer(DisconnectValue);
-
-            if (NetworkedPlayer.Player.IsLocal)
+            if (BasisNetworkManagement.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer NetworkedPlayer))
             {
-                BasisNetworkManagement.OnLocalPlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisLocalPlayer)NetworkedPlayer.Player);
+                BasisNetworkManagement.RemovePlayer(DisconnectValue);
+
+                if (NetworkedPlayer.Player.IsLocal)
+                {
+                    BasisNetworkManagement.OnLocalPlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisLocalPlayer)NetworkedPlayer.Player);
+                }
+                else
+                {
+                    BasisNetworkManagement.OnRemotePlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisRemotePlayer)NetworkedPlayer.Player);
+                }
+                GameObject.Destroy(NetworkedPlayer.gameObject);
             }
             else
             {
-                BasisNetworkManagement.OnRemotePlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisRemotePlayer)NetworkedPlayer.Player);
+                Debug.LogError("Removal Requested but no one was found with id " + DisconnectValue);
             }
-            GameObject.Destroy(NetworkedPlayer.gameObject);
+        }
+        else
+        {
+            Debug.LogError("Tried To Read Disconnect Message Missing Data!");
         }
     }
 }

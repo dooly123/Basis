@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WvCHv53MXtw=",
+  "dgSpecHash": "teIpBKFIBkE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj",
+  "projectFilePath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\doola\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\doola\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",

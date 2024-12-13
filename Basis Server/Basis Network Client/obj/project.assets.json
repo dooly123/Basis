@@ -328,11 +328,11 @@
   "project": {
     "version": "2.10.1",
     "restore": {
-      "projectUniqueName": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Client\\Basis.Network.Client.csproj",
+      "projectUniqueName": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Client\\Basis.Network.Client.csproj",
       "projectName": "Basis.Network.Client",
-      "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Client\\Basis.Network.Client.csproj",
+      "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Client\\Basis.Network.Client.csproj",
       "packagesPath": "C:\\Users\\doola\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Client\\obj\\",
+      "outputPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Client\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [
@@ -356,22 +356,22 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
-              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj"
+            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
+              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj"
             },
-            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj": {
-              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj"
+            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj": {
+              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj"
             }
           }
         },
         "net471": {
           "targetAlias": "net471",
           "projectReferences": {
-            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
-              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj"
+            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
+              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj"
             },
-            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj": {
-              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\BasisServer\\Basis Server Standalone\\Basis Server\\LiteNetLib\\LiteNetLib.csproj"
+            "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj": {
+              "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj"
             }
           }
         }
