@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using LiteNetLib;
 using UnityEngine;
 public class BasisTestNetworkAvatar : MonoBehaviour
 {
@@ -50,11 +51,11 @@ public class BasisTestNetworkAvatar : MonoBehaviour
     public void LoopSend()
     {
         Debug.Log("Sening Loop Data");
-        avatar.NetworkMessageSend(MessageIndexTest, SubmittingData, DarkRift.DeliveryMethod.Unreliable, Recipients);
+        avatar.NetworkMessageSend(MessageIndexTest, SubmittingData, DeliveryMethod.Unreliable, Recipients);
     }
 
     private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients = null)
     {
-      //  Debug.Log("OnNetworkMessageReceived from player " + PlayerID + " with message Index " + MessageIndex + " | " + buffer.Length);
+        //  Debug.Log("OnNetworkMessageReceived from player " + PlayerID + " with message Index " + MessageIndex + " | " + buffer.Length);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Basis.Scripts.BasisSdk;
-using DarkRift;
+using LiteNetLib;
 using UnityEngine;
 
 namespace HVR.Basis.Comms

@@ -1,9 +1,7 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
-using Basis.Scripts.Networking.NetworkedPlayer;
-using DarkRift;
-using System;
+using LiteNetLib;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour

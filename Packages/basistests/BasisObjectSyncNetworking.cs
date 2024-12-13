@@ -3,7 +3,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using BasisSerializer.OdinSerializer;
-using DarkRift;
+using LiteNetLib;
 using UnityEngine;
 public class BasisObjectSyncNetworking : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class BasisObjectSyncNetworking : MonoBehaviour
     private float sendInterval = 0.2f; // Send data every 0.2 seconds
     private float timeSinceLastSend = 0.0f;
     public BasisNetworkedPlayer LocalNetworkPlayer;
-    public DeliveryMethod DeliveryMethod = DarkRift.DeliveryMethod.Unreliable;
+    public DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable;
     public Vector3 previousPosition;
     public Quaternion previousRotation;
     public Vector3 previousScale;
@@ -93,7 +93,7 @@ public class BasisObjectSyncNetworking : MonoBehaviour
                     // Convert to byte array
                     byte[] byteArray = SerializationUtility.SerializeValue(Storeddata, DataFormat.Binary);
                     // Send network message with position, rotation, and scale data
-                    BasisScene.NetworkMessageSend(MessageIndex, byteArray, DarkRift.DeliveryMethod.Unreliable);
+                    BasisScene.NetworkMessageSend(MessageIndex, byteArray, DeliveryMethod);
 
                     // Reset previous values to the current ones
                     previousPosition = Storeddata.Position;

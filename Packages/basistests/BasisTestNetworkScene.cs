@@ -2,6 +2,7 @@ using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using LiteNetLib;
 using UnityEngine;
 
 public class BasisTestNetworkScene : MonoBehaviour
@@ -35,7 +36,7 @@ public class BasisTestNetworkScene : MonoBehaviour
     public void OnLocalPlayerJoined(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
     {
         BasisScene.OnNetworkMessageReceived += OnNetworkMessageReceived;
-        BasisScene.OnNetworkMessageSend(MessageIndex, SendingData, DarkRift.DeliveryMethod.ReliableOrdered, Recipients);
+        BasisScene.OnNetworkMessageSend(MessageIndex, SendingData, DeliveryMethod.ReliableOrdered, Recipients);
     }
     private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer,ushort[] Recipients)
     {

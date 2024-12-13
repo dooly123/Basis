@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Basis.Scripts.BasisSdk;
-using Basis.Scripts.Networking;
-using Basis.Scripts.Networking.NetworkedPlayer;
-using DarkRift;
+using LiteNetLib;
 using UnityEngine;
 
 namespace HVR.Basis.Comms
@@ -20,7 +17,7 @@ namespace HVR.Basis.Comms
         // This makes the value of 0 in range [-1:1] encodable as 127.
         private const float EncodingRange = 254f;
 
-        private const DeliveryMethod DeliveryMethod = DarkRift.DeliveryMethod.Sequenced;
+        public DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable;
         private const float TransmissionDeltaSeconds = 0.1f;
 
         internal BasisAvatar avatar;
