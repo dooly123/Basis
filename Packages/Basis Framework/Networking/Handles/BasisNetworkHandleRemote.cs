@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using static SerializableBasis;
 
 namespace Basis.Scripts.Networking
 {
@@ -14,13 +15,15 @@ namespace Basis.Scripts.Networking
     {
         public static async Task HandleCreateRemotePlayer(LiteNetLib.NetPacketReader reader,Transform Parent)
         {
-            reader.Read(out ServerReadyMessage SRM);
-            await CreateRemotePlayer(SRM, Parent);
+            ServerReadyMessage ServerReadyMessage = new ServerReadyMessage();
+            ServerReadyMessage.Deserialize(reader);
+            await CreateRemotePlayer(ServerReadyMessage, Parent);
         }
         public static async Task HandleCreateAllRemoteClients(LiteNetLib.NetPacketReader reader, Transform Parent)
         {
-            reader.Read(out CreateAllRemoteMessage allRemote);
-            int RemoteLength = allRemote.serverSidePlayer.Length;
+            CreateAllRemoteMessage createAllRemoteMessage = new CreateAllRemoteMessage();
+            createAllRemoteMessage.Deserialize(reader);
+            int RemoteLength = createAllRemoteMessage.serverSidePlayer.Length;
 
             // Create a list to hold the tasks
             List<Task> tasks = new List<Task>();
@@ -28,7 +31,7 @@ namespace Basis.Scripts.Networking
             // Start all tasks without awaiting them
             for (int PlayerIndex = 0; PlayerIndex < RemoteLength; PlayerIndex++)
             {
-                tasks.Add(CreateRemotePlayer(allRemote.serverSidePlayer[PlayerIndex], Parent));
+                tasks.Add(CreateRemotePlayer(createAllRemoteMessage.serverSidePlayer[PlayerIndex], Parent));
             }
 
             // Await all tasks at once

@@ -3,8 +3,8 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
-using DarkRift;
-using DarkRift.Server.Plugins.Commands;
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using static SerializableBasis;
 
 
 namespace Basis.Scripts.Networking.Transmitters

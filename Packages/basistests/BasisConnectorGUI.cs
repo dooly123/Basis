@@ -9,10 +9,10 @@ namespace Basis.Scripts.Tests
         public string IP = "192.168.1.7";
         public ushort Port = 4296;
         public bool IsServer = false;
-        void Start()
+        async void Start()
         {
             //  NetworkConnector.Host(25565);
-            NetworkConnector.Connect(Port, IP, IsServer);
+            await NetworkConnector.Connect(Port, IP, IsServer);
         }
     }
 }

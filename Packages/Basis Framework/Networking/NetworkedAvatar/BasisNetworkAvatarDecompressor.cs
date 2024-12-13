@@ -2,7 +2,7 @@ using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
 using System.Collections.Concurrent;
 using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
-
+using static SerializableBasis;
 using Vector3 = UnityEngine.Vector3;
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {

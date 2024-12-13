@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using LiteNetLib;
 using static SerializableBasis;
 
 public static class BasisNetworkHandleAvatar
@@ -14,7 +15,7 @@ public static class BasisNetworkHandleAvatar
     private static CancellationTokenSource avatarUpdateCancellationTokenSource = new CancellationTokenSource();
     private const int TimeoutMilliseconds = 100; // 100ms limit per execution
     public static ConcurrentQueue<ServerSideSyncPlayerMessage> Message = new ConcurrentQueue<ServerSideSyncPlayerMessage>();
-    public static async Task HandleAvatarUpdate(MessageReceivedEventArgs e)
+    public static async Task HandleAvatarUpdate(NetPacketReader Reader)
     {
         // Cancel any ongoing task
         avatarUpdateCancellationTokenSource.Cancel();
@@ -27,36 +28,30 @@ public static class BasisNetworkHandleAvatar
 
             try
             {
-                using (Message message = e.GetMessage())
+                if (Message.TryDequeue(out ServerSideSyncPlayerMessage SSM) == false)
                 {
-                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
+                    SSM = new ServerSideSyncPlayerMessage();
+                }
+
+                SSM.Deserialize(Reader);
+                if (BasisNetworkManagement.RemotePlayers.TryGetValue(SSM.playerIdMessage.playerID, out BasisNetworkReceiver player))
+                {
+                    if (cancellationToken.IsCancellationRequested)
                     {
-                        if (Message.TryDequeue(out ServerSideSyncPlayerMessage SSM) == false)
-                        {
-                            SSM = new ServerSideSyncPlayerMessage();
-                        }
-
-                        SSM.Deserialize(reader.deserializeEventSingleton);
-                        if (BasisNetworkManagement.RemotePlayers.TryGetValue(SSM.playerIdMessage.playerID, out BasisNetworkReceiver player))
-                        {
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                Debug.Log("HandleAvatarUpdate operation canceled.");
-                                return; // Exit early if a cancellation is requested
-                            }
-
-                            player.ReceiveNetworkAvatarData(SSM);
-                        }
-                        else
-                        {
-                            Debug.Log($"Missing Player For Avatar Update {SSM.playerIdMessage.playerID}");
-                        }
-                        Message.Enqueue(SSM);
-                        while (Message.Count > 250)
-                        {
-                            Message.TryDequeue(out ServerSideSyncPlayerMessage seg);
-                        }
+                        Debug.Log("HandleAvatarUpdate operation canceled.");
+                        return; // Exit early if a cancellation is requested
                     }
+
+                    player.ReceiveNetworkAvatarData(SSM);
+                }
+                else
+                {
+                    Debug.Log($"Missing Player For Avatar Update {SSM.playerIdMessage.playerID}");
+                }
+                Message.Enqueue(SSM);
+                while (Message.Count > 250)
+                {
+                    Message.TryDequeue(out ServerSideSyncPlayerMessage seg);
                 }
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))
@@ -75,7 +70,8 @@ public static class BasisNetworkHandleAvatar
     }
     public static void HandleAvatarChangeMessage(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerAvatarChangeMessage ServerAvatarChangeMessage);
+        ServerAvatarChangeMessage ServerAvatarChangeMessage = new ServerAvatarChangeMessage();
+        ServerAvatarChangeMessage.Deserialize(reader);
         ushort PlayerID = ServerAvatarChangeMessage.uShortPlayerId.playerID;
         if (BasisNetworkManagement.Players.TryGetValue(PlayerID, out BasisNetworkedPlayer Player))
         {

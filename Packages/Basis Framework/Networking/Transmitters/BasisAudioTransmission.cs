@@ -1,14 +1,16 @@
 ﻿using System;
 using UnityEngine;
 using UnityOpus;
-using DarkRift;
 
-using DarkRift.Server.Plugins.Commands;
+
+using LiteNetLib;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management;
 using Basis.Scripts.Profiler;
+using static SerializableBasis;
+using LiteNetLib.Utils;
 
 namespace Basis.Scripts.Networking.Transmitters
 {
@@ -107,11 +109,11 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (Base.HasReasonToSendAudio)
             {
-                if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Length != encodedLength)
+                if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Count != encodedLength)
                 {
                     AudioSegmentData.buffer = new byte[encodedLength];
                 }
-                Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer, 0, encodedLength);
+                Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer.Array, 0, encodedLength);
 
                 using (DarkRiftWriter writer = DarkRiftWriter.Create(encodedLength))
                 {
@@ -127,14 +129,12 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         private void SendSilenceOverNetwork()
         {
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
+            NetDataWriter writer = new NetDataWriter();
+            audioSilentSegmentData.Serialize(writer);
+            BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
+            using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
             {
-                writer.Write(audioSilentSegmentData);
-                BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
-                using (Message msg = Message.Create(BasisTags.AudioSegmentTag, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
-                }
+                BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.VoiceChannel, DeliveryMethod.Sequenced);
             }
             Local.AudioReceived?.Invoke(false);
         }

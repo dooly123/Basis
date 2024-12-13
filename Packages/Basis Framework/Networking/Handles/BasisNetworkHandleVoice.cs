@@ -13,7 +13,7 @@ public static class BasisNetworkHandleVoice
     private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private const int TimeoutMilliseconds = 1000;
     public static ConcurrentQueue<AudioSegmentMessage> Message = new ConcurrentQueue<AudioSegmentMessage>();
-    public static async Task HandleAudioUpdate(MessageReceivedEventArgs e)
+    public static async Task HandleAudioUpdate(LiteNetLib.NetPacketReader Reader)
     {
         // Cancel any ongoing task
         cancellationTokenSource.Cancel();
@@ -26,42 +26,36 @@ public static class BasisNetworkHandleVoice
 
             try
             {
-                using (Message message = e.GetMessage())
+                if (Message.TryDequeue(out AudioSegmentMessage audioUpdate) == false)
                 {
-                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
+                    audioUpdate = new AudioSegmentMessage();
+                }
+                audioUpdate.Deserialize(Reader);
+                if (BasisNetworkManagement.RemotePlayers.TryGetValue(audioUpdate.playerIdMessage.playerID, out BasisNetworkReceiver player))
+                {
+                    if (cancellationToken.IsCancellationRequested)
                     {
-                        if (Message.TryDequeue(out AudioSegmentMessage audioUpdate) == false)
-                        {
-                            audioUpdate = new AudioSegmentMessage();
-                        }
-                        audioUpdate.Deserialize(reader.deserializeEventSingleton);
-                        if (BasisNetworkManagement.RemotePlayers.TryGetValue(audioUpdate.playerIdMessage.playerID, out BasisNetworkReceiver player))
-                        {
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                Debug.Log("Operation canceled.");
-                                return; // Exit early if a cancellation is requested
-                            }
-
-                            if (audioUpdate.wasSilentData)
-                            {
-                                player.ReceiveSilentNetworkAudio(audioUpdate.silentData);
-                            }
-                            else
-                            {
-                                player.ReceiveNetworkAudio(audioUpdate);
-                            }
-                        }
-                        else
-                        {
-                            Debug.Log($"Missing Player For Message {audioUpdate.playerIdMessage.playerID}");
-                        }
-                        Message.Enqueue(audioUpdate);
-                        while(Message.Count > 250)
-                        {
-                            Message.TryDequeue(out AudioSegmentMessage seg);
-                        }
+                        Debug.Log("Operation canceled.");
+                        return; // Exit early if a cancellation is requested
                     }
+
+                    if (audioUpdate.wasSilentData)
+                    {
+                        player.ReceiveSilentNetworkAudio(audioUpdate.silentData);
+                    }
+                    else
+                    {
+                        player.ReceiveNetworkAudio(audioUpdate);
+                    }
+                }
+                else
+                {
+                    Debug.Log($"Missing Player For Message {audioUpdate.playerIdMessage.playerID}");
+                }
+                Message.Enqueue(audioUpdate);
+                while (Message.Count > 250)
+                {
+                    Message.TryDequeue(out AudioSegmentMessage seg);
                 }
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))

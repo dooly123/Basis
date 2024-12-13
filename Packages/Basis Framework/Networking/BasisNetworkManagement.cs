@@ -1,15 +1,20 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.Factorys;
+using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
 using JetBrains.Annotations;
 using LiteNetLib;
+using LiteNetLib.Utils;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using static BasisNetworkGenericMessages;
 using static SerializableBasis;
@@ -77,6 +82,7 @@ namespace Basis.Scripts.Networking
         public bool ForceConnect = false;
         public bool TryToReconnectAutomatically = true;
         public bool HasInitalizedClient = false;
+        public bool ISServer = false;
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>
@@ -86,8 +92,6 @@ namespace Basis.Scripts.Networking
         /// this occurs after a remote user has been authenticated and joined & spawned
         /// </summary>
         public static Action<BasisNetworkedPlayer, BasisRemotePlayer> OnRemotePlayerJoined;
-
-
         /// <summary>
         /// this occurs after the localplayer has removed
         /// </summary>
@@ -100,7 +104,7 @@ namespace Basis.Scripts.Networking
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
-        public void OnEnable()
+        public async void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
             {
@@ -117,7 +121,7 @@ namespace Basis.Scripts.Networking
             OnEnableInstanceCreate?.Invoke();
             if (ForceConnect)
             {
-                Connect(Port, Ip, ISServer);
+              await  Connect(Port, Ip, ISServer);
             }
         }
         public void OnDestroy()
@@ -155,11 +159,11 @@ namespace Basis.Scripts.Networking
         {
             BasisScene.OnNetworkMessageSend += BasisNetworkGenericMessages.OnNetworkMessageSend;
         }
-        public void Connect()
+        public async void Connect()
         {
-            Connect(Port, Ip, ISServer);
+          await  Connect(Port, Ip, ISServer);
         }
-        public void Connect(ushort Port, string IpString, bool IsHostMode)
+        public async Task Connect(ushort Port, string IpString, bool IsHostMode)
         {
             Debug.Log("Connecting with Port " + Port + " IpString " + IpString + " Is Server = " + IsHostMode);
             if (IsHostMode)
@@ -169,8 +173,7 @@ namespace Basis.Scripts.Networking
             HasAuthenticated = false;
             if (HasInitalizedClient == false)
             {
-                Client.Initialize();
-                Client.Disconnected += Disconnected;
+                BasisNetworkClient.listener.PeerDisconnectedEvent += Disconnect;
                 HasInitalizedClient = true;
             }
             if (HasAuthenticated == false)
@@ -180,17 +183,58 @@ namespace Basis.Scripts.Networking
             }
             string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
             Debug.Log($"DNS call: {IpString} resolves to {result}");
-            Client.ConnectInBackground(BasisNetworkIPResolve.IpOutput(result.ToString()), Port, Callback);
+
+            BasisNetworkedPlayer NetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+            BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
+            byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
+            Transmitters.BasisNetworkTransmitter Transmitter = (Transmitters.BasisNetworkTransmitter)NetworkedPlayer.NetworkSend;
+            BasisNetworkAvatarCompressor.CompressAvatarData(Transmitter, BasisLocalPlayer.Avatar.Animator);
+
+            BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = Transmitter.LASM;
+            BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
+            {
+                byteArray = Information,
+                loadMode = BasisLocalPlayer.AvatarLoadMode,
+            };
+            BasisNetworkManagement.Instance.readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
+            {
+                playerUUID = BasisLocalPlayer.UUID,
+                playerDisplayName = BasisLocalPlayer.DisplayName
+            };
+            NetDataWriter netDataWriter = new NetDataWriter();
+            BasisNetworkManagement.Instance.readyMessage.Serialize(netDataWriter);
+            BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
+            BasisNetworkClient.StartClient(result.ToString(), Port, netDataWriter.Data);
         }
-        public bool ISServer = false;
-        private void Disconnected(object sender, DisconnectedEventArgs e)
+
+        private void PeerConnectedEvent(NetPeer peer)
         {
-            Debug.LogError("Disconnected from Server " + e.Error);
+            throw new NotImplementedException();
+        }
+
+        public static void CreatePeer(BasisNetworkedPlayer NetworkedPlayer,ushort playerID)
+        {
+            NetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, playerID);
+            if (BasisNetworkManagement.AddPlayer(NetworkedPlayer))
+            {
+
+                Debug.Log("added local Player " + playerID);
+            }
+            else
+            {
+                Debug.LogError("Cant add " + playerID);
+            }
+            BasisNetworkManagement.OnLocalPlayerJoined?.Invoke(NetworkedPlayer, BasisLocalPlayer.Instance);
+            BasisNetworkManagement.HasSentOnLocalPlayerJoin = true;
+        }
+        private async void Disconnect(NetPeer peer, DisconnectInfo disconnectInfo)
+        {
+            Debug.LogError("Disconnected from Server " + disconnectInfo.Reason);
             Disconnect();
             Players.Clear();
             if (TryToReconnectAutomatically)
             {
-                Connect(Port, Ip, ISServer);
+              await  Connect(Port, Ip, ISServer);
             }
             else
             {
@@ -202,10 +246,10 @@ namespace Basis.Scripts.Networking
         {
             if (HasAuthenticated)
             {
-                Client.Client.MessageReceived -= MainThreadMessageReceived;
+                BasisNetworkClient.listener.NetworkReceiveEvent -= MainThreadMessageReceived;
                 HasAuthenticated = false;
             }
-            Client.Close();
+            BasisNetworkClient.Disconnect();
         }
         public void Callback([CanBeNull] Exception e)
         {
@@ -217,7 +261,7 @@ namespace Basis.Scripts.Networking
                 Debug.LogError("Failed to connect: " + e.Message);
             }
         }
-        private void MainThreadMessageReceived(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
+        private async void MainThreadMessageReceived(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
         {
             switch (e.Tag) // Use e.Tag instead of message.Tag
             {
@@ -228,7 +272,7 @@ namespace Basis.Scripts.Networking
                     await BasisNetworkHandleVoice.HandleAudioUpdate(e);
                     break;
 
-                case BasisNetworkTag.DisconnectTag:
+                case BasisNetworkTag.Disconnection:
                     BasisNetworkHandleRemoval.HandleDisconnection(reader);
                     break;
 
@@ -236,60 +280,43 @@ namespace Basis.Scripts.Networking
                     BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
                     break;
 
-                case BasisNetworkTag.CreateRemotePlayerTag:
+                case BasisNetworkTag.CreateRemotePlayer:
                     await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
                     break;
 
-                case BasisNetworkTag.CreateRemotePlayersTag:
+                case BasisNetworkTag.CreateRemotePlayers:
                     await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
                     break;
-
                 case BasisNetworkTag.SceneGenericMessage:
                     BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
                     break;
-
                 case BasisNetworkTag.SceneGenericMessage_NoRecipients:
                     BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
                     break;
-
                 case BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload:
                     BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
                     break;
-
                 case BasisNetworkTag.AvatarGenericMessage:
                     BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
                     break;
-
                 case BasisNetworkTag.AvatarGenericMessage_NoRecipients:
                     BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
                     break;
-
                 case BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload:
                     BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
                     break;
-
                 case BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload:
                     BasisNetworkGenericMessages.HandleServerAvatarDataMessage_Recipients_NoPayload(reader);
                     break;
-
                 case BasisNetworkTag.SceneGenericMessage_Recipients_NoPayload:
                     BasisNetworkGenericMessages.HandleServerSceneDataMessage_Recipients_NoPayload(reader);
                     break;
-
                 case BasisNetworkTag.OwnershipResponse:
-                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
-                    }
+                    BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
                     break;
-
                 case BasisNetworkTag.OwnershipTransfer:
-                    using (LiteNetLib.NetPacketReader reader = message.GetReader())
-                    {
-                        BasisNetworkGenericMessages.HandleOwnershipTransfer(reader);
-                    }
+                    BasisNetworkGenericMessages.HandleOwnershipTransfer(reader);
                     break;
-
                 default:
                     Debug.Log("Unknown message tag: " + e.Tag);
                     break;

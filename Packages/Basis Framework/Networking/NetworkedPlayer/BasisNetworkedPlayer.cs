@@ -5,6 +5,7 @@ using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEngine;
+using static SerializableBasis;
 
 
 namespace Basis.Scripts.Networking.NetworkedPlayer
@@ -39,14 +40,6 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
             }
         }
         public void ReInitialize(BasisPlayer player, ushort PlayerID)
-        {
-            LocalAvatarSyncMessage Stub = new LocalAvatarSyncMessage
-            {
-                array = new byte[212]
-            };
-            ReInitialize(player, PlayerID, Stub);
-        }
-        public void ReInitialize(BasisPlayer player, ushort PlayerID, LocalAvatarSyncMessage sspm)
         {
             if (Player != null && Player != player)
             {
@@ -131,10 +124,6 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
             {
                 BasisNetworkReceiver BasisNetworkReceiver = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
                 NetworkSend = BasisNetworkReceiver;
-                // if (sspm.array != null && sspm.array.Length != 0)
-                //  {
-                //  BasisNetworkReceiver.ReceiveNetworkAvatarData = sspm;
-                //  }
             }
             NetworkSend.NetworkNetID.playerID = PlayerID;
             NetworkSend.Initialize(this);

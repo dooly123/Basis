@@ -1,8 +1,10 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using LiteNetLib;
+using LiteNetLib.Utils;
 using UnityEngine;
 using static BasisNetworkPrimitiveCompression;
+using static SerializableBasis;
 
 namespace Basis.Scripts.Networking.NetworkedAvatar
 {
@@ -81,73 +83,67 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             if (buffer != null && buffer.Length == 0) buffer = null;
 
             ushort NetId = NetworkedPlayer.NetId;
-
-            using (DarkRiftWriter writer = DarkRiftWriter.Create())
+            NetDataWriter netDataWriter = new NetDataWriter();
+            // Handle cases based on presence of Recipients and buffer
+            if (Recipients == null)
             {
-                // Handle cases based on presence of Recipients and buffer
-                if (Recipients == null)
+                if (buffer == null)
                 {
-                    if (buffer == null)
+                    AvatarDataMessage_NoRecipients_NoPayload AvatarDataMessage_NoRecipients_NoPayload = new AvatarDataMessage_NoRecipients_NoPayload
                     {
-                        AvatarDataMessage_NoRecipients_NoPayload AvatarDataMessage_NoRecipients_NoPayload = new AvatarDataMessage_NoRecipients_NoPayload
-                        {
-                             playerIdMessage = new PlayerIdMessage() { playerID = NetId },
-                            messageIndex = MessageIndex
-                        };
-                        writer.Write(AvatarDataMessage_NoRecipients_NoPayload);
-                        // No recipients and no payload
-                        WriteAndSendMessage(BasisTags.AvatarGenericMessage_NoRecipients_NoPayload,writer, DeliveryMethod);
-                    }
-                    else
-                    {
-                        AvatarDataMessage_NoRecipients AvatarDataMessage_NoRecipients = new AvatarDataMessage_NoRecipients
-                        {
-                             playerIdMessage = new PlayerIdMessage() { playerID = NetId },
-                            messageIndex = MessageIndex,
-                            payload = buffer
-                        };
-
-                        writer.Write(AvatarDataMessage_NoRecipients);
-                        // No recipients but has payload
-                        WriteAndSendMessage(BasisTags.AvatarGenericMessage_NoRecipients,writer, DeliveryMethod);
-                    }
+                        playerIdMessage = new PlayerIdMessage() { playerID = NetId },
+                        messageIndex = MessageIndex
+                    };
+                    AvatarDataMessage_NoRecipients_NoPayload.Serialize(netDataWriter);
+                    // No recipients and no payload
+                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload, netDataWriter, DeliveryMethod);
                 }
                 else
                 {
-                    if (buffer == null)
+                    AvatarDataMessage_NoRecipients AvatarDataMessage_NoRecipients = new AvatarDataMessage_NoRecipients
                     {
-                        AvatarDataMessage_Recipients_NoPayload AvatarDataMessage = new AvatarDataMessage_Recipients_NoPayload();
-                        AvatarDataMessage.playerIdMessage = new PlayerIdMessage() { playerID = NetId };
-                        AvatarDataMessage.messageIndex = MessageIndex;
-                        AvatarDataMessage.recipients = Recipients;
-                        // Recipients present, payload may or may not be present
-                        writer.Write(AvatarDataMessage);
-                        WriteAndSendMessage(BasisTags.AvatarGenericMessage_Recipients_NoPayload, writer, DeliveryMethod);
-                    }
-                    else
+                        playerIdMessage = new PlayerIdMessage() { playerID = NetId },
+                        messageIndex = MessageIndex,
+                        payload = buffer
+                    };
+
+                    AvatarDataMessage_NoRecipients.Serialize(netDataWriter);
+                    // No recipients but has payload
+                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage_NoRecipients, netDataWriter, DeliveryMethod);
+                }
+            }
+            else
+            {
+                if (buffer == null)
+                {
+                    AvatarDataMessage_Recipients_NoPayload AvatarDataMessage = new AvatarDataMessage_Recipients_NoPayload();
+                    AvatarDataMessage.playerIdMessage = new PlayerIdMessage() { playerID = NetId };
+                    AvatarDataMessage.messageIndex = MessageIndex;
+                    AvatarDataMessage.recipients = Recipients;
+                    // Recipients present, payload may or may not be present
+                    AvatarDataMessage.Serialize(netDataWriter);
+                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload, netDataWriter, DeliveryMethod);
+                }
+                else
+                {
+                    AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
                     {
-                        AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
-                        {
-                             playerIdMessage = new PlayerIdMessage() { playerID = NetId },
-                            messageIndex = MessageIndex,
-                            payload = buffer,
-                            recipients = Recipients
-                        };
-                        // Recipients present, payload may or may not be present
-                        writer.Write(AvatarDataMessage);
-                        WriteAndSendMessage(BasisTags.AvatarGenericMessage, writer, DeliveryMethod);
-                    }
+                        playerIdMessage = new PlayerIdMessage() { playerID = NetId },
+                        messageIndex = MessageIndex,
+                        payload = buffer,
+                        recipients = Recipients
+                    };
+                    AvatarDataMessage.Serialize(netDataWriter);
+                    // Recipients present, payload may or may not be present
+                    WriteAndSendMessage(BasisNetworkTag.AvatarGenericMessage, netDataWriter, DeliveryMethod);
                 }
             }
         }
 
         // Helper method to avoid code duplication
-        private void WriteAndSendMessage(ushort tag, DarkRiftWriter writer, DeliveryMethod deliveryMethod)
+        private void WriteAndSendMessage(ushort tag, NetDataWriter writer, DeliveryMethod deliveryMethod)
         {
-            using (var msg = Message.Create(tag, writer))
-            {
-                BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.AvatarChannel, deliveryMethod);
-            }
+            BasisNetworkManagement.Instance..SendMessage(msg, BasisNetworking.AvatarChannel, deliveryMethod);
         }
 
     }
