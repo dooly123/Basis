@@ -12,7 +12,7 @@ namespace Basis.Scripts.Tests
         async void Start()
         {
             //  NetworkConnector.Host(25565);
-            await NetworkConnector.Connect(Port, IP, IsServer);
+            await NetworkConnector.Connect(Port, IP);
         }
     }
 }

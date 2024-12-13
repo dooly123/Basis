@@ -7,7 +7,6 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
 using DarkRift.Basis_Common.Serializable;
-using JetBrains.Annotations;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System;
@@ -86,7 +85,6 @@ namespace Basis.Scripts.Networking
         }
         public bool ForceConnect = false;
         public bool TryToReconnectAutomatically = true;
-        public bool ISServer = false;
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>
@@ -113,7 +111,8 @@ namespace Basis.Scripts.Networking
             if (BasisHelpers.CheckInstance(Instance))
             {
                 Instance = this;
-            }            // Initialize AvatarBuffer
+            }
+            // Initialize AvatarBuffer
             BasisAvatarBufferPool.AvatarBufferPool(30);
             OwnershipPairing.Clear();
             if (BasisScene.Instance != null)
@@ -125,9 +124,25 @@ namespace Basis.Scripts.Networking
             OnEnableInstanceCreate?.Invoke();
             if (ForceConnect)
             {
-              await  Connect(Port, Ip, ISServer);
+              await  Connect(Port, Ip);
             }
         }
+
+        private void LogErrorOutput(string obj)
+        {
+           Debug.LogError(obj);
+        }
+
+        private void LogWarningOutput(string obj)
+        {
+            Debug.LogWarning(obj);
+        }
+
+        private void LogOutput(string obj)
+        {
+            Debug.Log(obj);
+        }
+
         public void OnDestroy()
         {
             Players.Clear();
@@ -165,47 +180,47 @@ namespace Basis.Scripts.Networking
         }
         public async void Connect()
         {
-          await  Connect(Port, Ip, ISServer);
+          await  Connect(Port, Ip);
         }
-        public async Task Connect(ushort Port, string IpString, bool IsHostMode)
+        public async Task Connect(ushort Port, string IpString)
         {
-            Debug.Log("Connecting with Port " + Port + " IpString " + IpString + " Is Server = " + IsHostMode);
-            if (IsHostMode)
+            BNL.LogOutput += LogOutput;
+            BNL.LogWarningOutput += LogWarningOutput;
+            BNL.LogErrorOutput += LogErrorOutput;
+            Debug.Log("Connecting with Port " + Port + " IpString " + IpString);
+            // string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
+            // Debug.Log($"DNS call: {IpString} resolves to {result}");
+         //    LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+
+             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
+           //  LocalNetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, 0);//we initalize this again later with the real id
+             byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
+            //  LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
+            // BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
+            readyMessage = new ReadyMessage
             {
-                BasisNetworkServer.StartServer();
-            }
-           // string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
-           // Debug.Log($"DNS call: {IpString} resolves to {result}");
-
-            LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
-
-            BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
-            LocalNetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, 0);//we initalize this again later with the real id
-            byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-            LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
-            BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
-
-            readyMessage.localAvatarSyncMessage = LocalTransmitter.LASM;
-            readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
-            {
-                byteArray = Information,
-                loadMode = BasisLocalPlayer.AvatarLoadMode,
+                localAvatarSyncMessage = new LocalAvatarSyncMessage
+                {
+                    array = new byte[95]
+                },
+                clientAvatarChangeMessage = new ClientAvatarChangeMessage
+                {
+                    byteArray = Information,
+                    loadMode = BasisLocalPlayer.AvatarLoadMode,
+                },
+                playerMetaDataMessage = new PlayerMetaDataMessage
+                {
+                    playerUUID = BasisLocalPlayer.UUID,
+                    playerDisplayName = BasisLocalPlayer.DisplayName
+                }
             };
-            readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
-            {
-                playerUUID = BasisLocalPlayer.UUID,
-                playerDisplayName = BasisLocalPlayer.DisplayName
-            };
-            NetDataWriter netDataWriter = new NetDataWriter();
-            readyMessage.Serialize(netDataWriter);
             Debug.Log("Network  Starting Client");
-            LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, netDataWriter.Data);
-            Debug.Log("Network Client Started");
-            BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
-            BasisNetworkClient.listener.PeerDisconnectedEvent += Disconnect;
-            BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
+             LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);
+             Debug.Log("Network Client Started");
+             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
+             BasisNetworkClient.listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
+             BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
         }
-
         private void PeerConnectedEvent(NetPeer peer)
         {
             LocalPlayerID = (ushort)peer.Id;
@@ -228,14 +243,13 @@ namespace Basis.Scripts.Networking
             BasisNetworkManagement.OnLocalPlayerJoined?.Invoke(NetworkedPlayer, BasisLocalPlayer.Instance);
             BasisNetworkManagement.HasSentOnLocalPlayerJoin = true;
         }
-        private async void Disconnect(NetPeer peer, DisconnectInfo disconnectInfo)
+        private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
             Debug.LogError("Disconnected from Server " + disconnectInfo.Reason);
-            Disconnect();
             Players.Clear();
             if (TryToReconnectAutomatically)
             {
-              await  Connect(Port, Ip, ISServer);
+              await  Connect(Port, Ip);
             }
             else
             {

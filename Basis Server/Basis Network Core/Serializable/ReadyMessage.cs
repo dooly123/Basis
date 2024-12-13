@@ -1,31 +1,30 @@
-﻿using DarkRift;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     public struct ReadyMessage
     {
-        public LocalAvatarSyncMessage localAvatarSyncMessage;
-        public ClientAvatarChangeMessage clientAvatarChangeMessage;
         public PlayerMetaDataMessage playerMetaDataMessage;
+        public ClientAvatarChangeMessage clientAvatarChangeMessage;
+        public LocalAvatarSyncMessage localAvatarSyncMessage;
         public void Deserialize(NetDataReader Writer)
         {
-            localAvatarSyncMessage.Deserialize(Writer);
-            clientAvatarChangeMessage.Deserialize(Writer);
             playerMetaDataMessage.Deserialize(Writer);
+            clientAvatarChangeMessage.Deserialize(Writer);
+            localAvatarSyncMessage.Deserialize(Writer);
         }
 
         public void Dispose()
         {
-            localAvatarSyncMessage.Dispose();
-            clientAvatarChangeMessage.Dispose();
             playerMetaDataMessage.Dispose();
+            clientAvatarChangeMessage.Dispose();
+            localAvatarSyncMessage.Dispose();
         }
 
         public void Serialize(NetDataWriter Writer)
         {
-            localAvatarSyncMessage.Serialize(Writer);
-            clientAvatarChangeMessage.Serialize(Writer);
             playerMetaDataMessage.Serialize(Writer);
+            clientAvatarChangeMessage.Serialize(Writer);
+            localAvatarSyncMessage.Serialize(Writer);
         }
     }
     public struct ServerReadyMessage

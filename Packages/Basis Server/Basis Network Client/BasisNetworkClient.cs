@@ -4,6 +4,7 @@ using LiteNetLib.Utils;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static SerializableBasis;
 
 public static class BasisNetworkClient
 {
@@ -17,12 +18,9 @@ public static class BasisNetworkClient
     /// </summary>
     /// <param name="IP"></param>
     /// <param name="port"></param>
-    /// <param name="InitalData"></param>
-    public static NetPeer StartClient(string IP, int port, byte[] InitalData)
+    /// <param name="ReadyMessage"></param>
+    public static NetPeer StartClient(string IP, int port, ReadyMessage ReadyMessage)
     {
-        BNL.LogErrorOutput += LogError;
-        BNL.LogWarningOutput += LogWarning;
-        BNL.LogOutput += Log;
         listener = new EventBasedNetListener();
         client = new NetManager(listener)
         {
@@ -39,7 +37,8 @@ public static class BasisNetworkClient
         NetDataWriter Writer = new NetDataWriter();
         //this is the only time we dont put key!
         Writer.Put(BasisNetworkVersion.ServerVersion);
-        Writer.Put(InitalData);
+        ReadyMessage.Serialize(Writer);
+        BNL.LogError("Length! " + Writer.Length);
         peer = client.Connect(IP, port, Writer);
         listener.PeerConnectedEvent += (peer) =>
         {
@@ -59,18 +58,6 @@ public static class BasisNetworkClient
         };
         StartWorker();
         return peer;
-    }
-    public static void Log(string Message)
-    {
-       UnityEngine.Debug.Log(Message);
-    }
-    public static void LogWarning(string Message)
-    {
-        UnityEngine.Debug.LogWarning(Message);
-    }
-    public static void LogError(string Message)
-    {
-        UnityEngine.Debug.LogError(Message);
     }
     public static void Disconnect()
     {
@@ -108,7 +95,7 @@ public static class BasisNetworkClient
         {
             while (!token.IsCancellationRequested)
             {
-                BNL.Log("Running");
+               //works BNL.Log("Running");
                 client?.PollEvents();
                 Task.Delay(BasisNetworkCommons.NetworkIntervalPoll, token).Wait(token); // Waits but respects cancellation
             }

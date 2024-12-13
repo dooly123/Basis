@@ -1,15 +1,15 @@
 ﻿
 using DarkRift;
 using LiteNetLib.Utils;
+using System;
 public static partial class SerializableBasis
 {
     public struct LocalAvatarSyncMessage
     {
         public byte[] array;
-        public int size;
         public void Deserialize(NetDataReader Writer)
         {
-            Writer.GetBytes(array,size);
+            array = Writer.GetRemainingBytes();
         }
 
         public void Dispose()

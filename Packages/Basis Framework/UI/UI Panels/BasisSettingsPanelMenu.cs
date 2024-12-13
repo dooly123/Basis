@@ -51,7 +51,7 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             if (IP != null)
             {
-             await   NetworkConnector.Connect(SelectedPort, IP.text, IsServer);
+             await   NetworkConnector.Connect(SelectedPort, IP.text);
             }
         }
 

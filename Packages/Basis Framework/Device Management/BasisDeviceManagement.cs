@@ -9,6 +9,7 @@ using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -80,7 +81,8 @@ namespace Basis.Scripts.Device_Management
             {
                 Instance = this;
             }
-           await Initialize();
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            await Initialize();
         }
         void OnDestroy()
         {

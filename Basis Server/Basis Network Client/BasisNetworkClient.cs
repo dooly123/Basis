@@ -4,6 +4,7 @@ using LiteNetLib.Utils;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static SerializableBasis;
 
 public static class BasisNetworkClient
 {
@@ -17,8 +18,8 @@ public static class BasisNetworkClient
     /// </summary>
     /// <param name="IP"></param>
     /// <param name="port"></param>
-    /// <param name="InitalData"></param>
-    public static NetPeer StartClient(string IP, int port, byte[] InitalData)
+    /// <param name="ReadyMessage"></param>
+    public static NetPeer StartClient(string IP, int port, ReadyMessage ReadyMessage)
     {
         listener = new EventBasedNetListener();
         client = new NetManager(listener)
@@ -36,7 +37,8 @@ public static class BasisNetworkClient
         NetDataWriter Writer = new NetDataWriter();
         //this is the only time we dont put key!
         Writer.Put(BasisNetworkVersion.ServerVersion);
-        Writer.Put(InitalData);
+        ReadyMessage.Serialize(Writer);
+        BNL.LogError("Length! " + Writer.Length);
         peer = client.Connect(IP, port, Writer);
         listener.PeerConnectedEvent += (peer) =>
         {

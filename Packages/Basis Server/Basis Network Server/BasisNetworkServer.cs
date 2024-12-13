@@ -35,9 +35,11 @@ public static class BasisNetworkServer
             ChannelsCount = 7,
         };
         server.Start(SetPort);
-        BNL.Log("Server Wiring up");
+        BNL.Log("Server Wiring up " + SetPort);
+ 
         listener.ConnectionRequestEvent += request =>
         {
+            BNL.Log("Processing Connection Request");
             int ServerCount = server.ConnectedPeersCount;
             if (ServerCount < PeerLimit)
             {
@@ -50,6 +52,7 @@ public static class BasisNetworkServer
                         NetPeer ReadyToRoll = request.Accept();
                         if (Peers.TryAdd((ushort)ReadyToRoll.Id, ReadyToRoll))
                         {
+                            BNL.Log("Length is " + request.Data.AvailableBytes);
                             ReadyMessage ReadyMessage = new ReadyMessage();
                             ReadyMessage.Deserialize(request.Data);
                             BasisSavedState.AddLastData(ReadyToRoll, ReadyMessage);
