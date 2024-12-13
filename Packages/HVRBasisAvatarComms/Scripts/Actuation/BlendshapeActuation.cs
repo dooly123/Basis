@@ -23,15 +23,30 @@ namespace HVR.Basis.Comms
         private Dictionary<string, int> _addressBase = new Dictionary<string, int>();
         private ComputedActuator[] _computedActuators;
         private ComputedActuator[][] _addressBaseIndexToActuators;
-        private FeatureInterpolator featureInterpolator;
+        
+#region NetworkingFields
         private int _guidIndex;
-        private bool _isNetworkable;
+        // Can be null due to:
+        // - Application with no network, or
+        // - Network late initialization.
+        // Nullability is needed for local tests without initialization scene.
+        // - Becomes non-null after HVRAvatarComms.OnAvatarNetworkReady is successfully invoked
+        private FeatureInterpolator _featureInterpolator;
+        private bool _avatarReady;
+        private bool _networkReady;
+        private bool _dualInitialized;
+
+        #endregion
 
         private void Awake()
         {
             if (avatar == null) avatar = CommsUtil.GetAvatar(this);
             if (featureNetworking == null) featureNetworking = CommsUtil.FeatureNetworkingFromAvatar(avatar);
             if (acquisition == null) acquisition = AcquisitionService.SceneInstance;
+            
+            renderers = CommsUtil.SlowSanitizeEndUserProvidedObjectArray(renderers);
+            definitionFiles = CommsUtil.SlowSanitizeEndUserProvidedObjectArray(definitionFiles);
+            definitions = CommsUtil.SlowSanitizeEndUserProvidedStructArray(definitions);
 
             avatar.OnAvatarReady -= OnAvatarReady;
             avatar.OnAvatarReady += OnAvatarReady;
@@ -55,11 +70,10 @@ namespace HVR.Basis.Comms
                 upper = actuator.StreamedUpper;
             }
             
-            var streamed01 = Mathf.InverseLerp(lower, upper, inRange);
-
-            if (featureInterpolator != null) // Can be null due to network late init, this is needed for local tests without initialization scene 
+            if (_featureInterpolator != null)
             {
-                featureInterpolator.Store(index, streamed01);
+                var streamed01 = Mathf.InverseLerp(lower, upper, inRange);
+                _featureInterpolator.Store(index, streamed01);
             }
         }
 
@@ -149,7 +163,13 @@ namespace HVR.Basis.Comms
                         StreamedUpper = upper,
                         UseCurve = definition.useCurve,
                         Curve = definition.curve,
-                        Targets = actuatorTargets
+                        Targets = actuatorTargets,
+                        RequestedFeature = new RequestedFeature
+                        {
+                            identifier = definition.address,
+                            lower = lower,
+                            upper = upper
+                        }
                     };
                 })
                 .Where(actuator => actuator != null)
@@ -160,16 +180,45 @@ namespace HVR.Basis.Comms
             {
                 _addressBaseIndexToActuators[computedActuator.Key] = computedActuator.ToArray();
             }
+            
+            if (isWearer)
+            {
+                acquisition.RegisterAddresses(_addressBase.Keys.ToArray(), OnAddressUpdated);
+            }
 
-            acquisition.RegisterAddresses(_addressBase.Keys.ToArray(), OnAddressUpdated);
-            _isNetworkable = true;
+            _avatarReady = true;
+            TryOnAvatarIsNetworkable();
         }
 
-        private void WhenNetworkIdAssigned()
+        public void OnGuidAssigned(int guidIndex, Guid guid)
         {
-            if (!_isNetworkable) return;
+            _guidIndex = guidIndex;
+            
+            _networkReady = true;
+            TryOnAvatarIsNetworkable();
+        }
 
-            featureInterpolator = featureNetworking.NewInterpolator(_guidIndex, _addressBase.Count, OnInterpolatedDataChanged);
+        private void TryOnAvatarIsNetworkable()
+        {
+            // HACK: Work around an issue where remote and local avatars trigger
+            // OnAvatarReady and OnAvatarNetworkReady in a different order.
+
+            if (_avatarReady && _networkReady && !_dualInitialized)
+            {
+                _dualInitialized = true;
+                OnAvatarFullyNetworkable();
+            }
+        }
+
+        private void OnAvatarFullyNetworkable()
+        {
+            // FIXME: We should be using the computed actuators instead of the address base, assuming that
+            // the list of blendshapes is the same local and remote (no local-only or remote-only blendshapes).
+            _featureInterpolator = featureNetworking.NewInterpolator(_guidIndex, _addressBase.Count, OnInterpolatedDataChanged);
+            
+            // FIXME: Add default values in the blendshape actuation file
+            if (_addressBase.TryGetValue("FT/v2/EyeLidLeft", out var indexLeft)) _featureInterpolator.Store(indexLeft, 0.8f);
+            if (_addressBase.TryGetValue("FT/v2/EyeLidRight", out var indexRight)) _featureInterpolator.Store(indexRight, 0.8f);
         }
 
         private Dictionary<string, int> MakeIndexDictionary(string[] addressBase)
@@ -196,10 +245,10 @@ namespace HVR.Basis.Comms
         {
             acquisition.UnregisterAddresses(_addressBase.Keys.ToArray(), OnAddressUpdated);
 
-            if (featureInterpolator != null)
+            if (_featureInterpolator != null)
             {
-                featureInterpolator.Unregister();
-                featureInterpolator = null;
+                _featureInterpolator.Unregister();
+                _featureInterpolator = null;
             }
         }
 
@@ -266,18 +315,13 @@ namespace HVR.Basis.Comms
             public bool UseCurve;
             public AnimationCurve Curve;
             public ComputedActuatorTarget[] Targets;
+            public RequestedFeature RequestedFeature;
         }
 
         private class ComputedActuatorTarget
         {
             public SkinnedMeshRenderer Renderer;
             public int[] BlendshapeIndices;
-        }
-
-        public void OnGuidAssigned(int guidIndex, Guid guid)
-        {
-            _guidIndex = guidIndex;
-            WhenNetworkIdAssigned();
         }
     }
 }
