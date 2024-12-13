@@ -40,8 +40,6 @@ namespace Basis.Scripts.Networking
         public static SynchronizationContext MainThreadContext;
         public static ushort LocalPlayerID;
         public static NetPeer LocalPlayerPeer;
-        public static BasisNetworkedPlayer LocalNetworkedPlayer;
-        public static Transmitters.BasisNetworkTransmitter LocalTransmitter;
         public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
         {
             if (Instance != null)
@@ -190,18 +188,15 @@ namespace Basis.Scripts.Networking
             BNL.LogWarningOutput += LogWarningOutput;
             BNL.LogErrorOutput += LogErrorOutput;
             Debug.Log("Connecting with Port " + Port + " IpString " + IpString);
-             string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
-             Debug.Log($"DNS call: {IpString} resolves to {result}");
-             LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+            //   string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
+            //   Debug.Log($"DNS call: {IpString} resolves to {result}");
 
-             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
-             LocalNetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, 0);
-             byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-             LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
-             BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
+            BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
+            byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
+
             readyMessage = new ReadyMessage
             {
-                localAvatarSyncMessage = LocalTransmitter.LASM,
+                localAvatarSyncMessage = BasisNetworkAvatarCompressor.InitalAvatarData(BasisLocalPlayer.Instance.Avatar.Animator),
                 clientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
                     byteArray = Information,
@@ -214,33 +209,29 @@ namespace Basis.Scripts.Networking
                 }
             };
             Debug.Log("Network  Starting Client");
-             LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);
-             Debug.Log("Network Client Started");
-             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
-             BasisNetworkClient.listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
-             BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
+            LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);
+            Debug.Log("Network Client Started");
+            BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
+            BasisNetworkClient.listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
+            BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
         }
-        private void PeerConnectedEvent(NetPeer peer)
+        private async void PeerConnectedEvent(NetPeer peer)
         {
+            var LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
             LocalPlayerID = (ushort)peer.Id;
             LocalPlayerPeer = peer;
-            CreatePeer(LocalNetworkedPlayer, LocalPlayerID);
-        }
-
-        public static void CreatePeer(BasisNetworkedPlayer NetworkedPlayer,ushort playerID)
-        {
-            NetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, playerID);
-            if (BasisNetworkManagement.AddPlayer(NetworkedPlayer))
+            LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance, LocalPlayerID);
+            if (AddPlayer(LocalNetworkedPlayer))
             {
 
-                Debug.Log("added local Player " + playerID);
+                Debug.Log("added local Player " + LocalPlayerID);
             }
             else
             {
-                Debug.LogError("Cant add " + playerID);
+                Debug.LogError("Cant add " + LocalPlayerID);
             }
-            BasisNetworkManagement.OnLocalPlayerJoined?.Invoke(NetworkedPlayer, BasisLocalPlayer.Instance);
-            BasisNetworkManagement.HasSentOnLocalPlayerJoin = true;
+            OnLocalPlayerJoined?.Invoke(LocalNetworkedPlayer, BasisLocalPlayer.Instance);
+            HasSentOnLocalPlayerJoin = true;
         }
         private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {

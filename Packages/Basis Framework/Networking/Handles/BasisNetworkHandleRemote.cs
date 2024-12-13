@@ -57,7 +57,7 @@ namespace Basis.Scripts.Networking
                 BasisNetworkedPlayer networkedPlayer = await createNetworkedPlayerTask;
 
                 // Continue with the rest of the code
-                networkedPlayer.ReInitialize(remote, ServerReadyMessage.playerIdMessage.playerID);
+                networkedPlayer.RemoteInitalization(remote, ServerReadyMessage.playerIdMessage.playerID);
 
                 if (BasisNetworkManagement.AddPlayer(networkedPlayer))
                 {

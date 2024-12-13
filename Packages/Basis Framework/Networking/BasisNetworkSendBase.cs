@@ -13,7 +13,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     /// <summary>
     /// the goal of this script is to be the glue of consistent data between remote and local
     /// </summary>
-    public abstract partial class BasisNetworkSendBase : MonoBehaviour
+    public abstract class BasisNetworkSendBase : MonoBehaviour
     {
         public bool Ready;
         public BasisNetworkedPlayer NetworkedPlayer;
@@ -37,14 +37,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             }
         }
         public static BasisRangedUshortFloatData RotationCompression = new BasisRangedUshortFloatData(-1f, 1f, 0.001f);
-        public struct AvatarBuffer
-        {
-            public Unity.Mathematics.quaternion rotation;
-            public Unity.Mathematics.float3 Scale;
-            public Unity.Mathematics.float3 Position;
-            public float[] Muscles;
-            public double SecondsInterval;
-        }
         [SerializeField]
         public HumanPose HumanPose = new HumanPose();
         [SerializeField]
@@ -73,12 +65,8 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             {
                 if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null)
                 {
-                    PoseHandler = new HumanPoseHandler(
-                        NetworkedPlayer.Player.Avatar.Animator.avatar,
-                        NetworkedPlayer.Player.Avatar.transform
-                    );
-                    PoseHandler.GetHumanPose(ref HumanPose);
 
+                    ComputeHumanPose();
                     if (!NetworkedPlayer.Player.Avatar.HasSendEvent)
                     {
                         NetworkedPlayer.Player.Avatar.OnNetworkMessageSend += OnNetworkMessageSend;
@@ -90,7 +78,17 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 }
             }, null);
         }
-
+        public void ComputeHumanPose()
+        {
+            if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null)
+            {
+                PoseHandler = new HumanPoseHandler(
+                NetworkedPlayer.Player.Avatar.Animator.avatar,
+                NetworkedPlayer.Player.Avatar.transform
+            );
+                PoseHandler.GetHumanPose(ref HumanPose);
+            }
+        }
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
         {
             // Check if Recipients or buffer arrays are valid or not

@@ -36,7 +36,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public NativeArray<bool> AvatarResults;
         public NativeArray<float> smallestDistance;
 
-
+        public float[] FloatArray = new float[90];
         [SerializeField]
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
         public float UnClampedInterval;

@@ -5,6 +5,7 @@ using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.TransformBinders.BoneControl;
 using System;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using static SerializableBasis;
 
 
@@ -39,92 +40,53 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
                 NetworkSend.OnAvatarCalibration();
             }
         }
-        public void ReInitialize(BasisPlayer player, ushort PlayerID)
+        public void RemoteInitalization(BasisRemotePlayer RemotePlayer, ushort PlayerID)
         {
-            if (Player != null && Player != player)
+            this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            Player = RemotePlayer;
+            if (RemotePlayer.RemoteAvatarDriver != null)
             {
-                if (player.IsLocal)
+                if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
                 {
-                    BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
-                    if (LocalPlayer.AvatarDriver != null)
-                    {
-                        if (LocalPlayer.AvatarDriver.HasEvents == false)
-                        {
-                            LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
-                            LocalPlayer.AvatarDriver.HasEvents = true;
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("Missing CharacterIKCalibration");
-                    }
+                    RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
+                    RemotePlayer.RemoteAvatarDriver.HasEvents = true;
                 }
-                else
-                {
-                    BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
-                    if (RemotePlayer.RemoteAvatarDriver != null)
-                    {
-                        if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
-                        {
-                            RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
-                            RemotePlayer.RemoteAvatarDriver.HasEvents = true;
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("Missing CharacterIKCalibration");
-                    }
-
-                }
-            }
-            if (Player != player && player != null)
-            {
-                Player = player;
-                if (player.IsLocal)
-                {
-                    BasisLocalPlayer LocalPlayer = player as BasisLocalPlayer;
-                    if (LocalPlayer.AvatarDriver != null)
-                    {
-                        if (LocalPlayer.AvatarDriver.HasEvents == false)
-                        {
-                            LocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
-                            LocalPlayer.AvatarDriver.HasEvents = true;
-                        }
-                        LocalPlayer.LocalBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
-                    }
-                    else
-                    {
-                        Debug.LogError("Missing CharacterIKCalibration");
-                    }
-                }
-                else
-                {
-                    BasisRemotePlayer RemotePlayer = player as BasisRemotePlayer;
-                    if (RemotePlayer.RemoteAvatarDriver != null)
-                    {
-                        if (RemotePlayer.RemoteAvatarDriver.HasEvents == false)
-                        {
-                            RemotePlayer.RemoteAvatarDriver.CalibrationComplete += CalibrationComplete;
-                            RemotePlayer.RemoteAvatarDriver.HasEvents = true;
-                        }
-                        RemotePlayer.RemoteBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
-                    }
-                    else
-                    {
-                        Debug.LogError("Missing CharacterIKCalibration");
-                    }
-                }
-                this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            }
-            if (player.IsLocal)
-            {
-                NetworkSend = GetOrCreateNetworkComponent<BasisNetworkTransmitter>();
+                RemotePlayer.RemoteBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
             }
             else
             {
-                BasisNetworkReceiver BasisNetworkReceiver = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
-                NetworkSend = BasisNetworkReceiver;
+                Debug.LogError("Missing CharacterIKCalibration");
             }
+            if (RemotePlayer.RemoteAvatarDriver != null)
+            {
+            }
+            else
+            {
+                Debug.LogError("Missing CharacterIKCalibration");
+            }
+            NetworkSend = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
+            NetworkSend.NetworkNetID.playerID = PlayerID;
+            NetworkSend.Initialize(this);
+            CalibrationComplete();
+        }
+        public void LocalInitalize(BasisLocalPlayer BasisLocalPlayer,ushort PlayerID)
+        {
+            this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            Player = BasisLocalPlayer;
+            if (BasisLocalPlayer.AvatarDriver != null)
+            {
+                if (BasisLocalPlayer.AvatarDriver.HasEvents == false)
+                {
+                    BasisLocalPlayer.AvatarDriver.CalibrationComplete += CalibrationComplete;
+                    BasisLocalPlayer.AvatarDriver.HasEvents = true;
+                }
+                BasisLocalPlayer.LocalBoneDriver.FindBone(out MouthBone, BasisBoneTrackedRole.Mouth);
+            }
+            else
+            {
+                Debug.LogError("Missing CharacterIKCalibration");
+            }
+            NetworkSend = GetOrCreateNetworkComponent<BasisNetworkTransmitter>();
             NetworkSend.NetworkNetID.playerID = PlayerID;
             NetworkSend.Initialize(this);
             CalibrationComplete();
