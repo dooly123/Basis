@@ -3,6 +3,7 @@ using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using System.Threading;
 using UnityEngine;
 using static BasisNetworkPrimitiveCompression;
 using static SerializableBasis;
@@ -54,7 +55,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public static BasisRangedUshortFloatData PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
         [SerializeField]
         public static BasisRangedUshortFloatData ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
-
         public const int SizeAfterGap = 95 - SecondBuffer;
         public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;
@@ -62,20 +62,35 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public abstract void DeInitialize();
         public void OnAvatarCalibration()
         {
-            if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null)
+            if (BasisNetworkManagement.MainThreadContext == null)
             {
-                PoseHandler = new HumanPoseHandler(NetworkedPlayer.Player.Avatar.Animator.avatar, NetworkedPlayer.Player.Avatar.transform.transform);
-                PoseHandler.GetHumanPose(ref HumanPose);
-                if (NetworkedPlayer.Player.Avatar.HasSendEvent == false)
-                {
-                    NetworkedPlayer.Player.Avatar.OnNetworkMessageSend += OnNetworkMessageSend;
-                    NetworkedPlayer.Player.Avatar.HasSendEvent = true;
-                }
-                NetworkedPlayer.Player.Avatar.LinkedPlayerID = NetworkedPlayer.NetId;
-                NetworkedPlayer.Player.Avatar.OnAvatarNetworkReady?.Invoke();
-
+                Debug.LogError("Main thread context is not set. Ensure this script is started on the main thread.");
+                return;
             }
+
+            // Post the task to the main thread
+            BasisNetworkManagement.MainThreadContext.Post(_ =>
+            {
+                if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null)
+                {
+                    PoseHandler = new HumanPoseHandler(
+                        NetworkedPlayer.Player.Avatar.Animator.avatar,
+                        NetworkedPlayer.Player.Avatar.transform
+                    );
+                    PoseHandler.GetHumanPose(ref HumanPose);
+
+                    if (!NetworkedPlayer.Player.Avatar.HasSendEvent)
+                    {
+                        NetworkedPlayer.Player.Avatar.OnNetworkMessageSend += OnNetworkMessageSend;
+                        NetworkedPlayer.Player.Avatar.HasSendEvent = true;
+                    }
+
+                    NetworkedPlayer.Player.Avatar.LinkedPlayerID = NetworkedPlayer.NetId;
+                    NetworkedPlayer.Player.Avatar.OnAvatarNetworkReady?.Invoke();
+                }
+            }, null);
         }
+
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
         {
             // Check if Recipients or buffer arrays are valid or not

@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using static Basis.Network.Server.Generic.BasisSavedState;
 using static SerializableBasis;
 public static class BasisNetworkServer
@@ -139,15 +140,29 @@ public static class BasisNetworkServer
         {
             while (!token.IsCancellationRequested)
             {
-                // Perform the thread work here
-               // BNL.Log("Running");
-                server?.PollEvents();
-                Thread.Sleep(BasisNetworkCommons.NetworkIntervalPoll);
+                try
+                {
+                    // Main worker logic
+                    while (!token.IsCancellationRequested)
+                    {
+                        server?.PollEvents();
+                        Task.Delay(BasisNetworkCommons.NetworkIntervalPoll, token).Wait(token); // Waits but respects cancellation
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    // This is expected when the token is canceled; simply exit gracefully
+                    BNL.Log("Worker thread cancellation requested.");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception and continue looping
+                    BNL.LogError($"Worker thread encountered an exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
+                    // Optional: add a delay to avoid rapid re-execution in case of persistent failures
+                    Task.Delay(BasisNetworkCommons.NetworkIntervalPoll).Wait();
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            BNL.LogError($"Worker thread encountered an exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
         }
         finally
         {

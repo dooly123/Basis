@@ -104,14 +104,29 @@ public static class BasisNetworkClient
         {
             while (!token.IsCancellationRequested)
             {
-                //works BNL.Log("Running");
-                client?.PollEvents();
-                Task.Delay(BasisNetworkCommons.NetworkIntervalPoll, token).Wait(token); // Waits but respects cancellation
+                try
+                {
+                    // Main worker logic
+                    while (!token.IsCancellationRequested)
+                    {
+                        client?.PollEvents();
+                        Task.Delay(BasisNetworkCommons.NetworkIntervalPoll, token).Wait(token); // Waits but respects cancellation
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    // This is expected when the token is canceled; simply exit gracefully
+                    BNL.Log("Worker thread cancellation requested.");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception and continue looping
+                    BNL.LogError($"Worker thread encountered an exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
+                    // Optional: add a delay to avoid rapid re-execution in case of persistent failures
+                    Task.Delay(BasisNetworkCommons.NetworkIntervalPoll).Wait();
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            BNL.LogError($"Worker thread encountered an exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
         }
         finally
         {

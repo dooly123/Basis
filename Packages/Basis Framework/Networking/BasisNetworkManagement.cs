@@ -13,6 +13,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
@@ -36,7 +37,7 @@ namespace Basis.Scripts.Networking
         public static HashSet<ushort> JoiningPlayers = new HashSet<ushort>();
         public static BasisNetworkReceiver[] ReceiverArray;
         public static int ReceiverCount = 0;
-
+        public static SynchronizationContext MainThreadContext;
         public static ushort LocalPlayerID;
         public static NetPeer LocalPlayerPeer;
         public static BasisNetworkedPlayer LocalNetworkedPlayer;
@@ -112,6 +113,7 @@ namespace Basis.Scripts.Networking
             {
                 Instance = this;
             }
+            MainThreadContext = SynchronizationContext.Current;
             // Initialize AvatarBuffer
             BasisAvatarBufferPool.AvatarBufferPool(30);
             OwnershipPairing.Clear();
@@ -188,21 +190,18 @@ namespace Basis.Scripts.Networking
             BNL.LogWarningOutput += LogWarningOutput;
             BNL.LogErrorOutput += LogErrorOutput;
             Debug.Log("Connecting with Port " + Port + " IpString " + IpString);
-            // string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
-            // Debug.Log($"DNS call: {IpString} resolves to {result}");
-         //    LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+             string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
+             Debug.Log($"DNS call: {IpString} resolves to {result}");
+             LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
 
              BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
-           //  LocalNetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, 0);//we initalize this again later with the real id
+             LocalNetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, 0);
              byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-            //  LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
-            // BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
+             LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
+             BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
             readyMessage = new ReadyMessage
             {
-                localAvatarSyncMessage = new LocalAvatarSyncMessage
-                {
-                    array = new byte[95]
-                },
+                localAvatarSyncMessage = LocalTransmitter.LASM,
                 clientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
                     byteArray = Information,
@@ -225,7 +224,7 @@ namespace Basis.Scripts.Networking
         {
             LocalPlayerID = (ushort)peer.Id;
             LocalPlayerPeer = peer;
-          //  CreatePeer(LocalNetworkedPlayer, LocalPlayerID);
+            CreatePeer(LocalNetworkedPlayer, LocalPlayerID);
         }
 
         public static void CreatePeer(BasisNetworkedPlayer NetworkedPlayer,ushort playerID)
