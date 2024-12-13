@@ -36,7 +36,11 @@ namespace Basis.Scripts.Networking
         public static HashSet<ushort> JoiningPlayers = new HashSet<ushort>();
         public static BasisNetworkReceiver[] ReceiverArray;
         public static int ReceiverCount = 0;
+
         public static ushort LocalPlayerID;
+        public static NetPeer LocalPlayerPeer;
+        public static BasisNetworkedPlayer LocalNetworkedPlayer;
+        public static Transmitters.BasisNetworkTransmitter LocalTransmitter;
         public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
         {
             if (Instance != null)
@@ -179,18 +183,18 @@ namespace Basis.Scripts.Networking
             if (HasAuthenticated == false)
             {
                 HasAuthenticated = true;
-                BasisNetworkClient.listener.NetworkReceiveEvent += MainThreadMessageReceived;
+                BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEventTag;
             }
             string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
             Debug.Log($"DNS call: {IpString} resolves to {result}");
 
-            BasisNetworkedPlayer NetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+            LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
             byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-            Transmitters.BasisNetworkTransmitter Transmitter = (Transmitters.BasisNetworkTransmitter)NetworkedPlayer.NetworkSend;
-            BasisNetworkAvatarCompressor.CompressAvatarData(Transmitter, BasisLocalPlayer.Avatar.Animator);
+            LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
+            BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
 
-            BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = Transmitter.LASM;
+            BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = LocalTransmitter.LASM;
             BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
             {
                 byteArray = Information,
@@ -209,7 +213,9 @@ namespace Basis.Scripts.Networking
 
         private void PeerConnectedEvent(NetPeer peer)
         {
-            throw new NotImplementedException();
+            LocalPlayerID = (ushort)peer.Id;
+            LocalPlayerPeer = peer;
+            CreatePeer(LocalNetworkedPlayer, LocalPlayerID);
         }
 
         public static void CreatePeer(BasisNetworkedPlayer NetworkedPlayer,ushort playerID)
@@ -246,22 +252,43 @@ namespace Basis.Scripts.Networking
         {
             if (HasAuthenticated)
             {
-                BasisNetworkClient.listener.NetworkReceiveEvent -= MainThreadMessageReceived;
+                BasisNetworkClient.listener.NetworkReceiveEvent -= NetworkReceiveEventTag;
                 HasAuthenticated = false;
             }
             BasisNetworkClient.Disconnect();
         }
-        public void Callback([CanBeNull] Exception e)
+        private static void NetworkReceiveEvent(NetPeer peer, NetPacketReader Reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
         {
-            if (e == null)
+            BasisMessageReceivedEventArgs e = new BasisMessageReceivedEventArgs
             {
-            }
-            else
+                Tag = Reader.GetByte(),
+                SendMode = deliveryMethod,
+                ClientId = (ushort)peer.Id
+            };
+            switch (channel)
             {
-                Debug.LogError("Failed to connect: " + e.Message);
+                case BasisNetworkCommons.EventsChannel:
+                    NetworkReceiveEventTag(peer, Reader, e);
+                    break;
+                case BasisNetworkCommons.VoiceChannel:
+                    HandleVoiceMessage(Reader, peer, e);
+                    break;
+                case BasisNetworkCommons.MovementChannel:
+                    HandleAvatarMovement(Reader, peer, e);
+                    break;
+                case BasisNetworkCommons.SceneChannel:
+                    NetworkReceiveEventTag(peer, Reader, e);
+                    break;
+                case BasisNetworkCommons.AvatarChannel:
+                    NetworkReceiveEventTag(peer, Reader, e);
+                    break;
+                default:
+                    BNL.LogError($"this Channel was not been implemented {channel}");
+                    break;
             }
+            Reader.Recycle();
         }
-        private async void MainThreadMessageReceived(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
+        private async void NetworkReceiveEventTag(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
         {
             switch (e.Tag) // Use e.Tag instead of message.Tag
             {

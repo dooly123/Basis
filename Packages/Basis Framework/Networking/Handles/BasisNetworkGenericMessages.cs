@@ -4,6 +4,7 @@ using Basis.Scripts.Networking.NetworkedPlayer;
 
 using DarkRift.Basis_Common.Serializable;
 using LiteNetLib;
+using LiteNetLib.Utils;
 using UnityEngine;
 using static SerializableBasis;
 
@@ -13,21 +14,24 @@ public static class BasisNetworkGenericMessages
     // Handler for server scene data messages
     public static void HandleServerSceneDataMessage(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerSceneDataMessage serverSceneDataMessage);
-        ushort playerID = serverSceneDataMessage.playerIdMessage.playerID;
-        SceneDataMessage sceneDataMessage = serverSceneDataMessage.sceneDataMessage;
+        ServerSceneDataMessage ServerSceneDataMessage = new ServerSceneDataMessage();
+        ServerSceneDataMessage.Deserialize(reader);
+        ushort playerID = ServerSceneDataMessage.playerIdMessage.playerID;
+        SceneDataMessage sceneDataMessage = ServerSceneDataMessage.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
     }
     public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID,ushort NetIdNewOwner,bool IsOwner);
     public static void HandleOwnershipTransfer(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
+        OwnershipTransferMessage OwnershipTransferMessage = new OwnershipTransferMessage();
+        OwnershipTransferMessage.Deserialize(reader);
         HandleOwnership(OwnershipTransferMessage);
     }
     public static void HandleOwnershipResponse(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out OwnershipTransferMessage OwnershipTransferMessage);
-        HandleOwnership(OwnershipTransferMessage);
+        OwnershipTransferMessage  ownershipTransferMessage = new OwnershipTransferMessage();
+        ownershipTransferMessage.Deserialize(reader);
+        HandleOwnership(ownershipTransferMessage);
     }
     public static void HandleOwnership(OwnershipTransferMessage OwnershipTransferMessage)
     {
@@ -39,15 +43,18 @@ public static class BasisNetworkGenericMessages
         {
             BasisNetworkManagement.Instance.OwnershipPairing.TryAdd(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID);
         }
+        if (BasisNetworkManagement.TryGetLocalPlayerID(out ushort Id))
+        {
+            bool isLocalOwner = OwnershipTransferMessage.playerIdMessage.playerID == Id;
 
-        bool isLocalOwner = OwnershipTransferMessage.playerIdMessage.playerID == BasisNetworkManagement.Instance.Client.ID;
-
-        BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID, isLocalOwner);
+            BasisNetworkManagement.OnOwnershipTransfer?.Invoke(OwnershipTransferMessage.ownershipID, OwnershipTransferMessage.playerIdMessage.playerID, isLocalOwner);
+        }
     }
     // Handler for server avatar data messages
     public static void HandleServerAvatarDataMessage(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerAvatarDataMessage serverAvatarDataMessage);
+        ServerAvatarDataMessage serverAvatarDataMessage = new ServerAvatarDataMessage();
+        serverAvatarDataMessage.Deserialize(reader);
       //  Debug.Log("running " + nameof(HandleServerAvatarDataMessage));
         ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
@@ -75,7 +82,9 @@ public static class BasisNetworkGenericMessages
     // Handler for server scene data messages with no recipients
     public static void HandleServerSceneDataMessage_NoRecipients(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerSceneDataMessage_NoRecipients serverSceneDataMessage_NoRecipients);
+
+        ServerSceneDataMessage_NoRecipients serverSceneDataMessage_NoRecipients = new ServerSceneDataMessage_NoRecipients();
+        serverSceneDataMessage_NoRecipients.Deserialize(reader);
         ushort playerID = serverSceneDataMessage_NoRecipients.playerIdMessage.playerID;
         var sceneDataMessage = serverSceneDataMessage_NoRecipients.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
@@ -84,7 +93,10 @@ public static class BasisNetworkGenericMessages
     // Handler for server scene data messages with no recipients and no payload
     public static void HandleServerSceneDataMessage_NoRecipients_NoPayload(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerSceneDataMessage_NoRecipients_NoPayload serverSceneDataMessage_NoRecipients_NoPayload);
+        ServerSceneDataMessage_NoRecipients_NoPayload serverSceneDataMessage_NoRecipients_NoPayload = new ServerSceneDataMessage_NoRecipients_NoPayload();
+        serverSceneDataMessage_NoRecipients_NoPayload.Deserialize(reader);
+
+
         ushort playerID = serverSceneDataMessage_NoRecipients_NoPayload.playerIdMessage.playerID;
         var sceneDataMessage = serverSceneDataMessage_NoRecipients_NoPayload.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, null); // Pass null payload
@@ -93,7 +105,9 @@ public static class BasisNetworkGenericMessages
     // Handler for server avatar data messages with no recipients
     public static void HandleServerAvatarDataMessage_NoRecipients(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerAvatarDataMessage_NoRecipients serverAvatarDataMessage_NoRecipients);
+        ServerAvatarDataMessage_NoRecipients serverAvatarDataMessage_NoRecipients = new ServerAvatarDataMessage_NoRecipients();
+        serverAvatarDataMessage_NoRecipients.Deserialize(reader);
+
         ushort avatarLinkID = serverAvatarDataMessage_NoRecipients.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
@@ -124,7 +138,8 @@ public static class BasisNetworkGenericMessages
     // Handler for server avatar data messages with no recipients and no payload
     public static void HandleServerAvatarDataMessage_NoRecipients_NoPayload(LiteNetLib.NetPacketReader reader)
     {
-        reader.Read(out ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoRecipients_NoPayload);
+        ServerAvatarDataMessage_NoRecipients_NoPayload serverAvatarDataMessage_NoRecipients_NoPayload = new ServerAvatarDataMessage_NoRecipients_NoPayload();
+        serverAvatarDataMessage_NoRecipients_NoPayload.Deserialize(reader);
         ushort avatarLinkID = serverAvatarDataMessage_NoRecipients_NoPayload.avatarDataMessage.playerIdMessage.playerID; // destination
         if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
@@ -156,15 +171,12 @@ public static class BasisNetworkGenericMessages
         {
             recipients = null;
         }
-
+        NetDataWriter Writer = new NetDataWriter();
         // Check if buffer is valid or not
         if (buffer != null && buffer.Length == 0)
         {
             buffer = null;
         }
-
-        using (NetDataWriter writer = NetDataWriter.Create())
-        {
             // Check if there are no recipients and no payload
             if (recipients == null && buffer == null)
             {
@@ -174,13 +186,10 @@ public static class BasisNetworkGenericMessages
                 {
                     messageIndex = messageIndex
                 };
-                writer.Write(sceneDataMessage);
-
-                using (var msg = Message.Create(BasisTags.SceneGenericMessage_NoRecipients_NoPayload, writer))
-                {
-                    BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
-                }
-            }
+            Writer.Put(BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload);
+            sceneDataMessage.Serialize(Writer);
+            BasisNetworkManagement.LocalPlayerPeer.Send(msg, BasisNetworking.SceneChannel, deliveryMethod);
+        }
             // Check if there are no recipients but there is a payload
             else if (recipients == null)
             {
@@ -215,7 +224,6 @@ public static class BasisNetworkGenericMessages
                     BasisNetworkManagement.Instance.Client.SendMessage(msg, BasisNetworking.SceneChannel, deliveryMethod);
                 }
             }
-        }
     }
 
     // Handler for server avatar data messages with recipients but no payload
