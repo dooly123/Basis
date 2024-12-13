@@ -35,7 +35,7 @@ public static class BasisNetworkServer
             ChannelsCount = 7,
         };
         server.Start(SetPort);
-        BNL.Log("Server Booted");
+        BNL.Log("Server Wiring up");
         listener.ConnectionRequestEvent += request =>
         {
             int ServerCount = server.ConnectedPeersCount;
@@ -58,7 +58,7 @@ public static class BasisNetworkServer
                         }
                         else
                         {
-                            BNL.LogError($"Peer was unable to be added already exists! {ReadyToRoll.Id}");
+                            RejectWithReason(request, $"Peer was unable to be added already exists! {ReadyToRoll.Id}");
                         }
                     }
                     else
@@ -94,7 +94,9 @@ public static class BasisNetworkServer
             ClientDisconnect(Id, BasisNetworkCommons.EventsChannel, Peers);
         };
         listener.NetworkReceiveEvent += NetworkReceiveEvent;
+        BNL.Log("Server Worker Threads booting");
         StartWorker();
+        BNL.Log("Server Worker Threads Booted");
     }
     public static void BroadcastPositionUpdate(NetPeer sender, byte channel, NetDataWriter Writer, ConcurrentDictionary<ushort, NetPeer> authenticatedClients)
     {
@@ -137,6 +139,7 @@ public static class BasisNetworkServer
             while (!token.IsCancellationRequested)
             {
                 // Perform the thread work here
+               // BNL.Log("Running");
                 server?.PollEvents();
                 Thread.Sleep(BasisNetworkCommons.NetworkIntervalPoll);
             }

@@ -174,8 +174,8 @@ namespace Basis.Scripts.Networking
             {
                 BasisNetworkServer.StartServer();
             }
-            string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
-            Debug.Log($"DNS call: {IpString} resolves to {result}");
+           // string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
+           // Debug.Log($"DNS call: {IpString} resolves to {result}");
 
             LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
 
@@ -198,7 +198,9 @@ namespace Basis.Scripts.Networking
             };
             NetDataWriter netDataWriter = new NetDataWriter();
             readyMessage.Serialize(netDataWriter);
-            BasisNetworkClient.StartClient(result.ToString(), Port, netDataWriter.Data);
+            Debug.Log("Network  Starting Client");
+            LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, netDataWriter.Data);
+            Debug.Log("Network Client Started");
             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
             BasisNetworkClient.listener.PeerDisconnectedEvent += Disconnect;
             BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;

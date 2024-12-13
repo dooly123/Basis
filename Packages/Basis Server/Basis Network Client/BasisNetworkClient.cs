@@ -9,17 +9,20 @@ public static class BasisNetworkClient
 {
     public static NetManager client;
     public static EventBasedNetListener listener;
-    public static NetPeer peer;
     public static Thread ClientIncomeThread;
     private static CancellationTokenSource cancellationTokenSource;
+    private static NetPeer peer;
     /// <summary>
     /// inital data is typically the 
     /// </summary>
     /// <param name="IP"></param>
     /// <param name="port"></param>
     /// <param name="InitalData"></param>
-    public static void StartClient(string IP, int port, byte[] InitalData)
+    public static NetPeer StartClient(string IP, int port, byte[] InitalData)
     {
+        BNL.LogErrorOutput += LogError;
+        BNL.LogWarningOutput += LogWarning;
+        BNL.LogOutput += Log;
         listener = new EventBasedNetListener();
         client = new NetManager(listener)
         {
@@ -32,7 +35,12 @@ public static class BasisNetworkClient
             ChannelsCount = 7,
 
         };
-
+        client.Start();
+        NetDataWriter Writer = new NetDataWriter();
+        //this is the only time we dont put key!
+        Writer.Put(BasisNetworkVersion.ServerVersion);
+        Writer.Put(InitalData);
+        peer = client.Connect(IP, port, Writer);
         listener.PeerConnectedEvent += (peer) =>
         {
             BNL.Log("Client connected to server - ID: " + peer.Id);
@@ -49,21 +57,26 @@ public static class BasisNetworkClient
             }
             BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
         };
-        //implement unity side listener.NetworkReceiveEvent += NetworkReceiveEvent;
-
-        client.Start();
-        NetDataWriter Writer = new NetDataWriter();
-        //this is the only time we dont put key!
-        Writer.Put(BasisNetworkVersion.ServerVersion);
-        Writer.Put(InitalData);
-       peer = client.Connect(IP, port, Writer);
         StartWorker();
+        return peer;
+    }
+    public static void Log(string Message)
+    {
+       UnityEngine.Debug.Log(Message);
+    }
+    public static void LogWarning(string Message)
+    {
+        UnityEngine.Debug.LogWarning(Message);
+    }
+    public static void LogError(string Message)
+    {
+        UnityEngine.Debug.LogError(Message);
     }
     public static void Disconnect()
     {
         BNL.Log("Client Called Disconnect from server");
         peer?.Disconnect();
-        client.Stop();
+        client?.Stop();
         if (cancellationTokenSource != null)
         {
             cancellationTokenSource.Cancel();
@@ -95,6 +108,7 @@ public static class BasisNetworkClient
         {
             while (!token.IsCancellationRequested)
             {
+                BNL.Log("Running");
                 client?.PollEvents();
                 Task.Delay(BasisNetworkCommons.NetworkIntervalPoll, token).Wait(token); // Waits but respects cancellation
             }
