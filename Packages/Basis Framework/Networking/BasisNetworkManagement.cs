@@ -196,19 +196,19 @@ namespace Basis.Scripts.Networking
             LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
             BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
 
-            BasisNetworkManagement.Instance.readyMessage.localAvatarSyncMessage = LocalTransmitter.LASM;
-            BasisNetworkManagement.Instance.readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
+            readyMessage.localAvatarSyncMessage = LocalTransmitter.LASM;
+            readyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage
             {
                 byteArray = Information,
                 loadMode = BasisLocalPlayer.AvatarLoadMode,
             };
-            BasisNetworkManagement.Instance.readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
+            readyMessage.playerMetaDataMessage = new PlayerMetaDataMessage
             {
                 playerUUID = BasisLocalPlayer.UUID,
                 playerDisplayName = BasisLocalPlayer.DisplayName
             };
             NetDataWriter netDataWriter = new NetDataWriter();
-            BasisNetworkManagement.Instance.readyMessage.Serialize(netDataWriter);
+            readyMessage.Serialize(netDataWriter);
             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
             BasisNetworkClient.StartClient(result.ToString(), Port, netDataWriter.Data);
         }
