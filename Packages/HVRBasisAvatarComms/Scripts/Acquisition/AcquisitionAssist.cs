@@ -11,6 +11,8 @@ namespace HVR.Basis.Comms
         [HideInInspector] public AcquisitionService acquisitionService;
         [NonSerialized] public Dictionary<string, float> memory = new Dictionary<string, float>();
 
+        public string[] toggles;
+
         private void Awake()
         {
             if (acquisitionService == null) acquisitionService = AcquisitionService.SceneInstance;

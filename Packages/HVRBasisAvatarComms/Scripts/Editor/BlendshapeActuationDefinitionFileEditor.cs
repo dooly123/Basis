@@ -16,6 +16,7 @@ namespace HVR.Basis.Comms
 
         public override void OnInspectorGUI()
         {
+            EditorGUILayout.LabelField(((BlendshapeActuationDefinitionFile)target).comment ?? "", EditorStyles.wordWrappedLabel);
             DrawDefaultInspector();
 
             EditorGUILayout.BeginHorizontal();

@@ -40,7 +40,13 @@ All messages are trickling from the avatar wearer to the other observers.
 
 ### Negotiation packet (\[0\] == 255)
 
-The Negotiation packet must be the very first packet that is transmitted to another client before any other packet of that protocol is transmitted.
+- Who can send: Wearer
+- Who can receive: Non-wearers
+
+The Negotiation packet should be the first packet transmitted to all other clients when the avatar loads.
+
+If a client sends us a Reserved packet of type *Remote Requests Initialization* (described later in this document),
+a Negotiation packet should be sent to them.
 
 This packet defines a sequence of GUIDs. The GUIDs are already uniquely assigned to specific networked systems, as such they serve
 as networked IDs.
@@ -97,6 +103,9 @@ Assert that:
 
 ### Transmission packet (\[0\] < 254)
 
+- Who can send: Wearer
+- Who can receive: Non-wearers
+
 Transmission packets contains the data payload, along with relative timing information that will be used for interpolation.
 
 The data payload specification depends entirely on the implementation.
@@ -106,6 +115,10 @@ The data payload specification depends entirely on the implementation.
 The following applies when `bytes[0]` is strictly less than 255.
 
 The value of `bytes[0]` corresponds to the index of the GUID that represents the component.
+
+The rest of the message depends on whether the packet is being received by a streaming feature or an event-driven feature:
+
+##### Streaming
 
 The value of `bytes[1]` is the interpolation duration needed for this packet.
 - It is generally defined to be the number of seconds since the last packet was sent, multiplied by 60 (a second is quantized in 60 parts).
@@ -120,3 +133,12 @@ Assert that:
 - At least one valid Negotiation packet has been previously received.
 - `bytes[0]` must be less than the `NumberOfGuids` received in the last Negotiation packet.
 - `bytes.Length` must be greater or equal to 2.
+
+##### Event-Driven
+
+The rest of the message is not subject to additional restrictions.
+
+Assert that:
+- `bytes[0]` must be less than the `NumberOfGuids` received in the last Negotiation packet.
+- At least one valid Negotiation packet has been previously received.
+- `bytes.Length` must be greater or equal to 1.
