@@ -47,7 +47,6 @@ public static class BasisNetworkServer
                 {
                     if (ClientVersion >= BasisNetworkVersion.ServerVersion)
                     {
-                        byte[] Array = request.Data.GetRemainingBytes();
                         BNL.Log("Player Is Approved Total Count is: " + ServerCount);
                         NetPeer ReadyToRoll = request.Accept();
                         if (Peers.TryAdd((ushort)ReadyToRoll.Id, ReadyToRoll))
@@ -55,7 +54,6 @@ public static class BasisNetworkServer
                             BNL.Log("Length is " + request.Data.AvailableBytes);
                             ReadyMessage ReadyMessage = new ReadyMessage();
                             ReadyMessage.Deserialize(request.Data);
-                            BasisSavedState.AddLastData(ReadyToRoll, ReadyMessage);
                             BNL.Log($"Peer added and connected: {ReadyToRoll.Id}");
                             SendRemoteSpawnMessage(ReadyToRoll, ReadyMessage, BasisNetworkCommons.EventsChannel);
                         }

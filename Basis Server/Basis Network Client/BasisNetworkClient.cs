@@ -13,6 +13,7 @@ public static class BasisNetworkClient
     public static Thread ClientIncomeThread;
     private static CancellationTokenSource cancellationTokenSource;
     private static NetPeer peer;
+    private static bool IsInUse;
     /// <summary>
     /// inital data is typically the 
     /// </summary>
@@ -21,46 +22,54 @@ public static class BasisNetworkClient
     /// <param name="ReadyMessage"></param>
     public static NetPeer StartClient(string IP, int port, ReadyMessage ReadyMessage)
     {
-        listener = new EventBasedNetListener();
-        client = new NetManager(listener)
+        if (IsInUse == false)
         {
-            AutoRecycle = true,
-            UnconnectedMessagesEnabled = true,
-            NatPunchEnabled = true,
-            AllowPeerAddressChange = true,
-            BroadcastReceiveEnabled = true,
-            UseNativeSockets = false,//unity does not work with this
-            ChannelsCount = 7,
-
-        };
-        client.Start();
-        NetDataWriter Writer = new NetDataWriter();
-        //this is the only time we dont put key!
-        Writer.Put(BasisNetworkVersion.ServerVersion);
-        ReadyMessage.Serialize(Writer);
-        BNL.LogError("Length! " + Writer.Length);
-        peer = client.Connect(IP, port, Writer);
-        listener.PeerConnectedEvent += (peer) =>
-        {
-            BNL.Log("Client connected to server - ID: " + peer.Id);
-        };
-
-        listener.PeerDisconnectedEvent += (peer, disconnectInfo) =>
-        {
-            if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
+            listener = new EventBasedNetListener();
+            client = new NetManager(listener)
             {
-                if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
+                AutoRecycle = true,
+                UnconnectedMessagesEnabled = true,
+                NatPunchEnabled = true,
+                AllowPeerAddressChange = true,
+                BroadcastReceiveEnabled = true,
+                UseNativeSockets = false,//unity does not work with this
+                ChannelsCount = 7,
+
+            };
+            client.Start();
+            NetDataWriter Writer = new NetDataWriter();
+            //this is the only time we dont put key!
+            Writer.Put(BasisNetworkVersion.ServerVersion);
+            ReadyMessage.Serialize(Writer);
+            peer = client.Connect(IP, port, Writer);
+            listener.PeerConnectedEvent += (peer) =>
+            {
+                BNL.Log("Client connected to server - ID: " + peer.Id);
+            };
+
+            listener.PeerDisconnectedEvent += (peer, disconnectInfo) =>
+            {
+                if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
                 {
-                    BNL.LogError(Reason);
+                    if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
+                    {
+                        BNL.LogError(Reason);
+                    }
                 }
-            }
-            BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
-        };
-        StartWorker();
-        return peer;
+                BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
+            };
+            StartWorker();
+            return peer;
+        }
+        else
+        {
+            BNL.LogError("Call Shutdown First!");
+            return null;
+        }
     }
     public static void Disconnect()
     {
+        IsInUse = false;
         BNL.Log("Client Called Disconnect from server");
         peer?.Disconnect();
         client?.Stop();
@@ -95,7 +104,7 @@ public static class BasisNetworkClient
         {
             while (!token.IsCancellationRequested)
             {
-               //works BNL.Log("Running");
+                //works BNL.Log("Running");
                 client?.PollEvents();
                 Task.Delay(BasisNetworkCommons.NetworkIntervalPoll, token).Wait(token); // Waits but respects cancellation
             }

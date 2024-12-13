@@ -81,7 +81,7 @@ namespace Basis.Network.Server.Generic
                 existingData.lastAvatarChangeState = readyMessage.clientAvatarChangeMessage;
                 existingData.playerMetaDataMessage = readyMessage.playerMetaDataMessage;
 
-                BNL.Log("Added " + client.Id + " with AvatarID " + readyMessage.clientAvatarChangeMessage.byteArray);
+                BNL.Log("Added " + client.Id + " with AvatarID " + readyMessage.clientAvatarChangeMessage.byteArray.Length);
             }
             finally
             {

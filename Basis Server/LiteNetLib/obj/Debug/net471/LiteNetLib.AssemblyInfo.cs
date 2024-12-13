@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright 2024 Ruslan Pyrch")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Lite reliable UDP library for .NET, Mono, and .NET Core")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.3.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae2e0d7f0d2545fd8c9e554ce9f2a0e39711b57c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+654f772bb6ffc4a21cb9d2eca8fa65b99ccfd745")]
 [assembly: System.Reflection.AssemblyProductAttribute("LiteNetLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LiteNetLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.3.1")]

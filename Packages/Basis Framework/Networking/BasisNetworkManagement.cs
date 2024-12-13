@@ -225,7 +225,7 @@ namespace Basis.Scripts.Networking
         {
             LocalPlayerID = (ushort)peer.Id;
             LocalPlayerPeer = peer;
-            CreatePeer(LocalNetworkedPlayer, LocalPlayerID);
+          //  CreatePeer(LocalNetworkedPlayer, LocalPlayerID);
         }
 
         public static void CreatePeer(BasisNetworkedPlayer NetworkedPlayer,ushort playerID)
