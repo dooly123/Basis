@@ -27,7 +27,6 @@ namespace Basis.Scripts.Networking
     {
         public string Ip = "170.64.184.249";
         public ushort Port = 4296;
-        public bool HasAuthenticated = false;
         public ReadyMessage readyMessage = new ReadyMessage();
         /// <summary>
         /// fire when ownership is changed for a unique string
@@ -87,7 +86,6 @@ namespace Basis.Scripts.Networking
         }
         public bool ForceConnect = false;
         public bool TryToReconnectAutomatically = true;
-        public bool HasInitalizedClient = false;
         public bool ISServer = false;
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
@@ -176,22 +174,13 @@ namespace Basis.Scripts.Networking
             {
                 BasisNetworkServer.StartServer();
             }
-            HasAuthenticated = false;
-            if (HasInitalizedClient == false)
-            {
-                BasisNetworkClient.listener.PeerDisconnectedEvent += Disconnect;
-                HasInitalizedClient = true;
-            }
-            if (HasAuthenticated == false)
-            {
-                HasAuthenticated = true;
-                BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
-            }
             string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
             Debug.Log($"DNS call: {IpString} resolves to {result}");
 
             LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+
             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
+            LocalNetworkedPlayer.ReInitialize(BasisLocalPlayer.Instance, 0);//we initalize this again later with the real id
             byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
             LocalTransmitter = (Transmitters.BasisNetworkTransmitter)LocalNetworkedPlayer.NetworkSend;
             BasisNetworkAvatarCompressor.CompressAvatarData(LocalTransmitter, BasisLocalPlayer.Avatar.Animator);
@@ -209,8 +198,10 @@ namespace Basis.Scripts.Networking
             };
             NetDataWriter netDataWriter = new NetDataWriter();
             readyMessage.Serialize(netDataWriter);
-            BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
             BasisNetworkClient.StartClient(result.ToString(), Port, netDataWriter.Data);
+            BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
+            BasisNetworkClient.listener.PeerDisconnectedEvent += Disconnect;
+            BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
         }
 
         private void PeerConnectedEvent(NetPeer peer)
@@ -252,11 +243,6 @@ namespace Basis.Scripts.Networking
         }
         public void Disconnect()
         {
-            if (HasAuthenticated)
-            {
-                BasisNetworkClient.listener.NetworkReceiveEvent -= NetworkReceiveEvent;
-                HasAuthenticated = false;
-            }
             BasisNetworkClient.Disconnect();
         }
         private async void NetworkReceiveEvent(NetPeer peer, NetPacketReader Reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
