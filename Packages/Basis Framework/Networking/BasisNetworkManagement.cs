@@ -214,22 +214,48 @@ namespace Basis.Scripts.Networking
         }
         private async void PeerConnectedEvent(NetPeer peer)
         {
-            Debug.Log("Sucess Now Setting up Networked Local Player");
-            BasisNetworkedPlayer LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
-            LocalPlayerID = (ushort)peer.Id;
-            LocalPlayerPeer = peer;
-            LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance, LocalPlayerID);
-            if (AddPlayer(LocalNetworkedPlayer))
-            {
+            await PeerConnectedEventAsync(peer);
+        }
+        private async Task PeerConnectedEventAsync(NetPeer peer)
+        {
+            Debug.Log("Success! Now setting up Networked Local Player");
 
-                Debug.Log("added local Player " + LocalPlayerID);
-            }
-            else
+            // Wrap the main logic in a task for thread safety and asynchronous execution.
+            await Task.Run(() =>
             {
-                Debug.LogError("Cant add " + LocalPlayerID);
-            }
-            OnLocalPlayerJoined?.Invoke(LocalNetworkedPlayer, BasisLocalPlayer.Instance);
-            HasSentOnLocalPlayerJoin = true;
+                BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                {
+                    try
+                    {
+                        // Create the local networked player asynchronously.
+                        BasisNetworkedPlayer LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(
+                            new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+
+                        LocalPlayerID = (ushort)peer.Id;
+                        LocalPlayerPeer = peer;
+
+                        // Initialize the local networked player.
+                        LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance, LocalPlayerID);
+
+                        if (AddPlayer(LocalNetworkedPlayer))
+                        {
+                            Debug.Log($"Added local player {LocalPlayerID}");
+                        }
+                        else
+                        {
+                            Debug.LogError($"Cannot add player {LocalPlayerID}");
+                        }
+
+                        // Notify listeners about the local player joining.
+                        OnLocalPlayerJoined?.Invoke(LocalNetworkedPlayer, BasisLocalPlayer.Instance);
+                        HasSentOnLocalPlayerJoin = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error setting up the local player: {ex.Message}");
+                    }
+                }, null);
+            });
         }
         private void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Basis.Network.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("2.10.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.10.1+a7f72bb9f686b299a0dbd654ea2c7337e1e5378e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.10.1+5e04ff3e155499ad94577b618ca11d887f1fda65")]
 [assembly: System.Reflection.AssemblyProductAttribute("Basis.Network.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Basis.Network.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("2.10.1.0")]

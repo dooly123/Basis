@@ -15,7 +15,7 @@ public class BasisServerReductionSystem
     public static int MillisecondDefaultInterval = 50;
     public static float BaseMultiplier = 1f; // Starting multiplier.
     public static float IncreaseRate = 0.005f; // Rate of increase per unit distance.
-    private static readonly Dictionary<NetPeer, SyncedToPlayerPulse> PlayerSync = new Dictionary<NetPeer, SyncedToPlayerPulse>();
+    private static readonly Dictionary<ushort, SyncedToPlayerPulse> PlayerSync = new Dictionary<ushort, SyncedToPlayerPulse>();
     private static readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
 
     public static void AddOrUpdatePlayer(NetPeer playerID, SyncedToPlayerPulse data)
@@ -23,7 +23,7 @@ public class BasisServerReductionSystem
         Lock.EnterWriteLock();
         try
         {
-            PlayerSync[playerID] = data;
+            PlayerSync[(ushort)playerID.Id] = data;
         }
         finally
         {
@@ -52,7 +52,7 @@ public class BasisServerReductionSystem
         Lock.EnterReadLock();
         try
         {
-            return PlayerSync.TryGetValue(playerID, out data);
+            return PlayerSync.TryGetValue((ushort)playerID.Id, out data);
         }
         finally
         {
@@ -64,8 +64,8 @@ public class BasisServerReductionSystem
         Lock.EnterWriteLock();
         try
         {
-            output =  PlayerSync[playerID];
-            return PlayerSync.Remove(playerID);
+            output =  PlayerSync[(ushort)playerID.Id];
+            return PlayerSync.Remove((ushort)playerID.Id);
         }
         finally
         {
