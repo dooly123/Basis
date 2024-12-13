@@ -32,7 +32,7 @@ namespace Basis.Scripts.UI.UI_Panels
 
             Connect.onClick.AddListener(ConnectTOServer);
         }
-        public async void ConnectTOServer()
+        public  void ConnectTOServer()
         {
             if (Port != null)
             {
@@ -51,7 +51,7 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             if (IP != null)
             {
-             await   NetworkConnector.Connect(SelectedPort, IP.text);
+               NetworkConnector.Connect(SelectedPort, IP.text);
             }
         }
 

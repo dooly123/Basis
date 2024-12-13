@@ -1,6 +1,5 @@
 using Basis.Scripts.Networking.NetworkedAvatar;
 using System.Collections.Generic;
-using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 
 public static class BasisAvatarBufferPool
 {

@@ -42,22 +42,6 @@ public static class BasisNetworkClient
             Writer.Put(BasisNetworkVersion.ServerVersion);
             ReadyMessage.Serialize(Writer);
             peer = client.Connect(IP, port, Writer);
-            listener.PeerConnectedEvent += (peer) =>
-            {
-                BNL.Log("Client connected to server - ID: " + peer.Id);
-            };
-
-            listener.PeerDisconnectedEvent += (peer, disconnectInfo) =>
-            {
-                if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
-                {
-                    if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
-                    {
-                        BNL.LogError(Reason);
-                    }
-                }
-                BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
-            };
             StartWorker();
             return peer;
         }

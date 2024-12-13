@@ -27,7 +27,6 @@ namespace Basis.Scripts.Networking
     {
         public string Ip = "170.64.184.249";
         public ushort Port = 4296;
-        public ReadyMessage readyMessage = new ReadyMessage();
         /// <summary>
         /// fire when ownership is changed for a unique string
         /// </summary>
@@ -105,7 +104,7 @@ namespace Basis.Scripts.Networking
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
-        public async void OnEnable()
+        public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
             {
@@ -124,7 +123,7 @@ namespace Basis.Scripts.Networking
             OnEnableInstanceCreate?.Invoke();
             if (ForceConnect)
             {
-              await  Connect(Port, Ip);
+               Connect(Port, Ip);
             }
         }
 
@@ -178,11 +177,11 @@ namespace Basis.Scripts.Networking
         {
             BasisScene.OnNetworkMessageSend += BasisNetworkGenericMessages.OnNetworkMessageSend;
         }
-        public async void Connect()
+        public  void Connect()
         {
-          await  Connect(Port, Ip);
+            Connect(Port, Ip);
         }
-        public async Task Connect(ushort Port, string IpString)
+        public void Connect(ushort Port, string IpString)
         {
             BNL.LogOutput += LogOutput;
             BNL.LogWarningOutput += LogWarningOutput;
@@ -190,11 +189,9 @@ namespace Basis.Scripts.Networking
             Debug.Log("Connecting with Port " + Port + " IpString " + IpString);
             //   string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
             //   Debug.Log($"DNS call: {IpString} resolves to {result}");
-
             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
             byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
-
-            readyMessage = new ReadyMessage
+            ReadyMessage readyMessage = new ReadyMessage
             {
                 localAvatarSyncMessage = BasisNetworkAvatarCompressor.InitalAvatarData(BasisLocalPlayer.Instance.Avatar.Animator),
                 clientAvatarChangeMessage = new ClientAvatarChangeMessage
@@ -217,7 +214,8 @@ namespace Basis.Scripts.Networking
         }
         private async void PeerConnectedEvent(NetPeer peer)
         {
-            var LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+            Debug.Log("Sucess Now Setting up Networked Local Player");
+            BasisNetworkedPlayer LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
             LocalPlayerID = (ushort)peer.Id;
             LocalPlayerPeer = peer;
             LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance, LocalPlayerID);
@@ -233,13 +231,20 @@ namespace Basis.Scripts.Networking
             OnLocalPlayerJoined?.Invoke(LocalNetworkedPlayer, BasisLocalPlayer.Instance);
             HasSentOnLocalPlayerJoin = true;
         }
-        private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+        private void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            Debug.LogError("Disconnected from Server " + disconnectInfo.Reason);
+            if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
+            {
+                if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
+                {
+                    BNL.LogError(Reason);
+                }
+            }
+            BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
             Players.Clear();
             if (TryToReconnectAutomatically)
             {
-              await  Connect(Port, Ip);
+               Connect(Port, Ip);
             }
             else
             {
