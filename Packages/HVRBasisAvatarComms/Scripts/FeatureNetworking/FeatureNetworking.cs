@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Basis.Scripts.BasisSdk;
-using DarkRift;
+using LiteNetLib;
 using UnityEngine;
 
 namespace HVR.Basis.Comms
@@ -191,7 +191,7 @@ namespace HVR.Basis.Comms
 
     public class FeatureEvent : IFeatureReceiver
     {
-        private const DeliveryMethod DeliveryMethod = DarkRift.DeliveryMethod.Sequenced;
+        private DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced;
         
         private readonly FeatureNetworking _featureNetworking;
         private readonly int _guidIndex;

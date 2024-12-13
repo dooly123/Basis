@@ -154,7 +154,7 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 //Debug.Log("Arrays where not equal!");
                 Array.Copy(MicrophoneRangeIndex, LastMicrophoneRangeIndex, IndexLength);
-                List<ushort> TalkingPoints = new List<ushort>();
+                List<ushort> TalkingPoints = new List<ushort>(IndexLength);
                 for (int Index = 0; Index < IndexLength; Index++)
                 {
                     bool User = MicrophoneRangeIndex[Index];
@@ -365,12 +365,11 @@ namespace Basis.Scripts.Networking.Transmitters
         }
         public void SendOutLatestAvatar()
         {
-            byte[] LAI = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData);
             NetDataWriter Writer = new NetDataWriter();
             Writer.Put(BasisNetworkTag.AvatarChangeMessage);
             ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
             {
-                byteArray = LAI,
+                byteArray = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData),
                 loadMode = NetworkedPlayer.Player.AvatarLoadMode,
             };
             BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableOrdered);

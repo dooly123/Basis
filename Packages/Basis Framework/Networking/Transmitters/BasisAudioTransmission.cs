@@ -115,20 +115,23 @@ namespace Basis.Scripts.Networking.Transmitters
                     AudioSegmentData.buffer = new byte[encodedLength];
                 }
                 Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer.Array, 0, encodedLength);
-                NetDataWriter NetDataWriter = new NetDataWriter();
-                AudioSegmentData.Serialize(NetDataWriter);
+                NetDataWriter writer = new NetDataWriter();
+                AudioSegmentData.Serialize(writer);
                 BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
-                BasisNetworkManagement.LocalPlayerPeer.Send(NetDataWriter, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
+                BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
                 Local.AudioReceived?.Invoke(true);
             }
         }
         private void SendSilenceOverNetwork()
         {
-            NetDataWriter writer = new NetDataWriter();
-            audioSilentSegmentData.Serialize(writer);
-            BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
-            BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
-            Local.AudioReceived?.Invoke(false);
+            if (Base.HasReasonToSendAudio)
+            {
+                NetDataWriter writer = new NetDataWriter();
+                audioSilentSegmentData.Serialize(writer);
+                BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
+                BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
+                Local.AudioReceived?.Invoke(false);
+            }
         }
     }
 }
