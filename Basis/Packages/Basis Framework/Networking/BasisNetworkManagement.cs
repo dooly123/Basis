@@ -104,6 +104,34 @@ namespace Basis.Scripts.Networking
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
+        // ConcurrentQueue to hold actions to be executed on the Unity main thread
+        private static readonly ConcurrentQueue<Func<Task>> asyncActions = new ConcurrentQueue<Func<Task>>();
+        // Method to enqueue a task
+        public static void ScheduleOnMainThread(Func<Task> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            asyncActions.Enqueue(action);
+        }
+        // Method to process the queue in the Update method
+        private async void Update()
+        {
+            while (asyncActions.TryDequeue(out Func<Task> action))
+            {
+                if (action != null)
+                {
+                    try
+                    {
+                        await action.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error executing scheduled action: {ex.Message}");
+                    }
+                }
+            }
+        }
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -126,26 +154,23 @@ namespace Basis.Scripts.Networking
                Connect(Port, Ip);
             }
         }
-
         private void LogErrorOutput(string obj)
         {
            Debug.LogError(obj);
         }
-
         private void LogWarningOutput(string obj)
         {
             Debug.LogWarning(obj);
         }
-
         private void LogOutput(string obj)
         {
             Debug.Log(obj);
         }
-
         public void OnDestroy()
         {
             Players.Clear();
             BasisAvatarBufferPool.Clear();
+            Disconnect();
         }
         public void LateUpdate()
         {
@@ -294,7 +319,10 @@ namespace Basis.Scripts.Networking
                         SendMode = deliveryMethod,
                         ClientId = (ushort)peer.Id
                     };
-                    await NetworkReceiveEventTag(peer, Reader, e);
+                    ScheduleOnMainThread(async () =>
+                    {
+                        await NetworkReceiveEventTag(peer, Reader, e);
+                    });
                     break;
                 case BasisNetworkCommons.VoiceChannel:
                     await BasisNetworkHandleVoice.HandleAudioUpdate(Reader);
@@ -309,7 +337,10 @@ namespace Basis.Scripts.Networking
                         SendMode = deliveryMethod,
                         ClientId = (ushort)peer.Id
                     };
-                    await NetworkReceiveEventTag(peer, Reader, e);
+                    ScheduleOnMainThread(async () =>
+                    {
+                        await NetworkReceiveEventTag(peer, Reader, e);
+                    });
                     break;
                 case BasisNetworkCommons.AvatarChannel:
                      e = new BasisMessageReceivedEventArgs
@@ -318,7 +349,10 @@ namespace Basis.Scripts.Networking
                         SendMode = deliveryMethod,
                         ClientId = (ushort)peer.Id
                     };
-                    await NetworkReceiveEventTag(peer, Reader, e);
+                    ScheduleOnMainThread(async () =>
+                    {
+                        await NetworkReceiveEventTag(peer, Reader, e);
+                    });
                     break;
                 default:
                     BNL.LogError($"this Channel was not been implemented {channel}");
@@ -331,37 +365,16 @@ namespace Basis.Scripts.Networking
             switch (e.Tag) // Use e.Tag instead of message.Tag
             {
                 case BasisNetworkTag.Disconnection:
-                  await  BasisNetworkHandleRemoval.HandleDisconnection(reader);
+                    await BasisNetworkHandleRemoval.HandleDisconnection(reader);
                     break;
-
                 case BasisNetworkTag.AvatarChangeMessage:
-                    await Task.Run(() =>
-                    {
-                    BasisNetworkManagement.MainThreadContext.Post(async _ =>
-                    {
-                        BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
-                    }, null);
-                    });
+                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
                     break;
-
                 case BasisNetworkTag.CreateRemotePlayer:
-                    await Task.Run(() =>
-                    {
-                        BasisNetworkManagement.MainThreadContext.Post(async _ =>
-                        {
-                            await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
-                        }, null);
-                    });
+                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
                     break;
-
                 case BasisNetworkTag.CreateRemotePlayers:
-                    await Task.Run(() =>
-                    {
-                        BasisNetworkManagement.MainThreadContext.Post(async _ =>
-                        {
-                            await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
-                        }, null);
-                    });
+                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
                     break;
                 case BasisNetworkTag.SceneGenericMessage:
                     BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
