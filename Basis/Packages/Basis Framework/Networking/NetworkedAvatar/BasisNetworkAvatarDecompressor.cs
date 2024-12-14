@@ -1,7 +1,5 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
-using System.Collections.Concurrent;
-using static Basis.Scripts.Networking.NetworkedAvatar.BasisNetworkSendBase;
 using static SerializableBasis;
 using Vector3 = UnityEngine.Vector3;
 namespace Basis.Scripts.Networking.NetworkedAvatar
@@ -19,8 +17,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             avatarBuffer.rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);
             BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref Offset);
             int length = syncMessage.avatarSerialization.array.Length;
-            avatarBuffer.Scale = Vector3.one;
-            /*
+         //   avatarBuffer.Scale = Vector3.one;
             if (Offset == length)//we are at the end
             {
                 avatarBuffer.Scale = Vector3.one;
@@ -38,7 +35,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     avatarBuffer.Scale = new Unity.Mathematics.float3(Size, Size, Size);
                 }
             }
-            */
             avatarBuffer.SecondsInterval = syncMessage.interval / 1000.0f;
             baseReceiver.EnQueueAvatarBuffer(ref avatarBuffer);
         }

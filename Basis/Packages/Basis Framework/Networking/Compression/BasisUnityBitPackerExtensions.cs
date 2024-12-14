@@ -141,13 +141,13 @@ namespace Basis.Scripts.Networking.Compression
         // Write muscles to bytes (no BitConverter)
         public static void WriteMusclesToBytes(float[] muscles, ref byte[] bytes, ref int offset)
         {
-            int requiredLength = muscles.Length * sizeof(float);
+            int requiredLength = 90 * sizeof(float);
             EnsureSize(ref bytes, offset + requiredLength);
 
             // Manually copy float values as bytes
-            for (int i = 0; i < muscles.Length; i++)
+            for (int Index = 0; Index < 90; Index++)
             {
-                WriteFloatToBytes(muscles[i], ref bytes, ref offset);
+                WriteFloatToBytes(muscles[Index], ref bytes, ref offset);
             }
         }
 
@@ -161,9 +161,9 @@ namespace Basis.Scripts.Networking.Compression
             EnsureSize(bytes, offset + 360);
 
             // Manually read float values from bytes
-            for (int i = 0; i < 90; i++)
+            for (int Index = 0; Index < 90; Index++)
             {
-                muscles[i] = ReadFloatFromBytes(ref bytes, ref offset);
+                muscles[Index] = ReadFloatFromBytes(ref bytes, ref offset);
                // UnityEngine.Debug.Log("" + muscles[i]);
             }
         }
