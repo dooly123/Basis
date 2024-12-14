@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Basis.Network.Core;
+using Basis.Network.Core.Compression;
 using Basis.Scripts.Networking.Compression;
+using LiteNetLib;
+using LiteNetLib.Utils;
 using static SerializableBasis;
 public class BasisServerReductionSystem
 {
@@ -8,7 +12,7 @@ public class BasisServerReductionSystem
     public static int MillisecondDefaultInterval = 50;
     public static float BaseMultiplier = 1f; // Starting multiplier.
     public static float IncreaseRate = 0.005f; // Rate of increase per unit distance.
-    public static ConcurrentDictionary<ushort, SyncedToPlayerPulse> PlayerSync = new ConcurrentDictionary<ushort, SyncedToPlayerPulse>();
+    public static ConcurrentDictionary<NetPeer, SyncedToPlayerPulse> PlayerSync = new ConcurrentDictionary<NetPeer, SyncedToPlayerPulse>();
     /// <summary>
     /// add the new client
     /// then update all existing clients arrays
@@ -16,7 +20,7 @@ public class BasisServerReductionSystem
     /// <param name="playerID"></param>
     /// <param name="playerToUpdate"></param>
     /// <param name="serverSideSyncPlayer"></param>
-    public static void AddOrUpdatePlayer(ushort playerID, ServerSideSyncPlayerMessage playerToUpdate, ushort serverSideSyncPlayer)
+    public static void AddOrUpdatePlayer(NetPeer playerID, ServerSideSyncPlayerMessage playerToUpdate, NetPeer serverSideSyncPlayer)
     {
         //stage 1 lets update whoever send us this datas last player information
         if (PlayerSync.TryGetValue(serverSideSyncPlayer, out SyncedToPlayerPulse playerData))
@@ -35,7 +39,7 @@ public class BasisServerReductionSystem
             playerData = new SyncedToPlayerPulse
             {
                 playerID = playerID,
-                queuedPlayerMessages = new ConcurrentDictionary<ushort, ServerSideReducablePlayer>(),
+                queuedPlayerMessages = new ConcurrentDictionary<NetPeer, ServerSideReducablePlayer>(),
                 lastPlayerInformation = playerToUpdate,
             };
             //ok now we can try to schedule sending out this data!
@@ -45,7 +49,7 @@ public class BasisServerReductionSystem
             }
         }
     }
-    public static void RemovePlayer(ushort playerID)
+    public static void RemovePlayer(NetPeer playerID)
     {
         if (PlayerSync.TryRemove(playerID, out SyncedToPlayerPulse pulse))
         {
@@ -68,13 +72,13 @@ public class BasisServerReductionSystem
     public class SyncedToPlayerPulse
     {
         // The player ID to which the data is being sent
-        public ushort playerID;
+        public NetPeer playerID;
         public ServerSideSyncPlayerMessage lastPlayerInformation;
         /// <summary>
         /// Dictionary to hold queued messages for each player.
         /// Key: Player ID, Value: Server-side player data
         /// </summary>
-        public ConcurrentDictionary<ushort, ServerSideReducablePlayer> queuedPlayerMessages = new ConcurrentDictionary<ushort, ServerSideReducablePlayer>();
+        public ConcurrentDictionary<NetPeer, ServerSideReducablePlayer> queuedPlayerMessages = new ConcurrentDictionary<NetPeer, ServerSideReducablePlayer>();
 
         /// <summary>
         /// Supply new data to a specific player.
@@ -82,7 +86,7 @@ public class BasisServerReductionSystem
         /// <param name="playerID">The ID of the player</param>
         /// <param name="serverSideSyncPlayerMessage">The message to be synced</param>
         /// <param name="serverSidePlayer"></param>
-        public void SupplyNewData(ushort playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, ushort serverSidePlayer)
+        public void SupplyNewData(NetPeer playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, NetPeer serverSidePlayer)
         {
             if (queuedPlayerMessages.TryGetValue(serverSidePlayer, out ServerSideReducablePlayer playerData))
             {
@@ -104,7 +108,7 @@ public class BasisServerReductionSystem
         /// <param name="playerID">The ID of the player</param>
         /// <param name="serverSideSyncPlayerMessage">The initial message to be sent</param>
         /// <param name="serverSidePlayer"></param>
-        public void AddPlayer(ushort playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, ushort serverSidePlayer)
+        public void AddPlayer(NetPeer playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, NetPeer serverSidePlayer)
         {
             ClientPayload clientPayload = new ClientPayload
             {
@@ -125,7 +129,7 @@ public class BasisServerReductionSystem
         /// Removes a player from the queue and disposes of their timer.
         /// </summary>
         /// <param name="playerID">The ID of the player to remove</param>
-        public void RemovePlayer(ushort playerID)
+        public void RemovePlayer(NetPeer playerID)
         {
             if (queuedPlayerMessages.TryRemove(playerID, out ServerSideReducablePlayer playerData))
             {
@@ -135,8 +139,8 @@ public class BasisServerReductionSystem
         }
         public struct ClientPayload
         {
-            public ushort localClient;
-            public ushort dataCameFromThisUser;
+            public NetPeer localClient;
+            public NetPeer dataCameFromThisUser;
         }
         /// <summary>
         /// Callback function to send player data at regular intervals.
@@ -150,8 +154,8 @@ public class BasisServerReductionSystem
                 {
                     if (PlayerSync.TryGetValue(playerID.localClient, out SyncedToPlayerPulse pulse))
                     {
-                        Vector3 from = BasisCompressionExtensions.DecompressAndProcessAvatar(pulse.lastPlayerInformation);
-                        Vector3 to = BasisCompressionExtensions.DecompressAndProcessAvatar(playerData.serverSideSyncPlayerMessage);
+                        Vector3 from = BasisNetworkCompressionExtensions.DecompressAndProcessAvatar(pulse.lastPlayerInformation);
+                        Vector3 to = BasisNetworkCompressionExtensions.DecompressAndProcessAvatar(playerData.serverSideSyncPlayerMessage);
                         // Calculate the distance between the two points
                         float activeDistance = Distance(from, to);
                         // Adjust the timer interval based on the new syncRateMultiplier
@@ -169,21 +173,15 @@ public class BasisServerReductionSystem
                     {
                         Console.WriteLine("Unable to find Pulse for LocalClient Wont Do Interval Adjust");
                     }
-                    using (DarkRiftWriter writer = DarkRiftWriter.Create())
+                    NetDataWriter Writer = new NetDataWriter();
+                    if (playerData.serverSideSyncPlayerMessage.avatarSerialization.array == null || playerData.serverSideSyncPlayerMessage.avatarSerialization.array.Length == 0)
                     {
-                        if (playerData.serverSideSyncPlayerMessage.avatarSerialization.array == null || playerData.serverSideSyncPlayerMessage.avatarSerialization.array.Length == 0)
-                        {
-                            Console.WriteLine("Unable to send out Avatar Data Was null or Empty!");
-                        }
-                        else
-                        {
-                            writer.Write(playerData.serverSideSyncPlayerMessage);
-
-                            using (Message message = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
-                            {
-                                playerID.localClient.SendMessage(message, BasisNetworking.MovementChannel, DeliveryMethod.Sequenced);
-                            }
-                        }
+                        Console.WriteLine("Unable to send out Avatar Data Was null or Empty!");
+                    }
+                    else
+                    {
+                        playerData.serverSideSyncPlayerMessage.Serialize(Writer);
+                        playerID.localClient.Send(Writer, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
                     }
                     playerData.newDataExists = false;
                 }

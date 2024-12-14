@@ -311,7 +311,7 @@
       }
     },
     "com.unity.xr.core-utils": {
-      "version": "2.3.0",
+      "version": "2.4.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -342,7 +342,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.openxr": {
-      "version": "1.13.1",
+      "version": "1.13.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {

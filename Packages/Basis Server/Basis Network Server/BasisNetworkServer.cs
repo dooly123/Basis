@@ -349,7 +349,7 @@ public static class BasisNetworkServer
         if (Peers.TryGetValue(e.ClientId, out NetPeer client))
         {
             ServerSideSyncPlayerMessage ssspm = CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage, e.ClientId);
-            BasisServerReductionSystem.AddOrUpdatePlayer((ushort)client.Id, ssspm, (ushort)Peer.Id);
+            BasisServerReductionSystem.AddOrUpdatePlayer(client, ssspm, Peer);
         }
         else
         {

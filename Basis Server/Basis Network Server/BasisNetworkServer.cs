@@ -346,14 +346,14 @@ public static class BasisNetworkServer
         LocalAvatarSyncMessage LocalAvatarSyncMessage = new LocalAvatarSyncMessage();
         LocalAvatarSyncMessage.Deserialize(Reader);
         BasisSavedState.AddLastData(Peer, LocalAvatarSyncMessage);
-        if (Peers.TryGetValue(e.ClientId, out NetPeer client))
+        foreach (NetPeer client in Peers.Values)
         {
+            if (client.Id == e.ClientId)
+            {
+                continue;
+            }
             ServerSideSyncPlayerMessage ssspm = CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage, e.ClientId);
-            BasisServerReductionSystem.AddOrUpdatePlayer((ushort)client.Id, ssspm, (ushort)Peer.Id);
-        }
-        else
-        {
-            BNL.LogError("Peer dictonary did not have " + e.ClientId);
+            BasisServerReductionSystem.AddOrUpdatePlayer(client, ssspm, Peer);
         }
     }
     private static ServerSideSyncPlayerMessage CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage local, ushort clientId)
@@ -385,7 +385,7 @@ public static class BasisNetworkServer
         NetDataWriter Writer = new NetDataWriter();
         Writer.Put(BasisNetworkTag.CreateRemotePlayer);
         serverSideSyncPlayerMessage.Serialize(Writer);
-        var clientsToNotify = Peers.Values.Where(client => client != authClient);
+        IEnumerable<NetPeer> clientsToNotify = Peers.Values.Where(client => client != authClient);
 
         foreach (NetPeer client in clientsToNotify)
         {
