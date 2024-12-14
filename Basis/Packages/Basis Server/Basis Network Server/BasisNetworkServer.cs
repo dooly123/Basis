@@ -387,11 +387,13 @@ public static class BasisNetworkServer
         serverSideSyncPlayerMessage.Serialize(Writer);
         IEnumerable<NetPeer> clientsToNotify = Peers.Values.Where(client => client != authClient);
 
+        string ClientIds = string.Empty;
         foreach (NetPeer client in clientsToNotify)
         {
-            BNL.Log($"Sent Remote Spawn request to {client.Id}");
+            ClientIds += $" | {client.Id}";
             client.Send(Writer, channel, DeliveryMethod.ReliableOrdered);
         }
+        BNL.Log($"Sent Remote Spawn request to {ClientIds}");
     }
     private static void SendClientListToNewClient(NetPeer authClient, byte channel)
     {

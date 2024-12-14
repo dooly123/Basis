@@ -27,7 +27,7 @@ public static class BasisNetworkClient
             listener = new EventBasedNetListener();
             client = new NetManager(listener)
             {
-                AutoRecycle = true,
+                AutoRecycle = false,
                 UnconnectedMessagesEnabled = true,
                 NatPunchEnabled = true,
                 AllowPeerAddressChange = true,
