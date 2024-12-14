@@ -2,7 +2,6 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System.Collections.Concurrent;
-using static BasisNetworkServer;
 using static SerializableBasis;
 
 namespace Basis.Network.Server.Generic
