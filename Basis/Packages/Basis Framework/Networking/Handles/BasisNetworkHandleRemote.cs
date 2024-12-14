@@ -15,12 +15,14 @@ namespace Basis.Scripts.Networking
     {
         public static async Task HandleCreateRemotePlayer(LiteNetLib.NetPacketReader reader,Transform Parent)
         {
+            Debug.Log("Handling Create Remote Player!");
             ServerReadyMessage ServerReadyMessage = new ServerReadyMessage();
             ServerReadyMessage.Deserialize(reader);
             await CreateRemotePlayer(ServerReadyMessage, Parent);
         }
         public static async Task HandleCreateAllRemoteClients(LiteNetLib.NetPacketReader reader, Transform Parent)
         {
+            Debug.Log("Handling Create ALl Remote Players!");
             CreateAllRemoteMessage createAllRemoteMessage = new CreateAllRemoteMessage();
             createAllRemoteMessage.Deserialize(reader);
             int RemoteLength = createAllRemoteMessage.serverSidePlayer.Length;
@@ -39,6 +41,7 @@ namespace Basis.Scripts.Networking
         }
         public static async Task<BasisNetworkedPlayer> CreateRemotePlayer(ServerReadyMessage ServerReadyMessage, InstantiationParameters instantiationParameters)
         {
+
             ClientAvatarChangeMessage avatarID = ServerReadyMessage.localReadyMessage.clientAvatarChangeMessage;
 
             if (avatarID.byteArray != null)

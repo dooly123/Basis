@@ -331,19 +331,37 @@ namespace Basis.Scripts.Networking
             switch (e.Tag) // Use e.Tag instead of message.Tag
             {
                 case BasisNetworkTag.Disconnection:
-                    BasisNetworkHandleRemoval.HandleDisconnection(reader);
+                  await  BasisNetworkHandleRemoval.HandleDisconnection(reader);
                     break;
 
                 case BasisNetworkTag.AvatarChangeMessage:
-                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
+                    await Task.Run(() =>
+                    {
+                    BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                    {
+                        BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
+                    }, null);
+                    });
                     break;
 
                 case BasisNetworkTag.CreateRemotePlayer:
-                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
+                    await Task.Run(() =>
+                    {
+                        BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                        {
+                            await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
+                        }, null);
+                    });
                     break;
 
                 case BasisNetworkTag.CreateRemotePlayers:
-                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
+                    await Task.Run(() =>
+                    {
+                        BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                        {
+                            await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
+                        }, null);
+                    });
                     break;
                 case BasisNetworkTag.SceneGenericMessage:
                     BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
