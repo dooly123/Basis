@@ -1,6 +1,6 @@
 # Define source and destination directories
-$source = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\"
-$destination = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Packages\Basis Server\"
+$source = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server"
+$destination = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis\Packages\Basis Server\"
 
 # Remove the destination folder and recreate it
 Remove-Item -Recurse -Force $destination

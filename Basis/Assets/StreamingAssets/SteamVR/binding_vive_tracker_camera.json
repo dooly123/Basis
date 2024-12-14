@@ -1,0 +1,26 @@
+{
+  "bindings": {
+    "/actions/default": {
+      "chords": [],
+      "poses": [
+        {
+          "output": "/actions/default/in/pose",
+          "path": "/user/camera/pose/raw"
+        }
+      ],
+      "haptics": [],
+      "sources": [],
+      "skeleton": []
+    },
+    "/actions/mixedreality": {
+      "chords": [],
+      "poses": [],
+      "haptics": [],
+      "sources": [],
+      "skeleton": []
+    }
+  },
+  "controller_type": "vive_tracker_camera",
+  "description": "",
+  "name": "Holodance / Beat the Rhythm config for Mixed Reality Camera"
+}

@@ -1,0 +1,23 @@
+{
+  "bindings": {
+    "/actions/default": {
+      "chords": [],
+      "poses": [
+        {
+          "output": "/actions/default/in/pose",
+          "path": "/user/head/pose/raw"
+        },
+        {
+          "output": "/actions/default/in/pose",
+          "path": "/user/head/pose/raw"
+        }
+      ],
+      "haptics": [],
+      "sources": [],
+      "skeleton": []
+    }
+  },
+  "controller_type": "vive",
+  "description": "",
+  "name": "vive defaults"
+}

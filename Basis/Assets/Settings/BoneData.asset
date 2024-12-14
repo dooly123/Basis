@@ -1,0 +1,232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c1f66a5c2949a742a18892720c8f012, type: 3}
+  m_Name: BoneData
+  m_EditorClassIdentifier: 
+  FallBackPercentage:
+  - Position: {x: 0, y: 1.6, z: 0}
+    PositionPercentage: {x: 0, y: 0.88888896, z: 0}
+    HumanBone: 21
+    Role: 0
+  - Position: {x: 26.654125, y: 7.150641, z: -49.842667}
+    PositionPercentage: {x: 0.48435473, y: 0.31603947, z: 0.56670356}
+    HumanBone: 0
+    Role: 4
+  - Position: {x: 26.529566, y: 7.099302, z: -49.842655}
+    PositionPercentage: {x: 0.38298407, y: 0.2762123, z: 0.56673485}
+    HumanBone: 1
+    Role: 6
+  - Position: {x: 26.778685, y: 7.099302, z: -49.842655}
+    PositionPercentage: {x: 0.58572537, y: 0.2762123, z: 0.56673485}
+    HumanBone: 2
+    Role: 7
+  - Position: {x: 26.529753, y: 6.750581, z: -49.805573}
+    PositionPercentage: {x: 0.38313618, y: 0.0056863204, z: 0.66822577}
+    HumanBone: 3
+    Role: 8
+  - Position: {x: 26.778498, y: 6.750581, z: -49.805573}
+    PositionPercentage: {x: 0.58557326, y: 0.0056863204, z: 0.66822577}
+    HumanBone: 4
+    Role: 9
+  - Position: {x: 26.529625, y: 6.3046274, z: -49.87867}
+    PositionPercentage: {x: 0.3830322, y: 0, z: 0.4681673}
+    HumanBone: 5
+    Role: 10
+  - Position: {x: 26.778625, y: 6.3046274, z: -49.87867}
+    PositionPercentage: {x: 0.58567727, y: 0, z: 0.4681673}
+    HumanBone: 6
+    Role: 11
+  - Position: {x: 26.654125, y: 7.254875, z: -49.842667}
+    PositionPercentage: {x: 0.48435473, y: 0.39690086, z: 0.56670356}
+    HumanBone: 7
+    Role: 5
+  - Position: {x: 26.654125, y: 7.4087443, z: -49.842773}
+    PositionPercentage: {x: 0.48435473, y: 0.51626736, z: 0.5664112}
+    HumanBone: 8
+    Role: 3
+  - Position: {x: 26.654125, y: 7.678872, z: -49.867}
+    PositionPercentage: {x: 0.48435473, y: 0.72582334, z: 0.5001044}
+    HumanBone: 9
+    Role: 2
+  - Position: {x: 26.654125, y: 7.757849, z: -49.85838}
+    PositionPercentage: {x: 0.48435473, y: 0.7870911, z: 0.52369964}
+    HumanBone: 10
+    Role: 1
+  - Position: {x: 26.574934, y: 7.628578, z: -49.877464}
+    PositionPercentage: {x: 0.41990623, y: 0.68680704, z: 0.47146645}
+    HumanBone: 11
+    Role: 13
+  - Position: {x: 26.733316, y: 7.628578, z: -49.877464}
+    PositionPercentage: {x: 0.5488032, y: 0.68680704, z: 0.47146645}
+    HumanBone: 12
+    Role: 14
+  - Position: {x: 26.515121, y: 7.616054, z: -49.885254}
+    PositionPercentage: {x: 0.37122878, y: 0.67709124, z: 0.4501472}
+    HumanBone: 13
+    Role: 15
+  - Position: {x: 26.793129, y: 7.616054, z: -49.885258}
+    PositionPercentage: {x: 0.59748065, y: 0.67709124, z: 0.45013678}
+    HumanBone: 14
+    Role: 16
+  - Position: {x: 26.27284, y: 7.5069427, z: -49.900166}
+    PositionPercentage: {x: 0.17405234, y: 0.5924463, z: 0.4093358}
+    HumanBone: 15
+    Role: 17
+  - Position: {x: 27.03541, y: 7.5069427, z: -49.900166}
+    PositionPercentage: {x: 0.7946571, y: 0.5924463, z: 0.4093358}
+    HumanBone: 16
+    Role: 18
+  - Position: {x: 26.061842, y: 7.4172535, z: -49.8646}
+    PositionPercentage: {x: 0.0023346061, y: 0.52286845, z: 0.5066714}
+    HumanBone: 17
+    Role: 19
+  - Position: {x: 27.24641, y: 7.417254, z: -49.8646}
+    PositionPercentage: {x: 0.96637636, y: 0.5228688, z: 0.5066714}
+    HumanBone: 18
+    Role: 20
+  - Position: {x: 26.529642, y: 6.251636, z: -49.78459}
+    PositionPercentage: {x: 0.38304615, y: 0, z: 0.7256478}
+    HumanBone: 19
+    Role: 21
+  - Position: {x: 26.778608, y: 6.251636, z: -49.78459}
+    PositionPercentage: {x: 0.58566326, y: 0, z: 0.7256478}
+    HumanBone: 20
+    Role: 22
+  - Position: {x: 26.044693, y: 7.4001846, z: -49.837276}
+    PositionPercentage: {x: 0, y: 0.50962704, z: 0.5814558}
+    HumanBone: 24
+    Role: 24
+  - Position: {x: 26.032158, y: 7.382819, z: -49.80668}
+    PositionPercentage: {x: 0, y: 0.49615547, z: 0.665198}
+    HumanBone: 25
+    Role: 25
+  - Position: {x: 26.008257, y: 7.3627424, z: -49.790363}
+    PositionPercentage: {x: 0, y: 0.48058063, z: 0.70985156}
+    HumanBone: 26
+    Role: 26
+  - Position: {x: 25.981398, y: 7.375854, z: -49.823036}
+    PositionPercentage: {x: 0, y: 0.49075216, z: 0.62042975}
+    HumanBone: 27
+    Role: 27
+  - Position: {x: 25.952806, y: 7.3621387, z: -49.818703}
+    PositionPercentage: {x: 0, y: 0.4801123, z: 0.63229}
+    HumanBone: 28
+    Role: 28
+  - Position: {x: 25.927542, y: 7.3485365, z: -49.815292}
+    PositionPercentage: {x: 0, y: 0.46956015, z: 0.6416237}
+    HumanBone: 29
+    Role: 29
+  - Position: {x: 25.9771, y: 7.376545, z: -49.84622}
+    PositionPercentage: {x: 0, y: 0.49128816, z: 0.5569836}
+    HumanBone: 30
+    Role: 30
+  - Position: {x: 25.949196, y: 7.3608513, z: -49.845425}
+    PositionPercentage: {x: 0, y: 0.47911355, z: 0.55915517}
+    HumanBone: 31
+    Role: 31
+  - Position: {x: 25.924206, y: 7.3477364, z: -49.844803}
+    PositionPercentage: {x: 0, y: 0.46893942, z: 0.56085694}
+    HumanBone: 32
+    Role: 32
+  - Position: {x: 25.981308, y: 7.3752666, z: -49.868683}
+    PositionPercentage: {x: 0, y: 0.49029642, z: 0.4955002}
+    HumanBone: 33
+    Role: 33
+  - Position: {x: 25.953487, y: 7.356773, z: -49.86939}
+    PositionPercentage: {x: 0, y: 0.47594967, z: 0.49356872}
+    HumanBone: 34
+    Role: 34
+  - Position: {x: 25.930681, y: 7.343854, z: -49.86963}
+    PositionPercentage: {x: 0, y: 0.46592757, z: 0.49291098}
+    HumanBone: 35
+    Role: 35
+  - Position: {x: 25.990292, y: 7.3708277, z: -49.8904}
+    PositionPercentage: {x: 0, y: 0.48685288, z: 0.43606314}
+    HumanBone: 36
+    Role: 36
+  - Position: {x: 25.965317, y: 7.354962, z: -49.890903}
+    PositionPercentage: {x: 0, y: 0.47454473, z: 0.43468502}
+    HumanBone: 37
+    Role: 37
+  - Position: {x: 25.946653, y: 7.343824, z: -49.89099}
+    PositionPercentage: {x: 0, y: 0.46590427, z: 0.43444487}
+    HumanBone: 38
+    Role: 38
+  - Position: {x: 27.26356, y: 7.4001856, z: -49.837276}
+    PositionPercentage: {x: 0.9803328, y: 0.50962776, z: 0.5814558}
+    HumanBone: 39
+    Role: 39
+  - Position: {x: 27.276093, y: 7.38282, z: -49.80668}
+    PositionPercentage: {x: 0.99053276, y: 0.49615622, z: 0.665198}
+    HumanBone: 40
+    Role: 40
+  - Position: {x: 27.299994, y: 7.3627434, z: -49.790363}
+    PositionPercentage: {x: 1, y: 0.48058134, z: 0.70985156}
+    HumanBone: 41
+    Role: 41
+  - Position: {x: 27.326855, y: 7.3758545, z: -49.823036}
+    PositionPercentage: {x: 1, y: 0.49075252, z: 0.62042975}
+    HumanBone: 42
+    Role: 42
+  - Position: {x: 27.355444, y: 7.3621383, z: -49.818703}
+    PositionPercentage: {x: 1, y: 0.48011193, z: 0.63229}
+    HumanBone: 43
+    Role: 43
+  - Position: {x: 27.380709, y: 7.3485365, z: -49.815292}
+    PositionPercentage: {x: 1, y: 0.46956015, z: 0.6416237}
+    HumanBone: 44
+    Role: 44
+  - Position: {x: 27.331152, y: 7.376546, z: -49.84622}
+    PositionPercentage: {x: 1, y: 0.4912889, z: 0.5569836}
+    HumanBone: 45
+    Role: 45
+  - Position: {x: 27.359055, y: 7.3608513, z: -49.845425}
+    PositionPercentage: {x: 1, y: 0.47911355, z: 0.55915517}
+    HumanBone: 46
+    Role: 46
+  - Position: {x: 27.384045, y: 7.3477364, z: -49.844803}
+    PositionPercentage: {x: 1, y: 0.46893942, z: 0.56085694}
+    HumanBone: 47
+    Role: 47
+  - Position: {x: 27.326942, y: 7.3752666, z: -49.868683}
+    PositionPercentage: {x: 1, y: 0.49029642, z: 0.4955002}
+    HumanBone: 48
+    Role: 48
+  - Position: {x: 27.354763, y: 7.356773, z: -49.86939}
+    PositionPercentage: {x: 1, y: 0.47594967, z: 0.49356872}
+    HumanBone: 49
+    Role: 49
+  - Position: {x: 27.37757, y: 7.343854, z: -49.86963}
+    PositionPercentage: {x: 1, y: 0.46592757, z: 0.49291098}
+    HumanBone: 50
+    Role: 50
+  - Position: {x: 27.317959, y: 7.370828, z: -49.8904}
+    PositionPercentage: {x: 1, y: 0.48685324, z: 0.43606314}
+    HumanBone: 51
+    Role: 51
+  - Position: {x: 27.342934, y: 7.354962, z: -49.890903}
+    PositionPercentage: {x: 1, y: 0.47454473, z: 0.43468502}
+    HumanBone: 52
+    Role: 52
+  - Position: {x: 27.361597, y: 7.3438244, z: -49.89099}
+    PositionPercentage: {x: 1, y: 0.46590465, z: 0.43444487}
+    HumanBone: 53
+    Role: 53
+  - Position: {x: 0, y: 7.408744, z: 0}
+    PositionPercentage: {x: 0, y: 0.5562674, z: 0}
+    HumanBone: 54
+    Role: 12
+  - Position: {x: 0, y: 7.408744, z: 0}
+    PositionPercentage: {x: 0, y: 0.5562674, z: 0}
+    HumanBone: 23
+    Role: 23
+  BoneTrackedRoles: 0000000004000000060000000700000008000000090000000a0000000b000000050000000300000002000000010000000d0000000e0000000f0000001000000011000000120000001300000014000000150000001600000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f00000030000000310000003200000033000000340000000c00000017000000

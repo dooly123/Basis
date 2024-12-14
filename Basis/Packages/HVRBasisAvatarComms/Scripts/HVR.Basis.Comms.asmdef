@@ -1,0 +1,19 @@
+{
+    "name": "HVR.Basis.Comms",
+    "rootNamespace": "",
+    "references": [
+        "BasisSDK",
+        "Basis",
+        "Unity.Mathematics",
+        "LiteNetLib"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

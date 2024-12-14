@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network server\\basisnetworking\\basisserverreductionsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|solutionrelative:basis network server\\basisnetworking\\basisserverreductionsystem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|solutionrelative:basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network server\\basisnetworking\\basisnetworkownership.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|solutionrelative:basis network server\\basisnetworking\\basisnetworkownership.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03C7F258-DF70-43BD-A0A5-ABA906C34879}|LiteNetLib\\LiteNetLib.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\litenetlib\\basechannel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03C7F258-DF70-43BD-A0A5-ABA906C34879}|LiteNetLib\\LiteNetLib.csproj|solutionrelative:litenetlib\\basechannel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 396,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BasisServerReductionSystem.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworking\\BasisServerReductionSystem.cs",
+              "RelativeDocumentMoniker": "Basis Network Server\\BasisNetworking\\BasisServerReductionSystem.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworking\\BasisServerReductionSystem.cs",
+              "RelativeToolTip": "Basis Network Server\\BasisNetworking\\BasisServerReductionSystem.cs",
+              "ViewState": "AgIAAJsAAAAAAAAAAAAjwKkAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-14T01:30:15.653Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BasisNetworkServer.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.cs",
+              "RelativeDocumentMoniker": "Basis Network Server\\BasisNetworkServer.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.cs",
+              "RelativeToolTip": "Basis Network Server\\BasisNetworkServer.cs",
+              "ViewState": "AgIAAFQBAAAAAAAAAAAAwGMBAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-14T00:43:06.097Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BasisNetworkOwnership.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "RelativeDocumentMoniker": "Basis Network Server\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "RelativeToolTip": "Basis Network Server\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAqwGoAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-13T20:16:24.942Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BaseChannel.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\BaseChannel.cs",
+              "RelativeDocumentMoniker": "LiteNetLib\\BaseChannel.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\BaseChannel.cs",
+              "RelativeToolTip": "LiteNetLib\\BaseChannel.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAowCcAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-13T20:16:22.648Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
