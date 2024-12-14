@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Basis.Network.Core;
-using Basis.Network.Core.Compression;
 using Basis.Scripts.Networking.Compression;
-using LiteNetLib;
-using LiteNetLib.Utils;
 using static SerializableBasis;
 public class BasisServerReductionSystem
 {
@@ -15,77 +8,7 @@ public class BasisServerReductionSystem
     public static int MillisecondDefaultInterval = 50;
     public static float BaseMultiplier = 1f; // Starting multiplier.
     public static float IncreaseRate = 0.005f; // Rate of increase per unit distance.
-    private static readonly Dictionary<ushort, SyncedToPlayerPulse> PlayerSync = new Dictionary<ushort, SyncedToPlayerPulse>();
-    private static readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
-
-    public static void AddOrUpdatePlayer(NetPeer playerID, SyncedToPlayerPulse data)
-    {
-        Lock.EnterWriteLock();
-        try
-        {
-            PlayerSync[(ushort)playerID.Id] = data;
-        }
-        finally
-        {
-            Lock.ExitWriteLock();
-        }
-    }
-    /// <summary>
-    /// Retrieves all SyncedToPlayerPulse instances from the dictionary.
-    /// </summary>
-    /// <returns>A list containing all SyncedToPlayerPulse instances.</returns>
-    public static List<SyncedToPlayerPulse> GetAllSyncedToPlayerPulses()
-    {
-        Lock.EnterReadLock();
-        try
-        {
-            // Return a copy of the values to ensure thread safety
-            return PlayerSync.Values.ToList();
-        }
-        finally
-        {
-            Lock.ExitReadLock();
-        }
-    }
-    public static bool TryGetPlayer(NetPeer playerID, out SyncedToPlayerPulse data)
-    {
-        Lock.EnterReadLock();
-        try
-        {
-            return PlayerSync.TryGetValue((ushort)playerID.Id, out data);
-        }
-        finally
-        {
-            Lock.ExitReadLock();
-        }
-    }
-    public static bool RemovePlayer(NetPeer playerID,out SyncedToPlayerPulse output)
-    {
-        Lock.EnterWriteLock();
-        try
-        {
-            output =  PlayerSync[(ushort)playerID.Id];
-            return PlayerSync.Remove((ushort)playerID.Id);
-        }
-        finally
-        {
-            Lock.ExitWriteLock();
-        }
-    }
-    public struct ClientPayload
-    {
-        public NetPeer localClient;
-        public NetPeer dataCameFromThisUser;
-    }
-    /// <summary>
-    /// Structure representing a player's server-side data that can be reduced.
-    /// </summary>
-    public struct ServerSideReducablePlayer
-    {
-        public System.Threading.Timer timer;//create a new timer
-        public bool newDataExists;
-        public ServerSideSyncPlayerMessage serverSideSyncPlayerMessage;
-    }
+    public static ConcurrentDictionary<ushort, SyncedToPlayerPulse> PlayerSync = new ConcurrentDictionary<ushort, SyncedToPlayerPulse>();
     /// <summary>
     /// add the new client
     /// then update all existing clients arrays
@@ -93,15 +16,15 @@ public class BasisServerReductionSystem
     /// <param name="playerID"></param>
     /// <param name="playerToUpdate"></param>
     /// <param name="serverSideSyncPlayer"></param>
-    public static void AddOrUpdatePlayer(NetPeer playerID, ServerSideSyncPlayerMessage playerToUpdate, NetPeer serverSideSyncPlayer)
+    public static void AddOrUpdatePlayer(ushort playerID, ServerSideSyncPlayerMessage playerToUpdate, ushort serverSideSyncPlayer)
     {
         //stage 1 lets update whoever send us this datas last player information
-        if (TryGetPlayer(serverSideSyncPlayer, out SyncedToPlayerPulse playerData))
+        if (PlayerSync.TryGetValue(serverSideSyncPlayer, out SyncedToPlayerPulse playerData))
         {
             playerData.lastPlayerInformation = playerToUpdate;
         }
         //ok now we can try to schedule sending out this data!
-        if (TryGetPlayer(playerID, out playerData))
+        if (PlayerSync.TryGetValue(playerID, out playerData))
         {
             // Update the player's message
             playerData.SupplyNewData(playerID, playerToUpdate, serverSideSyncPlayer);
@@ -112,26 +35,28 @@ public class BasisServerReductionSystem
             playerData = new SyncedToPlayerPulse
             {
                 playerID = playerID,
-              //  queuedPlayerMessages = new Dictionary<NetPeer, ServerSideReducablePlayer>()
+                queuedPlayerMessages = new ConcurrentDictionary<ushort, ServerSideReducablePlayer>(),
                 lastPlayerInformation = playerToUpdate,
             };
             //ok now we can try to schedule sending out this data!
-            AddOrUpdatePlayer(playerID, playerData);
-            playerData.SupplyNewData(playerID, playerToUpdate, serverSideSyncPlayer);
+            if (PlayerSync.TryAdd(playerID, playerData))
+            {  // Update the player's message
+                playerData.SupplyNewData(playerID, playerToUpdate, serverSideSyncPlayer);
+            }
         }
     }
-    public static void RemovePlayer(NetPeer playerID)
+    public static void RemovePlayer(ushort playerID)
     {
-        if (RemovePlayer(playerID, out SyncedToPlayerPulse pulse))
+        if (PlayerSync.TryRemove(playerID, out SyncedToPlayerPulse pulse))
         {
-            foreach (ServerSideReducablePlayer player in pulse.GetAllSyncedToqueued())
+            foreach (ServerSideReducablePlayer player in pulse.queuedPlayerMessages.Values)
             {
                 player.timer.Dispose();
             }
         }
-        foreach (SyncedToPlayerPulse player in GetAllSyncedToPlayerPulses())
+        foreach (SyncedToPlayerPulse player in PlayerSync.Values)
         {
-            if (player.Removequeued(playerID, out ServerSideReducablePlayer reduceablePlayer))
+            if (player.queuedPlayerMessages.TryRemove(playerID, out ServerSideReducablePlayer reduceablePlayer))
             {
                 reduceablePlayer.timer.Dispose();
             }
@@ -143,82 +68,28 @@ public class BasisServerReductionSystem
     public class SyncedToPlayerPulse
     {
         // The player ID to which the data is being sent
-        public NetPeer playerID;
+        public ushort playerID;
         public ServerSideSyncPlayerMessage lastPlayerInformation;
         /// <summary>
         /// Dictionary to hold queued messages for each player.
         /// Key: Player ID, Value: Server-side player data
         /// </summary>
-        public readonly Dictionary<NetPeer, ServerSideReducablePlayer> queuedPlayerMessages = new Dictionary<NetPeer, ServerSideReducablePlayer>();
-        public readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim();
-        public void AddOrUpdatequeued(NetPeer playerID, ServerSideReducablePlayer data)
-        {
-            Lock.EnterWriteLock();
-            try
-            {
-                queuedPlayerMessages[playerID] = data;
-            }
-            finally
-            {
-                Lock.ExitWriteLock();
-            }
-        }
-        /// <summary>
-        /// Retrieves all SyncedToPlayerPulse instances from the dictionary.
-        /// </summary>
-        /// <returns>A list containing all SyncedToPlayerPulse instances.</returns>
-        public List<ServerSideReducablePlayer> GetAllSyncedToqueued()
-        {
-            Lock.EnterReadLock();
-            try
-            {
-                // Return a copy of the values to ensure thread safety
-                return queuedPlayerMessages.Values.ToList();
-            }
-            finally
-            {
-                Lock.ExitReadLock();
-            }
-        }
-        public bool TryGetqueued(NetPeer playerID, out ServerSideReducablePlayer data)
-        {
-            Lock.EnterReadLock();
-            try
-            {
-                return queuedPlayerMessages.TryGetValue(playerID, out data);
-            }
-            finally
-            {
-                Lock.ExitReadLock();
-            }
-        }
-        public bool Removequeued(NetPeer playerID, out ServerSideReducablePlayer output)
-        {
-            Lock.EnterWriteLock();
-            try
-            {
-                output = queuedPlayerMessages[playerID];
-                return queuedPlayerMessages.Remove(playerID);
-            }
-            finally
-            {
-                Lock.ExitWriteLock();
-            }
-        }
+        public ConcurrentDictionary<ushort, ServerSideReducablePlayer> queuedPlayerMessages = new ConcurrentDictionary<ushort, ServerSideReducablePlayer>();
+
         /// <summary>
         /// Supply new data to a specific player.
         /// </summary>
         /// <param name="playerID">The ID of the player</param>
         /// <param name="serverSideSyncPlayerMessage">The message to be synced</param>
         /// <param name="serverSidePlayer"></param>
-        public void SupplyNewData(NetPeer playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, NetPeer serverSidePlayer)
+        public void SupplyNewData(ushort playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, ushort serverSidePlayer)
         {
-            if (TryGetqueued(serverSidePlayer, out ServerSideReducablePlayer playerData))
+            if (queuedPlayerMessages.TryGetValue(serverSidePlayer, out ServerSideReducablePlayer playerData))
             {
                 // Update the player's message
                 playerData.serverSideSyncPlayerMessage = serverSideSyncPlayerMessage;
                 playerData.newDataExists = true;
-                AddOrUpdatequeued(serverSidePlayer, playerData);
+                queuedPlayerMessages[serverSidePlayer] = playerData;
             }
             else
             {
@@ -233,7 +104,7 @@ public class BasisServerReductionSystem
         /// <param name="playerID">The ID of the player</param>
         /// <param name="serverSideSyncPlayerMessage">The initial message to be sent</param>
         /// <param name="serverSidePlayer"></param>
-        public void AddPlayer(NetPeer playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, NetPeer serverSidePlayer)
+        public void AddPlayer(ushort playerID, ServerSideSyncPlayerMessage serverSideSyncPlayerMessage, ushort serverSidePlayer)
         {
             ClientPayload clientPayload = new ClientPayload
             {
@@ -246,20 +117,26 @@ public class BasisServerReductionSystem
                 newDataExists = true,
                 timer = new System.Threading.Timer(SendPlayerData, clientPayload, MillisecondDefaultInterval, MillisecondDefaultInterval)
             };
-            AddOrUpdatequeued(serverSidePlayer, newPlayer);
+
+            queuedPlayerMessages[serverSidePlayer] = newPlayer;
         }
 
         /// <summary>
         /// Removes a player from the queue and disposes of their timer.
         /// </summary>
         /// <param name="playerID">The ID of the player to remove</param>
-        public void RemovePlayer(NetPeer playerID)
+        public void RemovePlayer(ushort playerID)
         {
-            if (Removequeued(playerID, out ServerSideReducablePlayer playerData))
+            if (queuedPlayerMessages.TryRemove(playerID, out ServerSideReducablePlayer playerData))
             {
                 // Dispose of the timer to free resources
                 playerData.timer.Dispose();
             }
+        }
+        public struct ClientPayload
+        {
+            public ushort localClient;
+            public ushort dataCameFromThisUser;
         }
         /// <summary>
         /// Callback function to send player data at regular intervals.
@@ -267,14 +144,14 @@ public class BasisServerReductionSystem
         /// <param name="state">The player ID (passed from the timer)</param>
         private void SendPlayerData(object state)
         {
-            if (state is ClientPayload playerID && TryGetqueued(playerID.dataCameFromThisUser, out ServerSideReducablePlayer playerData))
+            if (state is ClientPayload playerID && queuedPlayerMessages.TryGetValue(playerID.dataCameFromThisUser, out ServerSideReducablePlayer playerData))
             {
                 if (playerData.newDataExists)
                 {
-                    if (TryGetPlayer(playerID.localClient, out SyncedToPlayerPulse pulse))
+                    if (PlayerSync.TryGetValue(playerID.localClient, out SyncedToPlayerPulse pulse))
                     {
-                        Vector3 from = BasisNetworkCompressionExtensions.DecompressAndProcessAvatar(pulse.lastPlayerInformation);
-                        Vector3 to = BasisNetworkCompressionExtensions.DecompressAndProcessAvatar(playerData.serverSideSyncPlayerMessage);
+                        Vector3 from = BasisCompressionExtensions.DecompressAndProcessAvatar(pulse.lastPlayerInformation);
+                        Vector3 to = BasisCompressionExtensions.DecompressAndProcessAvatar(playerData.serverSideSyncPlayerMessage);
                         // Calculate the distance between the two points
                         float activeDistance = Distance(from, to);
                         // Adjust the timer interval based on the new syncRateMultiplier
@@ -283,33 +160,49 @@ public class BasisServerReductionSystem
                         {
                             adjustedInterval = byte.MaxValue;
                         }
-                        //   BNL.Log("Adjusted Interval is" + adjustedInterval);
+                        //  Console.WriteLine("Adjusted Interval is" + adjustedInterval);
                         playerData.timer.Change(adjustedInterval, adjustedInterval);
                         //how long does this data need to last for
                         playerData.serverSideSyncPlayerMessage.interval = (byte)adjustedInterval;
                     }
                     else
                     {
-                        BNL.Log("Unable to find Pulse for LocalClient Wont Do Interval Adjust");
+                        Console.WriteLine("Unable to find Pulse for LocalClient Wont Do Interval Adjust");
                     }
-                    if (playerData.serverSideSyncPlayerMessage.avatarSerialization.array == null || playerData.serverSideSyncPlayerMessage.avatarSerialization.array.Length == 0)
+                    using (DarkRiftWriter writer = DarkRiftWriter.Create())
                     {
-                        BNL.Log("Unable to send out Avatar Data Was null or Empty!");
+                        if (playerData.serverSideSyncPlayerMessage.avatarSerialization.array == null || playerData.serverSideSyncPlayerMessage.avatarSerialization.array.Length == 0)
+                        {
+                            Console.WriteLine("Unable to send out Avatar Data Was null or Empty!");
+                        }
+                        else
+                        {
+                            writer.Write(playerData.serverSideSyncPlayerMessage);
+
+                            using (Message message = Message.Create(BasisTags.AvatarMuscleUpdateTag, writer))
+                            {
+                                playerID.localClient.SendMessage(message, BasisNetworking.MovementChannel, DeliveryMethod.Sequenced);
+                            }
+                        }
                     }
-                    else
-                    {
-                        NetDataWriter Writer = new NetDataWriter();
-                        playerData.serverSideSyncPlayerMessage.Serialize(Writer);
-                        playerID.localClient.Send(Writer, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
-                        playerData.newDataExists = false;
-                    }
+                    playerData.newDataExists = false;
                 }
             }
         }
-        public static float Distance(Vector3 pointA, Vector3 pointB)
-        {
-            Vector3 difference = pointB - pointA;
-            return difference.SquaredMagnitude();
-        }
+    }
+    public static float Distance(Vector3 pointA, Vector3 pointB)
+    {
+        Vector3 difference = pointB - pointA;
+        return difference.SquaredMagnitude();
+    }
+
+    /// <summary>
+    /// Structure representing a player's server-side data that can be reduced.
+    /// </summary>
+    public struct ServerSideReducablePlayer
+    {
+        public System.Threading.Timer timer;//create a new timer
+        public bool newDataExists;
+        public ServerSideSyncPlayerMessage serverSideSyncPlayerMessage;
     }
 }

@@ -10,7 +10,7 @@ namespace Basis.Scripts.BasisSdk
         public float GravityMultiplier = 0.1f;
         [Tooltip("How much mechanical friction to apply, this is specifically how quickly oscillations come to rest.")]
         [Range(0f, 1f)]
-        public float Friction = 0.05f;
+        public float Friction = 0.25f;
         [Tooltip("How much angular force is applied to bring it to the target shape.")]
         [Range(0f, 1f)]
         public float AngleElasticity = 0.6f;

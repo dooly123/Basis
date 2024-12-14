@@ -21,7 +21,6 @@ public static class BasisNetworkServer
     public static bool UseNativeSockets = false;
     private static CancellationTokenSource cancellationTokenSource;
     public static ConcurrentDictionary<ushort, NetPeer> Peers = new ConcurrentDictionary<ushort, NetPeer>();
-    public static bool UsesReductionSystem = true;
     public static void StartServer()
     {
         listener = new EventBasedNetListener();
@@ -99,14 +98,6 @@ public static class BasisNetworkServer
         BNL.Log("Server Worker Threads booting");
         StartWorker();
         BNL.Log("Server Worker Threads Booted");
-    }
-    public static void BroadcastPositionUpdate(NetPeer sender, byte channel, NetDataWriter Writer, ConcurrentDictionary<ushort, NetPeer> authenticatedClients)
-    {
-        IEnumerable<NetPeer> clientsToNotify = authenticatedClients.Values.Where(client => client != sender);
-        foreach (NetPeer client in clientsToNotify)
-        {
-            client.Send(Writer, channel, DeliveryMethod.Sequenced);
-        }
     }
     public static void ClientDisconnect(ushort Leaving, byte channel, ConcurrentDictionary<ushort, NetPeer> authenticatedClients)
     {
@@ -355,23 +346,14 @@ public static class BasisNetworkServer
         LocalAvatarSyncMessage LocalAvatarSyncMessage = new LocalAvatarSyncMessage();
         LocalAvatarSyncMessage.Deserialize(Reader);
         BasisSavedState.AddLastData(Peer, LocalAvatarSyncMessage);
-        ServerSideSyncPlayerMessage ssspm = CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage, e.ClientId);
-        if (UsesReductionSystem)
+        if (Peers.TryGetValue(e.ClientId, out NetPeer client))
         {
-            foreach (NetPeer client in Peers.Values)
-            {
-                if ((ushort)client.Id == e.ClientId)
-                {
-                    continue;
-                }
-                BasisServerReductionSystem.AddOrUpdatePlayer(client, ssspm, Peer);
-            }
+            ServerSideSyncPlayerMessage ssspm = CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage, e.ClientId);
+            BasisServerReductionSystem.AddOrUpdatePlayer((ushort)client.Id, ssspm, (ushort)Peer.Id);
         }
         else
         {
-            NetDataWriter Writer = new NetDataWriter();
-            LocalAvatarSyncMessage.Serialize(Writer);
-            BroadcastPositionUpdate(Peer, BasisNetworkCommons.MovementChannel, Writer, Peers);
+            BNL.LogError("Peer dictonary did not have " + e.ClientId);
         }
     }
     private static ServerSideSyncPlayerMessage CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage local, ushort clientId)

@@ -257,26 +257,26 @@ namespace Basis.Scripts.Networking
                 }, null);
             });
         }
-        private void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+        private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
+            await Task.Run(() =>
             {
-                if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
+                BasisNetworkManagement.MainThreadContext.Post(async _ =>
+            {
+                if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
                 {
-                    BNL.LogError(Reason);
+                    if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
+                    {
+                        BNL.LogError(Reason);
+                    }
                 }
-            }
-            BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
-            Players.Clear();
-            if (TryToReconnectAutomatically)
-            {
-               Connect(Port, Ip);
-            }
-            else
-            {
+                BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
+                Players.Clear();
+                OwnershipPairing.Clear();
                 SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
-            }
-            OwnershipPairing.Clear();
+                await Boot_Sequence.BootSequence.OnAddressablesInitializationComplete();
+            }, null);
+            });
         }
         public void Disconnect()
         {
