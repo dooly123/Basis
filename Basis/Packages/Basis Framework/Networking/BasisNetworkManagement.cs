@@ -228,8 +228,9 @@ namespace Basis.Scripts.Networking
                     try
                     {
                         // Create the local networked player asynchronously.
+                        this.transform.GetPositionAndRotation(out Vector3 Position,out Quaternion Rotation);
                         BasisNetworkedPlayer LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(
-                            new InstantiationParameters(this.transform.position, this.transform.rotation, this.transform));
+                            new InstantiationParameters(Position, Rotation, this.transform));
 
                         LocalPlayerID = (ushort)peer.Id;
                         LocalPlayerPeer = peer;

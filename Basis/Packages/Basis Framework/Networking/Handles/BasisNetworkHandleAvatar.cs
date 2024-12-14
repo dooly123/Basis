@@ -20,7 +20,7 @@ public static class BasisNetworkHandleAvatar
         // Cancel any ongoing task
         avatarUpdateCancellationTokenSource.Cancel();
         avatarUpdateCancellationTokenSource = new CancellationTokenSource();
-        var cancellationToken = avatarUpdateCancellationTokenSource.Token;
+        CancellationToken cancellationToken = avatarUpdateCancellationTokenSource.Token;
 
         try
         {
