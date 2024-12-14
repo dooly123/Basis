@@ -326,9 +326,11 @@ namespace Basis.Scripts.Networking
                     break;
                 case BasisNetworkCommons.VoiceChannel:
                     await BasisNetworkHandleVoice.HandleAudioUpdate(Reader);
+                    Reader.Recycle();
                     break;
                 case BasisNetworkCommons.MovementChannel:
                     await BasisNetworkHandleAvatar.HandleAvatarUpdate(Reader);
+                    Reader.Recycle();
                     break;
                 case BasisNetworkCommons.SceneChannel:
                      e = new BasisMessageReceivedEventArgs
@@ -356,9 +358,9 @@ namespace Basis.Scripts.Networking
                     break;
                 default:
                     BNL.LogError($"this Channel was not been implemented {channel}");
+                    Reader.Recycle();
                     break;
             }
-            Reader.Recycle();
         }
         private async Task NetworkReceiveEventTag(NetPeer peer, NetPacketReader reader, BasisMessageReceivedEventArgs e)
         {
@@ -410,6 +412,7 @@ namespace Basis.Scripts.Networking
                     Debug.Log("Unknown message tag: " + e.Tag);
                     break;
             }
+            reader.Recycle();
         }
         public static void RequestOwnership(string UniqueNetworkId, ushort NewOwner)
         {
