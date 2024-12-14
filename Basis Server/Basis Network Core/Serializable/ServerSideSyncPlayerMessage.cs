@@ -5,13 +5,13 @@ public static partial class SerializableBasis
     public struct ServerSideSyncPlayerMessage
     {
         public PlayerIdMessage playerIdMessage;
-        public LocalAvatarSyncMessage avatarSerialization;
         public byte interval;
+        public LocalAvatarSyncMessage avatarSerialization;
         public void Deserialize(NetDataReader Writer)
         {
+            Writer.Get(out interval);
             playerIdMessage.Deserialize(Writer);
             avatarSerialization.Deserialize(Writer);
-            Writer.Get(out interval);
         }
 
         public void Dispose()
@@ -22,9 +22,9 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
+            Writer.Put(interval);
             playerIdMessage.Serialize(Writer);
             avatarSerialization.Serialize(Writer);
-            Writer.Put(interval);
         }
     }
 }
