@@ -10,11 +10,13 @@ public class BasisAudioDecoder
     public BasisOpusSettings Settings;
     public float[] pcmBuffer;
     public int pcmLength;
+    public int FakepcmLength;
     public void Initialize()
     {
+        FakepcmLength = 2048;
         pcmLength = 2048;
         Settings = BasisDeviceManagement.Instance.BasisOpusSettings;
-        pcmBuffer = new float[pcmLength * (int)Settings.NumChannels];//AudioDecoder.maximumPacketDuration now its 2048
+        pcmBuffer = new float[FakepcmLength * (int)Settings.NumChannels];//AudioDecoder.maximumPacketDuration now its 2048
         decoder = new AudioDecoder(Settings.SamplingFrequency, Settings.NumChannels);
     }
     public void Deinitalize()
@@ -29,9 +31,9 @@ public class BasisAudioDecoder
     /// the pcm length is how much was actually encoded.
     /// </summary>
     /// <param name="data"></param>
-    public void OnDecode(ArraySegment<byte> data,int length)
+    public void OnDecode(byte[] data,int length)
     {
-        pcmLength = decoder.Decode(data.Array, length, pcmBuffer);
+        pcmLength = decoder.Decode(data, length, pcmBuffer);
         OnDecoded?.Invoke();
     }
 }

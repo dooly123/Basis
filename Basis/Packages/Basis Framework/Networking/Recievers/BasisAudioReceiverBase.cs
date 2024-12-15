@@ -40,12 +40,7 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void OnDecoded(float[] pcm, int length)
         {
-            if (length != decoder.pcmLength)
-            {
-                Debug.LogError($"PCM length {length} does not match SegmentSize {decoder.pcmLength}");
-                return;
-            }
-            RingBuffer.Add(pcm, decoder.pcmLength);
+            RingBuffer.Add(pcm, length);
         }
         public void OnAudioFilterRead(float[] data, int channels)
         {
@@ -113,15 +108,23 @@ namespace Basis.Scripts.Networking.Recievers
         public void Add(float[] segment, int length)
         {
             if (segment == null || segment.Length == 0)
+            {
                 throw new ArgumentNullException(nameof(segment));
-            if (length <= 0 || length > segment.Length)
-                throw new ArgumentOutOfRangeException(nameof(length), "Length must be a positive number and less than or equal to the segment's length.");
-
+            }
+            if (length <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), "Length must be a positive number.. "  + length);
+            }
+            if (length > segment.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), "data needs to be less than or equal to the segment's length. " + length);
+            }
             lock (lockObject)
             {
                 if (length > Capacity)
+                {
                     throw new InvalidOperationException("The segment is too large to fit into the buffer.");
-
+                }
                 // Remove old data to make room for new data
                 int availableSpace = Capacity - size;
                 if (length > availableSpace)

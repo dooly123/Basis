@@ -8,7 +8,6 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static SerializableBasis;
 
 
@@ -233,12 +232,12 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
-                if (silentData == null || silentData.Length != AudioReceiverModule.decoder.pcmLength)
+                if (silentData == null || silentData.Length != AudioReceiverModule.decoder.FakepcmLength)
                 {
-                    silentData = new float[AudioReceiverModule.decoder.pcmLength];
+                    silentData = new float[AudioReceiverModule.decoder.FakepcmLength];
                     Array.Fill(silentData, 0f);
                 }
-                AudioReceiverModule.OnDecoded(silentData, AudioReceiverModule.decoder.pcmLength);
+                AudioReceiverModule.OnDecoded(silentData, AudioReceiverModule.decoder.FakepcmLength);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(false);
                 BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(1);
             }
