@@ -1,4 +1,5 @@
 ﻿using LiteNetLib.Utils;
+using System;
 public static partial class SerializableBasis
 {
     public struct LocalAvatarSyncMessage
@@ -6,7 +7,7 @@ public static partial class SerializableBasis
         public byte[] array;
         public void Deserialize(NetDataReader Writer)
         {
-            Writer.GetBytes(array,386);
+            array = Writer.GetRemainingBytes();
         }
 
         public void Dispose()
@@ -15,7 +16,7 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
-             Writer.Put(array);
+            Writer.Put(array);
         }
     }
 }

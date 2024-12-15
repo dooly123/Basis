@@ -172,49 +172,6 @@ public static class BasisNetworkServer
         }
         server?.Stop();
     }
-    private static void NetworkReceiveEventTag(NetPeer peer, NetPacketReader Reader, BasisMessageReceivedEventArgs e)
-    {
-        switch (e.Tag)
-        {
-            case BasisNetworkTag.AvatarChangeMessage:
-                SendAvatarMessageToClients(Reader, peer, e);
-                break;
-            case BasisNetworkTag.SceneGenericMessage_Recipients_NoPayload:
-                BasisNetworkingGeneric.HandleSceneDataMessage_Recipients_NoPayload(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload:
-            case BasisNetworkTag.AvatarGenericMessage:
-                BasisNetworkingGeneric.HandleAvatarDataMessage_Recipients_Payload(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.AvatarGenericMessage_NoRecipients:
-                BasisNetworkingGeneric.HandleAvatarDataMessage_NoRecipients(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload:
-                BasisNetworkingGeneric.HandleAvatarDataMessage_NoRecipients_NoPayload(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.SceneGenericMessage:
-            case BasisNetworkTag.SceneGenericMessage_NoRecipients:
-                BasisNetworkingGeneric.HandleSceneDataMessage_NoRecipients(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload:
-                BasisNetworkingGeneric.HandleSceneDataMessage_NoRecipients_NoPayload(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.AudioRecipients:
-                UpdateVoiceReceivers(Reader, peer);
-                break;
-            case BasisNetworkTag.OwnershipResponse:
-                BNL.Log("OwnershipResponse");
-                BasisNetworkOwnership.OwnershipResponse(Reader, peer, e, Peers);
-                break;
-            case BasisNetworkTag.OwnershipTransfer:
-                BNL.Log("OwnershipTransfer");
-                BasisNetworkOwnership.OwnershipTransfer(Reader, peer, e, Peers);
-                break;
-            default:
-                BNL.LogError("Message Index " + e.Tag + " does not exist on the server!");
-                break;
-        }
-    }
     private static void NetworkReceiveEvent(NetPeer peer, NetPacketReader Reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
     {
 
@@ -258,6 +215,49 @@ public static class BasisNetworkServer
                 break;
         }
         Reader.Recycle();
+    }
+    private static void NetworkReceiveEventTag(NetPeer peer, NetPacketReader Reader, BasisMessageReceivedEventArgs e)
+    {
+        switch (e.Tag)
+        {
+            case BasisNetworkTag.AvatarChangeMessage:
+                SendAvatarMessageToClients(Reader, peer, e);
+                break;
+            case BasisNetworkTag.SceneGenericMessage_Recipients_NoPayload:
+                BasisNetworkingGeneric.HandleSceneDataMessage_Recipients_NoPayload(Reader, e, peer, Peers);
+                break;
+            case BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload:
+            case BasisNetworkTag.AvatarGenericMessage:
+                BasisNetworkingGeneric.HandleAvatarDataMessage_Recipients_Payload(Reader, e, peer, Peers);
+                break;
+            case BasisNetworkTag.AvatarGenericMessage_NoRecipients:
+                BasisNetworkingGeneric.HandleAvatarDataMessage_NoRecipients(Reader, e, peer, Peers);
+                break;
+            case BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload:
+                BasisNetworkingGeneric.HandleAvatarDataMessage_NoRecipients_NoPayload(Reader, e, peer, Peers);
+                break;
+            case BasisNetworkTag.SceneGenericMessage:
+            case BasisNetworkTag.SceneGenericMessage_NoRecipients:
+                BasisNetworkingGeneric.HandleSceneDataMessage_NoRecipients(Reader, e, peer, Peers);
+                break;
+            case BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload:
+                BasisNetworkingGeneric.HandleSceneDataMessage_NoRecipients_NoPayload(Reader, e, peer, Peers);
+                break;
+            case BasisNetworkTag.AudioRecipients:
+                UpdateVoiceReceivers(Reader, peer);
+                break;
+            case BasisNetworkTag.OwnershipResponse:
+                BNL.Log("OwnershipResponse");
+                BasisNetworkOwnership.OwnershipResponse(Reader, peer, e, Peers);
+                break;
+            case BasisNetworkTag.OwnershipTransfer:
+                BNL.Log("OwnershipTransfer");
+                BasisNetworkOwnership.OwnershipTransfer(Reader, peer, e, Peers);
+                break;
+            default:
+                BNL.LogError("Message Index " + e.Tag + " does not exist on the server!");
+                break;
+        }
     }
     private static void SendAvatarMessageToClients(NetPacketReader Reader, NetPeer Peer, BasisMessageReceivedEventArgs e)
     {
