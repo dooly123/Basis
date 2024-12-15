@@ -1,12 +1,14 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Profiler;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static SerializableBasis;
 
 
@@ -222,6 +224,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
+                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(audioSegment.audioSegmentData.size);
                 AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer, audioSegment.audioSegmentData.size);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
@@ -237,6 +240,7 @@ namespace Basis.Scripts.Networking.Recievers
                 }
                 AudioReceiverModule.OnDecoded(silentData, AudioReceiverModule.decoder.pcmLength);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(false);
+                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(1);
             }
         }
         public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)

@@ -1,5 +1,6 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
+using Basis.Scripts.Profiler;
 using System;
 using static SerializableBasis;
 using Vector3 = UnityEngine.Vector3;
@@ -16,6 +17,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             {
                 throw new ArgumentException("Cant Serialize Avatar Data");
             }
+            int Length = syncMessage.avatarSerialization.array.Length;
             baseReceiver.Offset = 0;
             AvatarBuffer avatarBuffer = new AvatarBuffer
             {
@@ -45,6 +47,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 
           }
             */
+            BasisNetworkProfiler.InBoundAvatarUpdatePacket.Sample(Length);
             avatarBuffer.SecondsInterval = syncMessage.interval / 1000.0f;
             baseReceiver.EnQueueAvatarBuffer(ref avatarBuffer);
         }

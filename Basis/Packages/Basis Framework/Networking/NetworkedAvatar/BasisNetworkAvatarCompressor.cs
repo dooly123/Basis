@@ -17,7 +17,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             NetDataWriter Writer = new NetDataWriter();
             CompressAvatarData(ref NetworkSendBase.Offset, ref NetworkSendBase.FloatArray,ref NetworkSendBase.LASM,NetworkSendBase.PoseHandler,NetworkSendBase.HumanPose, Anim);
             NetworkSendBase.LASM.Serialize(Writer);
-            BasisNetworkProfiler.AvatarUpdatePacket.Sample(Writer.Length);
+            BasisNetworkProfiler.OutBoundAvatarUpdatePacket.Sample(Writer.Length);
             BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
         }
         public static LocalAvatarSyncMessage InitalAvatarData(Animator Anim)

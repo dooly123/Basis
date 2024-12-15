@@ -292,13 +292,16 @@ public static class BasisMenuItemsEditor
         }
     }
     [System.Serializable]
-    [ProfilerModuleMetadata("Byte Array Count")]
+    [ProfilerModuleMetadata("Basis Network Information")]
     public class BasisNetworkingProfilerModule : ProfilerModule
     {
         static readonly ProfilerCounterDescriptor[] k_Counters = new ProfilerCounterDescriptor[]
         {
-        new ProfilerCounterDescriptor(BasisNetworkProfiler.AvatarUpdatePacketText, "Avatar Packet Size"),
-        new ProfilerCounterDescriptor(BasisNetworkProfiler.AudioUpdatePacketText, "Audio Packet Size"),
+        new ProfilerCounterDescriptor(BasisNetworkProfiler.OutBoundAvatarUpdatePacketText, "Avatar Packet Size"),
+        new ProfilerCounterDescriptor(BasisNetworkProfiler.OutBoundAudioUpdatePacketText, "Audio Packet Size"),
+
+        new ProfilerCounterDescriptor(BasisNetworkProfiler.InBoundAvatarUpdatePacketText, "Avatar Packet Size"),
+        new ProfilerCounterDescriptor(BasisNetworkProfiler.InBoundAudioUpdatePacketText, "Audio Packet Size"),
         };
         // Ensure that both ProfilerCategory.Scripts and ProfilerCategory.Memory categories are enabled when our module is active.
         static readonly string[] k_AutoEnabledCategoryNames = new string[]

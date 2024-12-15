@@ -23,7 +23,6 @@ namespace Basis.Scripts.Networking.Transmitters
         public BasisNetworkedPlayer NetworkedPlayer;
         public BasisNetworkSendBase Base;
         public BasisOpusSettings settings;
-        public byte[] outputBuffer;
         public int encodedLength;
         public BasisLocalPlayer Local;
         public MicrophoneRecorder Recorder;
@@ -91,16 +90,16 @@ namespace Basis.Scripts.Networking.Transmitters
         public void OnAudioReady()
         {
             // Ensure the output buffer is properly initialized and matches the packet size
-            if (outputBuffer == null || Recorder.PacketSize != outputBuffer.Length)
+            if (AudioSegmentData.buffer == null || Recorder.PacketSize != AudioSegmentData.buffer.Count)
             {
-                outputBuffer = new byte[Recorder.PacketSize];
+                AudioSegmentData.buffer = new byte[Recorder.PacketSize];
             }
 
             // Locking to ensure thread safety during encoding
             lock (encoder.encoderLock)
             {
                 // Encode the audio data from the microphone recorder's buffer
-                encodedLength = encoder.Encode(Recorder.processBufferArray, outputBuffer);
+                encodedLength = encoder.Encode(Recorder.processBufferArray, AudioSegmentData.buffer.Array);
             }
 
             // Invoke the OnEncoded event to handle the encoded data (e.g., sending over the network)
@@ -110,14 +109,10 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (Base.HasReasonToSendAudio)
             {
-                if (AudioSegmentData.buffer == null || AudioSegmentData.buffer.Count != encodedLength)
-                {
-                    AudioSegmentData.buffer = new byte[encodedLength];
-                }
-                Buffer.BlockCopy(outputBuffer, 0, AudioSegmentData.buffer.Array, 0, encodedLength);
+                AudioSegmentData.size = encodedLength;
                 NetDataWriter writer = new NetDataWriter();
                 AudioSegmentData.Serialize(writer);
-                BasisNetworkProfiler.AudioUpdatePacket.Sample(encodedLength);
+                BasisNetworkProfiler.OutBoundAudioUpdatePacket.Sample(encodedLength);
                 BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
                 Local.AudioReceived?.Invoke(true);
             }
@@ -128,7 +123,7 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 NetDataWriter writer = new NetDataWriter();
                 audioSilentSegmentData.Serialize(writer);
-                BasisNetworkProfiler.AudioUpdatePacket.Sample(writer.Length);
+                BasisNetworkProfiler.OutBoundAudioUpdatePacket.Sample(writer.Length);
                 BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
                 Local.AudioReceived?.Invoke(false);
             }
