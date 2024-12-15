@@ -170,8 +170,9 @@ namespace Basis.Scripts.Networking.Transmitters
                     users = TalkingPoints.ToArray()
                 };
                 NetDataWriter writer = new NetDataWriter();
+                writer.Put(BasisNetworkTag.AudioRecipients);
                 VRM.Serialize(writer);
-                BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.ReliableOrdered);
+                BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableOrdered);
             }
         }
         public static bool AreBoolArraysEqual(bool[] array1, bool[] array2)

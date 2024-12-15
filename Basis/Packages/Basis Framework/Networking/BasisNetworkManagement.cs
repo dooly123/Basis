@@ -171,6 +171,7 @@ namespace Basis.Scripts.Networking
             Players.Clear();
             BasisAvatarBufferPool.Clear();
             Disconnect();
+            GameObject.Destroy(this.gameObject);
         }
         public void LateUpdate()
         {
