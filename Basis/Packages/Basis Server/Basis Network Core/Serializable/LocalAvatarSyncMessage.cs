@@ -6,7 +6,7 @@ public static partial class SerializableBasis
         public byte[] array;
         public void Deserialize(NetDataReader Writer)
         {
-            array = Writer.GetRemainingBytes();
+            Writer.GetBytes(array,386);
         }
 
         public void Dispose()

@@ -99,9 +99,9 @@ namespace Basis.Scripts.Networking.Compression
         {
             EnsureSize(bytes, offset + 12);
 
-            float x = ReadFloatFromBytes(ref bytes, ref offset);
-            float y = ReadFloatFromBytes(ref bytes, ref offset);
-            float z = ReadFloatFromBytes(ref bytes, ref offset);
+            float x = ReadFloatFromBytes(ref bytes, ref offset);//4
+            float y = ReadFloatFromBytes(ref bytes, ref offset);//8
+            float z = ReadFloatFromBytes(ref bytes, ref offset);//12
 
             return new Unity.Mathematics.float3(x, y, z);
         }
@@ -128,12 +128,12 @@ namespace Basis.Scripts.Networking.Compression
         {
             EnsureSize(bytes, offset + 14);
 
-            float x = ReadFloatFromBytes(ref bytes, ref offset);
-            float y = ReadFloatFromBytes(ref bytes, ref offset);
-            float z = ReadFloatFromBytes(ref bytes, ref offset);
+            float x = ReadFloatFromBytes(ref bytes, ref offset);//4
+            float y = ReadFloatFromBytes(ref bytes, ref offset);//8
+            float z = ReadFloatFromBytes(ref bytes, ref offset);//12
 
             ushort compressedW = (ushort)(bytes[offset] | (bytes[offset + 1] << 8));
-            offset += 2;
+            offset += 2;//2
 
             return new Unity.Mathematics.quaternion(x, y, z, compressor.Decompress(compressedW));
         }

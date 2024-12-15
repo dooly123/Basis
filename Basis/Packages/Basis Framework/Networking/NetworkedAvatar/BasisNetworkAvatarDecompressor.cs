@@ -12,18 +12,18 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         /// </summary>
         public static void DecompressAndProcessAvatar(BasisNetworkReceiver baseReceiver, ServerSideSyncPlayerMessage syncMessage)
         {
-            if(syncMessage.avatarSerialization.array == null)
+            if (syncMessage.avatarSerialization.array == null)
             {
                 throw new ArgumentException("Cant Serialize Avatar Data");
             }
-                baseReceiver.Offset= 0;
+            baseReceiver.Offset = 0;
             AvatarBuffer avatarBuffer = new AvatarBuffer
             {
                 Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref baseReceiver.Offset),
                 rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref baseReceiver.Offset)
             };
             BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref baseReceiver.Offset);
-          //  int length = syncMessage.avatarSerialization.array.Length;
+            //  int length = syncMessage.avatarSerialization.array.Length;
             avatarBuffer.Scale = Vector3.one;
             /*
             if (Offset == length)//we are at the end
