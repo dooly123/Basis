@@ -141,11 +141,12 @@ namespace Basis.Scripts.Networking.Compression
         // Write muscles to bytes (no BitConverter)
         public static void WriteMusclesToBytes(float[] muscles, ref byte[] bytes, ref int offset)
         {
-            int requiredLength = 90 * sizeof(float);
+            int Length = muscles.Length;
+            int requiredLength = Length * sizeof(float);
             EnsureSize(ref bytes, offset + requiredLength);
 
             // Manually copy float values as bytes
-            for (int Index = 0; Index < 90; Index++)
+            for (int Index = 0; Index < Length; Index++)
             {
                 WriteFloatToBytes(muscles[Index], ref bytes, ref offset);
             }

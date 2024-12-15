@@ -46,6 +46,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             BasisUnityBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition, ref LocalAvatarSyncMessage.array, ref Offset);
             BasisUnityBitPackerExtensions.WriteQuaternionToBytes(Anim.bodyRotation, ref LocalAvatarSyncMessage.array, ref Offset, BasisNetworkSendBase.RotationCompression);
             BasisUnityBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref LocalAvatarSyncMessage.array, ref Offset);
+            Debug.Log(LocalAvatarSyncMessage.array.Length);
             /*
             UnityEngine.Vector3 Scale = Anim.transform.localScale;
             //we decode localscale last so we can optimize it.
