@@ -43,11 +43,9 @@ namespace Basis.Scripts.Networking.Transmitters
         public static float DefaultInterval = 0.0333333333333333f;
         public static float BaseMultiplier = 1f; // Starting multiplier.
         public static float IncreaseRate = 0.0075f; // Rate of increase per unit distance.
-
-        public int InitalizedLength = -1;
         public CombinedDistanceAndClosestTransformJob distanceJob = new CombinedDistanceAndClosestTransformJob();
         public JobHandle distanceJobHandle;
-        public int IndexLength;
+        public int IndexLength = -1;
         public float SlowestSendRate = 2.5f;
         void SendOutLatest()
         {
@@ -216,6 +214,7 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (Ready == false)
             {
+                IndexLength = -1;
                 NetworkedPlayer = networkedPlayer;
                 AudioTransmission.OnEnable(networkedPlayer);
                 OnAvatarCalibration();
@@ -225,9 +224,6 @@ namespace Basis.Scripts.Networking.Transmitters
                     NetworkedPlayer.Player.OnAvatarSwitched += OnAvatarCalibration;
                     NetworkedPlayer.Player.OnAvatarSwitched += SendOutLatestAvatar;
                     BasisLocalInputActions.AfterAvatarChanges += SendOutLatest;
-                    BasisNetworkManagement.OnRemotePlayerJoined += OnRemoteJoined;
-                    BasisNetworkManagement.OnRemotePlayerLeft += OnRemoteLeft;
-                    ResizeOrCreateArrayData(BasisNetworkManagement.ReceiverCount);
                     HasEvents = true;
                 }
                 Ready = true;
@@ -237,14 +233,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 Debug.Log("Already Ready");
             }
         }
-        private void OnRemoteLeft(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
-        {
-            ResizeOrCreateArrayData(BasisNetworkManagement.ReceiverCount);
-        }
-        private void OnRemoteJoined(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
-        {
-            ResizeOrCreateArrayData(BasisNetworkManagement.ReceiverCount);
-        }
         public void ScheduleCheck()
         {
             distanceJob.AvatarDistance = SMModuleDistanceBasedReductions.AvatarRange;
@@ -252,12 +240,9 @@ namespace Basis.Scripts.Networking.Transmitters
             distanceJob.VoiceDistance = SMModuleDistanceBasedReductions.MicrophoneRange;
             distanceJob.referencePosition = NetworkedPlayer.MouthBone.OutgoingWorldData.position;
             smallestDistance[0] = float.MaxValue;
-            for (int Index = 0; Index < BasisNetworkManagement.ReceiverCount; Index++)
-            {
-                targetPositions[Index] = BasisNetworkManagement.ReceiverArray[Index].NetworkedPlayer.MouthBone.OutgoingWorldData.position;
-            }
             if (IndexLength != BasisNetworkManagement.ReceiverCount)
             {
+                ResizeOrCreateArrayData(BasisNetworkManagement.ReceiverCount);
                 LastMicrophoneRangeIndex = new bool[BasisNetworkManagement.ReceiverCount];
                 MicrophoneRangeIndex = new bool[BasisNetworkManagement.ReceiverCount];
                 HearingIndex = new bool[BasisNetworkManagement.ReceiverCount];
@@ -266,62 +251,60 @@ namespace Basis.Scripts.Networking.Transmitters
                 IndexLength = BasisNetworkManagement.ReceiverCount;
                 HearingIndexToId = BasisNetworkManagement.RemotePlayers.Keys.ToArray();
             }
+            for (int Index = 0; Index < BasisNetworkManagement.ReceiverCount; Index++)
+            {
+                targetPositions[Index] = BasisNetworkManagement.ReceiverArray[Index].NetworkedPlayer.MouthBone.OutgoingWorldData.position;
+            }
             distanceJobHandle = distanceJob.Schedule(targetPositions.Length, 64);
         }
         public void ResizeOrCreateArrayData(int TotalUserCount)
         {
-            if (InitalizedLength != TotalUserCount)
+            if (distanceJobHandle.IsCompleted == false)
             {
-                if (distanceJobHandle.IsCompleted == false)
-                {
-                    distanceJobHandle.Complete();
-                }
-                if (targetPositions.IsCreated)
-                {
-                    targetPositions.Dispose();
-                }
-                if (distances.IsCreated)
-                {
-                    distances.Dispose();
-                }
-                if (smallestDistance.IsCreated)
-                {
-                    smallestDistance.Dispose();
-                }
-                if (DistanceResults.IsCreated)
-                {
-                    DistanceResults.Dispose();
-                }
-                if (HearingResults.IsCreated)
-                {
-                    HearingResults.Dispose();
-                }
-                if (AvatarResults.IsCreated)
-                {
-                    AvatarResults.Dispose();
-                }
-                smallestDistance = new NativeArray<float>(1, Allocator.Persistent);
-                smallestDistance[0] = float.MaxValue;
-                targetPositions = new NativeArray<float3>(TotalUserCount, Allocator.Persistent);
-                distances = new NativeArray<float>(TotalUserCount, Allocator.Persistent);
-                DistanceResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
-
-                HearingResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
-                AvatarResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
-
-                InitalizedLength = TotalUserCount;
-
-                // Step 2: Find closest index in the next frame
-                distanceJob.distances = distances;
-                distanceJob.DistanceResults = DistanceResults;
-                distanceJob.HearingResults = HearingResults;
-                distanceJob.AvatarResults = AvatarResults;
-
-
-                distanceJob.targetPositions = targetPositions;
-
-                distanceJob.smallestDistance = smallestDistance;
+                distanceJobHandle.Complete();
             }
+            if (targetPositions.IsCreated)
+            {
+                targetPositions.Dispose();
+            }
+            if (distances.IsCreated)
+            {
+                distances.Dispose();
+            }
+            if (smallestDistance.IsCreated)
+            {
+                smallestDistance.Dispose();
+            }
+            if (DistanceResults.IsCreated)
+            {
+                DistanceResults.Dispose();
+            }
+            if (HearingResults.IsCreated)
+            {
+                HearingResults.Dispose();
+            }
+            if (AvatarResults.IsCreated)
+            {
+                AvatarResults.Dispose();
+            }
+            smallestDistance = new NativeArray<float>(1, Allocator.Persistent);
+            smallestDistance[0] = float.MaxValue;
+            targetPositions = new NativeArray<float3>(TotalUserCount, Allocator.Persistent);
+            distances = new NativeArray<float>(TotalUserCount, Allocator.Persistent);
+            DistanceResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
+
+            HearingResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
+            AvatarResults = new NativeArray<bool>(TotalUserCount, Allocator.Persistent);
+            // Step 2: Find closest index in the next frame
+            distanceJob.distances = distances;
+            distanceJob.DistanceResults = DistanceResults;
+            distanceJob.HearingResults = HearingResults;
+            distanceJob.AvatarResults = AvatarResults;
+
+
+            distanceJob.targetPositions = targetPositions;
+
+            distanceJob.smallestDistance = smallestDistance;
         }
         public override void DeInitialize()
         {
@@ -335,8 +318,6 @@ namespace Basis.Scripts.Networking.Transmitters
                 NetworkedPlayer.Player.OnAvatarSwitched -= OnAvatarCalibration;
                 NetworkedPlayer.Player.OnAvatarSwitched -= SendOutLatestAvatar;
                 BasisLocalInputActions.AfterAvatarChanges -= SendOutLatest;
-                BasisNetworkManagement.OnRemotePlayerJoined -= OnRemoteJoined;
-                BasisNetworkManagement.OnRemotePlayerLeft -= OnRemoteLeft;
                 if (targetPositions.IsCreated) targetPositions.Dispose();
                 if (distances.IsCreated) distances.Dispose();
                 if (smallestDistance.IsCreated)
