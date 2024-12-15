@@ -62,7 +62,7 @@ namespace Basis.Scripts.Networking.Transmitters
                         MicrophoneRecorder.OnHasSilence += SendSilenceOverNetwork;
                         HasEvents = true;
                         // Ensure the output buffer is properly initialized and matches the packet size
-                        if (AudioSegmentData.buffer == null || Recorder.PacketSize != AudioSegmentData.buffer.Count)
+                        if (AudioSegmentData.buffer == null || Recorder.PacketSize != AudioSegmentData.buffer.Length)
                         {
                             AudioSegmentData.buffer = new byte[Recorder.PacketSize];
                         }
@@ -91,13 +91,22 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (Base.HasReasonToSendAudio)
             {
+                UnityEngine.Debug.Log("Sending out Audio");
+                if (Recorder.PacketSize != AudioSegmentData.buffer.Length)
+                {
+                    AudioSegmentData.buffer = new byte[Recorder.PacketSize];
+                }
                 // Encode the audio data from the microphone recorder's buffer
-                AudioSegmentData.size = encoder.Encode(Recorder.processBufferArray, AudioSegmentData.buffer.Array);
+                AudioSegmentData.LengthUsed = encoder.Encode(Recorder.processBufferArray, AudioSegmentData.buffer);
                 NetDataWriter writer = new NetDataWriter();
                 AudioSegmentData.Serialize(writer);
-                BasisNetworkProfiler.OutBoundAudioUpdatePacket.Sample(AudioSegmentData.size);
+                BasisNetworkProfiler.OutBoundAudioUpdatePacket.Sample(AudioSegmentData.LengthUsed);
                 BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
                 Local.AudioReceived?.Invoke(true);
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Rejecting out going Audio");
             }
         }
         private void SendSilenceOverNetwork()

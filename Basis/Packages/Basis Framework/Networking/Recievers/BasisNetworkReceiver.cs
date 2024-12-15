@@ -224,8 +224,8 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
-                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(audioSegment.audioSegmentData.size);
-                AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer, audioSegment.audioSegmentData.size);
+                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(audioSegment.audioSegmentData.LengthUsed);
+                AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer, audioSegment.audioSegmentData.LengthUsed);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
         }

@@ -81,3 +81,6 @@ crashlytics-build.properties
 *.vsidx
 Basis/.vs/Basis/v17/DocumentLayout.json
 /Basis/.vs
+/Basis/.vs
+*.nuspec
+*.cache
