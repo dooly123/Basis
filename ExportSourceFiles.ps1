@@ -1,10 +1,9 @@
 # Define source and destination directories
 $source = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server"
-$destination = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis\Packages\Basis Server\"
+$destination = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis\Packages\Basis Server"
 
-# Remove the destination folder and recreate it
-Remove-Item -Recurse -Force $destination
-New-Item -ItemType Directory -Path $destination
+# Remove all .cs files in the destination directory
+Get-ChildItem -Path $destination -Recurse -Include *.cs | Remove-Item -Force
 
 # Get all files from the source, excluding .dll files and obj folders
 Get-ChildItem -Path $source -Recurse | Where-Object { 
@@ -12,14 +11,16 @@ Get-ChildItem -Path $source -Recurse | Where-Object {
     $_.Extension -ne '.dll' -and $_.FullName -notmatch '\\obj\\'
 } | ForEach-Object {
     # Calculate the destination file path
-    $destinationPath = $_.FullName.Replace($source, $destination)
+    $destinationPath = $_.FullName -replace [regex]::Escape($source), $destination
 
-    # Create destination folder if it doesn't exist
+    # Ensure the destination folder exists
     $destinationFolder = [System.IO.Path]::GetDirectoryName($destinationPath)
     if (-not (Test-Path -Path $destinationFolder)) {
-        New-Item -ItemType Directory -Path $destinationFolder
+        New-Item -ItemType Directory -Path $destinationFolder -Force
     }
 
     # Copy the file to the destination
-    Copy-Item -Path $_.FullName -Destination $destinationPath -Force
+    if (-not $_.PSIsContainer) { # Ensure it's not a directory
+        Copy-Item -Path $_.FullName -Destination $destinationPath -Force
+    }
 }
