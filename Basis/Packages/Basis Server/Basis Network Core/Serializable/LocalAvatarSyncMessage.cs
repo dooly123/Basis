@@ -1,7 +1,4 @@
-﻿
-using DarkRift;
-using LiteNetLib.Utils;
-using System;
+﻿using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     public struct LocalAvatarSyncMessage

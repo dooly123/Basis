@@ -1,5 +1,4 @@
-﻿using DarkRift;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     public struct ServerSideSyncPlayerMessage
@@ -9,8 +8,8 @@ public static partial class SerializableBasis
         public LocalAvatarSyncMessage avatarSerialization;
         public void Deserialize(NetDataReader Writer)
         {
-            Writer.Get(out interval);
-            playerIdMessage.Deserialize(Writer);
+            playerIdMessage.Deserialize(Writer);//2bytes
+            Writer.Get(out interval);//1 bytes
             avatarSerialization.Deserialize(Writer);
         }
 
@@ -22,8 +21,8 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
-            Writer.Put(interval);
             playerIdMessage.Serialize(Writer);
+            Writer.Put(interval);
             avatarSerialization.Serialize(Writer);
         }
     }
