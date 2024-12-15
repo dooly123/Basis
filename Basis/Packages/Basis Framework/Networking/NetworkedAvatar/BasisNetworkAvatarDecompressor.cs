@@ -1,5 +1,6 @@
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Recievers;
+using System;
 using static SerializableBasis;
 using Vector3 = UnityEngine.Vector3;
 namespace Basis.Scripts.Networking.NetworkedAvatar
@@ -11,11 +12,17 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         /// </summary>
         public static void DecompressAndProcessAvatar(BasisNetworkReceiver baseReceiver, ServerSideSyncPlayerMessage syncMessage)
         {
-            AvatarBuffer avatarBuffer = new AvatarBuffer();
-            int Offset = 0;
-            avatarBuffer.Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref Offset);
-            avatarBuffer.rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref Offset);
-            BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref Offset);
+            if(syncMessage.avatarSerialization.array == null)
+            {
+                throw new ArgumentException("Cant Serialize Avatar Data");
+            }
+                baseReceiver.Offset= 0;
+            AvatarBuffer avatarBuffer = new AvatarBuffer
+            {
+                Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref baseReceiver.Offset),
+                rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref baseReceiver.Offset)
+            };
+            BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref baseReceiver.Offset);
           //  int length = syncMessage.avatarSerialization.array.Length;
             avatarBuffer.Scale = Vector3.one;
             /*

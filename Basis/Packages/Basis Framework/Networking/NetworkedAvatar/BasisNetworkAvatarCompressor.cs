@@ -33,6 +33,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         public static void CompressAvatarData(ref int Offset,ref float[] FloatArray, ref LocalAvatarSyncMessage LocalAvatarSyncMessage,HumanPoseHandler Handler, HumanPose PoseHandler, Animator Anim)
         {
+            Offset = 0;
             // Retrieve the human pose from the Animator
             Handler.GetHumanPose(ref PoseHandler);
 

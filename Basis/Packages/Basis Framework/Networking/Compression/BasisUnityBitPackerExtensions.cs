@@ -209,7 +209,7 @@ namespace Basis.Scripts.Networking.Compression
         // Ensure the byte array is large enough for reading
         private static void EnsureSize(byte[] bytes, int requiredSize)
         {
-            if (bytes == null || bytes.Length < requiredSize)
+            if (bytes.Length < requiredSize)
             {
                 throw new ArgumentException("Byte array is too small for the required size.");
             }

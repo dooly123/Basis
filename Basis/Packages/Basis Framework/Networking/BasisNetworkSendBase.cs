@@ -3,7 +3,6 @@ using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using LiteNetLib;
 using LiteNetLib.Utils;
-using System.Threading;
 using UnityEngine;
 using static BasisNetworkPrimitiveCompression;
 using static SerializableBasis;
@@ -19,6 +18,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public BasisNetworkedPlayer NetworkedPlayer;
         private readonly object _lock = new object(); // Lock object for thread-safety
         private bool _hasReasonToSendAudio;
+        public int Offset = 0;
         public bool HasReasonToSendAudio
         {
             get

@@ -32,7 +32,6 @@ public static class BasisNetworkHandleAvatar
                 {
                     SSM = new ServerSideSyncPlayerMessage();
                 }
-                Debug.Log("Reader Length " + Reader.AvailableBytes);
                 SSM.Deserialize(Reader);
                 if (BasisNetworkManagement.RemotePlayers.TryGetValue(SSM.playerIdMessage.playerID, out BasisNetworkReceiver player))
                 {

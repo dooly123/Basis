@@ -49,7 +49,6 @@ namespace Basis.Scripts.Networking.Transmitters
         public JobHandle distanceJobHandle;
         public int IndexLength;
         public float SlowestSendRate = 2.5f;
-        public int Offset;
         void SendOutLatest()
         {
             timer += Time.deltaTime;
