@@ -239,7 +239,6 @@ namespace Basis.Scripts.Networking.Transmitters
             distanceJob.HearingDistance = SMModuleDistanceBasedReductions.HearingRange;
             distanceJob.VoiceDistance = SMModuleDistanceBasedReductions.MicrophoneRange;
             distanceJob.referencePosition = NetworkedPlayer.MouthBone.OutgoingWorldData.position;
-            smallestDistance[0] = float.MaxValue;
             if (IndexLength != BasisNetworkManagement.ReceiverCount)
             {
                 ResizeOrCreateArrayData(BasisNetworkManagement.ReceiverCount);
@@ -255,6 +254,7 @@ namespace Basis.Scripts.Networking.Transmitters
             {
                 targetPositions[Index] = BasisNetworkManagement.ReceiverArray[Index].NetworkedPlayer.MouthBone.OutgoingWorldData.position;
             }
+            smallestDistance[0] = float.MaxValue;
             distanceJobHandle = distanceJob.Schedule(targetPositions.Length, 64);
         }
         public void ResizeOrCreateArrayData(int TotalUserCount)
