@@ -60,7 +60,7 @@ public static class BasisNetworkHandleVoice
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))
             {
-                Debug.LogError($"Error in HandleAudioUpdate: {ex.Message}");
+                Debug.LogError($"Error in HandleAudioUpdate: {ex.Message} {ex.StackTrace}");
             }
             finally
             {
