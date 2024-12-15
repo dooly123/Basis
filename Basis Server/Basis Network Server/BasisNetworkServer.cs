@@ -285,32 +285,24 @@ public static class BasisNetworkServer
     }
     private static void HandleVoiceMessage(NetPacketReader Reader, NetPeer peer)
     {
-        AudioSegmentMessage audioSegment = new AudioSegmentMessage();
-        if (Reader.EndOfData)
-        {
-            audioSegment.wasSilentData = true;
-            AudioSilentSegmentDataMessage AudioSilentSegmentDataMessage = new AudioSilentSegmentDataMessage();
-            AudioSilentSegmentDataMessage.Deserialize(Reader);
-            audioSegment.silentData = AudioSilentSegmentDataMessage;
-           // BNL.Log("Was Silent");
-        }
-        else
-        {
-            audioSegment.wasSilentData = false;
-            audioSegment.Deserialize(Reader);
-         //   BNL.Log("Was Not Silent");
-        }
+        ServerAudioSegmentMessage audioSegment = new ServerAudioSegmentMessage();
+        audioSegment.Deserialize(Reader);
         SendVoiceMessageToClients(audioSegment, BasisNetworkCommons.VoiceChannel, peer);
     }
-    private static void SendVoiceMessageToClients(AudioSegmentMessage audioSegment, byte channel, NetPeer sender)
+    private static void SendVoiceMessageToClients(ServerAudioSegmentMessage audioSegment, byte channel, NetPeer sender)
     {
         if (BasisSavedState.GetLastData(sender, out StoredData data))
         {
-            if (data.voiceReceiversMessage.users == null || data.voiceReceiversMessage.users.Length == 0)
+            if (data.voiceReceiversMessage.users == null)
             {
                 return;
             }
+
             int count = data.voiceReceiversMessage.users.Length;
+            if(count == 0)
+            {
+                return;
+            }
             List<NetPeer> endPoints = new List<NetPeer>(count);
             foreach (ushort user in data.voiceReceiversMessage.users)
             {
@@ -325,6 +317,7 @@ public static class BasisNetworkServer
             audioSegment.playerIdMessage.playerID = (ushort)sender.Id;
             NetDataWriter NetDataWriter = new NetDataWriter();
             audioSegment.Serialize(NetDataWriter);
+            BNL.Log("Sending Voice Data To Clients");
             BroadcastMessageToClients(NetDataWriter, channel, endPoints, DeliveryMethod.Sequenced);
         }
         else

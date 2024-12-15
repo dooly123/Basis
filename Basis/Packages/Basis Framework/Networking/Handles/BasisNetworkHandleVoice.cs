@@ -12,7 +12,7 @@ public static class BasisNetworkHandleVoice
     private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
     private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private const int TimeoutMilliseconds = 1000;
-    public static ConcurrentQueue<AudioSegmentMessage> Message = new ConcurrentQueue<AudioSegmentMessage>();
+    public static ConcurrentQueue<ServerAudioSegmentMessage> Message = new ConcurrentQueue<ServerAudioSegmentMessage>();
     public static async Task HandleAudioUpdate(LiteNetLib.NetPacketReader Reader)
     {
         // Cancel any ongoing task
@@ -26,9 +26,9 @@ public static class BasisNetworkHandleVoice
 
             try
             {
-                if (Message.TryDequeue(out AudioSegmentMessage audioUpdate) == false)
+                if (Message.TryDequeue(out ServerAudioSegmentMessage audioUpdate) == false)
                 {
-                    audioUpdate = new AudioSegmentMessage();
+                    audioUpdate = new ServerAudioSegmentMessage();
                 }
                 audioUpdate.Deserialize(Reader);
                 if (BasisNetworkManagement.RemotePlayers.TryGetValue(audioUpdate.playerIdMessage.playerID, out BasisNetworkReceiver player))
@@ -39,9 +39,9 @@ public static class BasisNetworkHandleVoice
                         return; // Exit early if a cancellation is requested
                     }
 
-                    if (audioUpdate.wasSilentData)
+                    if (audioUpdate.audioSegmentData.LengthUsed == 0)
                     {
-                        player.ReceiveSilentNetworkAudio(audioUpdate.silentData);
+                        player.ReceiveSilentNetworkAudio(audioUpdate);
                     }
                     else
                     {
@@ -55,7 +55,7 @@ public static class BasisNetworkHandleVoice
                 Message.Enqueue(audioUpdate);
                 while (Message.Count > 250)
                 {
-                    Message.TryDequeue(out AudioSegmentMessage seg);
+                    Message.TryDequeue(out ServerAudioSegmentMessage seg);
                 }
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))

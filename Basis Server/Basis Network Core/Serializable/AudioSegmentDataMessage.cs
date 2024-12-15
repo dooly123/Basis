@@ -1,5 +1,4 @@
 ﻿using LiteNetLib.Utils;
-using System;
 public static partial class SerializableBasis
 {
     [System.Serializable]
@@ -9,8 +8,15 @@ public static partial class SerializableBasis
         public int LengthUsed;
         public void Deserialize(NetDataReader Writer)
         {
-            buffer = Writer.GetRemainingBytes();
-            LengthUsed = buffer.Length;
+            if (Writer.EndOfData)
+            {
+                LengthUsed = 0;
+            }
+            else
+            {
+                buffer = Writer.GetRemainingBytes();
+                LengthUsed = buffer.Length;
+            }
         }
         public void Dispose()
         {
@@ -18,7 +24,10 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
-            Writer.Put(buffer, 0, LengthUsed);
+            if (LengthUsed != 0)
+            {
+                Writer.Put(buffer, 0, LengthUsed);
+            }
         }
     }
 }

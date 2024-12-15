@@ -27,7 +27,7 @@ namespace Basis.Scripts.Networking.Transmitters
 
         public bool IsInitalized = false;
         public AudioSegmentDataMessage AudioSegmentData = new AudioSegmentDataMessage();
-        public AudioSilentSegmentDataMessage audioSilentSegmentData = new AudioSilentSegmentDataMessage();
+        public AudioSegmentDataMessage audioSilentSegmentData = new AudioSegmentDataMessage();
         public bool HasEvents = false;
         public void OnEnable(BasisNetworkedPlayer networkedPlayer)
         {
@@ -91,7 +91,7 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (Base.HasReasonToSendAudio)
             {
-                UnityEngine.Debug.Log("Sending out Audio");
+                // UnityEngine.Debug.Log("Sending out Audio");
                 if (Recorder.PacketSize != AudioSegmentData.buffer.Length)
                 {
                     AudioSegmentData.buffer = new byte[Recorder.PacketSize];
@@ -114,6 +114,7 @@ namespace Basis.Scripts.Networking.Transmitters
             if (Base.HasReasonToSendAudio)
             {
                 NetDataWriter writer = new NetDataWriter();
+                audioSilentSegmentData.LengthUsed = 0;
                 audioSilentSegmentData.Serialize(writer);
                 BasisNetworkProfiler.OutBoundAudioUpdatePacket.Sample(writer.Length);
                 BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);

@@ -220,7 +220,7 @@ namespace Basis.Scripts.Networking.Recievers
                 Mathf.Abs(b.z) > epsilon ? a.z / b.z : a.z   // Same for z-axis
             );
         }
-        public void ReceiveNetworkAudio(AudioSegmentMessage audioSegment)
+        public void ReceiveNetworkAudio(ServerAudioSegmentMessage audioSegment)
         {
             if (AudioReceiverModule.decoder != null)
             {
@@ -229,7 +229,7 @@ namespace Basis.Scripts.Networking.Recievers
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
         }
-        public void ReceiveSilentNetworkAudio(AudioSilentSegmentDataMessage audioSilentSegment)
+        public void ReceiveSilentNetworkAudio(ServerAudioSegmentMessage audioSilentSegment)
         {
             if (AudioReceiverModule.decoder != null)
             {

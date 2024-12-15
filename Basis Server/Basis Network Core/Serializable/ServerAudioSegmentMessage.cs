@@ -1,51 +1,26 @@
 ﻿using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
-    public struct AudioSegmentMessage
+    public struct ServerAudioSegmentMessage
     {
         public PlayerIdMessage playerIdMessage;
-
-        public AudioSilentSegmentDataMessage silentData;
-
         public AudioSegmentDataMessage audioSegmentData;
-        /// <summary>
-        /// the goal here is to reuse this message but drop the AudioSegmentData when its not.
-        /// this forces the queue to remain correct.
-        /// </summary>
-        public bool wasSilentData;
         public void Deserialize(NetDataReader Writer)
         {
             playerIdMessage.Deserialize(Writer);
-            if (Writer.EndOfData)
-            {
-                wasSilentData = true;
-                silentData.Deserialize(Writer);
-            }
-            else
-            {
-                wasSilentData = false;
-                audioSegmentData.Deserialize(Writer);
-            }
+            audioSegmentData.Deserialize(Writer);
         }
 
         public void Dispose()
         {
             playerIdMessage.Dispose();
-            silentData.Dispose();
             audioSegmentData.Dispose();
         }
 
         public void Serialize(NetDataWriter Writer)
         {
             playerIdMessage.Serialize(Writer);
-            if (wasSilentData)
-            {
-                silentData.Serialize(Writer);
-            }
-            else
-            {
-                audioSegmentData.Serialize(Writer);
-            }
+            audioSegmentData.Serialize(Writer);
         }
     }
 
