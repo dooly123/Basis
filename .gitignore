@@ -79,3 +79,5 @@ crashlytics-build.properties
 /Basis/[Aa]ssets/_UserContent
 /Basis/[Aa]ssets/_UserContent.meta
 *.vsidx
+Basis/.vs/Basis/v17/DocumentLayout.json
+/Basis/.vs
