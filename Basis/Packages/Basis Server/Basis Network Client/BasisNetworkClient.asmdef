@@ -2,8 +2,8 @@
     "name": "BasisNetworkClient",
     "rootNamespace": "",
     "references": [
-        "GUID:784bec3882b21ab4d8407cc870539fa9",
-        "GUID:da668404f8bf3b14ebd4691cc0a6d67c"
+        "GUID:fd956392bc4ad864b8d6e45a9207a065",
+        "GUID:20367d3f7a9bcb443a40208746868286"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

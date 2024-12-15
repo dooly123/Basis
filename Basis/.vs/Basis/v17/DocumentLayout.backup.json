@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\transmitters\\basisaudiotransmission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\transmitters\\basisaudiotransmission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F132C3F1-8A69-6964-E4C7-9A9654DBE08B}|OpusIntergration.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\assets\\third_party\\plugins\\opus intergration\\encoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F132C3F1-8A69-6964-E4C7-9A9654DBE08B}|OpusIntergration.csproj|solutionrelative:assets\\third_party\\plugins\\opus intergration\\encoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\transmitters\\basisnetworktransmitter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\transmitters\\basisnetworktransmitter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -34,11 +42,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
+              "Title": "Encoder.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Assets\\third_party\\Plugins\\Opus Intergration\\Encoder.cs",
+              "RelativeDocumentMoniker": "Assets\\third_party\\Plugins\\Opus Intergration\\Encoder.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Assets\\third_party\\Plugins\\Opus Intergration\\Encoder.cs",
+              "RelativeToolTip": "Assets\\third_party\\Plugins\\Opus Intergration\\Encoder.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAE0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T16:23:17.102Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BasisAudioTransmission.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "RelativeToolTip": "Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAAAGkAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T16:22:23.36Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "BasisNetworkingProfilerModule.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Profiler\\BasisNetworkingProfilerModule.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Profiler\\BasisNetworkingProfilerModule.cs",
@@ -51,7 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "BasisNetworkReceiver.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Recievers\\BasisNetworkReceiver.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Recievers\\BasisNetworkReceiver.cs",
@@ -64,7 +98,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "BasisNetworkAvatarCompressor.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\NetworkedAvatar\\BasisNetworkAvatarCompressor.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\NetworkedAvatar\\BasisNetworkAvatarCompressor.cs",
@@ -77,7 +111,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "BasisUnityBitPackerExtensions.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Compression\\BasisUnityBitPackerExtensions.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Compression\\BasisUnityBitPackerExtensions.cs",
@@ -90,20 +124,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "BasisNetworkTransmitter.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Transmitters\\BasisNetworkTransmitter.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Transmitters\\BasisNetworkTransmitter.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Transmitters\\BasisNetworkTransmitter.cs",
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\Transmitters\\BasisNetworkTransmitter.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAApwCIAAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAhwBwAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-15T15:38:03.242Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "BasisNetworkAvatarDecompressor.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\NetworkedAvatar\\BasisNetworkAvatarDecompressor.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\NetworkedAvatar\\BasisNetworkAvatarDecompressor.cs",

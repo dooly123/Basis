@@ -292,11 +292,13 @@ public static class BasisNetworkServer
             AudioSilentSegmentDataMessage AudioSilentSegmentDataMessage = new AudioSilentSegmentDataMessage();
             AudioSilentSegmentDataMessage.Deserialize(Reader);
             audioSegment.silentData = AudioSilentSegmentDataMessage;
+           // BNL.Log("Was Silent");
         }
         else
         {
             audioSegment.wasSilentData = false;
             audioSegment.Deserialize(Reader);
+         //   BNL.Log("Was Not Silent");
         }
         SendVoiceMessageToClients(audioSegment, BasisNetworkCommons.VoiceChannel, peer);
     }
@@ -327,7 +329,7 @@ public static class BasisNetworkServer
         }
         else
         {
-            //   Console.WriteLine("Error unable to find " + sender.ID + " in the data store!");
+            BNL.Log("Error unable to find " + sender.Id + " in the data store!");
         }
     }
     public static void BroadcastMessageToClients(NetDataWriter Reader, byte channel, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> authenticatedClients, DeliveryMethod deliveryMethod = DeliveryMethod.Sequenced)
