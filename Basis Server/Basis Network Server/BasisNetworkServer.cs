@@ -217,27 +217,40 @@ public static class BasisNetworkServer
     }
     private static void NetworkReceiveEvent(NetPeer peer, NetPacketReader Reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
     {
-        BasisMessageReceivedEventArgs e = new BasisMessageReceivedEventArgs
-        {
-            Tag = Reader.GetByte(),
-            SendMode = deliveryMethod,
-            ClientId = (ushort)peer.Id
-        };
+
         switch (channel)
         {
-            case BasisNetworkCommons.EventsChannel:
-                NetworkReceiveEventTag(peer, Reader, e);
-                break;
             case BasisNetworkCommons.VoiceChannel:
-                HandleVoiceMessage(Reader, peer, e);
+                HandleVoiceMessage(Reader, peer);
                 break;
             case BasisNetworkCommons.MovementChannel:
-                HandleAvatarMovement(Reader, peer, e);
+                HandleAvatarMovement(Reader, peer);
+                break;
+            case BasisNetworkCommons.EventsChannel:
+                BasisMessageReceivedEventArgs e = new BasisMessageReceivedEventArgs
+                {
+                    Tag = Reader.GetByte(),
+                    SendMode = deliveryMethod,
+                    ClientId = (ushort)peer.Id
+                };
+                NetworkReceiveEventTag(peer, Reader, e);
                 break;
             case BasisNetworkCommons.SceneChannel:
+                e = new BasisMessageReceivedEventArgs
+                {
+                    Tag = Reader.GetByte(),
+                    SendMode = deliveryMethod,
+                    ClientId = (ushort)peer.Id
+                };
                 NetworkReceiveEventTag(peer, Reader, e);
                 break;
             case BasisNetworkCommons.AvatarChannel:
+                e = new BasisMessageReceivedEventArgs
+                {
+                    Tag = Reader.GetByte(),
+                    SendMode = deliveryMethod,
+                    ClientId = (ushort)peer.Id
+                };
                 NetworkReceiveEventTag(peer, Reader, e);
                 break;
             default:
@@ -270,7 +283,7 @@ public static class BasisNetworkServer
         VoiceReceiversMessage.Deserialize(Reader);
         BasisSavedState.AddLastData(Peer, VoiceReceiversMessage);
     }
-    private static void HandleVoiceMessage(NetPacketReader Reader, NetPeer peer, BasisMessageReceivedEventArgs e)
+    private static void HandleVoiceMessage(NetPacketReader Reader, NetPeer peer)
     {
         AudioSegmentMessage audioSegment = new AudioSegmentMessage();
         if (Reader.EndOfData)
@@ -341,18 +354,18 @@ public static class BasisNetworkServer
             client.Value.Send(Reader, channel, deliveryMethod);
         }
     }
-    private static void HandleAvatarMovement(NetPacketReader Reader, NetPeer Peer, BasisMessageReceivedEventArgs e)
+    private static void HandleAvatarMovement(NetPacketReader Reader, NetPeer Peer)
     {
         LocalAvatarSyncMessage LocalAvatarSyncMessage = new LocalAvatarSyncMessage();
         LocalAvatarSyncMessage.Deserialize(Reader);
         BasisSavedState.AddLastData(Peer, LocalAvatarSyncMessage);
         foreach (NetPeer client in Peers.Values)
         {
-            if (client.Id == e.ClientId)
+            if (client.Id == Peer.Id)
             {
                 continue;
             }
-            ServerSideSyncPlayerMessage ssspm = CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage, e.ClientId);
+            ServerSideSyncPlayerMessage ssspm = CreateServerSideSyncPlayerMessage(LocalAvatarSyncMessage, (ushort)Peer.Id);
             BasisServerReductionSystem.AddOrUpdatePlayer(client, ssspm, Peer);
         }
     }
