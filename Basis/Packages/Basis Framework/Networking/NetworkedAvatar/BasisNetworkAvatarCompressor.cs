@@ -15,7 +15,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public static void Compress(BasisNetworkTransmitter NetworkSendBase, Animator Anim)
         {
             NetDataWriter Writer = new NetDataWriter();
-            CompressAvatarData(ref NetworkSendBase.FloatArray,ref NetworkSendBase.LASM,NetworkSendBase.PoseHandler,NetworkSendBase.HumanPose, Anim);
+            CompressAvatarData(ref NetworkSendBase.Offset, ref NetworkSendBase.FloatArray,ref NetworkSendBase.LASM,NetworkSendBase.PoseHandler,NetworkSendBase.HumanPose, Anim);
             NetworkSendBase.LASM.Serialize(Writer);
             BasisNetworkProfiler.AvatarUpdatePacket.Sample(Writer.Length);
             BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
@@ -26,11 +26,12 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             HumanPose HumanPose = new HumanPose();
             PoseHandler.GetHumanPose(ref HumanPose);
             float[] FloatArray = new float[90];
+            int Offset = 0;
             LocalAvatarSyncMessage LocalAvatarSyncMessage = new LocalAvatarSyncMessage();
-            CompressAvatarData(ref FloatArray, ref LocalAvatarSyncMessage, PoseHandler, HumanPose, Anim);
+            CompressAvatarData(ref Offset, ref FloatArray, ref LocalAvatarSyncMessage, PoseHandler, HumanPose, Anim);
             return LocalAvatarSyncMessage;
         }
-        public static void CompressAvatarData(ref float[] FloatArray, ref LocalAvatarSyncMessage LocalAvatarSyncMessage,HumanPoseHandler Handler, HumanPose PoseHandler, Animator Anim)
+        public static void CompressAvatarData(ref int Offset,ref float[] FloatArray, ref LocalAvatarSyncMessage LocalAvatarSyncMessage,HumanPoseHandler Handler, HumanPose PoseHandler, Animator Anim)
         {
             // Retrieve the human pose from the Animator
             Handler.GetHumanPose(ref PoseHandler);
@@ -40,13 +41,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 
             // Copy muscles [21..end]
             Array.Copy(PoseHandler.muscles, BasisNetworkSendBase.SecondBuffer, FloatArray, BasisNetworkSendBase.FirstBuffer, BasisNetworkSendBase.SizeAfterGap);
-
-            int Offset = 0;
             //we write position first so we can use that on the server
             BasisUnityBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition, ref LocalAvatarSyncMessage.array, ref Offset);
             BasisUnityBitPackerExtensions.WriteQuaternionToBytes(Anim.bodyRotation, ref LocalAvatarSyncMessage.array, ref Offset, BasisNetworkSendBase.RotationCompression);
             BasisUnityBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref LocalAvatarSyncMessage.array, ref Offset);
-
+            /*
             UnityEngine.Vector3 Scale = Anim.transform.localScale;
             //we decode localscale last so we can optimize it.
             const float EPSILON = 0.0001f; // Define a small value for approximate comparison
@@ -69,6 +68,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     BasisUnityBitPackerExtensions.WriteUshortVectorFloatToBytes(Scale, BasisNetworkSendBase.ScaleRanged, ref LocalAvatarSyncMessage.array, ref Offset);
                 }
             }
+            */
         }
     }
 }

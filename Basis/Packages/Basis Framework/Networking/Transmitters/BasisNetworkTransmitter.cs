@@ -1,5 +1,4 @@
 using Basis.Network.Core;
-using Basis.Scripts.Avatar;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Networking.NetworkedAvatar;
@@ -49,32 +48,29 @@ namespace Basis.Scripts.Networking.Transmitters
         public CombinedDistanceAndClosestTransformJob distanceJob = new CombinedDistanceAndClosestTransformJob();
         public JobHandle distanceJobHandle;
         public int IndexLength;
-        public void Compute()
-        {
-            if (Ready && NetworkedPlayer.Player.Avatar != null)
-            {
-                BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
-            }
-        }
         public float SlowestSendRate = 2.5f;
+        public int Offset;
         void SendOutLatest()
         {
             timer += Time.deltaTime;
 
             if (timer >= interval)
             {
-                ScheduleCheck();
-                Compute();
-                distanceJobHandle.Complete();
-                HandleResults();
-                SmallestDistanceToAnotherPlayer = distanceJob.smallestDistance[0];
+                if (Ready && NetworkedPlayer.Player.Avatar != null)
+                {
+                    ScheduleCheck();
+                    BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
+                    distanceJobHandle.Complete();
+                    HandleResults();
+                    SmallestDistanceToAnotherPlayer = distanceJob.smallestDistance[0];
 
-                // Calculate next interval and clamp it
-                UnClampedInterval = DefaultInterval * (BaseMultiplier + (SmallestDistanceToAnotherPlayer * IncreaseRate));
-                interval = math.clamp(UnClampedInterval, 0.005f, SlowestSendRate);
+                    // Calculate next interval and clamp it
+                    UnClampedInterval = DefaultInterval * (BaseMultiplier + (SmallestDistanceToAnotherPlayer * IncreaseRate));
+                    interval = math.clamp(UnClampedInterval, 0.005f, SlowestSendRate);
 
-                // Account for overshoot
-                timer -= interval;
+                    // Account for overshoot
+                    timer -= interval;
+                }
             }
         }
         public bool[] MicrophoneRangeIndex;

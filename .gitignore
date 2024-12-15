@@ -78,3 +78,4 @@ crashlytics-build.properties
 /Basis/[Aa]sset[Bb]undles/
 /Basis/[Aa]ssets/_UserContent
 /Basis/[Aa]ssets/_UserContent.meta
+*.vsidx
