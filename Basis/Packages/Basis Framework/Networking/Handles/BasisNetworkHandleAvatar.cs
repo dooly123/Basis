@@ -55,7 +55,7 @@ public static class BasisNetworkHandleAvatar
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))
             {
-                Debug.LogError($"Error in HandleAvatarUpdate: {ex.StackTrace}");
+                Debug.LogError($"Error in HandleAvatarUpdate: {ex.Message} {ex.StackTrace}");
             }
             finally
             {

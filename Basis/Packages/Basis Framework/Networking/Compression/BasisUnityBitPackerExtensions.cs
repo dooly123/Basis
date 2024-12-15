@@ -211,7 +211,7 @@ namespace Basis.Scripts.Networking.Compression
         {
             if (bytes.Length < requiredSize)
             {
-                throw new ArgumentException("Byte array is too small for the required size.");
+                throw new ArgumentException("Byte array is too small for the required size. Current Size is " + bytes.Length + " But Required " + requiredSize);
             }
         }
 
