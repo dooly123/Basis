@@ -168,8 +168,7 @@ namespace Basis.Scripts.Networking
         {
             Players.Clear();
             BasisAvatarBufferPool.Clear();
-            Disconnect();
-            GameObject.Destroy(this.gameObject);
+            BasisNetworkClient.Disconnect();
         }
         public void LateUpdate()
         {
@@ -306,16 +305,10 @@ namespace Basis.Scripts.Networking
                     OwnershipPairing.Clear();
                     SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
                     await Boot_Sequence.BootSequence.OnAddressablesInitializationComplete();
+                    Destroy(this.gameObject);
                 }, null);
                 });
             }
-            else
-            {
-            }
-        }
-        public void Disconnect()
-        {
-            BasisNetworkClient.Disconnect();
         }
         private async void NetworkReceiveEvent(NetPeer peer, NetPacketReader Reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
         {
