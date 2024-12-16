@@ -61,7 +61,7 @@ namespace Basis.Scripts.Networking
                 RemotePlayers.TryRemove(NetID,out BasisNetworkReceiver A);
                 ReceiverArray = RemotePlayers.Values.ToArray();
                 ReceiverCount = ReceiverArray.Length;
-                Debug.Log("ReceiverCount was " + ReceiverCount);
+                //Debug.Log("ReceiverCount was " + ReceiverCount);
                 return Players.Remove(NetID, out var B);
             }
             return false;
@@ -82,7 +82,6 @@ namespace Basis.Scripts.Networking
             return false;
         }
         public bool ForceConnect = false;
-        public bool TryToReconnectAutomatically = true;
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>
