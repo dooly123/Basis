@@ -40,7 +40,7 @@ namespace Basis.Scripts.Device_Management.Devices.Unity_Spatial_Tracking
                 {
                     if (Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
-                        Control.IncomingData.position = FinalPosition - math.mul(FinalRotation, AvatarPositionOffset);
+                        Control.IncomingData.position = FinalPosition - math.mul(FinalRotation, AvatarPositionOffset * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale);
                         Control.IncomingData.rotation = math.mul(FinalRotation, Quaternion.Euler(AvatarRotationOffset));
                     }
                 }

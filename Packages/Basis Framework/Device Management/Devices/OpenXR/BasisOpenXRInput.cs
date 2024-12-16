@@ -49,7 +49,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
                     if (hasRoleAssigned && Control.HasTracked != BasisHasTracked.HasNoTracker)
                     {
                         // Apply the inverse rotation to position offset
-                        Control.IncomingData.position = LocalRawPosition - math.mul(LocalRawRotation, AvatarPositionOffset);
+                        Control.IncomingData.position = LocalRawPosition - math.mul(LocalRawRotation, AvatarPositionOffset * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale);
                     }
                 }
 
