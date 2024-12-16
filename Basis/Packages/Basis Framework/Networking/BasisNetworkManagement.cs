@@ -37,7 +37,6 @@ namespace Basis.Scripts.Networking
         public static BasisNetworkReceiver[] ReceiverArray;
         public static int ReceiverCount = 0;
         public static SynchronizationContext MainThreadContext;
-        public static ushort LocalPlayerID;
         public static NetPeer LocalPlayerPeer;
         public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
         {
@@ -192,7 +191,7 @@ namespace Basis.Scripts.Networking
         {
             if (Instance != null)
             {
-                LocalID = LocalPlayerID;
+                LocalID = (ushort)LocalPlayerPeer.Id;
                 return true;
             }
             LocalID = 0;
@@ -232,7 +231,7 @@ namespace Basis.Scripts.Networking
             };
             Debug.Log("Network  Starting Client");
             LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);
-            Debug.Log("Network Client Started");
+            Debug.Log("Network Client Started " + LocalPlayerPeer.Id + " | " + LocalPlayerPeer.RemoteId);
             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
             BasisNetworkClient.listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
             BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
@@ -257,9 +256,9 @@ namespace Basis.Scripts.Networking
                         BasisNetworkedPlayer LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(
                             new InstantiationParameters(Position, Rotation, this.transform));
 
-                        LocalPlayerID = (ushort)peer.Id;
+                       ushort LocalPlayerID = (ushort)peer.Id;
                         LocalPlayerPeer = peer;
-
+                        Debug.Log("Network Id Updated " + LocalPlayerPeer.Id + " | " + LocalPlayerPeer.RemoteId);
                         // Initialize the local networked player.
                         LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance, LocalPlayerID);
 
