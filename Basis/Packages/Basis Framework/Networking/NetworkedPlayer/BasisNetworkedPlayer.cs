@@ -3,12 +3,7 @@ using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.Recievers;
 using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.TransformBinders.BoneControl;
-using System;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
-using static SerializableBasis;
-
-
 namespace Basis.Scripts.Networking.NetworkedPlayer
 {
     public partial class BasisNetworkedPlayer : MonoBehaviour

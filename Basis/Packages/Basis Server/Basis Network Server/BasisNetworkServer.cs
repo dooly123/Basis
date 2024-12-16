@@ -54,7 +54,7 @@ public static class BasisNetworkServer
                             BNL.Log("Length is " + request.Data.AvailableBytes);
                             ReadyMessage ReadyMessage = new ReadyMessage();
                             ReadyMessage.Deserialize(request.Data);
-                            BNL.Log($"Peer added and connected: {ReadyToRoll.Id}");
+                            BNL.Log($"Peer added and connected: {ReadyToRoll.RemoteId}");
                             SendRemoteSpawnMessage(ReadyToRoll, ReadyMessage, BasisNetworkCommons.EventsChannel);
                         }
                         else
@@ -323,7 +323,7 @@ public static class BasisNetworkServer
             }
 
             audioSegment.playerIdMessage = new PlayerIdMessage();
-            audioSegment.playerIdMessage.playerID = (ushort)sender.Id;
+            audioSegment.playerIdMessage.playerID = (ushort)sender.RemoteId;
             NetDataWriter NetDataWriter = new NetDataWriter();
             audioSegment.Serialize(NetDataWriter);
           //  BNL.Log("Sending Voice Data To Clients");
@@ -331,7 +331,7 @@ public static class BasisNetworkServer
         }
         else
         {
-            BNL.Log("Error unable to find " + sender.Id + " in the data store!");
+            BNL.Log("Error unable to find " + sender.RemoteId + " in the data store!");
         }
     }
     public static void BroadcastMessageToClients(NetDataWriter Reader, byte channel, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> authenticatedClients, DeliveryMethod deliveryMethod = DeliveryMethod.Sequenced)
