@@ -31,8 +31,9 @@ public class BasisAudioDecoder
     /// the pcm length is how much was actually encoded.
     /// </summary>
     /// <param name="data"></param>
-    public void OnDecode(byte[] data,int length)
+    public void OnDecode(byte[] data, int length)
     {
+        UnityEngine.Debug.Log("decode size is " + data.Length + " " + length);
         pcmLength = decoder.Decode(data, length, pcmBuffer);
         OnDecoded?.Invoke();
     }

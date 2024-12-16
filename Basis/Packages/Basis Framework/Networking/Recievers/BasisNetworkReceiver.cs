@@ -237,9 +237,9 @@ namespace Basis.Scripts.Networking.Recievers
                     silentData = new float[AudioReceiverModule.decoder.FakepcmLength];
                     Array.Fill(silentData, 0f);
                 }
+                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(1);
                 AudioReceiverModule.OnDecoded(silentData, AudioReceiverModule.decoder.FakepcmLength);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(false);
-                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(1);
             }
         }
         public void ReceiveNetworkAvatarData(ServerSideSyncPlayerMessage serverSideSyncPlayerMessage)

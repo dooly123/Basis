@@ -1,5 +1,6 @@
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Drivers;
+using Basis.Scripts.Networking;
 using Basis.Scripts.TransformBinders.BoneControl;
 using Basis.Scripts.UI.UI_Panels;
 using System;
@@ -100,16 +101,17 @@ namespace Basis.Scripts.UI.NamePlate
                 {
                     targetColor = hasRealAudio ? IsTalkingColor : NormalColor;
                 }
-
-                if (colorTransitionCoroutine != null)
+                BasisNetworkManagement.MainThreadContext.Post(_ =>
                 {
-                    StopCoroutine(colorTransitionCoroutine);
-                }
+                    if (colorTransitionCoroutine != null)
+                    {
+                        StopCoroutine(colorTransitionCoroutine);
+                    }
 
-                colorTransitionCoroutine = StartCoroutine(TransitionColor(targetColor));
+                    colorTransitionCoroutine = StartCoroutine(TransitionColor(targetColor));
+                }, null);
             }
         }
-
         private IEnumerator TransitionColor(Color targetColor)
         {
             // Cache the initial values

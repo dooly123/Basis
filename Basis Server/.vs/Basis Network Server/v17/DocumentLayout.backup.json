@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|solutionrelative:basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E7342578-2EB7-4DC9-93B6-D00B52737D45}|Basis Network Core\\Basis.Network.Core.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network core\\serializable\\audiosegmentdatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E7342578-2EB7-4DC9-93B6-D00B52737D45}|Basis Network Core\\Basis.Network.Core.csproj|solutionrelative:basis network core\\serializable\\audiosegmentdatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E7342578-2EB7-4DC9-93B6-D00B52737D45}|Basis Network Core\\Basis.Network.Core.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network core\\serializable\\serveraudiosegmentmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E7342578-2EB7-4DC9-93B6-D00B52737D45}|Basis Network Core\\Basis.Network.Core.csproj|solutionrelative:basis network core\\serializable\\serveraudiosegmentmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E7342578-2EB7-4DC9-93B6-D00B52737D45}|Basis Network Core\\Basis.Network.Core.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network core\\serializable\\audiosegmentdatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E7342578-2EB7-4DC9-93B6-D00B52737D45}|Basis Network Core\\Basis.Network.Core.csproj|solutionrelative:basis network core\\serializable\\audiosegmentdatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|solutionrelative:basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E7342578-2EB7-4DC9-93B6-D00B52737D45}|Basis Network Core\\Basis.Network.Core.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network core\\serializable\\localavatarsyncmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -33,18 +33,18 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 316,
-          "SelectedChildIndex": 4,
+          "DockedWidth": 170,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "AudioSegmentDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Serializable\\AudioSegmentDataMessage.cs",
               "RelativeDocumentMoniker": "Basis Network Core\\Serializable\\AudioSegmentDataMessage.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Serializable\\AudioSegmentDataMessage.cs",
               "RelativeToolTip": "Basis Network Core\\Serializable\\AudioSegmentDataMessage.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-15T21:14:21.697Z",
               "EditorCaption": ""
@@ -57,7 +57,7 @@
               "RelativeDocumentMoniker": "Basis Network Core\\Serializable\\ServerAudioSegmentMessage.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Serializable\\ServerAudioSegmentMessage.cs",
               "RelativeToolTip": "Basis Network Core\\Serializable\\ServerAudioSegmentMessage.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAQwBAAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-15T21:12:36.026Z",
               "EditorCaption": ""
@@ -72,8 +72,7 @@
               "RelativeToolTip": "Basis Network Core\\Serializable\\OwnershipTransferMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T14:43:09.965Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T14:43:09.965Z"
             },
             {
               "$type": "Document",
@@ -85,18 +84,17 @@
               "RelativeToolTip": "Basis Network Client\\BasisNetworkClient.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAQwBwAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-14T17:12:30.358Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-14T17:12:30.358Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "BasisNetworkServer.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.cs",
               "RelativeDocumentMoniker": "Basis Network Server\\BasisNetworkServer.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.cs",
               "RelativeToolTip": "Basis Network Server\\BasisNetworkServer.cs",
-              "ViewState": "AgIAACQBAAAAAAAAAAASwCkBAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAAwBAAAAAAAAAAAlwCMBAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-14T00:43:06.097Z",
               "EditorCaption": ""
@@ -111,8 +109,7 @@
               "RelativeToolTip": "Basis Network Core\\Serializable\\LocalAvatarSyncMessage.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T14:43:10.997Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T14:43:10.997Z"
             }
           ]
         }

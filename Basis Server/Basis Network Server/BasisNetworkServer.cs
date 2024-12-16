@@ -295,12 +295,14 @@ public static class BasisNetworkServer
         {
             if (data.voiceReceiversMessage.users == null)
             {
+               // BNL.Log("No Users!");
                 return;
             }
 
             int count = data.voiceReceiversMessage.users.Length;
-            if(count == 0)
+            if (count == 0)
             {
+              //  BNL.Log("No Count!");
                 return;
             }
             List<NetPeer> endPoints = new List<NetPeer>(count);
@@ -312,7 +314,11 @@ public static class BasisNetworkServer
                 }
             }
 
-            if (endPoints.Count == 0) return;
+            if (endPoints.Count == 0)
+            {
+              //  BNL.Log("No Viable");
+                return;
+            }
 
             audioSegment.playerIdMessage.playerID = (ushort)sender.Id;
             NetDataWriter NetDataWriter = new NetDataWriter();
