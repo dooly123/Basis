@@ -285,6 +285,7 @@ namespace Basis.Scripts.Networking
         }
         private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
+            Debug.Log($"Client disconnected from server [{peer.Id}]");
             if (peer == LocalPlayerPeer)
             {
                 await Task.Run(() =>
@@ -295,10 +296,10 @@ namespace Basis.Scripts.Networking
                     {
                         if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
                         {
-                            BNL.LogError(Reason);
+                            Debug.LogError(Reason);
                         }
                     }
-                    BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
+                    Debug.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
                     Players.Clear();
                     OwnershipPairing.Clear();
                     SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
@@ -308,7 +309,6 @@ namespace Basis.Scripts.Networking
             }
             else
             {
-                BNL.Log($"Client disconnected from server [{peer.Id}]");
             }
         }
         public void Disconnect()
