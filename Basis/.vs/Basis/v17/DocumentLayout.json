@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\transmitters\\basisaudiotransmission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\transmitters\\basisaudiotransmission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\ui\\nameplate\\basisnameplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\ui\\nameplate\\basisnameplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\recievers\\basisaudioreceiverbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\recievers\\basisaudioreceiverbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F8379EF4-14C3-3FD9-E603-6B6CE12C3F93}|BasisNetworkCore.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis server\\basis network core\\serializable\\audiosegmentdatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F8379EF4-14C3-3FD9-E603-6B6CE12C3F93}|BasisNetworkCore.csproj|solutionrelative:packages\\basis server\\basis network core\\serializable\\audiosegmentdatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -11,24 +27,12 @@
       "RelativeMoniker": "D:0:0:{F8379EF4-14C3-3FD9-E603-6B6CE12C3F93}|BasisNetworkCore.csproj|solutionrelative:packages\\basis server\\basis network core\\serializable\\serveraudiosegmentmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\microphone\\basisaudiodecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\microphone\\basisaudiodecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|solutionrelative:packages\\basis framework\\microphone\\basisaudiodecoder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\handles\\basisnetworkhandlevoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\handles\\basisnetworkhandlevoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|solutionrelative:packages\\basis framework\\networking\\handles\\basisnetworkhandlevoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|solutionrelative:packages\\basis framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\recievers\\basisaudioreceiverbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\recievers\\basisaudioreceiverbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\recievers\\basisaudioreceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,11 +46,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 170,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BasisAudioTransmission.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "RelativeToolTip": "Packages\\Basis Framework\\Networking\\Transmitters\\BasisAudioTransmission.cs",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAAAGwAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-16T05:42:03.121Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "BasisNamePlate.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\NamePlate\\BasisNamePlate.cs",
+              "RelativeDocumentMoniker": "Packages\\Basis Framework\\UI\\NamePlate\\BasisNamePlate.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\NamePlate\\BasisNamePlate.cs",
+              "RelativeToolTip": "Packages\\Basis Framework\\UI\\NamePlate\\BasisNamePlate.cs",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAswGgAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-16T05:30:32.484Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "BasisAudioDecoder.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Microphone\\BasisAudioDecoder.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Microphone\\BasisAudioDecoder.cs",
@@ -54,12 +84,11 @@
               "RelativeToolTip": "Packages\\Basis Framework\\Microphone\\BasisAudioDecoder.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAASwCIAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T21:59:58.654Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T21:59:58.654Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "ServerAudioSegmentMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Server\\Basis Network Core\\Serializable\\ServerAudioSegmentMessage.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Server\\Basis Network Core\\Serializable\\ServerAudioSegmentMessage.cs",
@@ -67,25 +96,24 @@
               "RelativeToolTip": "Packages\\Basis Server\\Basis Network Core\\Serializable\\ServerAudioSegmentMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAYAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T21:57:23.37Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T21:57:23.37Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "BasisNetworkManagement.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
-              "ViewState": "AgIAAAYBAAAAAAAAAIAwwCIBAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAABgBAAAAAAAAAAAwwCYBAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-15T21:30:23.133Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "BasisNetworkHandleVoice.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkHandleVoice.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkHandleVoice.cs",
@@ -93,12 +121,11 @@
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkHandleVoice.cs",
               "ViewState": "AgIAABUAAAAAAAAAAIAwwCAAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T21:43:34.14Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T21:43:34.14Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "BasisAudioReceiver.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Recievers\\BasisAudioReceiver.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Recievers\\BasisAudioReceiver.cs",
@@ -110,7 +137,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "AudioSegmentDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Server\\Basis Network Core\\Serializable\\AudioSegmentDataMessage.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Server\\Basis Network Core\\Serializable\\AudioSegmentDataMessage.cs",
@@ -118,12 +145,11 @@
               "RelativeToolTip": "Packages\\Basis Server\\Basis Network Core\\Serializable\\AudioSegmentDataMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwBQAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T21:23:11.946Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-15T21:23:11.946Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "BasisAudioReceiverBase.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Recievers\\BasisAudioReceiverBase.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Recievers\\BasisAudioReceiverBase.cs",
@@ -131,25 +157,7 @@
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\Recievers\\BasisAudioReceiverBase.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAQwBUAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T21:54:11.886Z"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 82,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "BasisNetworkSendBase.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
-              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
-              "RelativeToolTip": "Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAwDUAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T22:39:54.235Z",
+              "WhenOpened": "2024-12-15T21:54:11.886Z",
               "EditorCaption": ""
             }
           ]

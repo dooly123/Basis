@@ -326,7 +326,7 @@ public static class BasisNetworkServer
             audioSegment.playerIdMessage.playerID = (ushort)sender.Id;
             NetDataWriter NetDataWriter = new NetDataWriter();
             audioSegment.Serialize(NetDataWriter);
-            BNL.Log("Sending Voice Data To Clients");
+          //  BNL.Log("Sending Voice Data To Clients");
             BroadcastMessageToClients(NetDataWriter, channel, endPoints, DeliveryMethod.Sequenced);
         }
         else

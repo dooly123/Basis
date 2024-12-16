@@ -286,24 +286,31 @@ namespace Basis.Scripts.Networking
         }
         private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            await Task.Run(() =>
+            if (peer == LocalPlayerPeer)
             {
-                BasisNetworkManagement.MainThreadContext.Post(async _ =>
-            {
-                if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
+                await Task.Run(() =>
                 {
-                    if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
+                    BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                {
+                    if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
                     {
-                        BNL.LogError(Reason);
+                        if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
+                        {
+                            BNL.LogError(Reason);
+                        }
                     }
-                }
-                BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
-                Players.Clear();
-                OwnershipPairing.Clear();
-                SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
-                await Boot_Sequence.BootSequence.OnAddressablesInitializationComplete();
-            }, null);
-            });
+                    BNL.Log($"Client disconnected from server [{peer.Id}] [{disconnectInfo.Reason}]");
+                    Players.Clear();
+                    OwnershipPairing.Clear();
+                    SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
+                    await Boot_Sequence.BootSequence.OnAddressablesInitializationComplete();
+                }, null);
+                });
+            }
+            else
+            {
+                BNL.Log($"Client disconnected from server [{peer.Id}]");
+            }
         }
         public void Disconnect()
         {

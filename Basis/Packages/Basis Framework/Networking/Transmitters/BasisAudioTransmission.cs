@@ -106,7 +106,7 @@ namespace Basis.Scripts.Networking.Transmitters
             }
             else
             {
-                UnityEngine.Debug.Log("Rejecting out going Audio");
+              //  UnityEngine.Debug.Log("Rejecting out going Audio");
             }
         }
         private void SendSilenceOverNetwork()
