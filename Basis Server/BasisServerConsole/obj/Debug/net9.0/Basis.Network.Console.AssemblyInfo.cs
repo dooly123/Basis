@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Basis.Network.Console")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+811c94d2be5324724fb9e7fdcc349c361ddfc55f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9d3caa9f17d750ecd21254f70fc56b4dc0008dc7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Basis.Network.Console")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Basis.Network.Console")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

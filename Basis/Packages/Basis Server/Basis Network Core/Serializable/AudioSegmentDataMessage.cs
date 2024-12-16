@@ -16,7 +16,7 @@ public static partial class SerializableBasis
             {
                 buffer = Writer.GetRemainingBytes();
                 LengthUsed = buffer.Length;
-                BNL.Log("Get Length was " + LengthUsed);
+               // BNL.Log("Get Length was " + LengthUsed);
             }
         }
         public void Dispose()
@@ -28,7 +28,7 @@ public static partial class SerializableBasis
             if (LengthUsed != 0)
             {
                 Writer.Put(buffer, 0, LengthUsed);
-                BNL.Log("Put Length was " + LengthUsed);
+              //  BNL.Log("Put Length was " + LengthUsed);
             }
         }
     }
