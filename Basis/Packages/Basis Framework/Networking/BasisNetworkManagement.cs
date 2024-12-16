@@ -172,6 +172,7 @@ namespace Basis.Scripts.Networking
         }
         public void LateUpdate()
         {
+
             double TimeAsDouble = Time.timeAsDouble;
             for (int Index = 0; Index < ReceiverCount; Index++)
             {
@@ -280,6 +281,7 @@ namespace Basis.Scripts.Networking
                 }, null);
             });
         }
+        public bool IsRunning = true;
         private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
             Debug.Log($"Client disconnected from server [{peer.Id}]");
@@ -300,12 +302,12 @@ namespace Basis.Scripts.Networking
                             Debug.LogError(Reason);
                         }
                     }
-                    Debug.Log($"Client disconnected from server [{peer.RemoteId}] [{disconnectInfo.Reason}]");
                     Players.Clear();
                     OwnershipPairing.Clear();
+                    ReceiverCount = 0;
+                    Debug.Log($"Client disconnected from server [{peer.RemoteId}] [{disconnectInfo.Reason}]");
                     SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
                     await Boot_Sequence.BootSequence.OnAddressablesInitializationComplete();
-                    Destroy(this.gameObject);
                 }, null);
                 });
             }
