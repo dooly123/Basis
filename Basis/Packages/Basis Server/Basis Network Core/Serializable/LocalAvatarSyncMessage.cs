@@ -1,5 +1,4 @@
 ﻿using LiteNetLib.Utils;
-using System;
 public static partial class SerializableBasis
 {
     public struct LocalAvatarSyncMessage
@@ -7,7 +6,7 @@ public static partial class SerializableBasis
         public byte[] array;
         public void Deserialize(NetDataReader Writer)
         {
-            array = Writer.GetRemainingBytes();
+            Writer.GetBytes(array, 386);//360 for muscles, 3*4 for position 12, 4*4 for rotation 16-2
         }
 
         public void Dispose()

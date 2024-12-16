@@ -54,7 +54,7 @@ public static class BasisNetworkServer
                             BNL.Log("Length is " + request.Data.AvailableBytes);
                             ReadyMessage ReadyMessage = new ReadyMessage();
                             ReadyMessage.Deserialize(request.Data);
-                            BNL.Log($"Peer added and connected: {ReadyToRoll.RemoteId}");
+                            BNL.Log($"Peer added and connected: {ReadyToRoll.Id}");
                             SendRemoteSpawnMessage(ReadyToRoll, ReadyMessage, BasisNetworkCommons.EventsChannel);
                         }
                         else
@@ -81,6 +81,7 @@ public static class BasisNetworkServer
         listener.PeerDisconnectedEvent += (peer, info) =>
         {
             ushort Id = (ushort)peer.Id;
+            ClientDisconnect(Id, BasisNetworkCommons.EventsChannel, Peers);
             if (Peers.TryRemove(Id, out peer))
             {
                 BNL.Log($"Peer removed and Disconnected: {peer.Id}");
@@ -92,7 +93,6 @@ public static class BasisNetworkServer
             BasisNetworkOwnership.RemovePlayerOwnership(Id);
             BasisSavedState.RemovePlayer(peer);
             BasisServerReductionSystem.RemovePlayer(peer);
-            ClientDisconnect(Id, BasisNetworkCommons.EventsChannel, Peers);
         };
         listener.NetworkReceiveEvent += NetworkReceiveEvent;
         BNL.Log("Server Worker Threads booting");
@@ -106,7 +106,10 @@ public static class BasisNetworkServer
         Writer.Put(Leaving);
         foreach (NetPeer client in authenticatedClients.Values)
         {
-            client.Send(Writer, channel, DeliveryMethod.ReliableOrdered);
+            if (client.Id != Leaving)
+            {
+                client.Send(Writer, channel, DeliveryMethod.ReliableOrdered);
+            }
         }
     }
     public static void RejectWithReason(ConnectionRequest Request, string Reason)
@@ -323,7 +326,7 @@ public static class BasisNetworkServer
             }
 
             audioSegment.playerIdMessage = new PlayerIdMessage();
-            audioSegment.playerIdMessage.playerID = (ushort)sender.RemoteId;
+            audioSegment.playerIdMessage.playerID = (ushort)sender.Id;
             NetDataWriter NetDataWriter = new NetDataWriter();
             audioSegment.Serialize(NetDataWriter);
           //  BNL.Log("Sending Voice Data To Clients");
@@ -331,7 +334,7 @@ public static class BasisNetworkServer
         }
         else
         {
-            BNL.Log("Error unable to find " + sender.RemoteId + " in the data store!");
+            BNL.Log("Error unable to find " + sender.Id + " in the data store!");
         }
     }
     public static void BroadcastMessageToClients(NetDataWriter Reader, byte channel, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> authenticatedClients, DeliveryMethod deliveryMethod = DeliveryMethod.Sequenced)
@@ -422,8 +425,8 @@ public static class BasisNetworkServer
 
         List<ServerReadyMessage> copied = new List<ServerReadyMessage>();
 
-        var clientsToNotify = Peers.Values.Where(client => client != authClient);
-
+        IEnumerable<NetPeer> clientsToNotify = Peers.Values.Where(client => client != authClient);
+        BNL.Log("Notifing Newly Connected Client about "+ clientsToNotify.Count());
         foreach (NetPeer client in clientsToNotify)
         {
             ServerReadyMessage serverReadyMessage = new ServerReadyMessage();
@@ -444,7 +447,7 @@ public static class BasisNetworkServer
                 serverReadyMessage.playerIdMessage = new PlayerIdMessage { playerID = (ushort)client.Id };
                 serverReadyMessage.localReadyMessage = new ReadyMessage
                 {
-                    localAvatarSyncMessage = new LocalAvatarSyncMessage() { array = new byte[390] },
+                    localAvatarSyncMessage = new LocalAvatarSyncMessage() { array = new byte[386] },
                     clientAvatarChangeMessage = new ClientAvatarChangeMessage() { byteArray = new byte[] { }, byteLength = 0 },
                     playerMetaDataMessage = new PlayerMetaDataMessage() { playerDisplayName = "Error", playerUUID = string.Empty },
                 };
