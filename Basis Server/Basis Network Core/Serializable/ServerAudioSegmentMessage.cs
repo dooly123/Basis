@@ -50,9 +50,10 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
-            foreach (ushort v in users)
+            int Count = users.Length;
+            for (int Index = 0; Index < Count; Index++)
             {
-                 Writer.Put(v);
+                Writer.Put(users[Index]);
             }
         }
     }
