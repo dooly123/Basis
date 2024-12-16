@@ -447,7 +447,7 @@ public static class BasisNetworkServer
                 serverReadyMessage.playerIdMessage = new PlayerIdMessage { playerID = (ushort)client.Id };
                 serverReadyMessage.localReadyMessage = new ReadyMessage
                 {
-                    localAvatarSyncMessage = new LocalAvatarSyncMessage() { array = new byte[390] },
+                    localAvatarSyncMessage = new LocalAvatarSyncMessage() { array = new byte[386] },
                     clientAvatarChangeMessage = new ClientAvatarChangeMessage() { byteArray = new byte[] { }, byteLength = 0 },
                     playerMetaDataMessage = new PlayerMetaDataMessage() { playerDisplayName = "Error", playerUUID = string.Empty },
                 };
