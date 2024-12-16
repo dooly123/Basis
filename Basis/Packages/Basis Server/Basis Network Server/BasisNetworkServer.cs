@@ -285,9 +285,11 @@ public static class BasisNetworkServer
     }
     private static void HandleVoiceMessage(NetPacketReader Reader, NetPeer peer)
     {
-        ServerAudioSegmentMessage audioSegment = new ServerAudioSegmentMessage();
+        AudioSegmentDataMessage audioSegment = new AudioSegmentDataMessage();
         audioSegment.Deserialize(Reader);
-        SendVoiceMessageToClients(audioSegment, BasisNetworkCommons.VoiceChannel, peer);
+        ServerAudioSegmentMessage ServerAudio = new ServerAudioSegmentMessage();
+        ServerAudio.audioSegmentData = audioSegment;
+        SendVoiceMessageToClients(ServerAudio, BasisNetworkCommons.VoiceChannel, peer);
     }
     private static void SendVoiceMessageToClients(ServerAudioSegmentMessage audioSegment, byte channel, NetPeer sender)
     {
@@ -295,14 +297,14 @@ public static class BasisNetworkServer
         {
             if (data.voiceReceiversMessage.users == null)
             {
-               // BNL.Log("No Users!");
+                // BNL.Log("No Users!");
                 return;
             }
 
             int count = data.voiceReceiversMessage.users.Length;
             if (count == 0)
             {
-              //  BNL.Log("No Count!");
+                //  BNL.Log("No Count!");
                 return;
             }
             List<NetPeer> endPoints = new List<NetPeer>(count);
@@ -316,10 +318,11 @@ public static class BasisNetworkServer
 
             if (endPoints.Count == 0)
             {
-              //  BNL.Log("No Viable");
+                //  BNL.Log("No Viable");
                 return;
             }
 
+            audioSegment.playerIdMessage = new PlayerIdMessage();
             audioSegment.playerIdMessage.playerID = (ushort)sender.Id;
             NetDataWriter NetDataWriter = new NetDataWriter();
             audioSegment.Serialize(NetDataWriter);
