@@ -16,13 +16,13 @@ public static class BasisNetworkHandleRemoval
                     BasisNetworkManagement.MainThreadContext.Post(_ =>
                     {
                         BasisNetworkManagement.OnRemotePlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisRemotePlayer)NetworkedPlayer.Player);
+                        GameObject.Destroy(NetworkedPlayer.gameObject);
                     }, null);
                 }
                 else
                 {
                     Debug.LogError("network used wrong api to remove local player!");
                 }
-                GameObject.Destroy(NetworkedPlayer.gameObject);
             }
             else
             {
