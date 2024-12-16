@@ -1,5 +1,4 @@
-﻿using DarkRift;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using System.IO;
 public static partial class SerializableBasis
 {
@@ -7,11 +6,8 @@ public static partial class SerializableBasis
     {
         public PlayerIdMessage playerIdMessage;
         public byte messageIndex;
-
         public uint payloadSize;
         public ushort recipientsSize;
-
-
         public byte[] payload;
         public ushort[] recipients;
         public void Deserialize(NetDataReader Writer)
@@ -29,18 +25,12 @@ public static partial class SerializableBasis
                 {
                     throw new EndOfStreamException("Insufficient data in stream for recipients and payload.");
                 }
-
-                // Allocate the arrays
                 recipients = new ushort[recipientsSize];
                 payload = new byte[payloadSize];
-
-                // Read the recipients
                 for (int index = 0; index < recipientsSize; index++)
                 {
                     Writer.Get(out recipients[index]);
                 }
-
-                // Read the payload
                 for (int index = 0; index < payloadSize; index++)
                 {
                     Writer.Get(out payload[index]);
@@ -52,33 +42,19 @@ public static partial class SerializableBasis
                 throw new EndOfStreamException("Error deserializing AvatarDataMessage: " + ex.Message, ex);
             }
         }
-
-        public void Dispose()
-        {
-
-            playerIdMessage.Dispose();
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
-            // Write the playerIdMessage and messageIndex first
             playerIdMessage.Serialize(Writer);
-             Writer.Put(messageIndex);
-
-            // Prepare sizes
+            Writer.Put(messageIndex);
             recipientsSize = (ushort)(recipients?.Length ?? 0);
             payloadSize = (uint)(payload?.Length ?? 0);
-
-            // Write sizes
-             Writer.Put(recipientsSize);
-             Writer.Put(payloadSize);
-
-            // Write the recipients
+            Writer.Put(recipientsSize);
+            Writer.Put(payloadSize);
             if (recipients != null)
             {
                 for (int index = 0; index < recipientsSize; index++)
                 {
-                     Writer.Put(recipients[index]);
+                    Writer.Put(recipients[index]);
                 }
             }
 
@@ -87,9 +63,14 @@ public static partial class SerializableBasis
             {
                 for (int index = 0; index < payloadSize; index++)
                 {
-                     Writer.Put(payload[index]);
+                    Writer.Put(payload[index]);
                 }
             }
+        }
+        public void Dispose()
+        {
+
+            playerIdMessage.Dispose();
         }
     }
     public struct ServerAvatarDataMessage
@@ -131,8 +112,8 @@ public static partial class SerializableBasis
         {
             // Write the assignedAvatarPlayer, messageIndex, and payload
             playerIdMessage.Serialize(Writer);
-             Writer.Put(messageIndex);
-             Writer.Put(payload);
+            Writer.Put(messageIndex);
+            Writer.Put(payload);
         }
         public void Dispose()
         {
@@ -180,7 +161,7 @@ public static partial class SerializableBasis
         {
             // Write the assignedAvatarPlayer and messageIndex
             playerIdMessage.Serialize(Writer);
-             Writer.Put(messageIndex);
+            Writer.Put(messageIndex);
         }
         public void Dispose()
         {
@@ -203,8 +184,8 @@ public static partial class SerializableBasis
         public void Serialize(NetDataWriter Writer)
         {
             // Write the playerIdMessage and avatarDataMessage
-             playerIdMessage.Serialize(Writer);
-             avatarDataMessage.Serialize(Writer);
+            playerIdMessage.Serialize(Writer);
+            avatarDataMessage.Serialize(Writer);
         }
         public void Dispose()
         {
@@ -217,33 +198,19 @@ public static partial class SerializableBasis
     {
         public PlayerIdMessage playerIdMessage;
         public byte messageIndex;
-        public ushort recipientsSize;
         public ushort[] recipients;
         public void Deserialize(NetDataReader Writer)
         {
             playerIdMessage.Deserialize(Writer);
             Writer.Get(out messageIndex);
-            Writer.Get(out recipientsSize);
-            recipients = new ushort[recipientsSize];
-            for (int index = 0; index < recipientsSize; index++)
-            {
-                Writer.Get(out recipients[index]);
-            }
+            recipients = Writer.GetUShortArray();
         }
 
         public void Serialize(NetDataWriter Writer)
         {
             playerIdMessage.Serialize(Writer);
             Writer.Put(messageIndex);
-
-            recipientsSize = (ushort)recipients.Length;
-            Writer.Put(recipientsSize);
-
-            for (int index = 0; index < recipientsSize; index++)
-            {
-                ushort recipient = recipients[index];
-                Writer.Put(recipient);
-            }
+            Writer.PutArray(recipients);
         }
         public void Dispose()
         {
@@ -279,21 +246,12 @@ public static partial class SerializableBasis
     {
         public PlayerIdMessage playerIdMessage;
         public byte messageIndex;
-        public ushort recipientsSize;
         public ushort[] recipients;
         public void Deserialize(NetDataReader Writer)
         {
             playerIdMessage.Deserialize(Writer);
             Writer.Get(out messageIndex);
-
-            Writer.Get(out recipientsSize);
-
-            recipients = new ushort[recipientsSize];
-
-            for (int index = 0; index < recipients.Length; index++)
-            {
-                Writer.Get(out recipients[index]);
-            }
+            recipients = Writer.GetUShortArray();
         }
         public void Dispose()
         {
@@ -304,16 +262,8 @@ public static partial class SerializableBasis
         public void Serialize(NetDataWriter Writer)
         {
             playerIdMessage.Serialize(Writer);
-             Writer.Put(messageIndex);
-
-            recipientsSize = (ushort)recipients.Length;
-
-             Writer.Put(recipientsSize);
-
-            for (int index = 0; index < recipients.Length; index++)
-            {
-                 Writer.Put(recipients[index]);
-            }
+            Writer.Put(messageIndex);
+            Writer.PutArray(recipients);
         }
     }
 

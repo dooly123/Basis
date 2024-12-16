@@ -5,7 +5,7 @@
     <version>2.10.1</version>
     <authors>Basis.Network.Server</authors>
     <description>Package Description</description>
-    <repository type="git" commit="63d965fa818a644eac0e250ede6e797e68a8773b" />
+    <repository type="git" commit="f99eeb7822cbd8a64460f565bf25981bbfeacdc3" />
     <dependencies>
       <group targetFramework=".NETFramework4.7.1">
         <dependency id="Basis.Network.Core" version="2.10.1" exclude="Build,Analyzers" />
