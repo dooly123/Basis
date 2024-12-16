@@ -292,6 +292,10 @@ namespace Basis.Scripts.Networking
                 {
                     BasisNetworkManagement.MainThreadContext.Post(async _ =>
                 {
+                    if (BasisNetworkManagement.Players.TryGetValue((ushort)LocalPlayerPeer.Id, out BasisNetworkedPlayer NetworkedPlayer))
+                    {
+                        BasisNetworkManagement.OnLocalPlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisLocalPlayer)NetworkedPlayer.Player);
+                    }
                     if (disconnectInfo.Reason == DisconnectReason.RemoteConnectionClose)
                     {
                         if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
@@ -374,7 +378,7 @@ namespace Basis.Scripts.Networking
             switch (e.Tag) // Use e.Tag instead of message.Tag
             {
                 case BasisNetworkTag.Disconnection:
-                    await BasisNetworkHandleRemoval.HandleDisconnection(reader);
+                    BasisNetworkHandleRemoval.HandleDisconnection(reader);
                     break;
                 case BasisNetworkTag.AvatarChangeMessage:
                     BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);

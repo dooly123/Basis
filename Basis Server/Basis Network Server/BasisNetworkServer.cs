@@ -81,6 +81,7 @@ public static class BasisNetworkServer
         listener.PeerDisconnectedEvent += (peer, info) =>
         {
             ushort Id = (ushort)peer.Id;
+            ClientDisconnect(Id, BasisNetworkCommons.EventsChannel, Peers);
             if (Peers.TryRemove(Id, out peer))
             {
                 BNL.Log($"Peer removed and Disconnected: {peer.Id}");
@@ -92,7 +93,6 @@ public static class BasisNetworkServer
             BasisNetworkOwnership.RemovePlayerOwnership(Id);
             BasisSavedState.RemovePlayer(peer);
             BasisServerReductionSystem.RemovePlayer(peer);
-            ClientDisconnect(Id, BasisNetworkCommons.EventsChannel, Peers);
         };
         listener.NetworkReceiveEvent += NetworkReceiveEvent;
         BNL.Log("Server Worker Threads booting");
@@ -106,7 +106,10 @@ public static class BasisNetworkServer
         Writer.Put(Leaving);
         foreach (NetPeer client in authenticatedClients.Values)
         {
-            client.Send(Writer, channel, DeliveryMethod.ReliableOrdered);
+            if (client.Id != Leaving)
+            {
+                client.Send(Writer, channel, DeliveryMethod.ReliableOrdered);
+            }
         }
     }
     public static void RejectWithReason(ConnectionRequest Request, string Reason)
