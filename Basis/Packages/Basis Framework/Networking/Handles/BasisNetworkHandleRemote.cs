@@ -22,11 +22,10 @@ namespace Basis.Scripts.Networking
         }
         public static async Task HandleCreateAllRemoteClients(LiteNetLib.NetPacketReader reader, Transform Parent)
         {
-            Debug.Log("Handling Create ALl Remote Players!");
             CreateAllRemoteMessage createAllRemoteMessage = new CreateAllRemoteMessage();
             createAllRemoteMessage.Deserialize(reader);
             int RemoteLength = createAllRemoteMessage.serverSidePlayer.Length;
-
+            Debug.Log("Handling Create All Remote Players! Total Connections To Create " + RemoteLength);
             // Create a list to hold the tasks
             List<Task> tasks = new List<Task>();
 

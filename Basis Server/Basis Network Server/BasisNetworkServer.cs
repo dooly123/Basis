@@ -425,8 +425,8 @@ public static class BasisNetworkServer
 
         List<ServerReadyMessage> copied = new List<ServerReadyMessage>();
 
-        var clientsToNotify = Peers.Values.Where(client => client != authClient);
-
+        IEnumerable<NetPeer> clientsToNotify = Peers.Values.Where(client => client != authClient);
+        BNL.Log("Notifing Newly Connected Client about "+ clientsToNotify.Count());
         foreach (NetPeer client in clientsToNotify)
         {
             ServerReadyMessage serverReadyMessage = new ServerReadyMessage();

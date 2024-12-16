@@ -50,6 +50,7 @@ namespace Basis.Scripts.Networking.Recievers
             musclesJob.targetMuscles = targetMuscles;
             AvatarJob.OutputVector = OuputVectors;
             AvatarJob.TargetVector = TargetVectors;
+            ComputeHumanPose();
         }
         /// <summary>
         /// Clean up resources used in the compute process.
