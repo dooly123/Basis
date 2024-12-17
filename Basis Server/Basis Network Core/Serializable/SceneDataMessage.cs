@@ -1,71 +1,64 @@
-﻿
-using System;
-using DarkRift;
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 
 public static partial class SerializableBasis
 {
     public struct SceneDataMessage
     {
         public ushort messageIndex;
-
-        public uint payloadSize;
         public ushort recipientsSize;
-
-        public byte[] payload;
-
         /// <summary>
         /// If null, it's for everyone. Otherwise, send only to the listed entries.
         /// </summary>
         public ushort[] recipients;
+        public byte[] payload;
 
         public void Deserialize(NetDataReader Writer)
         {
-            // Read messageIndex
             Writer.Get(out messageIndex);
-
-            Writer.Get(out recipientsSize);
-            Writer.Get(out payloadSize);
-
-            recipients = new ushort[recipientsSize];
-            payload = new byte[payloadSize];
-
-            for (int index = 0; index < recipientsSize; index++)
+            if (Writer.TryGetUShort(out recipientsSize))
             {
-                Writer.Get(out recipients[index]);
-            }
-            for (int index = 0; index < payloadSize; index++)
-            {
-                Writer.Get(out payload[index]);
+                recipients = new ushort[recipientsSize];
+                for (int index = 0; index < recipientsSize; index++)
+                {
+                    Writer.Get(out recipients[index]);
+                }
+                if (Writer.AvailableBytes != 0)
+                {
+                    payload = Writer.GetRemainingBytes();
+                }
             }
         }
-
-        public void Dispose()
-        {
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             // Write the messageIndex and buffer
-             Writer.Put(messageIndex);
+            Writer.Put(messageIndex);
 
-            recipientsSize = (ushort)recipients.Length;
-            payloadSize = (uint)payload.Length;
-
-             Writer.Put(recipientsSize);
-             Writer.Put(payloadSize);
-
-            for (int index = 0; index < recipientsSize; index++)
+            if (recipients == null || recipients.Length == 0 && (payload == null || payload.Length == 0))
             {
-                 Writer.Put(recipients[index]);
+                //this is the end of the message! its just a simple RPC
             }
-            for (int index = 0; index < payloadSize; index++)
+            else
             {
-                 Writer.Put(payload[index]);
+                if (recipients == null)//no recipients but we have data so set the size to zero
+                {
+                    recipientsSize = 0;
+                }
+                else
+                {
+                    recipientsSize = (ushort)recipients.Length;
+                }
+                Writer.Put(recipientsSize);
+                Writer.PutArray(recipients);
+                if (payload != null && payload.Length != 0)
+                {
+                    Writer.Put(payload);
+                }
             }
         }
+        public void Dispose()
+        {
+        }
     }
-
     public struct ServerSceneDataMessage
     {
         public PlayerIdMessage playerIdMessage;
@@ -87,98 +80,6 @@ public static partial class SerializableBasis
         public void Serialize(NetDataWriter Writer)
         {
             // Write the playerIdMessage and sceneDataMessage
-            playerIdMessage.Serialize(Writer);
-            sceneDataMessage.Serialize(Writer);
-        }
-    }
-    public struct SceneDataMessage_NoRecipients
-    {
-        public ushort messageIndex;
-        public byte[] payload;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            // Read messageIndex and payload
-            Writer.Get(out messageIndex);
-            payload = Writer.GetRemainingBytes();
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            // Write the messageIndex and payload
-             Writer.Put(messageIndex);
-             Writer.Put(payload);
-        }
-    }
-
-    public struct ServerSceneDataMessage_NoRecipients
-    {
-        public PlayerIdMessage playerIdMessage;
-        public SceneDataMessage_NoRecipients sceneDataMessage;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-            sceneDataMessage.Deserialize(Writer);
-        }
-
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            sceneDataMessage.Dispose();
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            // Write the playerIdMessage and sceneDataMessage
-            playerIdMessage.Serialize(Writer);
-            sceneDataMessage.Serialize(Writer);
-        }
-    }
-    public struct SceneDataMessage_NoRecipients_NoPayload
-    {
-        public ushort messageIndex;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            // Read only messageIndex
-            Writer.Get(out messageIndex);
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            // Write the messageIndex
-             Writer.Put(messageIndex);
-        }
-    }
-
-    public struct ServerSceneDataMessage_NoRecipients_NoPayload
-    {
-        public PlayerIdMessage playerIdMessage;
-        public SceneDataMessage_NoRecipients_NoPayload sceneDataMessage;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-            sceneDataMessage.Deserialize(Writer);
-        }
-
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            sceneDataMessage.Dispose();
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
             playerIdMessage.Serialize(Writer);
             sceneDataMessage.Serialize(Writer);
         }

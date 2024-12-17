@@ -337,28 +337,18 @@ namespace Basis.Scripts.Networking
                     Reader.Recycle();
                     break;
                 case BasisNetworkCommons.SceneChannel:
-                     e = new BasisMessageReceivedEventArgs
+                    BasisNetworkManagement.MainThreadContext.Post(_ =>
                     {
-                        Tag = Reader.GetByte(),
-                        SendMode = deliveryMethod,
-                        ClientId = (ushort)peer.RemoteId
-                     };
-                    ScheduleOnMainThread(async () =>
-                    {
-                        await NetworkReceiveEventTag(peer, Reader, e);
-                    });
+                        BasisNetworkGenericMessages.HandleServerSceneDataMessage(Reader);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 case BasisNetworkCommons.AvatarChannel:
-                     e = new BasisMessageReceivedEventArgs
+                    BasisNetworkManagement.MainThreadContext.Post(_ =>
                     {
-                        Tag = Reader.GetByte(),
-                        SendMode = deliveryMethod,
-                        ClientId = (ushort)peer.RemoteId
-                     };
-                    ScheduleOnMainThread(async () =>
-                    {
-                        await NetworkReceiveEventTag(peer, Reader, e);
-                    });
+                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage(Reader);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 default:
                     BNL.LogError($"this Channel was not been implemented {channel}");
@@ -381,30 +371,6 @@ namespace Basis.Scripts.Networking
                     break;
                 case BasisNetworkTag.CreateRemotePlayers:
                     await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
-                    break;
-                case BasisNetworkTag.SceneGenericMessage:
-                    BasisNetworkGenericMessages.HandleServerSceneDataMessage(reader);
-                    break;
-                case BasisNetworkTag.SceneGenericMessage_NoRecipients:
-                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients(reader);
-                    break;
-                case BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload:
-                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_NoRecipients_NoPayload(reader);
-                    break;
-                case BasisNetworkTag.AvatarGenericMessage:
-                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage(reader);
-                    break;
-                case BasisNetworkTag.AvatarGenericMessage_NoRecipients:
-                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients(reader);
-                    break;
-                case BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload:
-                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_NoRecipients_NoPayload(reader);
-                    break;
-                case BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload:
-                    BasisNetworkGenericMessages.HandleServerAvatarDataMessage_Recipients_NoPayload(reader);
-                    break;
-                case BasisNetworkTag.SceneGenericMessage_Recipients_NoPayload:
-                    BasisNetworkGenericMessages.HandleServerSceneDataMessage_Recipients_NoPayload(reader);
                     break;
                 case BasisNetworkTag.OwnershipResponse:
                     BasisNetworkGenericMessages.HandleOwnershipResponse(reader);

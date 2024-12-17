@@ -99,62 +99,16 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             ushort NetId = NetworkedPlayer.NetId;
             NetDataWriter netDataWriter = new NetDataWriter();
             // Handle cases based on presence of Recipients and buffer
-            if (Recipients == null)
+            AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
             {
-                if (buffer == null)
-                {
-                    AvatarDataMessage_NoRecipients_NoPayload AvatarDataMessage_NoRecipients_NoPayload = new AvatarDataMessage_NoRecipients_NoPayload
-                    {
-                        playerIdMessage = new PlayerIdMessage() { playerID = NetId },
-                        messageIndex = MessageIndex
-                    };
-                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload);
-                    AvatarDataMessage_NoRecipients_NoPayload.Serialize(netDataWriter);
-                    // No recipients and no payload
-                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
-                }
-                else
-                {
-                    AvatarDataMessage_NoRecipients AvatarDataMessage_NoRecipients = new AvatarDataMessage_NoRecipients
-                    {
-                        playerIdMessage = new PlayerIdMessage() { playerID = NetId },
-                        messageIndex = MessageIndex,
-                        payload = buffer
-                    };
-                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage_NoRecipients);
-                    AvatarDataMessage_NoRecipients.Serialize(netDataWriter);
-                    // No recipients but has payload
-                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
-                }
-            }
-            else
-            {
-                if (buffer == null)
-                {
-                    AvatarDataMessage_Recipients_NoPayload AvatarDataMessage = new AvatarDataMessage_Recipients_NoPayload();
-                    AvatarDataMessage.playerIdMessage = new PlayerIdMessage() { playerID = NetId };
-                    AvatarDataMessage.messageIndex = MessageIndex;
-                    AvatarDataMessage.recipients = Recipients;
-                    // Recipients present, payload may or may not be present
-                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload);
-                    AvatarDataMessage.Serialize(netDataWriter);
-                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
-                }
-                else
-                {
-                    AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
-                    {
-                        playerIdMessage = new PlayerIdMessage() { playerID = NetId },
-                        messageIndex = MessageIndex,
-                        payload = buffer,
-                        recipients = Recipients
-                    };
-                    netDataWriter.Put(BasisNetworkTag.AvatarGenericMessage);
-                    AvatarDataMessage.Serialize(netDataWriter);
-                    // Recipients present, payload may or may not be present
-                    WriteAndSendMessage(netDataWriter, DeliveryMethod);
-                }
-            }
+                PlayerIdMessage = new PlayerIdMessage() { playerID = NetId },
+                messageIndex = MessageIndex,
+                payload = buffer,
+                recipients = Recipients
+            };
+            AvatarDataMessage.Serialize(netDataWriter);
+            // Recipients present, payload may or may not be present
+            WriteAndSendMessage(netDataWriter, DeliveryMethod);
         }
 
         // Helper method to avoid code duplication

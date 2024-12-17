@@ -1,76 +1,65 @@
 ﻿using LiteNetLib.Utils;
-using System.IO;
 public static partial class SerializableBasis
 {
     public struct AvatarDataMessage
     {
-        public PlayerIdMessage playerIdMessage;
+        public PlayerIdMessage PlayerIdMessage;
         public byte messageIndex;
-        public uint payloadSize;
         public ushort recipientsSize;
-        public byte[] payload;
+        /// <summary>
+        /// If null, it's for everyone. Otherwise, send only to the listed entries.
+        /// </summary>
         public ushort[] recipients;
+        public byte[] payload;
+
         public void Deserialize(NetDataReader Writer)
         {
-            try
+            PlayerIdMessage = new PlayerIdMessage();
+            PlayerIdMessage.Deserialize(Writer);
+            Writer.Get(out messageIndex);
+            if (Writer.TryGetUShort(out recipientsSize))
             {
-                // Read the playerIdMessage and messageIndex first
-                playerIdMessage.Deserialize(Writer);
-                Writer.Get(out messageIndex);
-                Writer.Get(out recipientsSize);
-                Writer.Get(out payloadSize);
-
-                // Validate if the reader has enough data to read the expected sizes
-                if (Writer.AvailableBytes < recipientsSize * sizeof(ushort) + payloadSize * sizeof(byte))
-                {
-                    throw new EndOfStreamException("Insufficient data in stream for recipients and payload.");
-                }
                 recipients = new ushort[recipientsSize];
-                payload = new byte[payloadSize];
                 for (int index = 0; index < recipientsSize; index++)
                 {
                     Writer.Get(out recipients[index]);
                 }
-                for (int index = 0; index < payloadSize; index++)
+                if (Writer.AvailableBytes != 0)
                 {
-                    Writer.Get(out payload[index]);
+                    payload = Writer.GetRemainingBytes();
                 }
-            }
-            catch (EndOfStreamException ex)
-            {
-                // Log or handle stream read error
-                throw new EndOfStreamException("Error deserializing AvatarDataMessage: " + ex.Message, ex);
             }
         }
         public void Serialize(NetDataWriter Writer)
         {
-            playerIdMessage.Serialize(Writer);
+            PlayerIdMessage.Serialize(Writer);
+            // Write the messageIndex and buffer
             Writer.Put(messageIndex);
-            recipientsSize = (ushort)(recipients?.Length ?? 0);
-            payloadSize = (uint)(payload?.Length ?? 0);
-            Writer.Put(recipientsSize);
-            Writer.Put(payloadSize);
-            if (recipients != null)
-            {
-                for (int index = 0; index < recipientsSize; index++)
-                {
-                    Writer.Put(recipients[index]);
-                }
-            }
 
-            // Write the payload
-            if (payload != null)
+            if (recipients == null || recipients.Length == 0 && (payload == null || payload.Length == 0))
             {
-                for (int index = 0; index < payloadSize; index++)
+                //this is the end of the message! its just a simple RPC
+            }
+            else
+            {
+                if (recipients == null)//no recipients but we have data so set the size to zero
                 {
-                    Writer.Put(payload[index]);
+                    recipientsSize = 0;
+                }
+                else
+                {
+                    recipientsSize = (ushort)recipients.Length;
+                }
+                Writer.Put(recipientsSize);
+                Writer.PutArray(recipients);
+                if (payload != null && payload.Length != 0)
+                {
+                    Writer.Put(payload);
                 }
             }
         }
         public void Dispose()
         {
-
-            playerIdMessage.Dispose();
         }
     }
     public struct ServerAvatarDataMessage
@@ -86,201 +75,6 @@ public static partial class SerializableBasis
         {
             playerIdMessage.Dispose();
             avatarDataMessage.Dispose();
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            playerIdMessage.Serialize(Writer);
-            avatarDataMessage.Serialize(Writer);
-        }
-    }
-    public struct AvatarDataMessage_NoRecipients
-    {
-        public PlayerIdMessage playerIdMessage;
-        public byte messageIndex;
-        public byte[] payload;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            // Read the assignedAvatarPlayer, messageIndex, and payload
-            playerIdMessage.Deserialize(Writer);
-            Writer.Get(out messageIndex);
-            payload = Writer.GetRemainingBytes();
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            // Write the assignedAvatarPlayer, messageIndex, and payload
-            playerIdMessage.Serialize(Writer);
-            Writer.Put(messageIndex);
-            Writer.Put(payload);
-        }
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-        }
-    }
-
-    public struct ServerAvatarDataMessage_NoRecipients
-    {
-        public PlayerIdMessage playerIdMessage;
-        public AvatarDataMessage_NoRecipients avatarDataMessage;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            // Read the playerIdMessage and avatarDataMessage
-            playerIdMessage.Deserialize(Writer);
-            avatarDataMessage.Deserialize(Writer);
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            // Write the playerIdMessage and avatarDataMessage
-            playerIdMessage.Serialize(Writer);
-            avatarDataMessage.Serialize(Writer);
-        }
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            avatarDataMessage.Dispose();
-        }
-
-    }
-    public struct AvatarDataMessage_NoRecipients_NoPayload
-    {
-        public PlayerIdMessage playerIdMessage;
-        public byte messageIndex;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            // Read the assignedAvatarPlayer and messageIndex only
-            playerIdMessage.Deserialize(Writer);
-            Writer.Get(out messageIndex);
-        }
-        public void Serialize(NetDataWriter Writer)
-        {
-            // Write the assignedAvatarPlayer and messageIndex
-            playerIdMessage.Serialize(Writer);
-            Writer.Put(messageIndex);
-        }
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-        }
-
-    }
-
-    public struct ServerAvatarDataMessage_NoRecipients_NoPayload
-    {
-        public PlayerIdMessage playerIdMessage;
-        public AvatarDataMessage_NoRecipients_NoPayload avatarDataMessage;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-            avatarDataMessage.Deserialize(Writer);
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            // Write the playerIdMessage and avatarDataMessage
-            playerIdMessage.Serialize(Writer);
-            avatarDataMessage.Serialize(Writer);
-        }
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            avatarDataMessage.Dispose();
-        }
-
-    }
-    public struct SceneDataMessage_Recipients_NoPayload
-    {
-        public PlayerIdMessage playerIdMessage;
-        public byte messageIndex;
-        public ushort[] recipients;
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-            Writer.Get(out messageIndex);
-            recipients = Writer.GetUShortArray();
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            playerIdMessage.Serialize(Writer);
-            Writer.Put(messageIndex);
-            Writer.PutArray(recipients);
-        }
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-        }
-
-    }
-    public struct ServerSceneDataMessage_Recipients_NoPayload
-    {
-        public PlayerIdMessage playerIdMessage;
-        public SceneDataMessage_Recipients_NoPayload sceneDataMessage;
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-            sceneDataMessage.Deserialize(Writer);
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            playerIdMessage.Serialize(Writer);
-            sceneDataMessage.Serialize(Writer);
-        }
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            sceneDataMessage.Dispose();
-        }
-
-    }
-
-    public struct AvatarDataMessage_Recipients_NoPayload
-    {
-        public PlayerIdMessage playerIdMessage;
-        public byte messageIndex;
-        public ushort[] recipients;
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-            Writer.Get(out messageIndex);
-            recipients = Writer.GetUShortArray();
-        }
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-        }
-
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            playerIdMessage.Serialize(Writer);
-            Writer.Put(messageIndex);
-            Writer.PutArray(recipients);
-        }
-    }
-
-    public struct ServerAvatarDataMessage_Recipients_NoPayload
-    {
-        public PlayerIdMessage playerIdMessage;
-        public AvatarDataMessage_Recipients_NoPayload avatarDataMessage;
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            avatarDataMessage.Dispose();
-        }
-
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-            avatarDataMessage.Deserialize(Writer);
         }
 
         public void Serialize(NetDataWriter Writer)

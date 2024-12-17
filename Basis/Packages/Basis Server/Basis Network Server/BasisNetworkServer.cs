@@ -196,22 +196,10 @@ public static class BasisNetworkServer
                 NetworkReceiveEventTag(peer, Reader, e);
                 break;
             case BasisNetworkCommons.SceneChannel:
-                e = new BasisMessageReceivedEventArgs
-                {
-                    Tag = Reader.GetByte(),
-                    SendMode = deliveryMethod,
-                    ClientId = (ushort)peer.Id
-                };
-                NetworkReceiveEventTag(peer, Reader, e);
+                BasisNetworkingGeneric.HandleSceneDataMessage_Recipients_Payload(Reader, deliveryMethod, peer, Peers);
                 break;
             case BasisNetworkCommons.AvatarChannel:
-                e = new BasisMessageReceivedEventArgs
-                {
-                    Tag = Reader.GetByte(),
-                    SendMode = deliveryMethod,
-                    ClientId = (ushort)peer.Id
-                };
-                NetworkReceiveEventTag(peer, Reader, e);
+                BasisNetworkingGeneric.HandleAvatarDataMessage_Recipients_Payload(Reader, deliveryMethod, peer, Peers);
                 break;
             default:
                 BNL.LogError($"this Channel was not been implemented {channel}");
@@ -225,26 +213,6 @@ public static class BasisNetworkServer
         {
             case BasisNetworkTag.AvatarChangeMessage:
                 SendAvatarMessageToClients(Reader, peer, e);
-                break;
-            case BasisNetworkTag.SceneGenericMessage_Recipients_NoPayload:
-                BasisNetworkingGeneric.HandleSceneDataMessage_Recipients_NoPayload(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.AvatarGenericMessage_Recipients_NoPayload:
-            case BasisNetworkTag.AvatarGenericMessage:
-                BasisNetworkingGeneric.HandleAvatarDataMessage_Recipients_Payload(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.AvatarGenericMessage_NoRecipients:
-                BasisNetworkingGeneric.HandleAvatarDataMessage_NoRecipients(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.AvatarGenericMessage_NoRecipients_NoPayload:
-                BasisNetworkingGeneric.HandleAvatarDataMessage_NoRecipients_NoPayload(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.SceneGenericMessage:
-            case BasisNetworkTag.SceneGenericMessage_NoRecipients:
-                BasisNetworkingGeneric.HandleSceneDataMessage_NoRecipients(Reader, e, peer, Peers);
-                break;
-            case BasisNetworkTag.SceneGenericMessage_NoRecipients_NoPayload:
-                BasisNetworkingGeneric.HandleSceneDataMessage_NoRecipients_NoPayload(Reader, e, peer, Peers);
                 break;
             case BasisNetworkTag.AudioRecipients:
                 UpdateVoiceReceivers(Reader, peer);
