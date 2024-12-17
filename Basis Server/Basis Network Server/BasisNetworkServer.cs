@@ -16,6 +16,7 @@ public static class BasisNetworkServer
     public static int PeerLimit = 1024;
     public static ushort SetPort = 4296;
     public static int QueueEvents = 10;
+
     public static Thread serverIncomeThread;
     public static EventBasedNetListener listener;
     public static NetManager server;
@@ -24,6 +25,7 @@ public static class BasisNetworkServer
     public static ConcurrentDictionary<ushort, NetPeer> Peers = new ConcurrentDictionary<ushort, NetPeer>();
     public static void StartServer()
     {
+   //     Configuration config = Configuration.LoadFromXml("config.xml");
         listener = new EventBasedNetListener();
         server = new NetManager(listener)
         {

@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3BFB9307-E78F-4277-ABE3-6762A2B69E19}|BasisServerConsole\\Basis.Network.Console.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisserverconsole\\basisserversidelogging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3BFB9307-E78F-4277-ABE3-6762A2B69E19}|BasisServerConsole\\Basis.Network.Console.csproj|solutionrelative:basisserverconsole\\basisserversidelogging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|solutionrelative:basis network server\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basis network server\\basisnetworking\\basisserverconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB9D8AA9-98B0-4279-8444-D36743878F7D}|Basis Network Server\\Basis.Network.Server.csproj|solutionrelative:basis network server\\basisnetworking\\basisserverconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3BFB9307-E78F-4277-ABE3-6762A2B69E19}|BasisServerConsole\\Basis.Network.Console.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisserverconsole\\basisserversidelogging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3BFB9307-E78F-4277-ABE3-6762A2B69E19}|BasisServerConsole\\Basis.Network.Console.csproj|solutionrelative:basisserverconsole\\basisserversidelogging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3BFB9307-E78F-4277-ABE3-6762A2B69E19}|BasisServerConsole\\Basis.Network.Console.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisserverconsole\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -41,12 +45,12 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 360,
+          "DockedWidth": 318,
           "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "BasisNetworkClient.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Client\\BasisNetworkClient.cs",
               "RelativeDocumentMoniker": "Basis Network Client\\BasisNetworkClient.cs",
@@ -59,7 +63,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "BasisNetworkPrimitiveCompression.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Compression\\BasisNetworkPrimitiveCompression.cs",
               "RelativeDocumentMoniker": "Basis Network Core\\Compression\\BasisNetworkPrimitiveCompression.cs",
@@ -72,7 +76,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisServerConsole\\Program.cs",
               "RelativeDocumentMoniker": "BasisServerConsole\\Program.cs",
@@ -85,20 +89,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "BasisNetworkServer.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.cs",
               "RelativeDocumentMoniker": "Basis Network Server\\BasisNetworkServer.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.cs",
               "RelativeToolTip": "Basis Network Server\\BasisNetworkServer.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAAC4AAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T01:36:35.474Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "AvatarDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Serializable\\AvatarDataMessage.cs",
               "RelativeDocumentMoniker": "Basis Network Core\\Serializable\\AvatarDataMessage.cs",
@@ -110,7 +114,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "SceneDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Serializable\\SceneDataMessage.cs",
               "RelativeDocumentMoniker": "Basis Network Core\\Serializable\\SceneDataMessage.cs",
@@ -122,7 +126,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "BasisNetworkingGeneric.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworking\\BasisNetworkingGeneric.cs",
               "RelativeDocumentMoniker": "Basis Network Server\\BasisNetworking\\BasisNetworkingGeneric.cs",
@@ -136,12 +140,25 @@
           ]
         },
         {
-          "DockedWidth": 360,
+          "DockedWidth": 401,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "BasisServerConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworking\\BasisServerConfiguration.cs",
+              "RelativeDocumentMoniker": "Basis Network Server\\BasisNetworking\\BasisServerConfiguration.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworking\\BasisServerConfiguration.cs",
+              "RelativeToolTip": "Basis Network Server\\BasisNetworking\\BasisServerConfiguration.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAA2wB8AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-17T03:53:01.293Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "BasisServerSideLogging.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisServerConsole\\BasisServerSideLogging.cs",
               "RelativeDocumentMoniker": "BasisServerConsole\\BasisServerSideLogging.cs",
