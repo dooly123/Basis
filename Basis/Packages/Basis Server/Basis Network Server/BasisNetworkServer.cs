@@ -15,6 +15,7 @@ public static class BasisNetworkServer
 {
     public static int PeerLimit = 1024;
     public static ushort SetPort = 4296;
+    public static int QueueEvents = 10;
     public static Thread serverIncomeThread;
     public static EventBasedNetListener listener;
     public static NetManager server;
@@ -33,6 +34,9 @@ public static class BasisNetworkServer
             BroadcastReceiveEnabled = true,
             UseNativeSockets = UseNativeSockets,
             ChannelsCount = 7,
+            EnableStatistics = true,
+            IPv6Enabled = true,
+            UpdateTime = QueueEvents,
         };
         server.Start(SetPort);
         BNL.Log("Server Wiring up " + SetPort);
@@ -196,10 +200,10 @@ public static class BasisNetworkServer
                 NetworkReceiveEventTag(peer, Reader, e);
                 break;
             case BasisNetworkCommons.SceneChannel:
-                BasisNetworkingGeneric.HandleSceneDataMessage_Recipients_Payload(Reader, deliveryMethod, peer, Peers);
+                BasisNetworkingGeneric.HandleScene(Reader, deliveryMethod, peer, Peers);
                 break;
             case BasisNetworkCommons.AvatarChannel:
-                BasisNetworkingGeneric.HandleAvatarDataMessage_Recipients_Payload(Reader, deliveryMethod, peer, Peers);
+                BasisNetworkingGeneric.HandleAvatar(Reader, deliveryMethod, peer, Peers);
                 break;
             default:
                 BNL.LogError($"this Channel was not been implemented {channel}");
@@ -293,8 +297,10 @@ public static class BasisNetworkServer
                 return;
             }
 
-            audioSegment.playerIdMessage = new PlayerIdMessage();
-            audioSegment.playerIdMessage.playerID = (ushort)sender.Id;
+            audioSegment.playerIdMessage = new PlayerIdMessage
+            {
+                playerID = (ushort)sender.Id
+            };
             NetDataWriter NetDataWriter = new NetDataWriter();
             audioSegment.Serialize(NetDataWriter);
           //  BNL.Log("Sending Voice Data To Clients");

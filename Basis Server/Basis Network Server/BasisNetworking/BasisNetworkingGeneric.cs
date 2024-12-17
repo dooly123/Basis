@@ -8,7 +8,7 @@ namespace Basis.Network.Server.Generic
 {
     public static class BasisNetworkingGeneric
     {
-        public static void HandleSceneDataMessage_Recipients_Payload(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
+        public static void HandleScene(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
         {
             SceneDataMessage SceneDataMessage = new SceneDataMessage();
             SceneDataMessage.Deserialize(Reader);
@@ -50,7 +50,7 @@ namespace Basis.Network.Server.Generic
                 BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.SceneChannel, sender, allClients, DeliveryMethod);
             }
         }
-        public static void HandleAvatarDataMessage_Recipients_Payload(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
+        public static void HandleAvatar(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
         {
             AvatarDataMessage avatarDataMessage = new AvatarDataMessage();
             avatarDataMessage.Deserialize(Reader);

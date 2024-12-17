@@ -12,7 +12,7 @@
     <releaseNotes>https://github.com/RevenantX/LiteNetLib/releases/tag/1.3.1</releaseNotes>
     <copyright>Copyright 2024 Ruslan Pyrch</copyright>
     <tags>udp reliable-udp network</tags>
-    <repository type="git" url="https://github.com/RevenantX/LiteNetLib" commit="23b6ecf4c5331b52c152ee707a3919237c2e3de5" />
+    <repository type="git" url="https://github.com/RevenantX/LiteNetLib" commit="76995d7e464f235e0db938dccae994022a830257" />
     <dependencies>
       <group targetFramework=".NETFramework4.7.1" />
       <group targetFramework="net9.0" />
