@@ -91,12 +91,10 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
         {
-            ushort NetId = NetworkedPlayer.NetId;
             NetDataWriter netDataWriter = new NetDataWriter();
             // Handle cases based on presence of Recipients and buffer
             AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
             {
-                PlayerIdMessage = new PlayerIdMessage() { playerID = NetId },
                 messageIndex = MessageIndex,
                 payload = buffer,
                 recipients = Recipients

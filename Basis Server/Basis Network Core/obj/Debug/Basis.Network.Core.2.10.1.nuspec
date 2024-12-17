@@ -5,7 +5,7 @@
     <version>2.10.1</version>
     <authors>Basis.Network.Core</authors>
     <description>Package Description</description>
-    <repository type="git" commit="d7305d9e1e2377876039fb7f0f3ce521fa413e46" />
+    <repository type="git" commit="d8c48c5dfaf8708c6b0094ae1a9335f658a35244" />
     <dependencies>
       <group targetFramework=".NETFramework4.7.1">
         <dependency id="LiteNetLib" version="1.3.1" exclude="Build,Analyzers" />

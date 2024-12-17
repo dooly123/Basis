@@ -56,19 +56,21 @@ public static class BasisNetworkGenericMessages
     {
         ServerAvatarDataMessage serverAvatarDataMessage = new ServerAvatarDataMessage();
         serverAvatarDataMessage.Deserialize(reader);
-      //  Debug.Log("running " + nameof(HandleServerAvatarDataMessage));
-        ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.PlayerIdMessage.playerID; // destination
-        if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
+        if (BasisNetworkManagement.Players.TryGetValue(serverAvatarDataMessage.playerIdMessage.playerID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
             {
-                Debug.LogError("Missing Player! " + avatarLinkID);
+                Debug.LogError("Missing Player! " + serverAvatarDataMessage.playerIdMessage.playerID);
                 return;
             }
             if (player.Player.Avatar != null)
             {
                 AvatarDataMessage output = serverAvatarDataMessage.avatarDataMessage;
                 player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, output.recipients);
+            }
+            else
+            {
+                Debug.LogError("Missing Avatar For Message " + serverAvatarDataMessage.playerIdMessage.playerID);
             }
         }
         else
