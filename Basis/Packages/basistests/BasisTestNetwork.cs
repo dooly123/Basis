@@ -1,6 +1,7 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
+using Basis.Scripts.Networking.NetworkedPlayer;
 using LiteNetLib;
 using System.Linq;
 using UnityEngine;
@@ -15,14 +16,34 @@ public class BasisTestNetwork : MonoBehaviour
     {
         avatar = BasisLocalPlayer.Instance.Avatar;
 
-        avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
+        foreach (BasisNetworkedPlayer Player in BasisNetworkManagement.Players.Values)
+        {
+            if (Player != null && Player.Player != null & Player.Player.Avatar != null)
+            {
+                Player.Player.Avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
+            }
+            else
+            {
+                Debug.LogError("This should not have occured!");
+            }
+        }
         BasisScene.OnNetworkMessageReceived += OnNetworkMessageReceived;
     }
     public void OnDisable()
     {
         avatar = BasisLocalPlayer.Instance.Avatar;
 
-        avatar.OnNetworkMessageReceived -= OnNetworkMessageReceived;
+        foreach (BasisNetworkedPlayer Player in BasisNetworkManagement.Players.Values)
+        {
+            if (Player != null && Player.Player != null & Player.Player.Avatar != null)
+            {
+                Player.Player.Avatar.OnNetworkMessageReceived -= OnNetworkMessageReceived;
+            }
+            else
+            {
+                Debug.LogError("This should not have occured!");
+            }
+        }
         BasisScene.OnNetworkMessageReceived -= OnNetworkMessageReceived;
     }
     public void LateUpdate()

@@ -66,7 +66,14 @@ public static class BasisNetworkGenericMessages
             if (player.Player.Avatar != null)
             {
                 AvatarDataMessage output = serverAvatarDataMessage.avatarDataMessage;
-                player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, output.recipients);
+                if (player.Player.Avatar.OnNetworkMessageReceived == null)
+                {
+                    Debug.LogError("Message was Queued But nothing was there to Rec it.");
+                }
+                else
+                {
+                    player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, output.recipients);
+                }
             }
             else
             {
