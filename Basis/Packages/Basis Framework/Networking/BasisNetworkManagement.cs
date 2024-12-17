@@ -125,7 +125,7 @@ namespace Basis.Scripts.Networking
                     }
                     catch (Exception ex)
                     {
-                        Debug.LogError($"Error executing scheduled action: {ex.Message}");
+                        Debug.LogError($"Error executing scheduled action: {ex.Message} {ex.StackTrace}");
                     }
                 }
             }

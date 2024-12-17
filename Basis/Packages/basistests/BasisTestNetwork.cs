@@ -18,6 +18,13 @@ public class BasisTestNetwork : MonoBehaviour
         avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
         BasisScene.OnNetworkMessageReceived += OnNetworkMessageReceived;
     }
+    public void OnDisable()
+    {
+        avatar = BasisLocalPlayer.Instance.Avatar;
+
+        avatar.OnNetworkMessageReceived -= OnNetworkMessageReceived;
+        BasisScene.OnNetworkMessageReceived -= OnNetworkMessageReceived;
+    }
     public void LateUpdate()
     {
         if (Send)
@@ -33,22 +40,33 @@ public class BasisTestNetwork : MonoBehaviour
             Debug.Log("sending stage 3");
             Bytes = new byte[16];
             ushort[] Players = BasisNetworkManagement.Players.Keys.ToArray();
+            Debug.Log("syncing out " + Players.Length);
             avatar.NetworkMessageSend(3, Bytes, Method, Players);
             BasisScene.NetworkMessageSend(3, Bytes, Method, Players);
+
+            Debug.Log("sending stage 4");
+            Bytes = new byte[16];
+            avatar.NetworkMessageSend(2, null, Method);
+            BasisScene.NetworkMessageSend(2, null, Method);
+            Debug.Log("sending stage 5");
+            Bytes = new byte[16];
+            avatar.NetworkMessageSend(3, null, Method, Players);
+            BasisScene.NetworkMessageSend(3, null, Method, Players);
         }
-    }
-    public void OnDisable()
-    {
-        avatar.OnNetworkMessageReceived -= OnNetworkMessageReceived;
-        BasisScene.OnNetworkMessageReceived -= OnNetworkMessageReceived;
     }
     private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients)
     {
-        Debug.Log($"Scene: Interpreting {PlayerID} Stage {MessageIndex} {buffer.Length} {Recipients.Length}");
+        string bufferLength = buffer != null ? buffer.Length.ToString() : "null";
+        string recipientsLength = Recipients != null ? Recipients.Length.ToString() : "null";
+
+        Debug.Log($"Scene: Interpreting {PlayerID} Stage {MessageIndex} BufferLength: {bufferLength} RecipientsLength: {recipientsLength}");
     }
 
     private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients)
     {
-        Debug.Log($"Avatar: Interpreting {PlayerID} Stage {MessageIndex} {buffer.Length} {Recipients.Length}");
+        string bufferLength = buffer != null ? buffer.Length.ToString() : "null";
+        string recipientsLength = Recipients != null ? Recipients.Length.ToString() : "null";
+
+        Debug.Log($"Avatar: Interpreting {PlayerID} Stage {MessageIndex} BufferLength: {bufferLength} RecipientsLength: {recipientsLength}");
     }
 }

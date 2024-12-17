@@ -18,7 +18,7 @@ namespace Basis.Scripts.Networking.Recievers
             settings = BasisDeviceManagement.Instance.BasisOpusSettings;
             if (audioSource == null)
             {
-                var remotePlayer = (BasisRemotePlayer)networkedPlayer.Player;
+                BasisRemotePlayer remotePlayer = (BasisRemotePlayer)networkedPlayer.Player;
                 audioSource = BasisHelpers.GetOrAddComponent<AudioSource>(remotePlayer.AudioSourceTransform.gameObject);
             }
             audioSource.spatialize = true;
