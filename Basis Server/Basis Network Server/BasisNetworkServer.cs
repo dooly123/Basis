@@ -1,4 +1,5 @@
 using Basis.Network.Core;
+using Basis.Network.Server;
 using Basis.Network.Server.Generic;
 using Basis.Network.Server.Ownership;
 using LiteNetLib;
@@ -67,7 +68,10 @@ public static class BasisNetworkServer
             server.Start(Configuration.SetPort);
         }
 
- 
+        if (configuration.EnableStatistics)
+        {
+            BasisStatistics.StartWorkerThread(BasisNetworkServer.server);
+        }
         listener.ConnectionRequestEvent += request =>
         {
             BNL.Log("Processing Connection Request");

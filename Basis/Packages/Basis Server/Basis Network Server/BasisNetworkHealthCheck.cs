@@ -45,13 +45,13 @@ namespace Basis.Network.Server
         private volatile bool running = true;
         DateTime startTime = DateTime.Now;
 
-        public BasisNetworkHealthCheck(string Host = "localhost",ushort Port = 10666, string HealthPath = "/health")
+        public BasisNetworkHealthCheck(Configuration Config)
         {
-            host = Host;
+            host = Config.HealthCheckHost;
 
-            port = Port;
+            port = Config.HealthCheckPort;
 
-            path = HealthPath;
+            path = Config.HealthPath;
 
             httpListener.Prefixes.Add($"http://{host}:{port}/");
 

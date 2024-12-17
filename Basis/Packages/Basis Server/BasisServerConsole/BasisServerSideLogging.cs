@@ -28,15 +28,23 @@ namespace Basis.Network
                 Directory.CreateDirectory(LogDirectory);
             }
         }
-
-        public static void Initialize()
+        public static bool UseLogging;
+        public static void Initialize(Configuration config)
         {
+            UseLogging = config.UsingLoggingFile;
             BNL.LogOutput += Log;
             BNL.LogWarningOutput += LogWarning;
             BNL.LogErrorOutput += LogError;
 
-            Log("Logs are saved to " + CurrentLogFileName);
-            StartLoggingTask();
+            if (UseLogging)
+            {
+                Log("Logs are saved to " + CurrentLogFileName);
+                StartLoggingTask();
+            }
+            else
+            {
+                Log("no logs will be saved");
+            }
         }
 
         private static void StartLoggingTask()
@@ -83,8 +91,8 @@ namespace Basis.Network
 
         public static async Task ShutdownAsync()
         {
-            _cancellationTokenSource.Cancel();
-            LogQueue.CompleteAdding();
+            _cancellationTokenSource?.Cancel();
+            LogQueue?.CompleteAdding();
 
             try
             {
@@ -96,7 +104,7 @@ namespace Basis.Network
             }
             finally
             {
-                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource?.Dispose();
             }
         }
 
@@ -119,7 +127,11 @@ namespace Basis.Network
         {
             var logEntry = $"[{level}] {message}";
             Console.WriteLine(logEntry);
-            LogQueue.Add(logEntry);
+            if (UseLogging)
+            {
+                LogQueue.Add(logEntry);
+
+            }
         }
     }
 }

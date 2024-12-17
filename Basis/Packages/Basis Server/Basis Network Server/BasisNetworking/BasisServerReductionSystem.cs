@@ -9,9 +9,7 @@ using static SerializableBasis;
 public class BasisServerReductionSystem
 {
     // Default interval in milliseconds for the timer
-    public static int MillisecondDefaultInterval = 50;
-    public static float BaseMultiplier = 1f; // Starting multiplier.
-    public static float IncreaseRate = 0.005f; // Rate of increase per unit distance.
+    public static Configuration Configuration;
     public static ConcurrentDictionary<NetPeer, SyncedToPlayerPulse> PlayerSync = new ConcurrentDictionary<NetPeer, SyncedToPlayerPulse>();
     /// <summary>
     /// add the new client
@@ -119,7 +117,7 @@ public class BasisServerReductionSystem
             {
                 serverSideSyncPlayerMessage = serverSideSyncPlayerMessage,
                 newDataExists = true,
-                timer = new System.Threading.Timer(SendPlayerData, clientPayload, MillisecondDefaultInterval, MillisecondDefaultInterval)
+                timer = new System.Threading.Timer(SendPlayerData, clientPayload, Configuration.BSRSMillisecondDefaultInterval, Configuration.BSRSMillisecondDefaultInterval)
             };
 
             queuedPlayerMessages[serverSidePlayer] = newPlayer;
@@ -159,7 +157,7 @@ public class BasisServerReductionSystem
                         // Calculate the distance between the two points
                         float activeDistance = Distance(from, to);
                         // Adjust the timer interval based on the new syncRateMultiplier
-                        int adjustedInterval = (int)(MillisecondDefaultInterval * (BaseMultiplier + (activeDistance * IncreaseRate)));
+                        int adjustedInterval = (int)(Configuration.BSRSMillisecondDefaultInterval * (Configuration.BSRBaseMultiplier + (activeDistance * Configuration.BSRSIncreaseRate)));
                         if (adjustedInterval > byte.MaxValue)
                         {
                             adjustedInterval = byte.MaxValue;

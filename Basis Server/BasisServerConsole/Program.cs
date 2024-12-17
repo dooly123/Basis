@@ -26,7 +26,6 @@ namespace Basis
 
             // Start the server on a background task
             var serverTask = Task.Run(() => BasisNetworkServer.StartServer(config), cancellationToken);
-
             // Register a shutdown hook to clean up resources when the application is terminated
             AppDomain.CurrentDomain.ProcessExit += async (sender, eventArgs) =>
             {
@@ -46,8 +45,11 @@ namespace Basis
                         BNL.LogError(inner.Message);
                     }
                 }
-
-                await BasisServerSideLogging.ShutdownAsync();
+                if (config.EnableStatistics)
+                {
+                    BasisStatistics.StopWorkerThread();
+                }
+                    await BasisServerSideLogging.ShutdownAsync();
                 BNL.Log("Server shut down successfully.");
             };
 
