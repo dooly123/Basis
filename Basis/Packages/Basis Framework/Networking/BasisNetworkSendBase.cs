@@ -91,11 +91,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
         {
-            // Check if Recipients or buffer arrays are valid or not
-            if (Recipients != null && Recipients.Length == 0) Recipients = null;
-
-            if (buffer != null && buffer.Length == 0) buffer = null;
-
             ushort NetId = NetworkedPlayer.NetId;
             NetDataWriter netDataWriter = new NetDataWriter();
             // Handle cases based on presence of Recipients and buffer

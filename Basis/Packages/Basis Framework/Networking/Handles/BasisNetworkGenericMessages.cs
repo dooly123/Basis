@@ -68,10 +68,6 @@ public static class BasisNetworkGenericMessages
             if (player.Player.Avatar != null)
             {
                 AvatarDataMessage output = serverAvatarDataMessage.avatarDataMessage;
-                if (output.payload == null)
-                {
-                    Debug.LogError("Missing Payload");
-                }
                 player.Player.Avatar.OnNetworkMessageReceived?.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, output.recipients);
             }
         }

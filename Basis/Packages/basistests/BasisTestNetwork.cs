@@ -29,7 +29,7 @@ public class BasisTestNetwork : MonoBehaviour
     {
         if (Send)
         {
-            ushort[] Players = BasisNetworkManagement.Players.Keys.ToArray();
+            ushort[] Players = BasisNetworkManagement.RemotePlayers.Keys.ToArray();
             byte[] Bytes = new byte[16];
             Debug.Log("sending Avatar");
 
