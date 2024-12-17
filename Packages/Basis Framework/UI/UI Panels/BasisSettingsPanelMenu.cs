@@ -7,7 +7,7 @@ namespace Basis.Scripts.UI.UI_Panels
 {
     public class BasisSettingsPanelMenu : BasisUIBase
     {
-        public static string SettingsPanel = "SettingsPanel";
+        public const string SettingsPanel = "SettingsPanel";
         public Button Connect;
         public TMP_InputField IP;
         public TMP_InputField Port;
@@ -58,10 +58,12 @@ namespace Basis.Scripts.UI.UI_Panels
         public override void InitalizeEvent()
         {
             BasisCursorManagement.UnlockCursor(nameof(BasisSettingsPanelMenu));
+            BasisUINeedsVisibleTrackers.Instance.Add(this);
         }
         public override void DestroyEvent()
         {
             BasisCursorManagement.LockCursor(nameof(BasisSettingsPanelMenu));
+            BasisUINeedsVisibleTrackers.Instance.Remove(this);
         }
     }
 }

@@ -315,12 +315,10 @@ namespace Basis.Scripts.Device_Management.Devices
                         if (BasisHamburgerMenu.Instance == null)
                         {
                             BasisHamburgerMenu.OpenHamburgerMenuNow();
-                            BasisDeviceManagement.ShowTrackers();
                         }
                         else
                         {
                             BasisHamburgerMenu.Instance.CloseThisMenu();
-                            BasisDeviceManagement.HideTrackers();
                         }
                     }
                     if (InputState.PrimaryButtonGetState == false && LastState.PrimaryButtonGetState)

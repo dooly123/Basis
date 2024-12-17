@@ -30,6 +30,7 @@ namespace Basis.Scripts.UI.UI_Panels
             FullBody.onClick.AddListener(PutIntoCalibrationMode);
             Respawn.onClick.AddListener(RespawnLocalPlayer);
             BasisCursorManagement.UnlockCursor(nameof(BasisHamburgerMenu));
+            BasisUINeedsVisibleTrackers.Instance.Add(this);
         }
         private Dictionary<BasisInput, Action> TriggerDelegates = new Dictionary<BasisInput, Action>();
         public void RespawnLocalPlayer()
@@ -98,6 +99,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public override void DestroyEvent()
         {
             BasisCursorManagement.LockCursor(nameof(BasisHamburgerMenu));
+            BasisUINeedsVisibleTrackers.Instance.Remove(this);
         }
     }
 }
