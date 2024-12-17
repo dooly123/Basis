@@ -15,6 +15,7 @@ public static partial class SerializableBasis
 
         public void Deserialize(NetDataReader Writer)
         {
+            PlayerIdMessage.Deserialize(Writer);
             // Read the messageIndex safely
             if (!Writer.TryGetByte(out messageIndex))
             {
@@ -52,6 +53,7 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
+            PlayerIdMessage.Serialize(Writer);
             // Write the messageIndex
             Writer.Put(messageIndex);
 

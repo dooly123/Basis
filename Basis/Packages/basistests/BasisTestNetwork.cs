@@ -29,29 +29,32 @@ public class BasisTestNetwork : MonoBehaviour
     {
         if (Send)
         {
-            Send = false;
-            Debug.Log("sending stage 1");
-            avatar.NetworkMessageSend(1, Method);
-            BasisScene.NetworkMessageSend(1, Method);
-            Debug.Log("sending stage 2");
-            byte[] Bytes = new byte[16];
-            avatar.NetworkMessageSend(2, Bytes, Method);
-            BasisScene.NetworkMessageSend(2, Bytes, Method);
-            Debug.Log("sending stage 3");
-            Bytes = new byte[16];
             ushort[] Players = BasisNetworkManagement.Players.Keys.ToArray();
-            Debug.Log("syncing out " + Players.Length);
-            avatar.NetworkMessageSend(3, Bytes, Method, Players);
-            BasisScene.NetworkMessageSend(3, Bytes, Method, Players);
+            byte[] Bytes = new byte[16];
+            Debug.Log("sending Avatar");
 
-            Debug.Log("sending stage 4");
-            Bytes = new byte[16];
-            avatar.NetworkMessageSend(4, null, Method);
-            BasisScene.NetworkMessageSend(4, null, Method);
-            Debug.Log("sending stage 5");
-            Bytes = new byte[16];
-            avatar.NetworkMessageSend(5, null, Method, Players);
-            BasisScene.NetworkMessageSend(5, null, Method, Players);
+            avatar.NetworkMessageSend(1, Method);
+            avatar.NetworkMessageSend(2, null, Method);
+            avatar.NetworkMessageSend(3, null, Method, Players);
+
+            avatar.NetworkMessageSend(4, null, Method, null);
+
+            avatar.NetworkMessageSend(5, Bytes, Method);
+            avatar.NetworkMessageSend(6, Bytes, Method, Players);
+            avatar.NetworkMessageSend(7, Bytes, Method, null);
+            Debug.Log("sent Avatar");
+            Debug.Log("Sending Scene");
+            BasisScene.NetworkMessageSend(8, Method);
+            BasisScene.NetworkMessageSend(9, null, Method);
+            BasisScene.NetworkMessageSend(10, null, Method, Players);
+
+            BasisScene.NetworkMessageSend(11, null, Method, null);
+
+            BasisScene.NetworkMessageSend(12, Bytes, Method);
+            BasisScene.NetworkMessageSend(13, Bytes, Method, Players);
+            BasisScene.NetworkMessageSend(14, Bytes, Method, null);
+            Debug.Log("sent Scene");
+            Send = false;
         }
     }
     private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients)
