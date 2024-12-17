@@ -36,7 +36,7 @@ public static class BasisNetworkServer
             BroadcastReceiveEnabled = true,
             UseNativeSockets = UseNativeSockets,
             ChannelsCount = 7,
-            EnableStatistics = true,
+            EnableStatistics = true,//bandwidth information per user
             IPv6Enabled = true,
             UpdateTime = QueueEvents,
         };

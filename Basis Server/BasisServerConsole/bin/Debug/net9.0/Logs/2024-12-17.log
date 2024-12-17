@@ -30,3 +30,13 @@
 [INFO] [14:05] [INFO] Sent Remote Spawn request to  | 0
 [INFO] [14:05] [INFO] Notifing Newly Connected Client about 1
 [INFO] [14:05] [INFO] Sending list of clients to 1
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
+[INFO] [14:17] [INFO] Server Booting
+[INFO] [14:17] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [14:17] [INFO] Server Wiring up 4296
+[INFO] [14:17] [INFO] Server Worker Threads booting
+[INFO] [14:17] [INFO] Server Worker Threads Booted
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
+[INFO] [14:19] [INFO] Server Booting
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
+[INFO] [14:19] [INFO] Server Booting

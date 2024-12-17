@@ -32,6 +32,7 @@ public class Configuration
     public bool DisconnectOnUnreachable { get; set; }
     public bool AllowPeerAddressChange { get; set; }
 
+    public bool UsingLoggingFile { get; set; }
     public static Configuration LoadFromXml(string filePath)
     {
         XmlDocument doc = new XmlDocument();
