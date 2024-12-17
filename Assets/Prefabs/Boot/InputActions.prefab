@@ -1532,7 +1532,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1555,6 +1555,36 @@ MonoBehaviour:
     ExcludeFromThesePlatforms: []
     MasterQualityState: 0
     ParseController: 0
+    ReturnedValueTextType: 1
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 90
+    SliderMinValue: -1
+    Name: Snap Turn Angle
+    ValueDescriptor: Snap Turn Angle
+    SelectedValueDefault: 
+    ValueDefault: 45
+    Explanation: 
+    selectedValue: 
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
     ReturnedValueTextType: 1
     SelectableValueList: []
   SaveModules:
@@ -1995,28 +2025,35 @@ MonoBehaviour:
     Index: 27
     SelectableValueList: []
     Min: 0
+    Max: 0.5
+  - Name: Microphone Range
+    DefaultValue: 
+    SelectedValue: 
+    Index: 28
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  - Name: Hearing Range
+    DefaultValue: 
+    SelectedValue: 
+    Index: 29
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  - Name: Maximum Avatar Distance
+    DefaultValue: 
+    SelectedValue: 
+    Index: 30
+    SelectableValueList: []
+    Min: 0
     Max: 0
   - Name: 
     DefaultValue: 
     SelectedValue: 0
-    Index: 28
+    Index: 31
     SelectableValueList: []
-    Min: 0
-    Max: 25
-  - Name: 
-    DefaultValue: 
-    SelectedValue: 0
-    Index: 29
-    SelectableValueList: []
-    Min: 0
-    Max: 25
-  - Name: 
-    DefaultValue: 
-    SelectedValue: 0
-    Index: 30
-    SelectableValueList: []
-    Min: 0
-    Max: 75
+    Min: -1
+    Max: 90
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -2409,6 +2446,10 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 3
+  - OptionName: Snap Turn Angle
+    Explanation: 
+    Parse: 1
+    Type: 3
 --- !u!114 &6430705635976775670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2472,4 +2513,4 @@ MonoBehaviour:
   - OptionName: Maximum Avatar Distance
     Explanation: 
     Parse: 0
-    Type: 3
+    Type: 4
