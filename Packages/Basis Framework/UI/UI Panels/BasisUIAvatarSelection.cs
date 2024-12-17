@@ -38,6 +38,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public override void InitalizeEvent()
         {
             BasisCursorManagement.UnlockCursor(AvatarSelection);
+            BasisUINeedsVisibleTrackers.Instance.Add(this);
         }
 
         private async void AddAvatar()
@@ -209,6 +210,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public override void DestroyEvent()
         {
             BasisCursorManagement.LockCursor(AvatarSelection);
+            BasisUINeedsVisibleTrackers.Instance.Remove(this);
         }
     }
 }
