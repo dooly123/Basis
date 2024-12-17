@@ -1,5 +1,4 @@
 using Basis.Network.Core;
-using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
@@ -47,6 +46,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public JobHandle distanceJobHandle;
         public int IndexLength = -1;
         public float SlowestSendRate = 2.5f;
+        public NetDataWriter AvatarSendWriter = new NetDataWriter(true, 386);
         void SendOutLatest()
         {
             timer += Time.deltaTime;

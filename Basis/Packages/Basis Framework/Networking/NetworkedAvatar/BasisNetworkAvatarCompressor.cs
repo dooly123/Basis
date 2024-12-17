@@ -3,7 +3,6 @@ using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.Profiler;
 using LiteNetLib;
-using LiteNetLib.Utils;
 using System;
 using UnityEngine;
 using static SerializableBasis;
@@ -14,11 +13,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     {
         public static void Compress(BasisNetworkTransmitter NetworkSendBase, Animator Anim)
         {
-            NetDataWriter Writer = new NetDataWriter();
             CompressAvatarData(ref NetworkSendBase.Offset, ref NetworkSendBase.FloatArray,ref NetworkSendBase.LASM,NetworkSendBase.PoseHandler,NetworkSendBase.HumanPose, Anim);
-            NetworkSendBase.LASM.Serialize(Writer);
-            BasisNetworkProfiler.OutBoundAvatarUpdatePacket.Sample(Writer.Length);
-            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
+            NetworkSendBase.LASM.Serialize(NetworkSendBase.AvatarSendWriter);
+            BasisNetworkProfiler.OutBoundAvatarUpdatePacket.Sample(NetworkSendBase.AvatarSendWriter.Length);
+            BasisNetworkManagement.LocalPlayerPeer.Send(NetworkSendBase.AvatarSendWriter, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
+            NetworkSendBase.AvatarSendWriter.Reset();
         }
         public static LocalAvatarSyncMessage InitalAvatarData(Animator Anim)
         {

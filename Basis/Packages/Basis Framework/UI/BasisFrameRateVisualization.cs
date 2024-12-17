@@ -1,14 +1,17 @@
 using TMPro;
 using UnityEngine;
 using Basis.Scripts.Networking;
+using System.Text; // Import for StringBuilder
+
 public class BasisFrameRateVisualization : MonoBehaviour
 {
-    public TextMeshProUGUI fpsText;// UI Text element to display the FPS
+    public TextMeshProUGUI fpsText; // UI Text element to display the FPS
     private float deltaTime = 0.0f;  // Time between frames
     private float fps = 0.0f;  // Frames per second
     private float timeBetweenUpdates = 0.1f;  // Time between updates (in seconds)
     private float timeAccumulator = 0.0f;  // Time accumulator to track updates
-    public string FinalText;
+    private StringBuilder stringBuilder = new StringBuilder(); // Reusable StringBuilder
+
     void Update()
     {
         // Calculate the time it took to render the last frame
@@ -23,16 +26,21 @@ public class BasisFrameRateVisualization : MonoBehaviour
         // If the accumulated time exceeds the update interval, update the FPS display
         if (timeAccumulator >= timeBetweenUpdates)
         {
-            FinalText = $"FPS: {fps:F2}";
-            /*
-            if (BasisNetworkManagement.Instance != null && BasisNetworkManagement.Instance.Client != null && BasisNetworkManagement.Instance.Client.Client != null)
+            // Clear and construct the string using StringBuilder
+            stringBuilder.Clear();
+            stringBuilder.Append("FPS: ");
+            stringBuilder.Append(fps.ToString("F2"));
+
+            if (BasisNetworkManagement.LocalPlayerPeer != null)
             {
-                DarkRift.RoundTripTimeHelper RoundTripTimeHelper = BasisNetworkManagement.Instance.Client.Client.RoundTripTime;
-                FinalText += "| " + RoundTripTimeHelper.SmoothedRtt + "| " + RoundTripTimeHelper.LatestRtt + "| " + RoundTripTimeHelper.RttSampleCount;
+                stringBuilder.Append(" RTT: ");
+                stringBuilder.Append(BasisNetworkManagement.LocalPlayerPeer.RoundTripTime);
+                stringBuilder.Append(" Ping: ");
+                stringBuilder.Append(BasisNetworkManagement.LocalPlayerPeer.Ping);
             }
-            */
-            // Display FPS with two decimal places
-            fpsText.text = FinalText;
+
+            // Update the TextMeshProUGUI text
+            fpsText.text = stringBuilder.ToString();
 
             // Reset the time accumulator
             timeAccumulator = 0.0f;
