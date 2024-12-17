@@ -46,12 +46,12 @@ public class BasisTestNetwork : MonoBehaviour
 
             Debug.Log("sending stage 4");
             Bytes = new byte[16];
-            avatar.NetworkMessageSend(2, null, Method);
-            BasisScene.NetworkMessageSend(2, null, Method);
+            avatar.NetworkMessageSend(4, null, Method);
+            BasisScene.NetworkMessageSend(4, null, Method);
             Debug.Log("sending stage 5");
             Bytes = new byte[16];
-            avatar.NetworkMessageSend(3, null, Method, Players);
-            BasisScene.NetworkMessageSend(3, null, Method, Players);
+            avatar.NetworkMessageSend(5, null, Method, Players);
+            BasisScene.NetworkMessageSend(5, null, Method, Players);
         }
     }
     private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients)

@@ -1,4 +1,5 @@
 ﻿using LiteNetLib.Utils;
+using System;
 
 public static partial class SerializableBasis
 {
@@ -14,49 +15,74 @@ public static partial class SerializableBasis
 
         public void Deserialize(NetDataReader Writer)
         {
-            Writer.Get(out messageIndex);
+            // Read the messageIndex safely
+            if (!Writer.TryGetUShort(out messageIndex))
+            {
+                throw new ArgumentException("Failed to read messageIndex.");
+            }
+            // Read the recipientsSize safely
             if (Writer.TryGetUShort(out recipientsSize))
             {
+                // Guard against negative or absurd sizes
+                if (recipientsSize > Writer.AvailableBytes / sizeof(ushort))
+                {
+                    throw new ArgumentException($"Invalid recipientsSize: {recipientsSize}");
+                }
                 recipients = new ushort[recipientsSize];
                 for (int index = 0; index < recipientsSize; index++)
                 {
-                    Writer.Get(out recipients[index]);
+                    if (!Writer.TryGetUShort(out recipients[index]))
+                    {
+                        throw new ArgumentException($"Failed to read recipient at index {index}.");
+                    }
                 }
-                if (Writer.AvailableBytes != 0)
+
+                // Read remaining bytes as payload
+                if (Writer.AvailableBytes > 0)
                 {
                     payload = Writer.GetRemainingBytes();
                 }
             }
+            else
+            {
+                recipients = null;
+                payload = null;
+            }
         }
+
         public void Serialize(NetDataWriter Writer)
         {
-            // Write the messageIndex and buffer
+            // Write the messageIndex
             Writer.Put(messageIndex);
 
-            if (recipients == null || recipients.Length == 0 && (payload == null || payload.Length == 0))
+            // Determine and write the recipientsSize
+            if (recipients == null || recipients.Length == 0)
             {
-                //this is the end of the message! its just a simple RPC
+                recipientsSize = 0;
             }
             else
             {
-                if (recipients == null)//no recipients but we have data so set the size to zero
-                {
-                    recipientsSize = 0;
-                }
-                else
-                {
-                    recipientsSize = (ushort)recipients.Length;
-                }
-                Writer.Put(recipientsSize);
+                recipientsSize = (ushort)recipients.Length;
+            }
+            Writer.Put(recipientsSize);
+
+            // Write the recipients array if present
+            if (recipients != null && recipients.Length > 0)
+            {
                 Writer.PutArray(recipients);
-                if (payload != null && payload.Length != 0)
-                {
-                    Writer.Put(payload);
-                }
+            }
+
+            // Write the payload if present
+            if (payload != null && payload.Length > 0)
+            {
+                Writer.Put(payload);
             }
         }
+
         public void Dispose()
         {
+            recipients = null;
+            payload = null;
         }
     }
     public struct ServerSceneDataMessage
