@@ -49,8 +49,22 @@ public static partial class SerializableBasis
             // Write the messageIndex and buffer
              Writer.Put(messageIndex);
 
-            recipientsSize = (ushort)recipients.Length;
-            payloadSize = (uint)payload.Length;
+            if (recipients == null)
+            {
+                recipientsSize = 0;
+            }
+            else
+            {
+                recipientsSize = (ushort)recipients?.Length;
+            }
+            if (payload == null)
+            {
+                payloadSize = 0;
+            }
+            else
+            {
+                payloadSize = (uint)payload.Length;
+            }
 
              Writer.Put(recipientsSize);
              Writer.Put(payloadSize);
