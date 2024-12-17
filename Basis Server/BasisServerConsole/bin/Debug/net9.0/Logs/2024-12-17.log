@@ -34,3 +34,43 @@
 [INFO] [09:41] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
 [INFO] [09:41] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
 [INFO] [09:41] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:41] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:42] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:42] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:42] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:42] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:43] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:43] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:43] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:43] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
+[INFO] [09:43] [INFO] Server Booting
+[INFO] [09:43] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [09:43] [INFO] Server Wiring up SetPort 4296
+[INFO] [09:43] [INFO] Server Worker Threads Booted
+[INFO] [09:43] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:44] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:44] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:44] [INFO] Processing Connection Request
+[INFO] [09:44] [INFO] No Password in the Auth Message
+[INFO] [09:44] [INFO] Player approved. Current count: 0
+[INFO] [09:44] [INFO] Peer connected: 0
+[ERROR] [09:44] [ERROR] Worker exception: Index and count must refer to a location within the buffer. (Parameter 'bytes')
+[INFO] [09:44] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2091Bytes Sent: 99Packets Sent: 13
+[INFO] [09:44] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 4641Bytes Sent: 309Packets Sent: 43
+[INFO] [09:45] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 7191Bytes Sent: 519Packets Sent: 73
+[INFO] [09:45] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 9741Bytes Sent: 729Packets Sent: 103
+[INFO] [09:45] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12280Bytes Sent: 936Packets Sent: 132
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
+[INFO] [09:46] [INFO] Server Booting
+[INFO] [09:46] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [09:46] [INFO] Server Wiring up SetPort 4296
+[INFO] [09:46] [INFO] Server Worker Threads Booted
+[INFO] [09:46] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:46] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:46] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:46] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:47] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:47] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:47] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:47] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0

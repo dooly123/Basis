@@ -10,10 +10,21 @@ namespace Basis.Network.Server.Password
             if (string.IsNullOrEmpty(Configuration.Password))
             {
                 UsedPassword = string.Empty;
-                //we dont have a password configured!
+                BNL.Log("No Password Set");
                 return true;
             }
+            if(Auth.Message == null || Auth.Message.Length == 0)
+            {
+                UsedPassword = string.Empty;
+                BNL.Log("Auth Was Empty");
+                return false;
+            }
             UsedPassword = Encoding.UTF8.GetString(Auth.Message);
+            if (string.IsNullOrEmpty(UsedPassword))
+            {
+                BNL.Log("No Password in the Auth Message");
+                return true;
+            }
             return Configuration.Password == UsedPassword;
         }
     }
