@@ -8,25 +8,17 @@ namespace Basis.Network.Server.Generic
 {
     public static class BasisNetworkingGeneric
     {
-        public static void HandleSceneDataMessage_Recipients_Payload(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> clients)
+        public static void HandleSceneDataMessage_Recipients_Payload(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
         {
             SceneDataMessage SceneDataMessage = new SceneDataMessage();
             SceneDataMessage.Deserialize(Reader);
-            HandleSceneServer_Recipients_Payload(SceneDataMessage, BasisNetworkCommons.SceneChannel, DeliveryMethod, sender, clients);
-        }
-        public static void HandleAvatarDataMessage_Recipients_Payload(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> clients)
-        {
-            AvatarDataMessage avatarDataMessage = new AvatarDataMessage();
-            avatarDataMessage.Deserialize(Reader);
-            HandleAvatarServer_Recipients_Payload(avatarDataMessage, BasisNetworkCommons.AvatarChannel, DeliveryMethod, sender, clients);
-        }
 
-        private static void HandleSceneServer_Recipients_Payload(SceneDataMessage sceneDataMessage, byte channel,  DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
-        {
-
+            ushort[] Rec = SceneDataMessage.recipients;
+            SceneDataMessage.recipients = null;
+            SceneDataMessage.recipientsSize = 0;
             ServerSceneDataMessage serverSceneDataMessage = new ServerSceneDataMessage
             {
-                sceneDataMessage = sceneDataMessage,
+                sceneDataMessage = SceneDataMessage,
                 playerIdMessage = new PlayerIdMessage
                 {
                     playerID = (ushort)sender.Id,
@@ -34,12 +26,14 @@ namespace Basis.Network.Server.Generic
             };
 
             NetDataWriter Writer = new NetDataWriter();
-            if (serverSceneDataMessage.sceneDataMessage.recipients != null && serverSceneDataMessage.sceneDataMessage.recipients.Length > 0)
+            serverSceneDataMessage.Serialize(Writer);
+            if (Rec != null && Rec.Length > 0)
             {
                 var targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
 
-                foreach (ushort recipientId in serverSceneDataMessage.sceneDataMessage.recipients)
+                for (int Index = 0; Index < Rec.Length; Index++)
                 {
+                    ushort recipientId = Rec[Index];
                     if (allClients.TryGetValue(recipientId, out NetPeer client))
                     {
                         targetedClients.TryAdd((ushort)client.Id, client);
@@ -48,16 +42,21 @@ namespace Basis.Network.Server.Generic
 
                 if (targetedClients.Count > 0)
                 {
-                    BasisNetworkServer.BroadcastMessageToClients(Writer, channel, targetedClients, DeliveryMethod);
+                    BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.SceneChannel, targetedClients, DeliveryMethod);
                 }
             }
             else
             {
-                BasisNetworkServer.BroadcastMessageToClients(Writer, channel, sender, allClients, DeliveryMethod);
+                BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.SceneChannel, sender, allClients, DeliveryMethod);
             }
         }
-        private static void HandleAvatarServer_Recipients_Payload(AvatarDataMessage avatarDataMessage, byte channel, DeliveryMethod method, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
+        public static void HandleAvatarDataMessage_Recipients_Payload(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
         {
+            AvatarDataMessage avatarDataMessage = new AvatarDataMessage();
+            avatarDataMessage.Deserialize(Reader);
+            var Rec = avatarDataMessage.recipients;
+            avatarDataMessage.recipients = null;
+            avatarDataMessage.recipientsSize = 0;
             ServerAvatarDataMessage serverAvatarDataMessage = new ServerAvatarDataMessage
             {
                 avatarDataMessage = avatarDataMessage,
@@ -69,14 +68,14 @@ namespace Basis.Network.Server.Generic
 
             NetDataWriter Writer = new NetDataWriter();
             serverAvatarDataMessage.Serialize(Writer);
-            if (avatarDataMessage.recipients != null && avatarDataMessage.recipients.Length > 0)
+            if (Rec != null && Rec.Length > 0)
             {
                 var targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
 
-                int recipientsLength = avatarDataMessage.recipients.Length;
+                int recipientsLength = Rec.Length;
                 for (int index = 0; index < recipientsLength; index++)
                 {
-                    if (allClients.TryGetValue(avatarDataMessage.recipients[index], out NetPeer client))
+                    if (allClients.TryGetValue(Rec[index], out NetPeer client))
                     {
                         targetedClients.TryAdd((ushort)client.Id, client);
                     }
@@ -84,12 +83,12 @@ namespace Basis.Network.Server.Generic
 
                 if (targetedClients.Count > 0)
                 {
-                    BasisNetworkServer.BroadcastMessageToClients(Writer, channel, targetedClients, method);
+                    BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.AvatarChannel, targetedClients, DeliveryMethod);
                 }
             }
             else
             {
-                BasisNetworkServer.BroadcastMessageToClients(Writer, channel, sender, allClients, method);
+                BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.AvatarChannel, sender, allClients, DeliveryMethod);
             }
         }
     }
