@@ -5,3 +5,23 @@
 [INFO] [14:18] [INFO] Server Worker Threads booting
 [INFO] [14:18] [INFO] Server Worker Threads Booted
 [INFO] [14:20] [INFO] Shutting down server...
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\Logs\2024-12-17.log
+[INFO] [15:09] [INFO] Server Booting
+[INFO] [15:09] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [15:09] [INFO] Server Wiring up 4296
+[INFO] [15:09] [INFO] Server Worker Threads booting
+[INFO] [15:09] [INFO] Server Worker Threads Booted
+[INFO] [15:09] [INFO] Shutting down server...
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\Logs\2024-12-17.log
+[INFO] [15:10] [INFO] Server Booting
+[INFO] [15:10] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [15:10] [INFO] Server Wiring up 4296
+[INFO] [15:10] [INFO] Server Worker Threads booting
+[INFO] [15:10] [INFO] Server Worker Threads Booted
+[INFO] [15:10] [INFO] Shutting down server...
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\Logs\2024-12-17.log
+[INFO] [15:29] [INFO] Server Booting
+[INFO] [15:29] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [15:29] [INFO] Server Wiring up SetPort 4296
+[INFO] [15:29] [INFO] Server Worker Threads booting
+[INFO] [15:29] [INFO] Server Worker Threads Booted

@@ -13,41 +13,66 @@ using static Basis.Network.Server.Generic.BasisSavedState;
 using static SerializableBasis;
 public static class BasisNetworkServer
 {
-    public static int PeerLimit = 1024;
-    public static ushort SetPort = 4296;
-    public static int QueueEvents = 10;
-
     public static Thread serverIncomeThread;
     public static EventBasedNetListener listener;
     public static NetManager server;
-    public static bool UseNativeSockets = false;
     private static CancellationTokenSource cancellationTokenSource;
     public static ConcurrentDictionary<ushort, NetPeer> Peers = new ConcurrentDictionary<ushort, NetPeer>();
-    public static void StartServer()
+    public static Configuration Configuration;
+    public static void StartServer(Configuration configuration)
     {
-   //     Configuration config = Configuration.LoadFromXml("config.xml");
+        Configuration = configuration;
+        BasisServerReductionSystem.Configuration = configuration;
         listener = new EventBasedNetListener();
         server = new NetManager(listener)
         {
-            AutoRecycle = false,//we do this ourselves
-            UnconnectedMessagesEnabled = true,
-            NatPunchEnabled = true,
-            AllowPeerAddressChange = true,
-            BroadcastReceiveEnabled = true,
-            UseNativeSockets = UseNativeSockets,
-            ChannelsCount = 7,
-            EnableStatistics = true,//bandwidth information per user
-            IPv6Enabled = true,
-            UpdateTime = QueueEvents,
+            AutoRecycle = false,  // We do this ourselves
+            UnconnectedMessagesEnabled = configuration.UnconnectedMessagesEnabled,
+            NatPunchEnabled = configuration.NatPunchEnabled,
+            AllowPeerAddressChange = configuration.AllowPeerAddressChange,
+            BroadcastReceiveEnabled = configuration.BroadcastReceiveEnabled,
+            UseNativeSockets = configuration.UseNativeSockets,
+            ChannelsCount = 7,  // This can be configured separately
+            EnableStatistics = configuration.EnableStatistics,  // Bandwidth information per user
+            IPv6Enabled = configuration.IPv6Enabled,
+            UpdateTime = configuration.QueueEvents,
+
+            // Additional settings
+            PingInterval = configuration.PingInterval,
+            DisconnectTimeout = configuration.DisconnectTimeout,
+            SimulatePacketLoss = configuration.SimulatePacketLoss,
+            SimulateLatency = configuration.SimulateLatency,
+            SimulationPacketLossChance = configuration.SimulationPacketLossChance,
+            SimulationMinLatency = configuration.SimulationMinLatency,
+            SimulationMaxLatency = configuration.SimulationMaxLatency,
+            UnsyncedEvents = configuration.UnsyncedEvents,
+            UnsyncedReceiveEvent = configuration.UnsyncedReceiveEvent,
+            UnsyncedDeliveryEvent = configuration.UnsyncedDeliveryEvent,
+            ReconnectDelay = configuration.ReconnectDelay,
+            MaxConnectAttempts = configuration.MaxConnectAttempts,
+            ReuseAddress = configuration.ReuseAddress,
+            DontRoute = configuration.DontRoute,
+            MtuOverride = configuration.MtuOverride,
+            MtuDiscovery = configuration.MtuDiscovery,
+            DisconnectOnUnreachable = configuration.DisconnectOnUnreachable,
         };
-        server.Start(SetPort);
-        BNL.Log("Server Wiring up " + SetPort);
+        if(configuration.OverrideAutoDiscoveryOfIpv)
+        {
+            BNL.Log("Server Wiring up SetPort " + Configuration.SetPort + "IPv6Address " + Configuration.IPv6Address + "IPv6Address " + Configuration.IPv6Address);
+            server.Start(Configuration.IPv4Address, Configuration.IPv6Address, Configuration.SetPort);
+        }
+        else
+        {
+            BNL.Log("Server Wiring up SetPort " + Configuration.SetPort);
+            server.Start(Configuration.SetPort);
+        }
+
  
         listener.ConnectionRequestEvent += request =>
         {
             BNL.Log("Processing Connection Request");
             int ServerCount = server.ConnectedPeersCount;
-            if (ServerCount < PeerLimit)
+            if (ServerCount < Configuration.PeerLimit)
             {
                 if (request.Data.TryGetUShort(out ushort ClientVersion))
                 {

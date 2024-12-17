@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Basis.Network;
+﻿using Basis.Network;
 using Basis.Network.Server;
 
 namespace Basis
@@ -9,23 +6,26 @@ namespace Basis
     class Program
     {
         public static BasisNetworkHealthCheck Check;
-
         public static void Main(string[] args)
         {
+            // Get the path to the config.xml file in the application's directory
+            string configFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.xml");
+
+            // Load configuration from the XML file
+            Configuration config = Configuration.LoadFromXml(configFilePath);
             // Initialize server-side logging
-            BasisServerSideLogging.Initialize();
+            BasisServerSideLogging.Initialize(config);
 
             BNL.Log("Server Booting");
-
             // Create a cancellation token source
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
 
             // Initialize health check
-            Check = new BasisNetworkHealthCheck();
+            Check = new BasisNetworkHealthCheck(config);
 
             // Start the server on a background task
-            var serverTask = Task.Run(() => BasisNetworkServer.StartServer(), cancellationToken);
+            var serverTask = Task.Run(() => BasisNetworkServer.StartServer(config), cancellationToken);
 
             // Register a shutdown hook to clean up resources when the application is terminated
             AppDomain.CurrentDomain.ProcessExit += async (sender, eventArgs) =>

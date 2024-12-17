@@ -1,17 +1,48 @@
 {
   "version": 3,
   "targets": {
-    ".NETFramework,Version=v4.7.1": {
-      "System.Threading.Tasks/4.3.0": {
+    ".NETStandard,Version=v2.1": {
+      "Microsoft.NETCore.Platforms/1.1.0": {
         "type": "package",
-        "frameworkAssemblies": [
-          "System.Core"
-        ],
         "compile": {
-          "ref/net45/_._": {}
+          "lib/netstandard1.0/_._": {}
         },
         "runtime": {
-          "lib/net45/_._": {}
+          "lib/netstandard1.0/_._": {}
+        }
+      },
+      "Microsoft.NETCore.Targets/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        }
+      },
+      "System.Runtime/4.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0"
+        },
+        "compile": {
+          "ref/netstandard1.5/System.Runtime.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Threading.Tasks/4.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Threading.Tasks.dll": {
+            "related": ".xml"
+          }
         }
       },
       "LiteNetLib/1.3.1": {
@@ -279,7 +310,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETFramework,Version=v4.7.1": [
+    ".NETStandard,Version=v2.1": [
       "LiteNetLib >= 1.3.1",
       "System.Threading.Tasks >= 4.3.0"
     ],
@@ -311,8 +342,8 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net471",
-        "net9.0"
+        "net9.0",
+        "netstandard2.1"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -328,8 +359,8 @@
             }
           }
         },
-        "net471": {
-          "targetAlias": "net471",
+        "netstandard2.1": {
+          "targetAlias": "netstandard2.1",
           "projectReferences": {
             "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj": {
               "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj"
@@ -376,12 +407,28 @@
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
       },
-      "net471": {
-        "targetAlias": "net471",
+      "netstandard2.1": {
+        "targetAlias": "netstandard2.1",
         "dependencies": {
           "System.Threading.Tasks": {
             "target": "Package",
             "version": "[4.3.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "NETStandard.Library": {
+            "privateAssets": "all"
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
