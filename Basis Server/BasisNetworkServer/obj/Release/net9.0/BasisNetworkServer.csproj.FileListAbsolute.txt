@@ -1,0 +1,14 @@
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server Export\BasisNetworkServer\bin\Release\net9.0\BasisNetworkServer.deps.json
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server Export\BasisNetworkServer\bin\Release\net9.0\BasisNetworkServer.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server Export\BasisNetworkServer\bin\Release\net9.0\BasisNetworkServer.pdb
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.csproj.AssemblyReference.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.AssemblyInfoInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.AssemblyInfo.cs
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.csproj.CoreCompileInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.sourcelink.json
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNet.9DC2AEB9.Up2Date
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\refint\BasisNetworkServer.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\BasisNetworkServer.pdb
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Server\obj\Release\net9.0\ref\BasisNetworkServer.dll

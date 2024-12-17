@@ -1,0 +1,12 @@
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server Export\BasisNetworkClient\bin\Release\netstandard2.1\BasisNetworkClient.deps.json
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server Export\BasisNetworkClient\bin\Release\netstandard2.1\BasisNetworkClient.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server Export\BasisNetworkClient\bin\Release\netstandard2.1\BasisNetworkClient.pdb
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.csproj.AssemblyReference.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.AssemblyInfoInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.AssemblyInfo.cs
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.csproj.CoreCompileInputs.cache
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.sourcelink.json
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNet.4AF383CF.Up2Date
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\obj\Release\netstandard2.1\BasisNetworkClient.pdb

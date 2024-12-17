@@ -61,31 +61,32 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.31f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\Basis Server\Basis Network Core\Mathematics\MathExtensions.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\AvatarDataMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Compression\BasisNetworkPrimitiveCompression.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\CreateAllRemoteMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\AudioSegmentDataMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\Vector3Message.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\BasisNetworkTag.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\ServerAudioSegmentMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\BasisNetworkVersion.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\BasisNetworkCommons.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Compression\BasisNetworkCompressionExtensions.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\CreateSingleRemoteMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\BNL.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\PlayerMetaDataMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\ServerSideSyncPlayerMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\ServerAvatarChangeMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\SceneDataMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\ReadyMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\BasisMessageReceivedEventArgs.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\OwnershipTransferMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\PlayerIdMessage.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Core\Serializable\LocalAvatarSyncMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Compression\BasisNetworkCompressionExtensions.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\PlayerMetaDataMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\SceneDataMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\LocalAvatarSyncMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\OwnershipTransferMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ServerAvatarChangeMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\CreateSingleRemoteMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\AudioSegmentDataMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\Vector3Message.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ServerAudioSegmentMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Mathematics\MathExtensions.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Compression\BasisNetworkPrimitiveCompression.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\AuthenticationMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ReadyMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ServerSideSyncPlayerMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisNetworkCommons.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisNetworkTag.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisNetworkVersion.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisMessageReceivedEventArgs.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\AvatarDataMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\BNL.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\CreateAllRemoteMessage.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\PlayerIdMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\Basis Server\Basis Network Core\BasisNetworkCore.asmdef" />
+    <None Include="Packages\Basis Server\BasisNetworkCore\BasisNetworkCore.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -61,10 +61,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.31f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\Basis Server\Basis Network Client\BasisNetworkClient.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkClient\BasisNetworkClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\Basis Server\Basis Network Client\BasisNetworkClient.asmdef" />
+    <None Include="Packages\Basis Server\BasisNetworkClient\BasisNetworkClient.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

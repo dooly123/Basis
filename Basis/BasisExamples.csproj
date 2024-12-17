@@ -1090,18 +1090,6 @@
       <Project>{B9932C32-0996-492C-5B70-FA0BEBC5C5F9}</Project>
       <Name>BasisSerializer.OdinSerializer</Name>
     </ProjectReference>
-    <ProjectReference Include="BasisNetworkClient.csproj">
-      <Project>{57C936B1-3424-5771-9156-E9170D20D859}</Project>
-      <Name>BasisNetworkClient</Name>
-    </ProjectReference>
-    <ProjectReference Include="BasisNetworkCore.csproj">
-      <Project>{F8379EF4-14C3-3FD9-E603-6B6CE12C3F93}</Project>
-      <Name>BasisNetworkCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="BasisNetworkServer.csproj">
-      <Project>{0F4B0B5C-A8D4-C20B-8503-AE360C2E9203}</Project>
-      <Name>BasisNetworkServer</Name>
-    </ProjectReference>
     <ProjectReference Include="LiteNetLib.csproj">
       <Project>{1B61A2A2-044D-10B2-3D3A-E15D3BA21BFA}</Project>
       <Name>LiteNetLib</Name>

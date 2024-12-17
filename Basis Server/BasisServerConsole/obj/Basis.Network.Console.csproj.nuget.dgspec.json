@@ -4,12 +4,12 @@
     "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisServerConsole\\Basis.Network.Console.csproj": {}
   },
   "projects": {
-    "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
+    "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj": {
       "version": "2.10.1",
       "restore": {
-        "projectUniqueName": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj",
-        "projectName": "Basis.Network.Core",
-        "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj",
+        "projectUniqueName": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj",
+        "projectName": "BasisNetworkCore",
+        "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj",
         "packagesPath": "C:\\Users\\doola\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\obj\\",
         "projectStyle": "PackageReference",
@@ -116,12 +116,12 @@
         }
       }
     },
-    "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\Basis.Network.Server.csproj": {
+    "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.csproj": {
       "version": "2.10.1",
       "restore": {
-        "projectUniqueName": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\Basis.Network.Server.csproj",
-        "projectName": "Basis.Network.Server",
-        "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\Basis.Network.Server.csproj",
+        "projectUniqueName": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.csproj",
+        "projectName": "BasisNetworkServer",
+        "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.csproj",
         "packagesPath": "C:\\Users\\doola\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\obj\\",
         "projectStyle": "PackageReference",
@@ -147,8 +147,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
-                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj"
+              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj": {
+                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj"
               },
               "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj": {
                 "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj"
@@ -158,8 +158,8 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
-                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj"
+              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj": {
+                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj"
               },
               "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj": {
                 "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\LiteNetLib\\LiteNetLib.csproj"
@@ -182,6 +182,16 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "System.Diagnostics.performanceCounter": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "prometheus-net.AspNetCore": {
+              "target": "Package",
+              "version": "[8.2.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -251,11 +261,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj": {
-                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\Basis.Network.Core.csproj"
+              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj": {
+                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Core\\BasisNetworkCore.csproj"
               },
-              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\Basis.Network.Server.csproj": {
-                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\Basis.Network.Server.csproj"
+              "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.csproj": {
+                "projectPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\Basis Network Server\\BasisNetworkServer.csproj"
               }
             }
           }

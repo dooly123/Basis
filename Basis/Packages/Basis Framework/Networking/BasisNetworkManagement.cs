@@ -13,6 +13,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace Basis.Scripts.Networking
     {
         public string Ip = "170.64.184.249";
         public ushort Port = 4296;
+        public static string Password = "default_password";
         /// <summary>
         /// fire when ownership is changed for a unique string
         /// </summary>
@@ -149,7 +151,7 @@ namespace Basis.Scripts.Networking
             OnEnableInstanceCreate?.Invoke();
             if (ForceConnect)
             {
-               Connect(Port, Ip);
+                Connect();
             }
         }
         private void LogErrorOutput(string obj)
@@ -203,9 +205,9 @@ namespace Basis.Scripts.Networking
         }
         public  void Connect()
         {
-            Connect(Port, Ip);
+            Connect(Port, Ip, Password);
         }
-        public void Connect(ushort Port, string IpString)
+        public void Connect(ushort Port, string IpString,string PrimitivePassword)
         {
             BNL.LogOutput += LogOutput;
             BNL.LogWarningOutput += LogWarningOutput;
@@ -230,6 +232,8 @@ namespace Basis.Scripts.Networking
                 }
             };
             Debug.Log("Network  Starting Client");
+            BasisNetworkClient.AuthenticationMessage = new Network.Core.Serializable.SerializableBasis.AuthenticationMessage();
+            BasisNetworkClient.AuthenticationMessage.Message = Encoding.UTF8.GetBytes(PrimitivePassword);
             LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);
             Debug.Log("Network Client Started " + LocalPlayerPeer.RemoteId);
             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;

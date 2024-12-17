@@ -61,15 +61,19 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.31f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\Basis Server\Basis Network Server\BasisNetworking\BasisSavedState.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Server\BasisNetworkHealthCheck.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Server\BasisNetworking\BasisServerReductionSystem.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Server\BasisNetworkServer.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Server\BasisNetworking\BasisNetworkOwnership.cs" />
-    <Compile Include="Packages\Basis Server\Basis Network Server\BasisNetworking\BasisNetworkingGeneric.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisStatistics.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisNetworkOwnership.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisServerReductionSystem.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworkHealthCheck.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisSavedState.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworkServer.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\Promethus\BasisPromethus.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\Password\BasisPasswordImplementation.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisNetworkingGeneric.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisServerConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\Basis Server\Basis Network Server\BasisNetworkServer.asmdef" />
+    <None Include="Packages\Basis Server\BasisNetworkServer\BasisNetworkServer.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

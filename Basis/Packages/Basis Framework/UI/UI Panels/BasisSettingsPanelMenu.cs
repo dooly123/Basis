@@ -15,7 +15,6 @@ namespace Basis.Scripts.UI.UI_Panels
         public BasisNetworkManagement NetworkConnector;
         public string IPDefault = "localhost";
         public ushort PortDefault = 4296;
-        public string PassWordDefault = "Default";
         public ushort SelectedPort = 4296;
         public bool IsServer = false;
         public void OnEnable()
@@ -28,7 +27,7 @@ namespace Basis.Scripts.UI.UI_Panels
 
             IP.text = IPDefault;
             Port.text = PortDefault.ToString();
-            Password.text = PassWordDefault;
+            Password.text = BasisNetworkManagement.Password;
 
             Connect.onClick.AddListener(ConnectTOServer);
         }
@@ -47,11 +46,11 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             if (Password != null)
             {
-                //  NetworkConnector.Client.LiteNetLibConnnection. = Password.text;
+                NetworkConnector.Connect(SelectedPort, IP.text, Password.text);
             }
             if (IP != null)
             {
-               NetworkConnector.Connect(SelectedPort, IP.text);
+               NetworkConnector.Connect(SelectedPort, IP.text, BasisNetworkManagement.Password);
             }
         }
 

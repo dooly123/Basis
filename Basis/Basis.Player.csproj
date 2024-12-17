@@ -1118,21 +1118,21 @@
       <Project>{81D8DFA2-3A27-2F03-1DC7-F5DA936C4DFF}</Project>
       <Name>BasisGizmos.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="BasisNetworkClient.Player.csproj">
-      <Project>{DE40DE0B-D7DD-C301-BB34-3086D9A1CFAB}</Project>
-      <Name>BasisNetworkClient.Player</Name>
-    </ProjectReference>
-    <ProjectReference Include="BasisNetworkServer.Player.csproj">
-      <Project>{9BDD1C09-DE94-ED8E-B0F9-6ABADB1257BA}</Project>
-      <Name>BasisNetworkServer.Player</Name>
+    <ProjectReference Include="LiteNetLib.Player.csproj">
+      <Project>{A2803A7B-469B-A17F-0A5A-A714B616EC4D}</Project>
+      <Name>LiteNetLib.Player</Name>
     </ProjectReference>
     <ProjectReference Include="BasisNetworkCore.Player.csproj">
       <Project>{CD23A616-50F9-99A8-6459-BDC645F346AF}</Project>
       <Name>BasisNetworkCore.Player</Name>
     </ProjectReference>
-    <ProjectReference Include="LiteNetLib.Player.csproj">
-      <Project>{A2803A7B-469B-A17F-0A5A-A714B616EC4D}</Project>
-      <Name>LiteNetLib.Player</Name>
+    <ProjectReference Include="BasisNetworkServer.Player.csproj">
+      <Project>{9BDD1C09-DE94-ED8E-B0F9-6ABADB1257BA}</Project>
+      <Name>BasisNetworkServer.Player</Name>
+    </ProjectReference>
+    <ProjectReference Include="BasisNetworkClient.Player.csproj">
+      <Project>{DE40DE0B-D7DD-C301-BB34-3086D9A1CFAB}</Project>
+      <Name>BasisNetworkClient.Player</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

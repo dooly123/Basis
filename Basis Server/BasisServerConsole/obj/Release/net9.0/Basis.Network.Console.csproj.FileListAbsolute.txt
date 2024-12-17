@@ -43,3 +43,17 @@ C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Serv
 C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\obj\Release\net9.0\Basis.Network.Console.pdb
 C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\obj\Release\net9.0\Basis.Network.Console.genruntimeconfig.cache
 C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\obj\Release\net9.0\ref\Basis.Network.Console.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\Prometheus.NetStandard.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\Prometheus.AspNetCore.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\System.Configuration.ConfigurationManager.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\System.Drawing.Common.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\System.Security.Permissions.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\System.Windows.Extensions.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\runtimes\win\lib\net7.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll

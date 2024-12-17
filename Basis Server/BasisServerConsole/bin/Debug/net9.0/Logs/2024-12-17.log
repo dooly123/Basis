@@ -1,42 +1,36 @@
 [INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
-[INFO] [13:49] [INFO] Server Booting
-[INFO] [13:49] [INFO] HTTP health check started at 'http://localhost:10666/health'
-[INFO] [13:49] [INFO] Server Wiring up 4296
-[INFO] [13:49] [INFO] Server Worker Threads booting
-[INFO] [13:49] [INFO] Server Worker Threads Booted
-[INFO] [13:50] [INFO] Shutting down server...
+[INFO] [09:36] [INFO] Server Booting
+[INFO] [09:36] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [09:36] [INFO] Server Wiring up SetPort 4296
+[INFO] [09:36] [INFO] Server Worker Threads Booted
+[INFO] [09:36] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:36] [INFO] Processing Connection Request
+[ERROR] [09:36] [ERROR] Rejected: Authentication failed.
+[INFO] [09:36] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 3
 [INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
-[INFO] [14:03] [INFO] Server Booting
-[INFO] [14:03] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [09:38] [INFO] Server Booting
+[INFO] [09:38] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [09:38] [INFO] Server Wiring up SetPort 4296
+[INFO] [09:38] [INFO] Server Worker Threads Booted
+[INFO] [09:38] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:38] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:38] [INFO] Processing Connection Request
+[ERROR] [09:38] [ERROR] Worker exception: Value cannot be null. (Parameter 'dst')
+[INFO] [09:39] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 13497Bytes Sent: 0Packets Sent: 0
+[INFO] [09:39] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 13497Bytes Sent: 0Packets Sent: 0
+[INFO] [09:39] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 13497Bytes Sent: 0Packets Sent: 0
 [INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
-[INFO] [14:03] [INFO] Server Booting
-[INFO] [14:03] [INFO] HTTP health check started at 'http://localhost:10666/health'
-[INFO] [14:03] [INFO] Server Wiring up 4296
-[INFO] [14:03] [INFO] Server Worker Threads booting
-[INFO] [14:03] [INFO] Server Worker Threads Booted
-[INFO] [14:04] [INFO] Processing Connection Request
-[INFO] [14:04] [INFO] Player Is Approved Total Count is: 0
-[INFO] [14:04] [INFO] Length is 1173
-[INFO] [14:04] [INFO] Peer added and connected: 0
-[INFO] [14:04] [INFO] Added 0 with AvatarID 775
-[INFO] [14:04] [INFO] Sent Remote Spawn request to 
-[INFO] [14:04] [INFO] Notifing Newly Connected Client about 0
-[INFO] [14:04] [INFO] Sending list of clients to 0
-[INFO] [14:05] [INFO] Processing Connection Request
-[INFO] [14:05] [INFO] Player Is Approved Total Count is: 1
-[INFO] [14:05] [INFO] Length is 1173
-[INFO] [14:05] [INFO] Peer added and connected: 1
-[INFO] [14:05] [INFO] Added 1 with AvatarID 775
-[INFO] [14:05] [INFO] Sent Remote Spawn request to  | 0
-[INFO] [14:05] [INFO] Notifing Newly Connected Client about 1
-[INFO] [14:05] [INFO] Sending list of clients to 1
-[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
-[INFO] [14:17] [INFO] Server Booting
-[INFO] [14:17] [INFO] HTTP health check started at 'http://localhost:10666/health'
-[INFO] [14:17] [INFO] Server Wiring up 4296
-[INFO] [14:17] [INFO] Server Worker Threads booting
-[INFO] [14:17] [INFO] Server Worker Threads Booted
-[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
-[INFO] [14:19] [INFO] Server Booting
-[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-17.log
-[INFO] [14:19] [INFO] Server Booting
+[INFO] [09:39] [INFO] Server Booting
+[INFO] [09:39] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [09:39] [INFO] Server Wiring up SetPort 4296
+[INFO] [09:39] [INFO] Server Worker Threads Booted
+[INFO] [09:39] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:40] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:40] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:40] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:40] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [09:40] [INFO] Processing Connection Request
+[ERROR] [09:40] [ERROR] Rejected: Authentication failed Expected default_password but got 
+[INFO] [09:41] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:41] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [09:41] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1

@@ -1,5 +1,6 @@
 ﻿using Basis.Network;
 using Basis.Network.Server;
+using Basis.Network.Server.Prometheus;
 
 namespace Basis
 {
@@ -13,6 +14,7 @@ namespace Basis
 
             // Load configuration from the XML file
             Configuration config = Configuration.LoadFromXml(configFilePath);
+            BasisPrometheus.StartPrometheus(config.PromethusPort, config.PromethusUrl);
             // Initialize server-side logging
             BasisServerSideLogging.Initialize(config);
 
@@ -45,11 +47,12 @@ namespace Basis
                         BNL.LogError(inner.Message);
                     }
                 }
+                BasisPrometheus.StopPrometheus();
                 if (config.EnableStatistics)
                 {
                     BasisStatistics.StopWorkerThread();
                 }
-                    await BasisServerSideLogging.ShutdownAsync();
+                await BasisServerSideLogging.ShutdownAsync();
                 BNL.Log("Server shut down successfully.");
             };
 
