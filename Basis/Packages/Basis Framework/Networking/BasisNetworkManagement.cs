@@ -332,28 +332,46 @@ namespace Basis.Scripts.Networking
             switch (channel)
             {
                 case BasisNetworkCommons.Disconnection:
-                    BasisNetworkHandleRemoval.HandleDisconnection(Reader);
-                    Reader.Recycle();
+                    BasisNetworkManagement.MainThreadContext.Post(_ =>
+                    {
+                        BasisNetworkHandleRemoval.HandleDisconnection(Reader);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 case BasisNetworkCommons.AvatarChangeMessage:
-                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(Reader);
-                    Reader.Recycle();
+                    BasisNetworkManagement.MainThreadContext.Post(_ =>
+                    {
+                        BasisNetworkHandleAvatar.HandleAvatarChangeMessage(Reader);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 case BasisNetworkCommons.CreateRemotePlayer:
-                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(Reader, this.transform);
-                    Reader.Recycle();
+                    BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                    {
+                        await BasisNetworkHandleRemote.HandleCreateRemotePlayer(Reader, this.transform);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 case BasisNetworkCommons.CreateRemotePlayers:
-                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(Reader, this.transform);
-                    Reader.Recycle();
+                    BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                    {
+                        await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(Reader, this.transform);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 case BasisNetworkCommons.OwnershipResponse:
-                    BasisNetworkGenericMessages.HandleOwnershipResponse(Reader);
-                    Reader.Recycle();
+                    BasisNetworkManagement.MainThreadContext.Post(_ =>
+                    {
+                        BasisNetworkGenericMessages.HandleOwnershipResponse(Reader);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 case BasisNetworkCommons.OwnershipTransfer:
-                    BasisNetworkGenericMessages.HandleOwnershipTransfer(Reader);
-                    Reader.Recycle();
+                    BasisNetworkManagement.MainThreadContext.Post(_ =>
+                    {
+                        BasisNetworkGenericMessages.HandleOwnershipTransfer(Reader);
+                        Reader.Recycle();
+                    }, null);
                     break;
                 case BasisNetworkCommons.VoiceChannel:
                     await BasisNetworkHandleVoice.HandleAudioUpdate(Reader);
