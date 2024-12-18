@@ -216,6 +216,7 @@ public static class BasisNetworkServer
                 {
                     if (reader.TryGetByte(out byte Byte))
                     {
+                        BNL.Log($"Found Channel {Byte} {reader.AvailableBytes}");
                         HandleNetworkReceiveEvent(peer, reader, Byte, deliveryMethod);
                     }
                     else
@@ -315,8 +316,10 @@ public static class BasisNetworkServer
     {
         AudioSegmentDataMessage audioSegment = new AudioSegmentDataMessage();
         audioSegment.Deserialize(Reader);
-        ServerAudioSegmentMessage ServerAudio = new ServerAudioSegmentMessage();
-        ServerAudio.audioSegmentData = audioSegment;
+        ServerAudioSegmentMessage ServerAudio = new ServerAudioSegmentMessage
+        {
+            audioSegmentData = audioSegment
+        };
         SendVoiceMessageToClients(ServerAudio, BasisNetworkCommons.VoiceChannel, peer);
     }
     private static void SendVoiceMessageToClients(ServerAudioSegmentMessage audioSegment, byte channel, NetPeer sender)

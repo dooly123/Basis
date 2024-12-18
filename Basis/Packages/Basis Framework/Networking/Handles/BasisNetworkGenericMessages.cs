@@ -88,17 +88,7 @@ public static class BasisNetworkGenericMessages
     // Sending message with different conditions
     public static void OnNetworkMessageSend(ushort messageIndex, byte[] buffer = null, DeliveryMethod deliveryMethod = DeliveryMethod.Unreliable, ushort[] recipients = null)
     {
-        // Check if Recipients array is valid or not
-        if (recipients != null && recipients.Length == 0)
-        {
-            recipients = null;
-        }
         NetDataWriter netDataWriter = new NetDataWriter();
-        // Check if buffer is valid or not
-        if (buffer != null && buffer.Length == 0)
-        {
-            buffer = null;
-        }
         //Debug.Log("Sending with Recipients and buffer");
         SceneDataMessage sceneDataMessage = new SceneDataMessage
         {

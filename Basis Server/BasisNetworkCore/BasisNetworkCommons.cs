@@ -13,11 +13,11 @@ namespace Basis.Network.Core
         /// </summary>
         public const byte MovementChannel = 1;
         /// <summary>
-        /// this is voice data only can be used once!
+        /// this is what people use voice data only can be used once!
         /// </summary>
         public const byte VoiceChannel = 2;
         /// <summary>
-        /// this is what people to send data on the scene network
+        /// this is what peopl usee send data on the scene network
         /// </summary>
         public const byte SceneChannel = 3;
         /// <summary>
