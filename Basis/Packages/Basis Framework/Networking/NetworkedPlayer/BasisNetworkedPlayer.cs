@@ -4,6 +4,7 @@ using Basis.Scripts.Networking.Recievers;
 using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.TransformBinders.BoneControl;
 using UnityEngine;
+using static SerializableBasis;
 namespace Basis.Scripts.Networking.NetworkedPlayer
 {
     public partial class BasisNetworkedPlayer : MonoBehaviour
@@ -11,7 +12,9 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
         public BasisNetworkSendBase NetworkSend;
         public BasisBoneControl MouthBone;
         public BasisPlayer Player;
-        public ushort NetId => NetworkSend.NetworkNetID.playerID;
+        [SerializeField]
+        public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
+        public ushort NetId => NetworkNetID.playerID;
         public void OnDestroy()
         {
             if (Player != null)
@@ -35,7 +38,7 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
                 NetworkSend.OnAvatarCalibration();
             }
         }
-        public void RemoteInitalization(BasisRemotePlayer RemotePlayer, ushort PlayerID)
+        public void RemoteInitalization(BasisRemotePlayer RemotePlayer)
         {
             this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             Player = RemotePlayer;
@@ -60,11 +63,17 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
                 Debug.LogError("Missing CharacterIKCalibration");
             }
             NetworkSend = GetOrCreateNetworkComponent<BasisNetworkReceiver>();
-            NetworkSend.NetworkNetID.playerID = PlayerID;
+        }
+        public void InitalizeNetwork()
+        {
             NetworkSend.Initialize(this);
             CalibrationComplete();
         }
-        public void LocalInitalize(BasisLocalPlayer BasisLocalPlayer,ushort PlayerID)
+        public void ProvideNetworkKey(ushort PlayerID)
+        {
+            NetworkNetID.playerID = PlayerID;
+        }
+        public void LocalInitalize(BasisLocalPlayer BasisLocalPlayer)
         {
             this.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             Player = BasisLocalPlayer;
@@ -82,9 +91,6 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
                 Debug.LogError("Missing CharacterIKCalibration");
             }
             NetworkSend = GetOrCreateNetworkComponent<BasisNetworkTransmitter>();
-            NetworkSend.NetworkNetID.playerID = PlayerID;
-            NetworkSend.Initialize(this);
-            CalibrationComplete();
         }
         private T GetOrCreateNetworkComponent<T>() where T : BasisNetworkSendBase
         {

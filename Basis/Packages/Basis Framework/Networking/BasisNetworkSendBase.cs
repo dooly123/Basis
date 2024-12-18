@@ -40,8 +40,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         [SerializeField]
         public HumanPose HumanPose = new HumanPose();
         [SerializeField]
-        public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
-        [SerializeField]
         public HumanPoseHandler PoseHandler;
         [SerializeField]
         public static BasisRangedUshortFloatData PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);

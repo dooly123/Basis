@@ -58,14 +58,21 @@ namespace Basis.Scripts.Networking
                 BasisRemotePlayer remote = await createRemotePlayerTask;
                 BasisNetworkedPlayer networkedPlayer = await createNetworkedPlayerTask;
 
+                networkedPlayer.ProvideNetworkKey(ServerReadyMessage.playerIdMessage.playerID);
                 // Continue with the rest of the code
-                networkedPlayer.RemoteInitalization(remote, ServerReadyMessage.playerIdMessage.playerID);
-
+                networkedPlayer.RemoteInitalization(remote);
                 if (BasisNetworkManagement.AddPlayer(networkedPlayer))
                 {
-                    Debug.Log("Added Player " + ServerReadyMessage.playerIdMessage.playerID);
-                    BasisNetworkManagement.OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
+                    Debug.Log("Added Player AT " + networkedPlayer.NetId);
                 }
+                else
+                {
+                    Debug.LogError("Critical issue could not add player to data");
+                    return null;
+                }
+                networkedPlayer.InitalizeNetwork();//fires events and makes us network compatible
+                Debug.Log("Added Player " + ServerReadyMessage.playerIdMessage.playerID);
+                BasisNetworkManagement.OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
 
                 BasisNetworkManagement.JoiningPlayers.Remove(ServerReadyMessage.playerIdMessage.playerID);
                 await remote.LoadAvatarFromInital(avatarID);

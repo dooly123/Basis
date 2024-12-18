@@ -45,14 +45,25 @@ namespace Basis.Scripts.Networking
         {
             if (Instance != null)
             {
-                if (NetPlayer.Player != null && NetPlayer.Player.IsLocal == false)
+                if (NetPlayer.Player != null)
                 {
-                    RemotePlayers.TryAdd(NetPlayer.NetId, (BasisNetworkReceiver)NetPlayer.NetworkSend);
-                    ReceiverArray = RemotePlayers.Values.ToArray();
-                    ReceiverCount = ReceiverArray.Length;
-                    Debug.Log("ReceiverCount was " + ReceiverCount);
+                    if (NetPlayer.Player.IsLocal == false)
+                    {
+                        RemotePlayers.TryAdd(NetPlayer.NetId, (BasisNetworkReceiver)NetPlayer.NetworkSend);
+                        ReceiverArray = RemotePlayers.Values.ToArray();
+                        ReceiverCount = ReceiverArray.Length;
+                        Debug.Log("ReceiverCount was " + ReceiverCount);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Player was Null!");
                 }
                 return Players.TryAdd(NetPlayer.NetId, NetPlayer);
+            }
+            else
+            {
+                Debug.LogError("No network Instance Existed!");
             }
             return false;
         }
@@ -257,13 +268,14 @@ namespace Basis.Scripts.Networking
                         LocalPlayerPeer = peer;
                         ushort LocalPlayerID = (ushort)peer.RemoteId;
                         // Create the local networked player asynchronously.
-                        this.transform.GetPositionAndRotation(out Vector3 Position,out Quaternion Rotation);
+                        this.transform.GetPositionAndRotation(out Vector3 Position, out Quaternion Rotation);
                         BasisNetworkedPlayer LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(
                             new InstantiationParameters(Position, Rotation, this.transform));
                         Debug.Log("Network Id Updated " + LocalPlayerPeer.RemoteId);
-                        // Initialize the local networked player.
-                        LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance, LocalPlayerID);
 
+                        LocalNetworkedPlayer.ProvideNetworkKey(LocalPlayerID);
+                        // Initialize the local networked player.
+                        LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance);
                         if (AddPlayer(LocalNetworkedPlayer))
                         {
                             Debug.Log($"Added local player {LocalPlayerID}");
@@ -272,7 +284,7 @@ namespace Basis.Scripts.Networking
                         {
                             Debug.LogError($"Cannot add player {LocalPlayerID}");
                         }
-
+                        LocalNetworkedPlayer.InitalizeNetwork();
                         // Notify listeners about the local player joining.
                         OnLocalPlayerJoined?.Invoke(LocalNetworkedPlayer, BasisLocalPlayer.Instance);
                         HasSentOnLocalPlayerJoin = true;
