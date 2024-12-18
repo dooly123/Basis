@@ -331,6 +331,25 @@ namespace Basis.Scripts.Networking
         {
             switch (channel)
             {
+                case BasisNetworkCommons.FallChannel:
+                    if (deliveryMethod == DeliveryMethod.Unreliable)
+                    {
+                        if (Reader.TryGetByte(out byte Byte))
+                        {
+                            NetworkReceiveEvent(peer, Reader, Byte, deliveryMethod);
+                        }
+                        else
+                        {
+                            BNL.LogError($"Unknown channel no data remains: {channel} " + Reader.AvailableBytes);
+                            Reader.Recycle();
+                        }
+                    }
+                    else
+                    {
+                        BNL.LogError($"Unknown channel: {channel} " + Reader.AvailableBytes);
+                        Reader.Recycle();
+                    }
+                    break;
                 case BasisNetworkCommons.Disconnection:
                     BasisNetworkManagement.MainThreadContext.Post(_ =>
                     {
@@ -429,6 +448,7 @@ namespace Basis.Scripts.Networking
             OwnershipTransferMessage.Serialize(netDataWriter);
             BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter,BasisNetworkCommons.OwnershipResponse, DeliveryMethod.ReliableSequenced);
         }
+
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {
             if (Instance == null)

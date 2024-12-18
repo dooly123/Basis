@@ -1057,14 +1057,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="LiteNetLib.csproj">
-      <Project>{1B61A2A2-044D-10B2-3D3A-E15D3BA21BFA}</Project>
-      <Name>LiteNetLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="BasisNetworkCore.csproj">
-      <Project>{F8379EF4-14C3-3FD9-E603-6B6CE12C3F93}</Project>
-      <Name>BasisNetworkCore</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{260F66AB-7577-F32C-1174-593F73BBD0E0}</Project>
       <Name>UnityEditor.UI</Name>

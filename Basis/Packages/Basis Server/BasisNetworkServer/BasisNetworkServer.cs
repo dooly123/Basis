@@ -211,6 +211,25 @@ public static class BasisNetworkServer
     {
         switch (channel)
         {
+            case BasisNetworkCommons.FallChannel:
+                if (deliveryMethod == DeliveryMethod.Unreliable)
+                {
+                    if (reader.TryGetByte(out byte Byte))
+                    {
+                        HandleNetworkReceiveEvent(peer, reader, Byte, deliveryMethod);
+                    }
+                    else
+                    {
+                        BNL.LogError($"Unknown channel no data remains: {channel} " + reader.AvailableBytes);
+                        reader.Recycle();
+                    }
+                }
+                else
+                {
+                    BNL.LogError($"Unknown channel: {channel} " + reader.AvailableBytes);
+                    reader.Recycle();
+                }
+                break;
             case BasisNetworkCommons.MovementChannel:
                 HandleAvatarMovement(reader, peer);
                 reader.Recycle();

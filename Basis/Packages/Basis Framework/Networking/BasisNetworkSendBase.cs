@@ -94,11 +94,20 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             {
                 messageIndex = MessageIndex,
                 payload = buffer,
-                recipients = Recipients
+                recipients = Recipients,
             };
             NetDataWriter netDataWriter = new NetDataWriter();
-            AvatarDataMessage.Serialize(netDataWriter);
-            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.AvatarChannel, DeliveryMethod);
+            if (DeliveryMethod == DeliveryMethod.Unreliable)
+            {
+                netDataWriter.Put(BasisNetworkCommons.AvatarChannel);
+                AvatarDataMessage.Serialize(netDataWriter);
+                BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.FallChannel, DeliveryMethod);
+            }
+            else
+            {
+                AvatarDataMessage.Serialize(netDataWriter);
+                BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.AvatarChannel, DeliveryMethod);
+            }
         }
     }
 }

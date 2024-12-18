@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6972BF72-BE14-4C71-ABF3-6EF914FADEC8}|BasisNetworkClient\\BasisNetworkClient.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkclient\\basisnetworkclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6972BF72-BE14-4C71-ABF3-6EF914FADEC8}|BasisNetworkClient\\BasisNetworkClient.csproj|solutionrelative:basisnetworkclient\\basisnetworkclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|solutionrelative:basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,38 +21,38 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 465,
+          "DockedWidth": 646,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "BasisNetworkServer.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworkServer.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworkServer.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAcwDYAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAowNMAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-18T06:52:03.072Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "BasisNetworkingGeneric.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisNetworkingGeneric.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworking\\BasisNetworkingGeneric.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisNetworkingGeneric.cs",
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworking\\BasisNetworkingGeneric.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAgwDsAAABVAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-18T06:37:47.676Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "BasisNetworkOwnership.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
@@ -65,25 +61,6 @@
               "ViewState": "AgIAABsAAAAAAAAAAAAowCwAAABjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-18T06:17:54.45Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 405,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "BasisNetworkClient.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkClient\\BasisNetworkClient.cs",
-              "RelativeDocumentMoniker": "BasisNetworkClient\\BasisNetworkClient.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkClient\\BasisNetworkClient.cs",
-              "RelativeToolTip": "BasisNetworkClient\\BasisNetworkClient.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAADwvyEAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T06:02:20.745Z",
               "EditorCaption": ""
             }
           ]
