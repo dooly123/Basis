@@ -80,6 +80,8 @@ namespace HVR.Basis.Comms
 
         private void OnDestroy()
         {
+            avatar.OnAvatarReady -= OnAvatarReady;
+
             if (_isWearer)
             {
                 acquisition.UnregisterAddresses(new []{ address }, OnAddressUpdated);
