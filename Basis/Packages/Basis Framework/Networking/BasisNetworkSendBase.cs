@@ -98,9 +98,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             };
             NetDataWriter netDataWriter = new NetDataWriter();
             AvatarDataMessage.Serialize(netDataWriter);
-            byte Index = BasisNetworkCommons.AvatarChannel;
-            Debug.Log("sending out with " + Index + " " + netDataWriter.Length);
-            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, Index, DeliveryMethod);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.AvatarChannel, DeliveryMethod);
         }
     }
 }

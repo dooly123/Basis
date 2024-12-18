@@ -8,7 +8,6 @@ public class Configuration
     public ushort SetPort { get; set; }
     public int QueueEvents { get; set; }
     public bool UseNativeSockets { get; set; }
-    public bool UnconnectedMessagesEnabled { get; set; }
     public bool NatPunchEnabled { get; set; }
     public int UpdateTime { get; set; }
     public int PingInterval { get; set; }
@@ -21,7 +20,6 @@ public class Configuration
     public bool UnsyncedEvents { get; set; }
     public bool UnsyncedReceiveEvent { get; set; }
     public bool UnsyncedDeliveryEvent { get; set; }
-    public bool BroadcastReceiveEnabled { get; set; }
     public int ReconnectDelay { get; set; }
     public int MaxConnectAttempts { get; set; }
     public bool ReuseAddress { get; set; }
@@ -62,7 +60,6 @@ public class Configuration
             SetPort = ushort.Parse(doc.SelectSingleNode("/Configuration/SetPort")?.InnerText ?? "4296"),
             QueueEvents = int.Parse(doc.SelectSingleNode("/Configuration/QueueEvents")?.InnerText ?? "10"),
             UseNativeSockets = bool.Parse(doc.SelectSingleNode("/Configuration/UseNativeSockets")?.InnerText ?? "false"),
-            UnconnectedMessagesEnabled = bool.Parse(doc.SelectSingleNode("/Configuration/UnconnectedMessagesEnabled")?.InnerText ?? "false"),
             NatPunchEnabled = bool.Parse(doc.SelectSingleNode("/Configuration/NatPunchEnabled")?.InnerText ?? "false"),
             UpdateTime = int.Parse(doc.SelectSingleNode("/Configuration/UpdateTime")?.InnerText ?? "10"),
             PingInterval = int.Parse(doc.SelectSingleNode("/Configuration/PingInterval")?.InnerText ?? "1500"),
@@ -75,7 +72,6 @@ public class Configuration
             UnsyncedEvents = bool.Parse(doc.SelectSingleNode("/Configuration/UnsyncedEvents")?.InnerText ?? "false"),
             UnsyncedReceiveEvent = bool.Parse(doc.SelectSingleNode("/Configuration/UnsyncedReceiveEvent")?.InnerText ?? "false"),
             UnsyncedDeliveryEvent = bool.Parse(doc.SelectSingleNode("/Configuration/UnsyncedDeliveryEvent")?.InnerText ?? "false"),
-            BroadcastReceiveEnabled = bool.Parse(doc.SelectSingleNode("/Configuration/BroadcastReceiveEnabled")?.InnerText ?? "false"),
             ReconnectDelay = int.Parse(doc.SelectSingleNode("/Configuration/ReconnectDelay")?.InnerText ?? "2000"),
             MaxConnectAttempts = int.Parse(doc.SelectSingleNode("/Configuration/MaxConnectAttempts")?.InnerText ?? "5"),
             ReuseAddress = bool.Parse(doc.SelectSingleNode("/Configuration/ReuseAddress")?.InnerText ?? "false"),
@@ -111,7 +107,6 @@ public class Configuration
         root.AppendChild(CreateElement(doc, "SetPort", "4296"));
         root.AppendChild(CreateElement(doc, "QueueEvents", "10"));
         root.AppendChild(CreateElement(doc, "UseNativeSockets", "true"));
-        root.AppendChild(CreateElement(doc, "UnconnectedMessagesEnabled", "false"));
         root.AppendChild(CreateElement(doc, "NatPunchEnabled", "true"));
         root.AppendChild(CreateElement(doc, "UpdateTime", "10"));
         root.AppendChild(CreateElement(doc, "PingInterval", "1500"));
@@ -124,7 +119,6 @@ public class Configuration
         root.AppendChild(CreateElement(doc, "UnsyncedEvents", "false"));
         root.AppendChild(CreateElement(doc, "UnsyncedReceiveEvent", "false"));
         root.AppendChild(CreateElement(doc, "UnsyncedDeliveryEvent", "false"));
-        root.AppendChild(CreateElement(doc, "BroadcastReceiveEnabled", "false"));
         root.AppendChild(CreateElement(doc, "ReconnectDelay", "500"));
         root.AppendChild(CreateElement(doc, "MaxConnectAttempts", "10"));
         root.AppendChild(CreateElement(doc, "ReuseAddress", "true"));
