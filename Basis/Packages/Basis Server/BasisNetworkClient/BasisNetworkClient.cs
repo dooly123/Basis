@@ -36,6 +36,9 @@ public static class BasisNetworkClient
                 BroadcastReceiveEnabled = false,
                 UseNativeSockets = false,//unity does not work with this
                 ChannelsCount = 64,
+                EnableStatistics = true,
+                UpdateTime = 10,
+                PingInterval = 1500,
 
             };
             client.Start();

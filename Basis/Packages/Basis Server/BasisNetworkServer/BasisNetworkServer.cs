@@ -47,10 +47,10 @@ public static class BasisNetworkServer
         server = new NetManager(listener)
         {
             AutoRecycle = false,
-            UnconnectedMessagesEnabled = configuration.UnconnectedMessagesEnabled,
+            UnconnectedMessagesEnabled = false,
             NatPunchEnabled = configuration.NatPunchEnabled,
             AllowPeerAddressChange = configuration.AllowPeerAddressChange,
-            BroadcastReceiveEnabled = configuration.BroadcastReceiveEnabled,
+            BroadcastReceiveEnabled = false,
             UseNativeSockets = configuration.UseNativeSockets,
             ChannelsCount = 64,
             EnableStatistics = configuration.EnableStatistics,
@@ -211,35 +211,39 @@ public static class BasisNetworkServer
     {
         switch (channel)
         {
-            case BasisNetworkCommons.DefaultChannel:
-                BNL.Log("Rec unknown data " + reader.AvailableBytes);
-                break;
             case BasisNetworkCommons.MovementChannel:
                 HandleAvatarMovement(reader, peer);
+                reader.Recycle();
                 break;
             case BasisNetworkCommons.VoiceChannel:
                 HandleVoiceMessage(reader, peer);
+                reader.Recycle();
                 break;
             case BasisNetworkCommons.AvatarChannel:
                 BasisNetworkingGeneric.HandleAvatar(reader, deliveryMethod, peer, Peers);
+                reader.Recycle();
                 break;
             case BasisNetworkCommons.SceneChannel:
                 BasisNetworkingGeneric.HandleScene(reader, deliveryMethod, peer, Peers);
+                reader.Recycle();
                 break;
             case BasisNetworkCommons.AvatarChangeMessage:
                 SendAvatarMessageToClients(reader, peer);
+                reader.Recycle();
                 break;
             case BasisNetworkCommons.OwnershipTransfer:
                 BasisNetworkOwnership.OwnershipTransfer(reader, peer, Peers);
+                reader.Recycle();
                 break;
             case BasisNetworkCommons.AudioRecipients:
                 UpdateVoiceReceivers(reader, peer);
+                reader.Recycle();
                 break;
             default:
-                BNL.LogError($"Unknown channel: {channel}");
+                BNL.LogError($"Unknown channel: {channel} " + reader.AvailableBytes);
+                reader.Recycle();
                 break;
         }
-        reader.Recycle();
     }
 
     #endregion

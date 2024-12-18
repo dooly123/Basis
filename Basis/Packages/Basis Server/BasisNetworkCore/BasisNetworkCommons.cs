@@ -16,11 +16,11 @@ namespace Basis.Network.Core
         /// <summary>
         /// this is what people to send data on the scene network
         /// </summary>
-        public const byte SceneChannel = 4;
+        public const byte SceneChannel = 14;
         /// <summary>
         /// this is what people use to send data on there avatar
         /// </summary>
-        public const byte AvatarChannel = 5;
+        public const byte AvatarChannel = 15;
 
         public const byte CreateRemotePlayer = 6;
         public const byte CreateRemotePlayers = 7;
