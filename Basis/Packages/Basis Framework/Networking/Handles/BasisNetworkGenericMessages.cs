@@ -21,7 +21,7 @@ public static class BasisNetworkGenericMessages
         SceneDataMessage sceneDataMessage = ServerSceneDataMessage.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
     }
-    public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID,ushort NetIdNewOwner,bool IsOwner);
+    public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID, ushort NetIdNewOwner, bool IsOwner);
     public static void HandleOwnershipTransfer(LiteNetLib.NetPacketReader reader)
     {
         OwnershipTransferMessage OwnershipTransferMessage = new OwnershipTransferMessage();
@@ -30,7 +30,7 @@ public static class BasisNetworkGenericMessages
     }
     public static void HandleOwnershipResponse(LiteNetLib.NetPacketReader reader)
     {
-        OwnershipTransferMessage  ownershipTransferMessage = new OwnershipTransferMessage();
+        OwnershipTransferMessage ownershipTransferMessage = new OwnershipTransferMessage();
         ownershipTransferMessage.Deserialize(reader);
         HandleOwnership(ownershipTransferMessage);
     }
@@ -93,7 +93,7 @@ public static class BasisNetworkGenericMessages
         {
             recipients = null;
         }
-        NetDataWriter Writer = new NetDataWriter();
+        NetDataWriter netDataWriter = new NetDataWriter();
         // Check if buffer is valid or not
         if (buffer != null && buffer.Length == 0)
         {
@@ -106,7 +106,16 @@ public static class BasisNetworkGenericMessages
             payload = buffer,
             recipients = recipients
         };
-        sceneDataMessage.Serialize(Writer);
-        BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.SceneChannel, deliveryMethod);
+        if (deliveryMethod == DeliveryMethod.Unreliable)
+        {
+            netDataWriter.Put(BasisNetworkCommons.SceneChannel);
+            sceneDataMessage.Serialize(netDataWriter);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.FallChannel, deliveryMethod);
+        }
+        else
+        {
+            sceneDataMessage.Serialize(netDataWriter);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.SceneChannel, deliveryMethod);
+        }
     }
 }
