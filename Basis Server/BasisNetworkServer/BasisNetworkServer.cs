@@ -220,6 +220,9 @@ public static class BasisNetworkServer
             case BasisNetworkCommons.VoiceChannel:
                 HandleVoiceMessage(reader, peer);
                 break;
+            case BasisNetworkCommons.AvatarChannel:
+                BasisNetworkingGeneric.HandleAvatar(reader, deliveryMethod, peer, Peers);
+                break;
             case BasisNetworkCommons.SceneChannel:
                 BasisNetworkingGeneric.HandleScene(reader, deliveryMethod, peer, Peers);
                 break;

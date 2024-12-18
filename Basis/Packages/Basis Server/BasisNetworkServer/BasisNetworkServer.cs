@@ -211,14 +211,17 @@ public static class BasisNetworkServer
     {
         switch (channel)
         {
-            case BasisNetworkCommons.VoiceChannel:
-                HandleVoiceMessage(reader, peer);
+            case BasisNetworkCommons.EventsChannel:
+                HandleEventMessage(peer, reader, deliveryMethod);
                 break;
             case BasisNetworkCommons.MovementChannel:
                 HandleAvatarMovement(reader, peer);
                 break;
-            case BasisNetworkCommons.EventsChannel:
-                HandleEventMessage(peer, reader, deliveryMethod);
+            case BasisNetworkCommons.VoiceChannel:
+                HandleVoiceMessage(reader, peer);
+                break;
+            case BasisNetworkCommons.AvatarChannel:
+                BasisNetworkingGeneric.HandleAvatar(reader, deliveryMethod, peer, Peers);
                 break;
             case BasisNetworkCommons.SceneChannel:
                 BasisNetworkingGeneric.HandleScene(reader, deliveryMethod, peer, Peers);
