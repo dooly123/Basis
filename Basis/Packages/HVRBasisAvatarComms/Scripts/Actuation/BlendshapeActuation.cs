@@ -254,15 +254,21 @@ namespace HVR.Basis.Comms
 
         private void ResetAllBlendshapesToZero()
         {
-            foreach (var computedActuator in _computedActuators)
+            foreach (ComputedActuator computedActuator in _computedActuators)
             {
-                foreach (var target in computedActuator.Targets)
+                if (computedActuator != null)
                 {
-                    foreach (var blendshapeIndex in target.BlendshapeIndices)
+                    foreach (ComputedActuatorTarget target in computedActuator.Targets)
                     {
-                        if (target.Renderer != null)
+                        if (target != null)
                         {
-                            target.Renderer.SetBlendShapeWeight(blendshapeIndex, 0);
+                            foreach (int blendshapeIndex in target.BlendshapeIndices)
+                            {
+                                if (target.Renderer != null)
+                                {
+                                    target.Renderer.SetBlendShapeWeight(blendshapeIndex, 0);
+                                }
+                            }
                         }
                     }
                 }

@@ -97,7 +97,7 @@ This would not be possible without the following:
 
 ## Third-Party Code and Trademarks
 
-This project includes third-party copywrite
+This project includes third-party copyright
 
 libopus 1.2.1
 Copyright 2001-2011 Xiph.Org, Skype Limited, Octasic, Jean-Marc Valin, Timothy B. Terriberry, CSIRO, Gregory Maxwell, Mark Borgerding, Erik de Castro Lopo
