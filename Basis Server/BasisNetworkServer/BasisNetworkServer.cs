@@ -211,6 +211,9 @@ public static class BasisNetworkServer
     {
         switch (channel)
         {
+            case BasisNetworkCommons.DefaultChannel:
+                BNL.Log("Rec unknown data " + reader.AvailableBytes);
+                break;
             case BasisNetworkCommons.BasisChannel:
                 HandleEventMessage(peer, reader, deliveryMethod);
                 break;
@@ -235,26 +238,21 @@ public static class BasisNetworkServer
 
     private static void HandleEventMessage(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
     {
-        BasisMessageReceivedEventArgs args = new BasisMessageReceivedEventArgs
-        {
-            Tag = reader.GetByte(),
-            SendMode = deliveryMethod,
-            ClientId = (ushort)peer.Id
-        };
-
-        switch (args.Tag)
+      byte Tag = reader.GetByte();
+        switch (Tag)
         {
             case BasisNetworkTag.AvatarChangeMessage:
-                SendAvatarMessageToClients(reader, peer, args);
+
+                SendAvatarMessageToClients(reader, peer);
                 break;
             case BasisNetworkTag.OwnershipTransfer:
-                BasisNetworkOwnership.OwnershipTransfer(reader, peer, args, Peers);
+                BasisNetworkOwnership.OwnershipTransfer(reader, peer, Peers);
                 break;
             case BasisNetworkTag.AudioRecipients:
                 UpdateVoiceReceivers(reader, peer);
                 break;
             default:
-                BNL.LogError($"Unhandled tag: {args.Tag}");
+                BNL.LogError($"Unhandled tag: {Tag}");
                 break;
         }
     }
@@ -282,7 +280,7 @@ public static class BasisNetworkServer
         }
     }
     #endregion
-    private static void SendAvatarMessageToClients(NetPacketReader Reader, NetPeer Peer, BasisMessageReceivedEventArgs e)
+    private static void SendAvatarMessageToClients(NetPacketReader Reader, NetPeer Peer)
     {
         ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage();
         ClientAvatarChangeMessage.Deserialize(Reader);
