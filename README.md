@@ -44,7 +44,7 @@ Please help shape the future of Basis and leave your mark on its foundation.
 
  ## Installation
  
-This project is currently using Unity 6 (6000.0.29f1)
+This project is currently using Unity 6 (6000.0.31f1)
 Other Unity versions may work but will require changes and adaptations.
 Currently, only OPENXR and SteamVR are supported.
 
