@@ -163,6 +163,7 @@
     <Compile Include="Packages\Basis Framework\Networking\Transmitters\BasisNetworkTransmitter.cs" />
     <Compile Include="Packages\Basis Framework\Virtual keyboard\BasisVirtualRow.cs" />
     <Compile Include="Packages\Basis Framework\Drivers\PoseData.cs" />
+    <Compile Include="Packages\Basis Framework\UI\BasisTrackerVisibilityHandler.cs" />
     <Compile Include="Packages\Basis Framework\Networking\Handles\BasisNetworkHandleVoice.cs" />
     <Compile Include="Packages\Basis Framework\Virtual keyboard\BasisVirtualKeyboardButton.cs" />
     <Compile Include="Packages\Basis Framework\Device Management\Devices\BasisXRManagement.cs" />

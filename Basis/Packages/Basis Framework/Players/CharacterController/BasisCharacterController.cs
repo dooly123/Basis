@@ -38,6 +38,11 @@ namespace Basis.Scripts.BasisCharacterController
         public float RotationSpeed = 200;
         public bool HasEvents = false;
         public float pushPower = 1f;
+        private const float SnapTurnAbsoluteThreshold = 0.8f;
+        private bool UseSnapTurn => SMModuleControllerSettings.SnapTurnAngle != -1;
+        private float SnapTurnAngle => SMModuleControllerSettings.SnapTurnAngle;
+        private bool isSnapTurning;
+
         public void OnDestroy()
         {
             if (HasEvents)
@@ -84,7 +89,31 @@ namespace Basis.Scripts.BasisCharacterController
             GroundCheck();
 
             // Calculate the rotation amount for this frame
-            float rotationAmount = Rotation.x * RotationSpeed * driver.DeltaTime;
+            float rotationAmount;
+            if (UseSnapTurn)
+            {
+                var isAboveThreshold = math.abs(Rotation.x) > SnapTurnAbsoluteThreshold;
+                if (isAboveThreshold != isSnapTurning)
+                {
+                    isSnapTurning = isAboveThreshold;
+                    if (isSnapTurning)
+                    {
+                        rotationAmount = math.sign(Rotation.x) * SnapTurnAngle;
+                    }
+                    else
+                    {
+                        rotationAmount = 0f;
+                    }
+                }
+                else
+                {
+                    rotationAmount = 0f;
+                }
+            }
+            else
+            {
+                rotationAmount = Rotation.x * RotationSpeed * driver.DeltaTime;
+            }
 
 
             transform.GetPositionAndRotation(out Vector3 CurrentPosition, out Quaternion CurrentRotation);
@@ -110,6 +139,7 @@ namespace Basis.Scripts.BasisCharacterController
 
             ReadyToRead?.Invoke();
         }
+
         public void HandleJump()
         {
             if (groundedPlayer && !HasJumpAction)
@@ -178,6 +208,7 @@ namespace Basis.Scripts.BasisCharacterController
             characterController.Move(totalMoveDirection);
         }
         public float SpeedMultiplyer = 0.5f;
+
         public void CalculateCharacterSize()
         {
             eyeHeight = HasEye ? Eye.OutGoingData.position.y : 1.73f;

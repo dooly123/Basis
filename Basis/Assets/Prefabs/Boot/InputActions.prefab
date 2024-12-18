@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 256212325347645450}
   - component: {fileID: 6482417607131076391}
   - component: {fileID: 6378574261833472064}
+  - component: {fileID: 2204982582000934740}
   m_Layer: 0
   m_Name: InputActions
   m_TagString: Untagged
@@ -1532,7 +1533,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 1
+      EditorVisable: 0
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -1555,6 +1556,36 @@ MonoBehaviour:
     ExcludeFromThesePlatforms: []
     MasterQualityState: 0
     ParseController: 0
+    ReturnedValueTextType: 1
+    SelectableValueList: []
+  - EditorBasedUIToggles:
+      SupportedRenderPipelines: 0
+      DefaultPlatform: 0
+      ExcludePlatform: 0
+      ValueToggle: 0
+      EditorVisable: 1
+    SupportedRenderPipeline: 030000000400000000000000
+    Round: 1
+    RoundTo: 0
+    MaxPercentage: 100
+    MinPercentage: 0
+    SliderMaxValue: 90
+    SliderMinValue: -1
+    Name: Snap Turn Angle
+    ValueDescriptor: Snap Turn Angle
+    SelectedValueDefault: 
+    ValueDefault: 45
+    Explanation: 
+    selectedValue: 
+    Type: 3
+    TextDescription: {fileID: 0}
+    ObjectInput: {fileID: 0}
+    ApplyInput: {fileID: 0}
+    ResetToDefault: {fileID: 0}
+    PlatFormDefaultState: []
+    ExcludeFromThesePlatforms: []
+    MasterQualityState: 0
+    ParseController: 1
     ReturnedValueTextType: 1
     SelectableValueList: []
   SaveModules:
@@ -1995,28 +2026,35 @@ MonoBehaviour:
     Index: 27
     SelectableValueList: []
     Min: 0
+    Max: 0.5
+  - Name: Microphone Range
+    DefaultValue: 
+    SelectedValue: 
+    Index: 28
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  - Name: Hearing Range
+    DefaultValue: 
+    SelectedValue: 
+    Index: 29
+    SelectableValueList: []
+    Min: 0
+    Max: 0
+  - Name: Maximum Avatar Distance
+    DefaultValue: 
+    SelectedValue: 
+    Index: 30
+    SelectableValueList: []
+    Min: 0
     Max: 0
   - Name: 
     DefaultValue: 
     SelectedValue: 0
-    Index: 28
+    Index: 31
     SelectableValueList: []
-    Min: 0
-    Max: 25
-  - Name: 
-    DefaultValue: 
-    SelectedValue: 0
-    Index: 29
-    SelectableValueList: []
-    Min: 0
-    Max: 25
-  - Name: 
-    DefaultValue: 
-    SelectedValue: 0
-    Index: 30
-    SelectableValueList: []
-    Min: 0
-    Max: 75
+    Min: -1
+    Max: 90
   DefaultSaveType:
     Platform: 0
     SaveType: JSON
@@ -2026,6 +2064,18 @@ MonoBehaviour:
   OnSettingsSaved:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2204982582000934740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286943206467795689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8abbe688010b4f9a9e08ca05b0fdee95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7884915406730103288
 GameObject:
   m_ObjectHideFlags: 0
@@ -2409,6 +2459,10 @@ MonoBehaviour:
     Explanation: 
     Parse: 1
     Type: 3
+  - OptionName: Snap Turn Angle
+    Explanation: 
+    Parse: 1
+    Type: 3
 --- !u!114 &6430705635976775670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2472,4 +2526,4 @@ MonoBehaviour:
   - OptionName: Maximum Avatar Distance
     Explanation: 
     Parse: 0
-    Type: 3
+    Type: 4

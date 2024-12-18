@@ -8,11 +8,13 @@ namespace Basis.Scripts.UI.UI_Panels
         public override void DestroyEvent()
         {
             BasisCursorManagement.LockCursor(nameof(BasisUISettings));
+            BasisUINeedsVisibleTrackers.Instance.Remove(this);
         }
 
         public override void InitalizeEvent()
         {
             BasisCursorManagement.UnlockCursor(nameof(BasisUISettings));
+            BasisUINeedsVisibleTrackers.Instance.Add(this);
         }
         public void OpenConsole()
         {
