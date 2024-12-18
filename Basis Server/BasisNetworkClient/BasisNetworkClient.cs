@@ -30,10 +30,10 @@ public static class BasisNetworkClient
             client = new NetManager(listener)
             {
                 AutoRecycle = false,
-                UnconnectedMessagesEnabled = true,
+                UnconnectedMessagesEnabled = false,
                 NatPunchEnabled = true,
                 AllowPeerAddressChange = true,
-                BroadcastReceiveEnabled = true,
+                BroadcastReceiveEnabled = false,
                 UseNativeSockets = false,//unity does not work with this
                 ChannelsCount = 64,
 

@@ -391,7 +391,7 @@ public static class BasisNetworkServer
     public static void SendRemoteSpawnMessage(NetPeer authClient, ReadyMessage readyMessage)
     {
         ServerReadyMessage serverReadyMessage = LoadInitialState(authClient, readyMessage);
-        NotifyExistingClients(serverReadyMessage, BasisNetworkCommons.CreateRemotePlayer, authClient);
+        NotifyExistingClients(serverReadyMessage, authClient);
         SendClientListToNewClient(authClient);
     }
     public static ServerReadyMessage LoadInitialState(NetPeer authClient, ReadyMessage readyMessage)
@@ -404,7 +404,7 @@ public static class BasisNetworkServer
         BasisSavedState.AddLastData(authClient, readyMessage);
         return serverReadyMessage;
     }
-    private static void NotifyExistingClients(ServerReadyMessage serverSideSyncPlayerMessage, byte channel, NetPeer authClient)
+    private static void NotifyExistingClients(ServerReadyMessage serverSideSyncPlayerMessage, NetPeer authClient)
     {
         NetDataWriter Writer = new NetDataWriter();
         serverSideSyncPlayerMessage.Serialize(Writer);
@@ -414,7 +414,7 @@ public static class BasisNetworkServer
         foreach (NetPeer client in clientsToNotify)
         {
             ClientIds += $" | {client.Id}";
-            client.Send(Writer, channel, DeliveryMethod.ReliableOrdered);
+            client.Send(Writer, BasisNetworkCommons.CreateRemotePlayer, DeliveryMethod.ReliableOrdered);
         }
         BNL.Log($"Sent Remote Spawn request to {ClientIds}");
     }

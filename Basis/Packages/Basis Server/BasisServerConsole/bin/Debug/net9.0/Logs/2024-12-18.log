@@ -34000,3 +34000,80 @@
 [INFO] [16:09] [INFO] Server Worker Threads Booted
 [INFO] [16:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
 [INFO] [16:09] [INFO] Shutting down server...
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-18.log
+[INFO] [16:27] [INFO] Server Booting
+[INFO] [16:27] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [16:27] [INFO] Server Wiring up SetPort 4296
+[INFO] [16:27] [INFO] Server Worker Threads Booted
+[INFO] [16:27] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:27] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [16:29] [INFO] Processing Connection Request
+[INFO] [16:29] [INFO] Player approved. Current count: 0
+[INFO] [16:29] [INFO] Peer connected: 0
+[INFO] [16:29] [INFO] Added 0 with AvatarID 775
+[INFO] [16:29] [INFO] Sent Remote Spawn request to 
+[INFO] [16:29] [INFO] Notifing Newly Connected Client about 0
+[INFO] [16:29] [INFO] Sending list of clients to 0
+[INFO] [16:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2489Bytes Sent: 122Packets Sent: 15
+[INFO] [16:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 4984Bytes Sent: 317Packets Sent: 40
+[INFO] [16:30] [INFO] Processing Connection Request
+[INFO] [16:30] [INFO] Player approved. Current count: 1
+[INFO] [16:30] [INFO] Peer connected: 1
+[INFO] [16:30] [INFO] Added 1 with AvatarID 775
+[INFO] [16:30] [INFO] Sent Remote Spawn request to  | 0
+[INFO] [16:30] [INFO] Notifing Newly Connected Client about 1
+[INFO] [16:30] [INFO] Sending list of clients to 1
+[INFO] [16:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 10416Bytes Sent: 126082Packets Sent: 403
+[INFO] [16:30] [INFO] Peer removed: 1
+[INFO] [16:30] [INFO] Player 1's ownership removed from 0 objects.
+[INFO] [16:30] [INFO] Peer removed: 0
+[INFO] [16:30] [INFO] Player 0's ownership removed from 0 objects.
+[INFO] [16:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 12942Bytes Sent: 217854Packets Sent: 664
+[INFO] [16:32] [INFO] Processing Connection Request
+[INFO] [16:32] [INFO] Player approved. Current count: 0
+[INFO] [16:32] [INFO] Peer connected: 1
+[INFO] [16:32] [INFO] Added 1 with AvatarID 775
+[INFO] [16:32] [INFO] Sent Remote Spawn request to 
+[INFO] [16:32] [INFO] Notifing Newly Connected Client about 0
+[INFO] [16:32] [INFO] Sending list of clients to 1
+[INFO] [16:32] [INFO] Processing Connection Request
+[INFO] [16:32] [INFO] Player approved. Current count: 1
+[INFO] [16:32] [INFO] Peer connected: 0
+[INFO] [16:32] [INFO] Added 0 with AvatarID 775
+[INFO] [16:32] [INFO] Sent Remote Spawn request to  | 1
+[INFO] [16:32] [INFO] Notifing Newly Connected Client about 1
+[INFO] [16:32] [INFO] Sending list of clients to 0
+[INFO] [16:33] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 17957Bytes Sent: 272363Packets Sent: 830
+[INFO] [16:33] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 22947Bytes Sent: 462965Packets Sent: 1364
+[INFO] [16:33] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 27937Bytes Sent: 652781Packets Sent: 1896
+[INFO] [16:33] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 32927Bytes Sent: 843383Packets Sent: 2430
+[INFO] [16:34] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 37903Bytes Sent: 1033185Packets Sent: 2960
+[INFO] [16:34] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 42893Bytes Sent: 1223787Packets Sent: 3494
+[INFO] [16:34] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 47880Bytes Sent: 1413592Packets Sent: 4025
+[INFO] [16:34] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 52870Bytes Sent: 1603408Packets Sent: 4557
+[INFO] [16:35] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 57860Bytes Sent: 1794010Packets Sent: 5091
+[INFO] [16:35] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 62850Bytes Sent: 1983826Packets Sent: 5623
+[INFO] [16:35] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 67829Bytes Sent: 2174425Packets Sent: 6156
+[INFO] [16:35] [INFO] Packet Loss: 1Packet Loss Percent: 0Bytes Received: 72816Bytes Sent: 2364230Packets Sent: 6687
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-18.log
+[INFO] [16:35] [INFO] Server Booting
+[INFO] [16:35] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [16:35] [INFO] Server Wiring up SetPort 4296
+[INFO] [16:35] [INFO] Server Worker Threads Booted
+[INFO] [16:35] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
