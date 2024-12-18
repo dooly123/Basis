@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = BasisNetworkClient
-build_property.ProjectDir = C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\Basis Network Client\
+build_property.ProjectDir = C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisNetworkClient\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false

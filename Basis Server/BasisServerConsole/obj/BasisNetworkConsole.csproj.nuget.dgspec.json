@@ -182,16 +182,6 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "dependencies": {
-            "System.Diagnostics.performanceCounter": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
-            "prometheus-net.AspNetCore": {
-              "target": "Package",
-              "version": "[8.2.1, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

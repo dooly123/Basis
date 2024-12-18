@@ -1,4 +1,5 @@
-﻿#if NET9_0_OR_GREATER
+﻿/*
+#if NET9_0_OR_GREATER
 using Prometheus;
 #endif
 using System;
@@ -149,3 +150,4 @@ namespace Basis.Network.Server.Prometheus
 #endif
     }
 }
+*/
