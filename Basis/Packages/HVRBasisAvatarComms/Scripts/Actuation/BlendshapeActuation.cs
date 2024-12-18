@@ -243,6 +243,8 @@ namespace HVR.Basis.Comms
 
         private void OnDestroy()
         {
+            avatar.OnAvatarReady -= OnAvatarReady;
+            
             acquisition.UnregisterAddresses(_addressBase.Keys.ToArray(), OnAddressUpdated);
 
             if (_featureInterpolator != null)

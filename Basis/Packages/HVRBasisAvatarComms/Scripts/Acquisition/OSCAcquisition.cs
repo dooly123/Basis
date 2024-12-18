@@ -39,6 +39,8 @@ namespace HVR.Basis.Comms
 
         private void OnDestroy()
         {
+            avatar.OnAvatarReady -= OnAvatarReady;
+
             if (_acquisitionServer != null)
             {
                 _acquisitionServer.OnAddressUpdated -= OnAddressUpdated;
