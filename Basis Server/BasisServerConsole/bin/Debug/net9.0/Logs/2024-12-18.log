@@ -298,3 +298,55 @@
 [INFO] [11:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 374195Bytes Sent: 30612Packets Sent: 4369
 [INFO] [11:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 374195Bytes Sent: 30612Packets Sent: 4369
 [INFO] [11:10] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 374195Bytes Sent: 30612Packets Sent: 4369
+[INFO] [14:16] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 76603963Bytes Sent: 35308528Packets Sent: 101115
+[INFO] [14:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77059252Bytes Sent: 35498374Packets Sent: 101657
+[INFO] [14:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77514778Bytes Sent: 35689003Packets Sent: 102200
+[INFO] [14:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77959255Bytes Sent: 35878846Packets Sent: 102741
+[INFO] [14:17] [INFO] Peer removed: 0
+[INFO] [14:17] [INFO] Player 0's ownership removed from 0 objects.
+[INFO] [14:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77966518Bytes Sent: 35884967Packets Sent: 102788
+[INFO] [14:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77969068Bytes Sent: 35885177Packets Sent: 102818
+[INFO] [14:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77971618Bytes Sent: 35885387Packets Sent: 102848
+[INFO] [14:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77974165Bytes Sent: 35885586Packets Sent: 102877
+[INFO] [14:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77976715Bytes Sent: 35885796Packets Sent: 102907
+[INFO] [14:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77979254Bytes Sent: 35886003Packets Sent: 102936
+[INFO] [14:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77981804Bytes Sent: 35886213Packets Sent: 102966
+[INFO] [14:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77984354Bytes Sent: 35886423Packets Sent: 102996
+[INFO] [14:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77986904Bytes Sent: 35886633Packets Sent: 103026
+[INFO] [14:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77989454Bytes Sent: 35886843Packets Sent: 103056
+[INFO] [14:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77992004Bytes Sent: 35887053Packets Sent: 103086
+[INFO] [14:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77994554Bytes Sent: 35887263Packets Sent: 103116
+[INFO] [14:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77997093Bytes Sent: 35887470Packets Sent: 103145
+[INFO] [14:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 77999643Bytes Sent: 35887680Packets Sent: 103175
+[INFO] [14:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78002190Bytes Sent: 35887879Packets Sent: 103204
+[INFO] [14:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78004740Bytes Sent: 35888089Packets Sent: 103234
+[INFO] [14:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78007290Bytes Sent: 35888299Packets Sent: 103264
+[INFO] [14:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78009840Bytes Sent: 35888509Packets Sent: 103294
+[INFO] [14:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78012379Bytes Sent: 35888716Packets Sent: 103323
+[INFO] [14:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78014929Bytes Sent: 35888926Packets Sent: 103353
+[INFO] [14:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78017479Bytes Sent: 35889136Packets Sent: 103383
+[INFO] [14:23] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78020029Bytes Sent: 35889346Packets Sent: 103413
+[INFO] [14:23] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78022579Bytes Sent: 35889556Packets Sent: 103443
+[INFO] [14:23] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78025129Bytes Sent: 35889766Packets Sent: 103473
+[INFO] [14:23] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 78027665Bytes Sent: 35889962Packets Sent: 103501
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-18.log
+[INFO] [14:28] [INFO] Server Booting
+[INFO] [14:28] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [14:28] [INFO] Server Wiring up SetPort 4296
+[INFO] [14:28] [INFO] Server Worker Threads Booted
+[INFO] [14:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [14:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0

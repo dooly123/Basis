@@ -349,6 +349,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 byteArray = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData),
                 loadMode = NetworkedPlayer.Player.AvatarLoadMode,
             };
+            ClientAvatarChangeMessage.Serialize(Writer);
             BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableOrdered);
         }
         [BurstCompile]

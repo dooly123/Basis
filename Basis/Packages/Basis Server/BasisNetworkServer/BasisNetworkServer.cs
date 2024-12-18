@@ -247,6 +247,9 @@ public static class BasisNetworkServer
             case BasisNetworkTag.OwnershipTransfer:
                 BasisNetworkOwnership.OwnershipTransfer(reader, peer, args, Peers);
                 break;
+            case BasisNetworkTag.AudioRecipients:
+                UpdateVoiceReceivers(reader, peer);
+                break;
             default:
                 BNL.LogError($"Unhandled tag: {args.Tag}");
                 break;
@@ -464,7 +467,7 @@ public static class BasisNetworkServer
                 serverReadyMessage.localReadyMessage = new ReadyMessage
                 {
                     localAvatarSyncMessage = new LocalAvatarSyncMessage() { array = new byte[386] },
-                    clientAvatarChangeMessage = new ClientAvatarChangeMessage() { byteArray = new byte[] { }, byteLength = 0 },
+                    clientAvatarChangeMessage = new ClientAvatarChangeMessage() { byteArray = new byte[] { }, },
                     playerMetaDataMessage = new PlayerMetaDataMessage() { playerDisplayName = "Error", playerUUID = string.Empty },
                 };
             }
