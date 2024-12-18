@@ -470,9 +470,23 @@ namespace Basis.Scripts.Networking
             }
             if (Avatar.TryGetLinkedPlayer(out ushort id))
             {
-                BasisNetworkedPlayer output = Players[id];
-                BasisPlayer = output.Player;
-                return true;
+                if (Players.TryGetValue(id, out BasisNetworkedPlayer player))
+                {
+                    BasisNetworkedPlayer output = Players[id];
+                    BasisPlayer = output.Player;
+                    return true;
+                }
+                else
+                {
+                    if(JoiningPlayers.Contains(id))
+                    {
+                        Debug.LogError("Player was still Connecting when this was called!");
+                    }
+                    else
+                    {
+                        Debug.LogError("Player was not found, this also includes joining list, something is very wrong!");
+                    }
+                }
             }
             else
             {
