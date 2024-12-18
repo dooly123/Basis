@@ -24,8 +24,13 @@ namespace Basis.Network.Server.Generic
                     playerID = (ushort)sender.Id,
                 }
             };
-
+            byte Channel = BasisNetworkCommons.SceneChannel;
             NetDataWriter Writer = new NetDataWriter();
+            if (DeliveryMethod == DeliveryMethod.Unreliable)
+            {
+                Writer.Put(Channel);
+                Channel = BasisNetworkCommons.FallChannel;
+            }
             serverSceneDataMessage.Serialize(Writer);
             if (Rec != null && Rec.Length > 0)
             {
@@ -42,12 +47,12 @@ namespace Basis.Network.Server.Generic
 
                 if (targetedClients.Count > 0)
                 {
-                    BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.SceneChannel, targetedClients, DeliveryMethod);
+                    BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, targetedClients, DeliveryMethod);
                 }
             }
             else
             {
-                BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.SceneChannel, sender, allClients, DeliveryMethod);
+                BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, sender, allClients, DeliveryMethod);
             }
         }
         public static void HandleAvatar(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
@@ -65,9 +70,14 @@ namespace Basis.Network.Server.Generic
                     playerID = (ushort)sender.Id
                 }
             };
-
+            byte Channel = BasisNetworkCommons.AvatarChannel;
             NetDataWriter Writer = new NetDataWriter();
-            serverAvatarDataMessage.Serialize(Writer);
+            if (DeliveryMethod == DeliveryMethod.Unreliable)
+            {
+                Writer.Put(Channel);
+                Channel = BasisNetworkCommons.FallChannel;
+            }
+                serverAvatarDataMessage.Serialize(Writer);
             if (Rec != null && Rec.Length > 0)
             {
                 var targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
@@ -83,12 +93,12 @@ namespace Basis.Network.Server.Generic
 
                 if (targetedClients.Count > 0)
                 {
-                    BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.AvatarChannel, targetedClients, DeliveryMethod);
+                    BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, targetedClients, DeliveryMethod);
                 }
             }
             else
             {
-                BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.AvatarChannel, sender, allClients, DeliveryMethod);
+                BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, sender, allClients, DeliveryMethod);
             }
         }
     }

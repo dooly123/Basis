@@ -471,3 +471,119 @@
 [INFO] [01:59] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
 [INFO] [01:59] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
 [INFO] [01:59] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [02:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [02:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [02:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [02:00] [INFO] Processing Connection Request
+[INFO] [02:00] [INFO] Player approved. Current count: 0
+[INFO] [02:00] [INFO] Peer connected: 0
+[INFO] [02:00] [INFO] Added 0 with AvatarID 775
+[INFO] [02:00] [INFO] Sent Remote Spawn request to 
+[INFO] [02:00] [INFO] Notifing Newly Connected Client about 0
+[INFO] [02:00] [INFO] Sending list of clients to 0
+[INFO] [02:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1644Bytes Sent: 33Packets Sent: 4
+[INFO] [02:00] [INFO] Processing Connection Request
+[INFO] [02:00] [INFO] Player approved. Current count: 1
+[INFO] [02:00] [INFO] Peer connected: 1
+[INFO] [02:00] [INFO] Added 1 with AvatarID 775
+[INFO] [02:00] [INFO] Sent Remote Spawn request to  | 0
+[INFO] [02:00] [INFO] Notifing Newly Connected Client about 1
+[INFO] [02:00] [INFO] Sending list of clients to 1
+[INFO] [02:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 405840Bytes Sent: 305175Packets Sent: 918
+[INFO] [02:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 995480Bytes Sent: 749103Packets Sent: 2276
+[INFO] [02:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1583968Bytes Sent: 1192585Packets Sent: 3645
+[INFO] [02:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2075300Bytes Sent: 1595443Packets Sent: 4901
+[INFO] [02:02] [INFO] Found Channel 4 3
+[INFO] [02:02] [INFO] Found Channel 4 3
+[INFO] [02:02] [INFO] Found Channel 4 7
+[INFO] [02:02] [INFO] Found Channel 4 3
+[INFO] [02:02] [INFO] Found Channel 4 19
+[INFO] [02:02] [INFO] Found Channel 4 23
+[INFO] [02:02] [INFO] Found Channel 4 19
+[INFO] [02:02] [INFO] Found Channel 3 4
+[INFO] [02:02] [INFO] Found Channel 3 4
+[INFO] [02:02] [INFO] Found Channel 3 8
+[INFO] [02:02] [INFO] Found Channel 3 4
+[INFO] [02:02] [INFO] Found Channel 3 20
+[INFO] [02:02] [INFO] Found Channel 3 24
+[INFO] [02:02] [INFO] Found Channel 3 20
+[INFO] [02:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2566172Bytes Sent: 1995263Packets Sent: 6167
+[INFO] [02:02] [INFO] Found Channel 4 3
+[INFO] [02:02] [INFO] Found Channel 4 3
+[INFO] [02:02] [INFO] Found Channel 4 7
+[INFO] [02:02] [INFO] Found Channel 4 3
+[INFO] [02:02] [INFO] Found Channel 4 19
+[INFO] [02:02] [INFO] Found Channel 4 23
+[INFO] [02:02] [INFO] Found Channel 4 19
+[INFO] [02:02] [INFO] Found Channel 3 4
+[INFO] [02:02] [INFO] Found Channel 3 4
+[INFO] [02:02] [INFO] Found Channel 3 8
+[INFO] [02:02] [INFO] Found Channel 3 4
+[INFO] [02:02] [INFO] Found Channel 3 20
+[INFO] [02:02] [INFO] Found Channel 3 24
+[INFO] [02:02] [INFO] Found Channel 3 20
+[INFO] [02:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 3155164Bytes Sent: 2438134Packets Sent: 7549
+[INFO] [02:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 3743155Bytes Sent: 2881508Packets Sent: 8945
+[INFO] [02:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 4332629Bytes Sent: 3324917Packets Sent: 10329
+[INFO] [02:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 4895947Bytes Sent: 3759523Packets Sent: 11681
+[INFO] [02:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 5484716Bytes Sent: 4201749Packets Sent: 13059
+[INFO] [02:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 6073137Bytes Sent: 4644538Packets Sent: 14456
+[INFO] [02:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 6661409Bytes Sent: 5087924Packets Sent: 15836
+[INFO] [02:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 7249930Bytes Sent: 5531311Packets Sent: 17233
+[INFO] [02:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 7838923Bytes Sent: 5973558Packets Sent: 18612
+[INFO] [02:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 8428029Bytes Sent: 6416613Packets Sent: 19994
+[INFO] [02:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 9015983Bytes Sent: 6859891Packets Sent: 21396
+[INFO] [02:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 9604190Bytes Sent: 7302041Packets Sent: 22772
+[INFO] [02:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 10193390Bytes Sent: 7745242Packets Sent: 24160
+[INFO] [02:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 10782357Bytes Sent: 8188341Packets Sent: 25526
+[INFO] [02:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 11370315Bytes Sent: 8631171Packets Sent: 26888
+[INFO] [02:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 11959527Bytes Sent: 9074346Packets Sent: 28229
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-18.log
+[INFO] [02:06] [INFO] Server Booting
+[INFO] [02:06] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [02:06] [INFO] Server Wiring up SetPort 4296
+[INFO] [02:06] [INFO] Server Worker Threads Booted
+[INFO] [02:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [02:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 990Bytes Sent: 9Packets Sent: 6
+[INFO] [02:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 990Bytes Sent: 9Packets Sent: 6
+[INFO] [02:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 990Bytes Sent: 9Packets Sent: 6
+[INFO] [02:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 990Bytes Sent: 9Packets Sent: 6
+[INFO] [02:07] [INFO] Processing Connection Request
+[INFO] [02:07] [INFO] Player approved. Current count: 0
+[INFO] [02:07] [INFO] Peer connected: 0
+[INFO] [02:07] [INFO] Added 0 with AvatarID 775
+[INFO] [02:07] [INFO] Sent Remote Spawn request to 
+[INFO] [02:07] [INFO] Notifing Newly Connected Client about 0
+[INFO] [02:07] [INFO] Sending list of clients to 0
+[INFO] [02:07] [INFO] Processing Connection Request
+[INFO] [02:07] [INFO] Player approved. Current count: 1
+[INFO] [02:07] [INFO] Peer connected: 1
+[INFO] [02:07] [INFO] Added 1 with AvatarID 775
+[INFO] [02:07] [INFO] Sent Remote Spawn request to  | 0
+[INFO] [02:07] [INFO] Notifing Newly Connected Client about 1
+[INFO] [02:07] [INFO] Sending list of clients to 1
+[INFO] [02:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 3901Bytes Sent: 2461Packets Sent: 17
+[INFO] [02:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 401124Bytes Sent: 325963Packets Sent: 1009
+[INFO] [02:07] [INFO] Found Channel 4 3
+[INFO] [02:07] [INFO] Found Channel 4 3
+[INFO] [02:07] [INFO] Found Channel 4 7
+[INFO] [02:07] [INFO] Found Channel 4 3
+[INFO] [02:07] [INFO] Found Channel 4 19
+[INFO] [02:07] [INFO] Found Channel 4 23
+[INFO] [02:07] [INFO] Found Channel 4 19
+[INFO] [02:07] [INFO] Found Channel 3 4
+[INFO] [02:07] [INFO] Found Channel 3 4
+[INFO] [02:07] [INFO] Found Channel 3 8
+[INFO] [02:07] [INFO] Found Channel 3 4
+[INFO] [02:07] [INFO] Found Channel 3 20
+[INFO] [02:07] [INFO] Found Channel 3 24
+[INFO] [02:07] [INFO] Found Channel 3 20
+[INFO] [02:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 931244Bytes Sent: 761701Packets Sent: 2351
+[INFO] [02:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1477642Bytes Sent: 1204144Packets Sent: 3696
+[INFO] [02:08] [INFO] Peer removed: 0
+[INFO] [02:08] [INFO] Player 0's ownership removed from 0 objects.
+[INFO] [02:08] [INFO] Peer removed: 1
+[INFO] [02:08] [INFO] Player 1's ownership removed from 0 objects.
+[INFO] [02:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1606720Bytes Sent: 1329409Packets Sent: 4066
+[INFO] [02:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1606720Bytes Sent: 1329409Packets Sent: 4066
+[INFO] [02:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1606720Bytes Sent: 1329409Packets Sent: 4066
