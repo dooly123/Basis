@@ -98,15 +98,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 recipients = Recipients
             };
             AvatarDataMessage.Serialize(netDataWriter);
-            // Recipients present, payload may or may not be present
-            WriteAndSendMessage(netDataWriter, DeliveryMethod);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.AvatarChannel, DeliveryMethod);
         }
-
-        // Helper method to avoid code duplication
-        private void WriteAndSendMessage(NetDataWriter writer, DeliveryMethod deliveryMethod)
-        {
-            BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.AvatarChannel, deliveryMethod);
-        }
-
     }
 }
