@@ -1,0 +1,149 @@
+[INFO] [10:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:00] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:01] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:02] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:03] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:04] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:05] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:06] [INFO] Processing Connection Request
+[INFO] [10:06] [INFO] Auth Was Empty
+[ERROR] [10:06] [ERROR] Rejected: Authentication failed Expected default_password but got 
+[INFO] [10:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:06] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:07] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 1228Bytes Sent: 67Packets Sent: 1
+[INFO] [10:08] [INFO] Processing Connection Request
+[INFO] [10:08] [INFO] Auth Was Empty
+[ERROR] [10:08] [ERROR] Rejected: Authentication failed Expected default_password but got 
+[INFO] [10:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:08] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:09] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:10] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:10] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:10] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:10] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:11] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:11] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:11] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:11] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:12] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:12] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:12] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:12] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:13] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:13] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:13] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:13] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:14] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:14] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:14] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:14] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:15] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:15] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:15] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:15] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:16] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:16] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:16] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:16] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:17] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:18] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:19] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:20] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:21] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] [10:22] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2456Bytes Sent: 134Packets Sent: 2
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-18.log
+[INFO] [10:26] [INFO] Server Booting
+[INFO] [10:26] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [10:26] [INFO] Server Wiring up SetPort 4296
+[INFO] [10:26] [INFO] Server Worker Threads Booted
+[INFO] [10:26] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:26] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:26] [INFO] Processing Connection Request
+[INFO] [10:26] [INFO] Player approved. Current count: 0
+[INFO] [10:26] [INFO] Peer connected: 0
+[INFO] [10:26] [INFO] Added 0 with AvatarID 775
+[INFO] [10:26] [INFO] Sent Remote Spawn request to 
+[INFO] [10:26] [INFO] Notifing Newly Connected Client about 0
+[INFO] [10:26] [INFO] Sending list of clients to 0
+[INFO] [10:27] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 3386Bytes Sent: 216Packets Sent: 30
+[INFO] [10:27] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 5936Bytes Sent: 426Packets Sent: 60
+[INFO] [10:27] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 8486Bytes Sent: 636Packets Sent: 90
+[INFO] [10:27] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 11036Bytes Sent: 846Packets Sent: 120
+[INFO] [10:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 13575Bytes Sent: 1053Packets Sent: 149
+[INFO] [10:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 16125Bytes Sent: 1263Packets Sent: 179
+[INFO] [10:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 18675Bytes Sent: 1473Packets Sent: 209
+[INFO] [10:28] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 21222Bytes Sent: 1672Packets Sent: 238
+[INFO] [10:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 23772Bytes Sent: 1882Packets Sent: 268
+[INFO] [10:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 26322Bytes Sent: 2092Packets Sent: 298
+[INFO] [10:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 28861Bytes Sent: 2299Packets Sent: 327
+[INFO] [10:29] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 31411Bytes Sent: 2509Packets Sent: 357
+[INFO] [10:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 33961Bytes Sent: 2719Packets Sent: 387
+[INFO] [10:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 36511Bytes Sent: 2929Packets Sent: 417
+[INFO] [10:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 39061Bytes Sent: 3139Packets Sent: 447
+[INFO] [10:30] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 41611Bytes Sent: 3349Packets Sent: 477
+[INFO] [10:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 44161Bytes Sent: 3559Packets Sent: 507
+[INFO] [10:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 46700Bytes Sent: 3766Packets Sent: 536
+[INFO] [10:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 49250Bytes Sent: 3976Packets Sent: 566
+[INFO] [10:31] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 51800Bytes Sent: 4186Packets Sent: 596
+[INFO] [10:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 54347Bytes Sent: 4385Packets Sent: 625
+[INFO] [10:32] [INFO] Shutting down server...
+[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Debug\net9.0\Logs\2024-12-18.log
+[INFO] [10:32] [INFO] Server Booting
+[INFO] [10:32] [INFO] HTTP health check started at 'http://localhost:10666/health'
+[INFO] [10:32] [INFO] Server Wiring up SetPort 4296
+[INFO] [10:32] [INFO] Server Worker Threads Booted
+[INFO] [10:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 0Bytes Sent: 0Packets Sent: 0
+[INFO] [10:32] [INFO] Processing Connection Request
+[INFO] [10:32] [INFO] Player approved. Current count: 0
+[INFO] [10:32] [INFO] Peer connected: 0
+[INFO] [10:32] [INFO] Added 0 with AvatarID 775
+[INFO] [10:32] [INFO] Sent Remote Spawn request to 
+[INFO] [10:32] [INFO] Notifing Newly Connected Client about 0
+[INFO] [10:32] [INFO] Sending list of clients to 0
+[INFO] [10:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 2122Bytes Sent: 107Packets Sent: 16
+[INFO] [10:32] [INFO] Packet Loss: 0Packet Loss Percent: 0Bytes Received: 4672Bytes Sent: 317Packets Sent: 46

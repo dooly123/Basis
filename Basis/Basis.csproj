@@ -158,7 +158,6 @@
     <Compile Include="Packages\Basis Framework\UI\BasisFrameRateVisualization.cs" />
     <Compile Include="Packages\Basis Framework\UI\BasisPointerEventData.cs" />
     <Compile Include="Packages\Basis Framework\UI\UI Panels\BasisSetUserName.cs" />
-    <Compile Include="Packages\Basis Framework\UI\UI Panels\BasisSettingsPanelMenu.cs" />
     <Compile Include="Packages\Basis Framework\Avatar\BasisAvatarFactory.cs" />
     <Compile Include="Packages\Basis Framework\SettingsManagerModules\Basis Modules\SMModuleVerticalSync.cs" />
     <Compile Include="Packages\Basis Framework\Networking\Transmitters\BasisNetworkTransmitter.cs" />

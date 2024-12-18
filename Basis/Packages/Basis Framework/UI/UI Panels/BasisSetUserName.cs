@@ -26,7 +26,6 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField Password;
         public TMP_Text displayloadinginfo;
         public Button UseLocalhost;
-        public static string StartingPassword = "basis18072024";
 
         // Queue to hold actions that need to be run on the main thread
         private static readonly Queue<Action> mainThreadActions = new Queue<Action>();
@@ -106,7 +105,7 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             IPaddress.text = BasisNetworkManagement.Instance.Ip;
             Port.text = BasisNetworkManagement.Instance.Port.ToString();
-            Password.text = StartingPassword; //BasisNetworkConnector.Instance.Client.LiteNetLibConnnection.authenticationKey;
+            Password.text = BasisNetworkManagement.Instance.Password;
         }
         public async void HasUserName()
         {
@@ -120,8 +119,8 @@ namespace Basis.Scripts.UI.UI_Panels
                 if (BasisNetworkManagement.Instance != null)
                 {
                     BasisNetworkManagement.Instance.Ip = IPaddress.text;
+                    BasisNetworkManagement.Instance.Password = Password.text;
                     ushort.TryParse(Port.text, out BasisNetworkManagement.Instance.Port);
-                    //  BasisNetworkConnector.Instance.Client.LiteNetLibConnnection.authenticationKey = Password.text;
                     await CreateAssetBundle();
                     BasisNetworkManagement.Instance.Connect();
                     Ready.interactable = false;

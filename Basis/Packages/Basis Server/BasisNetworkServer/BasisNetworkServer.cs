@@ -117,16 +117,15 @@ public static class BasisNetworkServer
         AuthenticationMessage authMessage = new AuthenticationMessage();
         authMessage.Deserialize(request.Data);
 
-        if (!authMessage.HasAuthMessage || !BasisPasswordImplementation.CheckPassword(authMessage, Configuration))
+        if (!BasisPasswordImplementation.CheckPassword(authMessage, Configuration, out string UsedPassword))
         {
-            RejectWithReason(request, "Authentication failed.");
+            RejectWithReason(request, "Authentication failed Expected " + Configuration.Password + " but got " + UsedPassword);
             return;
         }
 
         BNL.Log("Player approved. Current count: " + ServerCount);
         ApproveAndInitializeConnection(request);
     }
-
     private static void ApproveAndInitializeConnection(ConnectionRequest request)
     {
         NetPeer newPeer = request.Accept();

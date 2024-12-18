@@ -14,7 +14,7 @@ namespace Basis
 
             // Load configuration from the XML file
             Configuration config = Configuration.LoadFromXml(configFilePath);
-            BasisPrometheus.StartPrometheus(config.PromethusPort, config.PromethusUrl);
+          //  BasisPrometheus.StartPrometheus(config.PromethusPort, config.PromethusUrl);
             // Initialize server-side logging
             BasisServerSideLogging.Initialize(config);
 
@@ -47,7 +47,7 @@ namespace Basis
                         BNL.LogError(inner.Message);
                     }
                 }
-                BasisPrometheus.StopPrometheus();
+               // BasisPrometheus.StopPrometheus();
                 if (config.EnableStatistics)
                 {
                     BasisStatistics.StopWorkerThread();

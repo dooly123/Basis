@@ -28,7 +28,8 @@ namespace Basis.Scripts.Networking
     {
         public string Ip = "170.64.184.249";
         public ushort Port = 4296;
-        public static string Password = "default_password";
+        [HideInInspector]
+        public string Password = "default_password";
         /// <summary>
         /// fire when ownership is changed for a unique string
         /// </summary>
@@ -82,7 +83,6 @@ namespace Basis.Scripts.Networking
             }
             return false;
         }
-        public bool ForceConnect = false;
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>
@@ -149,10 +149,6 @@ namespace Basis.Scripts.Networking
             BasisScene.Ready.AddListener(SetupSceneEvents);
             this.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             OnEnableInstanceCreate?.Invoke();
-            if (ForceConnect)
-            {
-                Connect();
-            }
         }
         private void LogErrorOutput(string obj)
         {
@@ -203,7 +199,7 @@ namespace Basis.Scripts.Networking
         {
             BasisScene.OnNetworkMessageSend += BasisNetworkGenericMessages.OnNetworkMessageSend;
         }
-        public  void Connect()
+        public void Connect()
         {
             Connect(Port, Ip, Password);
         }
@@ -231,9 +227,12 @@ namespace Basis.Scripts.Networking
                     playerDisplayName = BasisLocalPlayer.DisplayName
                 }
             };
-            Debug.Log("Network  Starting Client");
-            BasisNetworkClient.AuthenticationMessage = new Network.Core.Serializable.SerializableBasis.AuthenticationMessage();
-            BasisNetworkClient.AuthenticationMessage.Message = Encoding.UTF8.GetBytes(PrimitivePassword);
+            Debug.Log("Network Starting Client");
+            BasisNetworkClient.AuthenticationMessage = new Network.Core.Serializable.SerializableBasis.AuthenticationMessage
+            {
+                Message = Encoding.UTF8.GetBytes(PrimitivePassword)
+            };
+           // Debug.Log("Size is " + BasisNetworkClient.AuthenticationMessage.Message.Length);
             LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);
             Debug.Log("Network Client Started " + LocalPlayerPeer.RemoteId);
             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;

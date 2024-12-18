@@ -64,7 +64,6 @@
     <Compile Include="Packages\basistests\BasisTestNetworkScene.cs" />
     <Compile Include="Packages\basistests\Mirror\BasisSDKMirror.cs" />
     <Compile Include="Packages\basistests\BasisTestNetwork.cs" />
-    <Compile Include="Packages\basistests\BasisConnectorGUI.cs" />
     <Compile Include="Packages\basistests\BasisPositionRotationScale.cs" />
     <Compile Include="Packages\basistests\BasisTestNetworkAvatar.cs" />
     <Compile Include="Packages\basistests\BasisTestNetworkAvatarOverrideJump.cs" />

@@ -25,8 +25,17 @@ namespace Basis.Network.Core.Serializable
             }
             public void Serialize(NetDataWriter Writer)
             {
-                Writer.Put(MessageLength);
-                Writer.Put(Message);
+                if (Message != null)
+                {
+                    MessageLength = (ushort)Message.Length;
+                    Writer.Put(MessageLength);
+                    Writer.Put(Message);
+                }
+                else
+                {
+                    MessageLength = 0;
+                    Writer.Put(MessageLength);
+                }
             }
         }
     }

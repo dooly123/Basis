@@ -6,27 +6,18 @@ namespace Basis.Network.Core.Serializable
         [System.Serializable]
         public struct AuthenticationMessage
         {
-            public bool HasAuthMessage;
             public ushort MessageLength;
             public byte[] Message;
             public void Deserialize(NetDataReader Writer)
             {
                 if (Writer.TryGetUShort(out MessageLength))
                 {
-                    if (MessageLength != 0)
-                    {
-                        HasAuthMessage = true;
-                        Writer.GetBytes(Message, MessageLength);
-                    }
-                    else
-                    {
-                        HasAuthMessage = false;
-                    }
+                    Message = new byte[MessageLength];
+                    Writer.GetBytes(Message, MessageLength);
                 }
                 else
                 {
                     BNL.LogError("missing Message Length!");
-                    HasAuthMessage = false;
                 }
             }
             public void Dispose()
@@ -34,9 +25,17 @@ namespace Basis.Network.Core.Serializable
             }
             public void Serialize(NetDataWriter Writer)
             {
-                Writer.Put(MessageLength);
-                Writer.Put(Message);
-                HasAuthMessage = true;
+                if (Message != null)
+                {
+                    MessageLength = (ushort)Message.Length;
+                    Writer.Put(MessageLength);
+                    Writer.Put(Message);
+                }
+                else
+                {
+                    MessageLength = 0;
+                    Writer.Put(MessageLength);
+                }
             }
         }
     }

@@ -73,14 +73,14 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             BasisHamburgerMenu.Instance.CloseThisMenu();
             AddressableGenericResource resource = new AddressableGenericResource(BasisUIAvatarSelection.AvatarSelection, AddressableExpectedResult.SingleItem);
-            BasisSettingsPanelMenu.OpenMenuNow(resource);
+            BasisUISettings.OpenMenuNow(resource);
         }
 
         public static void SettingsPanel()
         {
             BasisHamburgerMenu.Instance.CloseThisMenu();
-            AddressableGenericResource resource = new AddressableGenericResource(BasisSettingsPanelMenu.SettingsPanel, AddressableExpectedResult.SingleItem);
-            BasisSettingsPanelMenu.OpenMenuNow(resource);
+            AddressableGenericResource resource = new AddressableGenericResource(BasisUISettings.SettingsPanel, AddressableExpectedResult.SingleItem);
+            BasisUISettings.OpenMenuNow(resource);
         }
         public static async Task OpenHamburgerMenu()
         {
