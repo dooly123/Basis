@@ -52,10 +52,10 @@ public static class BasisNetworkServer
             AllowPeerAddressChange = configuration.AllowPeerAddressChange,
             BroadcastReceiveEnabled = configuration.BroadcastReceiveEnabled,
             UseNativeSockets = configuration.UseNativeSockets,
-            ChannelsCount = 7,
+            ChannelsCount = 64,
             EnableStatistics = configuration.EnableStatistics,
             IPv6Enabled = configuration.IPv6Enabled,
-            UpdateTime = configuration.QueueEvents,
+            UpdateTime = configuration.UpdateTime,
             PingInterval = configuration.PingInterval,
             DisconnectTimeout = configuration.DisconnectTimeout
         };
@@ -134,7 +134,7 @@ public static class BasisNetworkServer
             BNL.Log($"Peer connected: {newPeer.Id}");
             ReadyMessage readyMessage = new ReadyMessage();
             readyMessage.Deserialize(request.Data);
-            SendRemoteSpawnMessage(newPeer, readyMessage, BasisNetworkCommons.BasisChannel);
+            SendRemoteSpawnMessage(newPeer, readyMessage);
         }
         else
         {
@@ -145,7 +145,7 @@ public static class BasisNetworkServer
     private static void HandlePeerDisconnected(NetPeer peer, DisconnectInfo info)
     {
         ushort id = (ushort)peer.Id;
-        ClientDisconnect(id, BasisNetworkCommons.BasisChannel, Peers);
+        ClientDisconnect(id,  Peers);
 
         if (Peers.TryRemove(id, out _))
         {
@@ -211,8 +211,8 @@ public static class BasisNetworkServer
     {
         switch (channel)
         {
-            case BasisNetworkCommons.BasisChannel:
-                HandleEventMessage(peer, reader, deliveryMethod);
+            case BasisNetworkCommons.DefaultChannel:
+                BNL.Log("Rec unknown data " + reader.AvailableBytes);
                 break;
             case BasisNetworkCommons.MovementChannel:
                 HandleAvatarMovement(reader, peer);
@@ -226,6 +226,15 @@ public static class BasisNetworkServer
             case BasisNetworkCommons.SceneChannel:
                 BasisNetworkingGeneric.HandleScene(reader, deliveryMethod, peer, Peers);
                 break;
+            case BasisNetworkCommons.AvatarChangeMessage:
+                SendAvatarMessageToClients(reader, peer);
+                break;
+            case BasisNetworkCommons.OwnershipTransfer:
+                BasisNetworkOwnership.OwnershipTransfer(reader, peer, Peers);
+                break;
+            case BasisNetworkCommons.AudioRecipients:
+                UpdateVoiceReceivers(reader, peer);
+                break;
             default:
                 BNL.LogError($"Unknown channel: {channel}");
                 break;
@@ -233,31 +242,6 @@ public static class BasisNetworkServer
         reader.Recycle();
     }
 
-    private static void HandleEventMessage(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
-    {
-        BasisMessageReceivedEventArgs args = new BasisMessageReceivedEventArgs
-        {
-            Tag = reader.GetByte(),
-            SendMode = deliveryMethod,
-            ClientId = (ushort)peer.Id
-        };
-
-        switch (args.Tag)
-        {
-            case BasisNetworkTag.AvatarChangeMessage:
-                SendAvatarMessageToClients(reader, peer, args);
-                break;
-            case BasisNetworkTag.OwnershipTransfer:
-                BasisNetworkOwnership.OwnershipTransfer(reader, peer, args, Peers);
-                break;
-            case BasisNetworkTag.AudioRecipients:
-                UpdateVoiceReceivers(reader, peer);
-                break;
-            default:
-                BNL.LogError($"Unhandled tag: {args.Tag}");
-                break;
-        }
-    }
     #endregion
 
     #region Utility Methods
@@ -269,20 +253,19 @@ public static class BasisNetworkServer
         BNL.LogError($"Rejected: {reason}");
     }
 
-    public static void ClientDisconnect(ushort leaving, byte channel, ConcurrentDictionary<ushort, NetPeer> authenticatedClients)
+    public static void ClientDisconnect(ushort leaving, ConcurrentDictionary<ushort, NetPeer> authenticatedClients)
     {
         NetDataWriter writer = new NetDataWriter();
-        writer.Put(BasisNetworkTag.Disconnection);
         writer.Put(leaving);
 
         foreach (var client in authenticatedClients.Values)
         {
             if (client.Id != leaving)
-                client.Send(writer, channel, DeliveryMethod.ReliableOrdered);
+                client.Send(writer, BasisNetworkCommons.Disconnection, DeliveryMethod.ReliableOrdered);
         }
     }
     #endregion
-    private static void SendAvatarMessageToClients(NetPacketReader Reader, NetPeer Peer, BasisMessageReceivedEventArgs e)
+    private static void SendAvatarMessageToClients(NetPacketReader Reader, NetPeer Peer)
     {
         ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage();
         ClientAvatarChangeMessage.Deserialize(Reader);
@@ -296,9 +279,8 @@ public static class BasisNetworkServer
         };
         BasisSavedState.AddLastData(Peer, ClientAvatarChangeMessage);
         NetDataWriter Writer = new NetDataWriter();
-        Writer.Put(BasisNetworkTag.AvatarChangeMessage);
         serverAvatarChangeMessage.Serialize(Writer);
-        BroadcastMessageToClients(Writer, BasisNetworkCommons.BasisChannel, Peer, Peers);
+        BroadcastMessageToClients(Writer, BasisNetworkCommons.AvatarChangeMessage, Peer, Peers);
     }
     private static void UpdateVoiceReceivers(NetPacketReader Reader, NetPeer Peer)
     {
@@ -406,11 +388,11 @@ public static class BasisNetworkServer
             avatarSerialization = local
         };
     }
-    public static void SendRemoteSpawnMessage(NetPeer authClient, ReadyMessage readyMessage, byte channel)
+    public static void SendRemoteSpawnMessage(NetPeer authClient, ReadyMessage readyMessage)
     {
         ServerReadyMessage serverReadyMessage = LoadInitialState(authClient, readyMessage);
-        NotifyExistingClients(serverReadyMessage, channel, authClient);
-        SendClientListToNewClient(authClient, BasisNetworkCommons.BasisChannel);
+        NotifyExistingClients(serverReadyMessage, BasisNetworkCommons.CreateRemotePlayer, authClient);
+        SendClientListToNewClient(authClient);
     }
     public static ServerReadyMessage LoadInitialState(NetPeer authClient, ReadyMessage readyMessage)
     {
@@ -425,7 +407,6 @@ public static class BasisNetworkServer
     private static void NotifyExistingClients(ServerReadyMessage serverSideSyncPlayerMessage, byte channel, NetPeer authClient)
     {
         NetDataWriter Writer = new NetDataWriter();
-        Writer.Put(BasisNetworkTag.CreateRemotePlayer);
         serverSideSyncPlayerMessage.Serialize(Writer);
         IEnumerable<NetPeer> clientsToNotify = Peers.Values.Where(client => client != authClient);
 
@@ -437,7 +418,7 @@ public static class BasisNetworkServer
         }
         BNL.Log($"Sent Remote Spawn request to {ClientIds}");
     }
-    private static void SendClientListToNewClient(NetPeer authClient, byte channel)
+    private static void SendClientListToNewClient(NetPeer authClient)
     {
         if (Peers.Count > ushort.MaxValue)
         {
@@ -483,9 +464,8 @@ public static class BasisNetworkServer
             serverSidePlayer = copied.ToArray(),
         };
         NetDataWriter Writer = new NetDataWriter();
-        Writer.Put(BasisNetworkTag.CreateRemotePlayers);
         remoteMessages.Serialize(Writer);
         BNL.Log($"Sending list of clients to {authClient.Id}");
-        authClient.Send(Writer, channel, DeliveryMethod.ReliableOrdered);
+        authClient.Send(Writer, BasisNetworkCommons.CreateRemotePlayers, DeliveryMethod.ReliableOrdered);
     }
 }

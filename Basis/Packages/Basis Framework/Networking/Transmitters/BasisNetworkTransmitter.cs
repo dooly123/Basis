@@ -170,9 +170,8 @@ namespace Basis.Scripts.Networking.Transmitters
                     users = TalkingPoints.ToArray()
                 };
                 NetDataWriter writer = new NetDataWriter();
-                writer.Put(BasisNetworkTag.AudioRecipients);
                 VRM.Serialize(writer);
-                BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableOrdered);
+                BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.AudioRecipients, DeliveryMethod.ReliableOrdered);
             }
         }
         public static bool AreBoolArraysEqual(bool[] array1, bool[] array2)
@@ -343,14 +342,13 @@ namespace Basis.Scripts.Networking.Transmitters
         public void SendOutLatestAvatar()
         {
             NetDataWriter Writer = new NetDataWriter();
-            Writer.Put(BasisNetworkTag.AvatarChangeMessage);
             ClientAvatarChangeMessage ClientAvatarChangeMessage = new ClientAvatarChangeMessage
             {
                 byteArray = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(NetworkedPlayer.Player.AvatarMetaData),
                 loadMode = NetworkedPlayer.Player.AvatarLoadMode,
             };
             ClientAvatarChangeMessage.Serialize(Writer);
-            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableOrdered);
+            BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.AvatarChangeMessage, DeliveryMethod.ReliableOrdered);
         }
         [BurstCompile]
         public struct CombinedDistanceAndClosestTransformJob : IJobParallelFor

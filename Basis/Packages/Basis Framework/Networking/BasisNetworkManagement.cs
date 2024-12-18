@@ -331,17 +331,29 @@ namespace Basis.Scripts.Networking
         {
             switch (channel)
             {
-                case BasisNetworkCommons.BasisChannel:
-                    BasisMessageReceivedEventArgs e = new BasisMessageReceivedEventArgs
-                    {
-                        Tag = Reader.GetByte(),
-                        SendMode = deliveryMethod,
-                        ClientId = (ushort)peer.RemoteId
-                    };
-                    ScheduleOnMainThread(async () =>
-                    {
-                        await NetworkReceiveEventTag(peer, Reader, e);
-                    });
+                case BasisNetworkCommons.Disconnection:
+                    BasisNetworkHandleRemoval.HandleDisconnection(Reader);
+                    Reader.Recycle();
+                    break;
+                case BasisNetworkCommons.AvatarChangeMessage:
+                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(Reader);
+                    Reader.Recycle();
+                    break;
+                case BasisNetworkCommons.CreateRemotePlayer:
+                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(Reader, this.transform);
+                    Reader.Recycle();
+                    break;
+                case BasisNetworkCommons.CreateRemotePlayers:
+                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(Reader, this.transform);
+                    Reader.Recycle();
+                    break;
+                case BasisNetworkCommons.OwnershipResponse:
+                    BasisNetworkGenericMessages.HandleOwnershipResponse(Reader);
+                    Reader.Recycle();
+                    break;
+                case BasisNetworkCommons.OwnershipTransfer:
+                    BasisNetworkGenericMessages.HandleOwnershipTransfer(Reader);
+                    Reader.Recycle();
                     break;
                 case BasisNetworkCommons.VoiceChannel:
                     await BasisNetworkHandleVoice.HandleAudioUpdate(Reader);
@@ -371,34 +383,6 @@ namespace Basis.Scripts.Networking
                     break;
             }
         }
-        private async Task NetworkReceiveEventTag(NetPeer peer, NetPacketReader reader, BasisMessageReceivedEventArgs e)
-        {
-            switch (e.Tag) // Use e.Tag instead of message.Tag
-            {
-                case BasisNetworkTag.Disconnection:
-                    BasisNetworkHandleRemoval.HandleDisconnection(reader);
-                    break;
-                case BasisNetworkTag.AvatarChangeMessage:
-                    BasisNetworkHandleAvatar.HandleAvatarChangeMessage(reader);
-                    break;
-                case BasisNetworkTag.CreateRemotePlayer:
-                    await BasisNetworkHandleRemote.HandleCreateRemotePlayer(reader, this.transform);
-                    break;
-                case BasisNetworkTag.CreateRemotePlayers:
-                    await BasisNetworkHandleRemote.HandleCreateAllRemoteClients(reader, this.transform);
-                    break;
-                case BasisNetworkTag.OwnershipResponse:
-                    BasisNetworkGenericMessages.HandleOwnershipResponse(reader);
-                    break;
-                case BasisNetworkTag.OwnershipTransfer:
-                    BasisNetworkGenericMessages.HandleOwnershipTransfer(reader);
-                    break;
-                default:
-                    Debug.Log("Unknown message tag: " + e.Tag);
-                    break;
-            }
-            reader.Recycle();
-        }
         public static void RequestOwnership(string UniqueNetworkId, ushort NewOwner)
         {
             OwnershipTransferMessage OwnershipTransferMessage = new OwnershipTransferMessage
@@ -410,9 +394,8 @@ namespace Basis.Scripts.Networking
                 ownershipID = UniqueNetworkId
             };
             NetDataWriter netDataWriter = new NetDataWriter();
-            netDataWriter.Put(BasisNetworkTag.OwnershipTransfer);
             OwnershipTransferMessage.Serialize(netDataWriter);
-            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableSequenced);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.OwnershipTransfer, DeliveryMethod.ReliableSequenced);
         }
         public static void RequestCurrentOwnership(string UniqueNetworkId)
         {
@@ -425,9 +408,8 @@ namespace Basis.Scripts.Networking
                 ownershipID = UniqueNetworkId
             };
             NetDataWriter netDataWriter = new NetDataWriter();
-            netDataWriter.Put(BasisNetworkTag.OwnershipResponse);
             OwnershipTransferMessage.Serialize(netDataWriter);
-            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter,BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableSequenced);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter,BasisNetworkCommons.OwnershipResponse, DeliveryMethod.ReliableSequenced);
         }
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {

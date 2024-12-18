@@ -89,7 +89,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         }
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
         {
-            NetDataWriter netDataWriter = new NetDataWriter();
             // Handle cases based on presence of Recipients and buffer
             AvatarDataMessage AvatarDataMessage = new AvatarDataMessage
             {
@@ -97,8 +96,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 payload = buffer,
                 recipients = Recipients
             };
+            NetDataWriter netDataWriter = new NetDataWriter();
             AvatarDataMessage.Serialize(netDataWriter);
-            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.AvatarChannel, DeliveryMethod);
+            byte Index = BasisNetworkCommons.AvatarChannel;
+            Debug.Log("sending out with " + Index + " " + netDataWriter.Length);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, Index, DeliveryMethod);
         }
     }
 }

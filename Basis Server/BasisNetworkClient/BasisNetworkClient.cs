@@ -35,7 +35,7 @@ public static class BasisNetworkClient
                 AllowPeerAddressChange = true,
                 BroadcastReceiveEnabled = true,
                 UseNativeSockets = false,//unity does not work with this
-                ChannelsCount = 7,
+                ChannelsCount = 64,
 
             };
             client.Start();

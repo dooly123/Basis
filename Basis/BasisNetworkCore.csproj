@@ -77,9 +77,7 @@
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ReadyMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ServerSideSyncPlayerMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisNetworkCommons.cs" />
-    <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisNetworkTag.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisNetworkVersion.cs" />
-    <Compile Include="Packages\Basis Server\BasisNetworkCore\BasisMessageReceivedEventArgs.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\AvatarDataMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\BNL.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\CreateAllRemoteMessage.cs" />

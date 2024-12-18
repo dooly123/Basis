@@ -3,10 +3,10 @@
   <SetPort>4296</SetPort>
   <QueueEvents>10</QueueEvents>
   <UseNativeSockets>true</UseNativeSockets>
-  <UnconnectedMessagesEnabled>true</UnconnectedMessagesEnabled>
+  <UnconnectedMessagesEnabled>false</UnconnectedMessagesEnabled>
   <NatPunchEnabled>true</NatPunchEnabled>
   <UpdateTime>10</UpdateTime>
-  <PingInterval>1000</PingInterval>
+  <PingInterval>1500</PingInterval>
   <DisconnectTimeout>5000</DisconnectTimeout>
   <SimulatePacketLoss>false</SimulatePacketLoss>
   <SimulateLatency>false</SimulateLatency>
