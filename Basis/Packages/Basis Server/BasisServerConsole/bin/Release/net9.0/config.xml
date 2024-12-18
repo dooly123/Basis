@@ -3,10 +3,9 @@
   <SetPort>4296</SetPort>
   <QueueEvents>10</QueueEvents>
   <UseNativeSockets>true</UseNativeSockets>
-  <UnconnectedMessagesEnabled>true</UnconnectedMessagesEnabled>
   <NatPunchEnabled>true</NatPunchEnabled>
   <UpdateTime>10</UpdateTime>
-  <PingInterval>1000</PingInterval>
+  <PingInterval>1500</PingInterval>
   <DisconnectTimeout>5000</DisconnectTimeout>
   <SimulatePacketLoss>false</SimulatePacketLoss>
   <SimulateLatency>false</SimulateLatency>
@@ -16,7 +15,6 @@
   <UnsyncedEvents>false</UnsyncedEvents>
   <UnsyncedReceiveEvent>false</UnsyncedReceiveEvent>
   <UnsyncedDeliveryEvent>false</UnsyncedDeliveryEvent>
-  <BroadcastReceiveEnabled>false</BroadcastReceiveEnabled>
   <ReconnectDelay>500</ReconnectDelay>
   <MaxConnectAttempts>10</MaxConnectAttempts>
   <ReuseAddress>true</ReuseAddress>
@@ -37,4 +35,7 @@
   <OverrideAutoDiscoveryOfIpv>false</OverrideAutoDiscoveryOfIpv>
   <IPv4Address>0.0.0.0</IPv4Address>
   <IPv6Address>::1</IPv6Address>
+  <PromethusPort>1234</PromethusPort>
+  <PromethusUrl>/metrics</PromethusUrl>
+  <Password>default_password</Password>
 </Configuration>

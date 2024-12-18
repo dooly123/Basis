@@ -200,7 +200,7 @@ public static class BasisNetworkServer
             }
             catch (Exception ex)
             {
-                BNL.LogError($"Worker exception: {ex.Message}");
+                BNL.LogError($"Worker exception: {ex.Message} {ex.StackTrace}");
             }
         }
     }
@@ -216,7 +216,7 @@ public static class BasisNetworkServer
                 {
                     if (reader.TryGetByte(out byte Byte))
                     {
-                        BNL.Log($"Found Channel {Byte} {reader.AvailableBytes}");
+                      //  BNL.Log($"Found Channel {Byte} {reader.AvailableBytes}");
                         HandleNetworkReceiveEvent(peer, reader, Byte, deliveryMethod);
                     }
                     else
