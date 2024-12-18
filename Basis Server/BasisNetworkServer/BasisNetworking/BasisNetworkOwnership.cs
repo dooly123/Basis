@@ -29,7 +29,7 @@ namespace Basis.Network.Server.Ownership
                 ownershipTransferMessage.playerIdMessage.playerID = currentOwner;
                 ownershipTransferMessage.Serialize(Writer);
                 BNL.Log("OwnershipResponse " + currentOwner + " for " + ownershipTransferMessage.playerIdMessage);
-                Peer.Send(Writer, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableSequenced);
+                Peer.Send(Writer, BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableSequenced);
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace Basis.Network.Server.Ownership
                     ownershipTransferMessage.Serialize(Writer);
 
                     BNL.Log("OwnershipResponse " + ownershipTransferMessage.ownershipID + " for " + ownershipTransferMessage.playerIdMessage);
-                    BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.EventsChannel, allClients, DeliveryMethod.ReliableSequenced);
+                    BasisNetworkServer.BroadcastMessageToClients(Writer, BasisNetworkCommons.BasisChannel, allClients, DeliveryMethod.ReliableSequenced);
                 }
                 else
                 {
@@ -64,7 +64,7 @@ namespace Basis.Network.Server.Ownership
                     //once a ownership has been requested there good for life or when a ownership switch happens.
                     NetworkRequestNewOrExisting(ownershipTransferMessage, out ushort currentOwner);
                     ownershipTransferMessage.Serialize(Writer);
-                    Peer.Send(Writer, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableSequenced);
+                    Peer.Send(Writer, BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableSequenced);
                 }
             }
             catch (Exception ex)

@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkserver\\basisnetworking\\basisnetworkownership.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|solutionrelative:basisnetworkserver\\basisnetworking\\basisnetworkownership.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|solutionrelative:basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkcore\\basisnetworkcommons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|solutionrelative:basisnetworkcore\\basisnetworkcommons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkserver\\basisnetworking\\basissavedstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -44,24 +52,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LocalAvatarSyncMessage.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
-              "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
-              "RelativeToolTip": "BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "BasisNetworkOwnership.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "RelativeToolTip": "BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAIA2wB8AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T04:22:18.597Z",
+              "WhenOpened": "2024-12-18T05:08:31.716Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
+              "Title": "BasisUISettings.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
+              "RelativeDocumentMoniker": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
+              "RelativeToolTip": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-18T04:05:03.983Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BasisHamburgerMenu.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
+              "RelativeDocumentMoniker": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
+              "RelativeToolTip": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAFMAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-18T04:04:02.602Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisServerConsole\\Program.cs",
+              "RelativeDocumentMoniker": "BasisServerConsole\\Program.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisServerConsole\\Program.cs",
+              "RelativeToolTip": "BasisServerConsole\\Program.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwBcAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-18T00:31:40.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BasisNetworkServer.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
+              "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworkServer.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
+              "RelativeToolTip": "BasisNetworkServer\\BasisNetworkServer.cs",
+              "ViewState": "AgIAAIgBAAAAAAAAAAAswJwBAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-17T23:26:46.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "AvatarDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
@@ -75,45 +135,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "BasisUISettings.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
-              "RelativeDocumentMoniker": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
-              "RelativeToolTip": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisUISettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA9AAAAAAAAAA==",
+              "Title": "LocalAvatarSyncMessage.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
+              "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
+              "RelativeToolTip": "BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T04:05:03.983Z",
+              "WhenOpened": "2024-12-18T04:22:18.597Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "BasisHamburgerMenu.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
-              "RelativeDocumentMoniker": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
-              "RelativeToolTip": "..\\Basis\\Packages\\Basis Framework\\UI\\UI Panels\\BasisHamburgerMenu.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAFMAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T04:04:02.602Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisServerConsole\\Program.cs",
-              "RelativeDocumentMoniker": "BasisServerConsole\\Program.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisServerConsole\\Program.cs",
-              "RelativeToolTip": "BasisServerConsole\\Program.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwBcAAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T00:31:40.152Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "BasisPasswordImplementation.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\Password\\BasisPasswordImplementation.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\Password\\BasisPasswordImplementation.cs",
@@ -126,20 +160,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "BasisNetworkServer.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
-              "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworkServer.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
-              "RelativeToolTip": "BasisNetworkServer\\BasisNetworkServer.cs",
-              "ViewState": "AgIAAKYAAAAAAAAAAAAYwNUAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-17T23:26:46.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "ServerAvatarChangeMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\ServerAvatarChangeMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\ServerAvatarChangeMessage.cs",
@@ -152,7 +173,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "BasisSavedState.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisSavedState.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworking\\BasisSavedState.cs",
@@ -161,6 +182,25 @@
               "ViewState": "AgIAAFcAAAAAAAAAAAAwwG4AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-18T04:25:42.411Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BasisNetworkCommons.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\BasisNetworkCommons.cs",
+              "RelativeDocumentMoniker": "BasisNetworkCore\\BasisNetworkCommons.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\BasisNetworkCommons.cs",
+              "RelativeToolTip": "BasisNetworkCore\\BasisNetworkCommons.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-18T05:01:46.178Z",
               "EditorCaption": ""
             }
           ]

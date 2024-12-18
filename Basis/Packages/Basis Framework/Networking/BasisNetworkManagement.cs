@@ -331,7 +331,7 @@ namespace Basis.Scripts.Networking
         {
             switch (channel)
             {
-                case BasisNetworkCommons.EventsChannel:
+                case BasisNetworkCommons.BasisChannel:
                     BasisMessageReceivedEventArgs e = new BasisMessageReceivedEventArgs
                     {
                         Tag = Reader.GetByte(),
@@ -412,7 +412,7 @@ namespace Basis.Scripts.Networking
             NetDataWriter netDataWriter = new NetDataWriter();
             netDataWriter.Put(BasisNetworkTag.OwnershipTransfer);
             OwnershipTransferMessage.Serialize(netDataWriter);
-            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableSequenced);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableSequenced);
         }
         public static void RequestCurrentOwnership(string UniqueNetworkId)
         {
@@ -427,7 +427,7 @@ namespace Basis.Scripts.Networking
             NetDataWriter netDataWriter = new NetDataWriter();
             netDataWriter.Put(BasisNetworkTag.OwnershipResponse);
             OwnershipTransferMessage.Serialize(netDataWriter);
-            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter,BasisNetworkCommons.EventsChannel, DeliveryMethod.ReliableSequenced);
+            BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter,BasisNetworkCommons.BasisChannel, DeliveryMethod.ReliableSequenced);
         }
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)
         {

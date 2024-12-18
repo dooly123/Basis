@@ -134,7 +134,7 @@ public static class BasisNetworkServer
             BNL.Log($"Peer connected: {newPeer.Id}");
             ReadyMessage readyMessage = new ReadyMessage();
             readyMessage.Deserialize(request.Data);
-            SendRemoteSpawnMessage(newPeer, readyMessage, BasisNetworkCommons.EventsChannel);
+            SendRemoteSpawnMessage(newPeer, readyMessage, BasisNetworkCommons.BasisChannel);
         }
         else
         {
@@ -145,7 +145,7 @@ public static class BasisNetworkServer
     private static void HandlePeerDisconnected(NetPeer peer, DisconnectInfo info)
     {
         ushort id = (ushort)peer.Id;
-        ClientDisconnect(id, BasisNetworkCommons.EventsChannel, Peers);
+        ClientDisconnect(id, BasisNetworkCommons.BasisChannel, Peers);
 
         if (Peers.TryRemove(id, out _))
         {
@@ -211,7 +211,7 @@ public static class BasisNetworkServer
     {
         switch (channel)
         {
-            case BasisNetworkCommons.EventsChannel:
+            case BasisNetworkCommons.BasisChannel:
                 HandleEventMessage(peer, reader, deliveryMethod);
                 break;
             case BasisNetworkCommons.MovementChannel:
@@ -298,7 +298,7 @@ public static class BasisNetworkServer
         NetDataWriter Writer = new NetDataWriter();
         Writer.Put(BasisNetworkTag.AvatarChangeMessage);
         serverAvatarChangeMessage.Serialize(Writer);
-        BroadcastMessageToClients(Writer, BasisNetworkCommons.EventsChannel, Peer, Peers);
+        BroadcastMessageToClients(Writer, BasisNetworkCommons.BasisChannel, Peer, Peers);
     }
     private static void UpdateVoiceReceivers(NetPacketReader Reader, NetPeer Peer)
     {
@@ -410,7 +410,7 @@ public static class BasisNetworkServer
     {
         ServerReadyMessage serverReadyMessage = LoadInitialState(authClient, readyMessage);
         NotifyExistingClients(serverReadyMessage, channel, authClient);
-        SendClientListToNewClient(authClient, BasisNetworkCommons.EventsChannel);
+        SendClientListToNewClient(authClient, BasisNetworkCommons.BasisChannel);
     }
     public static ServerReadyMessage LoadInitialState(NetPeer authClient, ReadyMessage readyMessage)
     {

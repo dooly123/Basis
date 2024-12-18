@@ -3,8 +3,8 @@ namespace Basis.Network.Core
     public static class BasisNetworkCommons
     {
         public static int NetworkIntervalPoll = 10;
-        //channels 0 to 6
-        public const byte EventsChannel = 0;
+        //we should never use this for basis, leave it for internal
+        public const byte DefaultChannel = 0;
         /// <summary>
         /// this is normally avatar movement only can be used once!
         /// </summary>
@@ -21,5 +21,9 @@ namespace Basis.Network.Core
         /// this is what people use to send data on there avatar
         /// </summary>
         public const byte AvatarChannel = 4;
+        /// <summary>
+        /// this is for anything basis related
+        /// </summary>
+        public const byte BasisChannel = 5;
     }
 }
