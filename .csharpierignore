@@ -1,0 +1,5 @@
+.direnv/
+target/
+**/[Bb]in/
+**/[Oo]bj/
+.git/
