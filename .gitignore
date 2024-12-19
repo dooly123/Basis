@@ -25,6 +25,7 @@
 
 # Visual Studio cache directory
 /Basis.vs/
+.vs/
 
 # JetBrains Rider cache directory
 /Basis.idea/
@@ -83,6 +84,28 @@ Basis/.vs/Basis/v17/DocumentLayout.json
 *.nuspec
 *.cache
 
+# Dotnet build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+**/[Bb]in/
+**/[Oo]bj/
+**/[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Nuget
+nupkg/
+
 # Nix stuff
 **/.direnv/
 /.envrc
+
+# Macos
+.DS_Store
