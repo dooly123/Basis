@@ -50,8 +50,7 @@
               "RelativeToolTip": "BasisServerConsole\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T16:15:45.892Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T16:15:45.892Z"
             },
             {
               "$type": "Document",
@@ -63,8 +62,7 @@
               "RelativeToolTip": "BasisNetworkServer\\Promethus\\BasisPromethus.cs",
               "ViewState": "AgIAAHUAAAAAAAAAAAAowJgAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T16:15:28.628Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T16:15:28.628Z"
             },
             {
               "$type": "Document",
@@ -76,8 +74,7 @@
               "RelativeToolTip": "BasisNetworkServer\\BasisStatistics.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAABgAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T16:13:16.488Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T16:13:16.488Z"
             },
             {
               "$type": "Document",
@@ -99,7 +96,7 @@
               "RelativeDocumentMoniker": "BasisNetworkClient\\BasisNetworkClient.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkClient\\BasisNetworkClient.cs",
               "RelativeToolTip": "BasisNetworkClient\\BasisNetworkClient.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAAiwHwAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAiwGAAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-18T08:50:49.064Z",
               "EditorCaption": ""
@@ -130,7 +127,7 @@
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworkServer.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworkServer.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAmwCIAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAmwCgAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-18T08:30:02.878Z",
               "EditorCaption": ""

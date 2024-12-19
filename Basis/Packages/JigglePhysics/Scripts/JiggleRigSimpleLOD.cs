@@ -1,6 +1,3 @@
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 
 namespace JigglePhysics
@@ -15,19 +12,9 @@ namespace JigglePhysics
 
         public static Camera currentCamera;
         public Transform TargetPoint;
-
-        protected virtual bool TryGetCamera(out Camera camera)
-        {
-            camera = currentCamera;
-            return currentCamera;
-        }
         protected override bool CheckActive()
         {
-            if (!TryGetCamera(out Camera camera))
-            {
-                return false;
-            }
-            var cameraDistance = Vector3.Distance(camera.transform.position, TargetPoint.position);
+            var cameraDistance = Vector3.Distance(currentCamera.transform.position, TargetPoint.position);
             var currentBlend = (cameraDistance - distance + blend) / blend;
             currentBlend = Mathf.Clamp01(1f - currentBlend);
             for (int Index = 0; Index < JiggleCount; Index++)

@@ -36,6 +36,14 @@ namespace Basis.Scripts.Networking.Recievers
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
         public float[] MuscleFinalStageOutput = new float[90];
         public quaternion OutputRotation;
+        public AvatarBuffer First;
+        public AvatarBuffer Last;
+        //  public int PayloadCount = 0;
+        public static int BufferCapacityBeforeCleanup = 3;
+        public float interpolationTime;
+        public double TimeBeforeCompletion;
+        public double TimeInThePast;
+        public bool HasAvatarInitalized;
         public void Initialize()
         {
             OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
@@ -62,14 +70,6 @@ namespace Basis.Scripts.Networking.Recievers
             if (muscles.IsCreated) muscles.Dispose();
             if (targetMuscles.IsCreated) targetMuscles.Dispose();
         }
-        public AvatarBuffer First;
-        public AvatarBuffer Last;
-        //  public int PayloadCount = 0;
-        public static int BufferCapacityBeforeCleanup = 3;
-        public float interpolationTime;
-        public double TimeBeforeCompletion;
-        public double TimeInThePast;
-        public bool HasAvatarInitalized;
         /// <summary>
         /// Perform computations to interpolate and update avatar state.
         /// </summary>
@@ -90,8 +90,14 @@ namespace Basis.Scripts.Networking.Recievers
                     OuputVectors[1] = First.Scale;    // Scale at index 1
                     TargetVectors[1] = Last.Scale;    // Target scale at index 1
 
-                    muscles.CopyFrom(First.Muscles);
-                    targetMuscles.CopyFrom(Last.Muscles);
+                    if (First.Muscles != null)
+                    {
+                        muscles.CopyFrom(First.Muscles);
+                    }
+                    if (Last.Muscles != null)
+                    {
+                        targetMuscles.CopyFrom(Last.Muscles);
+                    }
 
                     AvatarJob.Time = interpolationTime;
 
@@ -117,7 +123,7 @@ namespace Basis.Scripts.Networking.Recievers
                 RemotePlayer.RemoteBoneDriver.SimulateAndApply(TimeAsDouble, DeltaTime);
                 RemotePlayer.UpdateTransform(RemotePlayer.MouthControl.OutgoingWorldData.position, RemotePlayer.MouthControl.OutgoingWorldData.rotation);
 
-                RemotePlayer.Avatar.FaceVisemeMesh.transform.position = RemotePlayer.MouthControl.OutgoingWorldData.position;
+              //come back to this later!  RemotePlayer.Avatar.FaceVisemeMesh.transform.position = RemotePlayer.MouthControl.OutgoingWorldData.position;
             }
             if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
             {
@@ -152,7 +158,7 @@ namespace Basis.Scripts.Networking.Recievers
                 {
                     if (targetMuscles != null)
                     {
-                        Debug.Log(targetMuscles.Length);
+                        Debug.LogError("muscle was not null and was length! " + targetMuscles.Length);
                     }
                     if (targetMuscles.IsCreated) targetMuscles.Dispose();
                     targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
@@ -167,7 +173,7 @@ namespace Basis.Scripts.Networking.Recievers
                     muscles = new NativeArray<float>(90, Allocator.Persistent);
                 }
                 HasAvatarInitalized = true;
-               // DecompressionQueue.Enqueue(avatarBuffer);
+                // DecompressionQueue.Enqueue(avatarBuffer);
             }
             else
             {
@@ -175,7 +181,7 @@ namespace Basis.Scripts.Networking.Recievers
                 while (PayloadQueue.Count > BufferCapacityBeforeCleanup)
                 {
                     PayloadQueue.TryDequeue(out AvatarBuffer Buffer);
-                   // DecompressionQueue.Enqueue(Buffer);
+                    // DecompressionQueue.Enqueue(Buffer);
                 }
             }
         }

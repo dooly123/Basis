@@ -24,7 +24,16 @@ namespace Basis.Scripts.Drivers
                     int Count = player.Avatar.JiggleStrains.Length;
                     JiggleRigRendererLOD JiggleRigRendererLOD = BasisHelpers.GetOrAddComponent<JiggleRigRendererLOD>(player.Avatar.Animator.gameObject);
                     JiggleRigRendererLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
-                    JiggleRigRendererLOD.TargetPoint = player.Avatar.FaceVisemeMesh.transform;
+                    if(player.IsLocal)
+                    {
+                        BasisLocalPlayer Local = (BasisLocalPlayer)player;
+                        JiggleRigRendererLOD.TargetPoint = Local.FaceRenderer.transform;
+                    }
+                    else
+                    {
+                        BasisRemotePlayer Remote = (BasisRemotePlayer)player;
+                        JiggleRigRendererLOD.TargetPoint = Remote.MouthControl.BoneTransform;
+                    }
                     JiggleRigRendererLOD.SetRenderers(player.Avatar.Renders);
                     Jiggler = player.Avatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
@@ -35,7 +44,6 @@ namespace Basis.Scripts.Drivers
                         Jiggles.Add(JiggleRig);
                     }
                     Jiggler.jiggleRigs = Jiggles;
-                    //  Transform Hips = player.Avatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
                     Jiggler.Initialize();
                 }
             }

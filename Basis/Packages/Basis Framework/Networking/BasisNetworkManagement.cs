@@ -181,19 +181,36 @@ namespace Basis.Scripts.Networking
         }
         public void LateUpdate()
         {
-
             double TimeAsDouble = Time.timeAsDouble;
+
+            // Schedule multithreaded tasks
             for (int Index = 0; Index < ReceiverCount; Index++)
             {
-                //schedule mulithreaded tasks
-                ReceiverArray[Index].Compute(TimeAsDouble);
+                try
+                {
+                    ReceiverArray[Index].Compute(TimeAsDouble);
+                }
+                catch (Exception ex)
+                {
+                    // Log the error and continue with the next iteration
+                    Debug.LogError($"Error in Compute at index {Index}: {ex.Message} {ex.StackTrace}");
+                }
             }
+
             float deltaTime = Time.deltaTime;
+
+            // Complete tasks and apply results
             for (int Index = 0; Index < ReceiverCount; Index++)
             {
-                //now that its all schedule start going through and
-                //completing if they are not done already
-                ReceiverArray[Index].Apply(TimeAsDouble, deltaTime);
+                try
+                {
+                    ReceiverArray[Index].Apply(TimeAsDouble, deltaTime);
+                }
+                catch (Exception ex)
+                {
+                    // Log the error and continue with the next iteration
+                    Debug.LogError($"Error in Apply at index {Index}: {ex.Message} {ex.StackTrace}");
+                }
             }
         }
         public static bool TryGetLocalPlayerID(out ushort LocalID)
