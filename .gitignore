@@ -82,3 +82,7 @@ Basis/.vs/Basis/v17/DocumentLayout.json
 /Basis/.vs
 *.nuspec
 *.cache
+
+# Nix stuff
+**/.direnv/
+/.envrc
