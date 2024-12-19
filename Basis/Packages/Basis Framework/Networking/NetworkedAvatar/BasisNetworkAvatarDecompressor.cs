@@ -47,7 +47,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 
           }
             */
-            BasisNetworkProfiler.InBoundAvatarUpdatePacket.Sample(Length);
+            BasisNetworkProfiler.ServerSideSyncPlayerMessageCounter.Sample(Length);
             avatarBuffer.SecondsInterval = syncMessage.interval / 1000.0f;
             baseReceiver.EnQueueAvatarBuffer(ref avatarBuffer);
         }

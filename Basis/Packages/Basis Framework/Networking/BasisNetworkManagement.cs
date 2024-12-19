@@ -6,6 +6,7 @@ using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
+using Basis.Scripts.Profiler;
 using DarkRift.Basis_Common.Serializable;
 using LiteNetLib;
 using LiteNetLib.Utils;
@@ -450,6 +451,7 @@ namespace Basis.Scripts.Networking
             NetDataWriter netDataWriter = new NetDataWriter();
             OwnershipTransferMessage.Serialize(netDataWriter);
             BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.OwnershipTransfer, DeliveryMethod.ReliableSequenced);
+            BasisNetworkProfiler.OwnershipTransferMessageCounter.Sample(netDataWriter.Length);
         }
         public static void RequestCurrentOwnership(string UniqueNetworkId)
         {
@@ -464,6 +466,7 @@ namespace Basis.Scripts.Networking
             NetDataWriter netDataWriter = new NetDataWriter();
             OwnershipTransferMessage.Serialize(netDataWriter);
             BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter,BasisNetworkCommons.OwnershipResponse, DeliveryMethod.ReliableSequenced);
+            BasisNetworkProfiler.RequestOwnershipTransferMessageCounter.Sample(netDataWriter.Length);
         }
 
         public static bool AvatarToPlayer(BasisAvatar Avatar, out BasisPlayer BasisPlayer, out BasisNetworkedPlayer NetworkedPlayer)

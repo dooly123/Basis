@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityOpus;
 
@@ -100,7 +100,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 AudioSegmentData.LengthUsed = encoder.Encode(Recorder.processBufferArray, AudioSegmentData.buffer);
                 NetDataWriter writer = new NetDataWriter();
                 AudioSegmentData.Serialize(writer);
-                BasisNetworkProfiler.OutBoundAudioUpdatePacket.Sample(AudioSegmentData.LengthUsed);
+                BasisNetworkProfiler.AudioSegmentDataMessageCounter.Sample(AudioSegmentData.LengthUsed);
                 BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
                 Local.AudioReceived?.Invoke(true);
             }
@@ -116,7 +116,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 NetDataWriter writer = new NetDataWriter();
                 audioSilentSegmentData.LengthUsed = 0;
                 audioSilentSegmentData.Serialize(writer);
-                BasisNetworkProfiler.OutBoundAudioUpdatePacket.Sample(writer.Length);
+                BasisNetworkProfiler.AudioSegmentDataMessageCounter.Sample(writer.Length);
                 BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.VoiceChannel, DeliveryMethod.Sequenced);
                 Local.AudioReceived?.Invoke(false);
             }

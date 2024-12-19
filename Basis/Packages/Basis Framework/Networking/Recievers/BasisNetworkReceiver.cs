@@ -230,7 +230,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if (AudioReceiverModule.decoder != null)
             {
-                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(audioSegment.audioSegmentData.LengthUsed);
+                BasisNetworkProfiler.ServerAudioSegmentMessageCounter.Sample(audioSegment.audioSegmentData.LengthUsed);
                 AudioReceiverModule.decoder.OnDecode(audioSegment.audioSegmentData.buffer, audioSegment.audioSegmentData.LengthUsed);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(true);
             }
@@ -244,7 +244,7 @@ namespace Basis.Scripts.Networking.Recievers
                     silentData = new float[AudioReceiverModule.decoder.FakepcmLength];
                     Array.Fill(silentData, 0f);
                 }
-                BasisNetworkProfiler.InBoundAudioUpdatePacket.Sample(1);
+                BasisNetworkProfiler.ServerAudioSegmentMessageCounter.Sample(1);
                 AudioReceiverModule.OnDecoded(silentData, AudioReceiverModule.decoder.FakepcmLength);
                 NetworkedPlayer.Player.AudioReceived?.Invoke(false);
             }

@@ -1,6 +1,7 @@
 using Basis.Network.Core;
 using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Profiler;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using UnityEngine;
@@ -108,6 +109,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 AvatarDataMessage.Serialize(netDataWriter);
                 BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.AvatarChannel, DeliveryMethod);
             }
+            BasisNetworkProfiler.AvatarDataMessageCounter.Sample(netDataWriter.Length);
         }
     }
 }

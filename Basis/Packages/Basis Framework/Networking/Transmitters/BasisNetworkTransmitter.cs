@@ -2,6 +2,7 @@ using Basis.Network.Core;
 using Basis.Scripts.Device_Management.Devices.Desktop;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Profiler;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System;
@@ -172,6 +173,7 @@ namespace Basis.Scripts.Networking.Transmitters
                 NetDataWriter writer = new NetDataWriter();
                 VRM.Serialize(writer);
                 BasisNetworkManagement.LocalPlayerPeer.Send(writer, BasisNetworkCommons.AudioRecipients, DeliveryMethod.ReliableOrdered);
+                BasisNetworkProfiler.AudioRecipientsMessageCounter.Sample(writer.Length);
             }
         }
         public static bool AreBoolArraysEqual(bool[] array1, bool[] array2)
@@ -349,6 +351,7 @@ namespace Basis.Scripts.Networking.Transmitters
             };
             ClientAvatarChangeMessage.Serialize(Writer);
             BasisNetworkManagement.LocalPlayerPeer.Send(Writer, BasisNetworkCommons.AvatarChangeMessage, DeliveryMethod.ReliableOrdered);
+            BasisNetworkProfiler.AvatarChangeMessageCounter.Sample(Writer.Length);
         }
         [BurstCompile]
         public struct CombinedDistanceAndClosestTransformJob : IJobParallelFor

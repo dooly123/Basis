@@ -15,7 +15,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             CompressAvatarData(ref NetworkSendBase.Offset, ref NetworkSendBase.FloatArray,ref NetworkSendBase.LASM,NetworkSendBase.PoseHandler,NetworkSendBase.HumanPose, Anim);
             NetworkSendBase.LASM.Serialize(NetworkSendBase.AvatarSendWriter);
-            BasisNetworkProfiler.OutBoundAvatarUpdatePacket.Sample(NetworkSendBase.AvatarSendWriter.Length);
+            BasisNetworkProfiler.LocalAvatarSyncMessageCounter.Sample(NetworkSendBase.AvatarSendWriter.Length);
             BasisNetworkManagement.LocalPlayerPeer.Send(NetworkSendBase.AvatarSendWriter, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
             NetworkSendBase.AvatarSendWriter.Reset();
         }

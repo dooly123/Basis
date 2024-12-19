@@ -394,7 +394,7 @@ MonoBehaviour:
       DefaultPlatform: 0
       ExcludePlatform: 0
       ValueToggle: 0
-      EditorVisable: 0
+      EditorVisable: 1
     SupportedRenderPipeline: 030000000400000000000000
     Round: 0
     RoundTo: 0
@@ -405,7 +405,7 @@ MonoBehaviour:
     Name: Antialiasing
     ValueDescriptor: Antialiasing
     SelectedValueDefault: smaa
-    ValueDefault: ultra
+    ValueDefault: medium
     Explanation: Antialiasing
     selectedValue: smaa
     Type: 1
