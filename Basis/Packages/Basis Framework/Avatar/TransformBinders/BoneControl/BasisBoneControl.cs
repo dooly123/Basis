@@ -89,8 +89,7 @@ namespace Basis.Scripts.TransformBinders.BoneControl
                         // Calculate the target outgoing position with the rotated offset
                         float3 targetPosition = TargetControl.Target.OutGoingData.position + customDirection;
 
-                        // Clamp the interpolation factor to ensure it stays between 0 and 1
-                        float lerpFactor = math.clamp(TargetControl.LerpAmount * DeltaTime, 0f, 1f);
+                        float lerpFactor = ClampInterpolationFactor(TargetControl.LerpAmount, DeltaTime);
 
                         // Interpolate between the last position and the target position
                         OutGoingData.position = math.lerp(LastRunData.position, targetPosition, lerpFactor);
@@ -130,11 +129,18 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             float lerpAmount = lerpAmountNormal + (lerpAmountFastMovement - lerpAmountNormal) * timing;
 
             // Apply frame-rate-independent lerp factor
-            float lerpFactor = lerpAmount * DeltaTime;
+            float lerpFactor = ClampInterpolationFactor(lerpAmount, DeltaTime);
 
             // Perform spherical interpolation (slerp) with the optimized factor
             return math.slerp(CurrentRotation, FutureRotation, lerpFactor);
         }
+
+        private float ClampInterpolationFactor(float lerpAmount, float DeltaTime)
+        {
+            // Clamp the interpolation factor to ensure it stays between 0 and 1
+            return math.clamp(lerpAmount * DeltaTime, 0f, 1f);
+        }
+
         [HideInInspector]
         public bool Cullable = false;
         [SerializeField]
