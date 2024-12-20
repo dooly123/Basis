@@ -82,9 +82,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c5d7ffea6aec9f14f8c57483e9ff1e54, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7103285763428802826}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c5d7ffea6aec9f14f8c57483e9ff1e54, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -7558457131172189496}
   m_SourcePrefab: {fileID: 100100000, guid: c5d7ffea6aec9f14f8c57483e9ff1e54, type: 3}
 --- !u!1 &3467910526416094131 stripped
 GameObject:
@@ -141,22 +138,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-7558457131172189496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3467910526416094131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa044cf6cd51154488a26c8b2776ec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Avatar: {fileID: 3661943951247883631}
-  RemoteMessageIndex: 32
-  LocalMessageIndex: 64
-  DeliveryMethod: 3
 --- !u!137 &8839165641088738499 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 5064880245253675553, guid: c5d7ffea6aec9f14f8c57483e9ff1e54, type: 3}

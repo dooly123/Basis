@@ -1,7 +1,7 @@
-﻿namespace Basis.Network.Core
+namespace Basis.Network.Core
 {
     public class BasisNetworkVersion
     {
-        public static ushort ServerVersion = 1;
+        public static ushort ServerVersion = 2;
     }
 }

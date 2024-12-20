@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\handles\\basisnetworkgenericmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -19,11 +19,11 @@
       "RelativeMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|solutionrelative:packages\\basis framework\\players\\basisplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\bundle management\\basisloadhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\bundle management\\basisloadhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\bundle management\\basisloadhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -44,7 +44,7 @@
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkGenericMessages.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkGenericMessages.cs",
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkGenericMessages.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAIwDUAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAACkAAAAAAAAAAAAIwDIAAABiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-20T07:43:23.962Z",
               "EditorCaption": ""
@@ -59,8 +59,7 @@
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
               "ViewState": "AgIAADEAAAAAAAAAAAAwwEcAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:40:49.162Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-20T07:40:49.162Z"
             },
             {
               "$type": "Document",
@@ -72,8 +71,7 @@
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
               "ViewState": "AgIAAFMAAAAAAAAAAAAwwBEAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:37:39.587Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-20T07:37:39.587Z"
             },
             {
               "$type": "Document",
@@ -85,8 +83,7 @@
               "RelativeToolTip": "Packages\\Basis Framework\\Bundle Management\\BasisLoadhandler.cs",
               "ViewState": "AgIAADsAAAAAAAAAAAAmwEcAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:18:44.083Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-20T07:18:44.083Z"
             },
             {
               "$type": "Document",
@@ -98,8 +95,7 @@
               "RelativeToolTip": "Packages\\basistests\\BasisTestRoundTrip.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T06:42:50.353Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-20T06:42:50.353Z"
             },
             {
               "$type": "Document",
@@ -111,8 +107,7 @@
               "RelativeToolTip": "Packages\\Basis Framework\\Players\\BasisPlayer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T06:13:23.987Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-20T06:13:23.987Z"
             }
           ]
         }
