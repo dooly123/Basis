@@ -54,9 +54,10 @@ namespace Basis
                 await BasisServerSideLogging.ShutdownAsync();
                 BNL.Log("Server shut down successfully.");
             };
+            serverTask.Wait();
             while (!Console.KeyAvailable)
             {
-                BasisNetworkServer.server?.PollEvents();
+                BasisNetworkServer.server.PollEvents();
                 Thread.Sleep(15);
             }
         }
