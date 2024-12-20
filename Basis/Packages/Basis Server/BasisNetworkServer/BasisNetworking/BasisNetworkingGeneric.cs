@@ -12,13 +12,9 @@ namespace Basis.Network.Server.Generic
         {
             SceneDataMessage SceneDataMessage = new SceneDataMessage();
             SceneDataMessage.Deserialize(Reader);
-
-            ushort[] Rec = SceneDataMessage.recipients;
-            SceneDataMessage.recipients = null;
-            SceneDataMessage.recipientsSize = 0;
             ServerSceneDataMessage serverSceneDataMessage = new ServerSceneDataMessage
             {
-                sceneDataMessage = SceneDataMessage,
+                sceneDataMessage = new RemoteSceneDataMessage() { messageIndex = SceneDataMessage.messageIndex, payload = SceneDataMessage.payload },
                 playerIdMessage = new PlayerIdMessage
                 {
                     playerID = (ushort)sender.Id,
@@ -32,27 +28,34 @@ namespace Basis.Network.Server.Generic
                 Channel = BasisNetworkCommons.FallChannel;
             }
             serverSceneDataMessage.Serialize(Writer);
-            if (Rec != null && Rec.Length > 0)
+            if (SceneDataMessage.recipientsSize != 0)
             {
-                var targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
+                ConcurrentDictionary<ushort, NetPeer> targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
 
-                for (int Index = 0; Index < Rec.Length; Index++)
+                int recipientsLength = SceneDataMessage.recipientsSize;
+                BNL.Log("Query Recipients " + recipientsLength);
+                for (int index = 0; index < recipientsLength; index++)
                 {
-                    ushort recipientId = Rec[Index];
-                    if (allClients.TryGetValue(recipientId, out NetPeer client))
+                    if (BasisNetworkServer.Peers.TryGetValue(SceneDataMessage.recipients[index], out NetPeer client))
                     {
+                        BNL.Log("Found Peer! " + SceneDataMessage.recipients[index]);
                         targetedClients.TryAdd((ushort)client.Id, client);
+                    }
+                    else
+                    {
+                        BNL.Log("Missing Peer! " + SceneDataMessage.recipients[index]);
                     }
                 }
 
                 if (targetedClients.Count > 0)
                 {
+                    BNL.Log("Sending out Target Clients " + targetedClients.Count);
                     BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, targetedClients, DeliveryMethod);
                 }
             }
             else
             {
-                BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, sender, allClients, DeliveryMethod);
+                BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, sender, BasisNetworkServer.Peers, DeliveryMethod);
             }
         }
         public static void HandleAvatar(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender)
@@ -85,17 +88,17 @@ namespace Basis.Network.Server.Generic
                 ConcurrentDictionary<ushort, NetPeer> targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
 
                 int recipientsLength = avatarDataMessage.recipientsSize;
-                BNL.Log("Query Recipients " + recipientsLength);
+                //  BNL.Log("Query Recipients " + recipientsLength);
                 for (int index = 0; index < recipientsLength; index++)
                 {
                     if (BasisNetworkServer.Peers.TryGetValue(avatarDataMessage.recipients[index], out NetPeer client))
                     {
-                        BNL.Log("Found Peer! " + avatarDataMessage.recipients[index]);
+                        //   BNL.Log("Found Peer! " + avatarDataMessage.recipients[index]);
                         targetedClients.TryAdd((ushort)client.Id, client);
                     }
                     else
                     {
-                        BNL.Log("Missing Peer! " + avatarDataMessage.recipients[index]);
+                        BNL.LogError("Missing Peer! " + avatarDataMessage.recipients[index]);
                     }
                 }
 

@@ -1,4 +1,4 @@
-﻿using Basis.Network;
+using Basis.Network;
 using Basis.Network.Server;
 //using Basis.Network.Server.Prometheus;
 
@@ -14,7 +14,7 @@ namespace Basis
 
             // Load configuration from the XML file
             Configuration config = Configuration.LoadFromXml(configFilePath);
-          //  BasisPrometheus.StartPrometheus(config.PromethusPort, config.PromethusUrl);
+            //  BasisPrometheus.StartPrometheus(config.PromethusPort, config.PromethusUrl);
             // Initialize server-side logging
             BasisServerSideLogging.Initialize(config);
 
@@ -25,9 +25,8 @@ namespace Basis
 
             // Initialize health check
             Check = new BasisNetworkHealthCheck(config);
-
             // Start the server on a background task
-            var serverTask = Task.Run(() => BasisNetworkServer.StartServer(config), cancellationToken);
+            Task serverTask = Task.Run(() => BasisNetworkServer.StartServer(config), cancellationToken);
             // Register a shutdown hook to clean up resources when the application is terminated
             AppDomain.CurrentDomain.ProcessExit += async (sender, eventArgs) =>
             {
@@ -47,7 +46,7 @@ namespace Basis
                         BNL.LogError(inner.Message);
                     }
                 }
-               // BasisPrometheus.StopPrometheus();
+                // BasisPrometheus.StopPrometheus();
                 if (config.EnableStatistics)
                 {
                     BasisStatistics.StopWorkerThread();
@@ -55,9 +54,11 @@ namespace Basis
                 await BasisServerSideLogging.ShutdownAsync();
                 BNL.Log("Server shut down successfully.");
             };
-
-            // Keep the main thread alive indefinitely
-            Thread.Sleep(Timeout.Infinite);
+            while (!Console.KeyAvailable)
+            {
+                BasisNetworkServer.server?.PollEvents();
+                Thread.Sleep(15);
+            }
         }
     }
 }

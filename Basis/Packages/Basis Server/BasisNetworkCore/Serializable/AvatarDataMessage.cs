@@ -68,7 +68,7 @@ public static partial class SerializableBasis
                 recipientsSize = (ushort)recipients.Length;
             }
             Writer.Put(recipientsSize);
-            BNL.Log("Recipients is " + recipientsSize);
+           // BNL.Log("Recipients is " + recipientsSize);
             // Write the recipients array if present
             if (recipients != null && recipients.Length > 0)
             {

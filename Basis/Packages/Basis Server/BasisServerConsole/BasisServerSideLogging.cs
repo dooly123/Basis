@@ -1,9 +1,5 @@
-﻿using System;
 using System.Collections.Concurrent;
-using System.IO;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Basis.Network
 {
@@ -107,31 +103,57 @@ namespace Basis.Network
                 _cancellationTokenSource?.Dispose();
             }
         }
+        private static string FormatMessage(string level, string message)
+        {
+            string timestamp = DateTime.Now.ToString("HH:mm");
+            return $"[{timestamp}] [{level}] {message}";
+        }
 
         public static void Log(string message)
         {
-            EnqueueLog("INFO", message);
+            string formattedMessage = FormatMessage("INFO", message);
+            WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
+            WriteColoredMessage("[INFO] ", ConsoleColor.DarkMagenta); // Level in gray
+            WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
+
+            if (UseLogging)
+            {
+                LogQueue.Add(formattedMessage);
+            }
         }
 
         public static void LogWarning(string message)
         {
-            EnqueueLog("WARNING", message);
+            string formattedMessage = FormatMessage("WARNING", message);
+            WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
+            WriteColoredMessage("[WARNING] ", ConsoleColor.DarkYellow); // Level in yellow
+            WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
+
+            if (UseLogging)
+            {
+                LogQueue.Add(formattedMessage);
+            }
         }
 
         public static void LogError(string message)
         {
-            EnqueueLog("ERROR", message);
-        }
+            string formattedMessage = FormatMessage("ERROR", message);
+            WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
+            WriteColoredMessage("[ERROR] ", ConsoleColor.DarkRed); // Level in red
+            WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
 
-        private static void EnqueueLog(string level, string message)
-        {
-            var logEntry = $"[{level}] {message}";
-            Console.WriteLine(logEntry);
             if (UseLogging)
             {
-                LogQueue.Add(logEntry);
-
+                LogQueue.Add(formattedMessage);
             }
+        }
+
+        private static void WriteColoredMessage(string message, ConsoleColor color)
+        {
+            var originalColor = Console.ForegroundColor; // Save the original color
+            Console.ForegroundColor = color; // Set the desired color
+            Console.Write(message); // Write the message (without a new line)
+            Console.ForegroundColor = originalColor; // Restore the original color
         }
     }
 }

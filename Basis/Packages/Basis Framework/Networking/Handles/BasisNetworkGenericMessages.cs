@@ -18,7 +18,7 @@ public static class BasisNetworkGenericMessages
         ServerSceneDataMessage ServerSceneDataMessage = new ServerSceneDataMessage();
         ServerSceneDataMessage.Deserialize(reader);
         ushort playerID = ServerSceneDataMessage.playerIdMessage.playerID;
-        SceneDataMessage sceneDataMessage = ServerSceneDataMessage.sceneDataMessage;
+        RemoteSceneDataMessage sceneDataMessage = ServerSceneDataMessage.sceneDataMessage;
         BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload,deliveryMethod);
     }
     public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID, ushort NetIdNewOwner, bool IsOwner);

@@ -16,10 +16,8 @@ using static Basis.Network.Server.Generic.BasisSavedState;
 using static SerializableBasis;
 public static class BasisNetworkServer
 {
-    public static Thread serverIncomeThread;
     public static EventBasedNetListener listener;
     public static NetManager server;
-    private static CancellationTokenSource cancellationTokenSource;
     public static ConcurrentDictionary<ushort, NetPeer> Peers = new ConcurrentDictionary<ushort, NetPeer>();
     public static Configuration Configuration;
 
@@ -35,9 +33,8 @@ public static class BasisNetworkServer
         {
             BasisStatistics.StartWorkerThread(BasisNetworkServer.server);
         }
-
-        StartWorkerThread();
         BNL.Log("Server Worker Threads Booted");
+
     }
 
     #region Server Setup
@@ -167,43 +164,12 @@ public static class BasisNetworkServer
     #endregion
 
     #region Worker Thread
-    private static void StartWorkerThread()
-    {
-        cancellationTokenSource = new CancellationTokenSource();
-        serverIncomeThread = new Thread(() => WorkerThread(cancellationTokenSource.Token))
-        {
-            IsBackground = true
-        };
-        serverIncomeThread.Start();
-    }
 
     public static void StopWorker()
     {
-        cancellationTokenSource.Cancel();
-        serverIncomeThread.Join();
         server.Stop();
     }
 
-    private static void WorkerThread(CancellationToken token)
-    {
-        while (!token.IsCancellationRequested)
-        {
-            try
-            {
-                server.PollEvents();
-                Task.Delay(BasisNetworkCommons.NetworkIntervalPoll, token).Wait(token);
-            }
-            catch (OperationCanceledException)
-            {
-                BNL.Log("Worker thread cancelled.");
-                break;
-            }
-            catch (Exception ex)
-            {
-                BNL.LogError($"Worker exception: {ex.Message} {ex.StackTrace}");
-            }
-        }
-    }
     #endregion
 
     #region Network Receive Handlers

@@ -8,16 +8,9 @@ public static class BNL
     public static Action<string> LogOutput;
     public static Action<string> LogWarningOutput;
     public static Action<string> LogErrorOutput;
-
-    private static string FormatMessage(string level, string message)
-    {
-        string timestamp = DateTime.Now.ToString("HH:mm");
-        return $"[{timestamp}] [{level}] {message}";
-    }
-
     public static void Log(string message)
     {
-        string formattedMessage = FormatMessage("INFO", message);
+        string formattedMessage =message;
 
         if (LogOutput != null)
         {
@@ -31,29 +24,25 @@ public static class BNL
 
     public static void LogWarning(string message)
     {
-        string formattedMessage = FormatMessage("WARNING", message);
-
         if (LogWarningOutput != null)
         {
-            LogWarningOutput.Invoke(formattedMessage);
+            LogWarningOutput.Invoke(message);
         }
         else
         {
-            WriteWithColor(formattedMessage, ConsoleColor.Yellow); // Warning is yellow
+            WriteWithColor(message, ConsoleColor.Yellow); // Warning is yellow
         }
     }
 
     public static void LogError(string message)
     {
-        string formattedMessage = FormatMessage("ERROR", message);
-
         if (LogErrorOutput != null)
         {
-            LogErrorOutput.Invoke(formattedMessage);
+            LogErrorOutput.Invoke(message);
         }
         else
         {
-            WriteWithColor(formattedMessage, ConsoleColor.Red); // Error is red
+            WriteWithColor(message, ConsoleColor.Red); // Error is red
         }
     }
 
