@@ -57,11 +57,12 @@ public static class BasisNetworkGenericMessages
         BasisNetworkProfiler.ServerAvatarDataMessageCounter.Sample(reader.AvailableBytes);
         ServerAvatarDataMessage serverAvatarDataMessage = new ServerAvatarDataMessage();
         serverAvatarDataMessage.Deserialize(reader);
-        if (BasisNetworkManagement.Players.TryGetValue(serverAvatarDataMessage.playerIdMessage.playerID, out BasisNetworkedPlayer player))
+        ushort avatarLinkID = serverAvatarDataMessage.avatarDataMessage.PlayerIdMessage.playerID; // destination
+        if (BasisNetworkManagement.Players.TryGetValue(avatarLinkID, out BasisNetworkedPlayer player))
         {
             if (player.Player == null)
             {
-                Debug.LogError("Missing Player! " + serverAvatarDataMessage.playerIdMessage.playerID);
+                Debug.LogError("Missing Player! " + avatarLinkID);
                 return;
             }
             if (player.Player.Avatar != null)
