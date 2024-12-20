@@ -1,3 +1,4 @@
+using Basis.Scripts.Avatar;
 using BasisSerializer.OdinSerializer;
 using System;
 using System.Collections.Concurrent;
@@ -75,7 +76,10 @@ public static class BasisLoadHandler
         }
         else
         {
-            Debug.LogError($"tried to find Loaded Key {LoadedKey} but could not find it!");
+            if (LoadedKey.ToLower() != BasisAvatarFactory.LoadingAvatar.BasisRemoteBundleEncrypted.MetaURL.ToLower())
+            {
+                Debug.LogError($"tried to find Loaded Key {LoadedKey} but could not find it!");
+            }
         }
     }
     public static async Task<GameObject> LoadGameObjectBundle(BasisLoadableBundle loadableBundle, bool useContentRemoval, BasisProgressReport report, CancellationToken cancellationToken, Vector3 Position, Quaternion Rotation, Transform Parent = null)

@@ -73,7 +73,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                     }
 
                     NetworkedPlayer.Player.Avatar.LinkedPlayerID = NetworkedPlayer.NetId;
-                    NetworkedPlayer.Player.Avatar.OnAvatarNetworkReady?.Invoke();
+                    NetworkedPlayer.Player.Avatar.OnAvatarNetworkReady?.Invoke(NetworkedPlayer.Player.IsLocal);
                 }
             }, null);
         }

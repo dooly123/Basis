@@ -736,6 +736,24 @@ MonoBehaviour:
         AssetMode: 
         AssetToLoadName: 
         AssetBundleCRC: 0
+  - UnlockPassword: LoadingAvatar
+    BasisRemoteBundleEncrypted:
+      IsLocal: 1
+      MetaURL: LoadingAvatar
+      BundleURL: LoadingAvatar
+    BasisLocalEncryptedBundle:
+      LocalMetaFile: 
+      LocalBundleFile: 
+    BasisBundleInformation:
+      HasError: 0
+      BasisBundleDescription:
+        AssetBundleName: 
+        AssetBundleDescription: 
+      BasisBundleGenerated:
+        AssetBundleHash: 
+        AssetMode: 1
+        AssetToLoadName: 
+        AssetBundleCRC: 0
   ParentedAvatarButtons: {fileID: 4707479195400357847}
   ButtonPrefab: {fileID: 5504761427362873086}
   MetaField: {fileID: 2269253443789147195}

@@ -65,6 +65,7 @@
     <Compile Include="Packages\basistests\Mirror\BasisSDKMirror.cs" />
     <Compile Include="Packages\basistests\BasisTestNetwork.cs" />
     <Compile Include="Packages\basistests\BasisPositionRotationScale.cs" />
+    <Compile Include="Packages\basistests\BasisTestRoundTrip.cs" />
     <Compile Include="Packages\basistests\BasisTestNetworkAvatar.cs" />
     <Compile Include="Packages\basistests\BasisTestNetworkAvatarOverrideJump.cs" />
     <Compile Include="Packages\basistests\BasisObjectSyncNetworking.cs" />

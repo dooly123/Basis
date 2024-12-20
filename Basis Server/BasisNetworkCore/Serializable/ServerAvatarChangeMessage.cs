@@ -1,4 +1,5 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
+using static BasisNetworkCore.Serializable.SerializableBasis;
 public static partial class SerializableBasis
 {
     public struct ServerAvatarChangeMessage
@@ -30,6 +31,8 @@ public static partial class SerializableBasis
         public byte loadMode;
         public byte[] byteArray;
 
+        public byte TotalStoredMessages;
+        public AvatarLoadDataMessage[] AvatarLoadMessages;
         public void Deserialize(NetDataReader Writer)
         {
             // Read the load mode
@@ -39,6 +42,14 @@ public static partial class SerializableBasis
 
             // Read each byte manually into the array
             Writer.GetBytes(byteArray, 0, byteArray.Length);
+
+            TotalStoredMessages = Writer.GetByte();
+
+            AvatarLoadMessages = new AvatarLoadDataMessage[TotalStoredMessages];
+            for (int Index = 0; Index < TotalStoredMessages; Index++)
+            {
+                AvatarLoadMessages[Index].Deserialize(Writer);
+            }
         }
 
         public void Dispose()
@@ -51,6 +62,21 @@ public static partial class SerializableBasis
             Writer.Put(loadMode);
             Writer.Put((ushort)byteArray.Length);
             Writer.Put(byteArray);
+
+            if (AvatarLoadMessages == null)
+            {
+                TotalStoredMessages = 0;
+                Writer.Put(TotalStoredMessages);
+            }
+            else
+            {
+                TotalStoredMessages = (byte)AvatarLoadMessages.Length;
+                Writer.Put(AvatarLoadMessages.Length);
+                for (int Index = 0; Index < TotalStoredMessages; Index++)
+                {
+                    AvatarLoadMessages[Index].Serialize(Writer);
+                }
+            }
         }
     }
 }

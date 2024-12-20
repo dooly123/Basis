@@ -178,22 +178,22 @@ namespace Basis.Scripts.Avatar
                     Player.Avatar.IsOwnedLocally = true;
                     CreateLocal(localPlayer);
                     localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
-                    Avatar.OnAvatarReady?.Invoke(true);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
                         Avatar.Renders[Index].gameObject.layer = 6;
                     }
+                    Avatar.OnAvatarReady?.Invoke(true);
                 }
                 else if (Player is BasisRemotePlayer remotePlayer)
                 {
                     Player.Avatar.IsOwnedLocally = false;
                     CreateRemote(remotePlayer);
                     remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
-                    Avatar.OnAvatarReady?.Invoke(false);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
                         Avatar.Renders[Index].gameObject.layer = 7;
                     }
+                    Avatar.OnAvatarReady?.Invoke(false);
                 }
             }
         }

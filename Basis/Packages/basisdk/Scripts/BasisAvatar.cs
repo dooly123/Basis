@@ -17,7 +17,11 @@ namespace Basis.Scripts.BasisSdk
 
         private ushort linkedPlayerID;
         public bool HasLinkedPlayer { get; private set; } = false;
-        public Action OnAvatarNetworkReady;
+        public OnNetworkReady OnAvatarNetworkReady;
+        /// <summary>
+        /// this is called when the owner of this gameobject is ready for you to request data about it
+        /// </summary>
+        public delegate void OnNetworkReady(bool IsOwner);
         public bool IsOwnedLocally;
         // Property for LinkedPlayerID with logic to set HasLinkedPlayer
         public ushort LinkedPlayerID

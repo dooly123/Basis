@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Eye_Follow;
@@ -56,7 +56,7 @@ namespace HVR.Basis.Comms
             avatar.OnAvatarNetworkReady += OnAvatarNetworkReady;
         }
 
-        private void OnAvatarNetworkReady()
+        private void OnAvatarNetworkReady(bool IsOwner)
         {
             if (BasisNetworkManagement.AvatarToPlayer(avatar, out var player) && player is BasisRemotePlayer remote)
             {

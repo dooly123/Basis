@@ -153,3 +153,4 @@ MonoBehaviour:
   - UnityEngine.Animator
   - UnityEngine.SkinnedMeshRenderer
   - HVR.Basis.Comms.ObjectStateActuation
+  - BasisTestRoundTrip

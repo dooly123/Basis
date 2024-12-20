@@ -1,4 +1,4 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     public struct ServerAvatarChangeMessage
@@ -30,6 +30,8 @@ public static partial class SerializableBasis
         public byte loadMode;
         public byte[] byteArray;
 
+
+        public byte[] Array;
         public void Deserialize(NetDataReader Writer)
         {
             // Read the load mode

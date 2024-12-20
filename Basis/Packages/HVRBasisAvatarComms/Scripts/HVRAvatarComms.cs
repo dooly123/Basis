@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Basis.Scripts.BasisSdk;
@@ -47,7 +47,7 @@ namespace HVR.Basis.Comms
             avatar.OnAvatarNetworkReady -= OnAvatarNetworkReady;
         }
 
-        private void OnAvatarNetworkReady()
+        private void OnAvatarNetworkReady(bool IsOwner)
         {
             if (_alreadyInitialized) return;
             _alreadyInitialized = true;
