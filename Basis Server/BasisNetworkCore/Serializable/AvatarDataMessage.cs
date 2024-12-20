@@ -30,6 +30,7 @@ public static partial class SerializableBasis
                     throw new ArgumentException($"Invalid recipientsSize: {recipientsSize}");
                 }
                 recipients = new ushort[recipientsSize];
+                BNL.Log("Recipients is " + recipientsSize);
                 for (int index = 0; index < recipientsSize; index++)
                 {
                     if (!Writer.TryGetUShort(out recipients[index]))
@@ -67,11 +68,14 @@ public static partial class SerializableBasis
                 recipientsSize = (ushort)recipients.Length;
             }
             Writer.Put(recipientsSize);
-
+            BNL.Log("Recipients is " + recipientsSize);
             // Write the recipients array if present
             if (recipients != null && recipients.Length > 0)
             {
-                Writer.PutArray(recipients);
+                for (int index = 0; index < recipientsSize; index++)
+                {
+                    Writer.Put(recipients[index]);
+                }
             }
 
             // Write the payload if present
@@ -87,10 +91,47 @@ public static partial class SerializableBasis
             payload = null;
         }
     }
+    public struct RemoteAvatarDataMessage
+    {
+        public PlayerIdMessage PlayerIdMessage;
+        public byte messageIndex;
+        public byte[] payload;
+
+        public void Deserialize(NetDataReader Writer)
+        {
+            PlayerIdMessage.Deserialize(Writer);
+            // Read the messageIndex safely
+            if (!Writer.TryGetByte(out messageIndex))
+            {
+                throw new ArgumentException("Failed to read messageIndex.");
+            }
+            if (Writer.AvailableBytes > 0)
+            {
+                payload = Writer.GetRemainingBytes();
+            }
+        }
+
+        public void Serialize(NetDataWriter Writer)
+        {
+            PlayerIdMessage.Serialize(Writer);
+            // Write the messageIndex
+            Writer.Put(messageIndex);
+            // Write the payload if present
+            if (payload != null && payload.Length > 0)
+            {
+                Writer.Put(payload);
+            }
+        }
+
+        public void Dispose()
+        {
+            payload = null;
+        }
+    }
     public struct ServerAvatarDataMessage
     {
         public PlayerIdMessage playerIdMessage;
-        public AvatarDataMessage avatarDataMessage;
+        public RemoteAvatarDataMessage avatarDataMessage;
         public void Deserialize(NetDataReader Writer)
         {
             playerIdMessage.Deserialize(Writer);

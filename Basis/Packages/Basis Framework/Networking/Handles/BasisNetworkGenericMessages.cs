@@ -67,7 +67,7 @@ public static class BasisNetworkGenericMessages
             }
             if (player.Player.Avatar != null)
             {
-                AvatarDataMessage output = serverAvatarDataMessage.avatarDataMessage;
+                RemoteAvatarDataMessage output = serverAvatarDataMessage.avatarDataMessage;
                 if (player.Player.Avatar.OnNetworkMessageReceived == null)
                 {
                     Debug.LogWarning(player.Player.DisplayName + " Message was Queued But nothing was there to Rec it " + output.messageIndex);

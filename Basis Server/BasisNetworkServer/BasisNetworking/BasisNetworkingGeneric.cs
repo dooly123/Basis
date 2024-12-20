@@ -55,16 +55,18 @@ namespace Basis.Network.Server.Generic
                 BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, sender, allClients, DeliveryMethod);
             }
         }
-        public static void HandleAvatar(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender, ConcurrentDictionary<ushort, NetPeer> allClients)
+        public static void HandleAvatar(NetPacketReader Reader, DeliveryMethod DeliveryMethod, NetPeer sender)
         {
             AvatarDataMessage avatarDataMessage = new AvatarDataMessage();
             avatarDataMessage.Deserialize(Reader);
-            ushort[] Rec = avatarDataMessage.recipients;
-            avatarDataMessage.recipients = null;
-            avatarDataMessage.recipientsSize = 0;
             ServerAvatarDataMessage serverAvatarDataMessage = new ServerAvatarDataMessage
             {
-                avatarDataMessage = avatarDataMessage,
+                avatarDataMessage = new RemoteAvatarDataMessage()
+                {
+                    messageIndex = avatarDataMessage.messageIndex,
+                    payload = avatarDataMessage.payload,
+                    PlayerIdMessage = avatarDataMessage.PlayerIdMessage
+                },
                 playerIdMessage = new PlayerIdMessage
                 {
                     playerID = (ushort)sender.Id
@@ -77,28 +79,35 @@ namespace Basis.Network.Server.Generic
                 Writer.Put(Channel);
                 Channel = BasisNetworkCommons.FallChannel;
             }
-                serverAvatarDataMessage.Serialize(Writer);
-            if (Rec != null && Rec.Length > 0)
+            serverAvatarDataMessage.Serialize(Writer);
+            if (avatarDataMessage.recipientsSize != 0)
             {
-                var targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
+                ConcurrentDictionary<ushort, NetPeer> targetedClients = new ConcurrentDictionary<ushort, NetPeer>();
 
-                int recipientsLength = Rec.Length;
+                int recipientsLength = avatarDataMessage.recipientsSize;
+                BNL.Log("Query Recipients " + recipientsLength);
                 for (int index = 0; index < recipientsLength; index++)
                 {
-                    if (allClients.TryGetValue(Rec[index], out NetPeer client))
+                    if (BasisNetworkServer.Peers.TryGetValue(avatarDataMessage.recipients[index], out NetPeer client))
                     {
+                        BNL.Log("Found Peer! " + avatarDataMessage.recipients[index]);
                         targetedClients.TryAdd((ushort)client.Id, client);
+                    }
+                    else
+                    {
+                        BNL.Log("Missing Peer! " + avatarDataMessage.recipients[index]);
                     }
                 }
 
                 if (targetedClients.Count > 0)
                 {
+                    BNL.Log("Sending out Target Clients " + targetedClients.Count);
                     BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, targetedClients, DeliveryMethod);
                 }
             }
             else
             {
-                BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, sender, allClients, DeliveryMethod);
+                BasisNetworkServer.BroadcastMessageToClients(Writer, Channel, sender, BasisNetworkServer.Peers, DeliveryMethod);
             }
         }
     }

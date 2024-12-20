@@ -240,7 +240,7 @@ public static class BasisNetworkServer
                 reader.Recycle();
                 break;
             case BasisNetworkCommons.AvatarChannel:
-                BasisNetworkingGeneric.HandleAvatar(reader, deliveryMethod, peer, Peers);
+                BasisNetworkingGeneric.HandleAvatar(reader, deliveryMethod, peer);
                 reader.Recycle();
                 break;
             case BasisNetworkCommons.SceneChannel:

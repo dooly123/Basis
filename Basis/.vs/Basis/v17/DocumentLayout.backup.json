@@ -3,32 +3,60 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basis framework\\networking\\handles\\basisnetworkgenericmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|solutionrelative:packages\\basis framework\\networking\\handles\\basisnetworkgenericmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\handles\\basisnetworkgenericmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\handles\\basisnetworkgenericmessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD2C966F-7DDF-0534-4CE9-90DC719E12A3}|HVR.Basis.Comms.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\hvrbasisavatarcomms\\scripts\\hvravatarcomms.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD2C966F-7DDF-0534-4CE9-90DC719E12A3}|HVR.Basis.Comms.csproj|solutionrelative:packages\\hvrbasisavatarcomms\\scripts\\hvravatarcomms.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basistests\\basistestnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|solutionrelative:packages\\basistests\\basistestnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\basistests\\basistestroundtrip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|solutionrelative:packages\\basistests\\basistestroundtrip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8379EF4-14C3-3FD9-E603-6B6CE12C3F93}|BasisNetworkCore.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis server\\basisnetworkcore\\serializable\\avatardatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8379EF4-14C3-3FD9-E603-6B6CE12C3F93}|BasisNetworkCore.csproj|solutionrelative:packages\\basis server\\basisnetworkcore\\serializable\\avatardatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\players\\basisplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{67CDD50F-E4A4-B576-49C7-8239FAAC440F}|Basis.Player.csproj|solutionrelative:packages\\basis framework\\players\\basisplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1664F3B8-E531-5803-3C00-18E715449E9F}|BasisSDK.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basisdk\\scripts\\basisavatar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1664F3B8-E531-5803-3C00-18E715449E9F}|BasisSDK.csproj|solutionrelative:packages\\basisdk\\scripts\\basisavatar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basistests\\basistestroundtrip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|solutionrelative:packages\\basistests\\basistestroundtrip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basistests\\basisobjectsyncnetworking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|solutionrelative:packages\\basistests\\basisobjectsyncnetworking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basistests\\basistestnetworkavatar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|solutionrelative:packages\\basistests\\basistestnetworkavatar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD2C966F-7DDF-0534-4CE9-90DC719E12A3}|HVR.Basis.Comms.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\hvrbasisavatarcomms\\scripts\\hvravatarcomms.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD2C966F-7DDF-0534-4CE9-90DC719E12A3}|HVR.Basis.Comms.csproj|solutionrelative:packages\\hvrbasisavatarcomms\\scripts\\hvravatarcomms.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basistests\\basistestnetworkscene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|solutionrelative:packages\\basistests\\basistestnetworkscene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basistests\\basistestnetworkavataroverridejump.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F896A0F-9806-41F9-B4B3-9374A4AFA216}|BasisExamples.csproj|solutionrelative:packages\\basistests\\basistestnetworkavataroverridejump.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\bundle management\\basisloadhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\bundle management\\basisloadhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basis framework\\networking\\networkedplayer\\basisnetworkedplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\basis framework\\networking\\networkedplayer\\basisnetworkedplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1664F3B8-E531-5803-3C00-18E715449E9F}|BasisSDK.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\basisdk\\scripts\\basisscene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1664F3B8-E531-5803-3C00-18E715449E9F}|BasisSDK.csproj|solutionrelative:packages\\basisdk\\scripts\\basisscene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,20 +66,80 @@
       "DocumentGroups": [
         {
           "DockedWidth": 471,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
+              "Title": "BasisTestNetworkAvatar.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetworkAvatar.cs",
+              "RelativeDocumentMoniker": "Packages\\basistests\\BasisTestNetworkAvatar.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetworkAvatar.cs",
+              "RelativeToolTip": "Packages\\basistests\\BasisTestNetworkAvatar.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAgwDIAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T09:12:47.236Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "HVRAvatarComms.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\HVRBasisAvatarComms\\Scripts\\HVRAvatarComms.cs",
               "RelativeDocumentMoniker": "Packages\\HVRBasisAvatarComms\\Scripts\\HVRAvatarComms.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\HVRBasisAvatarComms\\Scripts\\HVRAvatarComms.cs",
               "RelativeToolTip": "Packages\\HVRBasisAvatarComms\\Scripts\\HVRAvatarComms.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAlwDwAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAwE8AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T08:20:59.743Z",
+              "WhenOpened": "2024-12-20T09:12:36.153Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BasisTestRoundTrip.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestRoundTrip.cs",
+              "RelativeDocumentMoniker": "Packages\\basistests\\BasisTestRoundTrip.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestRoundTrip.cs",
+              "RelativeToolTip": "Packages\\basistests\\BasisTestRoundTrip.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAwEAAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T09:11:08.113Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BasisTestNetworkAvatarOverrideJump.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetworkAvatarOverrideJump.cs",
+              "RelativeDocumentMoniker": "Packages\\basistests\\BasisTestNetworkAvatarOverrideJump.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetworkAvatarOverrideJump.cs",
+              "RelativeToolTip": "Packages\\basistests\\BasisTestNetworkAvatarOverrideJump.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAQwDYAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T09:10:33.531Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BasisTestNetwork.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetwork.cs",
+              "RelativeDocumentMoniker": "Packages\\basistests\\BasisTestNetwork.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetwork.cs",
+              "RelativeToolTip": "Packages\\basistests\\BasisTestNetwork.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAmwE0AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T08:50:17.371Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "BasisNetworkManagement.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
+              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
+              "RelativeToolTip": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
+              "ViewState": "AgIAAJsBAAAAAAAAAAAAwKcBAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T08:58:35.091Z"
             },
             {
               "$type": "Document",
@@ -61,9 +149,9 @@
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkGenericMessages.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkGenericMessages.cs",
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\Handles\\BasisNetworkGenericMessages.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAYwEEAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAADQAAAAAAAAAAAAswDwAAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:43:23.962Z",
+              "WhenOpened": "2024-12-20T08:58:10.088Z",
               "EditorCaption": ""
             },
             {
@@ -74,58 +162,81 @@
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
               "RelativeToolTip": "Packages\\Basis Framework\\Networking\\BasisNetworkSendBase.cs",
-              "ViewState": "AgIAADEAAAAAAAAAAAAwwEcAAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAwwGgAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:40:49.162Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "BasisNetworkManagement.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
-              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
-              "RelativeToolTip": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
-              "ViewState": "AgIAAFMAAAAAAAAAAAAwwBEAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:37:39.587Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "BasisLoadhandler.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Bundle Management\\BasisLoadhandler.cs",
-              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Bundle Management\\BasisLoadhandler.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Bundle Management\\BasisLoadhandler.cs",
-              "RelativeToolTip": "Packages\\Basis Framework\\Bundle Management\\BasisLoadhandler.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAmwEcAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:18:44.083Z"
+              "WhenOpened": "2024-12-20T11:28:16.218Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "BasisTestRoundTrip.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestRoundTrip.cs",
-              "RelativeDocumentMoniker": "Packages\\basistests\\BasisTestRoundTrip.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestRoundTrip.cs",
-              "RelativeToolTip": "Packages\\basistests\\BasisTestRoundTrip.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBcAAAAaAAAAAAAAAA==",
+              "Title": "AvatarDataMessage.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Server\\BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
+              "RelativeDocumentMoniker": "Packages\\Basis Server\\BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Server\\BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
+              "RelativeToolTip": "Packages\\Basis Server\\BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAcwEwAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T06:42:50.353Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-20T11:28:47.439Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BasisObjectSyncNetworking.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisObjectSyncNetworking.cs",
+              "RelativeDocumentMoniker": "Packages\\basistests\\BasisObjectSyncNetworking.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisObjectSyncNetworking.cs",
+              "RelativeToolTip": "Packages\\basistests\\BasisObjectSyncNetworking.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAowIUAAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T08:56:53.235Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "BasisNetworkedPlayer.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\NetworkedPlayer\\BasisNetworkedPlayer.cs",
+              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\NetworkedPlayer\\BasisNetworkedPlayer.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\NetworkedPlayer\\BasisNetworkedPlayer.cs",
+              "RelativeToolTip": "Packages\\Basis Framework\\Networking\\NetworkedPlayer\\BasisNetworkedPlayer.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAuwFUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T09:00:40.532Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BasisTestNetworkScene.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetworkScene.cs",
+              "RelativeDocumentMoniker": "Packages\\basistests\\BasisTestNetworkScene.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basistests\\BasisTestNetworkScene.cs",
+              "RelativeToolTip": "Packages\\basistests\\BasisTestNetworkScene.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAuwB8AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T08:56:46.639Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "BasisPlayer.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Players\\BasisPlayer.cs",
-              "RelativeDocumentMoniker": "Packages\\Basis Framework\\Players\\BasisPlayer.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Players\\BasisPlayer.cs",
-              "RelativeToolTip": "Packages\\Basis Framework\\Players\\BasisPlayer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAaAAAAAAAAAA==",
+              "Title": "BasisAvatar.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basisdk\\Scripts\\BasisAvatar.cs",
+              "RelativeDocumentMoniker": "Packages\\basisdk\\Scripts\\BasisAvatar.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basisdk\\Scripts\\BasisAvatar.cs",
+              "RelativeToolTip": "Packages\\basisdk\\Scripts\\BasisAvatar.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAIwE4AAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T06:13:23.987Z"
+              "WhenOpened": "2024-12-20T08:57:20.267Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "BasisScene.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basisdk\\Scripts\\BasisScene.cs",
+              "RelativeDocumentMoniker": "Packages\\basisdk\\Scripts\\BasisScene.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\basisdk\\Scripts\\BasisScene.cs",
+              "RelativeToolTip": "Packages\\basisdk\\Scripts\\BasisScene.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAEwBQAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-20T08:56:22.462Z"
             }
           ]
         }
