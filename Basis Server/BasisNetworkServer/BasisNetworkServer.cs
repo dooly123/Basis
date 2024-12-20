@@ -20,7 +20,7 @@ public static class BasisNetworkServer
     public static NetManager server;
     public static ConcurrentDictionary<ushort, NetPeer> Peers = new ConcurrentDictionary<ushort, NetPeer>();
     public static Configuration Configuration;
-
+    public static Thread serverIncomeThread;
     public static void StartServer(Configuration configuration)
     {
         Configuration = configuration;
@@ -35,8 +35,22 @@ public static class BasisNetworkServer
         }
         BNL.Log("Server Worker Threads Booted");
 
-    }
 
+        serverIncomeThread = new Thread(WorkerThread)
+        {
+            IsBackground = true // Ensure the thread doesn't prevent the application from exiting
+        };
+        serverIncomeThread.Start();
+
+    }
+    public static void WorkerThread()
+    {
+        while (true)
+        {
+            server.PollEvents();
+            Thread.Sleep(15);
+        }
+    }
     #region Server Setup
     private static void SetupServer(Configuration configuration)
     {
