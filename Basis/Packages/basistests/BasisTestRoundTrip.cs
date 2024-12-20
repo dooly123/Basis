@@ -1,5 +1,6 @@
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.Networking;
+using LiteNetLib;
 using UnityEngine;
 
 public class BasisTestRoundTrip : MonoBehaviour
@@ -45,7 +46,7 @@ public class BasisTestRoundTrip : MonoBehaviour
     /// <param name="MessageIndex">The index of the message type.</param>
     /// <param name="buffer">The data buffer received.</param>
     /// <param name="Recipients">The array of recipient player IDs.</param>
-    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients)
+    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, DeliveryMethod Method = DeliveryMethod.ReliableSequenced)
     {
         // Null checks for buffer and Recipients arrays
         if (buffer == null)
@@ -68,20 +69,14 @@ public class BasisTestRoundTrip : MonoBehaviour
             return;
         }
 
-        if (Recipients == null)
-        {
-            Debug.LogError($"Recipients array is null. MessageIndex: {MessageIndex}, PlayerID: {PlayerID}");
-            return;
-        }
-
         // Try to get the player from the network management system
         if (BasisNetworkManagement.Players.TryGetValue(PlayerID, out Basis.Scripts.Networking.NetworkedPlayer.BasisNetworkedPlayer Player))
         {
-            Debug.Log($"Rec Avatar Message from player {Player.Player.DisplayName}, MessageIndex: {MessageIndex}, Buffer Length: {buffer.Length}, Recipients Count: {Recipients.Length}");
+            Debug.Log($"Rec Avatar Message from player {Player.Player.DisplayName}, MessageIndex: {MessageIndex}, Buffer Length: {buffer.Length}, Recipients Count: {Method}");
         }
         else
         {
-            Debug.Log($"Player ID {PlayerID} not found. MessageIndex: {MessageIndex}, Buffer Length: {buffer.Length}, Recipients Count: {Recipients.Length}");
+            Debug.Log($"Player ID {PlayerID} not found. MessageIndex: {MessageIndex}, Buffer Length: {buffer.Length}, Recipients Count: {Method}");
         }
     }
 }

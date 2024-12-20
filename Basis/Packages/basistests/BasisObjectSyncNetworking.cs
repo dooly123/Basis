@@ -138,7 +138,7 @@ public class BasisObjectSyncNetworking : MonoBehaviour
         return positionChanged || rotationChanged || scaleChanged;
     }
 
-    public void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients)
+    public void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.ReliableSequenced)
     {
         // Check if this is the correct message
         if (MessageIndex == this.MessageIndex)

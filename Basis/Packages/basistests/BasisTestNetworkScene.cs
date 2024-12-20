@@ -38,7 +38,7 @@ public class BasisTestNetworkScene : MonoBehaviour
         BasisScene.OnNetworkMessageReceived += OnNetworkMessageReceived;
         BasisScene.OnNetworkMessageSend(MessageIndex, SendingData, DeliveryMethod.ReliableOrdered, Recipients);
     }
-    private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer,ushort[] Recipients)
+    private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, DeliveryMethod Method = DeliveryMethod.ReliableOrdered)
     {
 
     }

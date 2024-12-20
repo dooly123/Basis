@@ -59,7 +59,7 @@ namespace Basis.Network.Server.Generic
         {
             AvatarDataMessage avatarDataMessage = new AvatarDataMessage();
             avatarDataMessage.Deserialize(Reader);
-            var Rec = avatarDataMessage.recipients;
+            ushort[] Rec = avatarDataMessage.recipients;
             avatarDataMessage.recipients = null;
             avatarDataMessage.recipientsSize = 0;
             ServerAvatarDataMessage serverAvatarDataMessage = new ServerAvatarDataMessage

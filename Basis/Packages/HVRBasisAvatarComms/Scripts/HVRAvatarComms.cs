@@ -91,7 +91,7 @@ namespace HVR.Basis.Comms
             }
         }
 
-        private void OnNetworkMessageReceived(ushort whoSentThis, byte messageindex, byte[] unsafeBuffer, ushort[] recipients)
+        private void OnNetworkMessageReceived(ushort whoSentThis, byte messageindex, byte[] unsafeBuffer, DeliveryMethod Method = DeliveryMethod.ReliableSequenced)
         {
             // Ignore all other messages first
             if (OurMessageIndex != messageindex) return;

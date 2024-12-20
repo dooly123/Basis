@@ -421,14 +421,14 @@ namespace Basis.Scripts.Networking
                 case BasisNetworkCommons.SceneChannel:
                     BasisNetworkManagement.MainThreadContext.Post(_ =>
                     {
-                        BasisNetworkGenericMessages.HandleServerSceneDataMessage(Reader);
+                        BasisNetworkGenericMessages.HandleServerSceneDataMessage(Reader,deliveryMethod);
                         Reader.Recycle();
                     }, null);
                     break;
                 case BasisNetworkCommons.AvatarChannel:
                     BasisNetworkManagement.MainThreadContext.Post(_ =>
                     {
-                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage(Reader);
+                        BasisNetworkGenericMessages.HandleServerAvatarDataMessage(Reader, deliveryMethod);
                         Reader.Recycle();
                     }, null);
                     break;

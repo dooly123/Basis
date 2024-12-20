@@ -12,6 +12,7 @@ public class BasisTestNetwork : MonoBehaviour
     public BasisAvatar avatar;
     public DeliveryMethod Method = DeliveryMethod.ReliableSequenced;
     public bool Send = false;
+    public ushort[] Players;
     public void OnEnable()
     {
         avatar = BasisLocalPlayer.Instance.Avatar;
@@ -50,7 +51,7 @@ public class BasisTestNetwork : MonoBehaviour
     {
         if (Send)
         {
-            ushort[] Players = BasisNetworkManagement.RemotePlayers.Keys.ToArray();
+            //   ushort[] Players = BasisNetworkManagement.RemotePlayers.Keys.ToArray();
             byte[] Bytes = new byte[16];
             Debug.Log("sending Avatar");
 
@@ -78,19 +79,15 @@ public class BasisTestNetwork : MonoBehaviour
             Send = false;
         }
     }
-    private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients)
+    private void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, DeliveryMethod Method = DeliveryMethod.ReliableSequenced)
     {
         string bufferLength = buffer != null ? buffer.Length.ToString() : "null";
-        string recipientsLength = Recipients != null ? Recipients.Length.ToString() : "null";
-
-        Debug.Log($"Scene: Interpreting {PlayerID} Stage {MessageIndex} BufferLength: {bufferLength} RecipientsLength: {recipientsLength}");
+        Debug.Log($"Scene: Interpreting {PlayerID} Stage {MessageIndex} BufferLength: {bufferLength} ReliableSequenced: {Method}");
     }
 
-    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients)
+    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, DeliveryMethod Method = DeliveryMethod.ReliableSequenced)
     {
         string bufferLength = buffer != null ? buffer.Length.ToString() : "null";
-        string recipientsLength = Recipients != null ? Recipients.Length.ToString() : "null";
-
-        Debug.Log($"Avatar: Interpreting {PlayerID} Stage {MessageIndex} BufferLength: {bufferLength} RecipientsLength: {recipientsLength}");
+        Debug.Log($"Avatar: Interpreting {PlayerID} Stage {MessageIndex} BufferLength: {bufferLength} ReliableSequenced: {Method}");
     }
 }

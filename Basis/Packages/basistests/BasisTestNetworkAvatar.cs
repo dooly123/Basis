@@ -54,7 +54,7 @@ public class BasisTestNetworkAvatar : MonoBehaviour
         avatar.NetworkMessageSend(MessageIndexTest, SubmittingData, DeliveryMethod.Unreliable, Recipients);
     }
 
-    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients = null)
+    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer, DeliveryMethod Method = DeliveryMethod.ReliableSequenced)
     {
         //  Debug.Log("OnNetworkMessageReceived from player " + PlayerID + " with message Index " + MessageIndex + " | " + buffer.Length);
     }

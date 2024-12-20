@@ -13,8 +13,23 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
         public BasisBoneControl MouthBone;
         public BasisPlayer Player;
         [SerializeField]
-        public PlayerIdMessage NetworkNetID = new PlayerIdMessage();
-        public ushort NetId => NetworkNetID.playerID;
+        public PlayerIdMessage PlayerIDMessage;
+        public bool hasID = false;
+        public ushort NetId
+        {
+            get
+            {
+                if (hasID)
+                {
+                    return PlayerIDMessage.playerID;
+                }
+                else
+                {
+                    Debug.LogError("Missing Network ID!");
+                    return 0;
+                }
+            }
+        }
         public void OnDestroy()
         {
             if (Player != null)
@@ -71,7 +86,8 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
         }
         public void ProvideNetworkKey(ushort PlayerID)
         {
-            NetworkNetID.playerID = PlayerID;
+            PlayerIDMessage.playerID = PlayerID;
+            hasID = true;
         }
         public void LocalInitalize(BasisLocalPlayer BasisLocalPlayer)
         {

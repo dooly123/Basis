@@ -13,13 +13,13 @@ using static SerializableBasis;
 public static class BasisNetworkGenericMessages
 {
     // Handler for server scene data messages
-    public static void HandleServerSceneDataMessage(LiteNetLib.NetPacketReader reader)
+    public static void HandleServerSceneDataMessage(LiteNetLib.NetPacketReader reader, LiteNetLib.DeliveryMethod deliveryMethod)
     {
         ServerSceneDataMessage ServerSceneDataMessage = new ServerSceneDataMessage();
         ServerSceneDataMessage.Deserialize(reader);
         ushort playerID = ServerSceneDataMessage.playerIdMessage.playerID;
         SceneDataMessage sceneDataMessage = ServerSceneDataMessage.sceneDataMessage;
-        BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload);
+        BasisScene.OnNetworkMessageReceived?.Invoke(playerID, sceneDataMessage.messageIndex, sceneDataMessage.payload,deliveryMethod);
     }
     public delegate void OnNetworkMessageReceiveOwnershipTransfer(string UniqueEntityID, ushort NetIdNewOwner, bool IsOwner);
     public static void HandleOwnershipTransfer(LiteNetLib.NetPacketReader reader)
@@ -52,7 +52,7 @@ public static class BasisNetworkGenericMessages
         }
     }
     // Handler for server avatar data messages
-    public static void HandleServerAvatarDataMessage(LiteNetLib.NetPacketReader reader)
+    public static void HandleServerAvatarDataMessage(LiteNetLib.NetPacketReader reader, LiteNetLib.DeliveryMethod Method)
     {
         BasisNetworkProfiler.ServerAvatarDataMessageCounter.Sample(reader.AvailableBytes);
         ServerAvatarDataMessage serverAvatarDataMessage = new ServerAvatarDataMessage();
@@ -74,7 +74,7 @@ public static class BasisNetworkGenericMessages
                 }
                 else
                 {
-                    player.Player.Avatar.OnNetworkMessageReceived.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, output.recipients);
+                    player.Player.Avatar.OnNetworkMessageReceived.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, Method);
                 }
             }
             else

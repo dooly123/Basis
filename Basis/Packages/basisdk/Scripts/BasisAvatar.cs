@@ -88,7 +88,7 @@ namespace Basis.Scripts.BasisSdk
         /// </summary>
         /// <param name="MessageIndex"></param>
         /// <param name="buffer"></param>
-        public delegate void AvatarNetworkMessageReceiveEvent(ushort PlayerID, byte MessageIndex, byte[] buffer, ushort[] Recipients = null);
+        public delegate void AvatarNetworkMessageReceiveEvent(ushort PlayerID, byte MessageIndex, byte[] buffer, DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable);
 
 
         /// <summary>

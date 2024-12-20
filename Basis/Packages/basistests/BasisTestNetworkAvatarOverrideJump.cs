@@ -49,7 +49,7 @@ public class BasisTestNetworkAvatarOverrideJump : MonoBehaviour
             }
         }
     }
-    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer = null, ushort[] Recipients = null)
+    private void OnNetworkMessageReceived(ushort PlayerID, byte MessageIndex, byte[] buffer = null, DeliveryMethod Method = DeliveryMethod.ReliableSequenced)
     {
         Debug.Log("got message " + MessageIndex);
         if (MessageIndex == MessageIndexTest)

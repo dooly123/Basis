@@ -48,7 +48,7 @@ namespace Basis.Scripts.BasisSdk
         /// </summary>
         /// <param name="MessageIndex"></param>
         /// <param name="buffer"></param>
-        public delegate void SceneNetworkMessageReceiveEvent(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients = null);
+        public delegate void SceneNetworkMessageReceiveEvent(ushort PlayerID, ushort MessageIndex, byte[] buffer, LiteNetLib.DeliveryMethod deliveryMethod);
 
 
         /// <summary>
