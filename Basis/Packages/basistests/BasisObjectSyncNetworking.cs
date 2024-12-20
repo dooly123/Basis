@@ -3,24 +3,26 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using BasisSerializer.OdinSerializer;
-using LiteNetLib;
+using System;
 using UnityEngine;
+
 public class BasisObjectSyncNetworking : MonoBehaviour
 {
     public ushort MessageIndex = 3321;
     public byte[] byteArray = new byte[28];
-    public bool IsOwner = false;
-    public float LerpMultiplier = 3;
+    public bool IsOwner = false;  // Ownership flag
+    public float LerpMultiplier = 3f;
     private float sendInterval = 0.2f; // Send data every 0.2 seconds
     private float timeSinceLastSend = 0.0f;
-    public BasisNetworkedPlayer LocalNetworkPlayer;
-    public DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable;
-    public Vector3 previousPosition;
-    public Quaternion previousRotation;
-    public Vector3 previousScale;
-    public bool NeedsAUpdate = false;
+    public BasisNetworkedPlayer LocalNetworkPlayer;  // Local player reference
     public Rigidbody Rigidbody;
     public BasisPositionRotationScale Storeddata = new BasisPositionRotationScale();
+    public InteractableObject iObject;
+
+    public string uniqueId = "1";
+    private Transform currentOwner;
+
+    // Subscribe to necessary network events
     public void Awake()
     {
         BasisScene.OnNetworkMessageReceived += OnNetworkMessageReceived;
@@ -28,7 +30,10 @@ public class BasisObjectSyncNetworking : MonoBehaviour
         BasisNetworkManagement.OnRemotePlayerJoined += OnRemotePlayerJoined;
         BasisNetworkManagement.OnLocalPlayerLeft += OnLocalPlayerLeft;
         BasisNetworkManagement.OnRemotePlayerLeft += OnRemotePlayerLeft;
+        BasisNetworkManagement.OnOwnershipTransfer += OnOwnershipTransfer;
     }
+
+    // Unsubscribe when destroyed
     public void OnDestroy()
     {
         BasisScene.OnNetworkMessageReceived -= OnNetworkMessageReceived;
@@ -36,111 +41,95 @@ public class BasisObjectSyncNetworking : MonoBehaviour
         BasisNetworkManagement.OnRemotePlayerJoined -= OnRemotePlayerJoined;
         BasisNetworkManagement.OnLocalPlayerLeft -= OnLocalPlayerLeft;
         BasisNetworkManagement.OnRemotePlayerLeft -= OnRemotePlayerLeft;
-    }
-    public void OnRemotePlayerLeft(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
-    {
-        // Handle the remote player leaving
-        ComputeCurrentOwner();
+        BasisNetworkManagement.OnOwnershipTransfer -= OnOwnershipTransfer;
     }
 
-    public void OnLocalPlayerLeft(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
-    {
-        // Handle the local player leaving
-        ComputeCurrentOwner();
-    }
-
-    public void OnRemotePlayerJoined(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
-    {
-        // Handle a remote player joining
-        ComputeCurrentOwner();
-        NeedsAUpdate = true;
-    }
-
+    // Local player joins
     public void OnLocalPlayerJoined(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
     {
-        LocalNetworkPlayer = player1;
-        // Handle the local player joining
-        ComputeCurrentOwner();
+        LocalNetworkPlayer = player1;  // Assign the local player
+        RequestCurrentOwnership();  // Get the current owner of the object
     }
 
-    public void ComputeCurrentOwner()
+    // Remote player joins
+    public void OnRemotePlayerJoined(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
     {
-        ushort OldestPlayerInInstance = BasisNetworkManagement.Instance.GetOldestAvailablePlayerUshort();
-        IsOwner = OldestPlayerInInstance == LocalNetworkPlayer.NetId;
-        Rigidbody.isKinematic = !IsOwner;
+        RequestCurrentOwnership();  // Recheck ownership logic when remote player joins
+    }
+
+    // Player leaves the game
+    public void OnLocalPlayerLeft(BasisNetworkedPlayer player1, BasisLocalPlayer player2)
+    {
+        RequestCurrentOwnership();  // Recheck ownership if the local player leaves
+    }
+
+    public void OnRemotePlayerLeft(BasisNetworkedPlayer player1, BasisRemotePlayer player2)
+    {
+        RequestCurrentOwnership();  // Recheck ownership if remote player leaves
+    }
+
+    public void RequestOwnership()
+    {
+        BasisNetworkManagement.RequestOwnership(uniqueId, LocalNetworkPlayer.NetId);
+    }
+    private void RequestCurrentOwnership()
+    {
+        BasisNetworkManagement.RequestCurrentOwnership(uniqueId);
+    }
+    private void OnOwnershipTransfer(string UniqueEntityID, ushort NetIdNewOwner, bool IsOwner)
+    {
+        if (UniqueEntityID == uniqueId)
+        {
+            if (IsOwner)
+            {
+                currentOwner = LocalNetworkPlayer.transform;
+                Debug.Log("Current Owner Assigned: " + currentOwner.name);
+                if (!iObject.isHeld)
+                {
+                    iObject.PickUp(currentOwner);
+                }
+            }
+            else
+            {
+                if (iObject.isHeld)
+                {
+                    iObject.Drop();
+                }
+            }
+        }
     }
 
     public void Update()
     {
-        if (IsOwner)
+        // Exit if LocalNetworkPlayer is not assigned
+        if (LocalNetworkPlayer == null)
         {
-            // Accumulate time since last send
+            Debug.LogWarning("LocalNetworkPlayer is not assigned!");
+            return;
+        }
+
+        if (Rigidbody != null)
+        {
+            // Sync position, rotation, and scale to networked object
             timeSinceLastSend += Time.deltaTime;
 
-            // Only send data if the time since last send exceeds the interval
             if (timeSinceLastSend >= sendInterval)
             {
-                // Get current position, rotation, and scale
                 transform.GetPositionAndRotation(out Storeddata.Position, out Storeddata.Rotation);
                 Storeddata.Scale = transform.localScale;
 
-                // Check if position, rotation, or scale has changed since last sync
-                if (NeedsAUpdate || HasPositionRotationOrScaleChanged())
-                {
-                    // Reset the timer
-                    timeSinceLastSend = 0.0f;
+                // Send update to network if necessary
+                byte[] byteArray = SerializationUtility.SerializeValue(Storeddata, DataFormat.Binary);
 
-                    // Convert to byte array
-                    byte[] byteArray = SerializationUtility.SerializeValue(Storeddata, DataFormat.Binary);
-                    // Send network message with position, rotation, and scale data
-                    BasisScene.NetworkMessageSend(MessageIndex, byteArray, DeliveryMethod);
-
-                    // Reset previous values to the current ones
-                    previousPosition = Storeddata.Position;
-                    previousRotation = Storeddata.Rotation;
-                    previousScale = Storeddata.Scale;
-                    NeedsAUpdate = false;
-                }
-
-                // Check if the object is below the respawn height and reset position if necessary
-                if (Storeddata.Position.y < BasisSceneFactory.Instance.BasisScene.RespawnHeight)
-                {
-                    this.transform.position = BasisSceneFactory.Instance.BasisScene.SpawnPoint.position;
-                }
+                // Reset the timer
+                timeSinceLastSend = 0.0f;
             }
         }
-        else
-        {
-            // Get the current position, rotation, and scale
-            transform.GetPositionAndRotation(out Vector3 CurrentPosition, out Quaternion CurrentRotation);
-            Vector3 CurrentScale = transform.localScale;
-            float DeltaTime = Time.deltaTime;
-            float CurrentLerp = LerpMultiplier * DeltaTime;
-
-            // Interpolate position, rotation, and scale for smooth transitions
-            Vector3 DesiredCurrentPosition = Vector3.Lerp(CurrentPosition, Storeddata.Position, CurrentLerp);
-            Quaternion DesiredCurrentRotation = Quaternion.Slerp(CurrentRotation, Storeddata.Rotation, CurrentLerp);
-            Vector3 DesiredCurrentScale = Vector3.Lerp(CurrentScale, Storeddata.Scale, CurrentLerp);
-
-            transform.SetPositionAndRotation(DesiredCurrentPosition, DesiredCurrentRotation);
-            transform.localScale = DesiredCurrentScale;
-        }
     }
 
-    private bool HasPositionRotationOrScaleChanged()
-    {
-        // Check if the position, rotation, or scale has changed
-        bool positionChanged = previousPosition != Storeddata.Position;
-        bool rotationChanged = previousRotation != Storeddata.Rotation;
-        bool scaleChanged = previousScale != Storeddata.Scale;
-
-        // Return true if any have changed
-        return positionChanged || rotationChanged || scaleChanged;
-    }
-
+    // Handle network message reception
     public void OnNetworkMessageReceived(ushort PlayerID, ushort MessageIndex, byte[] buffer, ushort[] Recipients)
     {
-        // Check if this is the correct message
         if (MessageIndex == this.MessageIndex)
         {
             byteArray = buffer;
