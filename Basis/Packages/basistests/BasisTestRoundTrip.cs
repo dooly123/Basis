@@ -50,7 +50,21 @@ public class BasisTestRoundTrip : MonoBehaviour
         // Null checks for buffer and Recipients arrays
         if (buffer == null)
         {
-            Debug.LogError($"Buffer is null. MessageIndex: {MessageIndex}, PlayerID: {PlayerID}");
+            if (BasisNetworkManagement.Players.TryGetValue(PlayerID, out Basis.Scripts.Networking.NetworkedPlayer.BasisNetworkedPlayer netPlayer))
+            {
+                if (netPlayer.Player.IsLocal)
+                {
+                    Debug.LogError($"Buffer is null. MessageIndex: {MessageIndex}, Was a loop back: {PlayerID}");
+                }
+                else
+                {
+                    Debug.LogError($"Buffer is null. MessageIndex: {MessageIndex}, Was from remote player: {PlayerID}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Buffer is null. MessageIndex: {MessageIndex}, Was from unknown remote player: {PlayerID}");
+            }
             return;
         }
 
