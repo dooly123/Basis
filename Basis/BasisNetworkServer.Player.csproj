@@ -878,14 +878,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="LiteNetLib.Player.csproj">
-      <Project>{A2803A7B-469B-A17F-0A5A-A714B616EC4D}</Project>
-      <Name>LiteNetLib.Player</Name>
-    </ProjectReference>
-    <ProjectReference Include="BasisNetworkCore.Player.csproj">
-      <Project>{CD23A616-50F9-99A8-6459-BDC645F346AF}</Project>
-      <Name>BasisNetworkCore.Player</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.Player.csproj">
       <Project>{82F6ADF6-AD7F-3060-A94D-862FEEE7CCEC}</Project>
       <Name>UnityEngine.UI.Player</Name>
