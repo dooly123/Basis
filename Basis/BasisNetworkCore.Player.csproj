@@ -69,10 +69,10 @@
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ServerAvatarChangeMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\CreateSingleRemoteMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\AudioSegmentDataMessage.cs" />
-    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\Vector3Message.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ServerAudioSegmentMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Mathematics\MathExtensions.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Compression\BasisNetworkPrimitiveCompression.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\InitalAvatarPayload.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\AuthenticationMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ReadyMessage.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkCore\Serializable\ServerSideSyncPlayerMessage.cs" />

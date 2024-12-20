@@ -96,6 +96,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 messageIndex = MessageIndex,
                 payload = buffer,
                 recipients = Recipients,
+                PlayerIdMessage = new PlayerIdMessage() { playerID = NetworkedPlayer.NetId },
             };
             NetDataWriter netDataWriter = new NetDataWriter();
             if (DeliveryMethod == DeliveryMethod.Unreliable)
