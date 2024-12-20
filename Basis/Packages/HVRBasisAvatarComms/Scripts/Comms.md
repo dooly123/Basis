@@ -101,6 +101,8 @@ Assert that:
   - Who can send: Non-wearers
   - Who can receive: Wearer
 
+Assert that `bytes.Length == 2`
+
 ### Transmission packet (\[0\] < 254)
 
 - Who can send: Wearer
@@ -129,8 +131,13 @@ The value of `bytes[1]` is the interpolation duration needed for this packet.
   or apply multiple packets within the same frame in the order they were received,
   but it will not drop any packet that was effectively received.
 
-Assert that:
+Assume that:
 - At least one valid Negotiation packet has been previously received.
+- If a Negotiation packet has not been received yet prior to a Transmission packet being received,
+it is not considered to be an error, as Transmission packets are sent to everyone regardless of whether
+individual recipients have been sent a Negotiation packet yet.
+
+Assert that:
 - `bytes[0]` must be less than the `NumberOfGuids` received in the last Negotiation packet.
 - `bytes.Length` must be greater or equal to 2.
 
