@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Basis.Scripts.BasisSdk;
 using LiteNetLib;
@@ -14,19 +15,19 @@ namespace HVR.Basis.Comms
         // Use Sequenced, because we know this delivery type works
         private const DeliveryMethod MainMessageDeliveryMethod = DeliveryMethod.Sequenced;
         private const DeliveryMethod NegotiationDelivery = DeliveryMethod.ReliableOrdered;
-        
+
         public const byte OurMessageIndex = 0xC0;
         private const int BytesPerGuid = 16;
 
         [HideInInspector] [SerializeField] private BasisAvatar avatar;
         [HideInInspector] [SerializeField] private FeatureNetworking featureNetworking;
-        
+
         private bool _isWearer;
         private ushort _wearerNetId;
         private ushort[] _wearerNetIdRecipient;
         private Guid[] _negotiatedGuids;
         private Dictionary<int, int> _fromTheirsToOurs;
-        // private Stopwatch _debugRetrySendNegotiation;
+        private Stopwatch _debugRetrySendNegotiationOptional;
         private bool _alreadyInitialized;
 
         private void Awake()
@@ -37,7 +38,7 @@ namespace HVR.Basis.Comms
             {
                 throw new InvalidOperationException("Broke assumption: Avatar and/or FeatureNetworking cannot be found.");
             }
-            
+
             avatar.OnAvatarNetworkReady -= OnAvatarNetworkReady;
             avatar.OnAvatarNetworkReady += OnAvatarNetworkReady;
         }
@@ -51,7 +52,7 @@ namespace HVR.Basis.Comms
         {
             if (_alreadyInitialized) return;
             _alreadyInitialized = true;
-            
+
             _isWearer = avatar.IsOwnedLocally;
             _wearerNetId = avatar.LinkedPlayerID;
             _wearerNetIdRecipient = new[] { _wearerNetId };
@@ -61,9 +62,9 @@ namespace HVR.Basis.Comms
             avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
             if (_isWearer)
             {
-                // _debugRetrySendNegotiation = new Stopwatch();
-                // _debugRetrySendNegotiation.Restart();
-                
+                // _debugRetrySendNegotiationOptional = new Stopwatch();
+                // _debugRetrySendNegotiationOptional.Restart();
+
                 // Initialize other users.
                 Debug.Log($"Sending Negotiation Packet to everyone...");
                 avatar.NetworkMessageSend(OurMessageIndex, featureNetworking.GetNegotiationPacket(), MainMessageDeliveryMethod);
@@ -80,51 +81,51 @@ namespace HVR.Basis.Comms
 
         private void Update()
         {
-            // if (!_isWearer) return;
-            //
-            // // This is a hack: Send the negotiation packet every so often, because the negotiation packets are currently not going through properly.
-            // if (_debugRetrySendNegotiation.ElapsedMilliseconds > 5000)
-            // {
-            //     _debugRetrySendNegotiation.Restart();
-            //     avatar.NetworkMessageSend(OurMessageIndex, featureNetworking.GetNegotiationPacket(), MainMessageDeliveryMethod);
-            // }
+            if (!_isWearer) return;
+
+            // This is a hack: Send the negotiation packet every so often, because the negotiation packets are currently not going through properly.
+            if (_debugRetrySendNegotiationOptional != null && _debugRetrySendNegotiationOptional.ElapsedMilliseconds > 5000)
+            {
+                _debugRetrySendNegotiationOptional.Restart();
+                avatar.NetworkMessageSend(OurMessageIndex, featureNetworking.GetNegotiationPacket(), MainMessageDeliveryMethod);
+            }
         }
 
         private void OnNetworkMessageReceived(ushort whoSentThis, byte messageindex, byte[] unsafeBuffer, ushort[] recipients)
         {
             // Ignore all other messages first
             if (OurMessageIndex != messageindex) return;
-            
+
             // Ignore all net messages as long as this is disabled
             if (!isActiveAndEnabled) return;
 
-            if (unsafeBuffer.Length == 0) return; // Protocol error: Missing sub-packet identifier
-            
+            if (unsafeBuffer.Length == 0) { ProtocolError("Protocol error: Missing sub-packet identifier"); return; }
+
             var isSentByWearer = _wearerNetId == whoSentThis;
-            
+
             var theirs = unsafeBuffer[0];
             if (theirs == FeatureNetworking.NegotiationPacket)
             {
-                if (!isSentByWearer) return; // Protocol error: Only the wearer can send us this message.
-                if (_isWearer) return; // Protocol error: The wearer cannot receive this message.
-                
+                if (!isSentByWearer) { ProtocolError("Protocol error: Only the wearer can send us this message."); return; }
+                if (_isWearer) { ProtocolError("Protocol error: The wearer cannot receive this message."); return; }
+
                 Debug.Log($"Receiving Negotiation packet from {whoSentThis}...");
                 DecodeNegotiationPacket(SubBuffer(unsafeBuffer));
             }
             else if (theirs == FeatureNetworking.ReservedPacket)
             {
                 Debug.Log($"Decoding reserved packet...");
-                
+
                 // Reserved packets are not necessarily sent by the wearer.
                 DecodeReservedPacket(SubBuffer(unsafeBuffer), whoSentThis, isSentByWearer);
             }
             else // Transmission packet
             {
-                if (!isSentByWearer) return; // Protocol error: Only the wearer can send us this message.
-                if (_isWearer) return; // Protocol error: The wearer cannot receive this message.
-                
-                if (_fromTheirsToOurs == null) return; // Protocol error: No valid Networking packet was previously received
-                
+                if (!isSentByWearer) { ProtocolError("Protocol error: Only the wearer can send us this message."); return; }
+                if (_isWearer) { ProtocolError("Protocol error: The wearer cannot receive this message."); return; }
+
+                if (_fromTheirsToOurs == null) { ProtocolWarning("Protocol warning: No valid Networking packet was previously received yet."); return; }
+
                 if (_fromTheirsToOurs.TryGetValue(theirs, out var ours))
                 {
                     featureNetworking.OnPacketReceived(ours, SubBuffer(unsafeBuffer));
@@ -133,7 +134,8 @@ namespace HVR.Basis.Comms
                 {
                     // Either:
                     // - Mismatching avatar structures, or
-                    // - Protocol error: Remote has sent a GUID index greater or equal to the previously negotiated GUIDs. 
+                    // - Protocol asset mismatch: Remote has sent a GUID index greater or equal to the previously negotiated GUIDs.
+                    ProtocolAssetMismatch($"Protocol asset mismatch: Cannot handle GUID with index {theirs}");
                 }
             }
         }
@@ -145,11 +147,11 @@ namespace HVR.Basis.Comms
 
         private bool DecodeNegotiationPacket(ArraySegment<byte> unsafeGuids)
         {
-            if (unsafeGuids.Count % BytesPerGuid != 0) return false; // Protocol error: Unexpected message length.
-            
+            if (unsafeGuids.Count % BytesPerGuid != 0) { ProtocolError("Protocol error: Unexpected message length."); return false;}
+
             // Safe after this point
             var safeGuids = unsafeGuids;
-            
+
             var guidCount = safeGuids.Count / BytesPerGuid;
             _negotiatedGuids = new Guid[guidCount];
             _fromTheirsToOurs = new Dictionary<int, int>();
@@ -157,7 +159,7 @@ namespace HVR.Basis.Comms
             {
                 return true;
             }
-            
+
             for (var guidIndex = 0; guidIndex < guidCount; guidIndex++)
             {
                 var guid = new Guid(safeGuids.Slice(guidIndex * BytesPerGuid, BytesPerGuid));
@@ -181,26 +183,41 @@ namespace HVR.Basis.Comms
 
         private void DecodeReservedPacket(ArraySegment<byte> data, ushort whoSentThis, bool isSentByWearer)
         {
-            if (data.Count == 0) return; // Protocol error: Missing data identifier
+            if (data.Count == 0) { ProtocolError("Protocol error: Missing data identifier"); return; }
 
             var reservedPacketIdentifier = data.get_Item(0);
 
             if (reservedPacketIdentifier == FeatureNetworking.ReservedPacket_RemoteRequestsInitializationMessage)
             {
-                if (isSentByWearer) return; // Protocol error: Only remote users can send this message.
-                if (!_isWearer) return; // Protocol error: Only the wearer can receive this message.
-                if (data.Count != 1) return; // Protocol error: Unexpected message length.
-                
+                if (isSentByWearer) { ProtocolError("Protocol error: Only remote users can send this message."); return; }
+                if (!_isWearer) { ProtocolError("Protocol error: Only the wearer can receive this message."); return; }
+                if (data.Count != 1) { ProtocolError("Protocol error: Unexpected message length."); return; }
+
                 // TODO: We need a way to ignore incoming initialization requests if the avatar isn't the correct one
-                
+
                 Debug.Log($"Valid ReservedPacket_RemoteRequestsInitializationMessage received, sending negotiation packet now to {whoSentThis}...");
                 avatar.NetworkMessageSend(OurMessageIndex, featureNetworking.GetNegotiationPacket(), MainMessageDeliveryMethod, new[] { whoSentThis });
                 featureNetworking.TryResyncSome(new [] { whoSentThis });
             }
             else
             {
-                // Protocol error: This reserved packet is not known. 
+                ProtocolError("Protocol error: This reserved packet is not known.");
             }
+        }
+
+        internal static void ProtocolError(string message)
+        {
+            Debug.LogError(message);
+        }
+
+        internal static void ProtocolWarning(string message)
+        {
+            Debug.LogWarning(message);
+        }
+
+        internal static void ProtocolAssetMismatch(string message)
+        {
+            Debug.LogError(message);
         }
     }
 }
