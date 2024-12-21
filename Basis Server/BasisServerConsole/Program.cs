@@ -1,14 +1,12 @@
 using Basis.Network;
 using Basis.Network.Server;
-//using Basis.Network.Server.Prometheus;
-
 namespace Basis
 {
     class Program
     {
         public static BasisNetworkHealthCheck Check;
 
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             // Get the path to the config.xml file in the application's directory
             string configFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.xml");
@@ -67,9 +65,10 @@ namespace Basis
                 await BasisServerSideLogging.ShutdownAsync();
                 BNL.Log("Server shut down successfully.");
             };
-
-            // Block the main thread indefinitely to keep the application running
-            await Task.Delay(Timeout.Infinite);
+            while (true)
+            {
+                System.Threading.Thread.Sleep(15000);
+            }
         }
     }
 }
