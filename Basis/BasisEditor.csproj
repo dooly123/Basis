@@ -66,6 +66,7 @@
     <Compile Include="Packages\Basis Framework\Editor\BasisHeightEditor.cs" />
     <Compile Include="Packages\Basis Framework\Editor\ContentPoliceSelectorEditor.cs" />
     <Compile Include="Packages\Basis Framework\Editor\BasisMenuItemsEditor.cs" />
+    <Compile Include="Packages\Basis Framework\Editor\BasisNetworkManagementEditor.cs" />
     <Compile Include="Packages\Basis Framework\Editor\BasisVirtualKeyboardDefaultLanguagesAndStyles.cs" />
     <Compile Include="Packages\Basis Framework\Editor\BasisFallBackBoneDataEditor.cs" />
     <Compile Include="Packages\Basis Framework\Editor\BasisVirtualKeyboardLayoutDataEditor.cs" />

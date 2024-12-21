@@ -19,6 +19,7 @@ using static SerializableBasis;
 namespace Basis.Scripts.Networking.Transmitters
 {
     [DefaultExecutionOrder(15001)]
+    [System.Serializable]
     public partial class BasisNetworkTransmitter : BasisNetworkSendBase
     {
         public bool HasEvents = false;
@@ -207,10 +208,6 @@ namespace Basis.Scripts.Networking.Transmitters
             }
 
             return true;
-        }
-        public void OnDestroy()
-        {
-            DeInitialize();
         }
         public override void Initialize(BasisNetworkedPlayer networkedPlayer)
         {

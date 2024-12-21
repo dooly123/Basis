@@ -205,6 +205,8 @@ MonoBehaviour:
     GeneralLocation: 0
   HasEvents: 0
   LockAvatarFromChanging: 0
+  IsNotFallBack: 0
+  OutOfRangeFromLocal: 0
 --- !u!114 &7026422538752026465
 MonoBehaviour:
   m_ObjectHideFlags: 0

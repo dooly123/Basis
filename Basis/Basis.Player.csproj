@@ -70,7 +70,6 @@
     <Compile Include="Packages\Basis Framework\Device Management\Devices\BasisInput.cs" />
     <Compile Include="Packages\Basis Framework\Avatar\TransformBinders\BoneControl\BasisBoneControl.cs" />
     <Compile Include="Packages\Basis Framework\Drivers\BasisBaseMuscleDriver.cs" />
-    <Compile Include="Packages\Basis Framework\Networking\Factorys\BasisPlayerFactoryNetworked.cs" />
     <Compile Include="Packages\Basis Framework\UI\RaycastHitData.cs" />
     <Compile Include="Packages\Basis Framework\Avatar\TransformBinders\BoneControl\BasisHasTracked.cs" />
     <Compile Include="Packages\Basis Framework\Avatar\BasisTrackerMapping.cs" />

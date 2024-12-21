@@ -15,20 +15,20 @@ MonoBehaviour:
   audioEngine: 0
   perspectiveCorrection: 0
   perspectiveCorrectionFactor: 1
-  hrtfVolumeGainDB: 0
-  hrtfNormalizationType: 1
+  hrtfVolumeGainDB: 1
+  hrtfNormalizationType: 0
   SOFAFiles: []
   defaultMaterial: {fileID: 11400000, guid: a086f686223eed942816c70be67841b0, type: 2}
-  sceneType: 0
+  sceneType: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 0
-  maxOcclusionSamples: 16
+  maxOcclusionSamples: 128
   realTimeRays: 4096
   realTimeBounces: 4
   realTimeDuration: 1
   realTimeAmbisonicOrder: 1
-  realTimeMaxSources: 32
+  realTimeMaxSources: 128
   realTimeCPUCoresPercentage: 5
   realTimeIrradianceMinDistance: 1
   bakeConvolution: 1

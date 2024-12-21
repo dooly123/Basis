@@ -1,6 +1,6 @@
-﻿namespace Basis.Scripts.Networking.NetworkedAvatar
+namespace Basis.Scripts.Networking.NetworkedAvatar
 {
-    public struct AvatarBuffer
+    public class AvatarBuffer
     {
         public Unity.Mathematics.quaternion rotation;
         public Unity.Mathematics.float3 Scale;

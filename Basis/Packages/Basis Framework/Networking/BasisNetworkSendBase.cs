@@ -13,9 +13,11 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     /// <summary>
     /// the goal of this script is to be the glue of consistent data between remote and local
     /// </summary>
-    public abstract class BasisNetworkSendBase : MonoBehaviour
+    [System.Serializable]
+    public abstract class BasisNetworkSendBase
     {
         public bool Ready;
+        [SerializeField]
         public BasisNetworkedPlayer NetworkedPlayer;
         private readonly object _lock = new object(); // Lock object for thread-safety
         private bool _hasReasonToSendAudio;

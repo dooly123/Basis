@@ -276,13 +276,16 @@ public static class BasisMenuItemsEditor
         };
         serverSideSyncPlayerMessage.localReadyMessage.clientAvatarChangeMessage = new ClientAvatarChangeMessage();
         serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = new LocalAvatarSyncMessage();
-        BasisNetworkTransmitter Transmitter = GameObject.FindFirstObjectByType<BasisNetworkTransmitter>();
-        if (Transmitter != null)
+        if(BasisNetworkManagement.Players.TryGetValue((ushort)BasisNetworkManagement.LocalPlayerPeer.Id, out Basis.Scripts.Networking.NetworkedPlayer.BasisNetworkedPlayer Player))
         {
-            Debug.Log("Apply SpawnFakeRemote");
-            serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
+          BasisNetworkTransmitter Transmitter = (BasisNetworkTransmitter)Player.NetworkSend;
+            if (Transmitter != null)
+            {
+                Debug.Log("Apply SpawnFakeRemote");
+                serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
+            }
+            CreateTestRemotePlayer(serverSideSyncPlayerMessage);
         }
-        CreateTestRemotePlayer(serverSideSyncPlayerMessage);
     }
     public async static void CreateTestRemotePlayer(ServerReadyMessage ServerReadyMessage)
     {

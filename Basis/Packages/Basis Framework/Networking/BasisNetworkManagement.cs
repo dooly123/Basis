@@ -2,7 +2,6 @@ using Basis.Network.Core;
 using Basis.Scripts.BasisSdk;
 using Basis.Scripts.BasisSdk.Helpers;
 using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Networking.Factorys;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
@@ -89,7 +88,7 @@ namespace Basis.Scripts.Networking
                     RemotePlayers.Remove(NetPlayer.NetId, out BasisNetworkReceiver A);
                     ReceiverArray = RemotePlayers.Values.ToArray();
                     ReceiverCount = ReceiverArray.Length;
-                    Debug.Log("ReceiverCount was " + ReceiverCount);
+                  //  Debug.Log("ReceiverCount was " + ReceiverCount);
                 }
                 return Players.Remove(NetPlayer.NetId, out var B);
             }
@@ -116,34 +115,6 @@ namespace Basis.Scripts.Networking
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
-        // ConcurrentQueue to hold actions to be executed on the Unity main thread
-        private static readonly ConcurrentQueue<Func<Task>> asyncActions = new ConcurrentQueue<Func<Task>>();
-        // Method to enqueue a task
-        public static void ScheduleOnMainThread(Func<Task> action)
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            asyncActions.Enqueue(action);
-        }
-        // Method to process the queue in the Update method
-        private async void Update()
-        {
-            while (asyncActions.TryDequeue(out Func<Task> action))
-            {
-                if (action != null)
-                {
-                    try
-                    {
-                        await action.Invoke();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"Error executing scheduled action: {ex.Message} {ex.StackTrace}");
-                    }
-                }
-            }
-        }
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
@@ -180,7 +151,7 @@ namespace Basis.Scripts.Networking
             BasisAvatarBufferPool.Clear();
             BasisNetworkClient.Disconnect();
         }
-        public void LateUpdate()
+        public void Update()
         {
             double TimeAsDouble = Time.timeAsDouble;
 
@@ -197,7 +168,10 @@ namespace Basis.Scripts.Networking
                     Debug.LogError($"Error in Compute at index {Index}: {ex.Message} {ex.StackTrace}");
                 }
             }
-
+        }
+        public void LateUpdate()
+        {
+            double TimeAsDouble = Time.timeAsDouble;
             float deltaTime = Time.deltaTime;
 
             // Complete tasks and apply results
@@ -279,7 +253,7 @@ namespace Basis.Scripts.Networking
             // Wrap the main logic in a task for thread safety and asynchronous execution.
             await Task.Run(() =>
             {
-                BasisNetworkManagement.MainThreadContext.Post(async _ =>
+                BasisNetworkManagement.MainThreadContext.Post(_ =>
                 {
                     try
                     {
@@ -287,8 +261,7 @@ namespace Basis.Scripts.Networking
                         ushort LocalPlayerID = (ushort)peer.RemoteId;
                         // Create the local networked player asynchronously.
                         this.transform.GetPositionAndRotation(out Vector3 Position, out Quaternion Rotation);
-                        BasisNetworkedPlayer LocalNetworkedPlayer = await BasisPlayerFactoryNetworked.CreateNetworkedPlayer(
-                            new InstantiationParameters(Position, Rotation, this.transform));
+                        BasisNetworkedPlayer LocalNetworkedPlayer = new BasisNetworkedPlayer();
                         Debug.Log("Network Id Updated " + LocalPlayerPeer.RemoteId);
 
                         LocalNetworkedPlayer.ProvideNetworkKey(LocalPlayerID);
@@ -369,11 +342,8 @@ namespace Basis.Scripts.Networking
                     }
                     break;
                 case BasisNetworkCommons.Disconnection:
-                    BasisNetworkManagement.MainThreadContext.Post(_ =>
-                    {
-                        BasisNetworkHandleRemoval.HandleDisconnection(Reader);
-                        Reader.Recycle();
-                    }, null);
+                    BasisNetworkHandleRemoval.HandleDisconnection(Reader);
+                    Reader.Recycle();
                     break;
                 case BasisNetworkCommons.AvatarChangeMessage:
                     BasisNetworkManagement.MainThreadContext.Post(_ =>
@@ -415,7 +385,7 @@ namespace Basis.Scripts.Networking
                     Reader.Recycle();
                     break;
                 case BasisNetworkCommons.MovementChannel:
-                    await BasisNetworkHandleAvatar.HandleAvatarUpdate(Reader);
+                     BasisNetworkHandleAvatar.HandleAvatarUpdate(Reader);
                     Reader.Recycle();
                     break;
                 case BasisNetworkCommons.SceneChannel:
@@ -597,5 +567,7 @@ namespace Basis.Scripts.Networking
 
             return smallestValue;
         }
+
     }
+
 }

@@ -1,70 +1,34 @@
 using Basis.Scripts.Networking;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using LiteNetLib;
 using static SerializableBasis;
-
+using System.Collections.Generic;
+using Basis.Scripts.Networking.NetworkedAvatar;
 public static class BasisNetworkHandleAvatar
 {
-    private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1); // Ensures single execution
-    private static CancellationTokenSource avatarUpdateCancellationTokenSource = new CancellationTokenSource();
-    private const int TimeoutMilliseconds = 100; // 100ms limit per execution
-    public static ConcurrentQueue<ServerSideSyncPlayerMessage> Message = new ConcurrentQueue<ServerSideSyncPlayerMessage>();
-    public static async Task HandleAvatarUpdate(NetPacketReader Reader)
+    public static Queue<ServerSideSyncPlayerMessage> Message = new Queue<ServerSideSyncPlayerMessage>();
+    public static void HandleAvatarUpdate(NetPacketReader Reader)
     {
-        // Cancel any ongoing task
-        avatarUpdateCancellationTokenSource.Cancel();
-        avatarUpdateCancellationTokenSource = new CancellationTokenSource();
-        CancellationToken cancellationToken = avatarUpdateCancellationTokenSource.Token;
-
-        try
+        if (Message.TryDequeue(out ServerSideSyncPlayerMessage SSM) == false)
         {
-            await semaphore.WaitAsync(TimeoutMilliseconds);
-
-            try
-            {
-                if (Message.TryDequeue(out ServerSideSyncPlayerMessage SSM) == false)
-                {
-                    SSM = new ServerSideSyncPlayerMessage();
-                }
-                SSM.Deserialize(Reader);
-                if (BasisNetworkManagement.RemotePlayers.TryGetValue(SSM.playerIdMessage.playerID, out BasisNetworkReceiver player))
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        Debug.Log("HandleAvatarUpdate operation canceled.");
-                        return; // Exit early if a cancellation is requested
-                    }
-
-                    player.ReceiveNetworkAvatarData(SSM);
-                }
-                else
-                {
-                    Debug.Log($"Missing Player For Avatar Update {SSM.playerIdMessage.playerID}");
-                }
-                Message.Enqueue(SSM);
-                while (Message.Count > 250)
-                {
-                    Message.TryDequeue(out ServerSideSyncPlayerMessage seg);
-                }
-            }
-            catch (Exception ex) when (!(ex is OperationCanceledException))
-            {
-                Debug.LogError($"Error in HandleAvatarUpdate: {ex.Message} {ex.StackTrace}");
-            }
-            finally
-            {
-                semaphore.Release();
-            }
+            SSM = new ServerSideSyncPlayerMessage();
         }
-        catch (OperationCanceledException)
+        SSM.Deserialize(Reader);
+        if (BasisNetworkManagement.RemotePlayers.TryGetValue(SSM.playerIdMessage.playerID, out BasisNetworkReceiver player))
         {
-            Debug.Log("HandleAvatarUpdate task canceled.");
+            BasisNetworkAvatarDecompressor.DecompressAndProcessAvatar(player, SSM);
+        }
+        else
+        {
+            Debug.Log($"Missing Player For Avatar Update {SSM.playerIdMessage.playerID}");
+        }
+        Message.Enqueue(SSM);
+        if (Message.Count > 256)
+        {
+            Message.Clear();
+            Debug.LogError("Messages Exceeded 250! Resetting");
         }
     }
     public static void HandleAvatarChangeMessage(LiteNetLib.NetPacketReader reader)

@@ -25,30 +25,34 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref baseReceiver.Offset)
             };
             BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.avatarSerialization.array, ref avatarBuffer.Muscles, ref baseReceiver.Offset);
-            //  int length = syncMessage.avatarSerialization.array.Length;
             avatarBuffer.Scale = Vector3.one;
-            /*
-            if (Offset == length)//we are at the end
-            {
-                avatarBuffer.Scale = Vector3.one;
-            }
-            else
-            {
-                if (length > Offset + 6)//we have 3 ushorts
-                {
-                    avatarBuffer.Scale = BasisUnityBitPackerExtensions.ReadUshortVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkReceiver.ScaleRanged, ref Offset);
-                }
-                else
-                {
-                    //we have just one
-                    float Size = BasisUnityBitPackerExtensions.ReadUshortFloatFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkReceiver.ScaleRanged, ref Offset);
-                    avatarBuffer.Scale = new Unity.Mathematics.float3(Size, Size, Size);
-                }
-
-          }
-            */
             BasisNetworkProfiler.ServerSideSyncPlayerMessageCounter.Sample(Length);
             avatarBuffer.SecondsInterval = syncMessage.interval / 1000.0f;
+            baseReceiver.EnQueueAvatarBuffer(ref avatarBuffer);
+        }
+        /// <summary>
+        /// Inital Payload
+        /// </summary>
+        /// <param name="baseReceiver"></param>
+        /// <param name="syncMessage"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public static void DecompressAndProcessAvatar(BasisNetworkReceiver baseReceiver, LocalAvatarSyncMessage syncMessage)
+        {
+            if (syncMessage.array == null)
+            {
+                throw new ArgumentException("Cant Serialize Avatar Data");
+            }
+            int Length = syncMessage.array.Length;
+            baseReceiver.Offset = 0;
+            AvatarBuffer avatarBuffer = new AvatarBuffer
+            {
+                Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.array, ref baseReceiver.Offset),
+                rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.array, BasisNetworkSendBase.RotationCompression, ref baseReceiver.Offset)
+            };
+            BasisUnityBitPackerExtensions.ReadMusclesFromBytes(ref syncMessage.array, ref avatarBuffer.Muscles, ref baseReceiver.Offset);
+            avatarBuffer.Scale = Vector3.one;
+            BasisNetworkProfiler.ServerSideSyncPlayerMessageCounter.Sample(Length);
+            avatarBuffer.SecondsInterval = 0.01f;
             baseReceiver.EnQueueAvatarBuffer(ref avatarBuffer);
         }
     }

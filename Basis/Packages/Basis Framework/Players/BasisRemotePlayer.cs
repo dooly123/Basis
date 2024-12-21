@@ -33,6 +33,7 @@ namespace Basis.Scripts.BasisSdk.Players
                 HasEvents = true;
             }
             RemoteBoneDriver.FindBone(out MouthControl, BasisBoneTrackedRole.Mouth);
+            AudioSourceTransform.parent = MouthControl.BoneTransform;
             await BasisRemoteNamePlate.LoadRemoteNamePlate(this);
         }
         public async Task LoadAvatarFromInital(ClientAvatarChangeMessage CACM)
@@ -62,10 +63,6 @@ namespace Basis.Scripts.BasisSdk.Players
                 }
             }
 
-        }
-        public void UpdateTransform(Vector3 position, Quaternion rotation)
-        {
-            AudioSourceTransform.SetPositionAndRotation(position, rotation);
         }
         public async void CreateAvatar(byte Mode, BasisLoadableBundle BasisLoadableBundle)
         {

@@ -1,6 +1,7 @@
-﻿using Basis.Scripts.BasisSdk.Players;
-using Basis.Scripts.Networking.Factorys;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
+using Basis.Scripts.Networking.Recievers;
 using Basis.Scripts.Player;
 
 using System.Collections.Generic;
@@ -49,35 +50,32 @@ namespace Basis.Scripts.Networking
 
                 // Start both tasks simultaneously
                 Task<BasisRemotePlayer> createRemotePlayerTask = BasisPlayerFactory.CreateRemotePlayer(instantiationParameters, avatarID, ServerReadyMessage.localReadyMessage.playerMetaDataMessage);
-                Task<BasisNetworkedPlayer> createNetworkedPlayerTask = BasisPlayerFactoryNetworked.CreateNetworkedPlayer(instantiationParameters);
+                BasisNetworkedPlayer BasisNetworkedPlayer = new BasisNetworkedPlayer();
 
-                // Wait for both tasks to complete
-                await Task.WhenAll(createRemotePlayerTask, createNetworkedPlayerTask);
-
+                BasisNetworkedPlayer.ProvideNetworkKey(ServerReadyMessage.playerIdMessage.playerID);
                 // Retrieve the results
                 BasisRemotePlayer remote = await createRemotePlayerTask;
-                BasisNetworkedPlayer networkedPlayer = await createNetworkedPlayerTask;
-
-                networkedPlayer.ProvideNetworkKey(ServerReadyMessage.playerIdMessage.playerID);
                 // Continue with the rest of the code
-                networkedPlayer.RemoteInitalization(remote);
-                if (BasisNetworkManagement.AddPlayer(networkedPlayer))
+                BasisNetworkedPlayer.RemoteInitalization(remote);
+                if (BasisNetworkManagement.AddPlayer(BasisNetworkedPlayer))
                 {
-                    Debug.Log("Added Player AT " + networkedPlayer.NetId);
+                    Debug.Log("Added Player AT " + BasisNetworkedPlayer.NetId);
                 }
                 else
                 {
                     Debug.LogError("Critical issue could not add player to data");
                     return null;
                 }
-                networkedPlayer.InitalizeNetwork();//fires events and makes us network compatible
+                BasisNetworkedPlayer.InitalizeNetwork();//fires events and makes us network compatible
                 Debug.Log("Added Player " + ServerReadyMessage.playerIdMessage.playerID);
-                BasisNetworkManagement.OnRemotePlayerJoined?.Invoke(networkedPlayer, remote);
+                BasisNetworkReceiver Rec =(BasisNetworkReceiver)BasisNetworkedPlayer.NetworkSend;
+                BasisNetworkAvatarDecompressor.DecompressAndProcessAvatar(Rec, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
+                BasisNetworkManagement.OnRemotePlayerJoined?.Invoke(BasisNetworkedPlayer, remote);
 
                 BasisNetworkManagement.JoiningPlayers.Remove(ServerReadyMessage.playerIdMessage.playerID);
                 await remote.LoadAvatarFromInital(avatarID);
 
-                return networkedPlayer;
+                return BasisNetworkedPlayer;
             }
             else
             {
@@ -85,7 +83,7 @@ namespace Basis.Scripts.Networking
                 return null;
             }
         }
-        public static async Task<BasisNetworkedPlayer> CreateRemotePlayer(ServerReadyMessage ServerReadyMessage, Transform Parent)
+        public static async Task<BasisNetworkedPlayer> CreateRemotePlayer(ServerReadyMessage ServerReadyMessage,Transform Parent)
         {
             InstantiationParameters instantiationParameters = new InstantiationParameters(Vector3.zero, Quaternion.identity, Parent);
             return await CreateRemotePlayer(ServerReadyMessage, instantiationParameters);

@@ -12,7 +12,7 @@ namespace Basis.Scripts.Networking.Recievers
     public class BasisAudioReceiver : BasisAudioReceiverBase
     {
         public BasisRemoteAudioDriver BasisRemoteVisemeAudioDriver;
-        public void OnEnable(BasisNetworkedPlayer networkedPlayer, GameObject audioParent)
+        public void OnEnable(BasisNetworkedPlayer networkedPlayer)
         {
             // Initialize settings and audio source
             settings = BasisDeviceManagement.Instance.BasisOpusSettings;
@@ -57,16 +57,6 @@ namespace Basis.Scripts.Networking.Recievers
                 decoder.OnDecoded -= OnDecoded;
                 decoder.Deinitalize();
             }
-        }
-        public void OnDisable()
-        {
-            // Clean up audio and related components
-            if (decoder != null)
-            {
-                decoder.OnDecoded -= OnDecoded;
-                decoder.Deinitalize();
-            }
-
             if (audioSource != null)
             {
                 audioSource.Stop();

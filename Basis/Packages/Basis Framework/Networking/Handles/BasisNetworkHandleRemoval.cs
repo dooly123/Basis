@@ -12,11 +12,20 @@ public static class BasisNetworkHandleRemoval
             {
                 if (NetworkedPlayer.Player.IsLocal == false)
                 {
-                    BasisNetworkManagement.RemovePlayer(DisconnectValue);
+                    BasisNetworkManagement.RemovePlayer(DisconnectValue);//detach from sequences
                     BasisNetworkManagement.MainThreadContext.Post(_ =>
                     {
-                        BasisNetworkManagement.OnRemotePlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisRemotePlayer)NetworkedPlayer.Player);
-                        GameObject.Destroy(NetworkedPlayer.gameObject);
+                        BasisNetworkManagement.OnRemotePlayerLeft?.Invoke(NetworkedPlayer, (Basis.Scripts.BasisSdk.Players.BasisRemotePlayer)NetworkedPlayer.Player);//tell scripts delete time
+                        NetworkedPlayer.NetworkSend.DeInitialize();//shutdown the networking
+                        if (NetworkedPlayer.Player.Avatar != null)//nuke avatar first
+                        {
+                            GameObject.Destroy(NetworkedPlayer.Player.Avatar.gameObject);
+                        }
+                        if (NetworkedPlayer.Player != null)//remove the player
+                        {
+                            GameObject.Destroy(NetworkedPlayer.Player.gameObject);
+                        }
+
                     }, null);
                 }
                 else
