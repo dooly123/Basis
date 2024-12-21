@@ -1,0 +1,161 @@
+name: Automatic build
+
+on: [push, pull_request]
+
+jobs:
+  # To setup secrets for client build, see https://game.ci/docs/github/activation
+  # NOTE: For personal license, a dedicated account is recommended
+  # NOTE: To generate the license file, open Unity 2018 on a project at least once
+  check-secret:
+    name: Check if secrets available
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    outputs:
+      secret-is-set: ${{ steps.secret-is-set.outputs.defined }}
+    steps:
+      - name: Check if secret is set, then set variable
+        id: secret-is-set
+        env:
+          TMP_SECRET1: ${{ secrets.UNITY_LICENSE }}
+          TMP_SECRET2: ${{ secrets.UNITY_EMAIL }}
+          TMP_SECRET3: ${{ secrets.UNITY_PASSWORD }}
+        if: "${{ env.TMP_SECRET1 != '' && env.TMP_SECRET2 != '' && env.TMP_SECRET3 != '' }}"
+        run: echo "defined=true" >> $GITHUB_OUTPUT
+
+  build-client-win32:
+    name: Build client on Windows
+    timeout-minutes: 100
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Basis
+        targetPlatform:
+          - StandaloneWindows64
+    needs: [check-secret]
+    if: needs.check-secret.outputs.secret-is-set == 'true'
+    steps:
+      - name: "Checkout repository"
+        timeout-minutes: 2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: "Cache Library folder"
+        timeout-minutes: 10
+        uses: actions/cache@v3
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key:
+            Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}-${{ hashFiles(matrix.projectPath) }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}-
+            Library-${{ matrix.projectPath }}-
+            Library-
+      - name: "Build Unity project"
+        timeout-minutes: 100
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: 6000.0.31f1
+          targetPlatform: ${{ matrix.targetPlatform }}
+      - name: "Upload client artifact"
+        timeout-minutes: 2
+        uses: actions/upload-artifact@v4
+        with:
+          name: Basis-Client-${{ matrix.targetPlatform }}
+          path: |
+            build
+            "!**/${{ matrix.targetPlatform }}_BackUpThisFolder_ButDontShipItWithYourGame"
+      - name: "Upload client symbols artifact"
+        timeout-minutes: 4
+        uses: actions/upload-artifact@v4
+        with:
+          name: Basis-Symbols-Client-${{ matrix.targetPlatform }}
+          path: |
+            "**/${{ matrix.targetPlatform }}_BackUpThisFolder_ButDontShipItWithYourGame"
+
+  build-server:
+    name: Build server on Ubuntu
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Basis Server
+        targetPlatform:
+          - linux
+          - win
+    steps:
+      - name: "Checkout repository"
+        timeout-minutes: 2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: "Setup dotnet"
+        timeout-minutes: 2
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: "Build server"
+        timeout-minutes: 2
+        run: "dotnet publish '${{ matrix.projectPath }}' -f net9.0 --self-contained --os ${{ matrix.targetPlatform }} -o build -c Release"
+      - name: "Upload server artifact"
+        timeout-minutes: 2
+        uses: actions/upload-artifact@v4
+        with:
+          name: Basis-Server-${{ matrix.targetPlatform }}
+          path: "build"
+
+  create-release:
+    name: Create release
+    needs: [build-client-win32, build-server]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: "github.ref_type == 'tag' && github.ref != 'refs/tags/latest'"
+    steps:
+      - name: "Checkout repository"
+        timeout-minutes: 10
+        uses: actions/checkout@v4
+      - name: "Download client artifacts"
+        timeout-minutes: 10
+        uses: "actions/download-artifact@v4"
+        with:
+          pattern: Basis-Client-*
+          path: Basis-Client-Build
+          merge-multiple: true
+      - name: "Download server artifacts"
+        timeout-minutes: 5
+        uses: "actions/download-artifact@v4"
+        with:
+          pattern: Basis-Server-*
+          path: Basis-Server-Build
+          merge-multiple: true
+      - name: "Install additional dependencies"
+        timeout-minutes: 10
+        run: "sudo apt-get -y update && sudo apt-get -y install p7zip-full"
+      - name: Set up release prefix
+        run: |
+          echo "RELEASE_PREFIX=${{ github.event.repository.name }}-$(git describe --tags)" >> $GITHUB_ENV
+      - name: "Archive client artifact"
+        timeout-minutes: 10
+        run: "7z a -tzip ${{ env.RELEASE_PREFIX }}-Client.zip Basis-Client-Build"
+      - name: "Archive server artifact"
+        timeout-minutes: 10
+        run: "7z a -tzip ${{ env.RELEASE_PREFIX }}-Server.zip Basis-Server-Build"
+      - name: "Create release"
+        if: "github.ref_type == 'tag' && github.ref != 'refs/tags/latest'"
+        timeout-minutes: 5
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: "${{ contains(github.ref, '-rc') }}"
+          files: |
+            ${{ env.RELEASE_PREFIX }}-Client.zip
+            ${{ env.RELEASE_PREFIX }}-Server.zip
+
