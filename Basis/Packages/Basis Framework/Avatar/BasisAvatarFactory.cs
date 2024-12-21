@@ -7,13 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Basis.Scripts.BasisSdk.Helpers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 namespace Basis.Scripts.Avatar
 {
     public static class BasisAvatarFactory
     {
-      public static BasisLoadableBundle LoadingAvatar = new BasisLoadableBundle()
+        public static BasisLoadableBundle LoadingAvatar = new BasisLoadableBundle()
         {
             BasisBundleInformation = new BasisBundleInformation()
             {
@@ -180,7 +181,7 @@ namespace Basis.Scripts.Avatar
                     localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
-                        Avatar.Renders[Index].gameObject.layer = 6;
+                        Avatar.Renders[Index].gameObject.layer = BasisLayer.LocalPlayerAvatar;
                     }
                     Avatar.OnAvatarReady?.Invoke(true);
                 }
@@ -191,7 +192,7 @@ namespace Basis.Scripts.Avatar
                     remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
                     {
-                        Avatar.Renders[Index].gameObject.layer = 7;
+                        Avatar.Renders[Index].gameObject.layer = BasisLayer.RemotePlayerAvatar;
                     }
                     Avatar.OnAvatarReady?.Invoke(false);
                 }
@@ -251,7 +252,7 @@ namespace Basis.Scripts.Avatar
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
                     for (int Index = 0; Index < RenderCount; Index++)
                     {
-                        Avatar.Renders[Index].gameObject.layer = 6;
+                        Avatar.Renders[Index].gameObject.layer = BasisLayer.LocalPlayerAvatar;
                     }
                 }
                 else
@@ -262,7 +263,7 @@ namespace Basis.Scripts.Avatar
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
                     for (int Index = 0; Index < RenderCount; Index++)
                     {
-                        Avatar.Renders[Index].gameObject.layer = 7;
+                        Avatar.Renders[Index].gameObject.layer = BasisLayer.RemotePlayerAvatar;
                     }
                 }
             }
@@ -305,6 +306,9 @@ namespace Basis.Scripts.Avatar
                 Debug.LogError("Missing LocalPlayer or Avatar");
                 return;
             }
+            if (!Player.HeadShadowDriver) Player.HeadShadowDriver = BasisHelpers.GetOrAddComponent<BasisHeadShadowDriver>(Player.gameObject);
+
+            Player.HeadShadowDriver.Initialize(Player.Avatar);
 
             Player.AvatarDriver.InitialLocalCalibration(Player);
         }

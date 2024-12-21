@@ -67,6 +67,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         {
             BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply(Time.timeAsDouble,Time.deltaTime);
             AfterAvatarChanges?.Invoke();
+            BasisLocalPlayer.Instance.HeadShadowDriver.PrepareThisFrame();
         }
 
         public void Update()
