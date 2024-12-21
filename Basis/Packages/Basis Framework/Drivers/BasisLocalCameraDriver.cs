@@ -46,7 +46,7 @@ namespace Basis.Scripts.Drivers
         public Vector3 largerScale;
         public static Vector3 LeftEye;
         public static Vector3 RightEye;
-        
+
         public Color UnMutedMutedIconColorActive = Color.white;
         public Color UnMutedMutedIconColorInactive = Color.grey;
 
@@ -297,6 +297,7 @@ namespace Basis.Scripts.Drivers
             {
                 if (Camera.GetInstanceID() == CameraInstanceID)
                 {
+                    LocalPlayer.HeadShadowDriver.BeforeRenderFirstPerson();
                     ScaleheadToZero();
                     if (CameraData.allowXRRendering)
                     {
@@ -310,6 +311,7 @@ namespace Basis.Scripts.Drivers
                 }
                 else
                 {
+                    LocalPlayer.HeadShadowDriver.BeforeRenderThirdPerson();
                     ScaleHeadToNormal();
                 }
             }
