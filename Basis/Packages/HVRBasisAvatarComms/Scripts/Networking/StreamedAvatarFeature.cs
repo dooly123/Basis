@@ -19,7 +19,8 @@ namespace HVR.Basis.Comms
         private const float EncodingRange = 254f;
 
         public DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable;
-        private const float TransmissionDeltaSeconds = 0.1f;
+        private const float TransmissionDeltaSecondsRegularSpeed = 0.1f;
+        private const float TransmissionDeltaSecondsRegularHighSpeed = 0.03f;
 
         internal BasisAvatar avatar;
         [SerializeField] public byte valueArraySize = 8; // Must not change after first enabled.
@@ -34,10 +35,11 @@ namespace HVR.Basis.Comms
         private bool _writtenThisFrame;
         private bool _isWearer;
         private byte _scopedIndex;
+        private float _currentTransmissionDeltaSeconds = TransmissionDeltaSecondsRegularSpeed;
 
         public event InterpolatedDataChanged OnInterpolatedDataChanged;
         public delegate void InterpolatedDataChanged(float[] current);
-        
+
         private void Awake()
         {
             previous ??= new float[valueArraySize];
@@ -71,7 +73,7 @@ namespace HVR.Basis.Comms
         {
             _timeLeft += Time.deltaTime;
 
-            if (_timeLeft > TransmissionDeltaSeconds)
+            if (_timeLeft > _currentTransmissionDeltaSeconds)
             {
                 var toSend = new StreamedAvatarFeaturePayload
                 {
@@ -80,9 +82,19 @@ namespace HVR.Basis.Comms
                 };
 
                 EncodeAndSubmit(toSend, null);
-                
+
                 _timeLeft = 0;
             }
+        }
+
+        public void SwitchToHighSpeedTransmission()
+        {
+            _currentTransmissionDeltaSeconds = TransmissionDeltaSecondsRegularHighSpeed;
+        }
+
+        public void SwitchToRegularSpeedTransmission()
+        {
+            _currentTransmissionDeltaSeconds = TransmissionDeltaSecondsRegularSpeed;
         }
 
         private void OnReceiver()
@@ -93,14 +105,14 @@ namespace HVR.Basis.Comms
             float totalQueueSeconds = 0;
             foreach (var payload in _queue) totalQueueSeconds += payload.DeltaTime;
             // Debug.Log($"Queue time is {totalQueueSeconds} seconds, size is {_queue.Count}");
-            
+
             while (_timeLeft <= 0 && _queue.TryDequeue(out var eval))
             {
                 // Debug.Log($"Unpacking delta {eval.DeltaTime} as {string.Join(',', eval.FloatValues.Select(f => $"{f}"))}");
                 var effectiveDeltaTime = _queue.Count <= 5 || totalQueueSeconds < 0.2f
                     ? eval.DeltaTime
                     : (eval.DeltaTime * Mathf.Lerp(0.66f, 0.05f, Mathf.InverseLerp(DeltaTimeUsedForResyncs, totalQueueSeconds, 4f)));
-                
+
                 _timeLeft += effectiveDeltaTime;
                 previous = target;
                 target = eval.FloatValues;
@@ -153,7 +165,7 @@ namespace HVR.Basis.Comms
         public void OnPacketReceived(ArraySegment<byte> subBuffer)
         {
             if (!isActiveAndEnabled) return;
-            
+
             if (TryDecode(subBuffer, out var result))
             {
                 _queue.Enqueue(result);
@@ -171,12 +183,12 @@ namespace HVR.Basis.Comms
             var buffer = new byte[HeaderBytes + valueArraySize];
             buffer[0] = _scopedIndex;
             buffer[1] = (byte)(message.DeltaTime / DeltaLocalIntToSeconds);
-            
+
             for (var i = 0; i < current.Length; i++)
             {
                 buffer[HeaderBytes + i] = (byte)(message.FloatValues[i] * EncodingRange);
             }
-            
+
             avatar.NetworkMessageSend(HVRAvatarComms.OurMessageIndex, buffer, DeliveryMethod, recipientsNullable);
         }
 
@@ -192,16 +204,16 @@ namespace HVR.Basis.Comms
             {
                 floatValues[i - SubHeaderBytes] = subBuffer.get_Item(i) / EncodingRange;
             }
-            
+
             result = new StreamedAvatarFeaturePayload
             {
                 DeltaTime = subBuffer.get_Item(0) * DeltaLocalIntToSeconds,
                 FloatValues = floatValues
             };
-            
+
             return true;
         }
-        
+
         #endregion
 
         public void OnResyncEveryoneRequested()
