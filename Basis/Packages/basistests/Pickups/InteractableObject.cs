@@ -42,11 +42,9 @@ public class InteractableObject : MonoBehaviour
     public void HighlightObject(bool highlight)
     {
         // Debug log to check if HighlightObject is being called correctly
-        Debug.Log("Highlighting object: " + (highlight ? "ON" : "OFF"));
+        Debug.LogError("Highlighting object: " + (highlight ? "ON" : "OFF"));
         if (objectRenderer && highlightMaterial && originalMaterial)
         {
-            // Log the material being applied
-            Debug.Log("Applying material: " + (highlight ? highlightMaterial.name : originalMaterial.name));
             objectRenderer.sharedMaterial = highlight ? highlightMaterial : originalMaterial;
         }
     }

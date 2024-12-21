@@ -13,10 +13,12 @@ public class PlayerInteract : MonoBehaviour
     private BasisInputModuleHandler inputActions;
     private InteractableObject currentlyHighlightedObject = null;
     private InteractableObject currentlyHeldObject = null;
+    private bool isHighlighting = false;
+    private Ray ray;
 
     private void Start()
     {
-        inputActions = new BasisInputModuleHandler(); // Instantiate generated input actions
+        inputActions = new BasisInputModuleHandler();
         BasisLocalPlayer.Instance.LocalBoneDriver.OnSimulate += Simulate;
     }
     public void OnDestroy()
@@ -32,15 +34,42 @@ public class PlayerInteract : MonoBehaviour
             Basis.Scripts.Device_Management.Devices.BasisInput devices = BasisDeviceManagement.Instance.AllInputDevices[Index];
             if (devices.BasisDeviceMatchableNames.HasRayCastSupport)
             {
-                if (devices.InputState.Trigger == 1)  // Check if the player is pressing the trigger
+                ray = new Ray(transform.position, transform.forward);
+                RaycastHit hit;
+
+                if (devices.InputState.Trigger == 1)
                 {
                     HandleObjectInteraction();
                 }
                 else if (currentlyHeldObject != null)
                 {
-                    // If trigger is released, drop the object
                     currentlyHeldObject.Drop();
                     currentlyHeldObject = null;
+                }
+
+                InteractableObject previousHighlighted = currentlyHighlightedObject;
+                currentlyHighlightedObject = null;
+
+                if (Physics.Raycast(ray, out hit, raycastDistance))
+                {
+                    if (hit.collider == null) return;
+                    InteractableObject interactable = hit.collider.GetComponent<InteractableObject>();
+
+                    if (interactable != null && !interactable.IsHeld() && interactable.IsWithinRange(transform))
+                    {
+                        currentlyHighlightedObject = interactable;
+                        if (!isHighlighting)
+                        {
+                            interactable.HighlightObject(true);
+                            isHighlighting = true;
+                        }
+                    }
+                }
+
+                if (previousHighlighted != null && previousHighlighted != currentlyHighlightedObject)
+                {
+                    previousHighlighted.HighlightObject(false);
+                    isHighlighting = false;
                 }
             }
         }
@@ -48,19 +77,13 @@ public class PlayerInteract : MonoBehaviour
 
     private void HandleObjectInteraction()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        InteractableObject previousHighlighted = currentlyHighlightedObject;
-        currentlyHighlightedObject = null;
-
         if (Physics.Raycast(ray, out hit, raycastDistance))
         {
             if (hit.collider == null) return;
             InteractableObject interactable = hit.collider.GetComponent<InteractableObject>();
             if (interactable != null && !interactable.IsHeld() && interactable.IsWithinRange(transform))
             {
-                currentlyHighlightedObject = interactable;
-                interactable.HighlightObject(true);  // Highlight the object if within range
 
                 if (currentlyHeldObject != null)
                 {
@@ -69,7 +92,7 @@ public class PlayerInteract : MonoBehaviour
                 }
                 else
                 {
-                    BasisObjectSyncNetworking syncNetworking = currentlyHighlightedObject.GetComponent<BasisObjectSyncNetworking>();
+                    BasisObjectSyncNetworking syncNetworking = interactable.GetComponent<BasisObjectSyncNetworking>();
                     if (syncNetworking != null && !syncNetworking.IsOwner)
                     {
                         currentlyHighlightedObject.PickUp(transform);
@@ -78,9 +101,6 @@ public class PlayerInteract : MonoBehaviour
                 }
             }
         }
-
-        // Remove highlight from previously highlighted object
-        if (previousHighlighted != null && previousHighlighted != currentlyHighlightedObject) { previousHighlighted.HighlightObject(false); }
     }
 
     private void OnDrawGizmos()
