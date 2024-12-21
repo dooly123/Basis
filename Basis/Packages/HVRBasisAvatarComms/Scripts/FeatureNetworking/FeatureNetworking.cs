@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk.Players;
+using Basis.Scripts.Networking;
+using Basis.Scripts.Networking.Transmitters;
 using LiteNetLib;
 using UnityEngine;
 
@@ -31,6 +34,7 @@ namespace HVR.Basis.Comms
         private GameObject _holder;
         private bool _isWearer;
         private byte[] _remoteRequestsInitializationPacket;
+        private BasisNetworkTransmitter _netTransmitter;
 
         private void Awake()
         {
@@ -104,6 +108,7 @@ namespace HVR.Basis.Comms
             var streamed = _holder.AddComponent<StreamedAvatarFeature>();
             streamed.avatar = avatar;
             streamed.valueArraySize = (byte)count; // TODO: Sanitize count to be within bounds
+            streamed.transmitter = _netTransmitter;
             _holder.SetActive(true);
 
             var handle = new FeatureInterpolator(this, guidIndex, streamed, interpolatedDataChanged);
@@ -139,6 +144,19 @@ namespace HVR.Basis.Comms
         public void AssignGuids(bool isWearer)
         {
             _isWearer = isWearer;
+
+            if (BasisNetworkManagement.PlayerToNetworkedPlayer(BasisLocalPlayer.Instance, out var netPlayer))
+            {
+                if (netPlayer.NetworkSend is BasisNetworkTransmitter transmitter)
+                {
+                    _netTransmitter = transmitter;
+                }
+                else
+                    throw new InvalidOperationException("BasisNetworkSendBase for the local player is not a BasisNetworkTransmitter.");
+            }
+            else
+                throw new InvalidOperationException("Could not find networked player for local player during OnAvatarNetworkReady.");
+
             for (var index = 0; index < _orderedGuids.Length; index++)
             {
                 var guid = _orderedGuids[index];

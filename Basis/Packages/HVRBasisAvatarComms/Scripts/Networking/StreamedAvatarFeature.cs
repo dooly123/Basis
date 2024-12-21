@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Basis.Scripts.BasisSdk;
+using Basis.Scripts.Networking.Transmitters;
 using LiteNetLib;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace HVR.Basis.Comms
@@ -19,11 +21,12 @@ namespace HVR.Basis.Comms
         private const float EncodingRange = 254f;
 
         public DeliveryMethod DeliveryMethod = DeliveryMethod.Unreliable;
-        private const float TransmissionDeltaSecondsRegularSpeed = 0.1f;
-        private const float TransmissionDeltaSecondsRegularHighSpeed = 0.03f;
+        private static readonly float TransmissionDeltaSecondsRegularSpeed = math.max(0.1f, BasisNetworkTransmitter.DefaultInterval);
+        private const float TransmissionDeltaSecondsHighSpeed = BasisNetworkTransmitter.DefaultInterval;
 
         internal BasisAvatar avatar;
         [SerializeField] public byte valueArraySize = 8; // Must not change after first enabled.
+        internal BasisNetworkTransmitter transmitter;
 
         private readonly Queue<StreamedAvatarFeaturePayload> _queue = new();
         private float[] current;
@@ -35,7 +38,7 @@ namespace HVR.Basis.Comms
         private bool _writtenThisFrame;
         private bool _isWearer;
         private byte _scopedIndex;
-        private float _currentTransmissionDeltaSeconds = TransmissionDeltaSecondsRegularSpeed;
+        private bool _isHighSpeed;
 
         public event InterpolatedDataChanged OnInterpolatedDataChanged;
         public delegate void InterpolatedDataChanged(float[] current);
@@ -73,7 +76,10 @@ namespace HVR.Basis.Comms
         {
             _timeLeft += Time.deltaTime;
 
-            if (_timeLeft > _currentTransmissionDeltaSeconds)
+            var currentTransmissionDeltaSeconds = _isHighSpeed ? TransmissionDeltaSecondsHighSpeed : TransmissionDeltaSecondsRegularSpeed;
+            var intervalMultiplier = transmitter.interval / BasisNetworkTransmitter.DefaultInterval;
+            var netQualityAdjustedTransmissionDeltaSeconds = math.min(transmitter.SlowestSendRate, currentTransmissionDeltaSeconds * intervalMultiplier);
+            if (_timeLeft > netQualityAdjustedTransmissionDeltaSeconds)
             {
                 var toSend = new StreamedAvatarFeaturePayload
                 {
@@ -89,12 +95,12 @@ namespace HVR.Basis.Comms
 
         public void SwitchToHighSpeedTransmission()
         {
-            _currentTransmissionDeltaSeconds = TransmissionDeltaSecondsRegularHighSpeed;
+            _isHighSpeed = true;
         }
 
         public void SwitchToRegularSpeedTransmission()
         {
-            _currentTransmissionDeltaSeconds = TransmissionDeltaSecondsRegularSpeed;
+            _isHighSpeed = false;
         }
 
         private void OnReceiver()
