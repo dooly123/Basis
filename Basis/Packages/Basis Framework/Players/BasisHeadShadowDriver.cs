@@ -170,7 +170,33 @@ namespace Basis.Scripts.BasisSdk.Players
         {
             if (!_isShadowNecessary) return;
 
-            // Made shadow visible.
+            MakeShadowVisible();
+        }
+
+        public void AfterRenderFirstPerson()
+        {
+            if (!_isShadowNecessary) return;
+
+            // Make shadow invisible to avoid making the end state of the avatar
+            // dependent on the last rendered camera.
+            MakeShadowInvisible();
+        }
+
+        public void BeforeRenderThirdPerson()
+        {
+            if (!_isShadowNecessary) return;
+
+            MakeShadowInvisible();
+        }
+
+        public void AfterRenderThirdPerson()
+        {
+            if (!_isShadowNecessary) return;
+
+        }
+
+        private void MakeShadowVisible()
+        {
             // There may be better ways to do this.
             for (var index = 0; index < _copiesOfSkinnedMeshes.Length; index++)
             {
@@ -186,11 +212,8 @@ namespace Basis.Scripts.BasisSdk.Players
             }
         }
 
-        public void BeforeRenderThirdPerson()
+        private void MakeShadowInvisible()
         {
-            if (!_isShadowNecessary) return;
-
-            // Made shadow invisible, so that it doesn't cast shadow on the thing it's trying to copy.
             // There may be better ways to do this.
             foreach (var copy in _copiesOfSkinnedMeshes)
             {
