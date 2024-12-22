@@ -188,8 +188,10 @@ namespace Basis.Scripts.Device_Management
             }
 
             CurrentMode = newMode;
-            if (newMode == "Desktop") BasisCursorManagement.SwitchToDesktopMode();
-            else if (newMode != "Exiting") BasisCursorManagement.SwitchToVRMode();
+            if (newMode != "Desktop" && newMode != "Exiting")
+            {
+                BasisCursorManagement.UnlockCursorBypassChecks();
+            }
             OnBootModeChanged?.Invoke(CurrentMode);
 
             Debug.Log("Loading " + CurrentMode);
