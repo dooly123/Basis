@@ -34,13 +34,14 @@ namespace Basis.Scripts.BasisSdk.Players
         /// <summary>
         /// the bool when true is the final size
         /// the bool when false is not the final size
-        /// use the bool to 
+        /// use the bool to
         /// </summary>
         public Action OnPlayersHeightChanged;
         public BasisLocalBoneDriver LocalBoneDriver;
         public BasisLocalAvatarDriver AvatarDriver;
         //   public BasisFootPlacementDriver FootPlacementDriver;
         public BasisAudioAndVisemeDriver VisemeDriver;
+        public BasisHeadShadowDriver HeadShadowDriver;
         [SerializeField]
         public LayerMask GroundMask;
         public static string LoadFileNameAndExtension = "LastUsedAvatar.BAS";
