@@ -69,6 +69,7 @@ namespace Basis.Scripts.Drivers
                 MicrophoneRecorder.MainThreadOnHasAudio += MicrophoneTransmitting;
                 MicrophoneRecorder.MainThreadOnHasSilence += MicrophoneNotTransmitting;
                 RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
+                RenderPipelineManager.endCameraRendering += EndCameraRendering;
                 BasisDeviceManagement.Instance.OnBootModeChanged += OnModeSwitch;
                 BasisLocalPlayer.Instance.OnPlayersHeightChanged += OnHeightChanged;
                 InstanceExists?.Invoke();
@@ -285,6 +286,7 @@ namespace Basis.Scripts.Drivers
             if (HasEvents)
             {
                 RenderPipelineManager.beginCameraRendering -= BeginCameraRendering;
+                RenderPipelineManager.endCameraRendering -= BeginCameraRendering;
                 BasisDeviceManagement.Instance.OnBootModeChanged -= OnModeSwitch;
                 MicrophoneRecorder.MainThreadOnHasAudio -= MicrophoneTransmitting;
                 MicrophoneRecorder.MainThreadOnHasSilence -= MicrophoneNotTransmitting;
@@ -297,7 +299,11 @@ namespace Basis.Scripts.Drivers
             {
                 if (Camera.GetInstanceID() == CameraInstanceID)
                 {
-                    LocalPlayer.HeadShadowDriver.BeforeRenderFirstPerson();
+                    // Defensive check, this only seems to be null when the first avatar is not loaded yet.
+                    // May be fixable by updating the prefab so that it's always defined by default.
+                    if (LocalPlayer.HeadShadowDriver)
+                        LocalPlayer.HeadShadowDriver.BeforeRenderFirstPerson();
+
                     ScaleheadToZero();
                     if (CameraData.allowXRRendering)
                     {
@@ -311,11 +317,41 @@ namespace Basis.Scripts.Drivers
                 }
                 else
                 {
-                    LocalPlayer.HeadShadowDriver.BeforeRenderThirdPerson();
+                    // Defensive check, this only seems to be null when the first avatar is not loaded yet.
+                    // May be fixable by updating the prefab so that it's always defined by default.
+                    if (LocalPlayer.HeadShadowDriver)
+                        LocalPlayer.HeadShadowDriver.BeforeRenderThirdPerson();
+
                     ScaleHeadToNormal();
                 }
             }
         }
+
+        private void EndCameraRendering(ScriptableRenderContext context, Camera Camera)
+        {
+            if (LocalPlayer.HasAvatarDriver && LocalPlayer.AvatarDriver.References.Hashead)
+            {
+                if (Camera.GetInstanceID() == CameraInstanceID)
+                {
+                    // Rescale head to avoid making the end state of the avatar
+                    // dependent on the last rendered camera.
+                    ScaleHeadToNormal();
+
+                    // Defensive check, this only seems to be null when the first avatar is not loaded yet.
+                    // May be fixable by updating the prefab so that it's always defined by default.
+                    if (LocalPlayer.HeadShadowDriver)
+                        LocalPlayer.HeadShadowDriver.AfterRenderFirstPerson();
+                }
+                else
+                {
+                    // Defensive check, this only seems to be null when the first avatar is not loaded yet.
+                    // May be fixable by updating the prefab so that it's always defined by default.
+                    if (LocalPlayer.HeadShadowDriver)
+                        LocalPlayer.HeadShadowDriver.AfterRenderThirdPerson();
+                }
+            }
+        }
+
         public void ScaleHeadToNormal()
         {
             if (LocalPlayer.AvatarDriver.References.head.localScale != LocalPlayer.AvatarDriver.HeadScale)
