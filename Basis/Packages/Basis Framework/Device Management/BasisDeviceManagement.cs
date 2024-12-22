@@ -41,7 +41,7 @@ namespace Basis.Scripts.Device_Management
         /// <summary>
         /// checks to see if we are in desktop
         /// this being false does not mean its vr.
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public static bool IsUserInDesktop()
@@ -188,6 +188,8 @@ namespace Basis.Scripts.Device_Management
             }
 
             CurrentMode = newMode;
+            if (newMode == "Desktop") BasisCursorManagement.SwitchToDesktopMode();
+            else if (newMode != "Exiting") BasisCursorManagement.SwitchToVRMode();
             OnBootModeChanged?.Invoke(CurrentMode);
 
             Debug.Log("Loading " + CurrentMode);
