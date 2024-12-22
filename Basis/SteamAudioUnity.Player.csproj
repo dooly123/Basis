@@ -67,14 +67,12 @@
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\SteamAudioSettings.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\ProbeBatch.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\AudioEngineSource.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\FMODStudioAudioEngineSource.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\Common.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\AudioEngineAmbisonicSource.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\OpenCLDevice.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\StaticMesh.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\SteamAudioProbeBatch.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\Simulator.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\SteamAudioFMODStudio.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\SteamAudio.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\SerializedObject.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\SteamAudioListener.cs" />
@@ -90,7 +88,6 @@
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\UnityAudioEngineSource.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\SteamAudioBakedSource.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\Scene.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\FMODStudioAudioEngineState.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\UnityAudioEngineAmbisonicSource.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\EmbreeDevice.cs" />
     <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Runtime\InstancedMesh.cs" />

@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright 2017-2023 Valve Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,8 @@ namespace SteamAudio
     public enum AudioEngineType
     {
         Unity,
-        FMODStudio
+        FMODStudio,
+        Wwise
     }
 
     [CreateAssetMenu(menuName = "Steam Audio/Steam Audio Settings")]
@@ -34,6 +35,7 @@ namespace SteamAudio
         public AudioEngineType audioEngine = AudioEngineType.Unity;
 
         [Header("HRTF Settings")]
+        public bool hrtfDisabled = false;
         public bool perspectiveCorrection = false;
         [Range(.25f, 4.0f)]
         public float perspectiveCorrectionFactor = 1.0f;
@@ -151,7 +153,7 @@ namespace SteamAudio
 #if UNITY_EDITOR
                         sSingleton.defaultMaterial = (SteamAudioMaterial) AssetDatabase.LoadAssetAtPath("Assets/Plugins/SteamAudio/Resources/Materials/Default.asset", typeof(SteamAudioMaterial));
 
-                        AssetDatabase.CreateAsset(sSingleton, "Assets/Plugins/SteamAudio/Resources/SteamAudioSettings.asset");
+                        AssetDatabase.CreateAsset(sSingleton, "Assets/third_party/Plugins/SteamAudio/Resources/SteamAudioSettings.asset");
 #endif
                     }
                 }

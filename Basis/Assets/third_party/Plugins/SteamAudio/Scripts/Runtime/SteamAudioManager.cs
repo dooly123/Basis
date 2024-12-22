@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright 2017-2023 Valve Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -439,7 +439,8 @@ namespace SteamAudio
 
 #if UNITY_EDITOR && UNITY_2019_3_OR_NEWER
                 // If the developer has disabled scene reload, SceneManager.sceneLoaded won't fire during initial load
-                if (EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableSceneReload))
+                if ( EditorSettings.enterPlayModeOptionsEnabled &&
+                    EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableSceneReload))
                 {
                     OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
                 }
@@ -469,10 +470,18 @@ namespace SteamAudio
         }
 
         // Call this function when you create a new AudioListener component (or its equivalent, if you are using
-        // third-party audio middleware).
+        // third-party audio middleware). Use this function if you want Steam Audio to automatically find the new
+        // AudioListener.
         public static void NotifyAudioListenerChanged()
         {
-            sSingleton.mListener = AudioEngineStateHelpers.Create(SteamAudioSettings.Singleton.audioEngine).GetListenerTransform();
+            NotifyAudioListenerChangedTo(AudioEngineStateHelpers.Create(SteamAudioSettings.Singleton.audioEngine).GetListenerTransform());
+        }
+
+        // Call this function when you want to explicitly specify a new AudioListener component (or its equivalent, if
+        // you are using third-party audio middleware).
+        public static void NotifyAudioListenerChangedTo(Transform listenerTransform)
+        {
+            sSingleton.mListener = listenerTransform;
             if (sSingleton.mListener)
             {
                 sSingleton.mListenerComponent = sSingleton.mListener.GetComponent<SteamAudioListener>();
@@ -497,6 +506,7 @@ namespace SteamAudio
             if (mAudioEngineState == null)
                 return;
 
+            mAudioEngineState.SetHRTFDisabled(SteamAudioSettings.Singleton.hrtfDisabled);
             var perspectiveCorrection = GetPerspectiveCorrection();
             mAudioEngineState.SetPerspectiveCorrection(perspectiveCorrection);
 
@@ -1251,6 +1261,12 @@ namespace SteamAudio
             var dataAsset = (!exportOBJ) ? GetDataAsset(dynamicObject) : null;
             var objFileName = (exportOBJ) ? GetOBJFileName(dynamicObject) : "";
 
+            if (!exportOBJ && dataAsset == null)
+                return;
+
+            if (exportOBJ && (objFileName == null || objFileName.Length == 0))
+                return;
+
             Export(objects, dynamicObject.name, dataAsset, objFileName, true, exportOBJ);
         }
 
@@ -1438,7 +1454,7 @@ namespace SteamAudio
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null && mesh.sharedMesh != null && mesh.sharedMesh.triangles != null)
+            if (mesh != null && mesh.sharedMesh != null)
             {
                 return mesh.sharedMesh.triangles.Length / 3;
             }
@@ -1783,12 +1799,8 @@ namespace SteamAudio
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null)
+            if (mesh != null && mesh.sharedMesh != null)
             {
-                if (mesh.sharedMesh == null || mesh.sharedMesh.vertices == null)
-                {
-                    Debug.Log(gameObject.name, gameObject);
-                }
                 var vertexArray = mesh.sharedMesh.vertices;
                 for (var i = 0; i < vertexArray.Length; ++i)
                 {
@@ -1848,7 +1860,7 @@ namespace SteamAudio
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null)
+            if (mesh != null && mesh.sharedMesh != null)
             {
                 var triangleArray = mesh.sharedMesh.triangles;
                 for (var i = 0; i < triangleArray.Length / 3; ++i)
