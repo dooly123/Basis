@@ -100,6 +100,11 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void EnQueueAvatarBuffer(ref AvatarBuffer avatarBuffer)
         {
+            if(avatarBuffer == null)
+            {
+                Debug.LogError("Missing Avatar Buffer!");
+                return;
+            }
             if (Ready)
             {
                 if (HasAvatarInitalized)

@@ -35,8 +35,10 @@ public class BasisFrameRateVisualization : MonoBehaviour
             {
                 stringBuilder.Append(" RTT: ");
                 stringBuilder.Append(BasisNetworkManagement.LocalPlayerPeer.RoundTripTime);
-                stringBuilder.Append(" Ping: ");
+                stringBuilder.Append(" STT: ");
                 stringBuilder.Append(BasisNetworkManagement.LocalPlayerPeer.Ping);
+                stringBuilder.Append(" CCU: ");
+                stringBuilder.Append(BasisNetworkManagement.ReceiverCount +1);
             }
 
             // Update the TextMeshProUGUI text

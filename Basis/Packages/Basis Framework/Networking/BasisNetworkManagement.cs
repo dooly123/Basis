@@ -78,21 +78,6 @@ namespace Basis.Scripts.Networking
             }
             return false;
         }
-        public static bool RemovePlayer(BasisNetworkedPlayer NetPlayer)
-        {
-            if (Instance != null)
-            {
-                if (NetPlayer.Player != null && NetPlayer.Player.IsLocal == false)
-                {
-                    RemotePlayers.Remove(NetPlayer.NetId, out BasisNetworkReceiver A);
-                    ReceiverArray = RemotePlayers.Values.ToArray();
-                    ReceiverCount = ReceiverArray.Length;
-                  //  Debug.Log("ReceiverCount was " + ReceiverCount);
-                }
-                return Players.Remove(NetPlayer.NetId, out var B);
-            }
-            return false;
-        }
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>
@@ -159,7 +144,10 @@ namespace Basis.Scripts.Networking
             {
                 try
                 {
-                    ReceiverArray[Index].Compute(TimeAsDouble);
+                    if (ReceiverArray[Index] != null)
+                    {
+                        ReceiverArray[Index].Compute(TimeAsDouble);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -178,7 +166,10 @@ namespace Basis.Scripts.Networking
             {
                 try
                 {
-                    ReceiverArray[Index].Apply(TimeAsDouble, deltaTime);
+                    if (ReceiverArray[Index] != null)
+                    {
+                        ReceiverArray[Index].Apply(TimeAsDouble, deltaTime);
+                    }
                 }
                 catch (Exception ex)
                 {
