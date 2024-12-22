@@ -73,13 +73,16 @@ public partial class BasisAvatarSDKInspector : Editor
         Undo.RecordObject(Avatar, "Automatically Find Blinking");
         Avatar.BlinkViseme = new int[] { };
         List<string> Names = AvatarHelper.FindAllNames(Renderer);
-        List<int> Ints = new List<int>();
+        int[] Ints = new int[] { -1 };
         foreach (string Name in AvatarHelper.SearchForBlinkIndex)
         {
-            AvatarHelper.GetBlendShapes(Names, Name, out int BlendShapeIndex);
-            Ints.Add(BlendShapeIndex);
+            if (AvatarHelper.GetBlendShapes(Names, Name, out int BlendShapeIndex))
+            {
+                Ints[0] = BlendShapeIndex;
+                break;
+            }
         }
-        Avatar.BlinkViseme = Ints.ToArray();
+        Avatar.BlinkViseme = Ints;
         EditorUtility.SetDirty(Avatar);
         AssetDatabase.Refresh();
         AvatarSDKVisemes.Initialize(this);
