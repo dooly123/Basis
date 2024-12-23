@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using UnityEngine;
 
 namespace UnityOpus
 {
@@ -55,8 +56,6 @@ namespace UnityOpus
         IntPtr encoder;
         NumChannels channels;
         public readonly object encoderLock = new object(); // For thread safety
-        private ConcurrentQueue<string> errorQueue = new ConcurrentQueue<string>(); // Thread-safe error queue
-
         public Encoder(SamplingFrequency samplingFrequency, NumChannels channels, OpusApplication application)
         {
             this.channels = channels;
@@ -64,7 +63,7 @@ namespace UnityOpus
             encoder = Library.OpusEncoderCreate(samplingFrequency, channels, application, out error);
             if (error != ErrorCode.OK)
             {
-                errorQueue.Enqueue("[UnityOpus] Failed to init encoder. Error code: " + error.ToString());
+                Debug.Log("[UnityOpus] Failed to init encoder. Error code: " + error.ToString());
                 encoder = IntPtr.Zero;
             }
         }
@@ -87,15 +86,6 @@ namespace UnityOpus
                 );
             }
         }
-
-        public void ReportErrorsToMainThread()
-        {
-            while (errorQueue.TryDequeue(out var error))
-            {
-                UnityEngine.Debug.LogError(error);
-            }
-        }
-
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
