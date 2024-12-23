@@ -99,28 +99,35 @@ public static class BasisNetworkServer
 
     private static void HandleConnectionRequest(ConnectionRequest request)
     {
-        BNL.Log("Processing Connection Request");
-        int ServerCount = server.ConnectedPeersCount;
-
-        if (ServerCount >= Configuration.PeerLimit)
+        try
         {
-            RejectWithReason(request, "Server is full! Rejected.");
-            return;
-        }
+            BNL.Log("Processing Connection Request");
+            int ServerCount = server.ConnectedPeersCount;
 
-        if (!request.Data.TryGetUShort(out ushort ClientVersion))
+            if (ServerCount >= Configuration.PeerLimit)
+            {
+                RejectWithReason(request, "Server is full! Rejected.");
+                return;
+            }
+
+            if (!request.Data.TryGetUShort(out ushort ClientVersion))
+            {
+                RejectWithReason(request, "Invalid client data.");
+                return;
+            }
+
+            if (ClientVersion < BasisNetworkVersion.ServerVersion)
+            {
+                RejectWithReason(request, "Outdated client version.");
+                return;
+            }
+
+            ProcessConnectionApproval(request, ServerCount);
+        }
+        catch (Exception e)
         {
-            RejectWithReason(request, "Invalid client data.");
-            return;
+            BNL.LogError(e.Message + " " +  e.StackTrace);
         }
-
-        if (ClientVersion < BasisNetworkVersion.ServerVersion)
-        {
-            RejectWithReason(request, "Outdated client version.");
-            return;
-        }
-
-        ProcessConnectionApproval(request, ServerCount);
     }
 
     private static void ProcessConnectionApproval(ConnectionRequest request, int ServerCount)
@@ -155,18 +162,25 @@ public static class BasisNetworkServer
 
     private static void HandlePeerDisconnected(NetPeer peer, DisconnectInfo info)
     {
-        ushort id = (ushort)peer.Id;
-        ClientDisconnect(id,  Peers);
+        try
+        {
+            ushort id = (ushort)peer.Id;
+            ClientDisconnect(id, Peers);
 
-        if (Peers.TryRemove(id, out _))
-        {
-            BNL.Log($"Peer removed: {id}");
+            if (Peers.TryRemove(id, out _))
+            {
+                BNL.Log($"Peer removed: {id}");
+            }
+            else
+            {
+                BNL.LogError($"Failed to remove peer: {id}");
+            }
+            CleanupPlayerData(id, peer);
         }
-        else
+        catch (Exception e)
         {
-            BNL.LogError($"Failed to remove peer: {id}");
+            BNL.LogError(e.Message + " " + e.StackTrace);
         }
-        CleanupPlayerData(id, peer);
     }
 
     private static void CleanupPlayerData(ushort id, NetPeer peer)
@@ -406,6 +420,7 @@ public static class BasisNetworkServer
         {
             localReadyMessage = readyMessage,
             playerIdMessage = new PlayerIdMessage() { playerID = (ushort)authClient.Id },
+
         };
         BasisSavedState.AddLastData(authClient, readyMessage);
         return serverReadyMessage;
