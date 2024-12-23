@@ -10,7 +10,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using static Basis.Network.Core.Serializable.SerializableBasis;
 using static Basis.Network.Server.Generic.BasisSavedState;
 using static SerializableBasis;
@@ -63,10 +62,10 @@ public static class BasisNetworkServer
             AllowPeerAddressChange = configuration.AllowPeerAddressChange,
             BroadcastReceiveEnabled = false,
             UseNativeSockets = configuration.UseNativeSockets,
-            ChannelsCount = 64,
+            ChannelsCount = BasisNetworkCommons.TotalChannels,
             EnableStatistics = configuration.EnableStatistics,
             IPv6Enabled = configuration.IPv6Enabled,
-            UpdateTime = configuration.UpdateTime,
+            UpdateTime = BasisNetworkCommons.NetworkIntervalPoll,
             PingInterval = configuration.PingInterval,
             DisconnectTimeout = configuration.DisconnectTimeout
         };
@@ -126,7 +125,7 @@ public static class BasisNetworkServer
         }
         catch (Exception e)
         {
-            BNL.LogError(e.Message + " " +  e.StackTrace);
+            RejectWithReason(request, e.Message + " " + e.StackTrace);
         }
     }
 

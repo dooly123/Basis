@@ -35,11 +35,11 @@ public static class BasisNetworkClient
                 AllowPeerAddressChange = true,
                 BroadcastReceiveEnabled = false,
                 UseNativeSockets = false,//unity does not work with this
-                ChannelsCount = 64,
+                ChannelsCount = BasisNetworkCommons.TotalChannels,
                 EnableStatistics = true,
-                UpdateTime = 10,
+                UpdateTime = BasisNetworkCommons.NetworkIntervalPoll,
                 PingInterval = 1500,
-
+                 
             };
             client.Start();
             NetDataWriter Writer = new NetDataWriter();

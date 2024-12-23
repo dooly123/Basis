@@ -9,7 +9,6 @@ public class Configuration
     public int QueueEvents { get; set; }
     public bool UseNativeSockets { get; set; }
     public bool NatPunchEnabled { get; set; }
-    public int UpdateTime { get; set; }
     public int PingInterval { get; set; }
     public int DisconnectTimeout { get; set; }
     public bool SimulatePacketLoss { get; set; }
@@ -61,7 +60,6 @@ public class Configuration
             QueueEvents = int.Parse(doc.SelectSingleNode("/Configuration/QueueEvents")?.InnerText ?? "10"),
             UseNativeSockets = bool.Parse(doc.SelectSingleNode("/Configuration/UseNativeSockets")?.InnerText ?? "false"),
             NatPunchEnabled = bool.Parse(doc.SelectSingleNode("/Configuration/NatPunchEnabled")?.InnerText ?? "false"),
-            UpdateTime = int.Parse(doc.SelectSingleNode("/Configuration/UpdateTime")?.InnerText ?? "15"),
             PingInterval = int.Parse(doc.SelectSingleNode("/Configuration/PingInterval")?.InnerText ?? "1500"),
             DisconnectTimeout = int.Parse(doc.SelectSingleNode("/Configuration/DisconnectTimeout")?.InnerText ?? "30000"),
             SimulatePacketLoss = bool.Parse(doc.SelectSingleNode("/Configuration/SimulatePacketLoss")?.InnerText ?? "false"),
@@ -108,7 +106,6 @@ public class Configuration
         root.AppendChild(CreateElement(doc, "QueueEvents", "10"));
         root.AppendChild(CreateElement(doc, "UseNativeSockets", "true"));
         root.AppendChild(CreateElement(doc, "NatPunchEnabled", "true"));
-        root.AppendChild(CreateElement(doc, "UpdateTime", "15"));
         root.AppendChild(CreateElement(doc, "PingInterval", "1500"));
         root.AppendChild(CreateElement(doc, "DisconnectTimeout", "5000"));
         root.AppendChild(CreateElement(doc, "SimulatePacketLoss", "false"));

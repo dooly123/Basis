@@ -1,4 +1,4 @@
-﻿#if DEBUG
+#if DEBUG
 #define STATS_ENABLED
 #endif
 using System;

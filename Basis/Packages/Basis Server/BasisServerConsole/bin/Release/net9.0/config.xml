@@ -4,7 +4,7 @@
   <QueueEvents>10</QueueEvents>
   <UseNativeSockets>true</UseNativeSockets>
   <NatPunchEnabled>true</NatPunchEnabled>
-  <UpdateTime>10</UpdateTime>
+  <UpdateTime>15</UpdateTime>
   <PingInterval>1500</PingInterval>
   <DisconnectTimeout>5000</DisconnectTimeout>
   <SimulatePacketLoss>false</SimulatePacketLoss>

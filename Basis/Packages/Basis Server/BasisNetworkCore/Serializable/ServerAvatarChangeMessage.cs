@@ -60,8 +60,15 @@ public static partial class SerializableBasis
         {
             // Write the load mode
             Writer.Put(loadMode);
-            Writer.Put((ushort)byteArray.Length);
-            Writer.Put(byteArray);
+            if (byteArray == null)
+            {
+                Writer.Put((ushort)0);
+            }
+            else
+            {
+                Writer.Put((ushort)byteArray.Length);
+                Writer.Put(byteArray);
+            }
             /*
 if (AvatarLoadMessages == null)
 {

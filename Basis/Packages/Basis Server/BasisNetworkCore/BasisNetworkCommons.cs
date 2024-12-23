@@ -2,7 +2,12 @@ namespace Basis.Network.Core
 {
     public static class BasisNetworkCommons
     {
-        public static int NetworkIntervalPoll = 10;
+        public static int NetworkIntervalPoll = 15;
+        /// <summary>
+        /// when adding a new message we need to increase this
+        /// will funciton up to 64
+        /// </summary>
+        public static byte TotalChannels = 12;
         /// <summary>
         /// channel zero is only used for unreliable methods
         /// we fall it through to stop bugs

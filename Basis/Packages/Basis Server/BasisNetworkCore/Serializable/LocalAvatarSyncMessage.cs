@@ -27,7 +27,16 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
-            Writer.Put(array);
+            if (array == null || array.Length != 386)
+            {
+                BNL.LogError("Missing Array in Local Player Data!!");
+                array = new byte[386];
+                Writer.Put(array);
+            }
+            else
+            {
+                Writer.Put(array);
+            }
         }
     }
 }
