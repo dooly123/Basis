@@ -190,7 +190,7 @@ namespace Basis.Scripts.Device_Management
             CurrentMode = newMode;
             if (newMode != "Desktop" && newMode != "Exiting")
             {
-                BasisCursorManagement.UnlockCursorBypassChecks();
+                BasisCursorManagement.UnlockCursorBypassChecks("Forceful Unlock From Device Management");
             }
             OnBootModeChanged?.Invoke(CurrentMode);
 

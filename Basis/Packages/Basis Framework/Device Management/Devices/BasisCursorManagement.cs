@@ -36,6 +36,7 @@ public static class BasisCursorManagement
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Debug.Log("Cursor Locked");
+        cursorLockRequests.Add(requestName);
         OnCursorStateChange?.Invoke(CursorLockMode.Locked, false);
     }
 
@@ -47,22 +48,23 @@ public static class BasisCursorManagement
     {
         if (ShouldIgnoreCursorRequests()) return;
 
-        InternalUnlockCursor();
+        InternalUnlockCursor(requestName);
     }
 
     /// <summary>
     /// Unlocks the cursor and makes it visible. Bypasses checks that would have prevented it from being unlocked.
     /// </summary>
-    public static void UnlockCursorBypassChecks()
+    public static void UnlockCursorBypassChecks(string requestName)
     {
-        InternalUnlockCursor();
+        InternalUnlockCursor(requestName);
     }
 
-    private static void InternalUnlockCursor()
+    private static void InternalUnlockCursor(string requestName)
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Debug.Log("Cursor Unlocked");
+        cursorLockRequests.Remove(requestName);
         OnCursorStateChange?.Invoke(CursorLockMode.None, true);
     }
 

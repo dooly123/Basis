@@ -156,3 +156,5 @@ MonoBehaviour:
   - BasisTestRoundTrip
   - UnityEngine.VFX.Utility.URPCameraBinder
   - UnityEngine.Rendering.Universal.DecalProjector
+  - UnityEngine.VFX.VFXRenderer
+  - UnityEngine.VFX.VisualEffect
