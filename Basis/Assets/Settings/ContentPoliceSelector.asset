@@ -154,3 +154,5 @@ MonoBehaviour:
   - UnityEngine.SkinnedMeshRenderer
   - HVR.Basis.Comms.ObjectStateActuation
   - BasisTestRoundTrip
+  - UnityEngine.VFX.Utility.URPCameraBinder
+  - UnityEngine.Rendering.Universal.DecalProjector
