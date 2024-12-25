@@ -1,6 +1,0 @@
-[INFO] Logs are saved to C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server\BasisServerConsole\bin\Release\net9.0\Logs\2024-12-18.log
-[INFO] [02:16] [INFO] Server Booting
-[INFO] [02:16] [INFO] HTTP health check started at 'http://localhost:10666/health'
-[INFO] [02:16] [INFO] Server Wiring up SetPort 4296
-[INFO] [02:16] [INFO] Server Worker Threads Booted
-[INFO] [02:16] [INFO] Shutting down server...
