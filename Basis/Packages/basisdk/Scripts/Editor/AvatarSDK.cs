@@ -3,6 +3,7 @@ using Basis.Scripts.BasisSdk.Helpers.Editor;
 using Basis.Scripts.Editor;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEditor;
@@ -13,6 +14,7 @@ using UnityEngine.UIElements;
 [CustomEditor(typeof(BasisAvatar))]
 public partial class BasisAvatarSDKInspector : Editor
 {
+    private const string MsgIL2CPPIsNotInstalled = "IL2CPP is not installed.";
     public VisualTreeAsset visualTree;
     public BasisAvatar Avatar;
     public VisualElement uiElementsRoot;
@@ -22,11 +24,20 @@ public partial class BasisAvatarSDKInspector : Editor
     public AvatarSDKJiggleBonesView AvatarSDKJiggleBonesView = new AvatarSDKJiggleBonesView();
     public AvatarSDKVisemes AvatarSDKVisemes = new AvatarSDKVisemes();
     public Button EventCallbackAvatarBundleButton { get; private set; }
+    private bool IsIL2CPPIsInstalled;
 
     private void OnEnable()
     {
         visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(AvatarPathConstants.uxmlPath);
         Avatar = (BasisAvatar)target;
+        IsIL2CPPIsInstalled = CheckIfIL2CPPIsInstalled();
+    }
+
+    private static bool CheckIfIL2CPPIsInstalled()
+    {
+        var playbackEndingDirectory = BuildPipeline.GetPlaybackEngineDirectory(EditorUserBuildSettings.activeBuildTarget, BuildOptions.None, false);
+        return !string.IsNullOrEmpty(playbackEndingDirectory)
+               && Directory.Exists(Path.Combine(playbackEndingDirectory, "Variations", "il2cpp"));
     }
 
     public override VisualElement CreateInspectorGUI()
@@ -178,6 +189,8 @@ public partial class BasisAvatarSDKInspector : Editor
 
         ObjectField AvatarIconField = uiElementsRoot.Q<ObjectField>(AvatarPathConstants.AvatarIcon);
 
+        Label ErrorMessage = uiElementsRoot.Q<Label>(AvatarPathConstants.ErrorMessage);
+
         animatorField.allowSceneObjects = true;
         faceBlinkMeshField.allowSceneObjects = true;
         faceVisemeMeshField.allowSceneObjects = true;
@@ -217,6 +230,17 @@ public partial class BasisAvatarSDKInspector : Editor
         // Update Button Text
         avatarEyePositionClick.text = "Eye Position Gizmo " + AvatarHelper.BoolToText(AvatarEyePositionState);
         avatarMouthPositionClick.text = "Mouth Position Gizmo " + AvatarHelper.BoolToText(AvatarMouthPositionState);
+
+        if (!IsIL2CPPIsInstalled)
+        {
+            ErrorMessage.visible = true;
+            ErrorMessage.text = MsgIL2CPPIsNotInstalled;
+        }
+        else
+        {
+            ErrorMessage.visible = false;
+            ErrorMessage.text = "";
+        }
     }
     public Texture2D Texture;
     public void OnAssignTexture2D(ChangeEvent<UnityEngine.Object> Texture2D)
