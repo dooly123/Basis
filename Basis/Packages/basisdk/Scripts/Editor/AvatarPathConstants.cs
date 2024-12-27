@@ -19,4 +19,6 @@ public class AvatarPathConstants
     public static readonly string AvatarDescription = "avatardescriptioninput";
     public static readonly string AvatarIcon = "AvatarIcon";
     public static readonly string Avatarpassword = "avatarpassword";
+
+    public static readonly string ErrorMessage = "ErrorMessage";
 }

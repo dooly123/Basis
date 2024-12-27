@@ -26,6 +26,7 @@
         <engine:Foldout text="jiggle configuration" name="jiggles">
             <engine:VisualElement name="JiggleStrains" style="flex-grow: 1;" />
         </engine:Foldout>
+        <engine:Label name="ErrorMessage" enabled="true" text="Error Message" style="white-space: normal; color: rgb(255, 0, 0);" />
         <engine:Button text="Create Avatar Bundle" name="AvatarBundleButton" />
     </engine:VisualElement>
 </engine:UXML>
