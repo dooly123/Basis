@@ -84,7 +84,6 @@ This would not be possible without the following:
 - [Unity Starter Assets - ThirdPerson](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526)
 - [Aurellia](https://github.com/CascadianVR) Assets\third_party\Avatar\Aurellia\LICENSE
 - [YUN](https://github.com/yewnyx) Assets\third_party\Avatar\Yun\LICENSE
-- [vive OpenXR](https://developer.vive.com/resources/openxr/)
 - [lilToon](https://github.com/lilxyzw/lilToon)
 - [RNNoise](https://github.com/xiph/rnnoise?tab=BSD-3-Clause-1-ov-file)
 - [RNNoise.Net](https://github.com/Yellow-Dog-Man/RNNoise.Net)
