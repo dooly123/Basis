@@ -36,3 +36,16 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
+# Nix stuff
+**/.direnv/
+/.envrc
+
+# Macos
+.DS_Store
+
+# Basis exclusions
+*.vsidx
+*.nuspec
+*.cache
+
+
