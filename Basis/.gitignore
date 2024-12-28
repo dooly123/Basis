@@ -73,3 +73,9 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+-# Basis exclusions
+[Aa]sset[Bb]undles/
+[Aa]ssets/_[Uu]ser[Cc]ontent
+[Aa]ssets/_[Uu]ser[Cc]ontent.meta
+
