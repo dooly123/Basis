@@ -138,7 +138,6 @@
     <Compile Include="Packages\Basis Framework\UI\UI Panels\BasisUIInput.cs" />
     <Compile Include="Packages\Basis Framework\Device Management\Devices\Simulation\BasisInputXRSimulate.cs" />
     <Compile Include="Packages\Basis Framework\Command Line Args\CommandLineArgs.cs" />
-    <Compile Include="Packages\Basis Framework\Networking\Compression\BasisNetworkConstants.cs" />
     <Compile Include="Packages\Basis Framework\Scene Management\BasisSceneFactory.cs" />
     <Compile Include="Packages\Basis Framework\Drivers\BasisLocalCameraDriver.cs" />
     <Compile Include="Packages\Basis Framework\Networking\Compression\BasisCompression.cs" />

@@ -1,5 +1,4 @@
 using Basis.Network.Core;
-using Basis.Scripts.Networking.Compression;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Profiler;
 using LiteNetLib;
@@ -44,10 +43,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         public HumanPose HumanPose = new HumanPose();
         [SerializeField]
         public HumanPoseHandler PoseHandler;
-        [SerializeField]
-        public static BasisRangedUshortFloatData PositionRanged = new BasisRangedUshortFloatData(-BasisNetworkConstants.MaxPosition, BasisNetworkConstants.MaxPosition, BasisNetworkConstants.PositionPrecision);
-        [SerializeField]
-        public static BasisRangedUshortFloatData ScaleRanged = new BasisRangedUshortFloatData(BasisNetworkConstants.MinimumScale, BasisNetworkConstants.MaximumScale, BasisNetworkConstants.ScalePrecision);
         public const int SizeAfterGap = 95 - SecondBuffer;
         public const int FirstBuffer = 15;
         public const int SecondBuffer = 21;
@@ -113,6 +108,28 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 BasisNetworkManagement.LocalPlayerPeer.Send(netDataWriter, BasisNetworkCommons.AvatarChannel, DeliveryMethod);
             }
             BasisNetworkProfiler.AvatarDataMessageCounter.Sample(netDataWriter.Length);
+        }
+        public static float[] MinMuscle;
+        public static float[] MaxMuscle;
+        public static float[] RangeMuscle;
+        public static void SetupData()
+        {
+            MinMuscle = new float[LocalAvatarSyncMessage.StoredBones];
+            MaxMuscle = new float[LocalAvatarSyncMessage.StoredBones];
+            RangeMuscle = new float[LocalAvatarSyncMessage.StoredBones];
+            for (int i = 0, j = 0; i < LocalAvatarSyncMessage.StoredBones; i++)
+            {
+                if (i < FirstBuffer || i > SecondBuffer)
+                {
+                    MinMuscle[j] = HumanTrait.GetMuscleDefaultMin(i);
+                    MaxMuscle[j] = HumanTrait.GetMuscleDefaultMax(i);
+                    j++;
+                }
+            }
+            for (int Index = 0; Index < LocalAvatarSyncMessage.StoredBones; Index++)
+            {
+                RangeMuscle[Index] = MaxMuscle[Index] - MinMuscle[Index];
+            }
         }
     }
 }

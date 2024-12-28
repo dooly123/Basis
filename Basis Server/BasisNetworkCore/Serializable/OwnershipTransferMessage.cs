@@ -1,4 +1,4 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
 using static SerializableBasis;
 
 namespace DarkRift.Basis_Common.Serializable

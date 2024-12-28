@@ -4,16 +4,17 @@ public static partial class SerializableBasis
     public struct LocalAvatarSyncMessage
     {
         public byte[] array;
+        public const int AvatarSyncSize = 202;
+        public const int StoredBones = 89;
         public void Deserialize(NetDataReader Writer)
         {
             int Bytes = Writer.AvailableBytes;
-            if (Bytes >= 386)
+            if (Bytes >= AvatarSyncSize)
             {
-                if (array == null)
-                {
-                    array = new byte[386];
-                }
-                Writer.GetBytes(array, 386);//360 for muscles, 3*4 for position 12, 4*4 for rotation 16-2
+                array ??= new byte[AvatarSyncSize];
+                Writer.GetBytes(array, AvatarSyncSize);
+                //89 * 2 = 178 + 12 + 14 = 204
+                //now 178 for muscles, 3*4 for position 12, 4*4 for rotation 16-2 (W is half) = 204
             }
             else
             {
@@ -27,11 +28,9 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
-            if (array == null || array.Length != 386)
+            if (array == null)
             {
-                BNL.LogError("Missing Array in Local Player Data!!");
-                array = new byte[386];
-                Writer.Put(array);
+                BNL.LogError("array was null!!");
             }
             else
             {

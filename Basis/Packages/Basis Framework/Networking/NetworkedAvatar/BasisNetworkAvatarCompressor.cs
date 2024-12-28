@@ -4,6 +4,8 @@ using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.Profiler;
 using LiteNetLib;
 using System;
+using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 using static SerializableBasis;
 
@@ -13,24 +15,24 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
     {
         public static void Compress(BasisNetworkTransmitter NetworkSendBase, Animator Anim)
         {
-            CompressAvatarData(ref NetworkSendBase.Offset, ref NetworkSendBase.FloatArray, ref NetworkSendBase.LASM, NetworkSendBase.PoseHandler, NetworkSendBase.HumanPose, Anim);
+            CompressAvatarData(ref NetworkSendBase.Offset, ref NetworkSendBase.FloatArray, ref NetworkSendBase.UshortArray, ref NetworkSendBase.LASM, NetworkSendBase.PoseHandler, NetworkSendBase.HumanPose, Anim);
             NetworkSendBase.LASM.Serialize(NetworkSendBase.AvatarSendWriter);
             BasisNetworkProfiler.LocalAvatarSyncMessageCounter.Sample(NetworkSendBase.AvatarSendWriter.Length);
             BasisNetworkManagement.LocalPlayerPeer.Send(NetworkSendBase.AvatarSendWriter, BasisNetworkCommons.MovementChannel, DeliveryMethod.Sequenced);
             NetworkSendBase.AvatarSendWriter.Reset();
         }
-        public static LocalAvatarSyncMessage InitalAvatarData(Animator Anim)
+        public static void InitalAvatarData(Animator Anim, out LocalAvatarSyncMessage LocalAvatarSyncMessage)
         {
             HumanPoseHandler PoseHandler = new HumanPoseHandler(Anim.avatar, Anim.transform);
             HumanPose HumanPose = new HumanPose();
             PoseHandler.GetHumanPose(ref HumanPose);
-            float[] FloatArray = new float[90];
+            float[] FloatArray = new float[LocalAvatarSyncMessage.StoredBones];
+            ushort[] UshortArray = new ushort[LocalAvatarSyncMessage.StoredBones];
             int Offset = 0;
-            LocalAvatarSyncMessage LocalAvatarSyncMessage = new LocalAvatarSyncMessage();
-            CompressAvatarData(ref Offset, ref FloatArray, ref LocalAvatarSyncMessage, PoseHandler, HumanPose, Anim);
-            return LocalAvatarSyncMessage;
+            LocalAvatarSyncMessage = new LocalAvatarSyncMessage();
+            CompressAvatarData(ref Offset, ref FloatArray, ref UshortArray, ref LocalAvatarSyncMessage, PoseHandler, HumanPose, Anim);
         }
-        public static void CompressAvatarData(ref int Offset, ref float[] FloatArray, ref LocalAvatarSyncMessage LocalAvatarSyncMessage, HumanPoseHandler Handler, HumanPose PoseHandler, Animator Anim)
+        public static void CompressAvatarData(ref int Offset, ref float[] FloatArray, ref ushort[] NetworkSend, ref LocalAvatarSyncMessage LocalAvatarSyncMessage, HumanPoseHandler Handler, HumanPose PoseHandler, Animator Anim)
         {
             if (Handler == null)
             {
@@ -48,7 +50,38 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             //we write position first so we can use that on the server
             BasisUnityBitPackerExtensions.WriteVectorFloatToBytes(Anim.bodyPosition, ref LocalAvatarSyncMessage.array, ref Offset);
             BasisUnityBitPackerExtensions.WriteQuaternionToBytes(Anim.bodyRotation, ref LocalAvatarSyncMessage.array, ref Offset, BasisNetworkSendBase.RotationCompression);
-            BasisUnityBitPackerExtensions.WriteMusclesToBytes(FloatArray, ref LocalAvatarSyncMessage.array, ref Offset);
+
+            if(NetworkSend == null)
+            {
+                Debug.LogError("Network send was null!");
+                NetworkSend = new ushort[LocalAvatarSyncMessage.StoredBones];
+            }
+            if (FloatArray == null)
+            {
+                Debug.LogError("FloatArray send was null!");
+                FloatArray = new float[LocalAvatarSyncMessage.StoredBones];
+            }
+
+            var NetworkOutData = NetworkSend;
+            var FloatArrayCopy = FloatArray;
+            Parallel.For(0, LocalAvatarSyncMessage.StoredBones, Index =>
+            {
+                NetworkOutData[Index] = Compress(FloatArrayCopy[Index], BasisNetworkSendBase.MinMuscle[Index], BasisNetworkSendBase.MaxMuscle[Index], BasisNetworkSendBase.RangeMuscle[Index]);
+            });
+
+            BasisUnityBitPackerExtensions.WriteUShortsToBytes(NetworkOutData, ref LocalAvatarSyncMessage.array, ref Offset);
         }
+        public static ushort Compress(float value, float MinValue, float MaxValue,float valueDiffence)
+        {
+            // Clamp the value to ensure it's within the specified range
+            value = math.clamp(value, MinValue, MaxValue);
+
+            // Map the float value to the ushort range
+            float normalized = (value - MinValue) / (valueDiffence); // 0..1
+            return (ushort)(normalized * ushortRangeDifference);//+ UShortMin (its always zero)
+        }
+        private const ushort UShortMin = ushort.MinValue; // 0
+        private const ushort UShortMax = ushort.MaxValue; // 65535
+        private const ushort ushortRangeDifference = UShortMax - UShortMin;
     }
 }

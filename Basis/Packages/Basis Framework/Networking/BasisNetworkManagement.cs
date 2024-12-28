@@ -5,6 +5,7 @@ using Basis.Scripts.BasisSdk.Players;
 using Basis.Scripts.Networking.NetworkedAvatar;
 using Basis.Scripts.Networking.NetworkedPlayer;
 using Basis.Scripts.Networking.Recievers;
+using Basis.Scripts.Networking.Transmitters;
 using Basis.Scripts.Profiler;
 using DarkRift.Basis_Common.Serializable;
 using LiteNetLib;
@@ -36,48 +37,13 @@ namespace Basis.Scripts.Networking
         public static ConcurrentDictionary<ushort, BasisNetworkedPlayer> Players = new ConcurrentDictionary<ushort, BasisNetworkedPlayer>();
         public static ConcurrentDictionary<ushort, BasisNetworkReceiver> RemotePlayers = new ConcurrentDictionary<ushort, BasisNetworkReceiver>();
         public static HashSet<ushort> JoiningPlayers = new HashSet<ushort>();
-        public static BasisNetworkReceiver[] ReceiverArray;
+        public static BasisNetworkReceiver[] ReceiverArray => BasisNetworkManagement.Instance.receiverArray;
+        [SerializeField]
+        public BasisNetworkReceiver[] receiverArray;
         public static int ReceiverCount = 0;
         public static SynchronizationContext MainThreadContext;
         public static NetPeer LocalPlayerPeer;
-        public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
-        {
-            if (Instance != null)
-            {
-                if (NetPlayer.Player != null)
-                {
-                    if (NetPlayer.Player.IsLocal == false)
-                    {
-                        RemotePlayers.TryAdd(NetPlayer.NetId, (BasisNetworkReceiver)NetPlayer.NetworkSend);
-                        ReceiverArray = RemotePlayers.Values.ToArray();
-                        ReceiverCount = ReceiverArray.Length;
-                        Debug.Log("ReceiverCount was " + ReceiverCount);
-                    }
-                }
-                else
-                {
-                    Debug.LogError("Player was Null!");
-                }
-                return Players.TryAdd(NetPlayer.NetId, NetPlayer);
-            }
-            else
-            {
-                Debug.LogError("No network Instance Existed!");
-            }
-            return false;
-        }
-        public static bool RemovePlayer(ushort NetID)
-        {
-            if (Instance != null)
-            {
-                RemotePlayers.TryRemove(NetID,out BasisNetworkReceiver A);
-                ReceiverArray = RemotePlayers.Values.ToArray();
-                ReceiverCount = ReceiverArray.Length;
-                //Debug.Log("ReceiverCount was " + ReceiverCount);
-                return Players.Remove(NetID, out var B);
-            }
-            return false;
-        }
+        public static BasisNetworkTransmitter Transmitter;
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>
@@ -99,12 +65,51 @@ namespace Basis.Scripts.Networking
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
+        public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
+        {
+            if (Instance != null)
+            {
+                if (NetPlayer.Player != null)
+                {
+                    if (NetPlayer.Player.IsLocal == false)
+                    {
+                        RemotePlayers.TryAdd(NetPlayer.NetId, (BasisNetworkReceiver)NetPlayer.NetworkSend);
+                        BasisNetworkManagement.Instance.receiverArray = RemotePlayers.Values.ToArray();
+                        ReceiverCount = ReceiverArray.Length;
+                        Debug.Log("ReceiverCount was " + ReceiverCount);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Player was Null!");
+                }
+                return Players.TryAdd(NetPlayer.NetId, NetPlayer);
+            }
+            else
+            {
+                Debug.LogError("No network Instance Existed!");
+            }
+            return false;
+        }
+        public static bool RemovePlayer(ushort NetID)
+        {
+            if (Instance != null)
+            {
+                RemotePlayers.TryRemove(NetID,out BasisNetworkReceiver A);
+                BasisNetworkManagement.Instance.receiverArray = RemotePlayers.Values.ToArray();
+                ReceiverCount = ReceiverArray.Length;
+                //Debug.Log("ReceiverCount was " + ReceiverCount);
+                return Players.Remove(NetID, out var B);
+            }
+            return false;
+        }
         public void OnEnable()
         {
             if (BasisHelpers.CheckInstance(Instance))
             {
                 Instance = this;
             }
+            BasisNetworkSendBase.SetupData();
             MainThreadContext = SynchronizationContext.Current;
             // Initialize AvatarBuffer
             BasisAvatarBufferPool.AvatarBufferPool(30);
@@ -208,7 +213,6 @@ namespace Basis.Scripts.Networking
             byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
             ReadyMessage readyMessage = new ReadyMessage
             {
-                localAvatarSyncMessage = BasisNetworkAvatarCompressor.InitalAvatarData(BasisLocalPlayer.Instance.Avatar.Animator),
                 clientAvatarChangeMessage = new ClientAvatarChangeMessage
                 {
                     byteArray = Information,
@@ -220,6 +224,7 @@ namespace Basis.Scripts.Networking
                     playerDisplayName = BasisLocalPlayer.DisplayName
                 }
             };
+            BasisNetworkAvatarCompressor.InitalAvatarData(BasisLocalPlayer.Instance.Avatar.Animator, out readyMessage.localAvatarSyncMessage);
             Debug.Log("Network Starting Client");
             BasisNetworkClient.AuthenticationMessage = new Network.Core.Serializable.SerializableBasis.AuthenticationMessage
             {

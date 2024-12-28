@@ -36,7 +36,8 @@ namespace Basis.Scripts.Networking.Transmitters
         public NativeArray<bool> AvatarResults;
         public NativeArray<float> smallestDistance;
 
-        public float[] FloatArray = new float[90];
+        public float[] FloatArray = new float[LocalAvatarSyncMessage.StoredBones];
+        public ushort[] UshortArray = new ushort[LocalAvatarSyncMessage.StoredBones];
         [SerializeField]
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
         public float UnClampedInterval;
@@ -48,7 +49,7 @@ namespace Basis.Scripts.Networking.Transmitters
         public JobHandle distanceJobHandle;
         public int IndexLength = -1;
         public float SlowestSendRate = 2.5f;
-        public NetDataWriter AvatarSendWriter = new NetDataWriter(true, 386);
+        public NetDataWriter AvatarSendWriter = new NetDataWriter(true, LocalAvatarSyncMessage.AvatarSyncSize);
         void SendOutLatest()
         {
             timer += Time.deltaTime;

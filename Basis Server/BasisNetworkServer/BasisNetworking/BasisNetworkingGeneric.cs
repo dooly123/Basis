@@ -14,7 +14,11 @@ namespace Basis.Network.Server.Generic
             SceneDataMessage.Deserialize(Reader);
             ServerSceneDataMessage serverSceneDataMessage = new ServerSceneDataMessage
             {
-                sceneDataMessage = new RemoteSceneDataMessage() { messageIndex = SceneDataMessage.messageIndex, payload = SceneDataMessage.payload },
+                sceneDataMessage = new RemoteSceneDataMessage()
+                {
+                    messageIndex = SceneDataMessage.messageIndex,
+                    payload = SceneDataMessage.payload
+                },
                 playerIdMessage = new PlayerIdMessage
                 {
                     playerID = (ushort)sender.Id,

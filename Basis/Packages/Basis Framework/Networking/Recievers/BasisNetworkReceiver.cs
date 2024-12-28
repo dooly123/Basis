@@ -18,6 +18,7 @@ namespace Basis.Scripts.Networking.Recievers
     public partial class BasisNetworkReceiver : BasisNetworkSendBase
     {
         public float[] silentData;
+        public ushort[] CopyData = new ushort[LocalAvatarSyncMessage.StoredBones];
         [SerializeField]
         public BasisAudioReceiver AudioReceiverModule = new BasisAudioReceiver();
         [Header("Interpolation Settings")]
@@ -34,7 +35,7 @@ namespace Basis.Scripts.Networking.Recievers
         public JobHandle AvatarHandle;
         public UpdateAvatarMusclesJob musclesJob = new UpdateAvatarMusclesJob();
         public UpdateAvatarJob AvatarJob = new UpdateAvatarJob();
-        public float[] MuscleFinalStageOutput = new float[90];
+        public float[] MuscleFinalStageOutput = new float[LocalAvatarSyncMessage.StoredBones];
         public quaternion OutputRotation;
         public AvatarBuffer First;
         public AvatarBuffer Last;
@@ -76,26 +77,29 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void Apply(double TimeAsDouble, float DeltaTime)
         {
-            if (HasAvatarInitalized)
+            if (PoseHandler != null)
             {
-                OutputRotation = math.slerp(First.rotation, Last.rotation, interpolationTime);
-                // Complete the jobs and apply the results
-                musclesHandle.Complete();
+                if (HasAvatarInitalized)
+                {
+                    OutputRotation = math.slerp(First.rotation, Last.rotation, interpolationTime);
+                    // Complete the jobs and apply the results
+                    musclesHandle.Complete();
 
-                ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], OutputRotation, muscles);
-                PoseHandler.SetHumanPose(ref HumanPose);
+                    ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], OutputRotation, muscles);
+                    PoseHandler.SetHumanPose(ref HumanPose);
 
-                RemotePlayer.RemoteBoneDriver.SimulateAndApply(TimeAsDouble, DeltaTime);
+                    RemotePlayer.RemoteBoneDriver.SimulateAndApply(TimeAsDouble, DeltaTime);
 
-                //come back to this later!  RemotePlayer.Avatar.FaceVisemeMesh.transform.position = RemotePlayer.MouthControl.OutgoingWorldData.position;
-            }
-            if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
-            {
-                First = Last;
-                Last = result;
+                    //come back to this later!  RemotePlayer.Avatar.FaceVisemeMesh.transform.position = RemotePlayer.MouthControl.OutgoingWorldData.position;
+                }
+                if (interpolationTime >= 1 && PayloadQueue.TryDequeue(out AvatarBuffer result))
+                {
+                    First = Last;
+                    Last = result;
 
-                TimeBeforeCompletion = Last.SecondsInterval;
-                TimeInThePast = TimeAsDouble;
+                    TimeBeforeCompletion = Last.SecondsInterval;
+                    TimeInThePast = TimeAsDouble;
+                }
             }
         }
         public void EnQueueAvatarBuffer(ref AvatarBuffer avatarBuffer)
@@ -119,6 +123,7 @@ namespace Basis.Scripts.Networking.Recievers
                 {
                     First = avatarBuffer;
                     Last = avatarBuffer;
+                    ComputeHumanPose();
                     HasAvatarInitalized = true;
                 }
             }
@@ -138,6 +143,7 @@ namespace Basis.Scripts.Networking.Recievers
             // Apply scaling to position
             Vector3 ScaledPosition = Vector3.Scale(Position, Scaling);  // Apply the scaling
 
+           // Debug.Log("ScaledPosition " + ScaledPosition);
             // Apply pose data
             HumanPose.bodyPosition = ScaledPosition;
             HumanPose.bodyRotation = Rotation;
@@ -204,8 +210,8 @@ namespace Basis.Scripts.Networking.Recievers
                 }
                 OuputVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = position, Index 1 = scale
                 TargetVectors = new NativeArray<float3>(2, Allocator.Persistent); // Index 0 = target position, Index 1 = target scale
-                muscles = new NativeArray<float>(90, Allocator.Persistent);
-                targetMuscles = new NativeArray<float>(90, Allocator.Persistent);
+                muscles = new NativeArray<float>(LocalAvatarSyncMessage.StoredBones, Allocator.Persistent);
+                targetMuscles = new NativeArray<float>(LocalAvatarSyncMessage.StoredBones, Allocator.Persistent);
                 musclesJob = new UpdateAvatarMusclesJob();
                 AvatarJob = new UpdateAvatarJob();
                 musclesJob.Outputmuscles = muscles;

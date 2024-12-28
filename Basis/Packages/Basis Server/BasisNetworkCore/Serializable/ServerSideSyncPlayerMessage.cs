@@ -1,4 +1,4 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     public struct ServerSideSyncPlayerMessage

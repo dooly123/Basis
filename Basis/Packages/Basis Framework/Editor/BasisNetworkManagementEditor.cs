@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 using Basis.Scripts.Networking.Recievers;
 using Basis.Scripts.Networking;
 
@@ -29,6 +28,42 @@ public class BasisNetworkManagementEditor : Editor
         EditorGUILayout.LabelField("Joining Players:", BasisNetworkManagement.JoiningPlayers.Count.ToString());
         EditorGUILayout.LabelField("Receiver Count:", BasisNetworkManagement.ReceiverCount.ToString());
 
+
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Transmitter Details", EditorStyles.boldLabel);
+
+        // Display key properties
+        EditorGUILayout.LabelField("Ready:", BasisNetworkManagement.Transmitter.Ready.ToString());
+        EditorGUILayout.LabelField("Has Events:", BasisNetworkManagement.Transmitter.HasEvents.ToString());
+        EditorGUILayout.LabelField("Timer:", BasisNetworkManagement.Transmitter.timer.ToString("F3"));
+        EditorGUILayout.LabelField("Interval:", BasisNetworkManagement.Transmitter.interval.ToString("F3"));
+        EditorGUILayout.LabelField("Smallest Distance to Another Player:", BasisNetworkManagement.Transmitter.SmallestDistanceToAnotherPlayer.ToString("F3"));
+        EditorGUILayout.Space();
+        // Native Array Details
+        nativeArrayFoldout = EditorGUILayout.Foldout(nativeArrayFoldout, "Native Arrays", true);
+        if (nativeArrayFoldout)
+        {
+            EditorGUILayout.LabelField("Target Positions:", BasisNetworkManagement.Transmitter.targetPositions.IsCreated ? "Created" : "Not Created");
+            EditorGUILayout.LabelField("Distances:", BasisNetworkManagement.Transmitter.distances.IsCreated ? "Created" : "Not Created");
+            EditorGUILayout.LabelField("Distance Results:", BasisNetworkManagement.Transmitter.DistanceResults.IsCreated ? "Created" : "Not Created");
+            EditorGUILayout.LabelField("Hearing Results:", BasisNetworkManagement.Transmitter.HearingResults.IsCreated ? "Created" : "Not Created");
+            EditorGUILayout.LabelField("Avatar Results:", BasisNetworkManagement.Transmitter.AvatarResults.IsCreated ? "Created" : "Not Created");
+        }
+
+        EditorGUILayout.Space();
+
+        // Debugging Foldout
+        debugFoldout = EditorGUILayout.Foldout(debugFoldout, "Debugging", true);
+        if (debugFoldout)
+        {
+            EditorGUILayout.LabelField("Microphone Range Index:", BasisNetworkManagement.Transmitter.MicrophoneRangeIndex != null ? BasisNetworkManagement.Transmitter.MicrophoneRangeIndex.Length.ToString() : "NULL");
+            EditorGUILayout.LabelField("Hearing Index:", BasisNetworkManagement.Transmitter.HearingIndex != null ? BasisNetworkManagement.Transmitter.HearingIndex.Length.ToString() : "NULL");
+            EditorGUILayout.LabelField("Avatar Index:", BasisNetworkManagement.Transmitter.AvatarIndex != null ? BasisNetworkManagement.Transmitter.AvatarIndex.Length.ToString() : "NULL");
+        }
+
+        // Apply property modifications
+        serializedObject.ApplyModifiedProperties();
         EditorGUILayout.Space();
 
         // Foldout for Receiver Array Data
@@ -71,7 +106,8 @@ public class BasisNetworkManagementEditor : Editor
             EditorUtility.SetDirty(networkManager);
         }
     }
-
+    private bool nativeArrayFoldout = false; // Foldout for NativeArray details
+    private bool debugFoldout = false; // Foldout for debugging data
     private void DisplayReceiverProperties(BasisNetworkReceiver receiver)
     {
         // Use reflection to dynamically display fields

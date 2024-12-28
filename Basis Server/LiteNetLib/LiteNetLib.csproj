@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>LiteNetLib</AssemblyName>
@@ -37,7 +37,7 @@
     <Authors>Ruslan Pyrch</Authors>
     <Copyright>Copyright 2024 Ruslan Pyrch</Copyright>
     <Description>Lite reliable UDP library for .NET, Mono, and .NET Core</Description>
-    <TargetFrameworks>net9.0;net471</TargetFrameworks>
+    <TargetFrameworks>net9.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
 </Project>
