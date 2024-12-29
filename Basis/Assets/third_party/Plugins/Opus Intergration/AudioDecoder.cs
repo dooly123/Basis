@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 
 namespace UnityOpus
@@ -12,7 +12,8 @@ namespace UnityOpus
 
         public AudioDecoder(SamplingFrequency samplingFrequency,NumChannels channels) {ErrorCode error;this.channels = channels;
             decoder = Library.OpusDecoderCreate(samplingFrequency,channels,out error);
-            if (error != ErrorCode.OK) {
+            if (error != ErrorCode.OK)
+            {
                 Debug.LogError("[UnityOpus] Failed to create Decoder. Error code is " + error.ToString());
                 decoder = IntPtr.Zero;
             }

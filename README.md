@@ -2,24 +2,24 @@
 
 <table border="0">
  <tr>
-    <td><div align="center"><img src="https://raw.githubusercontent.com/dooly123/Basis/main/Images/BasisLogo.png" alt="Logo" width="160" height="160"></td>
+    <td><div align="center"><img src="./Basis/Images/BasisLogo.png" alt="Logo" width="160" height="160"></td>
     <td><div align="center"><h3><strong>Basis</strong></h3>
 The Social VR Framework</br>
 <a href="https://discord.gg/F35u3cUMqt"><strong>Join our Discord!»</strong></a></br></br>
-<a href="https://github.com/dooly123/Basis/issues/new?labels=bug&template=bug-report---.md">Report Bug</a> - 
-<a href="https://github.com/dooly123/Basis/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a></div></td>
+<a href="https://github.com/BasisVR/Basis/issues/new?labels=bug&template=bug-report---.md">Report Bug</a> - 
+<a href="https://github.com/BasisVR/Basis/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a></div></td>
  </tr>
 </table>
      
  ## About Basis
 
-[Basis Philosophy](https://github.com/dooly123/Basis/blob/main/PHILOSOPHY.md) <- read our Philosophy here!
+[Basis Philosophy](./PHILOSOPHY.md) <- read our Philosophy here!
 
 We are a MIT-Licensed Open-Source project with a focus on open development and full access to any optional modification desired or required.
 
 Our goal is to help equip VR Creators, so we can accelerate the growth of VR.
 
-<img src="https://raw.githubusercontent.com/dooly123/Basis/main/Images/Banner.png" alt="Banner" width="550" height="155">
+<img src="./Basis/Images/Banner.png" alt="Banner" width="550" height="155">
 
 We are actively working on Basis. If you like what you see please consider contributing to the github in any way you can.
 
@@ -73,11 +73,8 @@ Distributed under the MIT License. See [MIT License](https://opensource.org/lice
  ### Built With
 
 This would not be possible without the following:
-- [FFmpeg](https://github.com/FFmpeg/FFmpeg) (lgpl 3, 6.1)
-- [FFmpeg Builds](https://github.com/BtbN/FFmpeg-Builds?tab=MIT-1-ov-file) (lgpl 3)
 - [OdinSerializer](https://github.com/TeamSirenix/odin-serializer)
 - [ULipSync](https://github.com/hecomi/uLipSync)
-- [DarkRift 2](https://github.com/DarkRiftNetworking/ )
 - [UnityJigglePhysics](https://github.com/naelstrof/UnityJigglePhysics)
 - [UnityOpus](https://github.com/TyounanMOTI/UnityOpus)
 - [Settings Manager](https://assetstore.unity.com/packages/tools/gui/settings-manager-158458)
@@ -87,7 +84,6 @@ This would not be possible without the following:
 - [Unity Starter Assets - ThirdPerson](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526)
 - [Aurellia](https://github.com/CascadianVR) Assets\third_party\Avatar\Aurellia\LICENSE
 - [YUN](https://github.com/yewnyx) Assets\third_party\Avatar\Yun\LICENSE
-- [vive OpenXR](https://developer.vive.com/resources/openxr/)
 - [lilToon](https://github.com/lilxyzw/lilToon)
 - [RNNoise](https://github.com/xiph/rnnoise?tab=BSD-3-Clause-1-ov-file)
 - [RNNoise.Net](https://github.com/Yellow-Dog-Man/RNNoise.Net)
@@ -110,9 +106,9 @@ This project includes third-party code licensed under the BSD-3-Clause license:
 - [OpenVR](https://github.com/valvesoftware/openvr)
 The OpenVR API is (C) Valve Corporation under the BSD 3-clause license
 
-For more details, see `Assets/third_party/plugins/SteamAudio/LICENSE`.
-For more details, see `Assets/third_party/plugins/SteamVR/LICENSE`.
+For more details, see `Basis/Assets/third_party/plugins/SteamAudio/LICENSE`.
+For more details, see `Basis/Assets/third_party/plugins/SteamVR/LICENSE`.
 
-This project also includes third-party trademarks as described in `Assets/third_party/plugins/SteamAudio/TRADEMARK_RIGHTS.md`. For more details, see `Assets/third_party/plugins/SteamAudio/TRADEMARK_RIGHTS.md`.
+This project also includes third-party trademarks as described in `Basis/Assets/third_party/plugins/SteamAudio/TRADEMARK_RIGHTS.md`. For more details, see `Basis/Assets/third_party/plugins/SteamAudio/TRADEMARK_RIGHTS.md`.
 
-"Valve", "Steam", and the associated figurative images are trademarks and/or registered trademarks of Valve Corporation in the US and in various other jurisdictions. All rights reserved. Use of these trademarks must comply with the guidelines set forth in `Assets/third_party/plugins/SteamAudio/TRADEMARK_RIGHTS.md`.
+"Valve", "Steam", and the associated figurative images are trademarks and/or registered trademarks of Valve Corporation in the US and in various other jurisdictions. All rights reserved. Use of these trademarks must comply with the guidelines set forth in `Basis/Assets/third_party/plugins/SteamAudio/TRADEMARK_RIGHTS.md`.
