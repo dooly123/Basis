@@ -65,10 +65,11 @@
     <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisNetworkOwnership.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisServerReductionSystem.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworkHealthCheck.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\Auth\Password.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisSavedState.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworkServer.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkServer\Promethus\BasisPromethus.cs" />
-    <Compile Include="Packages\Basis Server\BasisNetworkServer\Password\BasisPasswordImplementation.cs" />
+    <Compile Include="Packages\Basis Server\BasisNetworkServer\Auth\Interface.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisNetworkingGeneric.cs" />
     <Compile Include="Packages\Basis Server\BasisNetworkServer\BasisNetworking\BasisServerConfiguration.cs" />
   </ItemGroup>
