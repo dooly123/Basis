@@ -2,24 +2,24 @@
 
 <table border="0">
  <tr>
-    <td><div align="center"><img src="https://raw.githubusercontent.com/dooly123/Basis/main/Images/BasisLogo.png" alt="Logo" width="160" height="160"></td>
+    <td><div align="center"><img src="./Basis/Images/BasisLogo.png" alt="Logo" width="160" height="160"></td>
     <td><div align="center"><h3><strong>Basis</strong></h3>
 The Social VR Framework</br>
 <a href="https://discord.gg/F35u3cUMqt"><strong>Join our Discord!»</strong></a></br></br>
-<a href="https://github.com/dooly123/Basis/issues/new?labels=bug&template=bug-report---.md">Report Bug</a> - 
-<a href="https://github.com/dooly123/Basis/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a></div></td>
+<a href="https://github.com/BasisVR/Basis/issues/new?labels=bug&template=bug-report---.md">Report Bug</a> - 
+<a href="https://github.com/BasisVR/Basis/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a></div></td>
  </tr>
 </table>
      
  ## About Basis
 
-[Basis Philosophy](https://github.com/dooly123/Basis/blob/main/PHILOSOPHY.md) <- read our Philosophy here!
+[Basis Philosophy](./PHILOSOPHY.md) <- read our Philosophy here!
 
 We are a MIT-Licensed Open-Source project with a focus on open development and full access to any optional modification desired or required.
 
 Our goal is to help equip VR Creators, so we can accelerate the growth of VR.
 
-<img src="https://raw.githubusercontent.com/dooly123/Basis/main/Images/Banner.png" alt="Banner" width="550" height="155">
+<img src="./Basis/Images/Banner.png" alt="Banner" width="550" height="155">
 
 We are actively working on Basis. If you like what you see please consider contributing to the github in any way you can.
 
