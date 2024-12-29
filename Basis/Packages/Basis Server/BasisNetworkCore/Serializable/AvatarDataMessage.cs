@@ -30,7 +30,7 @@ public static partial class SerializableBasis
                     throw new ArgumentException($"Invalid recipientsSize: {recipientsSize}");
                 }
                 recipients = new ushort[recipientsSize];
-                BNL.Log("Recipients is " + recipientsSize);
+               // BNL.Log("Recipients is " + recipientsSize);
                 for (int index = 0; index < recipientsSize; index++)
                 {
                     if (!Writer.TryGetUShort(out recipients[index]))

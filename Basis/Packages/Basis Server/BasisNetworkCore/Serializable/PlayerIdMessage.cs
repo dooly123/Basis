@@ -1,4 +1,4 @@
-﻿using DarkRift;
+using DarkRift;
 using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
@@ -16,7 +16,7 @@ public static partial class SerializableBasis
 
         public void Serialize(NetDataWriter Writer)
         {
-             Writer.Put(playerID);
+            Writer.Put(playerID);
         }
     }
 }
