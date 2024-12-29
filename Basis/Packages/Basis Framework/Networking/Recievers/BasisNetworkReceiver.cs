@@ -77,7 +77,7 @@ namespace Basis.Scripts.Networking.Recievers
         }
         public void Apply(double TimeAsDouble, float DeltaTime)
         {
-            if (PoseHandler != null)
+            if (Ready)
             {
                 if (HasAvatarInitalized)
                 {
