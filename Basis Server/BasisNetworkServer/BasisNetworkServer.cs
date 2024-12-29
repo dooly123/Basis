@@ -66,10 +66,10 @@ public static class BasisNetworkServer
             AllowPeerAddressChange = configuration.AllowPeerAddressChange,
             BroadcastReceiveEnabled = false,
             UseNativeSockets = configuration.UseNativeSockets,
-            ChannelsCount = 64,
+            ChannelsCount = BasisNetworkCommons.TotalChannels,
             EnableStatistics = configuration.EnableStatistics,
             IPv6Enabled = configuration.IPv6Enabled,
-            UpdateTime = configuration.UpdateTime,
+            UpdateTime = BasisNetworkCommons.NetworkIntervalPoll,
             PingInterval = configuration.PingInterval,
             DisconnectTimeout = configuration.DisconnectTimeout
         };

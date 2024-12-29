@@ -5,10 +5,10 @@ $destination = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis 
 # Remove all .cs files in the destination directory
 Get-ChildItem -Path $destination -Recurse -Include *.cs | Remove-Item -Force
 
-# Get all files from the source, excluding .dll files and obj folders
+# Get all files from the source, excluding .dll files, .asmdef files, and obj folders
 Get-ChildItem -Path $source -Recurse | Where-Object { 
-    # Exclude .dll files and obj directories
-    $_.Extension -ne '.dll' -and $_.FullName -notmatch '\\obj\\'
+    # Exclude .dll files, .asmdef files, and obj directories
+    $_.Extension -notin @('.dll', '.asmdef') -and $_.FullName -notmatch '\\obj\\'
 } | ForEach-Object {
     # Calculate the destination file path
     $destinationPath = $_.FullName -replace [regex]::Escape($source), $destination
