@@ -1,41 +1,33 @@
+#nullable enable
+
 using LiteNetLib.Utils;
+
 namespace Basis.Network.Core.Serializable
 {
     public static partial class SerializableBasis
     {
+        /// Consistes of a ushort length, followed by byte array (of same length)
         [System.Serializable]
         public struct AuthenticationMessage
         {
-            public ushort MessageLength;
-            public byte[] Message;
-            public void Deserialize(NetDataReader Writer)
+            public byte[] bytes;
+            public void Deserialize(NetDataReader Reader)
             {
-                if (Writer.TryGetUShort(out MessageLength))
+                if (Reader.TryGetUShort(out ushort msgLength))
                 {
-                    Message = new byte[MessageLength];
-                    Writer.GetBytes(Message, MessageLength);
+                    bytes = new byte[msgLength];
+                    Reader.GetBytes(bytes, msgLength);
                 }
                 else
                 {
                     BNL.LogError("missing Message Length!");
                 }
             }
-            public void Dispose()
+
+            public readonly void Serialize(NetDataWriter Writer)
             {
-            }
-            public void Serialize(NetDataWriter Writer)
-            {
-                if (Message != null)
-                {
-                    MessageLength = (ushort)Message.Length;
-                    Writer.Put(MessageLength);
-                    Writer.Put(Message);
-                }
-                else
-                {
-                    MessageLength = 0;
-                    Writer.Put(MessageLength);
-                }
+                Writer.Put(checked((ushort)bytes.Length));
+                Writer.Put(bytes);
             }
         }
     }

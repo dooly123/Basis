@@ -228,7 +228,7 @@ namespace Basis.Scripts.Networking
             Debug.Log("Network Starting Client");
             BasisNetworkClient.AuthenticationMessage = new Network.Core.Serializable.SerializableBasis.AuthenticationMessage
             {
-                Message = Encoding.UTF8.GetBytes(PrimitivePassword)
+                 bytes = Encoding.UTF8.GetBytes(PrimitivePassword)
             };
            // Debug.Log("Size is " + BasisNetworkClient.AuthenticationMessage.Message.Length);
             LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);

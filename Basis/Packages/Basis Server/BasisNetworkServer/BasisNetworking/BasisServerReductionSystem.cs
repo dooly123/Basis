@@ -1,4 +1,4 @@
- using System;
+using System;
 using System.Collections.Concurrent;
 using Basis.Network.Core;
 using Basis.Network.Core.Compression;

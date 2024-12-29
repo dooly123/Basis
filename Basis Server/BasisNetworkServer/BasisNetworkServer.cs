@@ -1,8 +1,8 @@
 using Basis.Network.Core;
 using Basis.Network.Server;
+using Basis.Network.Server.Auth;
 using Basis.Network.Server.Generic;
 using Basis.Network.Server.Ownership;
-using Basis.Network.Server.Password;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using System;
@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using static Basis.Network.Core.Serializable.SerializableBasis;
 using static Basis.Network.Server.Generic.BasisSavedState;
 using static SerializableBasis;
@@ -20,10 +21,13 @@ public static class BasisNetworkServer
     public static ConcurrentDictionary<ushort, NetPeer> Peers = new ConcurrentDictionary<ushort, NetPeer>();
     public static Configuration Configuration;
     public static Thread serverIncomeThread;
+    private static IAuth auth;
+
     public static void StartServer(Configuration configuration)
     {
         Configuration = configuration;
         BasisServerReductionSystem.Configuration = configuration;
+        auth = new PasswordAuth(configuration.Password ?? string.Empty);
 
         SetupServer(configuration);
         SetupServerEvents(configuration);
@@ -62,10 +66,10 @@ public static class BasisNetworkServer
             AllowPeerAddressChange = configuration.AllowPeerAddressChange,
             BroadcastReceiveEnabled = false,
             UseNativeSockets = configuration.UseNativeSockets,
-            ChannelsCount = BasisNetworkCommons.TotalChannels,
+            ChannelsCount = 64,
             EnableStatistics = configuration.EnableStatistics,
             IPv6Enabled = configuration.IPv6Enabled,
-            UpdateTime = BasisNetworkCommons.NetworkIntervalPoll,
+            UpdateTime = configuration.UpdateTime,
             PingInterval = configuration.PingInterval,
             DisconnectTimeout = configuration.DisconnectTimeout
         };
@@ -121,41 +125,42 @@ public static class BasisNetworkServer
                 return;
             }
 
-            ProcessConnectionApproval(request, ServerCount);
+            // Decide if connection should be approved
+            {
+
+                AuthenticationMessage authMessage = new AuthenticationMessage();
+                authMessage.Deserialize(request.Data);
+
+
+                if (auth.IsAuthenticated(authMessage))
+                {
+                    RejectWithReason(request, "Authentication failed, password rejected");
+                    return;
+                }
+
+                BNL.Log("Player approved. Current count: " + ServerCount);
+            }
+
+            // Finalize connection
+            {
+
+                NetPeer newPeer = request.Accept();
+                if (Peers.TryAdd((ushort)newPeer.Id, newPeer))
+                {
+                    BNL.Log($"Peer connected: {newPeer.Id}");
+                    ReadyMessage readyMessage = new ReadyMessage();
+                    readyMessage.Deserialize(request.Data);
+                    SendRemoteSpawnMessage(newPeer, readyMessage);
+                }
+                else
+                {
+                    RejectWithReason(request, "Peer already exists.");
+                }
+            }
         }
         catch (Exception e)
         {
-            RejectWithReason(request, e.Message + " " + e.StackTrace);
-        }
-    }
-
-    private static void ProcessConnectionApproval(ConnectionRequest request, int ServerCount)
-    {
-        AuthenticationMessage authMessage = new AuthenticationMessage();
-        authMessage.Deserialize(request.Data);
-
-        if (!BasisPasswordImplementation.CheckPassword(authMessage, Configuration, out string UsedPassword))
-        {
-            RejectWithReason(request, "Authentication failed Expected " + Configuration.Password + " but got " + UsedPassword);
-            return;
-        }
-
-        BNL.Log("Player approved. Current count: " + ServerCount);
-        ApproveAndInitializeConnection(request);
-    }
-    private static void ApproveAndInitializeConnection(ConnectionRequest request)
-    {
-        NetPeer newPeer = request.Accept();
-        if (Peers.TryAdd((ushort)newPeer.Id, newPeer))
-        {
-            BNL.Log($"Peer connected: {newPeer.Id}");
-            ReadyMessage readyMessage = new ReadyMessage();
-            readyMessage.Deserialize(request.Data);
-            SendRemoteSpawnMessage(newPeer, readyMessage);
-        }
-        else
-        {
-            RejectWithReason(request, "Peer already exists.");
+            BNL.LogError(e.Message + " " + e.StackTrace);
         }
     }
 
@@ -209,7 +214,7 @@ public static class BasisNetworkServer
                 {
                     if (reader.TryGetByte(out byte Byte))
                     {
-                      //  BNL.Log($"Found Channel {Byte} {reader.AvailableBytes}");
+                        //  BNL.Log($"Found Channel {Byte} {reader.AvailableBytes}");
                         HandleNetworkReceiveEvent(peer, reader, Byte, deliveryMethod);
                     }
                     else
@@ -352,7 +357,7 @@ public static class BasisNetworkServer
             };
             NetDataWriter NetDataWriter = new NetDataWriter();
             audioSegment.Serialize(NetDataWriter);
-          //  BNL.Log("Sending Voice Data To Clients");
+            //  BNL.Log("Sending Voice Data To Clients");
             BroadcastMessageToClients(NetDataWriter, channel, endPoints, DeliveryMethod.Sequenced);
         }
         else
@@ -449,7 +454,7 @@ public static class BasisNetworkServer
         List<ServerReadyMessage> copied = new List<ServerReadyMessage>();
 
         IEnumerable<NetPeer> clientsToNotify = Peers.Values.Where(client => client != authClient);
-        BNL.Log("Notifing Newly Connected Client about "+ clientsToNotify.Count());
+        BNL.Log("Notifing Newly Connected Client about " + clientsToNotify.Count());
         foreach (NetPeer client in clientsToNotify)
         {
             ServerReadyMessage serverReadyMessage = new ServerReadyMessage();
@@ -470,7 +475,7 @@ public static class BasisNetworkServer
                 serverReadyMessage.playerIdMessage = new PlayerIdMessage { playerID = (ushort)client.Id };
                 serverReadyMessage.localReadyMessage = new ReadyMessage
                 {
-                    localAvatarSyncMessage = new LocalAvatarSyncMessage() { array = new byte[LocalAvatarSyncMessage.AvatarSyncSize] },
+                    localAvatarSyncMessage = new LocalAvatarSyncMessage() { array = new byte[386] },
                     clientAvatarChangeMessage = new ClientAvatarChangeMessage() { byteArray = new byte[] { }, },
                     playerMetaDataMessage = new PlayerMetaDataMessage() { playerDisplayName = "Error", playerUUID = string.Empty },
                 };
