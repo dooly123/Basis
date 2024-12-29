@@ -5,5 +5,6 @@
 
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <NoWarn>$(NoWarn);IDE0003</NoWarn>
   </PropertyGroup>
 </Project>
