@@ -51,7 +51,7 @@ public static class AssetBundleBuilder
                 }
                 string Pathout = Path.GetDirectoryName(actualFilePath);
 
-                await SaveFileAsync(Pathout, "dontuploadmepassword", ".txt", Password);
+                await SaveFileAsync(Pathout, "dontuploadmepassword", "txt", Password);
 
                 OpenRelativePath(Pathout);
             }

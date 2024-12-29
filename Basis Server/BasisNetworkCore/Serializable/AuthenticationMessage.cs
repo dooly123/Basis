@@ -8,12 +8,12 @@ namespace Basis.Network.Core.Serializable
         {
             public ushort MessageLength;
             public byte[] Message;
-            public void Deserialize(NetDataReader Writer)
+            public void Deserialize(NetDataReader Reader)
             {
-                if (Writer.TryGetUShort(out MessageLength))
+                if (Reader.TryGetUShort(out MessageLength))
                 {
                     Message = new byte[MessageLength];
-                    Writer.GetBytes(Message, MessageLength);
+                    Reader.GetBytes(Message, MessageLength);
                 }
                 else
                 {
