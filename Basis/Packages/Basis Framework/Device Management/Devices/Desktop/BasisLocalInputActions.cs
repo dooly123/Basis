@@ -67,6 +67,11 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         {
             BasisLocalPlayer.Instance.LocalBoneDriver.SimulateAndApply(Time.timeAsDouble,Time.deltaTime);
             AfterAvatarChanges?.Invoke();
+
+            // Defensive check, this only seems to be null when the first avatar is not loaded yet.
+            // May be fixable by updating the prefab so that it's always defined by default.
+            if (BasisLocalPlayer.Instance.HeadShadowDriver)
+                BasisLocalPlayer.Instance.HeadShadowDriver.PrepareThisFrame();
         }
 
         public void Update()
