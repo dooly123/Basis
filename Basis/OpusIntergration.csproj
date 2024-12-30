@@ -61,14 +61,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\third_party\Plugins\Opus Intergration\AudioDecoder.cs" />
-    <Compile Include="Assets\third_party\Plugins\Opus Intergration\Library.cs" />
-    <Compile Include="Assets\third_party\Plugins\Opus Intergration\BasisOpusSettings.cs" />
-    <Compile Include="Assets\third_party\Plugins\Opus Intergration\Encoder.cs" />
+    <Compile Include="Packages\com.xiph.opus\Library.cs" />
+    <Compile Include="Packages\com.xiph.opus\Encoder.cs" />
+    <Compile Include="Packages\com.xiph.opus\BasisOpusSettings.cs" />
+    <Compile Include="Packages\com.xiph.opus\AudioDecoder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\third_party\Plugins\Opus Intergration\Opus Intergration.asmdef" />
-    <None Include="Assets\third_party\Plugins\Opus Intergration\Plugins\x64\UnityOpus.dll" />
+    <None Include="Packages\com.xiph.opus\Opus Intergration.asmdef" />
+    <None Include="Packages\com.xiph.opus\Plugins\x64\UnityOpus.dll" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -556,7 +556,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Assets\third_party\Plugins\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

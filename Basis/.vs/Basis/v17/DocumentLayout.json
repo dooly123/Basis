@@ -3,7 +3,23 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.basis.sdk\\scripts\\editor\\avatarsdk.uxml||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{76EB6543-AA89-28DB-7AFE-DB52C98BB30D}|SteamVR.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.steam.steamvr\\steamvr\\scripts\\steamvr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{76EB6543-AA89-28DB-7AFE-DB52C98BB30D}|SteamVR.csproj|solutionrelative:packages\\com.steam.steamvr\\steamvr\\scripts\\steamvr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54A4B2D3-3314-7BDF-19AB-FFBC642D40C1}|SteamVR_Input_Editor.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.steam.steamvr\\steamvr\\input\\editor\\steamvr_input_generator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54A4B2D3-3314-7BDF-19AB-FFBC642D40C1}|SteamVR_Input_Editor.csproj|solutionrelative:packages\\com.steam.steamvr\\steamvr\\input\\editor\\steamvr_input_generator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.basis.framework\\drivers\\basebonedriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\com.basis.framework\\drivers\\basebonedriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.basis.framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\com.basis.framework\\networking\\basisnetworkmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\packages\\com.basis.sdk\\scripts\\editor\\avatarsdk.uxml||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|solutionrelative:packages\\com.basis.sdk\\scripts\\editor\\avatarsdk.uxml||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
@@ -15,16 +31,16 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Packages\\JigglePhysics\\Scripts\\JiggleRigLateUpdateHandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6F1E02C5-11D3-B3F1-FE12-FCF7A2A9D318}|SettingsManagerEditor.csproj|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\assets\\third_party\\settings manager\\settingsmanagereditor\\editor\\settingsmanagereditorreference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6F1E02C5-11D3-B3F1-FE12-FCF7A2A9D318}|SettingsManagerEditor.csproj|solutionrelative:assets\\third_party\\settings manager\\settingsmanagereditor\\editor\\settingsmanagereditorreference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Recievers\\BasisNetworkReceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Packages\\Basis Framework\\Networking\\Recievers\\BasisNetworkReceiver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Assets\\third_party\\Settings Manager\\SettingsManagerEditor\\Editor\\SettingsManagerEditorReference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\third_party\\Settings Manager\\SettingsManagerEditor\\Editor\\SettingsManagerEditorReference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,11 +50,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 3098,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BaseBoneDriver.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.framework\\Drivers\\BaseBoneDriver.cs",
+              "RelativeDocumentMoniker": "Packages\\com.basis.framework\\Drivers\\BaseBoneDriver.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.framework\\Drivers\\BaseBoneDriver.cs",
+              "RelativeToolTip": "Packages\\com.basis.framework\\Drivers\\BaseBoneDriver.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAUwFAAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-30T08:07:36.267Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SteamVR_Input_Generator.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.steam.steamvr\\SteamVR\\Input\\Editor\\SteamVR_Input_Generator.cs",
+              "RelativeDocumentMoniker": "Packages\\com.steam.steamvr\\SteamVR\\Input\\Editor\\SteamVR_Input_Generator.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.steam.steamvr\\SteamVR\\Input\\Editor\\SteamVR_Input_Generator.cs",
+              "RelativeToolTip": "Packages\\com.steam.steamvr\\SteamVR\\Input\\Editor\\SteamVR_Input_Generator.cs",
+              "ViewState": "AgIAADoBAAAAAAAAAAAvwFIBAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-30T05:02:19.433Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "SteamVR.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.steam.steamvr\\SteamVR\\Scripts\\SteamVR.cs",
+              "RelativeDocumentMoniker": "Packages\\com.steam.steamvr\\SteamVR\\Scripts\\SteamVR.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.steam.steamvr\\SteamVR\\Scripts\\SteamVR.cs",
+              "RelativeToolTip": "Packages\\com.steam.steamvr\\SteamVR\\Scripts\\SteamVR.cs",
+              "ViewState": "AgIAAG4BAAAAAAAAAAAmwHoBAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-30T05:00:47.728Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BasisNetworkManagement.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.framework\\Networking\\BasisNetworkManagement.cs",
+              "RelativeDocumentMoniker": "Packages\\com.basis.framework\\Networking\\BasisNetworkManagement.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.framework\\Networking\\BasisNetworkManagement.cs",
+              "RelativeToolTip": "Packages\\com.basis.framework\\Networking\\BasisNetworkManagement.cs",
+              "ViewState": "AgIAAHYBAAAAAAAAAAAAwOQBAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-30T03:35:08.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "AvatarSDK.uxml",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.sdk\\Scripts\\Editor\\AvatarSDK.uxml",
               "RelativeDocumentMoniker": "Packages\\com.basis.sdk\\Scripts\\Editor\\AvatarSDK.uxml",
@@ -51,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "JiggleRigBuilder.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.naelstrof.jigglephysics\\Scripts\\JiggleRigBuilder.cs",
               "RelativeDocumentMoniker": "Packages\\com.naelstrof.jigglephysics\\Scripts\\JiggleRigBuilder.cs",
@@ -59,11 +127,12 @@
               "RelativeToolTip": "Packages\\com.naelstrof.jigglephysics\\Scripts\\JiggleRigBuilder.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T03:05:22.19Z"
+              "WhenOpened": "2024-12-30T03:05:22.19Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "JiggleRigLateUpdateHandler.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\JigglePhysics\\Scripts\\JiggleRigLateUpdateHandler.cs",
               "RelativeDocumentMoniker": "Packages\\JigglePhysics\\Scripts\\JiggleRigLateUpdateHandler.cs",
@@ -74,7 +143,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "BasisNetworkReceiver.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\Recievers\\BasisNetworkReceiver.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\Recievers\\BasisNetworkReceiver.cs",
@@ -85,7 +154,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "BasisNetworkManagement.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
               "RelativeDocumentMoniker": "Packages\\Basis Framework\\Networking\\BasisNetworkManagement.cs",
@@ -96,13 +165,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 9,
               "Title": "SettingsManagerEditorReference.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Assets\\third_party\\Settings Manager\\SettingsManagerEditor\\Editor\\SettingsManagerEditorReference.cs",
               "RelativeDocumentMoniker": "Assets\\third_party\\Settings Manager\\SettingsManagerEditor\\Editor\\SettingsManagerEditorReference.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Assets\\third_party\\Settings Manager\\SettingsManagerEditor\\Editor\\SettingsManagerEditorReference.cs",
               "RelativeToolTip": "Assets\\third_party\\Settings Manager\\SettingsManagerEditor\\Editor\\SettingsManagerEditorReference.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAqwCYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-29T14:53:11.446Z"
             }

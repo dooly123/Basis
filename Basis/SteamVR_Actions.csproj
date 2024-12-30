@@ -61,13 +61,13 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\third_party\Plugins\SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_default.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamVR_Input\SteamVR_Input_Actions.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamVR_Input\SteamVR_Input_Initialization.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamVR_Input\SteamVR_Input_ActionSets.cs" />
+    <Compile Include="Packages\com.steam.steamvr\SteamVR_Input\ActionSetClasses\SteamVR_Input_ActionSet_default.cs" />
+    <Compile Include="Packages\com.steam.steamvr\SteamVR_Input\SteamVR_Input_Initialization.cs" />
+    <Compile Include="Packages\com.steam.steamvr\SteamVR_Input\SteamVR_Input_Actions.cs" />
+    <Compile Include="Packages\com.steam.steamvr\SteamVR_Input\SteamVR_Input_ActionSets.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\third_party\Plugins\SteamVR_Input\SteamVR_Actions.asmdef" />
+    <None Include="Packages\com.steam.steamvr\SteamVR_Input\SteamVR_Actions.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -555,7 +555,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Assets\third_party\Plugins\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

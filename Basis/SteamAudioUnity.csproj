@@ -99,12 +99,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\phonon.dll" />
+    <None Include="Packages\com.steam.steamaudio\FMOD\platforms\win\lib\x86_64\phonon_fmod.dll" />
     <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86\audioplugin_phonon.dll" />
     <None Include="Packages\com.steam.steamaudio\SteamAudioUnity.asmdef" />
     <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\TrueAudioNext.dll" />
     <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\GPUUtilities.dll" />
     <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\audioplugin_phonon.dll" />
     <None Include="Packages\com.steam.steamaudio\Binaries\iOS\SteamAudioUnityAppController.h" />
+    <None Include="Packages\com.steam.steamaudio\FMOD\platforms\win\lib\x86\phonon_fmod.dll" />
     <None Include="Packages\com.steam.steamaudio\Binaries\iOS\SteamAudioUnityAppController.mm" />
     <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86\phonon.dll" />
   </ItemGroup>
@@ -594,7 +596,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Assets\third_party\Plugins\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

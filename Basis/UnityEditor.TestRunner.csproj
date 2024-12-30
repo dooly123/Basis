@@ -165,8 +165,8 @@
     <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\UnityTestProtocol\UtpMessageBuilder.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\TestRun\Tasks\EnterPlayModeTask.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\CommandLineTest\LogSavingCallbacks.cs" />
-    <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\Api\IErrorCallbacks.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\TestRun\Tasks\RestoreProjectSettingsTask.cs" />
+    <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\Api\IErrorCallbacks.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\TestRun\ITestJobRunner.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\GUI\TestListTreeView\TestTreeViewItem.cs" />
     <Compile Include="Library\PackageCache\com.unity.test-framework\UnityEditor.TestRunner\GUI\Controls\ISelectableItem.cs" />

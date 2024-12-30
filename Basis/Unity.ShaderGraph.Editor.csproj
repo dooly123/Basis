@@ -582,8 +582,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Controls\IdentifierControl.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Data\DropdownEntry.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Input\Scene\EyeIndexNode.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Descriptors\StencilDescriptor.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Views\GraphEditorView.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Descriptors\StencilDescriptor.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Enumerations\PropertyType.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Legacy\SlotReference0.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Math\Trigonometry\ArcsineNode.cs" />
@@ -597,8 +597,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Artistic\Filter\FadeTransitionNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Procedural\Shape\RectangleNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Graphs\ShaderInput.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Views\MaterialGraphView.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Controls.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Views\MaterialGraphView.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Input\Lighting\BakedGINode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Inspector\PropertyDrawers\SampleTexture2DNodePropertyDrawer.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Math\Trigonometry\TangentNode.cs" />
@@ -1375,7 +1375,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Assets\third_party\Plugins\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

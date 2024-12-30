@@ -1,4 +1,4 @@
-﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 //
 // Purpose: Access to SteamVR system (hmd) and compositor (distort) interfaces.
 //
@@ -9,7 +9,9 @@ using Valve.VR;
 using System.IO;
 using System.Linq;
 using UnityEngine.XR;
-
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 namespace Valve.VR
 {
     public class SteamVR : System.IDisposable
@@ -362,10 +364,7 @@ namespace Valve.VR
 
         public static string GetSteamVRFolderParentPath(bool localToAssetsFolder = false)
         {
-            SteamVR_Settings asset = ScriptableObject.CreateInstance<SteamVR_Settings>();
-            UnityEditor.MonoScript scriptAsset = UnityEditor.MonoScript.FromScriptableObject(asset);
-
-            string scriptPath = UnityEditor.AssetDatabase.GetAssetPath(scriptAsset);
+            string scriptPath = "Packages/com.steam.steamvr/SteamVR_Resources/Resources/SteamVR_Settings.asset";
 
             System.IO.FileInfo settingsScriptFileInfo = new System.IO.FileInfo(scriptPath);
 
@@ -383,10 +382,7 @@ namespace Valve.VR
 
         public static string GetSteamVRFolderPath(bool localToAssetsFolder = false)
         {
-            SteamVR_Settings asset = ScriptableObject.CreateInstance<SteamVR_Settings>();
-            UnityEditor.MonoScript scriptAsset = UnityEditor.MonoScript.FromScriptableObject(asset);
-
-            string scriptPath = UnityEditor.AssetDatabase.GetAssetPath(scriptAsset);
+            string scriptPath = "Packages/com.steam.steamvr/SteamVR_Resources/Resources/SteamVR_Settings.asset";
 
             System.IO.FileInfo settingsScriptFileInfo = new System.IO.FileInfo(scriptPath);
             string fullPath = settingsScriptFileInfo.Directory.Parent.FullName;

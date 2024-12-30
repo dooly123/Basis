@@ -1,0 +1,7 @@
+{
+  "name": "com.steam.steamvr",
+  "displayName": "SteamVR",
+  "version": "0.0.1",
+  "description": "SteamVR made by valve",
+  "hideInEditor": false
+}

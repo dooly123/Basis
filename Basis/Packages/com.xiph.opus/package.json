@@ -1,0 +1,6 @@
+{
+  "name": "com.xiph.opus",
+  "displayName": "Xiph/TyounanMOTI Opus",
+  "version": "0.0.1",
+  "description": "Opus by xiph https://github.com/xiph/opus, uses the unity opus bridge https://github.com/TyounanMOTI/UnityOpus"
+}

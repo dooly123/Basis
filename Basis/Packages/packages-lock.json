@@ -69,6 +69,12 @@
         "com.unity.mathematics": "1.2.5"
       }
     },
+    "com.keviniglesias.basicmotions": {
+      "version": "file:com.keviniglesias.basicmotions",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.llealloo.audiolink": {
       "version": "file:com.llealloo.audiolink",
       "depth": 0,
@@ -87,10 +93,22 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.steam.steamvr": {
+      "version": "file:com.steam.steamvr",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.3rdpersondemo": {
+      "version": "file:com.unity.3rdpersondemo",
+      "depth": 0,
+      "source": "embedded",
       "dependencies": {}
     },
     "com.unity.addressables": {
@@ -380,6 +398,18 @@
         "com.unity.ugui": "1.0.0",
         "com.unity.xr.legacyinputhelpers": "2.1.4"
       }
+    },
+    "com.xiph.opus": {
+      "version": "file:com.xiph.opus",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.xiph.rnnoise": {
+      "version": "file:com.xiph.rnnoise",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "dev.hai-vr.basis.comms": {
       "version": "file:HVRBasisAvatarComms",

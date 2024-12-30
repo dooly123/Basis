@@ -561,7 +561,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Assets\third_party\Plugins\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

@@ -252,8 +252,8 @@
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Utilities\PrimitiveValue.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\InputDiagnostics.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Devices\Commands\QueryKeyboardLayoutCommand.cs" />
-    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Devices\Commands\EnableIMECompositionCommand.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Actions\Composites\Vector2Composite.cs" />
+    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Devices\Commands\EnableIMECompositionCommand.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\IInputRuntime.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Plugins\XR\Haptics\BufferedRumble.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Plugins\PlayerInput\PlayerInputManagerEditor.cs" />
@@ -960,7 +960,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Assets\third_party\Plugins\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">
