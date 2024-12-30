@@ -61,19 +61,19 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\basistests\BasisTestNetworkScene.cs" />
-    <Compile Include="Packages\basistests\Mirror\BasisSDKMirror.cs" />
-    <Compile Include="Packages\basistests\BasisTestNetwork.cs" />
-    <Compile Include="Packages\basistests\BasisPositionRotationScale.cs" />
-    <Compile Include="Packages\basistests\BasisTestRoundTrip.cs" />
-    <Compile Include="Packages\basistests\BasisTestNetworkAvatar.cs" />
-    <Compile Include="Packages\basistests\BasisTestNetworkAvatarOverrideJump.cs" />
-    <Compile Include="Packages\basistests\BasisObjectSyncNetworking.cs" />
-    <Compile Include="Packages\basistests\BasisToggleByLocalPlayer.cs" />
-    <Compile Include="Packages\basistests\BasisTestClampedRotation.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisObjectSyncNetworking.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisTestNetworkAvatar.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisTestNetworkScene.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisToggleByLocalPlayer.cs" />
+    <Compile Include="Packages\com.basis.tests\Mirror\BasisSDKMirror.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisTestRoundTrip.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisTestNetworkAvatarOverrideJump.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisPositionRotationScale.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisTestNetwork.cs" />
+    <Compile Include="Packages\com.basis.tests\BasisTestClampedRotation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\basistests\BasisExamples.asmdef" />
+    <None Include="Packages\com.basis.tests\BasisExamples.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

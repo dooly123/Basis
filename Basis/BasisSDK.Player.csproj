@@ -61,30 +61,30 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\basisdk\Helpers\BasisObservableList.cs" />
-    <Compile Include="Packages\basisdk\Enum\BasisBoneTrackedRole.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisContentBase.cs" />
-    <Compile Include="Packages\basisdk\Helpers\BasisArrayExtensions.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisBundleInformation.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisStoredEncyptedBundle.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Content Police\ContentPoliceControl.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisMeshRendererCheck.cs" />
-    <Compile Include="Packages\basisdk\Helpers\BasisHelpers.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisRemoteEncyptedBundle.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisScene.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisEncryptionWrapper.cs" />
-    <Compile Include="Packages\basisdk\Scripts\UniqueID\BasisGenerateUniqueID.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Content Police\ContentPoliceSelector.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Content Police\BundledContentHolder.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Content Police\BasisLoadableBundle.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisJiggleStrain.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisAvatar.cs" />
-    <Compile Include="Packages\basisdk\Scripts\BasisProgressReport.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisRemoteEncyptedBundle.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Content Police\BasisLoadableBundle.cs" />
+    <Compile Include="Packages\com.basis.sdk\Helpers\BasisHelpers.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Content Police\BundledContentHolder.cs" />
+    <Compile Include="Packages\com.basis.sdk\Helpers\BasisObservableList.cs" />
+    <Compile Include="Packages\com.basis.sdk\Enum\BasisBoneTrackedRole.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisEncryptionWrapper.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisMeshRendererCheck.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisBundleInformation.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisContentBase.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Content Police\ContentPoliceSelector.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\UniqueID\BasisGenerateUniqueID.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Content Police\ContentPoliceControl.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisProgressReport.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisStoredEncyptedBundle.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisScene.cs" />
+    <Compile Include="Packages\com.basis.sdk\Helpers\BasisArrayExtensions.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisJiggleStrain.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\BasisAvatar.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\basisdk\BasisSDK.asmdef" />
-    <None Include="Packages\basisdk\Shaders\UIOverlayShader.shader" />
-    <None Include="Packages\basisdk\Template\ObjectField.uxml" />
+    <None Include="Packages\com.basis.sdk\BasisSDK.asmdef" />
+    <None Include="Packages\com.basis.sdk\Shaders\UIOverlayShader.shader" />
+    <None Include="Packages\com.basis.sdk\Template\ObjectField.uxml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

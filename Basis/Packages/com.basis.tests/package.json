@@ -1,0 +1,6 @@
+{
+    "name" : "com.basis.tests",
+    "displayName" : "Basis Tests",
+    "version" : "0.0.1",
+    "description" : "Tests and examples for the basis framework"
+}

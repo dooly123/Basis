@@ -61,25 +61,25 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigSimpleLOD.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigBuilder.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigLateUpdateHandler.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleBone.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigFixedUpdateHandler.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigRendererLOD.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigLODRenderComponent.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleSettingData.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigLOD.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\CachedSphereCollider.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\IJiggleAdvancable.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\PositionSignal.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleSettingsBase.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleSettingsBlend.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleRigHandler.cs" />
-    <Compile Include="Packages\JigglePhysics\Scripts\JiggleSettings.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigSimpleLOD.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigBuilder.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigLateUpdateHandler.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleBone.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigFixedUpdateHandler.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigRendererLOD.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigLODRenderComponent.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettingData.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigLOD.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\CachedSphereCollider.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\IJiggleAdvancable.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\PositionSignal.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettingsBase.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettingsBlend.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigHandler.cs" />
+    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\JigglePhysics\Naelstrof.JigglePhysics.asmdef" />
+    <None Include="Packages\com.naelstrof.jigglephysics\Naelstrof.JigglePhysics.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

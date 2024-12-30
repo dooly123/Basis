@@ -61,18 +61,18 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\Basis Framework\Editor\BasisFakeDeviceHelperWindow.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\DeviceManagementEditor.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\BasisHeightEditor.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\ContentPoliceSelectorEditor.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\BasisMenuItemsEditor.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\BasisNetworkManagementEditor.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\BasisVirtualKeyboardDefaultLanguagesAndStyles.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\BasisFallBackBoneDataEditor.cs" />
-    <Compile Include="Packages\Basis Framework\Editor\BasisVirtualKeyboardLayoutDataEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\BasisVirtualKeyboardLayoutDataEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\ContentPoliceSelectorEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\BasisNetworkManagementEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\DeviceManagementEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\BasisFallBackBoneDataEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\BasisFakeDeviceHelperWindow.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\BasisHeightEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\BasisMenuItemsEditor.cs" />
+    <Compile Include="Packages\com.basis.framework\Editor\BasisVirtualKeyboardDefaultLanguagesAndStyles.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\Basis Framework\Editor\BasisEditor.asmdef" />
+    <None Include="Packages\com.basis.framework\Editor\BasisEditor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -1,6 +1,6 @@
 # Define source and destination directories
 $source = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis Server"
-$destination = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis\Packages\Basis Server"
+$destination = "C:\Users\doola\OneDrive\Documents\Github\Basis Foundation\Basis Unity\Basis\Packages\com.basis.server"
 
 # Remove all .cs files in the destination directory
 Get-ChildItem -Path $destination -Recurse -Include *.cs | Remove-Item -Force

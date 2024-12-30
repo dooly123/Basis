@@ -61,12 +61,12 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\Basis Framework\Common\BasisTransformMapping.cs" />
-    <Compile Include="Packages\Basis Framework\Common\BasisDataStore.cs" />
-    <Compile Include="Packages\Basis Framework\Common\BasisCalibratedOffsetData.cs" />
+    <Compile Include="Packages\com.basis.framework\Common\BasisCalibratedOffsetData.cs" />
+    <Compile Include="Packages\com.basis.framework\Common\BasisTransformMapping.cs" />
+    <Compile Include="Packages\com.basis.framework\Common\BasisDataStore.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\Basis Framework\Common\BasisCommon.asmdef" />
+    <None Include="Packages\com.basis.framework\Common\BasisCommon.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -1,0 +1,10 @@
+{
+  "name": "com.basis.server",
+  "version": "1.0.0",
+  "displayName": "Basis Server",
+  "description": "Core networking default works with litenetlib",
+  "author": {
+    "name": "dooly123",
+    "url": "https://github.com/dooly123"
+  }
+}

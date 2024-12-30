@@ -61,31 +61,31 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\uLipSync\Editor\Timeline\uLipSyncClipEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncBakedDataWindow.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncBlendShapeEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\EditorUtil.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncMicrophoneEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\ProfileEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\Debug\DebugDumpEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\Debug\DebugUtil.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncAnimatorEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\Timeline\uLipSyncTrackEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncAnimationWindow.cs" />
-    <Compile Include="Packages\uLipSync\Editor\AudioUtil.cs" />
-    <Compile Include="Packages\uLipSync\Editor\Timeline\uLipSyncTimelineEventEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\Timeline\uLipSyncTimelineSetupHelper.cs" />
-    <Compile Include="Packages\uLipSync\Editor\AnimationUtil.cs" />
-    <Compile Include="Packages\uLipSync\Editor\Preference.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncBakedDataPlayerEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncAudioCalibrationPlayerEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\Debug\DebugAudioPlayerEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\BakedDataEditor.cs" />
-    <Compile Include="Packages\uLipSync\Editor\uLipSyncTextureEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Timeline\uLipSyncClipEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncBakedDataWindow.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncBlendShapeEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\EditorUtil.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncMicrophoneEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\ProfileEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Debug\DebugDumpEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Debug\DebugUtil.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncAnimatorEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Timeline\uLipSyncTrackEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncAnimationWindow.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\AudioUtil.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Timeline\uLipSyncTimelineEventEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Timeline\uLipSyncTimelineSetupHelper.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\AnimationUtil.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Preference.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncBakedDataPlayerEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncAudioCalibrationPlayerEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\Debug\DebugAudioPlayerEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\BakedDataEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Editor\uLipSyncTextureEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\uLipSync\Editor\uLipSync.Editor.asmdef" />
+    <None Include="Packages\com.hecomi.ulipsync\Editor\uLipSync.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

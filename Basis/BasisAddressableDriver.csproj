@@ -61,21 +61,21 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\basisaddressable\Resource\AddressableResourceProcess.cs" />
-    <Compile Include="Packages\basisaddressable\Debug\AddressableDebug.cs" />
-    <Compile Include="Packages\basisaddressable\AddressableLoadResource.cs" />
-    <Compile Include="Packages\basisaddressable\Remote\AddressableRemoteLoader.cs" />
-    <Compile Include="Packages\basisaddressable\Enums\AddressableLoadResourceType.cs" />
-    <Compile Include="Packages\basisaddressable\Scene\AddressableSceneSetActive.cs" />
-    <Compile Include="Packages\basisaddressable\Enums\AddressableExpectedResult.cs" />
-    <Compile Include="Packages\basisaddressable\Resource\AddressableLoadProcess.cs" />
-    <Compile Include="Packages\basisaddressable\Loading\AddressableManagement.cs" />
-    <Compile Include="Packages\basisaddressable\Remote\AddressableIdTransformer.cs" />
-    <Compile Include="Packages\basisaddressable\Factory\AddressableLoadFactory.cs" />
-    <Compile Include="Packages\basisaddressable\Validation\AddressableValidation.cs" />
+    <Compile Include="Packages\com.basis.addressables\Resource\AddressableLoadProcess.cs" />
+    <Compile Include="Packages\com.basis.addressables\Enums\AddressableLoadResourceType.cs" />
+    <Compile Include="Packages\com.basis.addressables\Debug\AddressableDebug.cs" />
+    <Compile Include="Packages\com.basis.addressables\Loading\AddressableManagement.cs" />
+    <Compile Include="Packages\com.basis.addressables\Remote\AddressableRemoteLoader.cs" />
+    <Compile Include="Packages\com.basis.addressables\Scene\AddressableSceneSetActive.cs" />
+    <Compile Include="Packages\com.basis.addressables\Remote\AddressableIdTransformer.cs" />
+    <Compile Include="Packages\com.basis.addressables\AddressableLoadResource.cs" />
+    <Compile Include="Packages\com.basis.addressables\Factory\AddressableLoadFactory.cs" />
+    <Compile Include="Packages\com.basis.addressables\Resource\AddressableResourceProcess.cs" />
+    <Compile Include="Packages\com.basis.addressables\Validation\AddressableValidation.cs" />
+    <Compile Include="Packages\com.basis.addressables\Enums\AddressableExpectedResult.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\basisaddressable\BasisAddressableDriver.asmdef" />
+    <None Include="Packages\com.basis.addressables\BasisAddressableDriver.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

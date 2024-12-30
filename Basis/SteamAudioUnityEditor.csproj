@@ -61,28 +61,28 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SOFAFileImporter.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioStaticMeshInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioListenerInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SOFAFileImporterEditor.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioMixerReturnGUI.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioAmbisonicSourceInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioGeometryInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioSettingsInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SerializedDataInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioProbeBatchInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioReverbGUI.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioBakedSourceInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioMaterialInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\Build.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SOFAFileEditor.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioBakedListenerInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioSourceInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioManagerInspector.cs" />
-    <Compile Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioDynamicObjectInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioListenerInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioGeometryInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SOFAFileEditor.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioMaterialInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioProbeBatchInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioAmbisonicSourceInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioSourceInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioMixerReturnGUI.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SerializedDataInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\Build.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioStaticMeshInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SOFAFileImporterEditor.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioBakedListenerInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioManagerInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioDynamicObjectInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioReverbGUI.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioSettingsInspector.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SOFAFileImporter.cs" />
+    <Compile Include="Packages\com.steam.steamaudio\Editor\SteamAudioBakedSourceInspector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\third_party\Plugins\SteamAudio\Scripts\Editor\SteamAudioUnityEditor.asmdef" />
+    <None Include="Packages\com.steam.steamaudio\Editor\SteamAudioUnityEditor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

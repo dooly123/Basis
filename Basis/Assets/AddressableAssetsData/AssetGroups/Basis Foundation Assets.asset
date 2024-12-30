@@ -130,6 +130,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ad599c7b6420494f84e3a3b71efbfa8
+    m_Address: Assets/Settings/OpusData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ae1051fd2d154e43bd647430b08a010
     m_Address: Packages/com.basis.basisdk/Materials/VideoPlayer.mat
     m_ReadOnly: 0

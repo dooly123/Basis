@@ -1,55 +1,61 @@
 {
   "dependencies": {
-    "com.basis.basisaddressables": {
-      "version": "file:basisaddressable",
+    "com.basis.addressables": {
+      "version": "file:com.basis.addressables",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "com.basis.basisconsoledisplay": {
-      "version": "file:basisconsole",
+    "com.basis.console": {
+      "version": "file:com.basis.console",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "com.basis.basisdk": {
-      "version": "file:basisdk",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.basis.basisframework": {
-      "version": "file:Basis Framework",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.basis.basistests": {
-      "version": "file:basistests",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.basis.corenetworking": {
-      "version": "file:Basis Server",
+    "com.basis.framework": {
+      "version": "file:com.basis.framework",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.basis.gizmos": {
-      "version": "file:basisGizmos",
+      "version": "file:com.basis.gizmos",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.basis.odinserializer": {
-      "version": "file:BasisSerializer.OdinSerializer",
+      "version": "file:com.basis.odinserializer",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.basis.sdk": {
+      "version": "file:com.basis.sdk",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.basis.server": {
+      "version": "file:com.basis.server",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.basis.tests": {
+      "version": "file:com.basis.tests",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.basis.visualtrackers": {
+      "version": "file:com.basis.visualtrackers",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.hecomi.ulipsync": {
-      "version": "file:uLipSync",
+      "version": "file:com.hecomi.ulipsync",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
@@ -64,7 +70,13 @@
       "dependencies": {}
     },
     "com.naelstrof.jigglephysics": {
-      "version": "file:JigglePhysics",
+      "version": "file:com.naelstrof.jigglephysics",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.steam.steamaudio": {
+      "version": "file:com.steam.steamaudio",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

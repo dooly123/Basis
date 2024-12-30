@@ -110,8 +110,8 @@
     <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\ScriptReference\UsingReleaseInstance.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\DisableBuildWarnings.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\ScriptReference\UsingLoadAssetsAsync.cs" />
-    <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\AsynchronousLoading.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\ScriptReference\UsingClearDependencyCacheAsync.cs" />
+    <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\AsynchronousLoading.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\ScriptReference\ContentBuiltCheck.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\ScriptReference\UsingLog.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Tests\Editor\DocExampleCode\AddExceptionHandler.cs" />

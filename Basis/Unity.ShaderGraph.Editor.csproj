@@ -246,8 +246,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\SearchWindowAdapter.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Extensions\IConditionalExtensions.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Inspector\PropertyDrawers\EnumPropertyDrawer.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Graphs\ColorRGBMaterialSlot.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Graphs\SerializableMesh.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Graphs\ColorRGBMaterialSlot.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Collections\AdditionalCommandCollection.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Descriptors\RenderStateDescriptor.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Math\Basic\SubtractNode.cs" />
@@ -534,8 +534,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Views\IdentifierField.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Graphs\Matrix4ShaderProperty.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Input\PBR\DielectricSpecularNode.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Views\ReorderableSlotListView.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Graphs\NormalMaterialSlot.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Views\ReorderableSlotListView.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Descriptors\SubShaderDescriptor.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Utility\DropdownNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Inspector\PropertyDrawers\GraphDataPropertyDrawer.cs" />
@@ -566,8 +566,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Input\Texture\Texture3DAssetNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Generation\Contexts\TargetPropertyGUIContext.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Nodes\Math\Trigonometry\ArccosineNode.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Colors\CustomColorData.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Attributes\BuiltinKeywordAttribute.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\Colors\CustomColorData.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Drawing\EdgeConnectorListener.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\ContextData.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph\Editor\Data\Graphs\GraphDataReadOnly.cs" />

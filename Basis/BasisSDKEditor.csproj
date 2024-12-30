@@ -61,29 +61,29 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\basisdk\Scripts\Editor\AssetBundleBuilder\BasisBasisBundleInformationHandler.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AssetBundleBuilder\BasisTemporaryStorageHandler.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AssetBundleBuilder\BasisBundleErrorHandler.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\RevealHiddenObjects.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AvatarSDKJiggleBonesView.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AssetBundleBuilder\BasisAssetBundleBuilder.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\BasisAvatarGizmoEditor.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AvatarSDK.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AssetBundleBuilder\BasisAssetBundlePipeline.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\BasisHelpersGizmo.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\BasisAutomaticSetupAvatarEditor.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AvatarPathConstants.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\RemoveMissingScriptsEditor.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\ScriptableObject\BasisAssetBundleObject.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AssetBundleBuilder\BasisBuildAssetBundleMenu.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AvatarSDKVisemes.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AvatarHelper.cs" />
-    <Compile Include="Packages\basisdk\Scripts\Editor\AssetBundleBuilder\BasisValidationHandler.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AssetBundleBuilder\BasisAssetBundlePipeline.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\ScriptableObject\BasisAssetBundleObject.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\BasisAutomaticSetupAvatarEditor.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\RemoveMissingScriptsEditor.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AssetBundleBuilder\BasisAssetBundleBuilder.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AssetBundleBuilder\BasisBasisBundleInformationHandler.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\BasisAvatarGizmoEditor.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AvatarSDK.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AvatarHelper.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\BasisHelpersGizmo.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AvatarPathConstants.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AssetBundleBuilder\BasisTemporaryStorageHandler.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AssetBundleBuilder\BasisValidationHandler.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AssetBundleBuilder\BasisBundleErrorHandler.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AssetBundleBuilder\BasisBuildAssetBundleMenu.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\RevealHiddenObjects.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AvatarSDKJiggleBonesView.cs" />
+    <Compile Include="Packages\com.basis.sdk\Scripts\Editor\AvatarSDKVisemes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\basisdk\Scripts\Editor\AvatarSDK.uss" />
-    <None Include="Packages\basisdk\Scripts\Editor\AvatarSDK.uxml" />
-    <None Include="Packages\basisdk\Scripts\Editor\BasisSDKEditor.asmdef" />
+    <None Include="Packages\com.basis.sdk\Scripts\Editor\AvatarSDK.uss" />
+    <None Include="Packages\com.basis.sdk\Scripts\Editor\AvatarSDK.uxml" />
+    <None Include="Packages\com.basis.sdk\Scripts\Editor\BasisSDKEditor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

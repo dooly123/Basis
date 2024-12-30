@@ -175,10 +175,10 @@
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Utilities\VectorFieldImporter\Editor\VectorFieldImporterEditor.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Operators\Implementations\LoadTexture2DArray.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Contexts\Implementations\VFXBasicGPUEvent.cs" />
-    <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Operators\Implementations\CurlNoise.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Blocks\Implementations\Forces\Turbulence.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Operators\Implementations\DistanceToPlane.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Contexts\Implementations\VFXBasicUpdate.cs" />
+    <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Operators\Implementations\CurlNoise.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Slots\Implementations\VFXSlotFlipBook.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Operators\Implementations\BitwiseAnd.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Expressions\VFXExpressionColor.cs" />

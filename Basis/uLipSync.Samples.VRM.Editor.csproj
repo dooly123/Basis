@@ -61,11 +61,11 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\uLipSync\Samples\04. VRM\Editor\uLipSyncBlendShapeVRMEditor.cs" />
-    <Compile Include="Packages\uLipSync\Samples\04. VRM\Editor\uLipSyncExpressionVRMEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Samples\04. VRM\Editor\uLipSyncBlendShapeVRMEditor.cs" />
+    <Compile Include="Packages\com.hecomi.ulipsync\Samples\04. VRM\Editor\uLipSyncExpressionVRMEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\uLipSync\Samples\04. VRM\Editor\uLipSync.Samples.VRM.Editor.asmdef" />
+    <None Include="Packages\com.hecomi.ulipsync\Samples\04. VRM\Editor\uLipSync.Samples.VRM.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

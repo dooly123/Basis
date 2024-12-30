@@ -61,25 +61,25 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleAntialiasing.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\Generics\SMModuleGenericToggle.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\Dynamics\SMDScreenmode.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleTerrain.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\Dynamics\SMDMonitor.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleHDRSupport.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleAmbientOcclusion.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleScreenSpaceReflection.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleAudio.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\Dynamics\SMDInputSelection.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\Dynamics\SMDMicrophone.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\Generics\SMModuleGenericToggleObjectToggle.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\Dynamics\SMDResolution.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleClosePointShadows.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleVolumetrics.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\General\UnityModules\SMModuleTextureQuality.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleHDRSupport.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\Generics\SMModuleGenericToggleObjectToggle.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\Dynamics\SMDResolution.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleAmbientOcclusion.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\Generics\SMModuleGenericToggle.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\Dynamics\SMDScreenmode.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleTerrain.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleScreenSpaceReflection.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleTextureQuality.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleAntialiasing.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleAudio.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\Dynamics\SMDMonitor.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\Dynamics\SMDInputSelection.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\Dynamics\SMDMicrophone.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleVolumetrics.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\General\UnityModules\SMModuleClosePointShadows.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\Basis Framework\SettingsManagerModules\General\SettingsManagerModules.asmdef" />
+    <None Include="Packages\com.basis.framework\SettingsManagerModules\General\SettingsManagerModules.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

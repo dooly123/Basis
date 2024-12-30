@@ -61,14 +61,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\URP Only Modules\SMModuleHDRURP.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\URP Only Modules\SMModuleAmbientOcclusionURP.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\URP Only Modules\SMModuleQualityAndQualitySetURP.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\URP Only Modules\SMModuleShadowQualityURP.cs" />
-    <Compile Include="Packages\Basis Framework\SettingsManagerModules\URP Only Modules\SMModuleAntialiasingURP.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\URP Only Modules\SMModuleHDRURP.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\URP Only Modules\SMModuleShadowQualityURP.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\URP Only Modules\SMModuleAmbientOcclusionURP.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\URP Only Modules\SMModuleAntialiasingURP.cs" />
+    <Compile Include="Packages\com.basis.framework\SettingsManagerModules\URP Only Modules\SMModuleQualityAndQualitySetURP.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\Basis Framework\SettingsManagerModules\URP Only Modules\SM Universal Render Pipeline.asmdef" />
+    <None Include="Packages\com.basis.framework\SettingsManagerModules\URP Only Modules\SM Universal Render Pipeline.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

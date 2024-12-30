@@ -83,8 +83,8 @@
     <Compile Include="Library\PackageCache\com.unity.addressables\Editor\Settings\AddressableScenesManager.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Editor\GUI\UpgradeNotifications.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Editor\BuildReportVisualizer\Utility\BuildReportUtility.cs" />
-    <Compile Include="Library\PackageCache\com.unity.addressables\Editor\Build\AddressablesDataBuilders.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Editor\BuildReportVisualizer\BuildReportWindow.cs" />
+    <Compile Include="Library\PackageCache\com.unity.addressables\Editor\Build\AddressablesDataBuilders.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Editor\Settings\AddressableAssetSettings.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Editor\Diagnostics\Profiler\AddressablesProfilerModule.cs" />
     <Compile Include="Library\PackageCache\com.unity.addressables\Editor\Build\Layout\BuildLayoutHelpers.cs" />
