@@ -38,7 +38,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public async Task LoadAvatarFromInital(ClientAvatarChangeMessage CACM)
         {
-            if (Avatar == null)
+            if (BasisAvatar == null)
             {
                 this.CACM = CACM;
               //  if (IsNotFallBack)

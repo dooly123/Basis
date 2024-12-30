@@ -16,9 +16,9 @@ namespace Basis.Scripts.Drivers
     {
         public float ActiveAvatarEyeHeight()
         {
-            if (BasisLocalPlayer.Instance.Avatar != null)
+            if (BasisLocalPlayer.Instance.BasisAvatar != null)
             {
-                return BasisLocalPlayer.Instance.Avatar.AvatarEyePosition.x;
+                return BasisLocalPlayer.Instance.BasisAvatar.AvatarEyePosition.x;
             }
             else
             {
@@ -38,7 +38,7 @@ namespace Basis.Scripts.Drivers
         public void Calibration(BasisAvatar Avatar)
         {
             FindSkinnedMeshRenders();
-            BasisTransformMapping.AutoDetectReferences(Player.Avatar.Animator, Avatar.transform, out References);
+            BasisTransformMapping.AutoDetectReferences(Player.BasisAvatar.Animator, Avatar.transform, out References);
             Player.FaceisVisible = false;
             if (Avatar == null)
             {
@@ -68,19 +68,19 @@ namespace Basis.Scripts.Drivers
             CurrentlyTposing = true;
             if (SavedruntimeAnimatorController == null)
             {
-                SavedruntimeAnimatorController = Player.Avatar.Animator.runtimeAnimatorController;
+                SavedruntimeAnimatorController = Player.BasisAvatar.Animator.runtimeAnimatorController;
             }
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(TPose);
             RuntimeAnimatorController RAC = op.WaitForCompletion();
-            Player.Avatar.Animator.runtimeAnimatorController = RAC;
-            ForceUpdateAnimator(Player.Avatar.Animator);
+            Player.BasisAvatar.Animator.runtimeAnimatorController = RAC;
+            ForceUpdateAnimator(Player.BasisAvatar.Animator);
             BasisDeviceManagement.UnassignFBTrackers();
             TposeStateChange?.Invoke();
         }
         public void ResetAvatarAnimator()
         {
             Debug.Log("ResetAvatarAnimator");
-            Player.Avatar.Animator.runtimeAnimatorController = SavedruntimeAnimatorController;
+            Player.BasisAvatar.Animator.runtimeAnimatorController = SavedruntimeAnimatorController;
             SavedruntimeAnimatorController = null;
             CurrentlyTposing = false;
             TposeStateChange?.Invoke();
@@ -148,14 +148,14 @@ namespace Basis.Scripts.Drivers
                 BasisBoneControl Control = driver.Controls[Index];
                 if (driver.trackedRoles[Index] == BasisBoneTrackedRole.CenterEye)
                 {
-                    GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarEyePosition, out quaternion Rotation, out float3 TposeWorld);
+                    GetWorldSpaceRotAndPos(() => Player.BasisAvatar.AvatarEyePosition, out quaternion Rotation, out float3 TposeWorld);
                     SetInitialData(anim, Control, driver.trackedRoles[Index], TposeWorld);
                 }
                 else
                 {
                     if (driver.trackedRoles[Index] == BasisBoneTrackedRole.Mouth)
                     {
-                        GetWorldSpaceRotAndPos(() => Player.Avatar.AvatarMouthPosition, out quaternion Rotation, out float3 TposeWorld);
+                        GetWorldSpaceRotAndPos(() => Player.BasisAvatar.AvatarMouthPosition, out quaternion Rotation, out float3 TposeWorld);
                         SetInitialData(anim, Control, driver.trackedRoles[Index], TposeWorld);
                     }
                     else
@@ -232,7 +232,7 @@ namespace Basis.Scripts.Drivers
         {
             rotation = Quaternion.identity;
             position = Vector3.zero;
-            if (BasisHelpers.TryGetFloor(Player.Avatar.Animator, out float3 bottom))
+            if (BasisHelpers.TryGetFloor(Player.BasisAvatar.Animator, out float3 bottom))
             {
                 Vector3 convertedToVector3 = BasisHelpers.AvatarPositionConversion(positionSelector());
                 position = BasisHelpers.ConvertFromLocalSpace(convertedToVector3, bottom);
@@ -304,7 +304,7 @@ namespace Basis.Scripts.Drivers
         }
         public void FindSkinnedMeshRenders()
         {
-            SkinnedMeshRenderer = Player.Avatar.Animator.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+            SkinnedMeshRenderer = Player.BasisAvatar.Animator.GetComponentsInChildren<SkinnedMeshRenderer>(true);
         }
         public void SetAllMatrixRecalculation(bool State)
         {
@@ -315,13 +315,13 @@ namespace Basis.Scripts.Drivers
         }
         public void SetHeadMatrixRecalculation(bool State)
         {
-            if (Player.Avatar.FaceBlinkMesh != null)
+            if (Player.BasisAvatar.FaceBlinkMesh != null)
             {
-                Player.Avatar.FaceBlinkMesh.forceMatrixRecalculationPerRender = State;
+                Player.BasisAvatar.FaceBlinkMesh.forceMatrixRecalculationPerRender = State;
             }
-            if (Player.Avatar.FaceVisemeMesh != null)
+            if (Player.BasisAvatar.FaceVisemeMesh != null)
             {
-                Player.Avatar.FaceVisemeMesh.forceMatrixRecalculationPerRender = State;
+                Player.BasisAvatar.FaceVisemeMesh.forceMatrixRecalculationPerRender = State;
             }
         }
         public void updateWhenOffscreen(bool State)

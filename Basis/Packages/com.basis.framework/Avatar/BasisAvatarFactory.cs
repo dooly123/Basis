@@ -171,11 +171,11 @@ namespace Basis.Scripts.Avatar
             if (Output.TryGetComponent(out BasisAvatar Avatar))
             {
                 DeleteLastAvatar(Player, true);
-                Player.Avatar = Avatar;
-                Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
+                Player.BasisAvatar = Avatar;
+                Player.BasisAvatar.Renders = Player.BasisAvatar.GetComponentsInChildren<Renderer>(true);
                 if (Player is BasisLocalPlayer localPlayer)
                 {
-                    Player.Avatar.IsOwnedLocally = true;
+                    Player.BasisAvatar.IsOwnedLocally = true;
                     CreateLocal(localPlayer);
                     localPlayer.InitalizeIKCalibration(localPlayer.AvatarDriver);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
@@ -186,7 +186,7 @@ namespace Basis.Scripts.Avatar
                 }
                 else if (Player is BasisRemotePlayer remotePlayer)
                 {
-                    Player.Avatar.IsOwnedLocally = false;
+                    Player.BasisAvatar.IsOwnedLocally = false;
                     CreateRemote(remotePlayer);
                     remotePlayer.InitalizeIKCalibration(remotePlayer.RemoteAvatarDriver);
                     for (int Index = 0; Index < Avatar.Renders.Length; Index++)
@@ -240,13 +240,13 @@ namespace Basis.Scripts.Avatar
 
             if (InSceneLoadingAvatar.TryGetComponent(out BasisAvatar Avatar))
             {
-                Player.Avatar = Avatar;
-                Player.Avatar.Renders = Player.Avatar.GetComponentsInChildren<Renderer>(true);
-                int RenderCount = Player.Avatar.Renders.Length;
+                Player.BasisAvatar = Avatar;
+                Player.BasisAvatar.Renders = Player.BasisAvatar.GetComponentsInChildren<Renderer>(true);
+                int RenderCount = Player.BasisAvatar.Renders.Length;
                 if (Player.IsLocal)
                 {
                     BasisLocalPlayer BasisLocalPlayer = (BasisLocalPlayer)Player;
-                    Player.Avatar.IsOwnedLocally = true;
+                    Player.BasisAvatar.IsOwnedLocally = true;
                     CreateLocal(BasisLocalPlayer);
                     Player.InitalizeIKCalibration(BasisLocalPlayer.AvatarDriver);
                     for (int Index = 0; Index < RenderCount; Index++)
@@ -257,7 +257,7 @@ namespace Basis.Scripts.Avatar
                 else
                 {
                     BasisRemotePlayer BasisRemotePlayer = (BasisRemotePlayer)Player;
-                    Player.Avatar.IsOwnedLocally = false;
+                    Player.BasisAvatar.IsOwnedLocally = false;
                     CreateRemote(BasisRemotePlayer);
                     Player.InitalizeIKCalibration(BasisRemotePlayer.RemoteAvatarDriver);
                     for (int Index = 0; Index < RenderCount; Index++)
@@ -269,15 +269,15 @@ namespace Basis.Scripts.Avatar
         }
         public static async void DeleteLastAvatar(BasisPlayer Player,bool IsRemovingFallback)
         {
-            if (Player.Avatar != null)
+            if (Player.BasisAvatar != null)
             {
                 if (IsRemovingFallback)
                 {
-                    GameObject.Destroy(Player.Avatar.gameObject);
+                    GameObject.Destroy(Player.BasisAvatar.gameObject);
                 }
                 else
                 {
-                  await  BasisLoadHandler.DestroyGameobject(Player.Avatar.gameObject, Player.AvatarMetaData.BasisRemoteBundleEncrypted.MetaURL, false);
+                  await  BasisLoadHandler.DestroyGameobject(Player.BasisAvatar.gameObject, Player.AvatarMetaData.BasisRemoteBundleEncrypted.MetaURL, false);
                 }
             }
 
@@ -289,7 +289,7 @@ namespace Basis.Scripts.Avatar
 
         public static void CreateRemote(BasisRemotePlayer Player)
         {
-            if (Player == null || Player.Avatar == null)
+            if (Player == null || Player.BasisAvatar == null)
             {
                 Debug.LogError("Missing RemotePlayer or Avatar");
                 return;
@@ -300,7 +300,7 @@ namespace Basis.Scripts.Avatar
 
         public static void CreateLocal(BasisLocalPlayer Player)
         {
-            if (Player == null || Player.Avatar == null)
+            if (Player == null || Player.BasisAvatar == null)
             {
                 Debug.LogError("Missing LocalPlayer or Avatar");
                 return;

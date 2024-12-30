@@ -21,19 +21,19 @@ namespace Basis.Scripts.Drivers
             {
                 return;
             }
-            Calibration(RemotePlayer.Avatar);
-            BasisEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisEyeFollowBase>(Player.Avatar.gameObject);
+            Calibration(RemotePlayer.BasisAvatar);
+            BasisEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisEyeFollowBase>(Player.BasisAvatar.gameObject);
             BasisEyeFollowDriver.Initalize(this, Player);
             SetAllMatrixRecalculation(false);
             updateWhenOffscreen(false);
-            RemotePlayer.Avatar.Animator.logWarnings = false;
+            RemotePlayer.BasisAvatar.Animator.logWarnings = false;
             for (int Index = 0; Index < SkinnedMeshRenderer.Length; Index++)
             {
                 SkinnedMeshRenderer[Index].forceMatrixRecalculationPerRender = false;
             }
-            CalculateTransformPositions(RemotePlayer.Avatar.Animator, remotePlayer.RemoteBoneDriver);
+            CalculateTransformPositions(RemotePlayer.BasisAvatar.Animator, remotePlayer.RemoteBoneDriver);
             ComputeOffsets(remotePlayer.RemoteBoneDriver);
-            RemotePlayer.Avatar.Animator.enabled = false;
+            RemotePlayer.BasisAvatar.Animator.enabled = false;
             CalibrationComplete?.Invoke();
         }
         public void ComputeOffsets(BaseBoneDriver BBD)
@@ -53,7 +53,7 @@ namespace Basis.Scripts.Drivers
         }
         public bool IsAble()
         {
-            if (IsNull(RemotePlayer.Avatar))
+            if (IsNull(RemotePlayer.BasisAvatar))
             {
                 return false;
             }
@@ -61,7 +61,7 @@ namespace Basis.Scripts.Drivers
             {
                 return false;
             }
-            if (IsNull(RemotePlayer.Avatar.Animator))
+            if (IsNull(RemotePlayer.BasisAvatar.Animator))
             {
                 return false;
             }

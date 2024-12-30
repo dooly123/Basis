@@ -56,10 +56,10 @@ namespace Basis.Scripts.Networking.Transmitters
 
             if (timer >= interval)
             {
-                if (Ready && NetworkedPlayer.Player.Avatar != null)
+                if (Ready && NetworkedPlayer.Player.BasisAvatar != null)
                 {
                     ScheduleCheck();
-                    BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.Avatar.Animator);
+                    BasisNetworkAvatarCompressor.Compress(this, NetworkedPlayer.Player.BasisAvatar.Animator);
                     distanceJobHandle.Complete();
                     HandleResults();
                     SmallestDistanceToAnotherPlayer = distanceJob.smallestDistance[0];

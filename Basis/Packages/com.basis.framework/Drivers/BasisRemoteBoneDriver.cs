@@ -54,8 +54,8 @@ public class BasisRemoteBoneDriver : BaseBoneDriver
     }
     public void OnCalibration(BasisRemotePlayer remotePlayer)
     {
-        HeadAvatar = RemotePlayer.Avatar.Animator.GetBoneTransform(HumanBodyBones.Head);
-        HipsAvatar = RemotePlayer.Avatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
+        HeadAvatar = RemotePlayer.BasisAvatar.Animator.GetBoneTransform(HumanBodyBones.Head);
+        HipsAvatar = RemotePlayer.BasisAvatar.Animator.GetBoneTransform(HumanBodyBones.Hips);
         this.RemotePlayer = remotePlayer;
     }
 }

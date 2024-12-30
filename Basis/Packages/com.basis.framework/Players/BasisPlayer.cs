@@ -11,7 +11,7 @@ namespace Basis.Scripts.BasisSdk.Players
         public bool IsLocal { get; set; }
         public string DisplayName;
         public string UUID;
-        public BasisAvatar Avatar;
+        public BasisAvatar BasisAvatar;
         public AddressableGenericResource AvatarAddressableGenericResource;
         public BasisLoadableBundle AvatarMetaData;
         public bool HasAvatarDriver;

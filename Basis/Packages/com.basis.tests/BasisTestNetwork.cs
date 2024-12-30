@@ -15,13 +15,13 @@ public class BasisTestNetwork : MonoBehaviour
     public ushort[] Players;
     public void OnEnable()
     {
-        avatar = BasisLocalPlayer.Instance.Avatar;
+        avatar = BasisLocalPlayer.Instance.BasisAvatar;
 
         foreach (BasisNetworkedPlayer Player in BasisNetworkManagement.Players.Values)
         {
-            if (Player != null && Player.Player != null & Player.Player.Avatar != null)
+            if (Player != null && Player.Player != null & Player.Player.BasisAvatar != null)
             {
-                Player.Player.Avatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
+                Player.Player.BasisAvatar.OnNetworkMessageReceived += OnNetworkMessageReceived;
             }
             else
             {
@@ -32,13 +32,13 @@ public class BasisTestNetwork : MonoBehaviour
     }
     public void OnDisable()
     {
-        avatar = BasisLocalPlayer.Instance.Avatar;
+        avatar = BasisLocalPlayer.Instance.BasisAvatar;
 
         foreach (BasisNetworkedPlayer Player in BasisNetworkManagement.Players.Values)
         {
-            if (Player != null && Player.Player != null & Player.Player.Avatar != null)
+            if (Player != null && Player.Player != null & Player.Player.BasisAvatar != null)
             {
-                Player.Player.Avatar.OnNetworkMessageReceived -= OnNetworkMessageReceived;
+                Player.Player.BasisAvatar.OnNetworkMessageReceived -= OnNetworkMessageReceived;
             }
             else
             {

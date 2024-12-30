@@ -59,35 +59,64 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
             // Post the task to the main thread
             BasisNetworkManagement.MainThreadContext.Post(_ =>
             {
-                if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null)
+                if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.BasisAvatar != null)
                 {
-
                     ComputeHumanPose();
-                    if (!NetworkedPlayer.Player.Avatar.HasSendEvent)
+                    if (!NetworkedPlayer.Player.BasisAvatar.HasSendEvent)
                     {
-                        NetworkedPlayer.Player.Avatar.OnNetworkMessageSend += OnNetworkMessageSend;
-                        NetworkedPlayer.Player.Avatar.HasSendEvent = true;
+                        NetworkedPlayer.Player.BasisAvatar.OnNetworkMessageSend += OnNetworkMessageSend;
+                        NetworkedPlayer.Player.BasisAvatar.HasSendEvent = true;
                     }
 
-                    NetworkedPlayer.Player.Avatar.LinkedPlayerID = NetworkedPlayer.NetId;
-                    NetworkedPlayer.Player.Avatar.OnAvatarNetworkReady?.Invoke(NetworkedPlayer.Player.IsLocal);
+                    NetworkedPlayer.Player.BasisAvatar.LinkedPlayerID = NetworkedPlayer.NetId;
+                    NetworkedPlayer.Player.BasisAvatar.OnAvatarNetworkReady?.Invoke(NetworkedPlayer.Player.IsLocal);
                 }
             }, null);
         }
         public void ComputeHumanPose()
         {
-            if (NetworkedPlayer != null && NetworkedPlayer.Player != null && NetworkedPlayer.Player.Avatar != null)
+            if (NetworkedPlayer == null)
             {
-                PoseHandler = new HumanPoseHandler(
-                NetworkedPlayer.Player.Avatar.Animator.avatar,
-                NetworkedPlayer.Player.Avatar.transform
+                Debug.LogError("NetworkedPlayer is null! Cannot compute HumanPose.");
+                return;
+            }
+
+            if (NetworkedPlayer.Player == null)
+            {
+                Debug.LogError("NetworkedPlayer.Player is null! Cannot compute HumanPose.");
+                return;
+            }
+
+            if (NetworkedPlayer.Player.BasisAvatar == null)
+            {
+                Debug.LogError("BasisAvatar is null! Cannot compute HumanPose.");
+                return;
+            }
+
+            if (NetworkedPlayer.Player.BasisAvatar.Animator == null )
+            {
+                Debug.LogError("Avatar Animator! Cannot compute HumanPose.");
+                return;
+            }
+
+            if (NetworkedPlayer.Player.BasisAvatar.Animator.avatar == null)
+            {
+                Debug.LogError("Animator avatar! Cannot compute HumanPose.");
+                return;
+            }
+
+            if (NetworkedPlayer.Player.BasisAvatar.transform == null)
+            {
+                Debug.LogError("NetworkedPlayer.Player.Avatar.transform is null! Cannot compute HumanPose.");
+                return;
+            }
+
+            // All checks passed
+            PoseHandler = new HumanPoseHandler(
+                NetworkedPlayer.Player.BasisAvatar.Animator.avatar,
+                NetworkedPlayer.Player.BasisAvatar.transform
             );
-                PoseHandler.GetHumanPose(ref HumanPose);
-            }
-            else
-            {
-                Debug.LogError("cant Compute HumanPose!");
-            }
+            PoseHandler.GetHumanPose(ref HumanPose);
         }
         private void OnNetworkMessageSend(byte MessageIndex, byte[] buffer = null, DeliveryMethod DeliveryMethod = DeliveryMethod.Sequenced, ushort[] Recipients = null)
         {

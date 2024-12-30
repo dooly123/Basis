@@ -65,16 +65,16 @@ public static class BasisNetworkGenericMessages
                 Debug.LogError("Missing Player! " + avatarLinkID);
                 return;
             }
-            if (player.Player.Avatar != null)
+            if (player.Player.BasisAvatar != null)
             {
                 RemoteAvatarDataMessage output = serverAvatarDataMessage.avatarDataMessage;
-                if (player.Player.Avatar.OnNetworkMessageReceived == null)
+                if (player.Player.BasisAvatar.OnNetworkMessageReceived == null)
                 {
                     Debug.LogWarning(player.Player.DisplayName + " Message was Queued But nothing was there to Rec it " + output.messageIndex);
                 }
                 else
                 {
-                    player.Player.Avatar.OnNetworkMessageReceived.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, Method);
+                    player.Player.BasisAvatar.OnNetworkMessageReceived.Invoke(serverAvatarDataMessage.playerIdMessage.playerID, output.messageIndex, output.payload, Method);
                 }
             }
             else

@@ -87,26 +87,26 @@ namespace Basis.Scripts.Drivers
             CleanupBeforeContinue();
             AdditionalTransforms.Clear();
             Rigs.Clear();
-            Player.Avatar.Animator.updateMode = AnimatorUpdateMode.Normal;
-            Player.Avatar.Animator.logWarnings = false;
-            if (Player.Avatar.Animator.runtimeAnimatorController == null)
+            Player.BasisAvatar.Animator.updateMode = AnimatorUpdateMode.Normal;
+            Player.BasisAvatar.Animator.logWarnings = false;
+            if (Player.BasisAvatar.Animator.runtimeAnimatorController == null)
             {
                 UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<RuntimeAnimatorController> op = Addressables.LoadAssetAsync<RuntimeAnimatorController>(Locomotion);
                 RuntimeAnimatorController RAC = op.WaitForCompletion();
-                Player.Avatar.Animator.runtimeAnimatorController = RAC;
+                Player.BasisAvatar.Animator.runtimeAnimatorController = RAC;
             }
-            Player.Avatar.Animator.applyRootMotion = false;
+            Player.BasisAvatar.Animator.applyRootMotion = false;
             PutAvatarIntoTPose();
             if (Builder != null)
             {
                 GameObject.Destroy(Builder);
             }
-            Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.Avatar.Animator.gameObject);
+            Builder = BasisHelpers.GetOrAddComponent<RigBuilder>(Player.BasisAvatar.Animator.gameObject);
             Builder.enabled = false;
-            Calibration(Player.Avatar);
+            Calibration(Player.BasisAvatar);
             BasisLocalPlayer.Instance.LocalBoneDriver.RemoveAllListeners();
             BasisLocalPlayer.Instance.LocalBoneDriver.CalculateHeading();
-            BasisLocalEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisEyeFollowBase>(Player.Avatar.gameObject);
+            BasisLocalEyeFollowDriver = BasisHelpers.GetOrAddComponent<BasisEyeFollowBase>(Player.BasisAvatar.gameObject);
             BasisLocalEyeFollowDriver.Initalize(this,Player);
             HeadScaledDown = Vector3.zero;
             SetAllMatrixRecalculation(true);
@@ -120,16 +120,16 @@ namespace Basis.Scripts.Drivers
                 HeadScale = Vector3.one;
             }
             SetBodySettings(LocalDriver);
-            CalculateTransformPositions(Player.Avatar.Animator, LocalDriver);
+            CalculateTransformPositions(Player.BasisAvatar.Animator, LocalDriver);
             ComputeOffsets(LocalDriver);
-            BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.Avatar.Animator.gameObject);
+            BasisMuscleDriver = BasisHelpers.GetOrAddComponent<BasisMuscleDriver>(Player.BasisAvatar.Animator.gameObject);
             BasisMuscleDriver.DisposeAllJobsData();
-            BasisMuscleDriver.Initialize(Player, Player.Avatar.Animator);
+            BasisMuscleDriver.Initialize(Player, Player.BasisAvatar.Animator);
 
             CalibrationComplete?.Invoke();
 
-            AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.Avatar.Animator.gameObject);
-            AnimatorDriver.Initialize(Player.Avatar.Animator);
+            AnimatorDriver = BasisHelpers.GetOrAddComponent<BasisLocalAnimatorDriver>(Player.BasisAvatar.Animator.gameObject);
+            AnimatorDriver.Initialize(Player.BasisAvatar.Animator);
 
             ResetAvatarAnimator();
             BasisAvatarIKStageCalibration.HasFBIKTrackers = false;
@@ -146,8 +146,8 @@ namespace Basis.Scripts.Drivers
                 Spine.HasRigLayer = BasisHasRigLayer.HasRigLayer;
             }
             StoredRolesTransforms = BasisAvatarIKStageCalibration.GetAllRolesAsTransform();
-            Player.Avatar.transform.parent = Hips.BoneTransform;
-            Player.Avatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position,Quaternion.identity);
+            Player.BasisAvatar.transform.parent = Hips.BoneTransform;
+            Player.BasisAvatar.transform.SetLocalPositionAndRotation(-Hips.TposeLocal.position,Quaternion.identity);
             CalibrateOffsets();
             BuildBuilder();
         }
@@ -170,7 +170,7 @@ namespace Basis.Scripts.Drivers
         }
         public void BuildBuilder()
         {
-            PlayableGraph = Player.Avatar.Animator.playableGraph;
+            PlayableGraph = Player.BasisAvatar.Animator.playableGraph;
             PlayableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
             Builder.Build(PlayableGraph);
         }
@@ -346,11 +346,11 @@ namespace Basis.Scripts.Drivers
             {
                 return false;
             }
-            if (IsNull(Player.Avatar))
+            if (IsNull(Player.BasisAvatar))
             {
                 return false;
             }
-            if (IsNull(Player.Avatar.Animator))
+            if (IsNull(Player.BasisAvatar.Animator))
             {
                 return false;
             }
@@ -595,7 +595,7 @@ namespace Basis.Scripts.Drivers
         }
         public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
         {
-            GameObject RigGameobject = CreateAndSetParent(Player.Avatar.Animator.transform, "Rig " + Role);
+            GameObject RigGameobject = CreateAndSetParent(Player.BasisAvatar.Animator.transform, "Rig " + Role);
             Rig = BasisHelpers.GetOrAddComponent<Rig>(RigGameobject);
             Rigs.Add(Rig);
             RigLayer = new RigLayer(Rig, Enabled);

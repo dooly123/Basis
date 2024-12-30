@@ -85,7 +85,7 @@ namespace Basis.Scripts.Networking.Recievers
                     // Complete the jobs and apply the results
                     musclesHandle.Complete();
 
-                    ApplyPoseData(NetworkedPlayer.Player.Avatar.Animator, OuputVectors[1], OuputVectors[0], OutputRotation, muscles);
+                    ApplyPoseData(NetworkedPlayer.Player.BasisAvatar.Animator, OuputVectors[1], OuputVectors[0], OutputRotation, muscles);
                     PoseHandler.SetHumanPose(ref HumanPose);
 
                     RemotePlayer.RemoteBoneDriver.SimulateAndApply(TimeAsDouble, DeltaTime);
@@ -123,7 +123,6 @@ namespace Basis.Scripts.Networking.Recievers
                 {
                     First = avatarBuffer;
                     Last = avatarBuffer;
-                    ComputeHumanPose();
                     HasAvatarInitalized = true;
                 }
             }
@@ -218,7 +217,6 @@ namespace Basis.Scripts.Networking.Recievers
                 musclesJob.targetMuscles = targetMuscles;
                 AvatarJob.OutputVector = OuputVectors;
                 AvatarJob.TargetVector = TargetVectors;
-                ComputeHumanPose();
                 NetworkedPlayer = networkedPlayer;
                 RemotePlayer = (BasisRemotePlayer)NetworkedPlayer.Player;
                 AudioReceiverModule.OnEnable(networkedPlayer);

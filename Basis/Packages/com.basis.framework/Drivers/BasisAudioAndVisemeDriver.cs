@@ -31,7 +31,7 @@ namespace Basis.Scripts.Drivers
         public bool TryInitialize(BasisPlayer BasisPlayer)
         {
             WasSuccessful = false;
-            Avatar = BasisPlayer.Avatar;
+            Avatar = BasisPlayer.BasisAvatar;
             Player = BasisPlayer;
             if (Avatar == null)
             {

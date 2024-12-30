@@ -17,12 +17,12 @@ namespace Basis.Scripts.Drivers
             {
                 GameObject.Destroy(Jiggler);
             }
-            if (player.Avatar != null)
+            if (player.BasisAvatar != null)
             {
-                if (player.Avatar.JiggleStrains != null && player.Avatar.JiggleStrains.Length != 0)
+                if (player.BasisAvatar.JiggleStrains != null && player.BasisAvatar.JiggleStrains.Length != 0)
                 {
-                    int Count = player.Avatar.JiggleStrains.Length;
-                    JiggleRigRendererLOD JiggleRigRendererLOD = BasisHelpers.GetOrAddComponent<JiggleRigRendererLOD>(player.Avatar.Animator.gameObject);
+                    int Count = player.BasisAvatar.JiggleStrains.Length;
+                    JiggleRigRendererLOD JiggleRigRendererLOD = BasisHelpers.GetOrAddComponent<JiggleRigRendererLOD>(player.BasisAvatar.Animator.gameObject);
                     JiggleRigRendererLOD.currentCamera = BasisLocalCameraDriver.Instance.Camera;
                     if(player.IsLocal)
                     {
@@ -34,12 +34,12 @@ namespace Basis.Scripts.Drivers
                         BasisRemotePlayer Remote = (BasisRemotePlayer)player;
                         JiggleRigRendererLOD.TargetPoint = Remote.MouthControl.BoneTransform;
                     }
-                    JiggleRigRendererLOD.SetRenderers(player.Avatar.Renders);
-                    Jiggler = player.Avatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
+                    JiggleRigRendererLOD.SetRenderers(player.BasisAvatar.Renders);
+                    Jiggler = player.BasisAvatar.Animator.gameObject.AddComponent<JiggleRigBuilder>();
                     List<JiggleRig> Jiggles = new List<JiggleRig>();
                     for (int StrainIndex = 0; StrainIndex < Count; StrainIndex++)
                     {
-                        BasisJiggleStrain Strain = player.Avatar.JiggleStrains[StrainIndex];
+                        BasisJiggleStrain Strain = player.BasisAvatar.JiggleStrains[StrainIndex];
                         JiggleRig JiggleRig = Conversion(Strain);
                         Jiggles.Add(JiggleRig);
                     }

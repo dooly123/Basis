@@ -224,7 +224,7 @@ namespace Basis.Scripts.Networking
                     playerDisplayName = BasisLocalPlayer.DisplayName
                 }
             };
-            BasisNetworkAvatarCompressor.InitalAvatarData(BasisLocalPlayer.Instance.Avatar.Animator, out readyMessage.localAvatarSyncMessage);
+            BasisNetworkAvatarCompressor.InitalAvatarData(BasisLocalPlayer.Instance.BasisAvatar.Animator, out readyMessage.localAvatarSyncMessage);
             Debug.Log("Network Starting Client");
             BasisNetworkClient.AuthenticationMessage = new Network.Core.Serializable.SerializableBasis.AuthenticationMessage
             {
