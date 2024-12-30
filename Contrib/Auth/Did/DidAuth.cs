@@ -1,14 +1,17 @@
 /// Cryptographically secure random number generator
+using System;
 using CryptoRng = System.Security.Cryptography.RandomNumberGenerator;
 
 namespace Basis.Contrib.Auth.Did
 {
+	/// Configuration for [`DidAuthentication`].
 	public record Config
 	{
 		public CryptoRng Rng { get; init; } = CryptoRng.Create();
 	}
 
-	// TODO: Create and implement an `IChallengeResponseAuth` interface. This interface should live in basis core.
+	// TODO(@thebutlah): Create and implement an `IChallengeResponseAuth`
+	// interface. This interface should live in basis core.
 	public class DidAuthentication
 	{
 		// We store the rng to make deterministic testing and seeding possible.
@@ -35,14 +38,12 @@ namespace Basis.Contrib.Auth.Did
 		///
 		/// It is the caller's responsibility to keep track of which challenges
 		/// should be held for which responses.
-		///
-		/// If successfull in verifying the response, returns null, otherwise
-		/// returns the VerifyResponseErr
-		// TODO(@thebutlah): Is this way of doing errors OK with C# devs?
-		public VerifyResponseErr? VerifyResponse(Response response, Challenge challenge)
+		public VerifyResponseResult VerifyResponse(
+			Response response,
+			Challenge challenge
+		)
 		{
-			// TODO(@thebutlah): Implement this
-			return null;
+			throw new NotImplementedException("todo");
 		}
 	}
 
@@ -56,13 +57,35 @@ namespace Basis.Contrib.Auth.Did
 	/// the identity's public key.
 	public record Challenge(string Identity, byte[] Nonce);
 
-	// TODO(@thebutlah): Implement this
-	public record Response();
+	public record Response(
+		/// A JSON Web Signature, in "compact serialization" form. The payload
+		/// of the JWS are the bytes of the corresponding challenge's nonce.
+		string Jws,
+		/// The particular key in the user's did document. If the empty string,
+		/// it is implied that there is only one key in the document and that
+		/// this single key should be what is used as the pub key.
+		///
+		/// Examples:
+		/// * `""`
+		/// * `"#key-0"`
+		/// * `"#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"`
+		string DidUrlFragment
+	);
 
-	/// Possible errror variants for the VerifyResponse method.
-	public enum VerifyResponseErr
+	/// Possible return values VerifyResponse method.
+	public enum VerifyResponseResult
 	{
+		/// The verification was successful
+		Success,
+
+		/// The fragment in the response didn't exist in the DID Document resolved
+		/// from the challenge's identity.
+		NoSuchFragment,
+
+		/// The JWS Payload did not match the challenge nonce
 		MismatchedNonce,
-		MismatchedPubKey,
+
+		/// The JWS verification failed due to an invalid signature
+		InvalidSig,
 	}
 }

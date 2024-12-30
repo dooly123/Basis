@@ -7,4 +7,7 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <NoWarn>$(NoWarn);IDE0003</NoWarn>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+  </ItemGroup>
 </Project>
