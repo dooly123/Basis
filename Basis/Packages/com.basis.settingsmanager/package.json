@@ -1,5 +1,5 @@
 {
-  "name": "com.battlephaze.settingsmanager",
+  "name": "com.basis.settingsmanager",
   "displayName": "Settings Manager",
   "version": "4.1.9",
   "description": "The Settings Manager is an efficient tool for incorporating options into your application. It simplifies the process of displaying options, storing data, and executing actions based on that data.",

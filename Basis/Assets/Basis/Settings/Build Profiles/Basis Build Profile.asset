@@ -19,9 +19,7 @@ MonoBehaviour:
   m_PlatformBuildProfile:
     rid: 5644484285017620559
   m_OverrideGlobalSceneList: 1
-  m_Scenes:
-  - m_enabled: 1
-    m_path: Assets/Scenes/initialization.unity
+  m_Scenes: []
   m_ScriptingDefines:
   - SETTINGS_MANAGER_UNIVERSAL
   - STEAMAUDIO_ENABLED

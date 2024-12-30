@@ -61,19 +61,19 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerDefines.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerMenuItemEditor.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerEditorModuleDisplay.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerEditorSettings.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsmanagerStyle.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerEditorList.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerEditor.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerEditorDefineManagement.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerEditorReference.cs" />
-    <Compile Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerOptionEditor.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerEditorModuleDisplay.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerDefines.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerMenuItemEditor.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerEditorDefineManagement.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerEditorSettings.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerEditor.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerOptionEditor.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsmanagerStyle.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerEditorReference.cs" />
+    <Compile Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerEditorList.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\third_party\Settings Manager\SettingsManagerEditor\Editor\SettingsManagerEditor.asmdef" />
+    <None Include="Packages\com.basis.settingsmanager\SettingsManagerEditor\Editor\SettingsManagerEditor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

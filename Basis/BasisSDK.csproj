@@ -82,9 +82,38 @@
     <Compile Include="Packages\com.basis.sdk\Scripts\BasisAvatar.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMPro.cginc" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Examples &amp; Extras\Fonts\Roboto-Bold - License.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Examples &amp; Extras\Fonts\Unity - OFL.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_Bitmap.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Examples &amp; Extras\Fonts\Roboto-Bold - AFL.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Examples &amp; Extras\Fonts\Anton OFL.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF SSD.shader" />
     <None Include="Packages\com.basis.sdk\BasisSDK.asmdef" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\SDFFunctions.hlsl" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF-Mobile SSD.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMPro_Properties.cginc" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMPro_Surface.cginc" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Resources\LineBreaking Following Characters.txt" />
     <None Include="Packages\com.basis.sdk\Shaders\UIOverlayShader.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Packages\com.basis.sdk\Template\ObjectField.uxml" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Shaders\TMP_Sprite.shader" />
+    <None Include="Packages\com.basis.sdk\Basis TMP\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
