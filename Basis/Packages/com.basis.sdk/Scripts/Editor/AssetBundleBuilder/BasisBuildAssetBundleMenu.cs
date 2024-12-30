@@ -1,5 +1,6 @@
-﻿using Basis.Scripts.BasisSdk;
+using Basis.Scripts.BasisSdk;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -88,6 +89,20 @@ public class BasisBuildAssetBundleMenu
         {
             BasisBundleDescription = BasisContentBase.BasisBundleDescription
         };
-        BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject, basisBundleInformation, "Scene");
+        if (CheckIfIL2CPPIsInstalled())
+        {
+            BasisAssetBundlePipeline.BuildAssetBundle(activeScene, BasisAssetBundleObject, basisBundleInformation, "Scene");
+        }
+        else
+        {
+            Debug.LogError("Missing il2cpp please install from unity hub!");
+        }
     }
+    private static bool CheckIfIL2CPPIsInstalled()
+    {
+        var playbackEndingDirectory = BuildPipeline.GetPlaybackEngineDirectory(EditorUserBuildSettings.activeBuildTarget, BuildOptions.None, false);
+        return !string.IsNullOrEmpty(playbackEndingDirectory)
+               && Directory.Exists(Path.Combine(playbackEndingDirectory, "Variations", "il2cpp"));
+    }
+
 }
