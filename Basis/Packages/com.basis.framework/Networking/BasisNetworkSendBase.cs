@@ -92,25 +92,6 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 Debug.LogError("BasisAvatar is null! Cannot compute HumanPose.");
                 return;
             }
-
-            if (NetworkedPlayer.Player.BasisAvatar.Animator == null )
-            {
-                Debug.LogError("Avatar Animator! Cannot compute HumanPose.");
-                return;
-            }
-
-            if (NetworkedPlayer.Player.BasisAvatar.Animator.avatar == null)
-            {
-                Debug.LogError("Animator avatar! Cannot compute HumanPose.");
-                return;
-            }
-
-            if (NetworkedPlayer.Player.BasisAvatar.transform == null)
-            {
-                Debug.LogError("NetworkedPlayer.Player.Avatar.transform is null! Cannot compute HumanPose.");
-                return;
-            }
-
             // All checks passed
             PoseHandler = new HumanPoseHandler(
                 NetworkedPlayer.Player.BasisAvatar.Animator.avatar,
