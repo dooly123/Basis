@@ -1,3 +1,26 @@
 # Export from building Basis Server
 /[Bb]asis\ [Ss]erver\ [Ee]xport
 
+# C# build artifacts
+[Bb]in/
+[Oo]bj/
+
+# Nix stuff
+.direnv/
+.envrc
+
+# Jetbrains Rider
+.idea/
+
+# Visual Studio cache directory
+.vs/
+
+# Gradle cache directory
+.gradle/
+
+# Vim
+*.swp
+*.swo
+
+# MacOS
+.DS_Store
