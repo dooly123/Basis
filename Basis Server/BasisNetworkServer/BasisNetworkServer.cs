@@ -132,7 +132,7 @@ public static class BasisNetworkServer
                 authMessage.Deserialize(request.Data);
 
 
-                if (auth.IsAuthenticated(authMessage))
+                if (auth.IsAuthenticated(authMessage) == false)
                 {
                     RejectWithReason(request, "Authentication failed, password rejected");
                     return;

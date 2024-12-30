@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkserver\\auth\\password.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|solutionrelative:basisnetworkserver\\auth\\password.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|solutionrelative:basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkcore\\serializable\\authenticationmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|solutionrelative:basisnetworkcore\\serializable\\authenticationmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkcore\\serializable\\playeridmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|solutionrelative:basisnetworkcore\\serializable\\playeridmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -11,16 +23,8 @@
       "RelativeMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|solutionrelative:basisnetworkcore\\serializable\\avatardatamessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{51F765C5-646F-4F9E-B212-416E93E2E562}|BasisNetworkServer\\BasisNetworkServer.csproj|solutionrelative:basisnetworkserver\\basisnetworkserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkcore\\serializable\\localavatarsyncmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|solutionrelative:basisnetworkcore\\serializable\\localavatarsyncmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkcore\\serializable\\authenticationmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|solutionrelative:basisnetworkcore\\serializable\\authenticationmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7828CBD0-B57F-4C02-AD19-A0E015A5DD70}|BasisNetworkCore\\BasisNetworkCore.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis server\\basisnetworkcore\\serializable\\ownershiptransfermessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -69,25 +73,38 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 936,
-          "SelectedChildIndex": 1,
+          "DockedWidth": 3098,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "Password.cs",
+              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\Auth\\Password.cs",
+              "RelativeDocumentMoniker": "BasisNetworkServer\\Auth\\Password.cs",
+              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\Auth\\Password.cs",
+              "RelativeToolTip": "BasisNetworkServer\\Auth\\Password.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAqwDgAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-30T00:48:03.957Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "BasisNetworkServer.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworkServer.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworkServer.cs",
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworkServer.cs",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAuwD4AAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAG0AAAAAAAAAAAAiwIYAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-29T06:00:25.86Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "PlayerIdMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\PlayerIdMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\PlayerIdMessage.cs",
@@ -100,7 +117,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "ReadyMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\ReadyMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\ReadyMessage.cs",
@@ -113,7 +130,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "SceneDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\SceneDataMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\SceneDataMessage.cs",
@@ -126,7 +143,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "ServerAudioSegmentMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\ServerAudioSegmentMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\ServerAudioSegmentMessage.cs",
@@ -139,7 +156,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "ServerAvatarChangeMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\ServerAvatarChangeMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\ServerAvatarChangeMessage.cs",
@@ -152,20 +169,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "AuthenticationMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\AuthenticationMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\AuthenticationMessage.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\AuthenticationMessage.cs",
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\AuthenticationMessage.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAwAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-28T10:22:47.741Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "AvatarDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
@@ -178,7 +195,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "LocalAvatarSyncMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
@@ -191,7 +208,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "AudioSegmentDataMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\AudioSegmentDataMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\AudioSegmentDataMessage.cs",
@@ -204,7 +221,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "ServerSideSyncPlayerMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\ServerSideSyncPlayerMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\ServerSideSyncPlayerMessage.cs",
@@ -217,7 +234,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "OwnershipTransferMessage.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkCore\\Serializable\\OwnershipTransferMessage.cs",
               "RelativeDocumentMoniker": "BasisNetworkCore\\Serializable\\OwnershipTransferMessage.cs",
@@ -230,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "BasisNetworkOwnership.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
@@ -243,7 +260,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "BasisNetworkingGeneric.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisNetworkingGeneric.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworking\\BasisNetworkingGeneric.cs",
@@ -256,7 +273,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "BasisServerReductionSystem.cs",
               "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\BasisNetworking\\BasisServerReductionSystem.cs",
               "RelativeDocumentMoniker": "BasisNetworkServer\\BasisNetworking\\BasisServerReductionSystem.cs",

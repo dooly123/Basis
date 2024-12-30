@@ -1,4 +1,4 @@
-﻿using BattlePhaze.SettingsManager.DebugSystem;
+using BattlePhaze.SettingsManager.DebugSystem;
 using BattlePhaze.SettingsManager.Style;
 using BattlePhaze.SettingsManager.Types;
 using System.Collections.Generic;
@@ -39,14 +39,14 @@ namespace BattlePhaze.SettingsManager
 
                     if (selectedIndex > 0)
                     {
-                        GameObject canvas; //tomorrow dooly
+                        GameObject canvas;
                         if (SettingsManagerEditor.manager.ManagerSettings.ActiveCanvasLikeObject == null)
                         {
                             canvas = (GameObject)SettingsManagerEditor.manager.ManagerSettings.ActiveCanvasLikeObject;
                         }
                         else
                         {
-                            canvas = GameObject.FindObjectOfType<Canvas>().gameObject;
+                            canvas = GameObject.FindFirstObjectByType<Canvas>().gameObject;
                         }
 
                         if (canvas != null && !string.IsNullOrEmpty(ManagerObjectsPaths[selectedIndex]))

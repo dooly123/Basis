@@ -3,6 +3,7 @@
 using System.Runtime.Serialization;
 using Encoding = System.Text.Encoding;
 using static Basis.Network.Core.Serializable.SerializableBasis;
+using System;
 
 namespace Basis.Network.Server.Auth
 {
@@ -52,7 +53,17 @@ namespace Basis.Network.Server.Auth
                 BNL.Log("User had an empty password, user is rejected");
                 return false;
             }
-            return serverPassword.V == userPassword.V;
+            // Compare strings with explicit options
+            if (string.Equals(serverPassword.V, userPassword.V, StringComparison.Ordinal))
+            {
+                BNL.Log("Passwords match successfully.");
+                return true;
+            }
+            else
+            {
+                BNL.LogError($"Passwords do not match: ServerPassword [{serverPassword.V}], UserPassword [{userPassword.V}]");
+                return false;
+            }
         }
 
         public bool IsAuthenticated(AuthenticationMessage msg)
