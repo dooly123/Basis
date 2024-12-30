@@ -68,10 +68,17 @@ namespace Basis.Scripts.UI.NamePlate
             {
                 Debug.Log("Wired up Renderer Check For Blinking");
                 BasisRemotePlayer.FaceRenderer.Check += UpdateFaceVisibility;
+                BasisRemotePlayer.FaceRenderer.DestroyCalled += AvatarUnloaded;
                 UpdateFaceVisibility(BasisRemotePlayer.FaceisVisible);
                 HasRendererCheckWiredUp = true;
             }
         }
+
+        private void AvatarUnloaded()
+        {
+            UpdateFaceVisibility(true);
+        }
+
         private void UpdateFaceVisibility(bool State)
         {
             IsVisible = State;
@@ -172,6 +179,7 @@ namespace Basis.Scripts.UI.NamePlate
             if (HasRendererCheckWiredUp && BasisRemotePlayer != null && BasisRemotePlayer.FaceRenderer != null)
             {
                 BasisRemotePlayer.FaceRenderer.Check -= UpdateFaceVisibility;
+                BasisRemotePlayer.FaceRenderer.DestroyCalled -= AvatarUnloaded;
             }
         }
         private void OnProgressStart()
