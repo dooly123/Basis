@@ -84,7 +84,7 @@
               "RelativeDocumentMoniker": "BasisNetworkServer\\Auth\\Password.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis Server\\BasisNetworkServer\\Auth\\Password.cs",
               "RelativeToolTip": "BasisNetworkServer\\Auth\\Password.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAqwDgAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAACsAAAAAAAAAAAA6wDMAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-30T00:48:03.957Z",
               "EditorCaption": ""
@@ -99,8 +99,7 @@
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworkServer.cs",
               "ViewState": "AgIAAG0AAAAAAAAAAAAiwIYAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-29T06:00:25.86Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-29T06:00:25.86Z"
             },
             {
               "$type": "Document",
@@ -112,8 +111,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\PlayerIdMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:22:19.627Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:22:19.627Z"
             },
             {
               "$type": "Document",
@@ -125,8 +123,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\ReadyMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:22:18.218Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:22:18.218Z"
             },
             {
               "$type": "Document",
@@ -138,8 +135,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\SceneDataMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T09:27:04.737Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T09:27:04.737Z"
             },
             {
               "$type": "Document",
@@ -151,8 +147,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\ServerAudioSegmentMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:22:16.172Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:22:16.172Z"
             },
             {
               "$type": "Document",
@@ -164,8 +159,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\ServerAvatarChangeMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:22:15.028Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:22:15.028Z"
             },
             {
               "$type": "Document",
@@ -177,8 +171,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\AuthenticationMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:22:47.741Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:22:47.741Z"
             },
             {
               "$type": "Document",
@@ -190,8 +183,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\AvatarDataMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:22:46.446Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:22:46.446Z"
             },
             {
               "$type": "Document",
@@ -203,8 +195,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\LocalAvatarSyncMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-29T05:58:07.701Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-29T05:58:07.701Z"
             },
             {
               "$type": "Document",
@@ -216,8 +207,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\AudioSegmentDataMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:21:56.209Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:21:56.209Z"
             },
             {
               "$type": "Document",
@@ -229,8 +219,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\ServerSideSyncPlayerMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:20:36.586Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:20:36.586Z"
             },
             {
               "$type": "Document",
@@ -242,8 +231,7 @@
               "RelativeToolTip": "BasisNetworkCore\\Serializable\\OwnershipTransferMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T10:22:26.394Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T10:22:26.394Z"
             },
             {
               "$type": "Document",
@@ -255,8 +243,7 @@
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworking\\BasisNetworkOwnership.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAewBsAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T09:12:16.206Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T09:12:16.206Z"
             },
             {
               "$type": "Document",
@@ -268,8 +255,7 @@
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworking\\BasisNetworkingGeneric.cs",
               "ViewState": "AgIAABcAAAAAAAAAAAAAACIAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T07:39:34.576Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T07:39:34.576Z"
             },
             {
               "$type": "Document",
@@ -281,8 +267,7 @@
               "RelativeToolTip": "BasisNetworkServer\\BasisNetworking\\BasisServerReductionSystem.cs",
               "ViewState": "AgIAAI4AAAAAAAAAAAAowJ0AAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T05:53:36.37Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-28T05:53:36.37Z"
             }
           ]
         }

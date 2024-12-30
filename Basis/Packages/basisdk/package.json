@@ -1,6 +1,7 @@
 {
-    "name" : "com.basis.basisdk",
-    "displayName" : "Basis SDK",
-    "version" : "0.0.1",
-    "description" : "SDK for the basis framework"
+  "name": "com.basis.basisdk",
+  "displayName": "Basis SDK",
+  "version": "0.0.1",
+  "description": "SDK for the basis framework",
+  "hideInEditor": false
 }
