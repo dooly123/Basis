@@ -61,14 +61,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.llealloo.audiolink\Editor\Scripts\AudioLinkDefineManager.cs" />
-    <Compile Include="Packages\com.llealloo.audiolink\Editor\Scripts\AudioLinkMiniPlayerControllerInspector.cs" />
-    <Compile Include="Packages\com.llealloo.audiolink\Editor\Scripts\AudioLinkEditor.cs" />
-    <Compile Include="Packages\com.llealloo.audiolink\Editor\Scripts\AudioLinkShaderCompatabilityUtility.cs" />
-    <Compile Include="Packages\com.llealloo.audiolink\Editor\Scripts\AudioLinkAssetManager.cs" />
+    <Compile Include="Library\PackageCache\com.llealloo.audiolink\Editor\Scripts\AudioLinkDefineManager.cs" />
+    <Compile Include="Library\PackageCache\com.llealloo.audiolink\Editor\Scripts\AudioLinkMiniPlayerControllerInspector.cs" />
+    <Compile Include="Library\PackageCache\com.llealloo.audiolink\Editor\Scripts\AudioLinkEditor.cs" />
+    <Compile Include="Library\PackageCache\com.llealloo.audiolink\Editor\Scripts\AudioLinkShaderCompatabilityUtility.cs" />
+    <Compile Include="Library\PackageCache\com.llealloo.audiolink\Editor\Scripts\AudioLinkAssetManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.llealloo.audiolink\Editor\Audiolink.Editor.asmdef" />
+    <None Include="Library\PackageCache\com.llealloo.audiolink\Editor\Audiolink.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

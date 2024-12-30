@@ -76,10 +76,11 @@
       "dependencies": {}
     },
     "com.llealloo.audiolink": {
-      "version": "file:com.llealloo.audiolink",
+      "version": "https://github.com/BasisVR/audiolink.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "fa8857ae1a7dca5cadb487ba6f2912c75a3c12cc"
     },
     "com.naelstrof.jigglephysics": {
       "version": "file:com.naelstrof.jigglephysics",
