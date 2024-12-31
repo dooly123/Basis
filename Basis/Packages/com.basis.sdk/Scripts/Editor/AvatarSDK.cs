@@ -274,11 +274,11 @@ public partial class BasisAvatarSDKInspector : Editor
 
             // Convert to Base64 string
             string base64String = ByteArrayToBase64String(randomBytes);
-            Debug.Log("Base64 String: " + base64String);
+          //  Debug.Log("Base64 String: " + base64String);
 
             // Convert to Hex string
             string hexString = ByteArrayToHexString(randomBytes);
-            Debug.Log("Hex String: " + hexString);
+         //   Debug.Log("Hex String: " + hexString);
             await BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, basisBundleInformation, hexString);
         }
         else
