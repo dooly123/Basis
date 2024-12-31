@@ -1,4 +1,4 @@
-﻿using Basis.Network.Core;
+using Basis.Network.Core;
 using DarkRift.Basis_Common.Serializable;
 using LiteNetLib;
 using LiteNetLib.Utils;

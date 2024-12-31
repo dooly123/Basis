@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/initialization.unity
+    path: Packages/com.basis.sdk/Scenes/initialization.unity
     guid: dd1db054b177db7459cc81633b86e525
   m_configObjects:
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: eb72c1b2c1c33b14291190a772f5e3df, type: 2}
