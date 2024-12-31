@@ -5,18 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.basis.framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72CD38CC-2981-5503-74FE-DD863B4B317F}|Basis.csproj|solutionrelative:packages\\com.basis.framework\\networking\\basisnetworksendbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.basis.sdk\\scripts\\editor\\avatarsdk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|solutionrelative:packages\\com.basis.sdk\\scripts\\editor\\avatarsdk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.basis.sdk\\scripts\\editor\\assetbundlebuilder\\basisassetbundlebuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|solutionrelative:packages\\com.basis.sdk\\scripts\\editor\\assetbundlebuilder\\basisassetbundlebuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|c:\\users\\doola\\onedrive\\documents\\github\\basis foundation\\basis unity\\basis\\packages\\com.basis.sdk\\scripts\\editor\\assetbundlebuilder\\basisbuildassetbundlemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{98F5464A-1032-2870-53D3-677BE24C6F06}|BasisSDKEditor.csproj|solutionrelative:packages\\com.basis.sdk\\scripts\\editor\\assetbundlebuilder\\basisbuildassetbundlemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 3098,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -36,48 +24,9 @@
               "RelativeDocumentMoniker": "Packages\\com.basis.framework\\Networking\\BasisNetworkSendBase.cs",
               "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.framework\\Networking\\BasisNetworkSendBase.cs",
               "RelativeToolTip": "Packages\\com.basis.framework\\Networking\\BasisNetworkSendBase.cs",
-              "ViewState": "AgIAAEYAAAAAAAAAAAAIwFMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAmwFYAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:56:52.673Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "BasisBuildAssetBundleMenu.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisBuildAssetBundleMenu.cs",
-              "RelativeDocumentMoniker": "Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisBuildAssetBundleMenu.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisBuildAssetBundleMenu.cs",
-              "RelativeToolTip": "Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisBuildAssetBundleMenu.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAmwEYAAABUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:35:12.837Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "BasisAssetBundleBuilder.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisAssetBundleBuilder.cs",
-              "RelativeDocumentMoniker": "Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisAssetBundleBuilder.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisAssetBundleBuilder.cs",
-              "RelativeToolTip": "Packages\\com.basis.sdk\\Scripts\\Editor\\AssetBundleBuilder\\BasisAssetBundleBuilder.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAoAAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:34:58.466Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AvatarSDK.cs",
-              "DocumentMoniker": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.sdk\\Scripts\\Editor\\AvatarSDK.cs",
-              "RelativeDocumentMoniker": "Packages\\com.basis.sdk\\Scripts\\Editor\\AvatarSDK.cs",
-              "ToolTip": "C:\\Users\\doola\\OneDrive\\Documents\\Github\\Basis Foundation\\Basis Unity\\Basis\\Packages\\com.basis.sdk\\Scripts\\Editor\\AvatarSDK.cs",
-              "RelativeToolTip": "Packages\\com.basis.sdk\\Scripts\\Editor\\AvatarSDK.cs",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAmwAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:26:43.588Z",
+              "WhenOpened": "2024-12-30T11:04:59.138Z",
               "EditorCaption": ""
             }
           ]

@@ -61,13 +61,13 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.basis.console\BasisLogManager.cs" />
-    <Compile Include="Packages\com.basis.console\BasisConsoleLogger.cs" />
-    <Compile Include="Packages\com.basis.console\BasisStaticLogInitializer.cs" />
-    <Compile Include="Packages\com.basis.console\BasisButtonHeldCallBack.cs" />
+    <Compile Include="Library\PackageCache\com.basis.console\BasisLogManager.cs" />
+    <Compile Include="Library\PackageCache\com.basis.console\BasisConsoleLogger.cs" />
+    <Compile Include="Library\PackageCache\com.basis.console\BasisStaticLogInitializer.cs" />
+    <Compile Include="Library\PackageCache\com.basis.console\BasisButtonHeldCallBack.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.basis.console\BasisConsoleDisplay.asmdef" />
+    <None Include="Library\PackageCache\com.basis.console\BasisConsoleDisplay.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

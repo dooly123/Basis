@@ -1,16 +1,18 @@
 {
   "dependencies": {
     "com.basis.addressables": {
-      "version": "file:com.basis.addressables",
+      "version": "https://github.com/BasisVR/BasisAddressables.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "bdafadab10017ecde7cc8a08c48df1931e60284e"
     },
     "com.basis.console": {
-      "version": "file:com.basis.console",
+      "version": "https://github.com/BasisVR/BasisConsoleDisplay.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "477ad687ad74ce1eba5672f4e3393e001669c53c"
     },
     "com.basis.framework": {
       "version": "file:com.basis.framework",
@@ -19,10 +21,11 @@
       "dependencies": {}
     },
     "com.basis.gizmos": {
-      "version": "file:com.basis.gizmos",
+      "version": "https://github.com/BasisVR/BasisGizmos.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "5b098deac6d115759870689224a62c562b1bf485"
     },
     "com.basis.odinserializer": {
       "version": "file:com.basis.odinserializer",
@@ -49,16 +52,18 @@
       "dependencies": {}
     },
     "com.basis.tests": {
-      "version": "file:com.basis.tests",
+      "version": "https://github.com/BasisVR/BasisTests.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "8b89ac399363dc044dbbf937828cd44a5969d0f9"
     },
     "com.basis.visualtrackers": {
-      "version": "file:com.basis.visualtrackers",
+      "version": "https://github.com/BasisVR/BasisVisualTrackers.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "97c4def2be4b30fcc1e2b7aa36568ecbaa3e2fb9"
     },
     "com.hecomi.ulipsync": {
       "version": "file:com.hecomi.ulipsync",

@@ -61,12 +61,12 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.basis.gizmos\BasisGizmosManager.cs" />
-    <Compile Include="Packages\com.basis.gizmos\BasisLineGizmos.cs" />
-    <Compile Include="Packages\com.basis.gizmos\BasisGizmos.cs" />
+    <Compile Include="Library\PackageCache\com.basis.gizmos\BasisGizmosManager.cs" />
+    <Compile Include="Library\PackageCache\com.basis.gizmos\BasisLineGizmos.cs" />
+    <Compile Include="Library\PackageCache\com.basis.gizmos\BasisGizmos.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.basis.gizmos\BasisGizmos.asmdef" />
+    <None Include="Library\PackageCache\com.basis.gizmos\BasisGizmos.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

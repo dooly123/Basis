@@ -61,19 +61,19 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.basis.tests\BasisObjectSyncNetworking.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisTestNetworkAvatar.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisTestNetworkScene.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisToggleByLocalPlayer.cs" />
-    <Compile Include="Packages\com.basis.tests\Mirror\BasisSDKMirror.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisTestRoundTrip.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisTestNetworkAvatarOverrideJump.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisPositionRotationScale.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisTestNetwork.cs" />
-    <Compile Include="Packages\com.basis.tests\BasisTestClampedRotation.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisObjectSyncNetworking.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisTestNetworkAvatar.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisTestNetworkScene.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisToggleByLocalPlayer.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\Mirror\BasisSDKMirror.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisTestRoundTrip.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisTestNetworkAvatarOverrideJump.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisPositionRotationScale.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisTestNetwork.cs" />
+    <Compile Include="Library\PackageCache\com.basis.tests\BasisTestClampedRotation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.basis.tests\BasisExamples.asmdef" />
+    <None Include="Library\PackageCache\com.basis.tests\BasisExamples.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "com.basis.addressables": "https://github.com/BasisVR/BasisAddressables.git",
+    "com.basis.console": "https://github.com/BasisVR/BasisConsoleDisplay.git",
+    "com.basis.gizmos": "https://github.com/BasisVR/BasisGizmos.git",
+    "com.basis.tests": "https://github.com/BasisVR/BasisTests.git",
+    "com.basis.visualtrackers": "https://github.com/BasisVR/BasisVisualTrackers.git",
     "com.llealloo.audiolink": "https://github.com/BasisVR/audiolink.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.addressables": "2.2.2",
