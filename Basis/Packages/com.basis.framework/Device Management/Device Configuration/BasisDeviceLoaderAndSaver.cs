@@ -27,7 +27,7 @@ public class BasisDeviceLoaderAndSaver
         }
         else
         {
-            Debug.LogError($"Directory '{directoryPath}' does not exist.");
+            BasisDebug.LogError($"Directory '{directoryPath}' does not exist.");
         }
 
         return loadedDevices;
@@ -37,7 +37,7 @@ public class BasisDeviceLoaderAndSaver
     {
         if (!File.Exists(jsonFile))
         {
-            Debug.LogError($"File not found: '{jsonFile}'");
+            BasisDebug.LogError($"File not found: '{jsonFile}'");
             return null;
         }
 
@@ -61,7 +61,7 @@ public class BasisDeviceLoaderAndSaver
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Failed to load or parse file '{jsonFile}': {ex.Message}");
+            BasisDebug.LogError($"Failed to load or parse file '{jsonFile}': {ex.Message}");
             return null;
         }
     }
@@ -122,7 +122,7 @@ public class BasisDeviceLoaderAndSaver
                 // Compare versions if necessary
                 if (existingDevice != null && existingDevice.VersionNumber > device.VersionNumber)
                 {
-                    Debug.Log("Newer version exists; using that instead");
+                    BasisDebug.Log("Newer version exists; using that instead", BasisDebug.LogTag.Device);
                     return;
                 }
 
@@ -136,12 +136,12 @@ public class BasisDeviceLoaderAndSaver
                 // If the hashes match, no need to write the file again
                 if (StructuralComparisons.StructuralEqualityComparer.Equals(existingContentHash, newContentHash))
                 {
-                //    Debug.Log("File content is identical; no need to write.");
+                //    BasisDebug.Log("File content is identical; no need to write.");
                     return;
                 }
                 else
                 {
-                    Debug.Log("File content differs; updating file.");
+                    BasisDebug.Log("File content differs; updating file.", BasisDebug.LogTag.Device);
                 }
             }
 
@@ -154,7 +154,7 @@ public class BasisDeviceLoaderAndSaver
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error processing file '{filePath}': {ex.Message}");
+            BasisDebug.LogError($"Error processing file '{filePath}': {ex.Message}");
             throw; // Rethrow to catch in WhenAll
         }
     }

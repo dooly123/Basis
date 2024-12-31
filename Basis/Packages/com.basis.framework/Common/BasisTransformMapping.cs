@@ -96,7 +96,7 @@ namespace Basis.Scripts.Common
             references = new BasisTransformMapping();
             if (!anim.isHuman)
             {
-                Debug.LogError("We need a Humanoid Animator");
+                BasisDebug.LogError("We need a Humanoid Animator");
                 return false;
             }
 

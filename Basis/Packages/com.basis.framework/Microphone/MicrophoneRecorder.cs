@@ -69,7 +69,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     private void ConfigureDenoiser(bool useDenoiser)
     {
         UseDenoiser = useDenoiser;
-        Debug.Log("Setting Denoiser To " + UseDenoiser);
+        BasisDebug.Log("Setting Denoiser To " + UseDenoiser);
     }
 
     public new void OnDestroy()
@@ -101,21 +101,21 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
     {
         if (string.IsNullOrEmpty(newMicrophone))
         {
-            Debug.LogError("Microphone was empty or null");
+            BasisDebug.LogError("Microphone was empty or null");
             return;
         }
         if (Microphone.devices.Length == 0)
         {
-            Debug.LogError("No Microphones found!");
+            BasisDebug.LogError("No Microphones found!");
             return;
         }
         if (!Microphone.devices.Contains(newMicrophone))
         {
-            Debug.LogError("Microphone " + newMicrophone + " not found!");
+            BasisDebug.LogError("Microphone " + newMicrophone + " not found!");
             return;
         }
         bool isRecording = Microphone.IsRecording(newMicrophone);
-        Debug.Log(isRecording ? $"Is Recording {MicrophoneDevice}" : $"Is not Recording {MicrophoneDevice}");
+        BasisDebug.Log(isRecording ? $"Is Recording {MicrophoneDevice}" : $"Is not Recording {MicrophoneDevice}");
         if (MicrophoneDevice != newMicrophone)
         {
             StopMicrophone();
@@ -124,13 +124,13 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         {
             if (!IsPaused)
             {
-                Debug.Log("Starting Microphone :" + newMicrophone);
+                BasisDebug.Log("Starting Microphone :" + newMicrophone);
                 clip = Microphone.Start(newMicrophone, true, BasisOpusSettings.RecordingFullLength, samplingFrequency);
                 MicrophoneIsStarted = true;
             }
             else
             {
-                Debug.Log("Microphone Change Stored");
+                BasisDebug.Log("Microphone Change Stored");
             }
             MicrophoneDevice = newMicrophone;
         }
@@ -143,7 +143,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
             return;
         }
         Microphone.End(MicrophoneDevice);
-        Debug.Log("Stopped Microphone " + MicrophoneDevice);
+        BasisDebug.Log("Stopped Microphone " + MicrophoneDevice);
         MicrophoneDevice = null;
         MicrophoneIsStarted = false;
     }
@@ -363,7 +363,7 @@ public class MicrophoneRecorder : MicrophoneRecorderBase
         Volume = volume;
         // Create the job
         VAJ.Volume = Volume;
-        Debug.Log("Set Microphone Volume To "+ Volume);
+        BasisDebug.Log("Set Microphone Volume To "+ Volume);
     }
     public void ApplyDeNoise()
     {

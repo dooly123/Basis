@@ -47,7 +47,7 @@ namespace Basis.Scripts.Avatar
         {
             if (string.IsNullOrEmpty(BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL))
             {
-                Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
+                BasisDebug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
                 await LoadAvatarAfterError(Player);
                 return;
             }
@@ -61,11 +61,11 @@ namespace Basis.Scripts.Avatar
                 switch (Mode)
                 {
                     case 0://download
-                        Debug.Log("Requested Avatar was a AssetBundle Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                        BasisDebug.Log("Requested Avatar was a AssetBundle Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                         Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                     case 1://localload
-                        Debug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                        BasisDebug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                         var Para = new UnityEngine.ResourceManagement.ResourceProviders.InstantiationParameters(Player.transform.position, Quaternion.identity, null);
                         ChecksRequired Required = new ChecksRequired
                         {
@@ -76,16 +76,16 @@ namespace Basis.Scripts.Avatar
 
                         if (GameObjects.Count > 0)
                         {
-                            Debug.Log("Found Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                            BasisDebug.Log("Found Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                             Output = GameObjects[0];
                         }
                         else
                         {
-                            Debug.LogError("Cant Find Local Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                            BasisDebug.LogError("Cant Find Local Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                         }
                         break;
                     default:
-                        Debug.Log("Using Default, this means index was out of acceptable range! " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                        BasisDebug.Log("Using Default, this means index was out of acceptable range! " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                         Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                 }
@@ -98,7 +98,7 @@ namespace Basis.Scripts.Avatar
             }
             catch (Exception e)
             {
-                Debug.LogError($"Loading avatar failed: {e}");
+                BasisDebug.LogError($"Loading avatar failed: {e}");
                 await LoadAvatarAfterError(Player);
             }
         }
@@ -107,7 +107,7 @@ namespace Basis.Scripts.Avatar
         {
             if (string.IsNullOrEmpty(BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL))
             {
-                Debug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
+                BasisDebug.LogError("Avatar Address was empty or null! Falling back to loading avatar.");
                 await LoadAvatarAfterError(Player);
                 return;
             }
@@ -124,7 +124,7 @@ namespace Basis.Scripts.Avatar
                         Output = await DownloadAndLoadAvatar(BasisLoadableBundle, Player);
                         break;
                     case 1://localload
-                        Debug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                        BasisDebug.Log("Requested Avatar was a Addressable Avatar " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                         ChecksRequired Required = new ChecksRequired
                         {
                             UseContentRemoval = false,
@@ -135,12 +135,12 @@ namespace Basis.Scripts.Avatar
 
                         if (GameObjects.Count > 0)
                         {
-                            Debug.Log("Found Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                            BasisDebug.Log("Found Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                             Output = GameObjects[0];
                         }
                         else
                         {
-                            Debug.LogError("Cant Find Local Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL);
+                            BasisDebug.LogError("Cant Find Local Avatar for " + BasisLoadableBundle.BasisRemoteBundleEncrypted.BundleURL, BasisDebug.LogTag.Avatar);
                         }
                         break;
                     default:
@@ -155,7 +155,7 @@ namespace Basis.Scripts.Avatar
             }
             catch (Exception e)
             {
-                Debug.LogError($"Loading avatar failed: {e}");
+                BasisDebug.LogError($"Loading avatar failed: {e}");
                 await LoadAvatarAfterError(Player);
             }
         }
@@ -222,7 +222,7 @@ namespace Basis.Scripts.Avatar
             }
             catch (Exception e)
             {
-                Debug.LogError($"Fallback avatar loading failed: {e}");
+                BasisDebug.LogError($"Fallback avatar loading failed: {e}");
             }
         }
         /// <summary>
@@ -291,7 +291,7 @@ namespace Basis.Scripts.Avatar
         {
             if (Player == null || Player.BasisAvatar == null)
             {
-                Debug.LogError("Missing RemotePlayer or Avatar");
+                BasisDebug.LogError("Missing RemotePlayer or Avatar");
                 return;
             }
 
@@ -302,7 +302,7 @@ namespace Basis.Scripts.Avatar
         {
             if (Player == null || Player.BasisAvatar == null)
             {
-                Debug.LogError("Missing LocalPlayer or Avatar");
+                BasisDebug.LogError("Missing LocalPlayer or Avatar");
                 return;
             }
 

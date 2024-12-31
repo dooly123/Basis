@@ -18,10 +18,10 @@ namespace Basis.Scripts.Drivers
         public static async Task LoadSceneAddressables(string SceneToLoad, bool SpawnPlayerOnSceneLoad = true, UnityEngine.SceneManagement.LoadSceneMode Mode = UnityEngine.SceneManagement.LoadSceneMode.Additive)
         {
             SetIfPlayerShouldSpawnOnSceneLoad(SpawnPlayerOnSceneLoad);
-            Debug.Log("Loading Scene " + SceneToLoad);
+            BasisDebug.Log("Loading Scene " + SceneToLoad, BasisDebug.LogTag.Event);
             AddressableSceneResource Process = new AddressableSceneResource(SceneToLoad, true, Mode);
             await AddressableLoadFactory.LoadAddressableResourceAsync<SceneInstance>(Process);
-            Debug.Log("Loaded Scene " + SceneToLoad);
+            BasisDebug.Log("Loaded Scene " + SceneToLoad, BasisDebug.LogTag.Event);
         }
 
         /// <summary>
@@ -31,9 +31,9 @@ namespace Basis.Scripts.Drivers
         public static async Task LoadSceneAssetBundle(BasisLoadableBundle BasisLoadableBundle, bool SpawnPlayerOnSceneLoad = true, bool MakeSceneActiveScene = true)
         {
             SetIfPlayerShouldSpawnOnSceneLoad(SpawnPlayerOnSceneLoad);
-            Debug.Log("Loading Scene ");
+            BasisDebug.Log("Loading Scene ", BasisDebug.LogTag.Scene);
             await BasisLoadHandler.LoadSceneBundle(MakeSceneActiveScene, BasisLoadableBundle, progressCallback, new CancellationToken());
-            Debug.Log("Loaded Scene ");
+            BasisDebug.Log("Loaded Scene ", BasisDebug.LogTag.Scene);
         }
         /// <summary>
         /// turning this off for loading in additional levels is recommended. :) 

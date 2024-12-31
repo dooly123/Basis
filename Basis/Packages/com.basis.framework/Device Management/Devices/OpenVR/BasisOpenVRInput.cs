@@ -61,7 +61,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                 }
                 else
                 {
-                    Debug.LogError("Error getting device pose: " + result);
+                    BasisDebug.LogError("Error getting device pose: " + result);
                 }
             }
         }

@@ -27,7 +27,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         {
             if (deviceIndex != Valve.VR.OpenVR.k_unTrackedDeviceIndexInvalid)
             {
-                Debug.Log($"Device index {deviceIndex} is connected: {deviceConnected}");
+                BasisDebug.Log($"Device index {deviceIndex} is connected: {deviceConnected}");
                 var error = new ETrackedPropertyError();
                 var id = new StringBuilder(64);
                 Valve.VR.OpenVR.System.GetStringTrackedDeviceProperty(deviceIndex, ETrackedDeviceProperty.Prop_RenderModelName_String, id, 64, ref error);
@@ -63,21 +63,21 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                     CreateController(openVRDevice, uniqueID, notUniqueID);
                     break;
                 case ETrackedDeviceClass.TrackingReference:
-                    Debug.Log("Was TrackingReference Device");
+                    BasisDebug.Log("Was TrackingReference Device");
                     //  CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
                     break;
                 case ETrackedDeviceClass.Invalid:
-                    Debug.Log("Was Invalid Device");
+                    BasisDebug.Log("Was Invalid Device");
                     break;
                 case ETrackedDeviceClass.GenericTracker:
-                    Debug.Log("Was GenericTracker Device");
+                    BasisDebug.Log("Was GenericTracker Device");
                     CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
                     break;
                 case ETrackedDeviceClass.DisplayRedirect:
-                    Debug.Log("Was DisplayRedirect Device");
+                    BasisDebug.Log("Was DisplayRedirect Device");
                     break;
                 case ETrackedDeviceClass.Max:
-                    Debug.Log("Was Max Device");
+                    BasisDebug.Log("Was Max Device");
                     CreateTracker(openVRDevice, uniqueID, notUniqueID, false, BasisBoneTrackedRole.CenterEye);
                     break;
                 default:
@@ -179,7 +179,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                 {
                     role = BasisBoneTrackedRole.LeftHand;
                     source = SteamVR_Input_Sources.LeftHand;
-                    Debug.LogError("Unable to discover Correctly using Name for role lookup " + source);
+                    BasisDebug.LogError("Unable to discover Correctly using Name for role lookup " + source);
                     return true;
                 }
                 else
@@ -188,11 +188,11 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                     {
                         role = BasisBoneTrackedRole.RightHand;
                         source = SteamVR_Input_Sources.RightHand;
-                        Debug.LogError("Unable to discover Correctly using Name for role lookup " + source);
+                        BasisDebug.LogError("Unable to discover Correctly using Name for role lookup " + source);
                         return true;
                     }
                 }
-                Debug.LogError("Device unknown " + NameInCaseFallback);
+                BasisDebug.LogError("Device unknown " + NameInCaseFallback);
             }
 
             return false;
@@ -228,7 +228,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                         }
                         else
                         {
-                            Debug.LogError("Some other Class Name " + input.ClassName + " look over this!");
+                            BasisDebug.LogError("Some other Class Name " + input.ClassName + " look over this!");
                         }
                         return;
                     }
@@ -268,13 +268,13 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
         {
             if (IsInUse)
             {
-                Debug.LogError("Already using OpenVR!");
+                BasisDebug.LogError("Already using OpenVR!");
                 return;
             }
             IsInUse = true;
             BasisDeviceManagement.Instance.SetCameraRenderState(true);
 
-            Debug.Log("Starting SteamVR Instance...");
+            BasisDebug.Log("Starting SteamVR Instance...");
             SteamVR = SteamVR.instance;
 
             if (SteamVR_BehaviourGameobject == null)
@@ -291,7 +291,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             // Register SteamVR events
             SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
             SteamVR_Events.System(EVREventType.VREvent_TrackedDeviceRoleChanged).Listen(OnTrackedDeviceRoleChanged);
-            Debug.Log("SteamVR SDK started successfully.");
+            BasisDebug.Log("SteamVR SDK started successfully.");
         }
         public async void WaitingUntilReady()
         {
@@ -305,7 +305,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             // Handle initialization failure
             if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeFailure)
             {
-                Debug.LogError("SteamVR failed to initialize");
+                BasisDebug.LogError("SteamVR failed to initialize");
                 return;
             }
         }

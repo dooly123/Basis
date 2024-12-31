@@ -42,7 +42,7 @@ namespace Basis.Scripts.Boot_Sequence
             }
             else
             {
-                Debug.LogError("Missing " + BootManager);
+                BasisDebug.LogError("Missing " + BootManager);
             }
         }
     }

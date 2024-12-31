@@ -128,7 +128,7 @@ namespace Basis.Scripts.UI.UI_Panels
             }
             else
             {
-                Debug.LogError("Name was empty, bailing");
+                BasisDebug.LogError("Name was empty, bailing");
                 // Re-enable button interaction if username is empty
                 Ready.interactable = true;
             }
@@ -136,7 +136,7 @@ namespace Basis.Scripts.UI.UI_Panels
 
         public async Task CreateAssetBundle()
         {
-            Debug.Log("connecting to default");
+            BasisDebug.Log("connecting to default");
             if (BundledContentHolder.Instance.UseAddressables)
             {
                 await BasisSceneLoadDriver.LoadSceneAddressables(BundledContentHolder.Instance.DefaultScene.BasisRemoteBundleEncrypted.BundleURL);

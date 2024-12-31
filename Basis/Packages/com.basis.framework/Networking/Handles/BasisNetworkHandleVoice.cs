@@ -35,7 +35,7 @@ public static class BasisNetworkHandleVoice
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        Debug.Log("Operation canceled.");
+                        BasisDebug.Log("Operation canceled.");
                         return; // Exit early if a cancellation is requested
                     }
 
@@ -50,7 +50,7 @@ public static class BasisNetworkHandleVoice
                 }
                 else
                 {
-                    Debug.Log($"Missing Player For Message {audioUpdate.playerIdMessage.playerID}");
+                    BasisDebug.Log($"Missing Player For Message {audioUpdate.playerIdMessage.playerID}");
                 }
                 Message.Enqueue(audioUpdate);
                 while (Message.Count > 250)
@@ -60,7 +60,7 @@ public static class BasisNetworkHandleVoice
             }
             catch (Exception ex) when (!(ex is OperationCanceledException))
             {
-                Debug.LogError($"Error in HandleAudioUpdate: {ex.Message} {ex.StackTrace}");
+                BasisDebug.LogError($"Error in HandleAudioUpdate: {ex.Message} {ex.StackTrace}");
             }
             finally
             {
@@ -69,7 +69,7 @@ public static class BasisNetworkHandleVoice
         }
         catch (OperationCanceledException)
         {
-            Debug.Log("HandleAudioUpdate task canceled.");
+            BasisDebug.Log("HandleAudioUpdate task canceled.");
         }
     }
 }

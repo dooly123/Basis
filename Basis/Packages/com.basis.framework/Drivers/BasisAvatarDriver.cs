@@ -42,11 +42,11 @@ namespace Basis.Scripts.Drivers
             Player.FaceisVisible = false;
             if (Avatar == null)
             {
-                Debug.LogError("Missing Avatar");
+                BasisDebug.LogError("Missing Avatar");
             }
             if (Avatar.FaceVisemeMesh == null)
             {
-                Debug.Log("Missing Face for " + Player.DisplayName);
+                BasisDebug.Log("Missing Face for " + Player.DisplayName, BasisDebug.LogTag.Avatar);
             }
             Player.UpdateFaceVisibility(Avatar.FaceVisemeMesh.isVisible);
             if (Player.FaceRenderer != null)
@@ -64,7 +64,7 @@ namespace Basis.Scripts.Drivers
         }
         public void PutAvatarIntoTPose()
         {
-            Debug.Log("PutAvatarIntoTPose");
+            BasisDebug.Log("PutAvatarIntoTPose", BasisDebug.LogTag.Avatar);
             CurrentlyTposing = true;
             if (SavedruntimeAnimatorController == null)
             {
@@ -79,7 +79,7 @@ namespace Basis.Scripts.Drivers
         }
         public void ResetAvatarAnimator()
         {
-            Debug.Log("ResetAvatarAnimator");
+            BasisDebug.Log("ResetAvatarAnimator", BasisDebug.LogTag.Avatar);
             Player.BasisAvatar.Animator.runtimeAnimatorController = SavedruntimeAnimatorController;
             SavedruntimeAnimatorController = null;
             CurrentlyTposing = false;
@@ -140,7 +140,7 @@ namespace Basis.Scripts.Drivers
         }
         public void CalculateTransformPositions(Animator anim, BaseBoneDriver driver)
         {
-            Debug.Log("CalculateTransformPositions");
+            BasisDebug.Log("CalculateTransformPositions", BasisDebug.LogTag.Avatar);
             UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<BasisFallBackBoneData> BasisFallBackBoneDataAsync = Addressables.LoadAssetAsync<BasisFallBackBoneData>(BoneData);
             BasisFallBackBoneData FBBD = BasisFallBackBoneDataAsync.WaitForCompletion();
             for (int Index = 0; Index < driver.ControlsLength; Index++)
@@ -169,12 +169,12 @@ namespace Basis.Scripts.Drivers
                             }
                             else
                             {
-                                Debug.LogError("cant Convert to humanbodybone " + driver.trackedRoles[Index]);
+                                BasisDebug.LogError("cant Convert to humanbodybone " + driver.trackedRoles[Index]);
                             }
                         }
                         else
                         {
-                            Debug.LogError("cant find Fallback Bone for " + driver.trackedRoles[Index]);
+                            BasisDebug.LogError("cant find Fallback Bone for " + driver.trackedRoles[Index]);
                         }
                     }
                 }
@@ -239,7 +239,7 @@ namespace Basis.Scripts.Drivers
             }
             else
             {
-                Debug.LogError("Missing bottom");
+                BasisDebug.LogError("Missing bottom");
             }
         }
         public void ForceUpdateAnimator(Animator Anim)
@@ -263,7 +263,7 @@ namespace Basis.Scripts.Drivers
         {
             if (obj == null)
             {
-                Debug.LogError("Missing Object during calibration");
+                BasisDebug.LogError("Missing Object during calibration");
                 return true;
             }
             else
@@ -293,11 +293,11 @@ namespace Basis.Scripts.Drivers
 
                 if (BaseBoneDriver.FindBone(out BasisBoneControl AssignedToAddToBone, AssignedTo) == false)
                 {
-                    Debug.LogError("Cant Find Bone " + AssignedTo);
+                    BasisDebug.LogError("Cant Find Bone " + AssignedTo);
                 }
                 if (BaseBoneDriver.FindBone(out BasisBoneControl LockToBone, LockToBoneRole) == false)
                 {
-                    Debug.LogError("Cant Find Bone " + LockToBoneRole);
+                    BasisDebug.LogError("Cant Find Bone " + LockToBoneRole);
                 }
                 BaseBoneDriver.CreateRotationalLock(AssignedToAddToBone, LockToBone, PositionLerpAmount, QuaternionLerpAmount);
             }

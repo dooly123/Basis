@@ -54,9 +54,9 @@ public static class BasisEncryptionToData
         {
             VP = BasisLoadableBundle.UnlockPassword
         };
-        // Debug.Log("BasisLoadableBundle.UnlockPassword" + BasisLoadableBundle.UnlockPassword);
+        // BasisDebug.Log("BasisLoadableBundle.UnlockPassword" + BasisLoadableBundle.UnlockPassword);
         byte[] LoadedMetaData = await BasisEncryptionWrapper.DecryptFileAsync(BasisPassword, FilePath, progressCallback, 81920);
-        Debug.Log("Converting decrypted meta file to BasisBundleInformation...");
+        BasisDebug.Log("Converting decrypted meta file to BasisBundleInformation...", BasisDebug.LogTag.Event);
         BasisLoadableBundle.BasisBundleInformation = ConvertBytesToJson(LoadedMetaData);
         return BasisLoadableBundle;
     }
@@ -64,12 +64,12 @@ public static class BasisEncryptionToData
     {
         if (loadedlocalmeta == null || loadedlocalmeta.Length == 0)
         {
-            Debug.LogError($"Data for {nameof(BasisBundleInformation)} is empty or null.");
+            BasisDebug.LogError($"Data for {nameof(BasisBundleInformation)} is empty or null.", BasisDebug.LogTag.Event);
             return new BasisBundleInformation() { HasError = true };
         }
 
         // Convert the byte array to a JSON string (assuming UTF-8 encoding)
-        Debug.Log($"Converting byte array to JSON string...");
+        BasisDebug.Log($"Converting byte array to JSON string...", BasisDebug.LogTag.Event);
         BasisBundleInformation Information = SerializationUtility.DeserializeValue<BasisBundleInformation>(loadedlocalmeta, DataFormat.JSON);
         return Information;
     }

@@ -52,7 +52,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             if (BasisNetworkManagement.MainThreadContext == null)
             {
-                Debug.LogError("Main thread context is not set. Ensure this script is started on the main thread.");
+                BasisDebug.LogError("Main thread context is not set. Ensure this script is started on the main thread.");
                 return;
             }
 
@@ -77,19 +77,19 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
         {
             if (NetworkedPlayer == null)
             {
-                Debug.LogError("NetworkedPlayer is null! Cannot compute HumanPose.");
+                BasisDebug.LogError("NetworkedPlayer is null! Cannot compute HumanPose.");
                 return;
             }
 
             if (NetworkedPlayer.Player == null)
             {
-                Debug.LogError("NetworkedPlayer.Player is null! Cannot compute HumanPose.");
+                BasisDebug.LogError("NetworkedPlayer.Player is null! Cannot compute HumanPose.");
                 return;
             }
 
             if (NetworkedPlayer.Player.BasisAvatar == null)
             {
-                Debug.LogError("BasisAvatar is null! Cannot compute HumanPose.");
+                BasisDebug.LogError("BasisAvatar is null! Cannot compute HumanPose.");
                 return;
             }
             // All checks passed

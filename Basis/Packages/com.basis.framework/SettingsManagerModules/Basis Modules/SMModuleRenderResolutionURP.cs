@@ -24,7 +24,7 @@ public class SMModuleRenderResolutionURP : SettingsManagerOption
     {
         if (NameReturn(0, Option))
         {
-            Debug.Log("Render Resolution");
+            BasisDebug.Log("Render Resolution");
             UniversalRenderPipelineAsset Asset = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
             if (SliderReadOption(Option, Manager, out float Value))
             {

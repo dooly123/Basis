@@ -21,7 +21,7 @@ public static class BasisAbsLargestValue
         // Handling the case where the result exceeds the maximum byte value
         if (result > int.MaxValue)
         {
-            Debug.LogError("Maxed Value ");
+            BasisDebug.LogError("Maxed Value ");
             result = int.MaxValue;
         }
         return result;

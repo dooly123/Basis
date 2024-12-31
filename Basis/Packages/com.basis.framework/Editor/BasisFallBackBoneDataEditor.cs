@@ -81,14 +81,14 @@ public class BasisFallBackBoneDataEditor : Editor
         }
         else
         {
-            Debug.Log("we found HumanBone But not Transform : " + bone);
+            BasisDebug.Log("we found HumanBone But not Transform : " + bone);
         }
 
         return fallbackedBone;
     }
     public static Vector3 CalculatePercentage(Vector3 Min, Vector3 Max, Vector3 CurrentHeight)
     {
-        Debug.Log("Finding Percentage " + Min + " " + Max + " current height " + CurrentHeight);
+        BasisDebug.Log("Finding Percentage " + Min + " " + Max + " current height " + CurrentHeight);
         float X = CalculatePercentage(Min.x, Max.x, CurrentHeight.x);
         float Y = CalculatePercentage(Min.y, Max.y, CurrentHeight.y);
         float Z = CalculatePercentage(Min.z, Max.z, CurrentHeight.z);

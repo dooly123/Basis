@@ -109,7 +109,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
 
         public override void StopSDK()
         {
-            Debug.Log("Stopping BasisOpenXRManagement");
+            BasisDebug.Log("Stopping BasisOpenXRManagement");
             List<string> Devices = TypicalDevices.Keys.ToList();
             foreach (string device in Devices)
             {
@@ -130,7 +130,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenXR
         public override void StartSDK()
         {
           BasisDeviceManagement.Instance.SetCameraRenderState(true);
-            Debug.Log("Starting BasisOpenXRManagement");
+            BasisDebug.Log("Starting BasisOpenXRManagement");
             if (HasEvents == false)
             {
                 InputDevices.deviceConnected += OnDeviceConnected;

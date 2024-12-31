@@ -10,7 +10,7 @@ public class SMModuleDebugOptions : SettingsManagerOption
             if (BasisGizmoManager.UseGizmos != Selected)
             {
                 BasisGizmoManager.UseGizmos = Selected;
-                Debug.Log("Gizmo State is " + BasisGizmoManager.UseGizmos + " " + Option.SelectedValue);
+                BasisDebug.Log("Gizmo State is " + BasisGizmoManager.UseGizmos + " " + Option.SelectedValue);
                 if(BasisGizmoManager.UseGizmos)
                 {
                     BasisGizmoManager.TryCreateParent();

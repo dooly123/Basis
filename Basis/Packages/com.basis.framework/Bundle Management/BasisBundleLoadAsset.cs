@@ -19,7 +19,7 @@ public static class BasisBundleLoadAsset
                         GameObject loadedObject = Request.asset as GameObject;
                         if (loadedObject == null)
                         {
-                            Debug.LogError("Unable to proceed, null Gameobject");
+                            BasisDebug.LogError("Unable to proceed, null Gameobject");
                             BasisLoadableBundle.DidErrorOccur = true;
                             await BasisLoadableBundle.AssetBundle.UnloadAsync(true);
                             return null;
@@ -35,15 +35,15 @@ public static class BasisBundleLoadAsset
                         return CreatedCopy;
                     }
                 default:
-                    Debug.LogError("Requested type " + output.BasisBundleInformation.BasisBundleGenerated.AssetMode + " has no handler");
+                    BasisDebug.LogError("Requested type " + output.BasisBundleInformation.BasisBundleGenerated.AssetMode + " has no handler");
                     return null;
             }
         }
         else
         {
-            Debug.LogError("Missing Bundle!");
+            BasisDebug.LogError("Missing Bundle!");
         }
-        Debug.LogError("Returning unable to load gameobject!");
+        BasisDebug.LogError("Returning unable to load gameobject!");
         return null;
     }
     public static async Task LoadSceneFromBundleAsync(BasisTrackedBundleWrapper bundle, bool MakeActiveScene, BasisProgressReport progressCallback)
@@ -52,7 +52,7 @@ public static class BasisBundleLoadAsset
         string[] scenePaths = bundle.AssetBundle.GetAllScenePaths();
         if (scenePaths.Length == 0)
         {
-            Debug.LogError("No scenes found in AssetBundle.");
+            BasisDebug.LogError("No scenes found in AssetBundle.");
             return;
         }
 
@@ -67,7 +67,7 @@ public static class BasisBundleLoadAsset
                 await Task.Yield();
             }
 
-            Debug.Log("Scene loaded successfully from AssetBundle.");
+            BasisDebug.Log("Scene loaded successfully from AssetBundle.");
             Scene loadedScene = SceneManager.GetSceneByPath(scenePaths[0]);
             bundle.MetaLink = loadedScene.path;
             // Set the loaded scene as the active scene
@@ -78,17 +78,17 @@ public static class BasisBundleLoadAsset
                     SceneManager.SetActiveScene(loadedScene);
                     AssignedIncrement = bundle.Increment();
                 }
-                Debug.Log("Scene set as active: " + loadedScene.name);
+                BasisDebug.Log("Scene set as active: " + loadedScene.name);
                 progressCallback.ReportProgress(100, "loading scene"); // Set progress to 100 when done
             }
             else
             {
-                Debug.LogError("Failed to get loaded scene.");
+                BasisDebug.LogError("Failed to get loaded scene.");
             }
         }
         else
         {
-            Debug.LogError("Path was null or empty! this should not be happening!");
+            BasisDebug.LogError("Path was null or empty! this should not be happening!");
         }
     }
 }

@@ -106,7 +106,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             if(avatarBuffer == null)
             {
-                Debug.LogError("Missing Avatar Buffer!");
+                BasisDebug.LogError("Missing Avatar Buffer!");
                 return;
             }
             if (Ready)
@@ -128,7 +128,7 @@ namespace Basis.Scripts.Networking.Recievers
             }
             else
             {
-                Debug.LogError("trying to apply Avatar Buffer before ready!");
+                BasisDebug.LogError("trying to apply Avatar Buffer before ready!");
             }
         }
         public void ApplyPoseData(Animator animator, float3 Scale, float3 Position, quaternion Rotation, NativeArray<float> Muscles)
@@ -142,7 +142,7 @@ namespace Basis.Scripts.Networking.Recievers
             // Apply scaling to position
             Vector3 ScaledPosition = Vector3.Scale(Position, Scaling);  // Apply the scaling
 
-           // Debug.Log("ScaledPosition " + ScaledPosition);
+           // BasisDebug.Log("ScaledPosition " + ScaledPosition);
             // Apply pose data
             HumanPose.bodyPosition = ScaledPosition;
             HumanPose.bodyRotation = Rotation;

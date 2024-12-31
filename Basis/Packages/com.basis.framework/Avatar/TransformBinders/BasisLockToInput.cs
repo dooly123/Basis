@@ -42,7 +42,7 @@ namespace Basis.Scripts.TransformBinders
         {
             if (AttachedInput == null || AttachedInput == input)
             {
-                Debug.Log("ReParenting Camera");
+                BasisDebug.Log("ReParenting Camera", BasisDebug.LogTag.Device);
                 transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
             }
         }
@@ -51,7 +51,7 @@ namespace Basis.Scripts.TransformBinders
         {
             transform.parent = BasisLocalPlayer.Instance.LocalBoneDriver.transform;
             int count = BasisDeviceManagement.Instance.AllInputDevices.Count;
-            Debug.Log("finding Lock " + TrackedRole);
+            BasisDebug.Log("finding Lock " + TrackedRole, BasisDebug.LogTag.Device);
             for (int Index = 0; Index < count; Index++)
             {
                 BasisInput Input = BasisDeviceManagement.Instance.AllInputDevices[Index];
@@ -70,12 +70,12 @@ namespace Basis.Scripts.TransformBinders
                     }
                     else
                     {
-                        Debug.LogError("Missing Role " + role);
+                        BasisDebug.LogError("Missing Role " + role);
                     }
                 }
                 else
                 {
-                    Debug.LogError("There was a missing BasisInput at " + Index);
+                    BasisDebug.LogError("There was a missing BasisInput at " + Index);
                 }
             }
         }

@@ -25,7 +25,7 @@ namespace Basis.Scripts.UI.UI_Panels
             {
                 keys.Add(newKey);
                 await SaveKeysToFile();
-                Debug.Log($"Key added: {newKey}");
+                BasisDebug.Log($"Key added: {newKey}");
             }
         }
 
@@ -36,33 +36,33 @@ namespace Basis.Scripts.UI.UI_Panels
             {
                 keys.Remove(key);
                 await SaveKeysToFile();
-                Debug.Log($"Key removed: {keyToRemove}");
+                BasisDebug.Log($"Key removed: {keyToRemove}");
             }
             else
             {
-                Debug.Log("Key not found.");
+                BasisDebug.Log("Key not found.");
             }
         }
 
         public static async Task LoadKeys()
         {
-            Debug.Log($"Loading keys from file at path: {FilePath}");
+            BasisDebug.Log($"Loading keys from file at path: {FilePath}");
             if (File.Exists(FilePath))
             {
                 try
                 {
                     byte[] byteData = await File.ReadAllBytesAsync(FilePath);
                     keys = SerializationUtility.DeserializeValue<List<AvatarKey>>(byteData, DataFormat.Binary);
-                    Debug.Log("Keys loaded successfully. Count: " + keys.Count);
+                    BasisDebug.Log("Keys loaded successfully. Count: " + keys.Count);
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"Failed to load keys: {e.Message}");
+                    BasisDebug.LogError($"Failed to load keys: {e.Message}");
                 }
             }
             else
             {
-                Debug.Log("No key file found. Starting fresh.");
+                BasisDebug.Log("No key file found. Starting fresh.");
             }
         }
 
@@ -72,11 +72,11 @@ namespace Basis.Scripts.UI.UI_Panels
             {
                 byte[] byteData = SerializationUtility.SerializeValue<List<AvatarKey>>(keys, DataFormat.Binary);
                 await File.WriteAllBytesAsync(FilePath, byteData);
-                Debug.Log($"Keys saved to file at: {FilePath}");
+                BasisDebug.Log($"Keys saved to file at: {FilePath}");
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Failed to save keys: {e.Message}");
+                BasisDebug.LogError($"Failed to save keys: {e.Message}");
             }
         }
 

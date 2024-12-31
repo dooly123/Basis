@@ -43,9 +43,9 @@ namespace Basis.Scripts.Player
             }
             else
             {
-                Debug.LogError("Missing ");
+                BasisDebug.LogError("Missing ");
             }
-            Debug.LogError("Error Missing Player!");
+            BasisDebug.LogError("Error Missing Player!");
             return null;
         }
     }

@@ -53,12 +53,12 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
 
             if(NetworkSend == null)
             {
-                Debug.LogError("Network send was null!");
+                BasisDebug.LogError("Network send was null!");
                 NetworkSend = new ushort[LocalAvatarSyncMessage.StoredBones];
             }
             if (FloatArray == null)
             {
-                Debug.LogError("FloatArray send was null!");
+                BasisDebug.LogError("FloatArray send was null!");
                 FloatArray = new float[LocalAvatarSyncMessage.StoredBones];
             }
 

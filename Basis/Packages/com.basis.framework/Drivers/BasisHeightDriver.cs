@@ -15,14 +15,14 @@ public static class BasisHeightDriver
     {
         if (basisPlayer == null)
         {
-            Debug.LogError("BasisPlayer is null. Cannot set player's eye height.");
+            BasisDebug.LogError("BasisPlayer is null. Cannot set player's eye height.");
             return;
         }
         // Retrieve the player's eye height from the input device
         CapturePlayerHeight();
         // Retrieve the active avatar's eye height
         basisPlayer.AvatarEyeHeight = basisPlayer.AvatarDriver?.ActiveAvatarEyeHeight() ?? 0;
-        Debug.Log($"Avatar eye height: {basisPlayer.AvatarEyeHeight}, Player eye height: {basisPlayer.PlayerEyeHeight}");
+        BasisDebug.Log($"Avatar eye height: {basisPlayer.AvatarEyeHeight}, Player eye height: {basisPlayer.PlayerEyeHeight}", BasisDebug.LogTag.Avatar);
 
         // Handle potential issues with height data
         if (basisPlayer.PlayerEyeHeight <= 0 || basisPlayer.AvatarEyeHeight <= 0)
@@ -34,7 +34,7 @@ public static class BasisHeightDriver
                 Debug.LogWarning("Player eye height was invalid. Set to default: 1.64f.");
             }
 
-            Debug.LogError("Invalid height data. Scaling ratios set to defaults.");
+            BasisDebug.LogError("Invalid height data. Scaling ratios set to defaults.");
         }
         else
         {
@@ -47,7 +47,7 @@ public static class BasisHeightDriver
         basisPlayer.EyeRatioPlayerToDefaultScale = basisPlayer.PlayerEyeHeight / BasisLocalPlayer.DefaultPlayerEyeHeight;
 
         // Notify listeners that height recalculation is complete
-        Debug.Log($"Final Player Eye Height: {basisPlayer.PlayerEyeHeight}");
+        BasisDebug.Log($"Final Player Eye Height: {basisPlayer.PlayerEyeHeight}", BasisDebug.LogTag.Avatar);
         basisPlayer.OnPlayersHeightChanged?.Invoke();
     }
     public static void CapturePlayerHeight()
@@ -56,11 +56,11 @@ public static class BasisHeightDriver
         if (basisLockToInput?.AttachedInput != null)
         {
             BasisLocalPlayer.Instance.PlayerEyeHeight = basisLockToInput.AttachedInput.LocalRawPosition.y;
-            Debug.Log($"Player's raw eye height recalculated: {BasisLocalPlayer.Instance.PlayerEyeHeight}");
+            BasisDebug.Log($"Player's raw eye height recalculated: {BasisLocalPlayer.Instance.PlayerEyeHeight}", BasisDebug.LogTag.Avatar);
         }
         else
         {
-            Debug.LogWarning("No attached input found for BasisLockToInput. Using default player eye height.");
+            BasisDebug.LogWarning("No attached input found for BasisLockToInput. Using default player eye height.", BasisDebug.LogTag.Avatar);
             BasisLocalPlayer.Instance.PlayerEyeHeight = BasisLocalPlayer.DefaultPlayerEyeHeight; // Set a reasonable default
         }
     }

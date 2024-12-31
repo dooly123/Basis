@@ -12,7 +12,7 @@ namespace Basis.Scripts.Common
             string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
             string json = JsonUtility.ToJson(new BasisSavedAvatar(avatarName, avatarData));
             File.WriteAllText(filePath, json);
-            Debug.Log("Avatar saved to " + filePath);
+            BasisDebug.Log("Avatar saved to " + filePath);
         }
         [System.Serializable]
         public class BasisSavedAvatar
@@ -38,7 +38,7 @@ namespace Basis.Scripts.Common
                     avatarWrapper.UniqueID = defaultName;
                      avatarWrapper.loadmode = defaultData;
                 }
-                Debug.Log("Avatar loaded from " + filePath);
+                BasisDebug.Log("Avatar loaded from " + filePath);
                 BasisSavedAvatar = avatarWrapper;
                 return true;
             }
@@ -55,7 +55,7 @@ namespace Basis.Scripts.Common
             string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
             string json = JsonUtility.ToJson(new BasisSavedString(stringContents));
             File.WriteAllText(filePath, json);
-            Debug.Log("String saved to " + filePath);
+            BasisDebug.Log("String saved to " + filePath);
         }
 
         // Method to load the string from a file using JSON
@@ -66,7 +66,7 @@ namespace Basis.Scripts.Common
             {
                 string json = File.ReadAllText(filePath);
                 BasisSavedString stringWrapper = JsonUtility.FromJson<BasisSavedString>(json);
-                Debug.Log("String loaded from " + filePath);
+                BasisDebug.Log("String loaded from " + filePath);
                 return stringWrapper.ToValue();
             }
             else
@@ -82,7 +82,7 @@ namespace Basis.Scripts.Common
             string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
             string json = JsonUtility.ToJson(new BasisSavedInt(intValue));
             File.WriteAllText(filePath, json);
-            Debug.Log("Int saved to " + filePath);
+            BasisDebug.Log("Int saved to " + filePath);
         }
 
         // Method to load an int value from a file
@@ -93,7 +93,7 @@ namespace Basis.Scripts.Common
             {
                 string json = File.ReadAllText(filePath);
                 BasisSavedInt intWrapper = JsonUtility.FromJson<BasisSavedInt>(json);
-                Debug.Log("Int loaded from " + filePath);
+                BasisDebug.Log("Int loaded from " + filePath);
                 return intWrapper.ToValue();
             }
             else
@@ -109,7 +109,7 @@ namespace Basis.Scripts.Common
             string filePath = Path.Combine(Application.persistentDataPath, fileNameAndExtension);
             string json = JsonUtility.ToJson(new BasisSavedFloat(floatValue.ToString(CultureInfo.InvariantCulture)));
             File.WriteAllText(filePath, json);
-            Debug.Log("Float saved to " + filePath);
+            BasisDebug.Log("Float saved to " + filePath);
         }
 
         // Method to load a float value from a file using invariant culture
@@ -122,7 +122,7 @@ namespace Basis.Scripts.Common
                 BasisSavedFloat floatWrapper = JsonUtility.FromJson<BasisSavedFloat>(json);
                 if (float.TryParse(floatWrapper.ToValue(), NumberStyles.Float, CultureInfo.InvariantCulture, out float loadedFloat))
                 {
-                    Debug.Log("Float loaded from " + filePath);
+                    BasisDebug.Log("Float loaded from " + filePath);
                     returningValue = loadedFloat;
                     return true;
                 }

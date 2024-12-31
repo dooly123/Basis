@@ -21,7 +21,7 @@ namespace BattlePhaze.SettingsManager
         }
         public bool LoadInternal(int OptionIndex, string FileName, SettingsManagerSaveSystem save)
         {
-            DebugSystem.SettingsManagerDebug.Log($"Loading Data Player Pref: {FileName}");
+            BasisDebug.Log($"Loading Data Player Pref: {FileName}");
             for (int i = 0; i < OptionIndex; i++)
             {
                 string key = PlayerPrefs.GetString($"{FileName}_Key{i}", string.Empty);
@@ -33,7 +33,7 @@ namespace BattlePhaze.SettingsManager
         }
         public bool SaveInternal(Dictionary<string, SMOptionInformation> sMOptionInformation, string fileName)
         {
-            DebugSystem.SettingsManagerDebug.Log("Saving Data to Player Prefs");
+            BasisDebug.Log("Saving Data to Player Prefs");
             PlayerPrefs.SetInt(fileName + "_Count", sMOptionInformation.Count);
             foreach (var option in sMOptionInformation)
             {
@@ -45,7 +45,7 @@ namespace BattlePhaze.SettingsManager
                 PlayerPrefs.SetString(fileName + "_Key" + key + "_Comment", comment);
             }
             PlayerPrefs.Save();
-            DebugSystem.SettingsManagerDebug.Log("Player Prefs saved");
+            BasisDebug.Log("Player Prefs saved");
             return true;
         }
         public void NukePlayerPrefs()
@@ -66,7 +66,7 @@ namespace BattlePhaze.SettingsManager
         }
         public bool DeleteInternal(Dictionary<string, SMOptionInformation> sMOptionInformation, string fileName)
         {
-            DebugSystem.SettingsManagerDebug.Log("Saving Data to Player Prefs");
+            BasisDebug.Log("Saving Data to Player Prefs");
             PlayerPrefs.SetInt(fileName + "_Count", sMOptionInformation.Count);
             foreach (var option in sMOptionInformation)
             {
@@ -76,7 +76,7 @@ namespace BattlePhaze.SettingsManager
                 PlayerPrefs.DeleteKey(fileName + "_Key" + key + "_Comment");
             }
             PlayerPrefs.Save();
-            DebugSystem.SettingsManagerDebug.Log("Player Prefs Deleted");
+            BasisDebug.Log("Player Prefs Deleted");
             return true;
         }
 

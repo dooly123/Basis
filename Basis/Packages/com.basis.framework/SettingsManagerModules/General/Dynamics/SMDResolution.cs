@@ -80,7 +80,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
 
             if (Screen.width != Width || Screen.height != Height)
             {
-                Debug.Log("setting res " + Screen.width + " now " + Width + " | " + Screen.height + " now" + Height);
+                BasisDebug.Log("setting res " + Screen.width + " now " + Width + " | " + Screen.height + " now" + Height);
                 Screen.SetResolution(Width, Height, Screen.fullScreenMode);
             }
         }

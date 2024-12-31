@@ -91,7 +91,7 @@ namespace Basis.Scripts.Networking.Transmitters
         {
             if (Base.HasReasonToSendAudio)
             {
-                // UnityEngine.Debug.Log("Sending out Audio");
+                // UnityEngine.BasisDebug.Log("Sending out Audio");
                 if (Recorder.PacketSize != AudioSegmentData.buffer.Length)
                 {
                     AudioSegmentData.buffer = new byte[Recorder.PacketSize];
@@ -106,7 +106,7 @@ namespace Basis.Scripts.Networking.Transmitters
             }
             else
             {
-              //  UnityEngine.Debug.Log("Rejecting out going Audio");
+              //  UnityEngine.BasisDebug.Log("Rejecting out going Audio");
             }
         }
         private void SendSilenceOverNetwork()

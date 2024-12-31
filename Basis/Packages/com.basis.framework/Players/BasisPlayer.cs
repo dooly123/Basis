@@ -38,7 +38,7 @@ namespace Basis.Scripts.BasisSdk.Players
             }
             else
             {
-                Debug.LogError("Mising CharacterIKCalibration");
+                BasisDebug.LogError("Mising CharacterIKCalibration");
                 HasAvatarDriver = false;
             }
             BasisAvatarStrainJiggleDriver = BasisHelpers.GetOrAddComponent<BasisAvatarStrainJiggleDriver>(this.gameObject);

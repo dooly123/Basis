@@ -156,7 +156,7 @@ public class BasisUIOffsetsMenu : BasisUIBase
                 {
                     Input.AvatarPositionOffset = BasisDeviceMatchableNames.AvatarPositionOffset;
                     Input.AvatarRotationOffset = BasisDeviceMatchableNames.AvatarRotationOffset;
-                    Debug.Log("loaded for " + Input.UniqueDeviceIdentifier);
+                    BasisDebug.Log("loaded for " + Input.UniqueDeviceIdentifier);
                 }
             }
             BasisDeviceMatchableNames.VersionNumber = 2;//we always just say 2.
@@ -185,7 +185,7 @@ public class BasisUIOffsetsMenu : BasisUIBase
                 {
                     input.AvatarPositionOffset = match.AvatarPositionOffset;
                     input.AvatarRotationOffset = match.AvatarRotationOffset;
-                    Debug.Log("Loaded for " + input.UniqueDeviceIdentifier);
+                    BasisDebug.Log("Loaded for " + input.UniqueDeviceIdentifier);
                     input.BasisDeviceMatchableNames = match; // Use deep clone here
                 }
             }

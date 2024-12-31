@@ -29,8 +29,8 @@ namespace Basis.Scripts.Device_Management.Devices
         }
         public void BeginLoad()
         {
-            Debug.Log("Starting LoadXR");
-            // Debug.Log("Begin Load of XR");
+            BasisDebug.Log("Starting LoadXR");
+            // BasisDebug.Log("Begin Load of XR");
             ReInitalizeCheck();
             BasisDeviceManagement.Instance.StartCoroutine(LoadXR());
         }
@@ -58,7 +58,7 @@ namespace Basis.Scripts.Device_Management.Devices
                 xRManagerSettings.StartSubsystems();
                 result = xRManagerSettings.activeLoader?.name;
             }
-            Debug.Log("Found Loader " + result);
+            BasisDebug.Log("Found Loader " + result);
             CheckForPass?.Invoke(result);
         }
         public void StopXR(bool IsExiting)

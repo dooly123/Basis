@@ -33,7 +33,7 @@ public class BasisAudioDecoder
     /// <param name="data"></param>
     public void OnDecode(byte[] data, int length)
     {
-       // UnityEngine.Debug.Log("decode size is " + data.Length + " " + length);
+       // UnityEngine.BasisDebug.Log("decode size is " + data.Length + " " + length);
         pcmLength = decoder.Decode(data, length, pcmBuffer);
         OnDecoded?.Invoke();
     }

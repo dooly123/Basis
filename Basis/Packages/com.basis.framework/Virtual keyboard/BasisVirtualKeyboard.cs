@@ -235,13 +235,13 @@ namespace Basis.Scripts.Virtual_keyboard
                 }
                 else
                 {
-                    Debug.LogError("Missing Button");
+                    BasisDebug.LogError("Missing Button");
                     return new BasisVirtualKeyboardButton();
                 }
             }
             else
             {
-                Debug.LogError("Missing RectTransform");
+                BasisDebug.LogError("Missing RectTransform");
                 return new BasisVirtualKeyboardButton();
             }
         }

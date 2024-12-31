@@ -194,8 +194,8 @@ namespace Basis.Scripts.Drivers
         }
         public void UpdatGizmoUsage(bool State)
         {
-            Debug.Log("Running Bone Driver Gizmos");
-           // Debug.Log("updating State!");
+            BasisDebug.Log("Running Bone Driver Gizmos", BasisDebug.LogTag.Gizmo);
+            // BasisDebug.Log("updating State!");
             for (int Index = 0; Index < ControlsLength; Index++)
             {
                 BasisBoneControl Control = Controls[Index];
@@ -275,7 +275,7 @@ namespace Basis.Scripts.Drivers
             else
             {
                 //FloorPosition = Vector3.zero;
-                Debug.LogError("Missing Avatar");
+                BasisDebug.LogError("Missing Avatar");
                 return Vector3.zero;
             }
         }

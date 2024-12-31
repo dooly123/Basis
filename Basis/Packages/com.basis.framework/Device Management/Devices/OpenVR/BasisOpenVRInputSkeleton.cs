@@ -27,7 +27,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
             }
             else
             {
-                Debug.LogError("Missing Skeleton Action for " + Action);
+                BasisDebug.LogError("Missing Skeleton Action for " + Action);
             }
 
         }

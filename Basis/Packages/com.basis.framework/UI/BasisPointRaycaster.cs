@@ -476,7 +476,7 @@ namespace Basis.Scripts.UI
         {
             if (fourCornersArray == null || fourCornersArray.Length < 4)
             {
-                Debug.LogError("Calling GetRectTransformWorldCorners with an array that is null or has less than 4 elements.");
+                BasisDebug.LogError("Calling GetRectTransformWorldCorners with an array that is null or has less than 4 elements.");
                 return;
             }
 

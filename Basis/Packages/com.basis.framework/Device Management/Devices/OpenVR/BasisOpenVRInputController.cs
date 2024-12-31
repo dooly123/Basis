@@ -38,7 +38,7 @@ namespace Basis.Scripts.Device_Management.Devices.OpenVR
                 SkeletonHandInput = new BasisOpenVRInputSkeleton();
                 SkeletonHandInput.Initalize(this);
             }
-            Debug.Log("set Controller to inputSource " + inputSource + " bone role " + basisBoneTrackedRole);
+            BasisDebug.Log("set Controller to inputSource " + inputSource + " bone role " + basisBoneTrackedRole);
         }
         public new void OnDestroy()
         {

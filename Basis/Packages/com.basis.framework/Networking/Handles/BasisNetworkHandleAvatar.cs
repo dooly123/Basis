@@ -22,13 +22,13 @@ public static class BasisNetworkHandleAvatar
         }
         else
         {
-            Debug.Log($"Missing Player For Avatar Update {SSM.playerIdMessage.playerID}");
+            BasisDebug.Log($"Missing Player For Avatar Update {SSM.playerIdMessage.playerID}");
         }
         Message.Enqueue(SSM);
         if (Message.Count > 256)
         {
             Message.Clear();
-            Debug.LogError("Messages Exceeded 250! Resetting");
+            BasisDebug.LogError("Messages Exceeded 250! Resetting");
         }
     }
     public static void HandleAvatarChangeMessage(LiteNetLib.NetPacketReader reader)
@@ -43,7 +43,7 @@ public static class BasisNetworkHandleAvatar
         }
         else
         {
-            Debug.Log("Missing Player For Message " + ServerAvatarChangeMessage.uShortPlayerId.playerID);
+            BasisDebug.Log("Missing Player For Message " + ServerAvatarChangeMessage.uShortPlayerId.playerID);
         }
     }
 }

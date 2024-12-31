@@ -18,12 +18,12 @@ public class BasisUIManagement : MonoBehaviour
     {
         if (basisUIBases.Contains(BasisUIBase) == false)
         {
-            Debug.Log("adding Menu " + BasisUIBase.gameObject.name);
+            BasisDebug.Log("adding Menu " + BasisUIBase.gameObject.name);
             basisUIBases.Add(BasisUIBase);
         }
         else
         {
-            Debug.LogError("Already has " + BasisUIBase.gameObject.name);
+            BasisDebug.LogError("Already has " + BasisUIBase.gameObject.name);
         }
     }
     public void RemoveUI(BasisUIBase BasisUIBase)
@@ -34,12 +34,12 @@ public class BasisUIManagement : MonoBehaviour
         }
         if (basisUIBases.Contains(BasisUIBase))
         {
-            Debug.Log("Remove Menu " + BasisUIBase.gameObject.name);
+            BasisDebug.Log("Remove Menu " + BasisUIBase.gameObject.name);
             basisUIBases.Remove(BasisUIBase);
         }
         else
         {
-            Debug.LogError("trying to close UI that did not exist in the UI management ");
+            BasisDebug.LogError("trying to close UI that did not exist in the UI management ");
         }
     }
     public void CloseAllMenus()
