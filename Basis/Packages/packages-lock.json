@@ -28,10 +28,11 @@
       "hash": "5b098deac6d115759870689224a62c562b1bf485"
     },
     "com.basis.odinserializer": {
-      "version": "file:com.basis.odinserializer",
+      "version": "https://github.com/BasisVR/odin-serializer.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "04d0e99b85b45c8f5180713910ee5e78ae542031"
     },
     "com.basis.sdk": {
       "version": "file:com.basis.sdk",
