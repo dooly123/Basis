@@ -61,11 +61,11 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.hecomi.ulipsync\Samples\10. Runtime Setup\Runtime\uLipSyncBlendShapeVRMRuntimeSetupExample.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Samples\10. Runtime Setup\Runtime\uLipSyncExpressionVRMRuntimeSetupExample.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Samples\10. Runtime Setup\Runtime\uLipSyncBlendShapeVRMRuntimeSetupExample.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Samples\10. Runtime Setup\Runtime\uLipSyncExpressionVRMRuntimeSetupExample.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.hecomi.ulipsync\Samples\10. Runtime Setup\Runtime\uLipSync.Example.RuntimeSetup.Runtime.asmdef" />
+    <None Include="Library\PackageCache\com.hecomi.ulipsync\Samples\10. Runtime Setup\Runtime\uLipSync.Example.RuntimeSetup.Runtime.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -365,7 +365,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

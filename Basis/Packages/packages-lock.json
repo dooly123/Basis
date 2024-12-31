@@ -66,13 +66,14 @@
       "hash": "97c4def2be4b30fcc1e2b7aa36568ecbaa3e2fb9"
     },
     "com.hecomi.ulipsync": {
-      "version": "file:com.hecomi.ulipsync",
+      "version": "https://github.com/BasisVR/uLipSync.git",
       "depth": 0,
-      "source": "embedded",
+      "source": "git",
       "dependencies": {
         "com.unity.burst": "1.4.11",
         "com.unity.mathematics": "1.2.5"
-      }
+      },
+      "hash": "d60f02432f913a7c3ea9fa6fe19dcfe1f3557912"
     },
     "com.keviniglesias.basicmotions": {
       "version": "file:com.keviniglesias.basicmotions",
@@ -88,22 +89,25 @@
       "hash": "fa8857ae1a7dca5cadb487ba6f2912c75a3c12cc"
     },
     "com.naelstrof.jigglephysics": {
-      "version": "file:com.naelstrof.jigglephysics",
+      "version": "https://github.com/BasisVR/UnityJigglePhysics.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "f32fe14b195808fb9eca5739bd64da74eb6a2c81"
     },
     "com.steam.steamaudio": {
-      "version": "file:com.steam.steamaudio",
+      "version": "https://github.com/BasisVR/steam-audio.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "3d9883ae07720e90626b8f6c21b85a9043268d41"
     },
     "com.steam.steamvr": {
-      "version": "file:com.steam.steamvr",
+      "version": "https://github.com/BasisVR/steamvr_unity_plugin.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "c33a831826e64c817176fc41ffcf8f4f773c3c40"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -406,16 +410,18 @@
       }
     },
     "com.xiph.opus": {
-      "version": "file:com.xiph.opus",
+      "version": "https://github.com/BasisVR/UnityOpus.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "0723f26d8ede8ad74992049da2ee55a2382dc29d"
     },
     "com.xiph.rnnoise": {
-      "version": "file:com.xiph.rnnoise",
+      "version": "https://github.com/BasisVR/RNNoise.Net.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "c70e762e2cdbad29afd7bccd0cf1a46dbcddd484"
     },
     "dev.hai-vr.basis.comms": {
       "version": "file:HVRBasisAvatarComms",

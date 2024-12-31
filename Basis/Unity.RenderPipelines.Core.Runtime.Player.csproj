@@ -118,8 +118,8 @@
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\Debugging\DebugDisplaySettings.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\XR\XRLayoutStack.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\Common\ObservableList.cs" />
-    <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\Debugging\DebugUI.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\CommandBuffers\CommandBufferHelpers.cs" />
+    <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\Debugging\DebugUI.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\PostProcessing\LensFlareDataSRP.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\Lighting\ProbeVolume\ProbeReferenceVolume.Debug.cs" />
     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core\Runtime\XR\XRLayout.cs" />
@@ -654,10 +654,6 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit\net40\unity-custom\nunit.framework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

@@ -61,12 +61,12 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.xiph.rnnoise\Plugins\Native.cs" />
-    <Compile Include="Packages\com.xiph.rnnoise\Plugins\Denoiser.cs" />
+    <Compile Include="Library\PackageCache\com.xiph.rnnoise\Plugins\Native.cs" />
+    <Compile Include="Library\PackageCache\com.xiph.rnnoise\Plugins\Denoiser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.xiph.rnnoise\Plugins\rnnoise.dll" />
-    <None Include="Packages\com.xiph.rnnoise\Plugins\RNNoiseIntergration.asmdef" />
+    <None Include="Library\PackageCache\com.xiph.rnnoise\Plugins\rnnoise.dll" />
+    <None Include="Library\PackageCache\com.xiph.rnnoise\Plugins\RNNoiseIntergration.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -366,7 +366,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

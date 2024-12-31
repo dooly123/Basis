@@ -61,54 +61,54 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioDynamicObject.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\ProbeBatch.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\UnityAudioEngineAmbisonicSource.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SOFAFile.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\UnityAudioEngineSource.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioGeometry.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\UnityAudioEngineState.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\HRTF.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudio.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioSettings.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioManager.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\StaticMesh.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioBakedListener.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\InstancedMesh.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\Common.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioAmbisonicSource.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\AudioEngineAmbisonicSource.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SerializedObject.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioStaticMesh.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioSource.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioMaterial.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\AudioEngineSource.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\TrueAudioNextDevice.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\RadeonRaysDevice.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioListener.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SerializedData.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\AudioEngineState.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\Context.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\OpenCLDevice.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\Simulator.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioProbeBatch.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\SteamAudioBakedSource.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\EmbreeDevice.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\Scene.cs" />
-    <Compile Include="Packages\com.steam.steamaudio\Runtime\Baker.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioDynamicObject.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\ProbeBatch.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\UnityAudioEngineAmbisonicSource.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SOFAFile.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\UnityAudioEngineSource.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioGeometry.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\UnityAudioEngineState.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\HRTF.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudio.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioSettings.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioManager.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\StaticMesh.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioBakedListener.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\InstancedMesh.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\Common.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioAmbisonicSource.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\AudioEngineAmbisonicSource.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SerializedObject.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioStaticMesh.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioSource.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioMaterial.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\AudioEngineSource.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\TrueAudioNextDevice.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\RadeonRaysDevice.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioListener.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SerializedData.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\AudioEngineState.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\Context.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\OpenCLDevice.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\Simulator.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioProbeBatch.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\SteamAudioBakedSource.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\EmbreeDevice.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\Scene.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamaudio\Runtime\Baker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\phonon.dll" />
-    <None Include="Packages\com.steam.steamaudio\FMOD\platforms\win\lib\x86_64\phonon_fmod.dll" />
-    <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86\audioplugin_phonon.dll" />
-    <None Include="Packages\com.steam.steamaudio\SteamAudioUnity.asmdef" />
-    <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\TrueAudioNext.dll" />
-    <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\GPUUtilities.dll" />
-    <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86_64\audioplugin_phonon.dll" />
-    <None Include="Packages\com.steam.steamaudio\Binaries\iOS\SteamAudioUnityAppController.h" />
-    <None Include="Packages\com.steam.steamaudio\FMOD\platforms\win\lib\x86\phonon_fmod.dll" />
-    <None Include="Packages\com.steam.steamaudio\Binaries\iOS\SteamAudioUnityAppController.mm" />
-    <None Include="Packages\com.steam.steamaudio\Binaries\Windows\x86\phonon.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\Windows\x86_64\phonon.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\FMOD\platforms\win\lib\x86_64\phonon_fmod.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\Windows\x86\audioplugin_phonon.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\SteamAudioUnity.asmdef" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\Windows\x86_64\TrueAudioNext.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\Windows\x86_64\GPUUtilities.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\Windows\x86_64\audioplugin_phonon.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\iOS\SteamAudioUnityAppController.h" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\FMOD\platforms\win\lib\x86\phonon_fmod.dll" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\iOS\SteamAudioUnityAppController.mm" />
+    <None Include="Library\PackageCache\com.steam.steamaudio\Binaries\Windows\x86\phonon.dll" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -596,7 +596,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

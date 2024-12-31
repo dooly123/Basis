@@ -61,63 +61,63 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Vector2.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Scripts\SteamVR_Settings.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Vector2.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Scripts\SteamVR_Utils.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Skeleton.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_TrackingChangedEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_SingleEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input_ActionSetUsages.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Skeleton_Pose.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input_Source.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_ActionSet_Manager.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input_ActionFile.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_ActionSet.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Pose.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_ActivateActionSetOnLoad.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Boolean.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Single.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_PoseEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_SkeletonEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Skeleton_TrackingChangedEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Scripts\SteamVR_Render.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_DeviceIndexChangedEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Scripts\SteamVR_Events.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input_ActionScopes.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Vector3.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_ConnectedChangedEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Vector2Event.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Scripts\SteamVR.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Scripts\SteamVR_Behaviour.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Skeleton.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input_BindingFile.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Skeleton_Poser.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Single.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Vector3.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Boolean.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Skeleton_ConnectedChangedEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input_Sources.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_BooleanEvent.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_SkeletonCustom.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Vibration.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Scripts\SteamVR_RingBuffer.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Out.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_In.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_ActionDirections.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Pose.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Vector3Event.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\openvr_api.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\SteamVR_Input_Generator_Names.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Vector2.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Scripts\SteamVR_Settings.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Vector2.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Scripts\SteamVR_Utils.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Skeleton.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_TrackingChangedEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_SingleEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input_ActionSetUsages.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Skeleton_Pose.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input_Source.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_ActionSet_Manager.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input_ActionFile.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_ActionSet.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Pose.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_ActivateActionSetOnLoad.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Boolean.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Single.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_PoseEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_SkeletonEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Skeleton_TrackingChangedEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Scripts\SteamVR_Render.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_DeviceIndexChangedEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Scripts\SteamVR_Events.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input_ActionScopes.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Vector3.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Pose_ConnectedChangedEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Vector2Event.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Scripts\SteamVR.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Scripts\SteamVR_Behaviour.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Skeleton.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input_BindingFile.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Skeleton_Poser.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Single.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Vector3.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_Boolean.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Skeleton_ConnectedChangedEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input_Sources.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_BooleanEvent.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Behaviour_SkeletonCustom.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Vibration.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Scripts\SteamVR_RingBuffer.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Out.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_In.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_ActionDirections.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Action_Pose.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\BehaviourUnityEvents\SteamVR_Behaviour_Vector3Event.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\openvr_api.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\SteamVR_Input_Generator_Names.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.steam.steamvr\SteamVR\readme.txt" />
-    <None Include="Packages\com.steam.steamvr\SteamVR\link.xml" />
-    <None Include="Packages\com.steam.steamvr\SteamVR\LICENSE.txt" />
-    <None Include="Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll" />
-    <None Include="Packages\com.steam.steamvr\SteamVR\SteamVR.asmdef" />
+    <None Include="Library\PackageCache\com.steam.steamvr\SteamVR\readme.txt" />
+    <None Include="Library\PackageCache\com.steam.steamvr\SteamVR\link.xml" />
+    <None Include="Library\PackageCache\com.steam.steamvr\SteamVR\LICENSE.txt" />
+    <None Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll" />
+    <None Include="Library\PackageCache\com.steam.steamvr\SteamVR\SteamVR.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -417,7 +417,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

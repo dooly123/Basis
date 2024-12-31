@@ -61,25 +61,25 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Pose_PropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_EditorWindow.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Vibration_PropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_CopyExampleInputFiles.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_ActionSetPropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Vector2_PropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_LiveWindow.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Single_PropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Boolean_PropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Skeleton_PoserEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_PostProcessBuild.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_ActionManifest_Manager.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Vector3_PropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Generator.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_GenericPropertyEditor.cs" />
-    <Compile Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Skeleton_PropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Pose_PropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_EditorWindow.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Vibration_PropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_CopyExampleInputFiles.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_ActionSetPropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Vector2_PropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_LiveWindow.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Single_PropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Boolean_PropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Skeleton_PoserEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_PostProcessBuild.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_ActionManifest_Manager.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Vector3_PropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Generator.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_GenericPropertyEditor.cs" />
+    <Compile Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Action_Skeleton_PropertyEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Editor.asmdef" />
+    <None Include="Library\PackageCache\com.steam.steamvr\SteamVR\Input\Editor\SteamVR_Input_Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -575,7 +575,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

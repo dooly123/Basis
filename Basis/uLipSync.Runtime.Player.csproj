@@ -61,34 +61,34 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSyncTexture.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSync.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSyncBlendShape.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\Util.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncBehaviour.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSyncAnimator.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncClip.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\MicUtil.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\Profile.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Debug\DebugDump.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\Common.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncMixer.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\LipSyncJob.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\TextureCreator.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSyncMicrophone.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSyncBakedDataPlayer.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\Algorithm.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\BakedData.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\WebGL.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncTrack.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncTimelineEvent.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Core\AnimationBakableMonoBehaviour.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSyncCalibrationAudioPlayer.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\Debug\DebugAudioPlayer.cs" />
-    <Compile Include="Packages\com.hecomi.ulipsync\Runtime\uLipSyncAudioSource.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSyncTexture.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSync.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSyncBlendShape.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\Util.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncBehaviour.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSyncAnimator.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncClip.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\MicUtil.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\Profile.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Debug\DebugDump.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\Common.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncMixer.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\LipSyncJob.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\TextureCreator.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSyncMicrophone.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSyncBakedDataPlayer.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\Algorithm.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\BakedData.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\WebGL.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncTrack.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Timeline\uLipSyncTimelineEvent.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Core\AnimationBakableMonoBehaviour.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSyncCalibrationAudioPlayer.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\Debug\DebugAudioPlayer.cs" />
+    <Compile Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSyncAudioSource.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.hecomi.ulipsync\Runtime\uLipSync.Runtime.asmdef" />
+    <None Include="Library\PackageCache\com.hecomi.ulipsync\Runtime\uLipSync.Runtime.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -388,7 +388,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

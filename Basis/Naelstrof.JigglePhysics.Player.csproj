@@ -61,25 +61,25 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigSimpleLOD.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigBuilder.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigLateUpdateHandler.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleBone.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigFixedUpdateHandler.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigRendererLOD.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigLODRenderComponent.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettingData.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigLOD.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\CachedSphereCollider.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\IJiggleAdvancable.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\PositionSignal.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettingsBase.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettingsBlend.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleRigHandler.cs" />
-    <Compile Include="Packages\com.naelstrof.jigglephysics\Scripts\JiggleSettings.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigSimpleLOD.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigBuilder.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigLateUpdateHandler.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleBone.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigFixedUpdateHandler.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigRendererLOD.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigLODRenderComponent.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleSettingData.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigLOD.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\CachedSphereCollider.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\IJiggleAdvancable.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\PositionSignal.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleSettingsBase.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleSettingsBlend.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleRigHandler.cs" />
+    <Compile Include="Library\PackageCache\com.naelstrof.jigglephysics\Scripts\JiggleSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Packages\com.naelstrof.jigglephysics\Naelstrof.JigglePhysics.asmdef" />
+    <None Include="Library\PackageCache\com.naelstrof.jigglephysics\Naelstrof.JigglePhysics.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -379,7 +379,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
+      <HintPath>Library\PackageCache\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">

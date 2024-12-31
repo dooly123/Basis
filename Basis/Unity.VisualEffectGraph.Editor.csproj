@@ -81,8 +81,8 @@
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\VFXErrorManager.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Blocks\Implementations\Update\BackupOldPosition.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Types\VFXPropertyAttribute.cs" />
-    <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Blocks\Implementations\FlipBook\FlipbookPlay.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\GraphView\Elements\Controllers\VFXBlockController.cs" />
+    <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Blocks\Implementations\FlipBook\FlipbookPlay.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Expressions\VFXExpressionCast.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\GraphView\Elements\Controllers\VFXFlowEdgeController.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph\Editor\Models\Deprecated\PositionAABoxDeprecatedV2.cs" />
@@ -1206,10 +1206,6 @@
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Valve.Newtonsoft.Json">
-      <HintPath>Packages\com.steam.steamvr\SteamVR\Input\Plugins\JSON.NET\Valve.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">
