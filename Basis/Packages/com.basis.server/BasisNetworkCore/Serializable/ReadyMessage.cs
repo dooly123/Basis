@@ -1,4 +1,4 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     public struct ReadyMessage
@@ -25,6 +25,18 @@ public static partial class SerializableBasis
             playerMetaDataMessage.Serialize(Writer);
             clientAvatarChangeMessage.Serialize(Writer);
             localAvatarSyncMessage.Serialize(Writer);
+        }
+        public bool WasDeserializedCorrectly()
+        {
+            if(clientAvatarChangeMessage.byteArray == null)
+            {
+                return false;
+            }
+            if(localAvatarSyncMessage.array == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
     public struct ServerReadyMessage

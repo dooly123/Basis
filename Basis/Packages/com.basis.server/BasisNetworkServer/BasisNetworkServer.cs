@@ -150,7 +150,14 @@ public static class BasisNetworkServer
                     BNL.Log($"Peer connected: {newPeer.Id}");
                     ReadyMessage readyMessage = new ReadyMessage();
                     readyMessage.Deserialize(request.Data);
-                    SendRemoteSpawnMessage(newPeer, readyMessage);
+                    if (readyMessage.WasDeserializedCorrectly())
+                    {
+                        SendRemoteSpawnMessage(newPeer, readyMessage);
+                    }
+                    else
+                    {
+                        RejectWithReason(request, "Payload Provided was invalid!");
+                    }
                 }
                 else
                 {
@@ -163,7 +170,6 @@ public static class BasisNetworkServer
             BNL.LogError(e.Message + " " + e.StackTrace);
         }
     }
-
     private static void HandlePeerDisconnected(NetPeer peer, DisconnectInfo info)
     {
         try
