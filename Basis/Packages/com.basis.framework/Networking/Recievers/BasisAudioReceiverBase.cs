@@ -43,7 +43,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             RingBuffer.Add(pcm, length);
         }
-        public void OnAudioFilterRead(float[] data, int channels)
+        public int OnAudioFilterRead(float[] data, int channels)
         {
             // Ensure we have enough data for the required samples
             int length = data.Length;
@@ -54,7 +54,7 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 // No voice data, fill with silence
                 Array.Fill(data, 0);
-                return;
+                return length;
             }
 
             // Retrieve the segment of audio data from the RingBuffer
@@ -76,6 +76,7 @@ namespace Basis.Scripts.Networking.Recievers
 
             // Return the processed segment back to the buffer for reuse
             RingBuffer.BufferedReturn.Enqueue(segment);
+            return length;
         }
     }
     public class RingBuffer

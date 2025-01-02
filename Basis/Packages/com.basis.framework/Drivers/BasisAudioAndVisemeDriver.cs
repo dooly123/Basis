@@ -194,7 +194,7 @@ namespace Basis.Scripts.Drivers
                 }
             }
         }
-        public void ProcessAudioSamples(float[] data,int channels)
+        public void ProcessAudioSamples(float[] data,int channels,int Length)
         {
             if (uLipSyncEnabledState == false)
             {
@@ -204,7 +204,7 @@ namespace Basis.Scripts.Drivers
             {
                 return;
             }
-            uLipSync.OnDataReceived(data, channels);
+            uLipSync.OnDataReceived(data, channels, Length);
         }
     }
 }
