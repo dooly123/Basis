@@ -2,6 +2,7 @@ using Basis.Scripts.Drivers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace Basis.Scripts.Networking.Recievers
@@ -42,7 +43,7 @@ namespace Basis.Scripts.Networking.Recievers
         {
             RingBuffer.Add(pcm, length);
         }
-        public void OnAudioFilterRead(float[] data, int channels)
+        public int OnAudioFilterRead(float[] data, int channels)
         {
             // Ensure we have enough data for the required samples
             int length = data.Length;
@@ -53,7 +54,7 @@ namespace Basis.Scripts.Networking.Recievers
             {
                 // No voice data, fill with silence
                 Array.Fill(data, 0);
-                return;
+                return length;
             }
 
             // Retrieve the segment of audio data from the RingBuffer
@@ -75,6 +76,7 @@ namespace Basis.Scripts.Networking.Recievers
 
             // Return the processed segment back to the buffer for reuse
             RingBuffer.BufferedReturn.Enqueue(segment);
+            return length;
         }
     }
     public class RingBuffer
@@ -83,8 +85,9 @@ namespace Basis.Scripts.Networking.Recievers
         private int head; // Points to the next position to write
         private int tail; // Points to the next position to read
         private int size; // Current data size in the buffer
-        private readonly object lockObject = new();
+        private readonly object bufferLock = new();
         public Queue<float[]> BufferedReturn = new Queue<float[]>();
+
         public RingBuffer(int capacity)
         {
             if (capacity <= 0) throw new ArgumentException("Capacity must be greater than zero.");
@@ -93,17 +96,10 @@ namespace Basis.Scripts.Networking.Recievers
             tail = 0;
             size = 0;
         }
+
         public int Capacity => buffer.Length;
-        public bool IsEmpty
-        {
-            get
-            {
-                lock (lockObject)
-                {
-                    return size == 0;
-                }
-            }
-        }
+
+        public bool IsEmpty => Interlocked.CompareExchange(ref size, 0, 0) == 0;
 
         public void Add(float[] segment, int length)
         {
@@ -113,25 +109,28 @@ namespace Basis.Scripts.Networking.Recievers
             }
             if (length <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(length), "Length must be a positive number.. "  + length);
+                throw new ArgumentOutOfRangeException(nameof(length), "Length must be a positive number.");
             }
             if (length > segment.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(length), "data needs to be less than or equal to the segment's length. " + length);
+                throw new ArgumentOutOfRangeException(nameof(length), "Length must be less than or equal to the segment's length.");
             }
-            lock (lockObject)
+
+            lock (bufferLock)
             {
                 if (length > Capacity)
                 {
                     throw new InvalidOperationException("The segment is too large to fit into the buffer.");
                 }
+
                 // Remove old data to make room for new data
-                int availableSpace = Capacity - size;
+                int availableSpace = Capacity - Interlocked.CompareExchange(ref size, 0, 0);
                 if (length > availableSpace)
                 {
                     int itemsToRemove = length - availableSpace;
-                    tail = (tail + itemsToRemove) % Capacity;
-                    size -= itemsToRemove;
+                    Interlocked.Add(ref tail, itemsToRemove);
+                    Interlocked.Add(ref size, -itemsToRemove);
+                    tail %= Capacity;
                 }
 
                 // Add the new segment to the buffer
@@ -143,25 +142,30 @@ namespace Basis.Scripts.Networking.Recievers
                     Array.Copy(segment, firstPart, buffer, 0, remaining); // Copy wrap-around part
                 }
 
-                head = (head + length) % Capacity; // Update head
-                size += length;                    // Update size
+                Interlocked.Add(ref head, length);
+                head %= Capacity;
+                Interlocked.Add(ref size, length);
             }
         }
+
         public void Remove(int segmentSize, out float[] segment)
         {
             if (segmentSize <= 0)
                 throw new ArgumentOutOfRangeException(nameof(segmentSize));
 
-            lock (lockObject)
+            // Try to reuse an array from the buffer pool
+            lock (BufferedReturn)
             {
-                // Try to reuse an array from the buffer pool
                 if (!BufferedReturn.TryDequeue(out segment) || segment.Length != segmentSize)
                 {
                     segment = new float[segmentSize];
                 }
+            }
 
-                // Calculate the actual number of items to remove
-                int itemsToRemove = Math.Min(segmentSize, size);
+            lock (bufferLock)
+            {
+                int currentSize = Interlocked.CompareExchange(ref size, 0, 0);
+                int itemsToRemove = Math.Min(segmentSize, currentSize);
 
                 // Remove items in bulk
                 int firstPart = Math.Min(itemsToRemove, Capacity - tail); // Items till the end of the buffer
@@ -172,9 +176,9 @@ namespace Basis.Scripts.Networking.Recievers
                     Array.Copy(buffer, 0, segment, firstPart, remaining); // Copy wrap-around part
                 }
 
-                // Update tail and size
-                tail = (tail + itemsToRemove) % Capacity;
-                size -= itemsToRemove;
+                Interlocked.Add(ref tail, itemsToRemove);
+                tail %= Capacity;
+                Interlocked.Add(ref size, -itemsToRemove);
 
                 // Warn if fewer items were available than requested
                 if (itemsToRemove < segmentSize)

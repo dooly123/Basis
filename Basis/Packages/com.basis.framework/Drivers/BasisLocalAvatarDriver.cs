@@ -68,7 +68,7 @@ namespace Basis.Scripts.Drivers
         public PlayableGraph PlayableGraph;
         public void InitialLocalCalibration(BasisLocalPlayer Player)
         {
-            Debug.Log("InitialLocalCalibration");
+            BasisDebug.Log("InitialLocalCalibration");
             if (HasTposeEvent == false)
             {
                 TposeStateChange += OnTpose;
@@ -78,7 +78,7 @@ namespace Basis.Scripts.Drivers
             this.LocalDriver = LocalPlayer.LocalBoneDriver;
             if (IsAble())
             {
-                // Debug.Log("LocalCalibration Underway");
+                // BasisDebug.Log("LocalCalibration Underway");
             }
             else
             {
@@ -530,41 +530,41 @@ namespace Basis.Scripts.Drivers
             switch (RoleWithHint)
             {
                 case BasisBoneTrackedRole.Chest:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    // BasisDebug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     HeadTwoBoneIK.data.hintWeight = weight;
                     break;
 
                 case BasisBoneTrackedRole.RightLowerLeg:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    // BasisDebug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     RightFootTwoBoneIK.data.hintWeight = weight;
                     break;
 
                 case BasisBoneTrackedRole.LeftLowerLeg:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    // BasisDebug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     LeftFootTwoBoneIK.data.hintWeight = weight;
                     break;
 
                 case BasisBoneTrackedRole.RightUpperArm:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    // BasisDebug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     RightHandTwoBoneIK.data.hintWeight = weight;
                     break;
 
                 case BasisBoneTrackedRole.LeftUpperArm:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    // BasisDebug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     LeftHandTwoBoneIK.data.hintWeight = weight;
                     break;
                 case BasisBoneTrackedRole.LeftLowerArm:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    // BasisDebug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     RightHandTwoBoneIK.data.hintWeight = weight;
                     break;
 
                 case BasisBoneTrackedRole.RightLowerArm:
-                    // Debug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
+                    // BasisDebug.Log("Setting Hint For " + RoleWithHint + " with weight " + weight);
                     LeftHandTwoBoneIK.data.hintWeight = weight;
                     break;
                 default:
                     // Optional: Handle cases where RoleWithHint does not match any of the expected roles
-                    // Debug.Log("Unknown role: " + RoleWithHint);
+                    // BasisDebug.Log("Unknown role: " + RoleWithHint);
                     break;
             }
         }
@@ -591,7 +591,7 @@ namespace Basis.Scripts.Drivers
         {
             // Check if any control in the list has HasRigLayer set to true
             Layer.active = Controls.Any(control => control.HasRigLayer == BasisHasRigLayer.HasRigLayer);
-           // Debug.Log("Update Layer to State " + Layer.active + " for layer " + Layer);
+           // BasisDebug.Log("Update Layer to State " + Layer.active + " for layer " + Layer);
         }
         public GameObject CreateRig(string Role, bool Enabled, out Rig Rig, out RigLayer RigLayer)
         {

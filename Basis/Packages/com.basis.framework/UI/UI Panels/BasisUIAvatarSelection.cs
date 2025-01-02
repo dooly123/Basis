@@ -45,7 +45,7 @@ namespace Basis.Scripts.UI.UI_Panels
         {
             if (string.IsNullOrEmpty(MetaField.text) || string.IsNullOrEmpty(BundleField.text) || string.IsNullOrEmpty(PasswordField.text))
             {
-                Debug.LogError("All fields must be filled.");
+                BasisDebug.LogError("All fields must be filled.");
                 return;
             }
 
@@ -117,7 +117,7 @@ namespace Basis.Scripts.UI.UI_Panels
             {
                 if (!BasisLoadHandler.IsMetaDataOnDisc(activeKeys[Index].Url, out var info))
                 {
-                    Debug.LogError("Missing File on Disc For " + activeKeys[Index].Url);
+                    BasisDebug.LogError("Missing File on Disc For " + activeKeys[Index].Url);
                     await BasisDataStoreAvatarKeys.RemoveKey(activeKeys[Index]);
                     continue;
                 }
@@ -177,7 +177,7 @@ namespace Basis.Scripts.UI.UI_Panels
                         }
                         catch (Exception E)
                         {
-                            Debug.LogError(E);
+                            BasisDebug.LogError(E);
                             BasisLoadHandler.RemoveDiscInfo(bundle.BasisRemoteBundleEncrypted.MetaURL);
                             continue;
                         }

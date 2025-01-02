@@ -15,7 +15,7 @@ namespace Basis.Scripts.Drivers
             RemotePlayer = remotePlayer;
             if (IsAble())
             {
-                Debug.Log("RemoteCalibration Underway");
+                BasisDebug.Log("RemoteCalibration Underway", BasisDebug.LogTag.Avatar);
             }
             else
             {

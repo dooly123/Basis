@@ -48,7 +48,7 @@ public class BasisTrackedBundleWrapper
             await Task.Delay(TimeSpan.FromSeconds(BasisLoadHandler.TimeUntilMemoryRemoval));
             if (RequestedTimes <= 0 && AssetBundle != null)
             {
-                Debug.Log("Unloading Bundle " + AssetBundle.name);
+                BasisDebug.Log("Unloading Bundle " + AssetBundle.name);
                 AssetBundle.Unload(true);
             }
             else

@@ -19,19 +19,19 @@ public static class BasisIOManagement
     /// <returns></returns>
     public static async Task DownloadFile(string url, string localFilePath, BasisProgressReport progressCallback, CancellationToken cancellationToken = default)
     {
-        Debug.Log($"Starting file download from {url}");
+        BasisDebug.Log($"Starting file download from {url}");
 
         // Null or empty URL check
         if (string.IsNullOrWhiteSpace(url))
         {
-            Debug.LogError("The provided URL is null or empty.");
+            BasisDebug.LogError("The provided URL is null or empty.");
             return;
         }
 
         // Null or empty file path check
         if (string.IsNullOrWhiteSpace(localFilePath))
         {
-            Debug.LogError("The provided local file path is null or empty.");
+            BasisDebug.LogError("The provided local file path is null or empty.");
             return;
         }
 
@@ -56,42 +56,42 @@ public static class BasisIOManagement
                 // Check if cancellation is requested
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    Debug.Log("Download cancelled.");
+                    BasisDebug.Log("Download cancelled.");
                     request.Abort(); // Abort request on cancellation
                     return;
                 }
 
                 // Report progress (0% to 100%)
                 progressCallback.ReportProgress(asyncOperation.webRequest.downloadProgress * 100, "downloading data");
-                // Debug.Log("downloading file " + asyncOperation.webRequest.downloadProgress);
+                // BasisDebug.Log("downloading file " + asyncOperation.webRequest.downloadProgress);
                 await Task.Yield();
             }
 
             // Handle potential download errors
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Failed to download file: {request.error} for URL {url}");
+                BasisDebug.LogError($"Failed to download file: {request.error} for URL {url}");
                 return;
             }
 
             // Check if the file has been written successfully
             if (!File.Exists(localFilePath))
             {
-                Debug.LogError("The file was not created.");
+                BasisDebug.LogError("The file was not created.");
                 return;
             }
 
-            Debug.Log($"Successfully downloaded file from {url} to {localFilePath}");
+            BasisDebug.Log($"Successfully downloaded file from {url} to {localFilePath}");
         }
     }
     public static async Task<byte[]> LoadLocalFile(string filePath, BasisProgressReport progressCallback, CancellationToken cancellationToken = default)
     {
-        Debug.Log($"Starting file load from {filePath}");
+        BasisDebug.Log($"Starting file load from {filePath}");
 
         // Check if the file exists
         if (!File.Exists(filePath))
         {
-            Debug.LogError($"File does not exist: {filePath}");
+            BasisDebug.LogError($"File does not exist: {filePath}");
             return null;
         }
 
@@ -112,7 +112,7 @@ public static class BasisIOManagement
                 // Check if cancellation is requested
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    Debug.Log("Load cancelled.");
+                    BasisDebug.Log("Load cancelled.");
                     return null;
                 }
 
@@ -121,7 +121,7 @@ public static class BasisIOManagement
             }
         }
 
-        Debug.Log($"Successfully loaded file from {filePath}");
+        BasisDebug.Log($"Successfully loaded file from {filePath}");
         return fileData;
     }
 
@@ -165,7 +165,7 @@ public static class BasisIOManagement
     {
         if (!File.Exists(sourceFilePath))
         {
-            Debug.LogError($"Source file not found: {sourceFilePath}");
+            BasisDebug.LogError($"Source file not found: {sourceFilePath}");
             return false;
         }
 
@@ -197,7 +197,7 @@ public static class BasisIOManagement
             }
 
             // After copying, delete the source file
-            Debug.Log($"Successfully copied file from {sourceFilePath} to {destinationFilePath}");
+            BasisDebug.Log($"Successfully copied file from {sourceFilePath} to {destinationFilePath}");
             return true;
         }
         catch (OperationCanceledException)
@@ -207,26 +207,26 @@ public static class BasisIOManagement
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error moving file: {ex.Message}");
+            BasisDebug.LogError($"Error moving file: {ex.Message}");
             return false;
         }
     }
     public static string GenerateFilePath(string fileName, string subFolder)
     {
-        Debug.Log($"Generating folder path for {fileName} in subfolder {subFolder}");
+        BasisDebug.Log($"Generating folder path for {fileName} in subfolder {subFolder}");
 
         // Create the full folder path
         string folderPath = GenerateFolderPath(subFolder);
         // Create the full file path
         string localPath = Path.Combine(folderPath, fileName);
-        Debug.Log($"Generated folder path: {localPath}");
+        BasisDebug.Log($"Generated folder path: {localPath}");
 
         // Return the local path
         return localPath;
     }
     public static string GenerateFolderPath(string subFolder)
     {
-        Debug.Log($"Generating folder path in subfolder {subFolder}");
+        BasisDebug.Log($"Generating folder path in subfolder {subFolder}");
 
         // Create the full folder path
         string folderPath = Path.Combine(Application.persistentDataPath, subFolder);
@@ -234,7 +234,7 @@ public static class BasisIOManagement
         // Check if the directory exists, and create it if it doesn't
         if (!Directory.Exists(folderPath))
         {
-            Debug.Log($"Directory {folderPath} does not exist. Creating directory.");
+            BasisDebug.Log($"Directory {folderPath} does not exist. Creating directory.");
             Directory.CreateDirectory(folderPath);
         }
         return folderPath;

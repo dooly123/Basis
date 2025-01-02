@@ -96,7 +96,7 @@ namespace Basis.Scripts.Avatar
                 if (BasisLocalPlayer.Instance.LocalBoneDriver.FindBone(out BasisBoneControl control, role))
                 {
                     float ScaledDistance = MaxDistanceBeforeMax(role) * BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale;
-                    Debug.Log("Using a scaler of  " + BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale + " leading to a scaled Distance of " + ScaledDistance);
+                    BasisDebug.Log("Using a scaler of  " + BasisLocalPlayer.Instance.EyeRatioAvatarToAvatarDefaultScale + " leading to a scaled Distance of " + ScaledDistance);
                     if (StoredRolesTransforms.TryGetValue(role, out Transform Transform))
                     {
                         BasisTrackerMapping mapping = new BasisTrackerMapping(control, Transform, role, connectors, ScaledDistance);
@@ -105,7 +105,7 @@ namespace Basis.Scripts.Avatar
                 }
                 else
                 {
-                    Debug.LogError("Missing bone control for role " + role);
+                    BasisDebug.LogError("Missing bone control for role " + role);
                 }
             }
             List<BasisBoneTrackedRole> roles = new List<BasisBoneTrackedRole>();
@@ -121,7 +121,7 @@ namespace Basis.Scripts.Avatar
                 }
                 else
                 {
-                    Debug.LogError("Missing Tracker for index " + Index + " with ID " + mapping);
+                    BasisDebug.LogError("Missing Tracker for index " + Index + " with ID " + mapping);
                 }
             }
             //do the roles after to stop the animator switch issue
@@ -160,12 +160,12 @@ namespace Basis.Scripts.Avatar
                     }
                     else
                     {
-                        //Debug.Log("we have already assigned role " + mapping.BasisBoneControlRole);
+                        //BasisDebug.Log("we have already assigned role " + mapping.BasisBoneControlRole);
                     }
                 }
                 else
                 {
-                    //Debug.Log("Already assigned " + Connector.Tracker);
+                    //BasisDebug.Log("Already assigned " + Connector.Tracker);
                 }
             }
 

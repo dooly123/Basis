@@ -41,7 +41,7 @@ namespace Basis.Scripts.UI.UI_Panels
         }
         public void StartWaitAndSetUILocation()
         {
-            Debug.Log("StartWaitAndSetUILocation");
+            BasisDebug.Log("StartWaitAndSetUILocation");
             SetUILocation();
         }
         public void SetUILocation()
@@ -50,7 +50,7 @@ namespace Basis.Scripts.UI.UI_Panels
             BasisLocalCameraDriver.GetPositionAndRotation(out Position, out Rotation);
 
             // Log the current scale for debugging purposes
-            Debug.Log("Scale was " + BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale);
+            BasisDebug.Log("Scale was " + BasisLocalPlayer.Instance.EyeRatioPlayerToDefaultScale);
 
             // Extract the yaw (rotation around the vertical axis) and ignore pitch and roll
             Vector3 eulerRotation = Rotation.eulerAngles;

@@ -281,7 +281,7 @@ public static class BasisMenuItemsEditor
           BasisNetworkTransmitter Transmitter = (BasisNetworkTransmitter)Player.NetworkSend;
             if (Transmitter != null)
             {
-                Debug.Log("Apply SpawnFakeRemote");
+                BasisDebug.Log("Apply SpawnFakeRemote");
                 serverSideSyncPlayerMessage.localReadyMessage.localAvatarSyncMessage = Transmitter.LASM;
             }
             CreateTestRemotePlayer(serverSideSyncPlayerMessage);

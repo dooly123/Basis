@@ -15,7 +15,7 @@ public static class BasisNetworkIPResolve
                 for (int Index = 0; Index < ips.Length; Index++)
                 {
                     addresses[Index] = ips[Index].ToString();
-                    Debug.Log($"IP Candidate: {addresses[Index]}");
+                    BasisDebug.Log($"IP Candidate: {addresses[Index]}");
 
                     bool hasThreePeriods = addresses[Index].Split('.').Length - 1 == 3;
                     if (hasThreePeriods)
@@ -29,7 +29,7 @@ public static class BasisNetworkIPResolve
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("Failed to resolve to IP address: " + ex.Message);
+            BasisDebug.LogError("Failed to resolve to IP address: " + ex.Message);
         }
         return null;
     }
@@ -51,7 +51,7 @@ public static class BasisNetworkIPResolve
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("Failed to resolve localhost to IP address: " + ex.Message);
+            BasisDebug.LogError("Failed to resolve localhost to IP address: " + ex.Message);
         }
         return null;
     }
@@ -73,7 +73,7 @@ public static class BasisNetworkIPResolve
         }
         else
         {
-            Debug.LogError("Failed to resolve localhost to IP address.");
+            BasisDebug.LogError("Failed to resolve localhost to IP address.");
         }
         return addresses;
     }

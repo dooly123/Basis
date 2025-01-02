@@ -148,7 +148,7 @@ namespace Basis.Scripts.Networking.Transmitters
 
             if (AreBoolArraysEqual(MicrophoneRangeIndex, LastMicrophoneRangeIndex) == false)
             {
-                //Debug.Log("Arrays where not equal!");
+                //BasisDebug.Log("Arrays where not equal!");
                 Array.Copy(MicrophoneRangeIndex, LastMicrophoneRangeIndex, IndexLength);
                 List<ushort> TalkingPoints = new List<ushort>(IndexLength);
                 for (int Index = 0; Index < IndexLength; Index++)
@@ -230,7 +230,7 @@ namespace Basis.Scripts.Networking.Transmitters
             }
             else
             {
-                Debug.Log("Already Ready");
+                BasisDebug.Log("Already Ready");
             }
         }
         public void ScheduleCheck()

@@ -27,7 +27,7 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
                 }
                 else
                 {
-                    Debug.LogError("Missing Network ID!");
+                    BasisDebug.LogError("Missing Network ID!");
                     return 0;
                 }
             }
@@ -67,7 +67,7 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
             }
             else
             {
-                Debug.LogError("Missing CharacterIKCalibration");
+                BasisDebug.LogError("Missing CharacterIKCalibration");
             }
             NetworkSend = new BasisNetworkTransmitter();
             BasisNetworkManagement.Transmitter = (BasisNetworkTransmitter)NetworkSend;
@@ -86,14 +86,14 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
             }
             else
             {
-                Debug.LogError("Missing CharacterIKCalibration");
+                BasisDebug.LogError("Missing CharacterIKCalibration");
             }
             if (RemotePlayer.RemoteAvatarDriver != null)
             {
             }
             else
             {
-                Debug.LogError("Missing CharacterIKCalibration");
+                BasisDebug.LogError("Missing CharacterIKCalibration");
             }
             NetworkSend = new BasisNetworkReceiver();
         }

@@ -88,7 +88,7 @@ public class BasisUIRaycastProcess
             currentEventData.pointerCurrentRaycast = raycastResult;
             currentEventData.pointerPressRaycast = raycastResult;
             bool IsDownThisFrame = Current.Trigger == 1;
-            //Debug.Log("running "  + raycastResult.gameObject);
+            //BasisDebug.Log("running "  + raycastResult.gameObject);
             if (IsDownThisFrame)
             {
                 if (currentEventData.WasLastDown == false)
@@ -309,7 +309,7 @@ public class BasisUIRaycastProcess
             if (!CurrentEventData.useDragThreshold || (CurrentEventData.pressPosition - CurrentEventData.position).sqrMagnitude >= (threshold * threshold))
             {
                 var target = CurrentEventData.pointerDrag;
-            //    Debug.Log("Started Dragging " + (CurrentEventData.pressPosition - CurrentEventData.position).sqrMagnitude);
+            //    BasisDebug.Log("Started Dragging " + (CurrentEventData.pressPosition - CurrentEventData.position).sqrMagnitude);
                 ExecuteEvents.Execute(target, CurrentEventData, ExecuteEvents.beginDragHandler);
                 CurrentEventData.dragging = true;
             }
@@ -322,12 +322,12 @@ public class BasisUIRaycastProcess
             if (target != CurrentEventData.pointerDrag)
             {
                 ExecuteEvents.Execute(target, CurrentEventData, ExecuteEvents.pointerUpHandler);
-              //  Debug.Log("pointerUpHandler");
+              //  BasisDebug.Log("pointerUpHandler");
                 CurrentEventData.eligibleForClick = false;
                 CurrentEventData.pointerPress = null;
                 CurrentEventData.rawPointerPress = null;
             }
-         //   Debug.Log("dragHandler " + CurrentEventData.position);
+         //   BasisDebug.Log("dragHandler " + CurrentEventData.position);
             ExecuteEvents.Execute(CurrentEventData.pointerDrag, CurrentEventData, ExecuteEvents.dragHandler);
         }
     }

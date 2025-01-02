@@ -105,7 +105,7 @@ namespace Basis.Scripts.Eye_Follow
             {
                 if (LinkedPlayer != null && LinkedPlayer.FaceRenderer != null)
                 {
-                    Debug.Log("Wired up Renderer Check For Blinking");
+                    BasisDebug.Log("Wired up Renderer Check For Blinking");
                     LinkedPlayer.FaceRenderer.Check += UpdateFaceVisibility;
                     UpdateFaceVisibility(LinkedPlayer.FaceisVisible);
                     HasRendererCheckWiredUp = true;
@@ -118,7 +118,7 @@ namespace Basis.Scripts.Eye_Follow
         }
         public void UpdatGizmoUsage(bool State)
         {
-            Debug.Log("Running Bone EyeFollow Gizmos");
+            BasisDebug.Log("Running Bone EyeFollow Gizmos");
             if (State)
             {
                 if (LeftEyeHasGizmo == false)

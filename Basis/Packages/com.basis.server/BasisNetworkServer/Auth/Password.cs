@@ -1,6 +1,5 @@
 #nullable enable
 
-using System.Runtime.Serialization;
 using Encoding = System.Text.Encoding;
 using static Basis.Network.Core.Serializable.SerializableBasis;
 using System;

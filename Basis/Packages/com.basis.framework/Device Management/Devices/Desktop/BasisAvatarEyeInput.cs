@@ -28,16 +28,16 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         public bool PauseLook = false;
         public void Initalize(string ID = "Desktop Eye", string subSystems = "BasisDesktopManagement")
         {
-            Debug.Log("Initalizing Avatar Eye");
+            BasisDebug.Log("Initalizing Avatar Eye", BasisDebug.LogTag.Input);
             if (BasisLocalPlayer.Instance.AvatarDriver != null)
             {
-                Debug.Log("Using Configured Height " + BasisLocalPlayer.Instance.PlayerEyeHeight);
+                BasisDebug.Log("Using Configured Height " + BasisLocalPlayer.Instance.PlayerEyeHeight, BasisDebug.LogTag.Input);
                 LocalRawPosition = new Vector3(InjectedX, BasisLocalPlayer.Instance.PlayerEyeHeight, InjectedZ);
                 LocalRawRotation = Quaternion.identity;
             }
             else
             {
-                Debug.Log("Using Fallback Height " + FallBackHeight);
+                BasisDebug.Log("Using Fallback Height " + FallBackHeight, BasisDebug.LogTag.Input);
                 LocalRawPosition = new Vector3(InjectedX, FallBackHeight, InjectedZ);
                 LocalRawRotation = Quaternion.identity;
             }
@@ -63,7 +63,7 @@ namespace Basis.Scripts.Device_Management.Devices.Desktop
         }
         private void OnCursorStateChange(CursorLockMode cursor, bool newCursorVisible)
         {
-            Debug.Log("cursor changed to : " + cursor.ToString() + " | Cursor Visible : " + newCursorVisible);
+            BasisDebug.Log("cursor changed to : " + cursor.ToString() + " | Cursor Visible : " + newCursorVisible, BasisDebug.LogTag.Input);
             if (cursor == CursorLockMode.Locked)
             {
                 PauseLook = false;

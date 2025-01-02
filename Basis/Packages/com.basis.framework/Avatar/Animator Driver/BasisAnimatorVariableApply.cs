@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Basis.Scripts.Animator_Driver
 {
@@ -58,7 +58,7 @@ namespace Basis.Scripts.Animator_Driver
         public bool IsStopped = false;
         public void StopAll()
         {
-            Debug.Log("Stopping all");
+            BasisDebug.Log("Stopping all");
             // Set all animator boolean parameters to false
             Animator.SetBool(BasisAvatarAnimatorHash.HashMovingState, false);
             Animator.SetBool(BasisAvatarAnimatorHash.HashCrouchedState, false);

@@ -14,7 +14,7 @@ public static class BasisCursorManagement
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Debug.Log("Requested a forced Cursor Lock for " + requestName);
+        BasisDebug.Log("Requested a forced Cursor Lock for " + requestName);
     }
     public static CursorLockMode ActiveLockState()
     {
@@ -35,7 +35,7 @@ public static class BasisCursorManagement
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Debug.Log("Cursor Locked");
+        BasisDebug.Log("Cursor Locked");
         cursorLockRequests.Add(requestName);
         OnCursorStateChange?.Invoke(CursorLockMode.Locked, false);
     }
@@ -63,7 +63,7 @@ public static class BasisCursorManagement
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Debug.Log("Cursor Unlocked");
+        BasisDebug.Log("Cursor Unlocked");
         cursorLockRequests.Remove(requestName);
         OnCursorStateChange?.Invoke(CursorLockMode.None, true);
     }
@@ -78,7 +78,7 @@ public static class BasisCursorManagement
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-        Debug.Log("Cursor Confined");
+        BasisDebug.Log("Cursor Confined");
         OnCursorStateChange?.Invoke(CursorLockMode.Confined, true);
     }
 

@@ -35,7 +35,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
         public void ChangeTextureQuality(string quality)
         {
 #if UNITY_2017
-            Debug.Log("2017 does not support texture streaming");
+            BasisDebug.Log("2017 does not support texture streaming");
 #else
             QualitySettings.streamingMipmapsActive = true;
             QualitySettings.streamingMipmapsAddAllCameras = true;
@@ -62,7 +62,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
                     QualitySettings.streamingMipmapsMaxFileIORequests = ultraStreamingMipmapsMaxFileIORequests;
                     break;
                 default:
-                    Debug.LogError($"Invalid texture quality value: {quality}");
+                    BasisDebug.LogError($"Invalid texture quality value: {quality}");
                     break;
             }
 #endif
@@ -71,7 +71,7 @@ namespace BattlePhaze.SettingsManager.Intergrations
         public void ChangeMemoryAllocation(string memoryAllocation)
         {
 #if UNITY_2017
-            Debug.Log("2017 does not support texture streaming");
+            BasisDebug.Log("2017 does not support texture streaming");
 #else
             if (int.TryParse(memoryAllocation, out int mem))
             {

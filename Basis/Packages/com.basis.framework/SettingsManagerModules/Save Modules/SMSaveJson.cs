@@ -36,13 +36,13 @@ namespace BattlePhaze.SettingsManager
                 }
                 catch (IOException e)
                 {
-                    SettingsManagerDebug.Log("Impossible to open file nuking : " + filePath);
-                    SettingsManagerDebug.Log(e.StackTrace);
+                    BasisDebug.Log("Impossible to open file nuking : " + filePath);
+                    BasisDebug.Log(e.StackTrace);
                     Delete(Manager, Save);
                     return false;
                 }
             }
-            SettingsManagerDebug.Log("Loading Data json");
+          //  BasisDebug.Log("Loading Data json");
             return true;
         }
 
@@ -59,7 +59,7 @@ namespace BattlePhaze.SettingsManager
         public override bool Save(SettingsManager Manager, SettingsManagerSaveSystem Save)
         {
             Encoding encoding = Encoding.UTF8;
-            SettingsManagerDebug.Log("Saving Data JSON");
+            BasisDebug.Log("Saving Data JSON");
             string filePath = GetCurrentFilePath(Manager);
             try
             {
@@ -74,13 +74,13 @@ namespace BattlePhaze.SettingsManager
                     }
                     catch (Exception ex)
                     {
-                        SettingsManagerDebug.LogError("Error saving file: " + ex.Message);
+                        BasisDebug.LogError("Error saving file: " + ex.Message);
                     }
                 }
             }
             catch (IOException e)
             {
-                SettingsManagerDebug.LogError("Impossible to save file: " + GetCurrentFilePath(Manager));
+                BasisDebug.LogError("Impossible to save file: " + GetCurrentFilePath(Manager));
                 Debug.LogWarning(e);
                 return false;
             }

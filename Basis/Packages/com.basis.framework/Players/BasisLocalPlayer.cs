@@ -108,24 +108,24 @@ namespace Basis.Scripts.BasisSdk.Players
                             BasisLocalEncryptedBundle = info.StoredLocal,
                             UnlockPassword = Key.Pass
                         };
-                        Debug.Log("loading previously loaded avatar");
+                        BasisDebug.Log("loading previously loaded avatar");
                         await CreateAvatar(LastUsedAvatar.loadmode, bundle);
                         return;
                     }
                 }
-                Debug.Log("failed to load last used : no key found to load but was found on disc");
+                BasisDebug.Log("failed to load last used : no key found to load but was found on disc");
                 await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
             }
             else
             {
-                Debug.Log("failed to load last used : url was not found on disc");
+                BasisDebug.Log("failed to load last used : url was not found on disc");
                 await CreateAvatar(BasisPlayer.LoadModeLocal, BasisAvatarFactory.LoadingAvatar);
             }
         }
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             BasisAvatarStrainJiggleDriver.PrepareTeleport();
-            Debug.Log("Teleporting");
+            BasisDebug.Log("Teleporting");
             Move.enabled = false;
             transform.SetPositionAndRotation(position, rotation);
             Move.enabled = true;
@@ -188,7 +188,7 @@ namespace Basis.Scripts.BasisSdk.Players
         }
         public void DriveAudioToViseme()
         {
-            VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray,1);
+            VisemeDriver.ProcessAudioSamples(MicrophoneRecorder.processBufferArray,1, MicrophoneRecorder.processBufferArray.Length);
         }
         private void OnPausedEvent(bool IsPaused)
         {

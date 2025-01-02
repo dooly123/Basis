@@ -30,11 +30,11 @@ public class BasisSceneFactory : MonoBehaviour
         {
             LoadCameraPropertys(scene.MainCamera);
             GameObject.DestroyImmediate(scene.MainCamera.gameObject);
-            Debug.Log("Destroying Main Camera Attached To Scene");
+            BasisDebug.Log("Destroying Main Camera Attached To Scene");
         }
         else
         {
-            Debug.Log("No attached camera to scene script Found");
+            BasisDebug.Log("No attached camera to scene script Found");
         }
         List<GameObject> MainCameras = new List<GameObject>();
         GameObject.FindGameObjectsWithTag("MainCamera", MainCameras);
@@ -49,7 +49,7 @@ public class BasisSceneFactory : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("No New main Camera Found");
+                    BasisDebug.Log("No New main Camera Found");
                 }
             }
         }
@@ -98,11 +98,11 @@ public class BasisSceneFactory : MonoBehaviour
             }
         }
 
-        Debug.Log("Mixer group assigned to all scene AudioSources.");
+        BasisDebug.Log("Mixer group assigned to all scene AudioSources.");
     }
     public void SpawnPlayer(BasisLocalPlayer Basis)
     {
-        Debug.Log("Spawning Player");
+        BasisDebug.Log("Spawning Player");
         RequestSpawnPoint(out Vector3 position, out Quaternion rotation);
         if (Basis != null)
         {
@@ -140,7 +140,7 @@ public class BasisSceneFactory : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Missing BasisScene!");
+            BasisDebug.LogError("Missing BasisScene!");
             Position = Vector3.zero;
             Rotation = Quaternion.identity;
         }

@@ -7,7 +7,7 @@ public static class BasisNetworkHandleRemoval
     {
         if (reader.TryGetUShort(out ushort DisconnectValue))
         {
-            Debug.Log($"trying to remove Networked Player {DisconnectValue}");
+            BasisDebug.Log($"trying to remove Networked Player {DisconnectValue}");
             if (BasisNetworkManagement.Players.TryGetValue(DisconnectValue, out BasisNetworkedPlayer NetworkedPlayer))
             {
                 if (NetworkedPlayer.Player.IsLocal == false)
@@ -30,17 +30,17 @@ public static class BasisNetworkHandleRemoval
                 }
                 else
                 {
-                    Debug.LogError("network used wrong api to remove local player!");
+                    BasisDebug.LogError("network used wrong api to remove local player!");
                 }
             }
             else
             {
-                Debug.LogError("Removal Requested but no one was found with id " + DisconnectValue);
+                BasisDebug.LogError("Removal Requested but no one was found with id " + DisconnectValue);
             }
         }
         else
         {
-            Debug.LogError("Tried To Read Disconnect Message Missing Data!");
+            BasisDebug.LogError("Tried To Read Disconnect Message Missing Data!");
         }
     }
 }

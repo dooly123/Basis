@@ -168,7 +168,7 @@ namespace Basis.Scripts.TransformBinders.BoneControl
             {
                 if (hasTrackerDriver != value)
                 {
-                    // Debug.Log("Setting Tracker To has Tracker Position Driver " + value);
+                    // BasisDebug.Log("Setting Tracker To has Tracker Position Driver " + value);
                     hasTrackerDriver = value;
                     OnHasTrackerDriverChanged?.Invoke(value);
                 }

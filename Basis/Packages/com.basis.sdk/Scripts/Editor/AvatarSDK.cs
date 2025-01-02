@@ -261,30 +261,36 @@ public partial class BasisAvatarSDKInspector : Editor
     }
     private async void EventCallbackAvatarBundle()
     {
+        if(string.IsNullOrEmpty(Avatar.BasisBundleDescription.AssetBundleName))
+        {
+            Debug.LogError("Name was Empty!");
+            EditorUtility.DisplayDialog("Missing the name", "please give a name in the field", "ok");
+            return;
+        }
+        if (string.IsNullOrEmpty(Avatar.BasisBundleDescription.AssetBundleDescription))
+        {
+            Debug.LogError("Description was Empty!");
+            EditorUtility.DisplayDialog("Missing the description", "please give a description in the field", "ok");
+            return;
+
+        }
         BasisAssetBundleObject BasisAssetBundleObject = AssetDatabase.LoadAssetAtPath<BasisAssetBundleObject>(BasisAssetBundleObject.AssetBundleObject);
 
-        if (Avatar.gameObject.TryGetComponent(out BasisContentBase basisContentBase))
+        BasisBundleInformation basisBundleInformation = new BasisBundleInformation
         {
-            BasisBundleInformation basisBundleInformation = new BasisBundleInformation
-            {
-                BasisBundleDescription = basisContentBase.BasisBundleDescription
-            };
-            // Generate a random byte array
-            byte[] randomBytes = GenerateRandomBytes(32);
+            BasisBundleDescription = Avatar.BasisBundleDescription
+        };
+        // Generate a random byte array
+        byte[] randomBytes = GenerateRandomBytes(32);
 
-            // Convert to Base64 string
-            string base64String = ByteArrayToBase64String(randomBytes);
-          //  Debug.Log("Base64 String: " + base64String);
+        // Convert to Base64 string
+        string base64String = ByteArrayToBase64String(randomBytes);
+        //  Debug.Log("Base64 String: " + base64String);
 
-            // Convert to Hex string
-            string hexString = ByteArrayToHexString(randomBytes);
-         //   Debug.Log("Hex String: " + hexString);
-            await BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, basisBundleInformation, hexString);
-        }
-        else
-        {
-            Debug.LogError("Missing the Avatar");
-        }
+        // Convert to Hex string
+        string hexString = ByteArrayToHexString(randomBytes);
+        //   Debug.Log("Hex String: " + hexString);
+        await BasisAssetBundlePipeline.BuildAssetBundle(Avatar.gameObject, BasisAssetBundleObject, basisBundleInformation, hexString);
     }
     // Generates a random byte array of specified length
     public byte[] GenerateRandomBytes(int length)

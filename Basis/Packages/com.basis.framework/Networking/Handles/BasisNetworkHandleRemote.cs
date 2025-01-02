@@ -16,7 +16,7 @@ namespace Basis.Scripts.Networking
     {
         public static async Task HandleCreateRemotePlayer(LiteNetLib.NetPacketReader reader,Transform Parent)
         {
-            Debug.Log("Handling Create Remote Player!");
+            BasisDebug.Log("Handling Create Remote Player!");
             ServerReadyMessage ServerReadyMessage = new ServerReadyMessage();
             ServerReadyMessage.Deserialize(reader);
             await CreateRemotePlayer(ServerReadyMessage, Parent);
@@ -26,7 +26,7 @@ namespace Basis.Scripts.Networking
             CreateAllRemoteMessage createAllRemoteMessage = new CreateAllRemoteMessage();
             createAllRemoteMessage.Deserialize(reader);
             int RemoteLength = createAllRemoteMessage.serverSidePlayer.Length;
-            Debug.Log("Handling Create All Remote Players! Total Connections To Create " + RemoteLength);
+            BasisDebug.Log("Handling Create All Remote Players! Total Connections To Create " + RemoteLength);
             // Create a list to hold the tasks
             List<Task> tasks = new List<Task>();
 
@@ -59,15 +59,15 @@ namespace Basis.Scripts.Networking
                 BasisNetworkedPlayer.RemoteInitalization(remote);
                 if (BasisNetworkManagement.AddPlayer(BasisNetworkedPlayer))
                 {
-                    Debug.Log("Added Player AT " + BasisNetworkedPlayer.NetId);
+                    BasisDebug.Log("Added Player AT " + BasisNetworkedPlayer.NetId);
                 }
                 else
                 {
-                    Debug.LogError("Critical issue could not add player to data");
+                    BasisDebug.LogError("Critical issue could not add player to data");
                     return null;
                 }
                 BasisNetworkedPlayer.InitalizeNetwork();//fires events and makes us network compatible
-                Debug.Log("Added Player " + ServerReadyMessage.playerIdMessage.playerID);
+                BasisDebug.Log("Added Player " + ServerReadyMessage.playerIdMessage.playerID);
                 BasisNetworkReceiver Rec =(BasisNetworkReceiver)BasisNetworkedPlayer.NetworkSend;
                 BasisNetworkAvatarDecompressor.DecompressAndProcessAvatar(Rec, ServerReadyMessage.localReadyMessage.localAvatarSyncMessage);
                 BasisNetworkManagement.OnRemotePlayerJoined?.Invoke(BasisNetworkedPlayer, remote);
@@ -79,7 +79,7 @@ namespace Basis.Scripts.Networking
             }
             else
             {
-                Debug.LogError("Empty Avatar ID for Player fatal error! " + ServerReadyMessage.playerIdMessage.playerID);
+                BasisDebug.LogError("Empty Avatar ID for Player fatal error! " + ServerReadyMessage.playerIdMessage.playerID);
                 return null;
             }
         }

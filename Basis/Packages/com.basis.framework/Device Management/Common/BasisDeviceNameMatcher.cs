@@ -36,7 +36,7 @@ namespace Basis.Scripts.Device_Management
                 TrackedRole = FallBackRole,
             };
             BasisDeviceManagement.Instance.BasisDeviceNameMatcher.BasisDevice.Add(Settings);
-            Debug.LogError("Unable to find Configuration for device Generating " + nameToMatch);
+            BasisDebug.LogError("Unable to find Configuration for device Generating " + nameToMatch);
             BasisDeviceManagement.Instance.LoadAndOrSaveDefaultDeviceConfigs();
             return Settings;
         }
@@ -86,7 +86,7 @@ namespace Basis.Scripts.Device_Management
                 string directoryPath = EditorUtility.OpenFolderPanel("Select Directory to Save Devices", "", "");
                 if (!string.IsNullOrEmpty(directoryPath))
                 {
-                    Debug.Log("directoryPath " + directoryPath);
+                    BasisDebug.Log("directoryPath " + directoryPath);
                     await BasisDeviceLoaderAndSaver.SaveDevices(directoryPath, script.BasisDevice);
                 }
             }
@@ -95,7 +95,7 @@ namespace Basis.Scripts.Device_Management
                 string directoryPath = EditorUtility.OpenFolderPanel("Select Directory to Save Devices", "", "");
                 if (!string.IsNullOrEmpty(directoryPath))
                 {
-                    Debug.Log("directoryPath " + directoryPath);
+                    BasisDebug.Log("directoryPath " + directoryPath);
                     script.BasisDevice = await BasisDeviceLoaderAndSaver.LoadDeviceAsync(directoryPath);
                 }
             }

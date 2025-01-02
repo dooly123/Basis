@@ -170,7 +170,7 @@ namespace Basis.Scripts.Device_Management
         {
             if (CurrentMode != "None")
             {
-                Debug.Log("killing off " + CurrentMode);
+                BasisDebug.Log("killing off " + CurrentMode, BasisDebug.LogTag.Device);
                 if (newMode == "Desktop")
                 {
                     ShutDownXR();
@@ -194,7 +194,7 @@ namespace Basis.Scripts.Device_Management
             }
             OnBootModeChanged?.Invoke(CurrentMode);
 
-            Debug.Log("Loading " + CurrentMode);
+            BasisDebug.Log("Loading " + CurrentMode, BasisDebug.LogTag.Device);
 
             switch (CurrentMode)
             {
@@ -214,7 +214,7 @@ namespace Basis.Scripts.Device_Management
                 case "Exiting":
                     break;
                 default:
-                    Debug.LogError("This should not occur (default)");
+                    BasisDebug.LogError("This should not occur (default)");
                     if (TryFindBasisBaseTypeManagement("Desktop", out Matched))
                     {
                         foreach (var m in Matched)
@@ -262,7 +262,7 @@ namespace Basis.Scripts.Device_Management
 
             if (gameObjects.Count == 0)
             {
-                Debug.LogError("Missing ");
+                BasisDebug.LogError("Missing ");
             }
         }
         public static void ForceLoadXR()
@@ -323,7 +323,7 @@ namespace Basis.Scripts.Device_Management
         }
         private void CheckForPass(string type)
         {
-            Debug.Log("Loading " + type);
+            BasisDebug.Log("Loading " + type, BasisDebug.LogTag.Device);
             if (TryFindBasisBaseTypeManagement("SimulateXR", out List<BasisBaseTypeManagement> Matched))
             {
                 foreach (var m in Matched)
@@ -352,14 +352,14 @@ namespace Basis.Scripts.Device_Management
                     }
                     else
                     {
-                        Debug.Log("bailing out of restore already has a replacement");
+                        BasisDebug.Log("bailing out of restore already has a replacement", BasisDebug.LogTag.Device);
                     }
                 }
                 return true;
             }
             else
             {
-                Debug.LogError("already added a Input Device thats identical!");
+                BasisDebug.LogError("already added a Input Device thats identical!", BasisDebug.LogTag.Device);
             }
             return false;
         }
@@ -370,7 +370,7 @@ namespace Basis.Scripts.Device_Management
             {
                 if (CheckBeforeOverride(PreviousDevice))
                 {
-                    Debug.Log("device is restored " + PreviousDevice.trackedRole);
+                    BasisDebug.Log("device is restored " + PreviousDevice.trackedRole, BasisDebug.LogTag.Device);
                     basisXRInput.ApplyTrackerCalibration(PreviousDevice.trackedRole);
                     basisXRInput.Control.InverseOffsetFromBone = PreviousDevice.InverseOffsetFromBone;
                 }
@@ -434,7 +434,7 @@ namespace Basis.Scripts.Device_Management
             {
                 if (Device.UniqueID == id && Device.SubSystem == SubSystem)
                 {
-                    Debug.Log("this device is restoreable restoring..");
+                    BasisDebug.Log("this device is restoreable restoring..", BasisDebug.LogTag.Device);
                     PreviouslyConnectedDevices.Remove(Device);
                     StoredPreviousDevice = Device;
                     return true;

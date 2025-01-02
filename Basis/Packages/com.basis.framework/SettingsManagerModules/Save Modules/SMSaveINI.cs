@@ -56,7 +56,7 @@ namespace BattlePhaze.SettingsManager
                             }
                             else
                             {
-                                SettingsManagerDebug.LogError("Trailing ']' character not found in line: " + line);
+                                BasisDebug.LogError("Trailing ']' character not found in line: " + line);
                             }
                         }
                         else if (line.StartsWith("*") || line.StartsWith("#"))
@@ -84,12 +84,12 @@ namespace BattlePhaze.SettingsManager
             }
             catch (IOException e)
             {
-                SettingsManagerDebug.LogError("Impossible to open file: " + manager.ManagerSettings.FileName + ".ini");
+                BasisDebug.LogError("Impossible to open file: " + manager.ManagerSettings.FileName + ".ini");
                 Debug.LogWarning(e);
                 return false;
             }
 
-            SettingsManagerDebug.Log("Loading Data INI");
+            BasisDebug.Log("Loading Data INI");
             return true;
         }
 
@@ -135,7 +135,7 @@ namespace BattlePhaze.SettingsManager
             }
             catch (IOException e)
             {
-                SettingsManagerDebug.LogError($"Failed to save settings file: {filePath}");
+                BasisDebug.LogError($"Failed to save settings file: {filePath}");
                 Debug.LogWarning(e);
                 return false;
             }

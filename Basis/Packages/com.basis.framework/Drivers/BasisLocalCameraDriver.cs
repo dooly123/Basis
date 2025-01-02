@@ -97,7 +97,7 @@ namespace Basis.Scripts.Drivers
         }
         public void UpdateMicrophoneVisuals(bool IsMuted, bool PlaySound)
         {
-           // Debug.Log(nameof(UpdateMicrophoneVisuals));
+           // BasisDebug.Log(nameof(UpdateMicrophoneVisuals));
             // Cancel the current coroutine if it's running
             if (scaleCoroutine != null)
             {
@@ -105,7 +105,7 @@ namespace Basis.Scripts.Drivers
             }
             if (IsMuted)
             {
-               // Debug.Log(nameof(UpdateMicrophoneVisuals) + IsMuted);
+               // BasisDebug.Log(nameof(UpdateMicrophoneVisuals) + IsMuted);
 
                 MicrophoneMutedIcon.gameObject.SetActive(true);
                 MicrophoneUnMutedIcon.gameObject.SetActive(false);
@@ -119,7 +119,7 @@ namespace Basis.Scripts.Drivers
             }
             else
             {
-               // Debug.Log(nameof(UpdateMicrophoneVisuals) + IsMuted);
+               // BasisDebug.Log(nameof(UpdateMicrophoneVisuals) + IsMuted);
 
                 MicrophoneMutedIcon.gameObject.SetActive(false);
                 MicrophoneUnMutedIcon.gameObject.SetActive(true);

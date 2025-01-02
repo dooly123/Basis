@@ -14,13 +14,13 @@ public class BasisHeightEditor : Editor
 
         if (basisPlayer == null)
         {
-            Debug.LogError("No BasisLocalPlayer instance found.");
+            BasisDebug.LogError("No BasisLocalPlayer instance found.");
             return;
         }
 
         // Call the method from the BasisHeightDriver class
         BasisHeightDriver.SetPlayersEyeHeight(basisPlayer);
-        Debug.Log("Player eye height recalculated successfully.");
+        BasisDebug.Log("Player eye height recalculated successfully.");
     }
 
     // Menu item for capturing the player's height
@@ -29,7 +29,7 @@ public class BasisHeightEditor : Editor
     {
         // Call the CapturePlayerHeight method from the BasisHeightDriver class
         BasisHeightDriver.CapturePlayerHeight();
-        Debug.Log("Player height captured successfully.");
+        BasisDebug.Log("Player height captured successfully.");
     }
 
     // Menu item for loading or getting default player height
@@ -37,7 +37,7 @@ public class BasisHeightEditor : Editor
     public static void GetDefaultOrLoadPlayerHeight()
     {
         float height = BasisHeightDriver.GetDefaultOrLoadPlayerHeight();
-        Debug.Log($"Loaded or default player height: {height}");
+        BasisDebug.Log($"Loaded or default player height: {height}");
     }
 
     // Menu item for saving player height
@@ -49,12 +49,12 @@ public class BasisHeightEditor : Editor
 
         if (basisPlayer == null)
         {
-            Debug.LogError("No BasisLocalPlayer instance found.");
+            BasisDebug.LogError("No BasisLocalPlayer instance found.");
             return;
         }
 
         // Save the current player height
         BasisHeightDriver.SaveHeight(basisPlayer.PlayerEyeHeight);
-        Debug.Log($"Player height saved: {basisPlayer.PlayerEyeHeight}");
+        BasisDebug.Log($"Player height saved: {basisPlayer.PlayerEyeHeight}");
     }
 }

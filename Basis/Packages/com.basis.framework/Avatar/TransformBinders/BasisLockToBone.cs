@@ -21,7 +21,7 @@ public class BasisLockToBone : MonoBehaviour
             if (CharacterTransformDriver == null)
             {
                 hasCharacterTransformDriver = false;
-                Debug.LogError("Missing CharacterTransformDriver");
+                BasisDebug.LogError("Missing CharacterTransformDriver");
             }
             else
             {
@@ -31,7 +31,7 @@ public class BasisLockToBone : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Missing LocalPlayer");
+            BasisDebug.LogError("Missing LocalPlayer");
         }
         if (HasEvent == false)
         {

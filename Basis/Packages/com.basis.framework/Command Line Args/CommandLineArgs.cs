@@ -42,11 +42,11 @@ namespace Basis.Scripts.Command_Line_Args
             try
             {
                 BasisDeviceManagement.Instance.BasisXRManagement.DisableDeviceManagerSolution(mode);
-                Debug.Log($"Device manager solution for mode {mode} has been successfully disabled.");
+                BasisDebug.Log($"Device manager solution for mode {mode} has been successfully disabled.", BasisDebug.LogTag.Device);
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Failed to disable device manager solution for mode {mode}: {ex.Message}");
+                BasisDebug.LogError($"Failed to disable device manager solution for mode {mode}: {ex.Message}", BasisDebug.LogTag.Device);
             }
         }
     }

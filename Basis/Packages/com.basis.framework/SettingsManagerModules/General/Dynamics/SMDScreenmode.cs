@@ -34,12 +34,12 @@ namespace BattlePhaze.SettingsManager.Intergrations
             {
                 SettingsManagerDropDown.SetOptionsValue(Manager, 0, 0, true);
                 Option.SelectedValue = Option.SelectableValueList[0].RealValue;
-                Debug.Log("Updating ScreenMode to " + Option.SelectedValue);
+                BasisDebug.Log("Updating ScreenMode to " + Option.SelectedValue);
                 Screen.fullScreenMode = FullScreenMode.Windowed;
             }
             else
             {
-                Debug.Log("Updating ScreenMode to " + Option.SelectedValue);
+                BasisDebug.Log("Updating ScreenMode to " + Option.SelectedValue);
                 for (int RealValuesIndex = 0; RealValuesIndex < Option.SelectableValueList.Count; RealValuesIndex++)
                 {
                     if (Option.SelectableValueList[RealValuesIndex].RealValue == Option.SelectedValue)
@@ -50,17 +50,17 @@ namespace BattlePhaze.SettingsManager.Intergrations
                             case FullscreenModeName:
                                 Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
                                 SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
-                                Debug.Log("set ScreenMode to " + Option.SelectedValue);
+                                BasisDebug.Log("set ScreenMode to " + Option.SelectedValue);
                                 return;
                             case MaximizedWindowModeName:
                                 Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
                                 SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
-                                Debug.Log("set ScreenMode to " + Option.SelectedValue);
+                                BasisDebug.Log("set ScreenMode to " + Option.SelectedValue);
                                 return;
                             case WindowedModeName:
                                 Screen.fullScreenMode = FullScreenMode.Windowed;
                                 SettingsManagerDropDown.SetOptionsValue(Manager, Option.OptionIndex, RealValuesIndex, true);
-                                Debug.Log("set ScreenMode to " + Option.SelectedValue);
+                                BasisDebug.Log("set ScreenMode to " + Option.SelectedValue);
                                 return;
                         }
                     }

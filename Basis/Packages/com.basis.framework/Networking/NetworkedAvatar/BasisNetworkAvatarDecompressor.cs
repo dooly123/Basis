@@ -24,7 +24,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 Position = BasisUnityBitPackerExtensions.ReadVectorFloatFromBytes(ref syncMessage.avatarSerialization.array, ref baseReceiver.Offset),
                 rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.avatarSerialization.array, BasisNetworkSendBase.RotationCompression, ref baseReceiver.Offset)
             };
-            //  UnityEngine.Debug.Log("avatar Pos " + avatarBuffer.Position);
+            //  UnityEngine.BasisDebug.Log("avatar Pos " + avatarBuffer.Position);
             if (avatarBuffer.Muscles == null)
             {
                 avatarBuffer.Muscles = new float[LocalAvatarSyncMessage.StoredBones];
@@ -59,7 +59,7 @@ namespace Basis.Scripts.Networking.NetworkedAvatar
                 rotation = BasisUnityBitPackerExtensions.ReadQuaternionFromBytes(ref syncMessage.array, BasisNetworkSendBase.RotationCompression, ref baseReceiver.Offset)
             };
             BasisUnityBitPackerExtensions.ReadMusclesFromBytesAsUShort(ref syncMessage.array, ref baseReceiver.CopyData, ref baseReceiver.Offset);
-            //    UnityEngine.Debug.Log("avatar Pos " + avatarBuffer.Position);
+            //    UnityEngine.BasisDebug.Log("avatar Pos " + avatarBuffer.Position);
             if (avatarBuffer.Muscles == null)
             {
                 avatarBuffer.Muscles = new float[LocalAvatarSyncMessage.StoredBones];

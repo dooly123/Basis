@@ -10,14 +10,14 @@ public class SMModuleControllerSettings : SettingsManagerOption
         {
             if (SliderReadOption(Option, Manager, out JoyStickDeadZone))
             {
-                Debug.Log("JoyStick deadspace is set to " + JoyStickDeadZone);
+                BasisDebug.Log("JoyStick deadspace is set to " + JoyStickDeadZone);
             }
         }
         if (NameReturn(1, Option))
         {
             if (SliderReadOption(Option, Manager, out SnapTurnAngle))
             {
-                Debug.Log("Snap Turn Angle is set to " + SnapTurnAngle);
+                BasisDebug.Log("Snap Turn Angle is set to " + SnapTurnAngle);
             }
         }
     }

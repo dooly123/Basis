@@ -35,17 +35,17 @@ namespace Basis.Scripts.Drivers
             Player = BasisPlayer;
             if (Avatar == null)
             {
-                Debug.Log("not setting up BasisVisemeDriver Avatar was null");
+                BasisDebug.Log("not setting up BasisVisemeDriver Avatar was null");
                 return false;
             }
             if (Avatar.FaceVisemeMesh == null)
             {
-                Debug.Log("not setting up BasisVisemeDriver FaceVisemeMesh was null");
+                BasisDebug.Log("not setting up BasisVisemeDriver FaceVisemeMesh was null");
                 return false;
             }
             if (Avatar.FaceVisemeMesh.sharedMesh.blendShapeCount == 0)
             {
-                Debug.Log("not setting up BasisVisemeDriver blendShapeCount was empty");
+                BasisDebug.Log("not setting up BasisVisemeDriver blendShapeCount was empty");
                 return false;
             }
             if (uLipSync == null)
@@ -164,7 +164,7 @@ namespace Basis.Scripts.Drivers
             }
             if (Player != null && Player.FaceRenderer != null && HashInstanceID != Player.FaceRenderer.GetInstanceID())
             {
-                Debug.Log("Wired up Renderer Check For Blinking");
+                BasisDebug.Log("Wired up Renderer Check For Blinking");
                 Player.FaceRenderer.Check += UpdateFaceVisibility;
                 Player.FaceRenderer.DestroyCalled += TryDeinitalize;
             }
@@ -194,7 +194,7 @@ namespace Basis.Scripts.Drivers
                 }
             }
         }
-        public void ProcessAudioSamples(float[] data,int channels)
+        public void ProcessAudioSamples(float[] data,int channels,int Length)
         {
             if (uLipSyncEnabledState == false)
             {
@@ -204,7 +204,7 @@ namespace Basis.Scripts.Drivers
             {
                 return;
             }
-            uLipSync.OnDataReceived(data, channels);
+            uLipSync.OnDataReceived(data, channels, Length);
         }
     }
 }

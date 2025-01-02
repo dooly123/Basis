@@ -71,12 +71,12 @@ namespace Basis.Scripts.Device_Management.Devices
                     {
                         if (CanHaveMultipleRoles.Contains(found) == false)
                         {
-                            Debug.LogError("Already Found tracker for  " + Role);
+                            BasisDebug.LogError("Already Found tracker for  " + Role, BasisDebug.LogTag.Input);
                             return;
                         }
                         else
                         {
-                            Debug.Log("Has Multiple Roles assigned for " + found + " most likely ok.");
+                            BasisDebug.Log("Has Multiple Roles assigned for " + found + " most likely ok.", BasisDebug.LogTag.Input);
                         }
                     }
                 }
@@ -108,7 +108,7 @@ namespace Basis.Scripts.Device_Management.Devices
             }
             else
             {
-                Debug.LogError("Attempted to find " + Role + " but it did not exist");
+                BasisDebug.LogError("Attempted to find " + Role + " but it did not exist");
             }
         }
         public Quaternion InitalRotation;
@@ -153,7 +153,7 @@ namespace Basis.Scripts.Device_Management.Devices
         {
             //unassign the old tracker
             UnAssignTracker();
-            Debug.Log("Finding ID " + unUniqueDeviceID);
+            BasisDebug.Log("Finding ID " + unUniqueDeviceID, BasisDebug.LogTag.Input);
             AvatarRotationOffset = Quaternion.identity.eulerAngles;
             //configure device identifier
             SubSystemIdentifier = subSystems;
@@ -163,7 +163,7 @@ namespace Basis.Scripts.Device_Management.Devices
             BasisDeviceMatchableNames = BasisDeviceManagement.Instance.BasisDeviceNameMatcher.GetAssociatedDeviceMatchableNames(CommonDeviceIdentifier, basisBoneTrackedRole, ForceAssignTrackedRole);
             if (BasisDeviceMatchableNames.HasTrackedRole)
             {
-                Debug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID);
+                BasisDebug.Log("Overriding Tracker " + BasisDeviceMatchableNames.DeviceID, BasisDebug.LogTag.Input);
                 AssignRoleAndTracker(BasisDeviceMatchableNames.TrackedRole);
             }
 
@@ -192,7 +192,7 @@ namespace Basis.Scripts.Device_Management.Devices
             }
             else
             {
-                Debug.Log("has device events assigned already " + UniqueDeviceIdentifier);
+                BasisDebug.Log("has device events assigned already " + UniqueDeviceIdentifier, BasisDebug.LogTag.Input);
             }
         }
         public void ApplyFinalMovement()
@@ -228,7 +228,7 @@ namespace Basis.Scripts.Device_Management.Devices
             {
                 if (HasControl)
                 {
-                    Debug.Log("UnAssigning Tracker " + Control.Name);
+                    BasisDebug.Log("UnAssigning Tracker " + Control.Name, BasisDebug.LogTag.Input);
                     Control.InverseOffsetFromBone.position = Vector3.zero;
                     Control.InverseOffsetFromBone.rotation = Quaternion.identity;
                     Control.InverseOffsetFromBone.Use = false;
@@ -239,14 +239,14 @@ namespace Basis.Scripts.Device_Management.Devices
         public void ApplyTrackerCalibration(BasisBoneTrackedRole Role)
         {
             UnAssignTracker();
-            Debug.Log("ApplyTrackerCalibration " + Role + " to tracker " + UniqueDeviceIdentifier);
+            BasisDebug.Log("ApplyTrackerCalibration " + Role + " to tracker " + UniqueDeviceIdentifier, BasisDebug.LogTag.Input);
             AssignRoleAndTracker(Role);
         }
         public void StopTracking()
         {
             if (BasisLocalPlayer.Instance.LocalBoneDriver == null)
             {
-                Debug.LogError("Missing Driver!");
+                BasisDebug.LogError("Missing Driver!");
                 return;
             }
             UnAssignRoleAndTracker();
@@ -259,7 +259,7 @@ namespace Basis.Scripts.Device_Management.Devices
             }
             else
             {
-                Debug.Log("has device events assigned already " + UniqueDeviceIdentifier);
+                BasisDebug.Log("has device events assigned already " + UniqueDeviceIdentifier, BasisDebug.LogTag.Input);
             }
         }
         public void SetRealTrackers(BasisHasTracked hasTracked, BasisHasRigLayer HasLayer)
@@ -284,11 +284,11 @@ namespace Basis.Scripts.Device_Management.Devices
                         BasisLocalPlayer.Instance.AvatarDriver.ApplyHint(Role, 1);
                     }
                 }
-                Debug.Log("Set Tracker State for tracker " + UniqueDeviceIdentifier + " with bone " + Control.Name + " as " + Control.HasTracked.ToString() + " | " + Control.HasRigLayer.ToString());
+                BasisDebug.Log("Set Tracker State for tracker " + UniqueDeviceIdentifier + " with bone " + Control.Name + " as " + Control.HasTracked.ToString() + " | " + Control.HasRigLayer.ToString(), BasisDebug.LogTag.Input);
             }
             else
             {
-                Debug.LogError("Missing Controller Or Bone");
+                BasisDebug.LogError("Missing Controller Or Bone", BasisDebug.LogTag.Input);
             }
         }
         public void PollData()
@@ -451,21 +451,21 @@ namespace Basis.Scripts.Device_Management.Devices
         public static string FallbackDeviceID = "FallbackSphere";
         public void HideTrackedVisual()
         {
-            Debug.Log("HideTrackedVisual");
+            BasisDebug.Log("HideTrackedVisual", BasisDebug.LogTag.Input);
             if (BasisVisualTracker != null)
             {
-                Debug.Log("Found and removing  HideTrackedVisual");
+                BasisDebug.Log("Found and removing  HideTrackedVisual", BasisDebug.LogTag.Input);
                 GameObject.Destroy(BasisVisualTracker.gameObject);
             }
             if (LoadedDeviceRequest != null)
             {
-                Debug.Log("Released Memory");
+                BasisDebug.Log("Released Memory", BasisDebug.LogTag.Input);
                 AddressableLoadFactory.ReleaseResource(LoadedDeviceRequest);
             }
         }
         public async void CreateRayCaster(BasisInput BaseInput)
         {
-            Debug.Log("Adding RayCaster");
+            BasisDebug.Log("Adding RayCaster");
             BasisPointRaycasterRef = new GameObject(nameof(BasisPointRaycaster));
             BasisPointRaycasterRef.transform.parent = this.transform;
             BasisPointRaycasterRef.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);

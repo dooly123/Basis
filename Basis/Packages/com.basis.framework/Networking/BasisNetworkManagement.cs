@@ -30,6 +30,7 @@ namespace Basis.Scripts.Networking
         public ushort Port = 4296;
         [HideInInspector]
         public string Password = "default_password";
+        public bool IsHostMode = false;
         /// <summary>
         /// fire when ownership is changed for a unique string
         /// </summary>
@@ -65,6 +66,10 @@ namespace Basis.Scripts.Networking
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
+        /// <summary>
+        /// allows a local host to be the server
+        /// </summary>
+        public BasisNetworkServerRunner BasisNetworkServerRunner = null;
         public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
         {
             if (Instance != null)
@@ -76,18 +81,18 @@ namespace Basis.Scripts.Networking
                         RemotePlayers.TryAdd(NetPlayer.NetId, (BasisNetworkReceiver)NetPlayer.NetworkSend);
                         BasisNetworkManagement.Instance.receiverArray = RemotePlayers.Values.ToArray();
                         ReceiverCount = ReceiverArray.Length;
-                        Debug.Log("ReceiverCount was " + ReceiverCount);
+                        BasisDebug.Log("ReceiverCount was " + ReceiverCount);
                     }
                 }
                 else
                 {
-                    Debug.LogError("Player was Null!");
+                    BasisDebug.LogError("Player was Null!");
                 }
                 return Players.TryAdd(NetPlayer.NetId, NetPlayer);
             }
             else
             {
-                Debug.LogError("No network Instance Existed!");
+                BasisDebug.LogError("No network Instance Existed!");
             }
             return false;
         }
@@ -98,7 +103,7 @@ namespace Basis.Scripts.Networking
                 RemotePlayers.TryRemove(NetID,out BasisNetworkReceiver A);
                 BasisNetworkManagement.Instance.receiverArray = RemotePlayers.Values.ToArray();
                 ReceiverCount = ReceiverArray.Length;
-                //Debug.Log("ReceiverCount was " + ReceiverCount);
+                //BasisDebug.Log("ReceiverCount was " + ReceiverCount);
                 return Players.Remove(NetID, out var B);
             }
             return false;
@@ -124,7 +129,7 @@ namespace Basis.Scripts.Networking
         }
         private void LogErrorOutput(string obj)
         {
-           Debug.LogError(obj);
+           BasisDebug.LogError(obj);
         }
         private void LogWarningOutput(string obj)
         {
@@ -132,13 +137,49 @@ namespace Basis.Scripts.Networking
         }
         private void LogOutput(string obj)
         {
-            Debug.Log(obj);
+            BasisDebug.Log(obj);
         }
         public void OnDestroy()
         {
             Players.Clear();
+            Shutdown();
             BasisAvatarBufferPool.Clear();
             BasisNetworkClient.Disconnect();
+        }
+        public void Shutdown()
+        {
+            // Reset static fields
+            Ip = "0.0.0.0";
+            Port = 0;
+            Password = string.Empty;
+            IsHostMode = false;
+            OnOwnershipTransfer = null;
+            Players.Clear();
+            RemotePlayers.Clear();
+            JoiningPlayers.Clear();
+            ReceiverCount = 0;
+            MainThreadContext = null;
+            LocalPlayerPeer = null;
+            Transmitter = null;
+            OnLocalPlayerJoined = null;
+            HasSentOnLocalPlayerJoin = false;
+            OnRemotePlayerJoined = null;
+            OnLocalPlayerLeft = null;
+            OnRemotePlayerLeft = null;
+            OnEnableInstanceCreate = null;
+
+            // Reset instance fields
+            Instance = null;
+            OwnershipPairing.Clear();
+            BasisNetworkServerRunner = null;
+
+            if (receiverArray != null)
+            {
+                Array.Clear(receiverArray, 0, receiverArray.Length);
+                receiverArray = null;
+            }
+
+            Debug.Log("BasisNetworkManagement has been successfully shutdown.");
         }
         public void Update()
         {
@@ -157,7 +198,7 @@ namespace Basis.Scripts.Networking
                 catch (Exception ex)
                 {
                     // Log the error and continue with the next iteration
-                    Debug.LogError($"Error in Compute at index {Index}: {ex.Message} {ex.StackTrace}");
+                    BasisDebug.LogError($"Error in Compute at index {Index}: {ex.Message} {ex.StackTrace}");
                 }
             }
         }
@@ -179,7 +220,7 @@ namespace Basis.Scripts.Networking
                 catch (Exception ex)
                 {
                     // Log the error and continue with the next iteration
-                    Debug.LogError($"Error in Apply at index {Index}: {ex.Message} {ex.StackTrace}");
+                    BasisDebug.LogError($"Error in Apply at index {Index}: {ex.Message} {ex.StackTrace}");
                 }
             }
         }
@@ -199,16 +240,25 @@ namespace Basis.Scripts.Networking
         }
         public void Connect()
         {
-            Connect(Port, Ip, Password);
+            Connect(Port, Ip, Password, IsHostMode);
         }
-        public void Connect(ushort Port, string IpString,string PrimitivePassword)
+        public void Connect(ushort Port, string IpString,string PrimitivePassword,bool IsHostMode)
         {
             BNL.LogOutput += LogOutput;
             BNL.LogWarningOutput += LogWarningOutput;
             BNL.LogErrorOutput += LogErrorOutput;
-            Debug.Log("Connecting with Port " + Port + " IpString " + IpString);
+
+            if(IsHostMode)
+            {
+                IpString = "localhost";
+                BasisNetworkServerRunner = new BasisNetworkServerRunner();
+                Configuration ServerConfig =   new Configuration() { IPv4Address = IpString };
+                BasisNetworkServerRunner.Initalize(ServerConfig,string.Empty);
+            }
+
+            BasisDebug.Log("Connecting with Port " + Port + " IpString " + IpString);
             //   string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
-            //   Debug.Log($"DNS call: {IpString} resolves to {result}");
+            //   BasisDebug.Log($"DNS call: {IpString} resolves to {result}");
             BasisLocalPlayer BasisLocalPlayer = BasisLocalPlayer.Instance;
             byte[] Information = BasisBundleConversionNetwork.ConvertBasisLoadableBundleToBytes(BasisLocalPlayer.AvatarMetaData);
             ReadyMessage readyMessage = new ReadyMessage
@@ -225,14 +275,14 @@ namespace Basis.Scripts.Networking
                 }
             };
             BasisNetworkAvatarCompressor.InitalAvatarData(BasisLocalPlayer.Instance.BasisAvatar.Animator, out readyMessage.localAvatarSyncMessage);
-            Debug.Log("Network Starting Client");
+            BasisDebug.Log("Network Starting Client");
             BasisNetworkClient.AuthenticationMessage = new Network.Core.Serializable.SerializableBasis.AuthenticationMessage
             {
                  bytes = Encoding.UTF8.GetBytes(PrimitivePassword)
             };
-           // Debug.Log("Size is " + BasisNetworkClient.AuthenticationMessage.Message.Length);
+           // BasisDebug.Log("Size is " + BasisNetworkClient.AuthenticationMessage.Message.Length);
             LocalPlayerPeer = BasisNetworkClient.StartClient(IpString, Port, readyMessage);
-            Debug.Log("Network Client Started " + LocalPlayerPeer.RemoteId);
+            BasisDebug.Log("Network Client Started " + LocalPlayerPeer.RemoteId);
             BasisNetworkClient.listener.PeerConnectedEvent += PeerConnectedEvent;
             BasisNetworkClient.listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
             BasisNetworkClient.listener.NetworkReceiveEvent += NetworkReceiveEvent;
@@ -243,7 +293,7 @@ namespace Basis.Scripts.Networking
         }
         private async Task PeerConnectedEventAsync(NetPeer peer)
         {
-            Debug.Log("Success! Now setting up Networked Local Player");
+            BasisDebug.Log("Success! Now setting up Networked Local Player");
 
             // Wrap the main logic in a task for thread safety and asynchronous execution.
             await Task.Run(() =>
@@ -257,18 +307,18 @@ namespace Basis.Scripts.Networking
                         // Create the local networked player asynchronously.
                         this.transform.GetPositionAndRotation(out Vector3 Position, out Quaternion Rotation);
                         BasisNetworkedPlayer LocalNetworkedPlayer = new BasisNetworkedPlayer();
-                        Debug.Log("Network Id Updated " + LocalPlayerPeer.RemoteId);
+                        BasisDebug.Log("Network Id Updated " + LocalPlayerPeer.RemoteId);
 
                         LocalNetworkedPlayer.ProvideNetworkKey(LocalPlayerID);
                         // Initialize the local networked player.
                         LocalNetworkedPlayer.LocalInitalize(BasisLocalPlayer.Instance);
                         if (AddPlayer(LocalNetworkedPlayer))
                         {
-                            Debug.Log($"Added local player {LocalPlayerID}");
+                            BasisDebug.Log($"Added local player {LocalPlayerID}");
                         }
                         else
                         {
-                            Debug.LogError($"Cannot add player {LocalPlayerID}");
+                            BasisDebug.LogError($"Cannot add player {LocalPlayerID}");
                         }
                         LocalNetworkedPlayer.InitalizeNetwork();
                         // Notify listeners about the local player joining.
@@ -277,7 +327,7 @@ namespace Basis.Scripts.Networking
                     }
                     catch (Exception ex)
                     {
-                        Debug.LogError($"Error setting up the local player: {ex.Message}");
+                        BasisDebug.LogError($"Error setting up the local player: {ex.Message}");
                     }
                 }, null);
             });
@@ -285,7 +335,7 @@ namespace Basis.Scripts.Networking
         public bool IsRunning = true;
         private async void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            Debug.Log($"Client disconnected from server [{peer.Id}]");
+            BasisDebug.Log($"Client disconnected from server [{peer.Id}]");
             if (peer == LocalPlayerPeer)
             {
                 await Task.Run(() =>
@@ -300,13 +350,18 @@ namespace Basis.Scripts.Networking
                     {
                         if (disconnectInfo.AdditionalData.TryGetString(out string Reason))
                         {
-                            Debug.LogError(Reason);
+                            BasisDebug.LogError(Reason);
                         }
+                    }
+                    if(BasisNetworkServerRunner != null)
+                    {
+                        BasisNetworkServerRunner.Stop();
+                        BasisNetworkServerRunner = null;
                     }
                     Players.Clear();
                     OwnershipPairing.Clear();
                     ReceiverCount = 0;
-                    Debug.Log($"Client disconnected from server [{peer.RemoteId}] [{disconnectInfo.Reason}]");
+                    BasisDebug.Log($"Client disconnected from server [{peer.RemoteId}] [{disconnectInfo.Reason}]");
                     SceneManager.LoadScene(0, LoadSceneMode.Single);//reset
                     await Boot_Sequence.BootSequence.OnAddressablesInitializationComplete();
                 }, null);
@@ -438,14 +493,14 @@ namespace Basis.Scripts.Networking
         {
             if (Instance == null)
             {
-                Debug.LogError("Network Not Ready!");
+                BasisDebug.LogError("Network Not Ready!");
                 NetworkedPlayer = null;
                 BasisPlayer = null;
                 return false;
             }
             if (Avatar == null)
             {
-                Debug.LogError("Missing Avatar! Make sure your not sending in a null item");
+                BasisDebug.LogError("Missing Avatar! Make sure your not sending in a null item");
                 NetworkedPlayer = null;
                 BasisPlayer = null;
                 return false;
@@ -459,7 +514,7 @@ namespace Basis.Scripts.Networking
             }
             else
             {
-                Debug.LogError("the player was not assigned at this time!");
+                BasisDebug.LogError("the player was not assigned at this time!");
             }
             NetworkedPlayer = null;
             BasisPlayer = null;
@@ -475,13 +530,13 @@ namespace Basis.Scripts.Networking
         {
             if (Instance == null)
             {
-                Debug.LogError("Network Not Ready!");
+                BasisDebug.LogError("Network Not Ready!");
                 BasisPlayer = null;
                 return false;
             }
             if (Avatar == null)
             {
-                Debug.LogError("Missing Avatar! Make sure your not sending in a null item");
+                BasisDebug.LogError("Missing Avatar! Make sure your not sending in a null item");
                 BasisPlayer = null;
                 return false;
             }
@@ -497,17 +552,17 @@ namespace Basis.Scripts.Networking
                 {
                     if(JoiningPlayers.Contains(id))
                     {
-                        Debug.LogError("Player was still Connecting when this was called!");
+                        BasisDebug.LogError("Player was still Connecting when this was called!");
                     }
                     else
                     {
-                        Debug.LogError("Player was not found, this also includes joining list, something is very wrong!");
+                        BasisDebug.LogError("Player was not found, this also includes joining list, something is very wrong!");
                     }
                 }
             }
             else
             {
-                Debug.LogError("the player was not assigned at this time!");
+                BasisDebug.LogError("the player was not assigned at this time!");
             }
             BasisPlayer = null;
             return false;
@@ -516,13 +571,13 @@ namespace Basis.Scripts.Networking
         {
             if (Instance == null)
             {
-                Debug.LogError("Network Not Ready!");
+                BasisDebug.LogError("Network Not Ready!");
                 NetworkedPlayer = null;
                 return false;
             }
             if (BasisPlayer == null)
             {
-                Debug.LogError("Missing Player! make sure your not sending in a null item");
+                BasisDebug.LogError("Missing Player! make sure your not sending in a null item");
                 NetworkedPlayer = null;
                 return false;
             }

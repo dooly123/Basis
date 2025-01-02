@@ -1,48 +1,46 @@
-using System;
 using System.IO;
 using System.Xml;
-
+[System.Serializable]
 public class Configuration
 {
-    public int PeerLimit { get; set; }
-    public ushort SetPort { get; set; }
-    public int QueueEvents { get; set; }
-    public bool UseNativeSockets { get; set; }
-    public bool NatPunchEnabled { get; set; }
-    public int PingInterval { get; set; }
-    public int DisconnectTimeout { get; set; }
-    public bool SimulatePacketLoss { get; set; }
-    public bool SimulateLatency { get; set; }
-    public int SimulationPacketLossChance { get; set; }
-    public int SimulationMinLatency { get; set; }
-    public int SimulationMaxLatency { get; set; }
-    public bool UnsyncedEvents { get; set; }
-    public bool UnsyncedReceiveEvent { get; set; }
-    public bool UnsyncedDeliveryEvent { get; set; }
-    public int ReconnectDelay { get; set; }
-    public int MaxConnectAttempts { get; set; }
-    public bool ReuseAddress { get; set; }
-    public bool DontRoute { get; set; }
-    public bool EnableStatistics { get; set; }
-    public bool IPv6Enabled { get; set; }
-    public int MtuOverride { get; set; }
-    public bool MtuDiscovery { get; set; }
-    public bool DisconnectOnUnreachable { get; set; }
-    public bool AllowPeerAddressChange { get; set; }
-    public bool UsingLoggingFile { get; set; }
-    public string HealthCheckHost { get; set; }
-    public ushort HealthCheckPort { get; set; }
-    public string HealthPath { get; set; }
-    public int BSRSMillisecondDefaultInterval { get; set; }
-    public int BSRBaseMultiplier { get; set; }
-    public float BSRSIncreaseRate { get; set; }
-    public bool OverrideAutoDiscoveryOfIpv { get; set; }
-    public string IPv4Address { get; set; }
-    public string IPv6Address { get; set; }
-    public int PromethusPort { get; set; }
-    public string PromethusUrl { get; set; }
-    public string Password { get; set; } // New field
-
+    public int PeerLimit = 1024;
+    public ushort SetPort = 4296;
+    public int QueueEvents = 10;
+    public bool UseNativeSockets = false;
+    public bool NatPunchEnabled = true;
+    public int PingInterval = 1500;
+    public int DisconnectTimeout = 30000;
+    public bool SimulatePacketLoss = false;
+    public bool SimulateLatency = false;
+    public int SimulationPacketLossChance = 10;
+    public int SimulationMinLatency = 50;
+    public int SimulationMaxLatency = 150;
+    public bool UnsyncedEvents = false;
+    public bool UnsyncedReceiveEvent = false;
+    public bool UnsyncedDeliveryEvent = false;
+    public int ReconnectDelay = 2000;
+    public int MaxConnectAttempts = 5;
+    public bool ReuseAddress = false;
+    public bool DontRoute = false;
+    public bool EnableStatistics = true;
+    public bool IPv6Enabled = false;
+    public int MtuOverride = 1500;
+    public bool MtuDiscovery = true;
+    public bool DisconnectOnUnreachable = true;
+    public bool AllowPeerAddressChange = true;
+    public bool UsingLoggingFile = false;
+    public string HealthCheckHost = "localhost";
+    public ushort HealthCheckPort = 10666;
+    public string HealthPath = "/health";
+    public int BSRSMillisecondDefaultInterval = 50;
+    public int BSRBaseMultiplier = 1;
+    public float BSRSIncreaseRate = 0.005f;
+    public bool OverrideAutoDiscoveryOfIpv = false;
+    public string IPv4Address = "0.0.0.0";
+    public string IPv6Address = "::1";
+    public int PromethusPort = 1234;
+    public string PromethusUrl = "/metrics";
+    public string Password = "default_password";
     public static Configuration LoadFromXml(string filePath)
     {
         if (!File.Exists(filePath))
@@ -59,7 +57,7 @@ public class Configuration
             SetPort = ushort.Parse(doc.SelectSingleNode("/Configuration/SetPort")?.InnerText ?? "4296"),
             QueueEvents = int.Parse(doc.SelectSingleNode("/Configuration/QueueEvents")?.InnerText ?? "10"),
             UseNativeSockets = bool.Parse(doc.SelectSingleNode("/Configuration/UseNativeSockets")?.InnerText ?? "false"),
-            NatPunchEnabled = bool.Parse(doc.SelectSingleNode("/Configuration/NatPunchEnabled")?.InnerText ?? "false"),
+            NatPunchEnabled = bool.Parse(doc.SelectSingleNode("/Configuration/NatPunchEnabled")?.InnerText ?? "true"),
             PingInterval = int.Parse(doc.SelectSingleNode("/Configuration/PingInterval")?.InnerText ?? "1500"),
             DisconnectTimeout = int.Parse(doc.SelectSingleNode("/Configuration/DisconnectTimeout")?.InnerText ?? "30000"),
             SimulatePacketLoss = bool.Parse(doc.SelectSingleNode("/Configuration/SimulatePacketLoss")?.InnerText ?? "false"),

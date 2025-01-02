@@ -15,7 +15,7 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
         /*
                     if (NameReturn(0, option))
                     {
-                        Debug.Log($"[SMModuleAmbientOcclusionURP] Received quality option: {option.SelectedValue}");
+                        BasisDebug.Log($"[SMModuleAmbientOcclusionURP] Received quality option: {option.SelectedValue}");
                         SetQuality(option.SelectedValue);
                     }
             */
@@ -24,7 +24,7 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
     {
         if (AmbientOcclusion == null)
         {
-            Debug.LogError("[SMModuleAmbientOcclusionURP] AmbientOcclusion is null. Cannot set quality.");
+            BasisDebug.LogError("[SMModuleAmbientOcclusionURP] AmbientOcclusion is null. Cannot set quality.");
             return;
         }
 
@@ -32,11 +32,11 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
 
         if (quality == "very low")
         {
-            Debug.Log("[SMModuleAmbientOcclusionURP] Quality set to 'very low'; Ambient Occlusion disabled.");
+            BasisDebug.Log("[SMModuleAmbientOcclusionURP] Quality set to 'very low'; Ambient Occlusion disabled.");
             return;
         }
 
-        Debug.Log($"[SMModuleAmbientOcclusionURP] Configuring SSAO for quality level: {quality}");
+        BasisDebug.Log($"[SMModuleAmbientOcclusionURP] Configuring SSAO for quality level: {quality}");
         switch (quality)
         {
             case "low":
@@ -63,7 +63,7 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
     {
         if (AmbientOcclusion == null)
         {
-            Debug.LogError("SSAO Feature reference is missing.");
+            BasisDebug.LogError("SSAO Feature reference is missing.");
             return;
         }
 
@@ -73,7 +73,7 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
             settingsInstance = settingsField.GetValue(AmbientOcclusion);
             if (settingsInstance == null)
             {
-                Debug.LogError("Failed to retrieve m_Settings.");
+                BasisDebug.LogError("Failed to retrieve m_Settings.");
                 return;
             }
 
@@ -84,7 +84,7 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
         }
         else
         {
-            Debug.LogError("m_Settings field not found.");
+            BasisDebug.LogError("m_Settings field not found.");
         }
     }
 
@@ -99,7 +99,7 @@ public class SMModuleAmbientOcclusionURP : SettingsManagerOption
             if (enumValue != null)
             {
                 field.SetValue(settingsInstance, enumValue);
-                Debug.Log($"[SMModuleAmbientOcclusionURP] Set {fieldName} to {enumValue}");
+                BasisDebug.Log($"[SMModuleAmbientOcclusionURP] Set {fieldName} to {enumValue}");
             }
             else
             {

@@ -62,7 +62,7 @@ public static class BasisNetworkGenericMessages
         {
             if (player.Player == null)
             {
-                Debug.LogError("Missing Player! " + avatarLinkID);
+                BasisDebug.LogError("Missing Player! " + avatarLinkID);
                 return;
             }
             if (player.Player.BasisAvatar != null)
@@ -79,19 +79,19 @@ public static class BasisNetworkGenericMessages
             }
             else
             {
-                Debug.LogError("Missing Avatar For Message " + serverAvatarDataMessage.playerIdMessage.playerID);
+                BasisDebug.LogError("Missing Avatar For Message " + serverAvatarDataMessage.playerIdMessage.playerID);
             }
         }
         else
         {
-            Debug.Log("Missing Player For Message " + serverAvatarDataMessage.playerIdMessage.playerID);
+            BasisDebug.Log("Missing Player For Message " + serverAvatarDataMessage.playerIdMessage.playerID);
         }
     }
     // Sending message with different conditions
     public static void OnNetworkMessageSend(ushort messageIndex, byte[] buffer = null, DeliveryMethod deliveryMethod = DeliveryMethod.Unreliable, ushort[] recipients = null)
     {
         NetDataWriter netDataWriter = new NetDataWriter();
-        //Debug.Log("Sending with Recipients and buffer");
+        //BasisDebug.Log("Sending with Recipients and buffer");
         SceneDataMessage sceneDataMessage = new SceneDataMessage
         {
             messageIndex = messageIndex,

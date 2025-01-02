@@ -110,7 +110,7 @@ namespace Basis.Scripts.Networking.Compression
             for (int Index = 0; Index < LocalAvatarSyncMessage.StoredBones - 1; Index++)
             {
                 muscles[Index] = ReadUShortFromBytes(ref bytes, ref offset);
-                // UnityEngine.Debug.Log("" + muscles[i]);
+                // UnityEngine.BasisDebug.Log("" + muscles[i]);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Basis.Scripts.Networking.Compression
             for (int index = 0; index < LocalAvatarSyncMessage.StoredBones - 1; index++)
             {
                 muscles[index] = ReadUShortFromBytes(ref bytes, ref offset);
-                // UnityEngine.Debug.Log("" + muscles[index]);
+                // UnityEngine.BasisDebug.Log("" + muscles[index]);
             }
         }
 
