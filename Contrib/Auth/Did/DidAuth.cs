@@ -1,9 +1,9 @@
 /// Cryptographically secure random number generator
 using System;
-using Basis.Contrib.Auth.Did.Newtypes;
+using Basis.Contrib.Auth.DecentralizedIds.Newtypes;
 using CryptoRng = System.Security.Cryptography.RandomNumberGenerator;
 
-namespace Basis.Contrib.Auth.Did
+namespace Basis.Contrib.Auth.DecentralizedIds
 {
 	/// Configuration for [`DidAuthentication`].
 	public record Config
@@ -21,17 +21,17 @@ namespace Basis.Contrib.Auth.Did
 		const ushort NONCE_LEN = 256 / sizeof(byte);
 
 		// We store the rng to make deterministic testing and seeding possible.
-		readonly CryptoRng rng;
+		readonly CryptoRng Rng;
 
 		public DidAuthentication(Config cfg)
 		{
-			this.rng = cfg.Rng;
+			Rng = cfg.Rng;
 		}
 
-		public Challenge MakeChallenge(Newtypes.Did identity)
+		public Challenge MakeChallenge(Did identity)
 		{
 			var nonce = new byte[NONCE_LEN];
-			this.rng.GetBytes(nonce);
+			Rng.GetBytes(nonce);
 			return new Challenge(Identity: identity, Nonce: nonce);
 		}
 
@@ -61,7 +61,7 @@ namespace Basis.Contrib.Auth.Did
 	/// Challenges also track the identity of the party that the challenge was
 	/// sent to, so that later the signature's public key can be compared to
 	/// the identity's public key.
-	public record Challenge(Newtypes.Did Identity, byte[] Nonce);
+	public record Challenge(Did Identity, byte[] Nonce);
 
 	public record Response(
 		/// A JSON Web Signature, in "compact serialization" form. The payload

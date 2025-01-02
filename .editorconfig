@@ -11,3 +11,5 @@ trim_trailing_whitespace = true
 [*.{cs|csx}]
 indent_style = tab
 max_line_length = 88
+# enforce naming rules
+dotnet_diagnostic.IDE1006.severity = warning

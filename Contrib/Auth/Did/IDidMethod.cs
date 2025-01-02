@@ -1,9 +1,8 @@
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using DidUrlFragment = Basis.Contrib.Auth.Did.Newtypes.DidUrlFragment;
-using JsonWebKey = Microsoft.IdentityModel.Tokens.JsonWebKey;
+using Did = Basis.Contrib.Auth.DecentralizedIds.Newtypes.Did;
+using DidDocument = Basis.Contrib.Auth.DecentralizedIds.DidDocument;
 
-namespace Basis.Contrib.Auth.Did
+namespace Basis.Contrib.Auth.DecentralizedIds
 {
 	/// The functionality that all DID methods implement
 	interface IDidMethod
@@ -15,6 +14,6 @@ namespace Basis.Contrib.Auth.Did
 		/// Even though json is not what all DID methods will use to represent keys,
 		/// we standardize the api to return JsonWebKey because it documents its
 		/// own key algorithms and is a reasonably portable format.
-		public Task<ReadOnlyDictionary<DidUrlFragment, JsonWebKey>> ResolvePubkeys();
+		public Task<DidDocument> ResolveDocument(Did did);
 	}
 }
