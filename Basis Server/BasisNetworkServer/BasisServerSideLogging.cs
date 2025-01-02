@@ -9,7 +9,7 @@ namespace Basis.Network
 {
     public static class BasisServerSideLogging
     {
-        private static readonly string LogDirectory;
+        private static string LogDirectory;
         private static string CurrentLogFileName => Path.Combine(LogDirectory, $"{DateTime.UtcNow:yyyy-MM-dd}.log");
 
         private static CancellationTokenSource _cancellationTokenSource;
@@ -27,9 +27,10 @@ namespace Basis.Network
         /// </summary>
         /// <param name="config"></param>
         /// <param name="PathOutput"></param>
-        public static void Initialize(Configuration config, string LogDirectory)
+        public static void Initialize(Configuration config, string logDirectory)
         {
             UseLogging = config.UsingLoggingFile;
+            LogDirectory = logDirectory;
             BNL.LogOutput += Log;
             BNL.LogWarningOutput += LogWarning;
             BNL.LogErrorOutput += LogError;
@@ -49,7 +50,6 @@ namespace Basis.Network
                 Log("no logs will be saved");
             }
         }
-
         private static void StartLoggingTask()
         {
             _cancellationTokenSource = new CancellationTokenSource();

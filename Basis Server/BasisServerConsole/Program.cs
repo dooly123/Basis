@@ -16,7 +16,6 @@ namespace Basis
             //  BasisPrometheus.StartPrometheus(config.PromethusPort, config.PromethusUrl);
             // Initialize server-side logging
             string FolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-            config.UsingLoggingFile = false;
             BasisServerSideLogging.Initialize(config, FolderPath);
 
             BNL.Log("Server Booting");
