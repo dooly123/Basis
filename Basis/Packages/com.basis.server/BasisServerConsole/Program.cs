@@ -1,5 +1,6 @@
 using Basis.Network;
 using Basis.Network.Server;
+
 namespace Basis
 {
     class Program
@@ -8,16 +9,19 @@ namespace Basis
 
         public static void Main(string[] args)
         {
+            // Set up global exception handlers
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+
             // Get the path to the config.xml file in the application's directory
             string configFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.xml");
 
             // Load configuration from the XML file
             Configuration config = Configuration.LoadFromXml(configFilePath);
-            //  BasisPrometheus.StartPrometheus(config.PromethusPort, config.PromethusUrl);
+
             // Initialize server-side logging
-            string FolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-            config.UsingLoggingFile = false;
-            BasisServerSideLogging.Initialize(config, FolderPath);
+            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+            BasisServerSideLogging.Initialize(config, folderPath);
 
             BNL.Log("Server Booting");
 
@@ -67,10 +71,36 @@ namespace Basis
                 await BasisServerSideLogging.ShutdownAsync();
                 BNL.Log("Server shut down successfully.");
             };
+
+            // Keep the application running
             while (true)
             {
-                System.Threading.Thread.Sleep(15000);
+                Thread.Sleep(15000);
             }
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var exception = e.ExceptionObject as Exception;
+            if (exception != null)
+            {
+                BNL.LogError($"Fatal exception: {exception.Message}");
+                BNL.LogError($"Stack trace: {exception.StackTrace}");
+            }
+            else
+            {
+                BNL.LogError("An unknown fatal exception occurred.");
+            }
+        }
+
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            foreach (var exception in e.Exception.InnerExceptions)
+            {
+                BNL.LogError($"Unobserved task exception: {exception.Message}");
+                BNL.LogError($"Stack trace: {exception.StackTrace}");
+            }
+            e.SetObserved(); // Prevents the application from crashing
         }
     }
 }
