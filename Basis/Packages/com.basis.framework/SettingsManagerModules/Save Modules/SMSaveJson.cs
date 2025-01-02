@@ -42,7 +42,7 @@ namespace BattlePhaze.SettingsManager
                     return false;
                 }
             }
-            BasisDebug.Log("Loading Data json");
+          //  BasisDebug.Log("Loading Data json");
             return true;
         }
 

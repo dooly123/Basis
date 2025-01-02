@@ -32,36 +32,37 @@ public class BasisNetworkManagementEditor : Editor
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Transmitter Details", EditorStyles.boldLabel);
-
-        // Display key properties
-        EditorGUILayout.LabelField("Ready:", BasisNetworkManagement.Transmitter.Ready.ToString());
-        EditorGUILayout.LabelField("Has Events:", BasisNetworkManagement.Transmitter.HasEvents.ToString());
-        EditorGUILayout.LabelField("Timer:", BasisNetworkManagement.Transmitter.timer.ToString("F3"));
-        EditorGUILayout.LabelField("Interval:", BasisNetworkManagement.Transmitter.interval.ToString("F3"));
-        EditorGUILayout.LabelField("Smallest Distance to Another Player:", BasisNetworkManagement.Transmitter.SmallestDistanceToAnotherPlayer.ToString("F3"));
-        EditorGUILayout.Space();
-        // Native Array Details
-        nativeArrayFoldout = EditorGUILayout.Foldout(nativeArrayFoldout, "Native Arrays", true);
-        if (nativeArrayFoldout)
+        if (BasisNetworkManagement.Transmitter != null)
         {
-            EditorGUILayout.LabelField("Target Positions:", BasisNetworkManagement.Transmitter.targetPositions.IsCreated ? "Created" : "Not Created");
-            EditorGUILayout.LabelField("Distances:", BasisNetworkManagement.Transmitter.distances.IsCreated ? "Created" : "Not Created");
-            EditorGUILayout.LabelField("Distance Results:", BasisNetworkManagement.Transmitter.DistanceResults.IsCreated ? "Created" : "Not Created");
-            EditorGUILayout.LabelField("Hearing Results:", BasisNetworkManagement.Transmitter.HearingResults.IsCreated ? "Created" : "Not Created");
-            EditorGUILayout.LabelField("Avatar Results:", BasisNetworkManagement.Transmitter.AvatarResults.IsCreated ? "Created" : "Not Created");
+            // Display key properties
+            EditorGUILayout.LabelField("Ready:", BasisNetworkManagement.Transmitter.Ready.ToString());
+            EditorGUILayout.LabelField("Has Events:", BasisNetworkManagement.Transmitter.HasEvents.ToString());
+            EditorGUILayout.LabelField("Timer:", BasisNetworkManagement.Transmitter.timer.ToString("F3"));
+            EditorGUILayout.LabelField("Interval:", BasisNetworkManagement.Transmitter.interval.ToString("F3"));
+            EditorGUILayout.LabelField("Smallest Distance to Another Player:", BasisNetworkManagement.Transmitter.SmallestDistanceToAnotherPlayer.ToString("F3"));
+            EditorGUILayout.Space();
+            // Native Array Details
+            nativeArrayFoldout = EditorGUILayout.Foldout(nativeArrayFoldout, "Native Arrays", true);
+            if (nativeArrayFoldout)
+            {
+                EditorGUILayout.LabelField("Target Positions:", BasisNetworkManagement.Transmitter.targetPositions.IsCreated ? "Created" : "Not Created");
+                EditorGUILayout.LabelField("Distances:", BasisNetworkManagement.Transmitter.distances.IsCreated ? "Created" : "Not Created");
+                EditorGUILayout.LabelField("Distance Results:", BasisNetworkManagement.Transmitter.DistanceResults.IsCreated ? "Created" : "Not Created");
+                EditorGUILayout.LabelField("Hearing Results:", BasisNetworkManagement.Transmitter.HearingResults.IsCreated ? "Created" : "Not Created");
+                EditorGUILayout.LabelField("Avatar Results:", BasisNetworkManagement.Transmitter.AvatarResults.IsCreated ? "Created" : "Not Created");
+            }
+
+            EditorGUILayout.Space();
+
+            // Debugging Foldout
+            debugFoldout = EditorGUILayout.Foldout(debugFoldout, "Debugging", true);
+            if (debugFoldout)
+            {
+                EditorGUILayout.LabelField("Microphone Range Index:", BasisNetworkManagement.Transmitter.MicrophoneRangeIndex != null ? BasisNetworkManagement.Transmitter.MicrophoneRangeIndex.Length.ToString() : "NULL");
+                EditorGUILayout.LabelField("Hearing Index:", BasisNetworkManagement.Transmitter.HearingIndex != null ? BasisNetworkManagement.Transmitter.HearingIndex.Length.ToString() : "NULL");
+                EditorGUILayout.LabelField("Avatar Index:", BasisNetworkManagement.Transmitter.AvatarIndex != null ? BasisNetworkManagement.Transmitter.AvatarIndex.Length.ToString() : "NULL");
+            }
         }
-
-        EditorGUILayout.Space();
-
-        // Debugging Foldout
-        debugFoldout = EditorGUILayout.Foldout(debugFoldout, "Debugging", true);
-        if (debugFoldout)
-        {
-            EditorGUILayout.LabelField("Microphone Range Index:", BasisNetworkManagement.Transmitter.MicrophoneRangeIndex != null ? BasisNetworkManagement.Transmitter.MicrophoneRangeIndex.Length.ToString() : "NULL");
-            EditorGUILayout.LabelField("Hearing Index:", BasisNetworkManagement.Transmitter.HearingIndex != null ? BasisNetworkManagement.Transmitter.HearingIndex.Length.ToString() : "NULL");
-            EditorGUILayout.LabelField("Avatar Index:", BasisNetworkManagement.Transmitter.AvatarIndex != null ? BasisNetworkManagement.Transmitter.AvatarIndex.Length.ToString() : "NULL");
-        }
-
         // Apply property modifications
         serializedObject.ApplyModifiedProperties();
         EditorGUILayout.Space();

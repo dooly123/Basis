@@ -14,6 +14,12 @@
       "dependencies": {},
       "hash": "477ad687ad74ce1eba5672f4e3393e001669c53c"
     },
+    "com.basis.corenetworking": {
+      "version": "file:com.basis.server",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.basis.framework": {
       "version": "file:com.basis.framework",
       "depth": 0,
@@ -36,12 +42,6 @@
     },
     "com.basis.sdk": {
       "version": "file:com.basis.sdk",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.basis.server": {
-      "version": "file:com.basis.server",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

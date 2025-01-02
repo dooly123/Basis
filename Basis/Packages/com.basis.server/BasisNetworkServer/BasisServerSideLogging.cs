@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Basis.Network
 {
@@ -15,17 +19,15 @@ namespace Basis.Network
 
         static BasisServerSideLogging()
         {
-            // Set the log directory to a folder named "Logs" in the executable's directory
-            LogDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-
-            // Ensure the logs directory exists
-            if (!Directory.Exists(LogDirectory))
-            {
-                Directory.CreateDirectory(LogDirectory);
-            }
         }
         public static bool UseLogging;
-        public static void Initialize(Configuration config)
+        public static bool WriteToScreen = true;
+        /// <summary>
+        /// Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs")
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="PathOutput"></param>
+        public static void Initialize(Configuration config, string LogDirectory)
         {
             UseLogging = config.UsingLoggingFile;
             BNL.LogOutput += Log;
@@ -34,6 +36,11 @@ namespace Basis.Network
 
             if (UseLogging)
             {
+                // Ensure the logs directory exists
+                if (!Directory.Exists(LogDirectory))
+                {
+                    Directory.CreateDirectory(LogDirectory);
+                }
                 Log("Logs are saved to " + CurrentLogFileName);
                 StartLoggingTask();
             }
@@ -111,40 +118,49 @@ namespace Basis.Network
 
         public static void Log(string message)
         {
-            string formattedMessage = FormatMessage("INFO", message);
-            WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
-            WriteColoredMessage("[INFO] ", ConsoleColor.DarkMagenta); // Level in gray
-            WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
-
-            if (UseLogging)
+            if (WriteToScreen || UseLogging)
             {
-                LogQueue.Add(formattedMessage);
+                string formattedMessage = FormatMessage("INFO", message);
+                WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
+                WriteColoredMessage("[INFO] ", ConsoleColor.DarkMagenta); // Level in gray
+                WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
+
+                if (UseLogging)
+                {
+                    LogQueue.Add(formattedMessage);
+                }
             }
         }
 
         public static void LogWarning(string message)
         {
-            string formattedMessage = FormatMessage("WARNING", message);
-            WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
-            WriteColoredMessage("[WARNING] ", ConsoleColor.DarkYellow); // Level in yellow
-            WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
-
-            if (UseLogging)
+            if (WriteToScreen || UseLogging)
             {
-                LogQueue.Add(formattedMessage);
+                string formattedMessage = FormatMessage("WARNING", message);
+                WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
+                WriteColoredMessage("[WARNING] ", ConsoleColor.DarkYellow); // Level in yellow
+                WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
+
+                if (UseLogging)
+                {
+                    LogQueue.Add(formattedMessage);
+                }
             }
         }
 
         public static void LogError(string message)
         {
-            string formattedMessage = FormatMessage("ERROR", message);
-            WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
-            WriteColoredMessage("[ERROR] ", ConsoleColor.DarkRed); // Level in red
-            WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
-
-            if (UseLogging)
+            if (WriteToScreen || UseLogging)
             {
-                LogQueue.Add(formattedMessage);
+                string formattedMessage = FormatMessage("ERROR", message);
+                WriteColoredMessage($"[{DateTime.Now:HH:mm}] ", ConsoleColor.DarkCyan); // Timestamp in white
+                WriteColoredMessage("[ERROR] ", ConsoleColor.DarkRed); // Level in red
+                WriteColoredMessage($"{message}\n", ConsoleColor.Gray); // Message in gray
+
+                if (UseLogging)
+                {
+                    LogQueue.Add(formattedMessage);
+                }
             }
         }
 

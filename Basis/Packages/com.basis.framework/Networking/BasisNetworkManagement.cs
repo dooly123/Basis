@@ -30,6 +30,7 @@ namespace Basis.Scripts.Networking
         public ushort Port = 4296;
         [HideInInspector]
         public string Password = "default_password";
+        public bool IsHostMode = false;
         /// <summary>
         /// fire when ownership is changed for a unique string
         /// </summary>
@@ -65,6 +66,10 @@ namespace Basis.Scripts.Networking
         public static Action OnEnableInstanceCreate;
         public static BasisNetworkManagement Instance;
         public Dictionary<string, ushort> OwnershipPairing = new Dictionary<string, ushort>();
+        /// <summary>
+        /// allows a local host to be the server
+        /// </summary>
+        public BasisNetworkServerRunner BasisNetworkServerRunner = null;
         public static bool AddPlayer(BasisNetworkedPlayer NetPlayer)
         {
             if (Instance != null)
@@ -137,8 +142,44 @@ namespace Basis.Scripts.Networking
         public void OnDestroy()
         {
             Players.Clear();
+            Shutdown();
             BasisAvatarBufferPool.Clear();
             BasisNetworkClient.Disconnect();
+        }
+        public void Shutdown()
+        {
+            // Reset static fields
+            Ip = "0.0.0.0";
+            Port = 0;
+            Password = string.Empty;
+            IsHostMode = false;
+            OnOwnershipTransfer = null;
+            Players.Clear();
+            RemotePlayers.Clear();
+            JoiningPlayers.Clear();
+            ReceiverCount = 0;
+            MainThreadContext = null;
+            LocalPlayerPeer = null;
+            Transmitter = null;
+            OnLocalPlayerJoined = null;
+            HasSentOnLocalPlayerJoin = false;
+            OnRemotePlayerJoined = null;
+            OnLocalPlayerLeft = null;
+            OnRemotePlayerLeft = null;
+            OnEnableInstanceCreate = null;
+
+            // Reset instance fields
+            Instance = null;
+            OwnershipPairing.Clear();
+            BasisNetworkServerRunner = null;
+
+            if (receiverArray != null)
+            {
+                Array.Clear(receiverArray, 0, receiverArray.Length);
+                receiverArray = null;
+            }
+
+            Debug.Log("BasisNetworkManagement has been successfully shutdown.");
         }
         public void Update()
         {
@@ -199,13 +240,22 @@ namespace Basis.Scripts.Networking
         }
         public void Connect()
         {
-            Connect(Port, Ip, Password);
+            Connect(Port, Ip, Password, IsHostMode);
         }
-        public void Connect(ushort Port, string IpString,string PrimitivePassword)
+        public void Connect(ushort Port, string IpString,string PrimitivePassword,bool IsHostMode)
         {
             BNL.LogOutput += LogOutput;
             BNL.LogWarningOutput += LogWarningOutput;
             BNL.LogErrorOutput += LogErrorOutput;
+
+            if(IsHostMode)
+            {
+                IpString = "localhost";
+                BasisNetworkServerRunner = new BasisNetworkServerRunner();
+                Configuration ServerConfig =   new Configuration() { IPv4Address = IpString };
+                BasisNetworkServerRunner.Initalize(ServerConfig,string.Empty);
+            }
+
             BasisDebug.Log("Connecting with Port " + Port + " IpString " + IpString);
             //   string result = BasisNetworkIPResolve.ResolveHosttoIP(IpString);
             //   BasisDebug.Log($"DNS call: {IpString} resolves to {result}");
@@ -302,6 +352,11 @@ namespace Basis.Scripts.Networking
                         {
                             BasisDebug.LogError(Reason);
                         }
+                    }
+                    if(BasisNetworkServerRunner != null)
+                    {
+                        BasisNetworkServerRunner.Stop();
+                        BasisNetworkServerRunner = null;
                     }
                     Players.Clear();
                     OwnershipPairing.Clear();

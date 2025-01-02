@@ -26,7 +26,7 @@ namespace Basis.Scripts.UI.UI_Panels
         public TMP_InputField Password;
         public TMP_Text displayloadinginfo;
         public Button UseLocalhost;
-
+        public Toggle HostMode;
         // Queue to hold actions that need to be run on the main thread
         private static readonly Queue<Action> mainThreadActions = new Queue<Action>();
 
@@ -106,6 +106,7 @@ namespace Basis.Scripts.UI.UI_Panels
             IPaddress.text = BasisNetworkManagement.Instance.Ip;
             Port.text = BasisNetworkManagement.Instance.Port.ToString();
             Password.text = BasisNetworkManagement.Instance.Password;
+            HostMode.isOn = BasisNetworkManagement.Instance.IsHostMode;
         }
         public async void HasUserName()
         {
@@ -120,6 +121,7 @@ namespace Basis.Scripts.UI.UI_Panels
                 {
                     BasisNetworkManagement.Instance.Ip = IPaddress.text;
                     BasisNetworkManagement.Instance.Password = Password.text;
+                    BasisNetworkManagement.Instance.IsHostMode = HostMode.isOn;
                     ushort.TryParse(Port.text, out BasisNetworkManagement.Instance.Port);
                     await CreateAssetBundle();
                     BasisNetworkManagement.Instance.Connect();
