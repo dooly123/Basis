@@ -261,6 +261,10 @@ public static class BasisNetworkServer
                     BasisNetworkOwnership.OwnershipTransfer(reader, peer, Peers);
                     reader.Recycle();
                     break;
+                case BasisNetworkCommons.OwnershipResponse:
+                    BasisNetworkOwnership.OwnershipResponse(reader, peer, Peers);
+                    reader.Recycle();
+                    break;
                 case BasisNetworkCommons.AudioRecipients:
                     UpdateVoiceReceivers(reader, peer);
                     reader.Recycle();
