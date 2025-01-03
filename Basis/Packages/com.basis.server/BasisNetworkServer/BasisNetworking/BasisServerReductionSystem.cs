@@ -157,6 +157,7 @@ public class BasisServerReductionSystem
                         // Calculate the distance between the two points
                         float activeDistance = Distance(from, to);
                         // Adjust the timer interval based on the new syncRateMultiplier
+                        //50 * (1 + 1 * 0.005f)
                         int adjustedInterval = (int)(Configuration.BSRSMillisecondDefaultInterval * (Configuration.BSRBaseMultiplier + (activeDistance * Configuration.BSRSIncreaseRate)));
                         if (adjustedInterval > byte.MaxValue)
                         {

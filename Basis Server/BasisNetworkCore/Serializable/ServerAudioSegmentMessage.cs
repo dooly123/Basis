@@ -1,4 +1,4 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     public struct ServerAudioSegmentMessage
@@ -10,13 +10,6 @@ public static partial class SerializableBasis
             playerIdMessage.Deserialize(Writer);
             audioSegmentData.Deserialize(Writer);
         }
-
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            audioSegmentData.Dispose();
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             playerIdMessage.Serialize(Writer);
@@ -43,11 +36,6 @@ public static partial class SerializableBasis
                 users[index] = Writer.GetUShort();
             }
         }
-
-        public void Dispose()
-        {
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             int Count = users.Length;

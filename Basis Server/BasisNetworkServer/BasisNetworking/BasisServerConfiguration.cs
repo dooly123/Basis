@@ -32,9 +32,9 @@ public class Configuration
     public string HealthCheckHost = "localhost";
     public ushort HealthCheckPort = 10666;
     public string HealthPath = "/health";
-    public int BSRSMillisecondDefaultInterval = 50;
+    public int BSRSMillisecondDefaultInterval = 66;
     public int BSRBaseMultiplier = 1;
-    public float BSRSIncreaseRate = 0.005f;
+    public float BSRSIncreaseRate = 0.0075f;
     public bool OverrideAutoDiscoveryOfIpv = false;
     public string IPv4Address = "0.0.0.0";
     public string IPv6Address = "::1";
@@ -84,7 +84,7 @@ public class Configuration
             HealthPath = doc.SelectSingleNode("/Configuration/HealthPath")?.InnerText ?? "/health",
             BSRSMillisecondDefaultInterval = int.Parse(doc.SelectSingleNode("/Configuration/BSRSMillisecondDefaultInterval")?.InnerText ?? "50"),
             BSRBaseMultiplier = int.Parse(doc.SelectSingleNode("/Configuration/BSRBaseMultiplier")?.InnerText ?? "1"),
-            BSRSIncreaseRate = float.Parse(doc.SelectSingleNode("/Configuration/BSRSIncreaseRate")?.InnerText ?? "0.005"),
+            BSRSIncreaseRate = float.Parse(doc.SelectSingleNode("/Configuration/BSRSIncreaseRate")?.InnerText ?? "0.0075"),
             OverrideAutoDiscoveryOfIpv = bool.Parse(doc.SelectSingleNode("/Configuration/OverrideAutoDiscoveryOfIpv")?.InnerText ?? "false"),
             IPv4Address = doc.SelectSingleNode("/Configuration/IPv4Address")?.InnerText ?? "0.0.0.0",
             IPv6Address = doc.SelectSingleNode("/Configuration/IPv6Address")?.InnerText ?? "::1",
@@ -130,7 +130,7 @@ public class Configuration
         root.AppendChild(CreateElement(doc, "HealthPath", "/health"));
         root.AppendChild(CreateElement(doc, "BSRSMillisecondDefaultInterval", "50"));
         root.AppendChild(CreateElement(doc, "BSRBaseMultiplier", "1"));
-        root.AppendChild(CreateElement(doc, "BSRSIncreaseRate", "0.005"));
+        root.AppendChild(CreateElement(doc, "BSRSIncreaseRate", "0.0075"));
         root.AppendChild(CreateElement(doc, "OverrideAutoDiscoveryOfIpv", "false"));
         root.AppendChild(CreateElement(doc, "IPv4Address", "0.0.0.0"));
         root.AppendChild(CreateElement(doc, "IPv6Address", "::1"));

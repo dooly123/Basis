@@ -1,4 +1,4 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
 public static partial class SerializableBasis
 {
     [System.Serializable]
@@ -19,10 +19,6 @@ public static partial class SerializableBasis
                // BNL.Log("Get Length was " + LengthUsed);
             }
         }
-        public void Dispose()
-        {
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             if (LengthUsed != 0)

@@ -21,11 +21,6 @@ public static partial class SerializableBasis
                 BNL.LogError($"Unable to read Remaing bytes where {Bytes}");
             }
         }
-
-        public void Dispose()
-        {
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             if (array == null)

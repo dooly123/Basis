@@ -28,12 +28,6 @@ public static partial class SerializableBasis
         {
             Writer.Get(out data); // Read the entire ushort value
         }
-
-        public void Dispose()
-        {
-            // No resources to dispose in this structure
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             Writer.Put(data); // Write the entire ushort value

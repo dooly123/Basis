@@ -70,7 +70,7 @@ namespace Basis.Scripts.Networking.NetworkedPlayer
                 BasisDebug.LogError("Missing CharacterIKCalibration");
             }
             NetworkSend = new BasisNetworkTransmitter();
-            BasisNetworkManagement.Transmitter = (BasisNetworkTransmitter)NetworkSend;
+            BasisNetworkManagement.Instance.Transmitter = (BasisNetworkTransmitter)NetworkSend;
         }
         public void RemoteInitalization(BasisRemotePlayer RemotePlayer)
         {

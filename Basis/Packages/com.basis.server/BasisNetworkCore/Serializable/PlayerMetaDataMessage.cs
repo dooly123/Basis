@@ -13,11 +13,6 @@ public static partial class SerializableBasis
             Writer.Get(out playerUUID);
             Writer.Get(out playerDisplayName);
         }
-
-        public void Dispose()
-        {
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             if (string.IsNullOrEmpty(playerUUID) == false)

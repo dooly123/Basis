@@ -81,12 +81,6 @@ public static partial class SerializableBasis
                 Writer.Put(payload);
             }
         }
-
-        public void Dispose()
-        {
-            recipients = null;
-            payload = null;
-        }
     }
     public struct ServerSceneDataMessage
     {
@@ -99,13 +93,6 @@ public static partial class SerializableBasis
             playerIdMessage.Deserialize(Writer);
             sceneDataMessage.Deserialize(Writer);
         }
-
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            sceneDataMessage.Dispose();
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             // Write the playerIdMessage and sceneDataMessage
@@ -142,11 +129,6 @@ public static partial class SerializableBasis
             {
                 Writer.Put(payload);
             }
-        }
-
-        public void Dispose()
-        {
-            payload = null;
         }
     }
 }
