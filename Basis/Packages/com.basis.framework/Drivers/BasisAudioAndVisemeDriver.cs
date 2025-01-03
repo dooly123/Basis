@@ -160,8 +160,9 @@ namespace Basis.Scripts.Drivers
             }
             if (FirstTime)
             {
-                uLipSync.onLipSyncUpdate.AddListener(uLipSyncBlendShape.OnLipSyncUpdate);
+                uLipSync.uLipSyncBlendShape = uLipSyncBlendShape;
             }
+            uLipSync.Initalize();
             if (Player != null && Player.FaceRenderer != null && HashInstanceID != Player.FaceRenderer.GetInstanceID())
             {
                 BasisDebug.Log("Wired up Renderer Check For Blinking");
