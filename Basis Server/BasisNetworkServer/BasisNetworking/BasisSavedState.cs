@@ -1,4 +1,4 @@
-﻿using LiteNetLib;
+using LiteNetLib;
 using System.Collections.Concurrent;
 using static SerializableBasis;
 
