@@ -44,7 +44,7 @@ namespace Basis.Scripts.Networking
         public static int ReceiverCount = 0;
         public static SynchronizationContext MainThreadContext;
         public static NetPeer LocalPlayerPeer;
-        public static BasisNetworkTransmitter Transmitter;
+        public BasisNetworkTransmitter Transmitter;
         /// <summary>
         /// this occurs after the localplayer has been approved by the network and setup
         /// </summary>

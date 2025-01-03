@@ -42,9 +42,9 @@ namespace Basis.Scripts.Networking.Transmitters
         public LocalAvatarSyncMessage LASM = new LocalAvatarSyncMessage();
         public float UnClampedInterval;
 
-        public static float DefaultInterval = 0.0333333333333333f;
-        public static float BaseMultiplier = 1f; // Starting multiplier.
-        public static float IncreaseRate = 0.0075f; // Rate of increase per unit distance.
+        public float DefaultInterval = 0.06666917f;
+        public float BaseMultiplier = 1f; // Starting multiplier.
+        public float IncreaseRate = 0.0075f; // Rate of increase per unit distance.
         public CombinedDistanceAndClosestTransformJob distanceJob = new CombinedDistanceAndClosestTransformJob();
         public JobHandle distanceJobHandle;
         public int IndexLength = -1;
