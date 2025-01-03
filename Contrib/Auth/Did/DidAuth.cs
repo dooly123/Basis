@@ -1,4 +1,3 @@
-/// Cryptographically secure random number generator
 using System;
 using Basis.Contrib.Auth.DecentralizedIds.Newtypes;
 using CryptoRng = System.Security.Cryptography.RandomNumberGenerator;
