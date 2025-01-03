@@ -40,18 +40,8 @@ namespace Basis.Contrib.Auth.DecentralizedIds
 					)[0]
 				);
 				var document = await resolver.ResolveDocument(new Did(inputDid));
-				document
-					.Pubkeys.ToList()
-					.ForEach(item =>
-					{
-						Console.WriteLine(item.ToString());
-					});
-				Console.WriteLine("resolved doc: {0}", document);
 				Debug.Assert(document.Pubkeys.Count == 1);
 				var resolvedJwk = document.Pubkeys[expectedFragment];
-				Console.WriteLine(
-					$"resolved jwk: {JsonSerializer.Serialize(resolvedJwk)}"
-				);
 				Debug.Assert(
 					JsonSerializer.Serialize(resolvedJwk)
 						== JsonSerializer.Serialize(expectedJwk),
