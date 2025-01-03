@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using Base128 = WojciechMikołajewicz.Base128;
@@ -14,9 +16,9 @@ using StringSplitOptions = System.StringSplitOptions;
 namespace Basis.Contrib.Auth.DecentralizedIds
 {
 	/// Implements resolution of a did:key to the various information stored in it
-	class DidKeyResolver : IDidMethod
+	public class DidKeyResolver : IDidMethod
 	{
-		const string PREFIX = "did:key:";
+		public const string PREFIX = "did:key:";
 
 		/// https://github.com/multiformats/multicodec/blob/master/table.csv#L98
 		const ushort ED25519_MULTIFORMAT_CODE = 0xED;
@@ -46,6 +48,8 @@ namespace Basis.Contrib.Auth.DecentralizedIds
 			{
 				throw new DidKeyDecodeException(DidKeyDecodeError.NotBase58Btc);
 			}
+			// Again, did:key uses base58-btc encoding, see the spec here:
+			// https://w3c-ccg.github.io/did-method-key/#format
 			var multicodecPrefixed = Base58.Bitcoin.Decode(multibasePart[1..]);
 			if (
 				!Base128.TryReadUInt16(
@@ -79,16 +83,17 @@ namespace Basis.Contrib.Auth.DecentralizedIds
 			);
 		}
 
-		/// See https://www.rfc-editor.org/rfc/rfc8037.html#appendix-A.2
+		/// See
 		private static JsonWebKey CreateEd25519Jwk(byte[] pubkeyBytes)
 		{
 			Debug.Assert(pubkeyBytes.Length == Ed25519.PublicKeySize);
-			return new JsonWebKey
+			var key = new JsonWebKey
 			{
 				Kty = "OKP",
 				Crv = "Ed25519",
 				X = Base64UrlEncoder.Encode(pubkeyBytes),
 			};
+			return key;
 		}
 	}
 
