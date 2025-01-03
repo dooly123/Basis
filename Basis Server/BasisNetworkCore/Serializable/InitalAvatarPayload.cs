@@ -63,11 +63,6 @@ namespace BasisNetworkCore.Serializable
                     Writer.Put(payload);
                 }
             }
-
-            public void Dispose()
-            {
-                payload = null;
-            }
         }
     }
 }

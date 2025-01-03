@@ -12,12 +12,6 @@ namespace DarkRift.Basis_Common.Serializable
             playerIdMessage.Deserialize(Writer);
             Writer.Get(out ownershipID);
         }
-
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             playerIdMessage.Serialize(Writer);

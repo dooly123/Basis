@@ -1,21 +1,19 @@
 using LiteNetLib.Utils;
-using static SerializableBasis;
-
-namespace DarkRift.Basis_Common.Serializable
+public static partial class SerializableBasis
 {
-    public struct OwnershipTransferMessage
+    public struct ServerAvatarDataMessage
     {
         public PlayerIdMessage playerIdMessage;
-        public string ownershipID;
+        public RemoteAvatarDataMessage avatarDataMessage;
         public void Deserialize(NetDataReader Writer)
         {
             playerIdMessage.Deserialize(Writer);
-            Writer.Get(out ownershipID);
+            avatarDataMessage.Deserialize(Writer);
         }
         public void Serialize(NetDataWriter Writer)
         {
             playerIdMessage.Serialize(Writer);
-             Writer.Put(ownershipID);
+            avatarDataMessage.Serialize(Writer);
         }
     }
 }

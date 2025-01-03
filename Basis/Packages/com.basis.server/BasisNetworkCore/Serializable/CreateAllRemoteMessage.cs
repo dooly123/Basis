@@ -1,4 +1,4 @@
-﻿using LiteNetLib.Utils;
+using LiteNetLib.Utils;
 using System.Collections.Generic;
 public static partial class SerializableBasis
 {
@@ -16,15 +16,6 @@ public static partial class SerializableBasis
             }
             serverSidePlayer = temp.ToArray();
         }
-
-        public void Dispose()
-        {
-            foreach (var item in serverSidePlayer)
-            {
-                item.Dispose();
-            }
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             int ServerSidePlayers = serverSidePlayer.Length;

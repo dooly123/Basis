@@ -12,14 +12,6 @@ public static partial class SerializableBasis
             clientAvatarChangeMessage.Deserialize(Writer);
             localAvatarSyncMessage.Deserialize(Writer);
         }
-
-        public void Dispose()
-        {
-            playerMetaDataMessage.Dispose();
-            clientAvatarChangeMessage.Dispose();
-            localAvatarSyncMessage.Dispose();
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             playerMetaDataMessage.Serialize(Writer);
@@ -37,28 +29,6 @@ public static partial class SerializableBasis
                 return false;
             }
             return true;
-        }
-    }
-    public struct ServerReadyMessage
-    {
-        public PlayerIdMessage playerIdMessage;
-        public ReadyMessage localReadyMessage;
-        public void Deserialize(NetDataReader Writer)
-        {
-            playerIdMessage.Deserialize(Writer);
-             localReadyMessage.Deserialize(Writer);
-        }
-
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            localReadyMessage.Dispose();
-        }
-
-        public void Serialize(NetDataWriter Writer)
-        {
-            playerIdMessage.Serialize(Writer);
-            localReadyMessage.Serialize(Writer);
         }
     }
 }

@@ -12,13 +12,6 @@ public static partial class SerializableBasis
             Writer.Get(out interval);//1 bytes
             avatarSerialization.Deserialize(Writer);
         }
-
-        public void Dispose()
-        {
-            playerIdMessage.Dispose();
-            avatarSerialization.Dispose();
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             playerIdMessage.Serialize(Writer);

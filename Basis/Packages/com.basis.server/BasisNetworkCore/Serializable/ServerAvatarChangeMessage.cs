@@ -10,13 +10,6 @@ public static partial class SerializableBasis
             uShortPlayerId.Deserialize(Writer);
             clientAvatarChangeMessage.Deserialize(Writer);
         }
-
-        public void Dispose()
-        {
-            uShortPlayerId.Dispose();
-            clientAvatarChangeMessage.Dispose();
-        }
-
         public void Serialize(NetDataWriter Writer)
         {
             uShortPlayerId.Serialize(Writer);
