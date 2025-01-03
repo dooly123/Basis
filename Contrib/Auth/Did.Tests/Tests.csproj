@@ -17,7 +17,7 @@
 
   <!--First-party dependencies-->
   <ItemGroup>
-    <ProjectReference Include="..\Did.csproj" />
+    <ProjectReference Include="..\Did\Did.csproj" />
   </ItemGroup>
 
 </Project>
